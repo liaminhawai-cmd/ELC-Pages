@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analytical Writing Wall — ELC Hub</title>
+<style>
+  :root {
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#2563eb; --accent-soft:#dbeafe; --radius:14px;
+    --shadow:0 1px 2px rgba(16,24,40,.05), 0 4px 14px rgba(16,24,40,.06);
+    --c2:#2563eb; --c2-tint:#dbeafe;
+    --c3:#0d9488; --c3-tint:#ccfbf1;
+    --c4:#d97706; --c4-tint:#fef0d5;
+    --vce:#7c3aed; --vce-tint:#ede4fd;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048; --accent:#7aa5ff; --accent-soft:#1d2c4d; --shadow:0 1px 2px rgba(0,0,0,.4);
+      --c2-tint:#16233f; --c3-tint:#0d2b28; --c4-tint:#3a2508; --vce-tint:#271c40; }
+  }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; }
+  header { background:linear-gradient(135deg,#2563eb,#7c3aed 60%,#db2777); color:#fff; padding:28px 20px 36px; text-align:center; }
+  header a.back { color:#fff; opacity:.85; text-decoration:none; font-size:.85rem; font-weight:600; }
+  header h1 { font-size:clamp(1.5rem,4.5vw,2.1rem); letter-spacing:-.4px; margin-top:8px; }
+  header p { max-width:600px; margin:8px auto 0; opacity:.94; font-size:.95rem; }
+  main { max-width:880px; margin:0 auto; padding:26px 16px 60px; }
+
+  /* ---- persistent rubric ---- */
+  .rubric-wrap { margin-bottom:8px; }
+  .rubric-wrap h2 { font-size:1.15rem; margin-bottom:4px; }
+  .rubric-wrap p.sub { color:var(--muted); font-size:.88rem; margin-bottom:12px; }
+  .rubric-scroll { overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow); }
+  table.rubric { border-collapse:collapse; width:100%; min-width:640px; }
+  table.rubric th, table.rubric td { padding:12px 14px; text-align:left; vertical-align:top; font-size:.86rem; border-bottom:1px solid var(--line); }
+  table.rubric th { font-size:.78rem; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); border-bottom:2px solid var(--line); }
+  table.rubric th.band { color:#fff; border-radius:6px 6px 0 0; }
+  table.rubric td:first-child { font-weight:700; white-space:nowrap; color:var(--ink); }
+  th.band.c2, td.c2-cell { background:var(--c2-tint); }
+  th.band.c3, td.c3-cell { background:var(--c3-tint); }
+  th.band.c4, td.c4-cell { background:var(--c4-tint); }
+  th.band.vce, td.vce-cell { background:var(--vce-tint); }
+  th.band.c2 { background:var(--c2); }
+  th.band.c3 { background:var(--c3); }
+  th.band.c4 { background:var(--c4); }
+  th.band.vce { background:var(--vce); }
+  table.rubric tr:last-child td { border-bottom:none; }
+
+  /* ---- collapsible text types ---- */
+  .types { margin-top:28px; display:flex; flex-direction:column; gap:12px; }
+  .type { border:1px solid var(--line); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow); overflow:hidden; }
+  .type button.head {
+    width:100%; display:flex; align-items:center; gap:12px; padding:16px 18px; background:none; border:none;
+    text-align:left; cursor:pointer; font:inherit; color:inherit;
+  }
+  .type button.head .emoji { font-size:1.5rem; }
+  .type button.head h3 { font-size:1.05rem; }
+  .type button.head p { font-size:.84rem; color:var(--muted); margin-top:2px; }
+  .type button.head .chev { margin-left:auto; font-size:1.1rem; color:var(--muted); transition:transform .2s; flex-shrink:0; }
+  .type.open button.head .chev { transform:rotate(90deg); }
+  .type .body { display:none; padding:0 18px 20px; }
+  .type.open .body { display:block; }
+  .skillfocus { background:var(--bg); border-radius:8px; padding:10px 14px; margin-bottom:14px; font-size:.85rem; }
+  .skillfocus b { color:var(--muted); font-weight:700; font-size:.75rem; text-transform:uppercase; letter-spacing:.4px; display:block; margin-bottom:6px; }
+  .bandgrid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; }
+  .bandcard { border-radius:10px; padding:13px 14px; border:1px solid var(--line); }
+  .bandcard .tag { display:inline-block; font-size:.72rem; font-weight:800; letter-spacing:.5px; padding:2px 9px; border-radius:999px; color:#fff; margin-bottom:9px; }
+  .bandcard .example { font-size:.92rem; font-style:italic; margin-bottom:9px; line-height:1.45; }
+  .bandcard .explain { font-size:.8rem; color:var(--muted); line-height:1.45; }
+  .bandcard.c2 { background:var(--c2-tint); } .bandcard.c2 .tag { background:var(--c2); }
+  .bandcard.c3 { background:var(--c3-tint); } .bandcard.c3 .tag { background:var(--c3); }
+  .bandcard.c4 { background:var(--c4-tint); } .bandcard.c4 .tag { background:var(--c4); }
+  .bandcard.vce { background:var(--vce-tint); } .bandcard.vce .tag { background:var(--vce); }
+
+  .controls { display:flex; gap:8px; margin:18px 0 0; }
+  .controls button { font-size:.82rem; padding:7px 13px; border-radius:8px; border:1px solid var(--line); background:var(--card); color:var(--ink); cursor:pointer; }
+  footer { border-top:1px solid var(--line); margin-top:44px; padding:20px 16px 34px; text-align:center; color:var(--muted); font-size:.85rem; }
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← ELC Hub</a>
+  <h1>📝 Analytical Writing Wall</h1>
+  <p>The same idea, written at every band. See what actually changes between C2 and VCE — then try lifting your own paragraph a level.</p>
+</header>
+
+<main>
+  <div class="rubric-wrap">
+    <h2>The rubric</h2>
+    <p class="sub">Stays the same no matter which text type you're writing about.</p>
+    <div class="rubric-scroll">
+      <table class="rubric">
+        <thead>
+          <tr>
+            <th>Skill area</th>
+            <th class="band c2">C2 · Describe</th>
+            <th class="band c3">C3 · Explain</th>
+            <th class="band c4">C4 · Analyse</th>
+            <th class="band vce">VCE1 · Interpret</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ideas &amp; Themes</td>
+            <td class="c2-cell">Recognises what happens in the text or scene. Retells key details with little interpretation.</td>
+            <td class="c3-cell">Explains basic feelings or ideas suggested by the text. Begins linking choices to simple themes.</td>
+            <td class="c4-cell">Connects specific language or film techniques to themes or concepts. Explains what the creator might be saying.</td>
+            <td class="vce-cell">Analyses how choices express messages, values, or perspectives. Analyses the creator's purpose in representing social or cultural issues.</td>
+          </tr>
+          <tr>
+            <td>Evidence &amp; Metalanguage</td>
+            <td class="c2-cell">Gives a simple quote or description from the text or scene.</td>
+            <td class="c3-cell">Names a language or film feature and begins linking it to meaning.</td>
+            <td class="c4-cell">Uses terminology accurately with short, embedded evidence.</td>
+            <td class="vce-cell">Integrates evidence and metalanguage fluently to build interpretation.</td>
+          </tr>
+          <tr>
+            <td>Language &amp; Structure</td>
+            <td class="c2-cell">Writes short, simple sentences using mostly literal verbs ("shows", "uses").</td>
+            <td class="c3-cell">Expands sentences with connectives such as because, so, or to. Uses basic evaluative words.</td>
+            <td class="c4-cell">Uses more complex sentences and analytical verbs ("suggests", "highlights").</td>
+            <td class="vce-cell">Writes fluently in a cohesive formal style, varying sentence structures to show cause, effect and interpretation.</td>
+          </tr>
+          <tr>
+            <td>Purpose &amp; Interpretation</td>
+            <td class="c2-cell">Identifies the basic meaning or message.</td>
+            <td class="c3-cell">Explains the effect on the reader or viewer.</td>
+            <td class="c4-cell">Makes inferences about the creator's intent or perspective.</td>
+            <td class="vce-cell">Discusses deeper social, moral or ethical ideas, linking choices to broader context.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="expandAll">Expand all</button>
+    <button id="collapseAll">Collapse all</button>
+  </div>
+
+  <div class="types" id="types">
+
+    <div class="type" data-type="fiction">
+      <button class="head" aria-expanded="false">
+        <span class="emoji">📖</span>
+        <span><h3>Fiction / Narrative</h3><p>The Giving Tree — repetition and self-sacrifice</p></span>
+        <span class="chev">▸</span>
+      </button>
+      <div class="body">
+        <div class="skillfocus"><b>Skill focus across the bands</b>Say what happens → Explain effect or meaning → Link language choices to ideas or themes → Link literary, structural and stylistic features to messages, values and creator's intent</div>
+        <div class="bandgrid">
+          <div class="bandcard c2"><span class="tag">C2 Describe</span>
+            <p class="example">"The author uses repetition to show that the tree keeps giving when it says, 'And the tree was happy.'"</p>
+            <p class="explain">Simple subject + verb + object. Names a language feature and states what happens in the text. Meaning stays close to the words on the page.</p>
+          </div>
+          <div class="bandcard c3"><span class="tag">C3 Explain</span>
+            <p class="example">"The repetition of the phrase 'the tree was happy' makes the tree seem generous, encouraging the reader to feel sympathy for her."</p>
+            <p class="explain">Adds an effect phrase to explain how the language influences the reader. Uses evaluative words and basic cause–effect reasoning.</p>
+          </div>
+          <div class="bandcard c4"><span class="tag">C4 Analyse</span>
+            <p class="example">"Silverstein uses repetition of the line 'And the tree was happy' to highlight the one-sided relationship, suggesting themes of sacrifice and imbalance."</p>
+            <p class="explain">Links language choice, effect and theme in one sentence. Uses analytical verbs ("highlight", "suggest") to move beyond description.</p>
+          </div>
+          <div class="bandcard vce"><span class="tag">VCE1 Interpret</span>
+            <p class="example">"By repeatedly portraying the tree as endlessly giving through the recurring motif 'And the tree was happy,' Silverstein invites readers to question cultural expectations around self-sacrifice in unequal relationships."</p>
+            <p class="explain">Combines language choice, ideas and values. Analyses the author's message and connects it to broader historical, social and cultural ideas.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="type" data-type="persuasive">
+      <button class="head" aria-expanded="false">
+        <span class="emoji">📢</span>
+        <span><h3>Persuasive</h3><p>Should schools control what students eat?</p></span>
+        <span class="chev">▸</span>
+      </button>
+      <div class="body">
+        <div class="skillfocus"><b>Skill focus across the bands</b>Say what happens → Explain effect or meaning → Link language choices to ideas or themes → Link literary, structural and stylistic features to messages, values and creator's intent</div>
+        <div class="bandgrid">
+          <div class="bandcard c2"><span class="tag">C2 Describe</span>
+            <p class="example">"The writer states that schools should not tell children what to eat when they argue that 'schools should not control students' diets'."</p>
+            <p class="explain">Simple subject + verb + object. Identifies the writer's opinion and states what is said. Verbs are literal ("states", "says") and ideas are concrete.</p>
+          </div>
+          <div class="bandcard c3"><span class="tag">C3 Explain</span>
+            <p class="example">"This statement encourages readers to agree because the claim 'schools should not control students' diets' sounds confident and reasonable."</p>
+            <p class="explain">Adds an effect or reason clause to explain how the statement sounds to the reader. Begins using evaluative adjectives ("reasonable", "strong") with connectives like because or so.</p>
+          </div>
+          <div class="bandcard c4"><span class="tag">C4 Analyse</span>
+            <p class="example">"By presenting the claim 'schools should not control students' diets' as an assertion, the writer reinforces the idea that parents should control children's choices."</p>
+            <p class="explain">Links language choice, effect and idea in one longer sentence. Uses analytical verbs ("reinforces", "frames") and abstract nouns like control, responsibility, choice.</p>
+          </div>
+          <div class="bandcard vce"><span class="tag">VCE1 Interpret</span>
+            <p class="example">"By framing parental responsibility as 'common sense', the writer promotes individual choice over institutional control, reflecting values of personal freedom."</p>
+            <p class="explain">Combines several ideas smoothly. Uses metalanguage to comment on the writer's perspective, connecting language choices to purpose, values or beliefs.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="type" data-type="film">
+      <button class="head" aria-expanded="false">
+        <span class="emoji">🎬</span>
+        <span><h3>Film</h3><p>Rabbit-Proof Fence — the long shot in the desert</p></span>
+        <span class="chev">▸</span>
+      </button>
+      <div class="body">
+        <div class="skillfocus"><b>Skill focus across the bands</b>Say what happens → Add meaning → Link to ideas or themes → Discuss message and director's intent</div>
+        <div class="bandgrid">
+          <div class="bandcard c2"><span class="tag">C2 Describe</span>
+            <p class="example">"The film uses a long shot to show the girls walking alone."</p>
+            <p class="explain">Simple subject + verb + object. Names the film technique and tells what is happening on screen. Verbs are literal ("shows", "uses").</p>
+          </div>
+          <div class="bandcard c3"><span class="tag">C3 Explain</span>
+            <p class="example">"The long shot makes the audience see how far the girls must travel, showing their bravery."</p>
+            <p class="explain">Adds a purpose phrase using "to + verb" to show effect on the audience. Introduces descriptive/feeling words ("brave", "alone") with connectives like because or so.</p>
+          </div>
+          <div class="bandcard c4"><span class="tag">C4 Analyse</span>
+            <p class="example">"Noyce uses a long shot to highlight the girls' isolation in the vast desert, symbolising their determination and loss of freedom."</p>
+            <p class="explain">Links technique, purpose and theme in one longer sentence. Uses analytical verbs ("highlight", "symbolise") to connect the image to a bigger idea.</p>
+          </div>
+          <div class="bandcard vce"><span class="tag">VCE1 Interpret</span>
+            <p class="example">"Noyce repeatedly uses wide landscape shots to contrast the beauty of the land with the cruelty of the government's control, emphasising the theme of resilience against oppression."</p>
+            <p class="explain">Combines several ideas smoothly. Uses metalanguage to comment on the director's choices, connecting film language, tone and theme in one flowing idea.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>More text types get added here as new WAGOLLs are written — nothing to rebuild, just a new card.</footer>
+
+<script>
+document.querySelectorAll(".type .head").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const t = btn.closest(".type");
+    const open = t.classList.toggle("open");
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+});
+document.getElementById("expandAll").addEventListener("click", () => {
+  document.querySelectorAll(".type").forEach(t => { t.classList.add("open"); t.querySelector(".head").setAttribute("aria-expanded","true"); });
+});
+document.getElementById("collapseAll").addEventListener("click", () => {
+  document.querySelectorAll(".type").forEach(t => { t.classList.remove("open"); t.querySelector(".head").setAttribute("aria-expanded","false"); });
+});
+</script>
+</body>
+</html>
