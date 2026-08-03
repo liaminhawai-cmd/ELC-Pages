@@ -3,76 +3,104 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>My Report — ELC Hub</title>
+<meta name="description" content="A private, device-local record of ELC activities and a saved learning goal.">
+<title>My Learning Record — ELC Hub</title>
 <style>
-  :root { --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2; --accent:#2563eb; --radius:14px; }
-  @media (prefers-color-scheme: dark) { :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048; --accent:#7aa5ff; } }
+  :root { --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2; --accent:#2563eb; --green:#15803d; --green-soft:#dcfce7; --radius:14px; }
+  @media (prefers-color-scheme:dark) { :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048; --accent:#7aa5ff; --green:#6ee7a0; --green-soft:#183d2a; } }
   * { box-sizing:border-box; margin:0; }
   body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; padding:24px 16px 60px; }
-  .wrap { max-width:640px; margin:0 auto; }
-  a.back { color:var(--accent); text-decoration:none; font-size:.9rem; font-weight:600; }
+  .wrap { max-width:680px; margin:0 auto; }
+  a.back { color:var(--accent); text-decoration:none; font-size:.9rem; font-weight:700; }
   .sheet { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:24px; margin-top:16px; box-shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06); }
-  h1 { font-size:1.5rem; margin-bottom:2px; }
-  .meta { color:var(--muted); font-size:.9rem; margin-bottom:18px; }
-  table { width:100%; border-collapse:collapse; margin:10px 0 4px; }
-  td { padding:6px 0; border-bottom:1px solid var(--line); font-size:.95rem; }
-  td.k { color:var(--muted); width:38%; }
+  h1 { font-size:1.55rem; margin-bottom:2px; }
+  h2 { margin-top:22px; font-size:1.05rem; }
+  .meta,.privacy { color:var(--muted); font-size:.86rem; }
+  .privacy { margin-top:8px; padding:9px 11px; background:var(--bg); border-radius:9px; }
+  .goal { margin-top:9px; padding:13px 14px; border:1px solid color-mix(in srgb,var(--green) 45%,var(--line)); border-radius:10px; background:var(--green-soft); }
+  .goal p { margin:3px 0; font-size:.9rem; }
+  .empty { color:var(--muted); font-size:.9rem; padding:12px 0; }
   ul.log { list-style:none; padding:0; margin-top:8px; }
-  ul.log li { display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); font-size:.92rem; }
-  ul.log li span.cat { color:var(--muted); font-size:.8rem; }
-  .empty { color:var(--muted); font-size:.9rem; padding:14px 0; }
-  .actions { margin-top:20px; display:flex; gap:10px; }
-  button { padding:10px 16px; border-radius:8px; border:1px solid var(--line); background:var(--card); color:var(--ink); font-weight:600; cursor:pointer; font-size:.9rem; }
-  button.primary { background:var(--accent); color:#fff; border:none; }
-  .noprint { }
+  ul.log li { display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); font-size:.92rem; }
+  ul.log li .cat { color:var(--muted); font-size:.8rem; text-align:right; }
+  .actions { margin-top:22px; display:flex; flex-wrap:wrap; gap:9px; }
+  button { padding:10px 14px; border-radius:8px; border:1px solid var(--line); background:var(--card); color:var(--ink); font-weight:700; cursor:pointer; font-size:.88rem; }
+  button.primary { background:var(--accent); color:#fff; border-color:transparent; }
+  button.clear { color:var(--muted); margin-left:auto; }
   @media print {
-    .noprint, a.back { display:none !important; }
+    .noprint,a.back { display:none!important; }
     body { background:#fff; color:#000; padding:0; }
-    .sheet { border:none; box-shadow:none; }
+    .sheet { border:0; box-shadow:none; }
+    .goal { background:#fff; border:1px solid #999; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
   <a class="back noprint" href="index.html">← Back to ELC Hub</a>
-  <div class="sheet">
-    <h1>My ELC Report</h1>
+  <main class="sheet">
+    <h1>My Learning Record</h1>
     <p class="meta" id="dateLine"></p>
-    <table>
-      <tr><td class="k">First name</td><td id="rFirst">—</td></tr>
-      <tr><td class="k">Last name</td><td id="rLast">—</td></tr>
-      <tr><td class="k">Student ID</td><td id="rId">—</td></tr>
-    </table>
+    <p class="privacy noprint">🔒 Anonymous and stored in this browser only. This record shows what you opened; it is not an official assessment.</p>
 
-    <h2 style="margin-top:20px; font-size:1.05rem;">Activities completed</h2>
+    <h2>My learning direction</h2>
+    <div id="goal"></div>
+
+    <h2>Activities opened</h2>
     <ul class="log" id="log"></ul>
-    <p class="empty" id="emptyMsg" style="display:none;">Nothing opened yet — go back and try a tool, then come back here.</p>
+    <p class="empty" id="emptyActivities" hidden>Nothing opened yet — return to the hub and choose a tool.</p>
 
     <div class="actions noprint">
-      <button class="primary" onclick="window.print()">🖨️ Print / Save</button>
-      <button onclick="location.href='index.html'">Do another activity</button>
+      <button class="primary" id="print">🖨️ Print / Save</button>
+      <button id="another">Do another activity</button>
+      <button class="clear" id="clear">Clear activity record</button>
     </div>
-  </div>
+  </main>
 </div>
 
 <script>
-const s = JSON.parse(localStorage.getItem("elc_student") || "null");
-document.getElementById("dateLine").textContent = "Printed " + new Date().toLocaleDateString();
-if (s) {
-  rFirst.textContent = s.first || "—";
-  rLast.textContent = s.last || "—";
-  rId.textContent = s.id || "—";
+const VISITS_KEY="elc_visited", GOAL_KEY="elc_learning_compass_goal";
+document.getElementById("dateLine").textContent=new Date().toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"});
+
+function text(tag,value,className){
+  const element=document.createElement(tag);
+  element.textContent=value;
+  if(className) element.className=className;
+  return element;
 }
-let v = []; try{ v = JSON.parse(localStorage.getItem("elc_visited") || "[]"); }catch(e){}
-v.sort((a,b)=> a.ts - b.ts);
-const log = document.getElementById("log");
-if (v.length === 0) { document.getElementById("emptyMsg").style.display = "block"; }
-v.forEach(item=>{
-  const li = document.createElement("li");
-  const time = new Date(item.ts).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
-  li.innerHTML = `<span>${item.title}</span><span class="cat">${item.cat} · ${time}</span>`;
-  log.appendChild(li);
+
+let goal=null;
+try { goal=JSON.parse(localStorage.getItem(GOAL_KEY)||"null"); } catch(e) {}
+const goalBox=document.getElementById("goal");
+if(goal){
+  goalBox.className="goal";
+  goalBox.append(text("p",`${goal.modeLabel} · ${goal.level}`));
+  goalBox.append(text("p",goal.goal));
+  if(goal.evidence) goalBox.append(text("p",`Evidence: ${goal.evidence}`));
+} else {
+  goalBox.append(text("p","No goal saved yet — use the Learning Compass to choose one.","empty"));
+}
+
+let visits=[];
+try { visits=JSON.parse(localStorage.getItem(VISITS_KEY)||"[]"); } catch(e) {}
+visits=Array.isArray(visits)?visits.sort((a,b)=>a.ts-b.ts):[];
+const log=document.getElementById("log");
+document.getElementById("emptyActivities").hidden=visits.length!==0;
+visits.forEach(item=>{
+  const li=document.createElement("li");
+  li.append(text("span",item.title||"Activity"));
+  const when=new Date(item.ts).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+  li.append(text("span",`${item.cat||"ELC Hub"} · ${when}`,"cat"));
+  log.append(li);
 });
+
+document.getElementById("print").onclick=()=>window.print();
+document.getElementById("another").onclick=()=>location.href="index.html";
+document.getElementById("clear").onclick=()=>{
+  localStorage.removeItem(VISITS_KEY);
+  log.replaceChildren();
+  document.getElementById("emptyActivities").hidden=false;
+};
 </script>
 </body>
 </html>

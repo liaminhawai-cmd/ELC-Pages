@@ -3,105 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ELC Hub</title>
 <meta name="description" content="ELC Hub — practice tools and simulations for ELC students.">
+<title>ELC Hub</title>
 <style>
   :root {
     --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
     --accent:#2563eb; --accent-soft:#dbeafe; --radius:14px;
-    --shadow:0 1px 2px rgba(16,24,40,.05), 0 4px 14px rgba(16,24,40,.06);
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
   }
-  @media (prefers-color-scheme: dark) {
+  @media (prefers-color-scheme:dark) {
     :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048; --accent:#7aa5ff; --accent-soft:#1d2c4d; --shadow:0 1px 2px rgba(0,0,0,.4); }
   }
   * { box-sizing:border-box; margin:0; }
   body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; }
   header { background:linear-gradient(135deg,#2563eb,#7c3aed 60%,#db2777); color:#fff; padding:34px 20px 44px; text-align:center; position:relative; }
   header h1 { font-size:clamp(1.7rem,5vw,2.6rem); letter-spacing:-.5px; }
-  header p { max-width:560px; margin:10px auto 0; opacity:.94; }
+  header p { max-width:600px; margin:10px auto 0; opacity:.94; }
   .teacher-link { position:absolute; top:16px; right:16px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.35); color:#fff; padding:6px 13px; border-radius:999px; font-size:.85rem; cursor:pointer; }
   .teacher-link:hover { background:rgba(255,255,255,.28); }
+  .teacher-link:focus-visible,a:focus-visible { outline:3px solid rgba(255,255,255,.7); outline-offset:3px; }
   main { max-width:1080px; margin:0 auto; padding:24px 18px 60px; }
   section { margin-top:36px; }
   section > h2 { font-size:1.35rem; padding-bottom:8px; border-bottom:2px solid var(--line); }
   .grid { display:grid; gap:14px; margin-top:16px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); }
-  a.card { display:flex; flex-direction:column; gap:6px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:15px; text-decoration:none; color:inherit; box-shadow:var(--shadow); transition:transform .12s; }
+  a.card { display:flex; flex-direction:column; gap:6px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:15px; text-decoration:none; color:inherit; box-shadow:var(--shadow); transition:transform .12s,border-color .12s; }
   a.card:hover { transform:translateY(-3px); border-color:var(--accent); }
   .card .emoji { font-size:1.6rem; }
   .card h3 { font-size:1rem; }
   .card p { font-size:.85rem; color:var(--muted); }
   .report-link-row { text-align:center; margin-top:8px; }
-  .report-link-row a { color:var(--accent); font-weight:600; text-decoration:none; }
+  .report-link-row a { color:var(--accent); font-weight:700; text-decoration:none; }
+  .privacy-note { max-width:640px; margin:17px auto 0; padding:9px 12px; border-radius:10px; background:var(--accent-soft); color:var(--muted); font-size:.8rem; text-align:center; }
   footer { border-top:1px solid var(--line); margin-top:50px; padding:22px 18px 36px; text-align:center; color:var(--muted); font-size:.85rem; }
-
-  /* intake overlay */
-  #intake { position:fixed; inset:0; background:rgba(10,14,24,.55); display:flex; align-items:center; justify-content:center; z-index:50; padding:16px; }
-  #intake .box { background:var(--card); border-radius:16px; padding:26px 24px; max-width:380px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,.25); }
-  #intake h2 { font-size:1.25rem; margin-bottom:4px; }
-  #intake p.sub { color:var(--muted); font-size:.9rem; margin-bottom:16px; }
-  #intake label { display:block; font-size:.82rem; font-weight:600; margin:10px 0 4px; }
-  #intake input { width:100%; padding:10px 12px; border:1px solid var(--line); border-radius:8px; font-size:.95rem; background:var(--bg); color:var(--ink); }
-  #intake button { width:100%; margin-top:16px; padding:11px; border:none; border-radius:8px; background:var(--accent); color:#fff; font-weight:700; font-size:.95rem; cursor:pointer; }
-  #intake .skip { display:block; text-align:center; margin-top:10px; font-size:.8rem; color:var(--muted); cursor:pointer; text-decoration:underline; }
-  #intake.hidden { display:none; }
-
-  /* teacher modal */
-  #teacherModal { position:fixed; inset:0; background:rgba(10,14,24,.55); display:none; align-items:center; justify-content:center; z-index:60; padding:16px; }
-  #teacherModal.show { display:flex; }
-  #teacherModal .box { background:var(--card); border-radius:14px; padding:22px; max-width:320px; width:100%; box-shadow:0 10px 40px rgba(0,0,0,.25); }
-  #teacherModal h3 { font-size:1.05rem; margin-bottom:12px; }
-  #teacherModal input { width:100%; padding:9px 11px; border:1px solid var(--line); border-radius:7px; margin-bottom:9px; background:var(--bg); color:var(--ink); }
-  #teacherModal button { width:100%; padding:10px; border:none; border-radius:7px; background:var(--accent); color:#fff; font-weight:700; cursor:pointer; }
-  #teacherModal .err { color:#dc2626; font-size:.82rem; min-height:1.2em; margin-bottom:4px; }
-  #teacherModal .close { display:block; text-align:center; margin-top:10px; font-size:.8rem; color:var(--muted); cursor:pointer; }
-  .teacher-badge { display:none; background:#16a34a; color:#fff; font-size:.72rem; font-weight:700; padding:3px 9px; border-radius:999px; position:fixed; bottom:14px; right:14px; z-index:40; }
+  .teacher-badge { display:none; background:#16a34a; color:#fff; font-size:.72rem; font-weight:700; padding:4px 10px; border-radius:999px; position:fixed; bottom:14px; right:14px; z-index:40; }
   body.teacher-on .teacher-badge { display:block; }
+  @media (max-width:540px) {
+    header { padding-top:66px; }
+    .teacher-link { left:50%; right:auto; transform:translateX(-50%); white-space:nowrap; }
+  }
 </style>
 </head>
 <body>
-
-<div id="intake">
-  <div class="box">
-    <h2>Welcome to ELC Hub 🌟</h2>
-    <p class="sub">Please write your name so your report can be printed for your teacher.</p>
-    <form id="intakeForm">
-      <label for="fname">First name</label>
-      <input id="fname" required autocomplete="given-name">
-      <label for="lname">Last name</label>
-      <input id="lname" required autocomplete="family-name">
-      <label for="sid">Student ID</label>
-      <input id="sid" required inputmode="numeric">
-      <button type="submit">Start</button>
-    </form>
-    <span class="skip" id="skipIntake">Skip for now</span>
-  </div>
-</div>
-
-<div id="teacherModal">
-  <div class="box">
-    <h3>Teacher sign-in</h3>
-    <div class="err" id="teacherErr"></div>
-    <input id="tUser" placeholder="Username" autocomplete="username">
-    <input id="tPass" type="password" placeholder="Password" autocomplete="current-password">
-    <button id="teacherSubmit">Sign in</button>
-    <span class="close" id="teacherClose">Cancel</span>
-  </div>
-</div>
-
-<span class="teacher-badge">Teacher view</span>
+<span class="teacher-badge">Teacher view · display mode only</span>
 
 <header>
-  <button class="teacher-link" id="openTeacher">Teacher sign-in</button>
+  <button class="teacher-link" id="teacherToggle" aria-pressed="false">Teacher view</button>
   <h1>🌟 ELC Hub</h1>
-  <p>Practice tools, trainers and simulations made for ELC students. No accounts needed — everything runs right here in your browser.</p>
+  <p>Practice tools, trainers and simulations made for ELC students. No account needed — your activity record stays in this browser.</p>
 </header>
 
 <main>
-  <div class="report-link-row"><a href="report.html">📄 My Report →</a></div>
+  <div class="report-link-row"><a href="report.html">📄 My learning record →</a></div>
+  <p class="privacy-note">🔒 This hub does not ask for your name or student ID. Activity and goals are stored on this device only.</p>
 
   <section>
     <h2>🧡 Made for ELC</h2>
     <div class="grid">
+      <a class="card" data-cat="Made for ELC" data-title="Learning Compass" href="learning-compass.html"><span class="emoji">🧭</span><h3>Learning Compass</h3><p>Compare Pathway C levels and save one clear next-step goal.</p></a>
+      <a class="card" data-cat="Made for ELC" data-title="Feeling Wheel" href="feeling-wheel.html"><span class="emoji">🎡</span><h3>Feeling Wheel</h3><p>Spin from a core emotion to precise words in English, Chinese or Vietnamese.</p></a>
       <a class="card" data-cat="Made for ELC" data-title="Analytical Writing Wall" href="writing-wall.html"><span class="emoji">📝</span><h3>Analytical Writing Wall</h3><p>The same idea written at every band — see what actually changes.</p></a>
     </div>
   </section>
@@ -119,47 +78,27 @@
 <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
 
 <script>
-const KEY = "elc_student", VKEY = "elc_visited", TKEY = "elc_teacher";
-const TEACHER_USER = "ELC Staff", TEACHER_PASS = "ELC26";
+const VISITS_KEY = "elc_visited", TEACHER_KEY = "elc_teacher";
 
-// ---- intake ----
-function loadStudent(){ try{ return JSON.parse(localStorage.getItem(KEY)||"null"); }catch(e){ return null; } }
-if (loadStudent()) document.getElementById("intake").classList.add("hidden");
-
-document.getElementById("intakeForm").addEventListener("submit", e=>{
-  e.preventDefault();
-  const s = { first: fname.value.trim(), last: lname.value.trim(), id: sid.value.trim(), ts: Date.now() };
-  localStorage.setItem(KEY, JSON.stringify(s));
-  document.getElementById("intake").classList.add("hidden");
-});
-document.getElementById("skipIntake").addEventListener("click", ()=>{
-  document.getElementById("intake").classList.add("hidden");
-});
-
-// ---- visited tracking (for My Report) ----
-document.querySelectorAll("a.card").forEach(a=>{
-  a.addEventListener("click", ()=>{
-    let v = []; try{ v = JSON.parse(localStorage.getItem(VKEY)||"[]"); }catch(e){}
-    v = v.filter(x=>x.title !== a.dataset.title);
-    v.push({ title:a.dataset.title, cat:a.dataset.cat, ts:Date.now() });
-    localStorage.setItem(VKEY, JSON.stringify(v));
+document.querySelectorAll("a.card").forEach(card => {
+  card.addEventListener("click", () => {
+    let visits=[];
+    try { visits=JSON.parse(localStorage.getItem(VISITS_KEY)||"[]"); } catch(e) {}
+    visits=visits.filter(item => item.title !== card.dataset.title);
+    visits.push({title:card.dataset.title,cat:card.dataset.cat,ts:Date.now()});
+    localStorage.setItem(VISITS_KEY,JSON.stringify(visits));
   });
 });
 
-// ---- teacher toggle (cosmetic view switch only — not real access control) ----
-if (localStorage.getItem(TKEY) === "1") document.body.classList.add("teacher-on");
-const modal = document.getElementById("teacherModal");
-document.getElementById("openTeacher").addEventListener("click", ()=>{ modal.classList.add("show"); teacherErr.textContent=""; });
-document.getElementById("teacherClose").addEventListener("click", ()=> modal.classList.remove("show"));
-document.getElementById("teacherSubmit").addEventListener("click", ()=>{
-  if (tUser.value.trim() === TEACHER_USER && tPass.value === TEACHER_PASS) {
-    localStorage.setItem(TKEY, "1");
-    document.body.classList.add("teacher-on");
-    modal.classList.remove("show");
-  } else {
-    teacherErr.textContent = "Incorrect username or password.";
-  }
-});
+const toggle=document.getElementById("teacherToggle");
+function setTeacherView(on){
+  document.body.classList.toggle("teacher-on",on);
+  toggle.setAttribute("aria-pressed",String(on));
+  toggle.textContent=on?"Exit teacher view":"Teacher view";
+  localStorage.setItem(TEACHER_KEY,on?"1":"0");
+}
+setTeacherView(localStorage.getItem(TEACHER_KEY)==="1");
+toggle.addEventListener("click",()=>setTeacherView(!document.body.classList.contains("teacher-on")));
 </script>
 </body>
 </html>

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="An interactive multilingual feeling wheel for choosing precise emotion words.">
+<title>Feeling Wheel · ELC Hub</title>
+<style>
+  :root {
+    --paper:#fbfaf5;
+    --card:#ffffff;
+    --ink:#17211b;
+    --muted:#626a64;
+    --line:#d9ddd8;
+    --accent:#225b48;
+    --accent-soft:#e4f3eb;
+    --shadow:0 16px 42px rgba(31,45,37,.10);
+    --radius:20px;
+  }
+  * { box-sizing:border-box; }
+  html { scroll-behavior:smooth; }
+  body {
+    margin:0;
+    background:
+      radial-gradient(circle at 10% 5%,rgba(167,239,192,.24),transparent 28rem),
+      radial-gradient(circle at 96% 18%,rgba(247,167,168,.20),transparent 26rem),
+      var(--paper);
+    color:var(--ink);
+    font-family:system-ui,-apple-system,"Segoe UI","Noto Sans TC","Noto Sans SC",Arial,sans-serif;
+    line-height:1.5;
+  }
+  button,a { font:inherit; }
+  button { color:inherit; }
+  a { color:var(--accent); }
+  a:focus-visible,button:focus-visible,[tabindex]:focus-visible { outline:3px solid #2563eb; outline-offset:3px; }
+  .topbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    max-width:1480px;
+    margin:auto;
+    padding:16px clamp(16px,3vw,34px) 0;
+  }
+  .back { font-weight:800; text-decoration:none; }
+  .privacy { color:var(--muted); font-size:.82rem; }
+  header { max-width:980px; margin:26px auto 0; padding:0 20px; text-align:center; }
+  .eyebrow { margin:0 0 8px; color:var(--accent); font-size:.78rem; font-weight:900; letter-spacing:.14em; text-transform:uppercase; }
+  h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:clamp(2.15rem,6vw,4.4rem); line-height:1; letter-spacing:-.035em; }
+  .lede { max-width:760px; margin:17px auto 0; color:var(--muted); font-size:clamp(1rem,2vw,1.14rem); }
+  .goals { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; margin:20px auto 0; }
+  .goal { border:1px solid var(--line); border-radius:999px; background:rgba(255,255,255,.76); padding:7px 12px; font-size:.84rem; }
+  .goal strong { color:var(--accent); }
+  main { max-width:1480px; margin:26px auto 0; padding:0 clamp(12px,2.4vw,34px) 64px; }
+  .toolbar {
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    background:rgba(255,255,255,.82);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:12px;
+    box-shadow:0 6px 22px rgba(31,45,37,.06);
+    position:sticky;
+    top:8px;
+    z-index:20;
+    backdrop-filter:blur(12px);
+  }
+  .languages,.spin-controls { display:flex; flex-wrap:wrap; gap:7px; align-items:center; }
+  .tool-label { padding:0 4px; color:var(--muted); font-size:.8rem; font-weight:850; }
+  .pill,.icon-btn {
+    border:1px solid var(--line);
+    background:var(--card);
+    border-radius:999px;
+    cursor:pointer;
+    min-height:38px;
+    transition:background .15s,border-color .15s,transform .15s;
+  }
+  .pill { padding:7px 12px; }
+  .icon-btn { min-width:42px; padding:7px 11px; font-weight:900; }
+  .pill:hover,.icon-btn:hover { border-color:var(--accent); transform:translateY(-1px); }
+  .pill.active { background:var(--accent); color:#fff; border-color:var(--accent); font-weight:850; }
+  .workspace { display:grid; grid-template-columns:minmax(620px,1fr) minmax(300px,390px); gap:clamp(16px,2.2vw,30px); align-items:start; margin-top:20px; }
+  .wheel-card,.detail-card {
+    background:rgba(255,255,255,.9);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+  .wheel-card { padding:clamp(8px,1.5vw,20px); overflow:hidden; }
+  .wheel-stage { position:relative; max-width:940px; margin:auto; touch-action:none; user-select:none; }
+  .top-marker {
+    position:absolute;
+    z-index:5;
+    top:0;
+    left:50%;
+    width:0;
+    height:0;
+    border-left:12px solid transparent;
+    border-right:12px solid transparent;
+    border-top:22px solid var(--ink);
+    transform:translateX(-50%);
+    filter:drop-shadow(0 2px 1px rgba(255,255,255,.8));
+    pointer-events:none;
+  }
+  svg { display:block; width:100%; height:auto; overflow:visible; cursor:grab; }
+  svg.dragging { cursor:grabbing; }
+  #wheelGroup { transform-origin:410px 410px; transform-box:view-box; transition:transform .65s cubic-bezier(.22,.82,.24,1); }
+  #wheelGroup.no-transition { transition:none; }
+  .sector { cursor:pointer; transition:opacity .18s,filter .18s,stroke-width .18s; vector-effect:non-scaling-stroke; }
+  .sector:hover { filter:brightness(.96) saturate(1.08); }
+  .sector.dimmed { opacity:.21; }
+  .sector.selected { filter:brightness(.97) saturate(1.18); }
+  .core-path { stroke-width:3.8; }
+  .branch-path { stroke-width:1.9; }
+  .leaf-path { stroke-width:1.05; }
+  .sector.selected { stroke-width:4.4; }
+  .wheel-label { pointer-events:none; fill:#111814; text-anchor:middle; dominant-baseline:middle; font-weight:760; paint-order:stroke; stroke:rgba(255,255,255,.52); stroke-width:1.4px; stroke-linejoin:round; }
+  .core-label { font-family:Georgia,"Times New Roman",serif; font-size:18px; font-weight:800; }
+  .branch-label { font-size:11.2px; }
+  .leaf-label { font-size:9.2px; font-weight:680; }
+  .translated-label { font-size:9.5px; }
+  .core-label.translated-label { font-size:16px; }
+  .leaf-label.translated-label { font-size:8.8px; }
+  .wheel-outline { fill:none; stroke:var(--ink); stroke-width:5; pointer-events:none; vector-effect:non-scaling-stroke; }
+  .hub-dot { fill:var(--ink); pointer-events:none; }
+  .drag-hint { margin:5px 0 2px; color:var(--muted); font-size:.83rem; text-align:center; }
+  .focus-strip { border-top:1px solid var(--line); margin-top:8px; padding:14px 6px 2px; }
+  .focus-heading { display:flex; align-items:center; gap:8px; margin:0 0 9px; font-size:.86rem; }
+  .focus-dot { width:14px; height:14px; border-radius:50%; border:1.5px solid var(--ink); flex:none; }
+  .focus-words { display:flex; flex-wrap:wrap; gap:7px; }
+  .focus-word { border:1px solid var(--line); background:#fff; border-radius:999px; padding:6px 10px; cursor:pointer; font-size:.82rem; }
+  .focus-word:hover { border-color:var(--accent); }
+  .detail-card { position:sticky; top:82px; min-height:520px; overflow:hidden; }
+  .detail-colour { height:10px; background:var(--accent-soft); }
+  .detail-inner { padding:clamp(20px,3vw,29px); }
+  .detail-kicker { margin:0; color:var(--muted); font-size:.76rem; font-weight:900; letter-spacing:.11em; text-transform:uppercase; }
+  .detail-word { margin:6px 0 0; font-family:Georgia,"Times New Roman",serif; font-size:clamp(2.1rem,4vw,3.6rem); line-height:1.02; overflow-wrap:anywhere; }
+  .detail-english { margin:6px 0 0; color:var(--muted); font-size:1.06rem; font-weight:750; }
+  .trail { display:flex; flex-wrap:wrap; gap:5px; align-items:center; margin:17px 0 0; color:var(--muted); font-size:.8rem; }
+  .trail button { border:0; background:transparent; padding:0; color:var(--accent); cursor:pointer; text-decoration:underline; }
+  .detail-section { margin-top:23px; }
+  .detail-section h3 { margin:0 0 9px; font-size:.84rem; letter-spacing:.04em; text-transform:uppercase; }
+  .chips { display:flex; flex-wrap:wrap; gap:7px; }
+  .chip { border-radius:9px; padding:6px 9px; font-size:.83rem; }
+  .form-chip { background:#f1f4f1; border:1px solid #dce2dd; }
+  button.related { border:1px solid var(--line); background:#fff; cursor:pointer; }
+  button.related:hover { border-color:var(--accent); color:var(--accent); }
+  .example { margin:0; border-left:4px solid var(--accent); background:var(--accent-soft); border-radius:0 12px 12px 0; padding:12px 14px; font-size:.92rem; }
+  .spelling-note { margin:9px 0 0; color:var(--muted); font-size:.8rem; }
+  .empty-detail { display:grid; min-height:490px; place-content:center; text-align:center; color:var(--muted); }
+  .empty-icon { font-size:3rem; }
+  .empty-detail strong { display:block; color:var(--ink); margin:10px 0 5px; font-family:Georgia,"Times New Roman",serif; font-size:1.5rem; }
+  .key { display:inline-block; border:1px solid var(--line); border-bottom-width:3px; border-radius:6px; background:#fff; padding:0 5px; color:var(--ink); font-size:.75rem; }
+  .bottom-note { max-width:900px; margin:22px auto 0; color:var(--muted); text-align:center; font-size:.82rem; }
+  @media (max-width:1050px) {
+    .workspace { grid-template-columns:1fr; }
+    .detail-card { position:static; min-height:0; }
+    .empty-detail { min-height:260px; }
+  }
+  @media (max-width:680px) {
+    .topbar { align-items:flex-start; }
+    .privacy { max-width:170px; text-align:right; }
+    .toolbar { position:static; }
+    .workspace { display:block; }
+    .wheel-card { border-radius:14px; padding:5px; }
+    .detail-card { margin-top:14px; }
+    .wheel-label { stroke-width:1px; }
+    .core-label { font-size:15px; }
+    .branch-label { font-size:9.5px; }
+    .leaf-label { font-size:7.6px; }
+    .translated-label { font-size:8px; }
+    .leaf-label.translated-label { font-size:7.1px; }
+    .focus-strip { padding-inline:9px; }
+  }
+  @media (prefers-reduced-motion:reduce) {
+    html { scroll-behavior:auto; }
+    #wheelGroup,.sector,.pill,.icon-btn { transition:none; }
+  }
+</style>
+</head>
+<body>
+<div class="topbar">
+  <a class="back" href="index.html">← ELC Hub</a>
+  <span class="privacy">No names, logins or data sent away</span>
+</div>
+
+<header>
+  <p class="eyebrow">Vocabulary · precision · expression</p>
+  <h1 id="pageTitle">Feeling Wheel</h1>
+  <p class="lede" id="pageIntro">Start with a broad feeling, spin its arc to the top, then move outwards to find a more precise word.</p>
+  <div class="goals">
+    <span class="goal"><strong>Learning intention:</strong> choose precise emotion vocabulary.</span>
+    <span class="goal"><strong>Success:</strong> explain the difference between a core feeling and a specific shade of it.</span>
+  </div>
+</header>
+
+<main>
+  <div class="toolbar" aria-label="Wheel controls">
+    <div class="languages" role="group" aria-label="Translation language">
+      <span class="tool-label" id="languageLabel">Wheel language</span>
+      <button class="pill active" type="button" data-lang="en" lang="en">English</button>
+      <button class="pill" type="button" data-lang="zhHant" lang="zh-Hant">繁體中文</button>
+      <button class="pill" type="button" data-lang="zhHans" lang="zh-Hans">简体中文</button>
+      <button class="pill" type="button" data-lang="vi" lang="vi">Tiếng Việt</button>
+    </div>
+    <div class="spin-controls" role="group" aria-label="Spin wheel">
+      <span class="tool-label" id="spinLabel">Spin</span>
+      <button class="icon-btn" type="button" id="spinLeft" aria-label="Spin anticlockwise">↶</button>
+      <button class="icon-btn" type="button" id="resetWheel" aria-label="Reset wheel">Reset</button>
+      <button class="icon-btn" type="button" id="spinRight" aria-label="Spin clockwise">↷</button>
+    </div>
+  </div>
+
+  <div class="workspace">
+    <section class="wheel-card" aria-label="Interactive feeling wheel">
+      <div class="wheel-stage">
+        <span class="top-marker" aria-hidden="true"></span>
+        <svg id="wheelSvg" viewBox="0 0 820 820" role="group" aria-label="Feeling wheel. Drag to spin, or select any word." tabindex="0">
+          <g id="wheelGroup"></g>
+        </svg>
+      </div>
+      <p class="drag-hint" id="dragHint">Drag anywhere to spin · click a core emotion to bring its arc to the top · use <span class="key">←</span> <span class="key">→</span> on the keyboard</p>
+      <div class="focus-strip" id="focusStrip" aria-live="polite"></div>
+    </section>
+
+    <aside class="detail-card" id="detailCard" aria-live="polite">
+      <div class="detail-colour" id="detailColour"></div>
+      <div class="detail-inner" id="detailInner">
+        <div class="empty-detail">
+          <div class="empty-icon">☝️</div>
+          <strong>Choose any word</strong>
+          <span>Its translation, word family and nearby emotions will appear here.</span>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <p class="bottom-note">Translations are classroom-friendly equivalents: emotion words do not always match one-to-one across languages. Ask which word best fits the situation.</p>
+</main>
+
+<script>
+(() => {
+  "use strict";
+
+  const W = (en, zhHant, zhHans, vi) => ({ en, zhHant, zhHans, vi });
+  const EMOTIONS = [
+    {
+      colour:"#a7efc0", core:W("Happy","快樂","快乐","Vui vẻ"), branches:[
+        [W("Playful","調皮","调皮","Tinh nghịch"), W("Aroused","興奮","兴奋","Phấn khích"), W("Cheeky","頑皮","顽皮","Lém lỉnh")],
+        [W("Content","滿足","满足","Hài lòng"), W("Free","自由","自由","Tự do"), W("Joyful","喜悅","喜悦","Hân hoan")],
+        [W("Interested","感興趣","感兴趣","Quan tâm"), W("Curious","好奇","好奇","Tò mò"), W("Inquisitive","愛探究","爱探究","Ham tìm hiểu")],
+        [W("Proud","自豪","自豪","Tự hào"), W("Successful","成功","成功","Thành công"), W("Confident","自信","自信","Tự tin")],
+        [W("Accepted","被接納","被接纳","Được chấp nhận"), W("Respected","被尊重","被尊重","Được tôn trọng"), W("Valued","被重視","被重视","Được coi trọng")],
+        [W("Powerful","強大","强大","Mạnh mẽ"), W("Courageous","勇敢","勇敢","Can đảm"), W("Creative","有創意","有创意","Sáng tạo")],
+        [W("Peaceful","平靜","平静","Bình yên"), W("Loving","有愛心","有爱心","Yêu thương"), W("Thankful","感激","感激","Biết ơn")],
+        [W("Trusting","信任","信任","Tin tưởng"), W("Sensitive","敏感","敏感","Nhạy cảm"), W("Intimate","親密","亲密","Thân mật")],
+        [W("Optimistic","樂觀","乐观","Lạc quan"), W("Hopeful","充滿希望","充满希望","Đầy hy vọng"), W("Inspired","受到啟發","受到启发","Được truyền cảm hứng")]
+      ]
+    },
+    {
+      colour:"#ffd4c2", core:W("Surprised","驚訝","惊讶","Ngạc nhiên"), branches:[
+        [W("Excited","興奮","兴奋","Hào hứng"), W("Energetic","精力充沛","精力充沛","Tràn đầy năng lượng"), W("Eager","渴望","渴望","Háo hức")],
+        [W("Amazed","驚奇","惊奇","Kinh ngạc"), W("Awe","敬畏","敬畏","Choáng ngợp"), W("Astonished","震驚","震惊","Sửng sốt")],
+        [W("Confused","困惑","困惑","Bối rối"), W("Perplexed","不知所措","不知所措","Hoang mang"), W("Disillusioned","幻滅","幻灭","Vỡ mộng")],
+        [W("Startled","吃驚","吃惊","Giật mình"), W("Dismayed","驚愕","惊愕","Hoảng hốt"), W("Shocked","震驚","震惊","Sốc")]
+      ]
+    },
+    {
+      colour:"#fff2a8", core:W("Bad","糟糕","糟糕","Tồi tệ"), branches:[
+        [W("Tired","疲倦","疲倦","Mệt mỏi"), W("Sleepy","睏倦","困倦","Buồn ngủ"), W("Unfocused","不專心","不专心","Mất tập trung")],
+        [W("Stressed","有壓力","有压力","Căng thẳng"), W("Out of control","失控","失控","Mất kiểm soát"), W("Overwhelmed","不知所措","不知所措","Quá tải")],
+        [W("Busy","忙碌","忙碌","Bận rộn"), W("Rushed","匆忙","匆忙","Vội vã"), W("Pressured","感到壓力","感到压力","Bị áp lực")],
+        [W("Bored","無聊","无聊","Chán"), W("Apathetic","冷漠","冷漠","Thờ ơ"), W("Indifferent","漠不關心","漠不关心","Dửng dưng")]
+      ]
+    },
+    {
+      colour:"#dce8e5", core:W("Fearful","恐懼","恐惧","Sợ hãi"), branches:[
+        [W("Scared","害怕","害怕","Sợ"), W("Helpless","無助","无助","Bất lực"), W("Frightened","驚恐","惊恐","Hoảng sợ")],
+        [W("Anxious","焦慮","焦虑","Lo âu"), W("Overwhelmed","不知所措","不知所措","Quá tải"), W("Worried","擔心","担心","Lo lắng")],
+        [W("Insecure","不安","不安","Thiếu an toàn"), W("Inadequate","覺得不足","觉得不足","Cảm thấy chưa đủ tốt"), W("Inferior","自卑","自卑","Tự ti")],
+        [W("Weak","軟弱","软弱","Yếu đuối"), W("Worthless","毫無價值","毫无价值","Vô giá trị"), W("Insignificant","微不足道","微不足道","Không đáng kể")],
+        [W("Rejected","被拒絕","被拒绝","Bị từ chối"), W("Excluded","被排斥","被排斥","Bị loại trừ"), W("Persecuted","受迫害","受迫害","Bị ngược đãi")],
+        [W("Threatened","受威脅","受威胁","Bị đe doạ"), W("Nervous","緊張","紧张","Hồi hộp"), W("Exposed","暴露","暴露","Bị phơi bày")]
+      ]
+    },
+    {
+      colour:"#f7a7a8", core:W("Angry","憤怒","愤怒","Tức giận"), branches:[
+        [W("Let down","失望","失望","Bị thất vọng"), W("Betrayed","被背叛","被背叛","Bị phản bội"), W("Resentful","怨恨","怨恨","Ấm ức")],
+        [W("Humiliated","受辱","受辱","Bị sỉ nhục"), W("Disrespected","不被尊重","不被尊重","Không được tôn trọng"), W("Ridiculed","被嘲笑","被嘲笑","Bị chế giễu")],
+        [W("Bitter","憤恨","愤恨","Cay đắng"), W("Indignant","憤慨","愤慨","Phẫn nộ"), W("Violated","被侵犯","被侵犯","Bị xâm phạm")],
+        [W("Mad","生氣","生气","Tức tối"), W("Furious","暴怒","暴怒","Giận dữ"), W("Jealous","嫉妒","嫉妒","Ghen tị")],
+        [W("Aggressive","攻擊性","攻击性","Hung hăng"), W("Provoked","被激怒","被激怒","Bị chọc giận"), W("Hostile","敵對","敌对","Thù địch")],
+        [W("Frustrated","沮喪","沮丧","Bực bội"), W("Infuriated","狂怒","狂怒","Điên tiết"), W("Annoyed","惱火","恼火","Khó chịu")],
+        [W("Distant","疏離","疏离","Xa cách"), W("Withdrawn","退縮","退缩","Thu mình"), W("Numb","麻木","麻木","Tê liệt")],
+        [W("Critical","挑剔","挑剔","Hay chỉ trích"), W("Sceptical","懷疑","怀疑","Hoài nghi"), W("Dismissive","輕視","轻视","Coi thường")]
+      ]
+    },
+    {
+      colour:"#e8d9ee", core:W("Disgusted","厭惡","厌恶","Ghê tởm"), branches:[
+        [W("Disapproving","不贊同","不赞同","Không tán thành"), W("Judgmental","愛批判","爱批判","Hay phán xét"), W("Embarrassed","尷尬","尴尬","Xấu hổ")],
+        [W("Disappointed","失望","失望","Thất vọng"), W("Appalled","駭然","骇然","Kinh hoàng"), W("Revolted","反感","反感","Ghê sợ")],
+        [W("Awful","糟透了","糟透了","Tồi tệ"), W("Nauseated","噁心","恶心","Buồn nôn"), W("Detestable","可憎","可憎","Đáng ghét")],
+        [W("Repelled","反感","反感","Bị ghê tởm"), W("Horrified","驚駭","惊骇","Khiếp sợ"), W("Hesitant","猶豫","犹豫","Do dự")]
+      ]
+    },
+    {
+      colour:"#d8eaf6", core:W("Sad","悲傷","悲伤","Buồn"), branches:[
+        [W("Hurt","受傷","受伤","Tổn thương"), W("Embarrassed","尷尬","尴尬","Xấu hổ"), W("Disappointed","失望","失望","Thất vọng")],
+        [W("Depressed","情緒低落","情绪低落","Trầm uất"), W("Inferior","自卑","自卑","Tự ti"), W("Empty","空虛","空虚","Trống rỗng")],
+        [W("Guilty","內疚","内疚","Có lỗi"), W("Remorseful","懊悔","懊悔","Ân hận"), W("Ashamed","羞愧","羞愧","Hổ thẹn")],
+        [W("Despair","絕望","绝望","Tuyệt vọng"), W("Powerless","無力","无力","Bất lực"), W("Grief","悲痛","悲痛","Đau buồn")],
+        [W("Vulnerable","脆弱","脆弱","Dễ bị tổn thương"), W("Fragile","易受傷","易受伤","Mong manh"), W("Victimised","受害","受害","Bị hại")],
+        [W("Lonely","孤單","孤单","Cô đơn"), W("Abandoned","被遺棄","被遗弃","Bị bỏ rơi"), W("Isolated","被孤立","被孤立","Bị cô lập")]
+      ]
+    }
+  ];
+
+  const FAMILIES = {
+    "Happy":["happy","happiness","happier","happiest","happily","unhappy"],
+    "Surprised":["surprise","surprised","surprising","surprisingly"],
+    "Bad":["bad","worse","worst","badly"],
+    "Fearful":["fear","fearful","fearfully","fearless","fearlessness"],
+    "Angry":["anger","angry","angrier","angriest","angrily"],
+    "Disgusted":["disgust","disgusted","disgusting","disgustingly"],
+    "Sad":["sad","sadness","sadder","saddest","sadly"],
+    "Playful":["play","playful","playfully","playfulness"],
+    "Cheeky":["cheek","cheeky","cheekier","cheekiest","cheekily","cheekiness"],
+    "Content":["content","contented","contentment"],
+    "Free":["free","freed","freeing","freedom","freely"],
+    "Interested":["interest","interested","interesting","interestingly"],
+    "Inquisitive":["inquire","inquisitive","inquisitively","inquisitiveness"],
+    "Proud":["pride","proud","prouder","proudest","proudly"],
+    "Accepted":["accept","accepted","accepting","acceptance","acceptable"],
+    "Powerful":["power","powerful","powerfully","powerless"],
+    "Peaceful":["peace","peaceful","peacefully","peacefulness"],
+    "Trusting":["trust","trusted","trusting","trustworthy"],
+    "Intimate":["intimacy","intimate","intimately"],
+    "Optimistic":["optimism","optimist","optimistic","optimistically"],
+    "Excited":["excite","excited","exciting","excitement"],
+    "Amazed":["amaze","amazed","amazing","amazement"],
+    "Confused":["confuse","confused","confusing","confusion"],
+    "Startled":["startle","startled","startling"],
+    "Tired":["tire","tired","tiring","tiredness"],
+    "Stressed":["stress","stressed","stressful","stressfully"],
+    "Busy":["busy","busier","busiest","busily","busyness"],
+    "Bored":["bore","bored","boring","boredom"],
+    "Scared":["scare","scared","scary","scarier","scariest"],
+    "Anxious":["anxiety","anxious","anxiously"],
+    "Insecure":["insecurity","insecure","insecurely"],
+    "Weak":["weak","weaker","weakest","weakly","weakness"],
+    "Rejected":["reject","rejected","rejecting","rejection"],
+    "Threatened":["threat","threaten","threatened","threatening"],
+    "Let down":["let down","lets down","letting down","felt let down"],
+    "Humiliated":["humiliate","humiliated","humiliating","humiliation"],
+    "Bitter":["bitter","bitterer","bitterest","bitterly","bitterness"],
+    "Mad":["mad","madder","maddest","madly"],
+    "Aggressive":["aggression","aggressive","aggressively"],
+    "Frustrated":["frustrate","frustrated","frustrating","frustration"],
+    "Distant":["distance","distant","distantly"],
+    "Critical":["criticise","critic","criticism","critical","critically"],
+    "Disapproving":["disapprove","disapproved","disapproving","disapproval"],
+    "Disappointed":["disappoint","disappointed","disappointing","disappointment"],
+    "Awful":["awful","awfully","awfulness"],
+    "Repelled":["repel","repelled","repelling","repellent"],
+    "Hurt":["hurt","hurts","hurting","hurtful"],
+    "Depressed":["depress","depressed","depressing","depression"],
+    "Guilty":["guilt","guilty","guiltier","guiltiest","guiltily"],
+    "Despair":["despair","despaired","despairing","despairingly"],
+    "Vulnerable":["vulnerable","vulnerability"],
+    "Lonely":["lone","lonely","lonelier","loneliest","loneliness"],
+    "Aroused":["arouse","aroused","arousing","arousal"],
+    "Joyful":["joy","joyful","joyfully","joyfulness"],
+    "Curious":["curiosity","curious","curiously"],
+    "Successful":["success","succeed","successful","successfully"],
+    "Confident":["confidence","confident","confidently"],
+    "Respected":["respect","respected","respectful","respectfully"],
+    "Valued":["value","valued","valuable"],
+    "Courageous":["courage","courageous","courageously"],
+    "Creative":["create","creative","creativity","creatively"],
+    "Loving":["love","loved","loving","lovingly"],
+    "Thankful":["thank","thankful","thankfully","thankfulness"],
+    "Sensitive":["sense","sensitive","sensitivity","sensitively"],
+    "Hopeful":["hope","hopeful","hopefully","hopeless"],
+    "Inspired":["inspire","inspired","inspiring","inspiration"],
+    "Energetic":["energy","energise","energetic","energetically"],
+    "Eager":["eager","eagerly","eagerness"],
+    "Astonished":["astonish","astonished","astonishing","astonishment"],
+    "Awe":["awe","awed","awesome","awe-inspiring"],
+    "Perplexed":["perplex","perplexed","perplexing","perplexity"],
+    "Disillusioned":["disillusion","disillusioned","disillusionment"],
+    "Shocked":["shock","shocked","shocking"],
+    "Dismayed":["dismay","dismayed","dismaying"],
+    "Sleepy":["sleep","sleepy","sleepier","sleepiest","sleepiness"],
+    "Unfocused":["focus","focused","focusing","unfocused"],
+    "Out of control":["control","controlled","controlling","out of control"],
+    "Overwhelmed":["overwhelm","overwhelmed","overwhelming"],
+    "Rushed":["rush","rushed","rushing"],
+    "Pressured":["pressure","pressured","pressuring"],
+    "Apathetic":["apathy","apathetic","apathetically"],
+    "Indifferent":["indifference","indifferent","indifferently"],
+    "Helpless":["help","helpful","helpless","helplessly","helplessness"],
+    "Frightened":["fright","frighten","frightened","frightening"],
+    "Worried":["worry","worried","worrying"],
+    "Inadequate":["inadequacy","inadequate","inadequately"],
+    "Inferior":["inferior","inferiority"],
+    "Worthless":["worth","worthy","worthless","worthlessness"],
+    "Insignificant":["significance","significant","insignificant","insignificance"],
+    "Excluded":["exclude","excluded","excluding","exclusion"],
+    "Persecuted":["persecute","persecuted","persecuting","persecution"],
+    "Nervous":["nerve","nervous","nervously","nervousness"],
+    "Exposed":["expose","exposed","exposing","exposure"],
+    "Betrayed":["betray","betrayed","betraying","betrayal"],
+    "Resentful":["resent","resentful","resentment"],
+    "Ridiculed":["ridicule","ridiculed","ridiculing","ridiculous"],
+    "Disrespected":["disrespect","disrespected","disrespectful"],
+    "Indignant":["indignant","indignantly","indignation"],
+    "Violated":["violate","violated","violating","violation"],
+    "Furious":["fury","furious","furiously"],
+    "Jealous":["jealous","jealously","jealousy"],
+    "Provoked":["provoke","provoked","provoking","provocation"],
+    "Hostile":["hostile","hostility"],
+    "Infuriated":["infuriate","infuriated","infuriating","infuriation"],
+    "Annoyed":["annoy","annoyed","annoying","annoyance"],
+    "Withdrawn":["withdraw","withdrew","withdrawn","withdrawing"],
+    "Numb":["numb","numbed","numbing","numbness"],
+    "Sceptical":["sceptic","sceptical","sceptically","scepticism"],
+    "Dismissive":["dismiss","dismissed","dismissive","dismissively"],
+    "Judgmental":["judge","judgment","judgmental"],
+    "Embarrassed":["embarrass","embarrassed","embarrassing","embarrassment"],
+    "Appalled":["appal","appalled","appalling"],
+    "Revolted":["revolt","revolted","revolting","revulsion"],
+    "Nauseated":["nausea","nauseate","nauseated","nauseating"],
+    "Detestable":["detest","detested","detestable"],
+    "Horrified":["horror","horrify","horrified","horrifying"],
+    "Hesitant":["hesitate","hesitant","hesitantly","hesitation"],
+    "Empty":["empty","emptier","emptiest","emptiness"],
+    "Remorseful":["remorse","remorseful","remorsefully"],
+    "Ashamed":["shame","ashamed","shameful"],
+    "Powerless":["power","powerless","powerlessness"],
+    "Grief":["grief","grieve","grieving","grief-stricken"],
+    "Fragile":["fragile","fragility"],
+    "Victimised":["victim","victimise","victimised","victimisation"],
+    "Abandoned":["abandon","abandoned","abandoning","abandonment"],
+    "Isolated":["isolate","isolated","isolating","isolation"]
+  };
+
+  const UI = {
+    en:{title:"Feeling Wheel",intro:"Start with a broad feeling, spin its arc to the top, then move outwards to find a more precise word.",language:"Wheel language",spin:"Spin",drag:"Drag anywhere to spin · click a core emotion to bring its arc to the top · use ← → on the keyboard",focus:"Words inside",choose:"Choose any word",chooseHelp:"Its translation, word family and nearby emotions will appear here.",family:"English word family",nearby:"Nearby emotion words",tryIt:"Try it in a sentence",ring:["Core emotion","Emotion group","Precise word"]},
+    zhHant:{title:"情緒輪",intro:"先選一個核心情緒，把它轉到頂部，再向外找更精確的詞語。",language:"情緒輪語言",spin:"旋轉",drag:"拖曳情緒輪來旋轉 · 點選核心情緒把該區轉到頂部 · 鍵盤可用 ← →",focus:"這個情緒裡的詞語",choose:"選擇任何詞語",chooseHelp:"這裡會顯示翻譯、英語詞族和相關情緒。",family:"英語詞族",nearby:"相關情緒詞",tryIt:"放進句子裡",ring:["核心情緒","情緒類別","精確詞語"]},
+    zhHans:{title:"情绪轮",intro:"先选一个核心情绪，把它转到顶部，再向外找更精确的词语。",language:"情绪轮语言",spin:"旋转",drag:"拖动情绪轮来旋转 · 点击核心情绪把该区转到顶部 · 键盘可用 ← →",focus:"这个情绪里的词语",choose:"选择任何词语",chooseHelp:"这里会显示翻译、英语词族和相关情绪。",family:"英语词族",nearby:"相关情绪词",tryIt:"放进句子里",ring:["核心情绪","情绪类别","精确词语"]},
+    vi:{title:"Vòng tròn cảm xúc",intro:"Bắt đầu với một cảm xúc chính, xoay cung đó lên trên, rồi đi ra ngoài để tìm từ chính xác hơn.",language:"Ngôn ngữ",spin:"Xoay",drag:"Kéo để xoay · bấm cảm xúc chính để đưa cung lên trên · dùng phím ← →",focus:"Các từ trong cảm xúc",choose:"Chọn bất kỳ từ nào",chooseHelp:"Bản dịch, họ từ tiếng Anh và các cảm xúc gần nghĩa sẽ hiện ở đây.",family:"Họ từ tiếng Anh",nearby:"Từ cảm xúc liên quan",tryIt:"Dùng trong câu",ring:["Cảm xúc chính","Nhóm cảm xúc","Từ cụ thể"]}
+  };
+
+  const svg = document.getElementById("wheelSvg");
+  const wheelGroup = document.getElementById("wheelGroup");
+  const focusStrip = document.getElementById("focusStrip");
+  const detailInner = document.getElementById("detailInner");
+  const detailColour = document.getElementById("detailColour");
+  const NS = "http://www.w3.org/2000/svg";
+  const CX = 410, CY = 410, CORE_R = 112, BRANCH_R = 238, OUTER_R = 390;
+  const TOTAL_LEAVES = EMOTIONS.reduce((n,c) => n + c.branches.length * 2, 0);
+  const LEAF_ANGLE = 360 / TOTAL_LEAVES;
+  const registry = new Map();
+  const byEnglish = new Map();
+  const coreAngles = [];
+  let language = "en";
+  let rotation = 0;
+  let selectedCore = null;
+  let selectedId = null;
+  let dragging = false;
+  let dragLastAngle = 0;
+  let dragDistance = 0;
+  let moved = false;
+
+  const polar = (r,deg) => {
+    const a = deg * Math.PI / 180;
+    return [CX + r * Math.cos(a), CY + r * Math.sin(a)];
+  };
+
+  function donutPath(r0,r1,a0,a1) {
+    const p0 = polar(r1,a0), p1 = polar(r1,a1), p2 = polar(r0,a1), p3 = polar(r0,a0);
+    const large = a1 - a0 > 180 ? 1 : 0;
+    if (r0 === 0) return `M ${CX} ${CY} L ${p0[0]} ${p0[1]} A ${r1} ${r1} 0 ${large} 1 ${p1[0]} ${p1[1]} Z`;
+    return `M ${p0[0]} ${p0[1]} A ${r1} ${r1} 0 ${large} 1 ${p1[0]} ${p1[1]} L ${p2[0]} ${p2[1]} A ${r0} ${r0} 0 ${large} 0 ${p3[0]} ${p3[1]} Z`;
+  }
+
+  function lighten(hex,amount) {
+    const rgb = hex.slice(1).match(/../g).map(v => parseInt(v,16));
+    return "#" + rgb.map(v => Math.round(v + (255-v)*amount).toString(16).padStart(2,"0")).join("");
+  }
+
+  function normalise(deg) { return ((deg % 360) + 360) % 360; }
+
+  function textTransform(angle,r) {
+    const [x,y] = polar(r,angle);
+    const n = normalise(angle);
+    const flip = n > 90 && n < 270 ? 180 : 0;
+    return `translate(${x} ${y}) rotate(${angle + flip})`;
+  }
+
+  function addSector({id,word,coreIndex,branchIndex,level,a0,a1,r0,r1,fill,parentId}) {
+    const path = document.createElementNS(NS,"path");
+    path.setAttribute("d",donutPath(r0,r1,a0,a1));
+    path.setAttribute("fill",fill);
+    path.setAttribute("stroke","#17211b");
+    path.setAttribute("class",`sector ${level}-path`);
+    path.setAttribute("tabindex","0");
+    path.setAttribute("role","button");
+    path.setAttribute("aria-label",`${word.en}: ${word[language]}`);
+    path.dataset.id = id;
+    wheelGroup.appendChild(path);
+
+    const text = document.createElementNS(NS,"text");
+    const r = level === "core" ? 68 : level === "branch" ? 174 : 313;
+    text.setAttribute("transform",textTransform((a0+a1)/2,r));
+    text.setAttribute("class",`wheel-label ${level}-label${language === "en" ? "" : " translated-label"}`);
+    text.textContent = word[language];
+    wheelGroup.appendChild(text);
+
+    const entry = {id,word,coreIndex,branchIndex,level,parentId,a0,a1};
+    registry.set(id,entry);
+    if (!byEnglish.has(word.en)) byEnglish.set(word.en,id);
+  }
+
+  function renderWheel() {
+    wheelGroup.replaceChildren();
+    registry.clear();
+    byEnglish.clear();
+    coreAngles.length = 0;
+    let angle = -90;
+
+    EMOTIONS.forEach((core,ci) => {
+      const coreStart = angle;
+      const coreSpan = core.branches.length * 2 * LEAF_ANGLE;
+      const coreEnd = coreStart + coreSpan;
+      coreAngles.push({start:coreStart,end:coreEnd,mid:(coreStart+coreEnd)/2});
+      const coreId = `c${ci}`;
+      addSector({id:coreId,word:core.core,coreIndex:ci,branchIndex:null,level:"core",a0:coreStart,a1:coreEnd,r0:0,r1:CORE_R,fill:core.colour,parentId:null});
+
+      core.branches.forEach((branch,bi) => {
+        const branchStart = angle;
+        const branchEnd = angle + 2 * LEAF_ANGLE;
+        const branchId = `c${ci}b${bi}`;
+        addSector({id:branchId,word:branch[0],coreIndex:ci,branchIndex:bi,level:"branch",a0:branchStart,a1:branchEnd,r0:CORE_R,r1:BRANCH_R,fill:lighten(core.colour,.27),parentId:coreId});
+        [branch[1],branch[2]].forEach((leaf,li) => {
+          const leafId = `c${ci}b${bi}l${li}`;
+          addSector({id:leafId,word:leaf,coreIndex:ci,branchIndex:bi,level:"leaf",a0:angle,a1:angle+LEAF_ANGLE,r0:BRANCH_R,r1:OUTER_R,fill:lighten(core.colour,.50),parentId:branchId});
+          angle += LEAF_ANGLE;
+        });
+      });
+    });
+
+    const outline = document.createElementNS(NS,"circle");
+    outline.setAttribute("cx",CX); outline.setAttribute("cy",CY); outline.setAttribute("r",OUTER_R);
+    outline.setAttribute("class","wheel-outline");
+    wheelGroup.appendChild(outline);
+    const dot = document.createElementNS(NS,"circle");
+    dot.setAttribute("cx",CX); dot.setAttribute("cy",CY); dot.setAttribute("r",6); dot.setAttribute("class","hub-dot");
+    wheelGroup.appendChild(dot);
+    applyRotation(false);
+    updateSelectionClasses();
+  }
+
+  function applyRotation(animate=true) {
+    wheelGroup.classList.toggle("no-transition",!animate || dragging);
+    wheelGroup.style.transform = `rotate(${rotation}deg)`;
+  }
+
+  function nearestTurn(target) {
+    const delta = ((target - rotation + 540) % 360) - 180;
+    return rotation + delta;
+  }
+
+  function rotateCoreToTop(ci) {
+    rotation = nearestTurn(-90 - coreAngles[ci].mid);
+    applyRotation(true);
+  }
+
+  function updateSelectionClasses() {
+    wheelGroup.querySelectorAll(".sector").forEach(path => {
+      const entry = registry.get(path.dataset.id);
+      path.classList.toggle("dimmed",selectedCore !== null && entry.coreIndex !== selectedCore);
+      path.classList.toggle("selected",entry.id === selectedId);
+      path.setAttribute("aria-pressed",String(entry.id === selectedId));
+    });
+  }
+
+  function relatedEntries(entry) {
+    const ids = [];
+    if (entry.level !== "core") ids.push(`c${entry.coreIndex}`);
+    if (entry.level === "leaf") ids.push(`c${entry.coreIndex}b${entry.branchIndex}`);
+    if (entry.level === "core") {
+      EMOTIONS[entry.coreIndex].branches.forEach((_,bi) => ids.push(`c${entry.coreIndex}b${bi}`));
+    } else {
+      const branch = EMOTIONS[entry.coreIndex].branches[entry.branchIndex];
+      ids.push(`c${entry.coreIndex}b${entry.branchIndex}l0`,`c${entry.coreIndex}b${entry.branchIndex}l1`);
+      if (entry.level === "leaf") {
+        const sibling = entry.id.endsWith("l0") ? "l1" : "l0";
+        ids.unshift(`c${entry.coreIndex}b${entry.branchIndex}${sibling}`);
+      }
+      if (!branch) return [];
+    }
+    return [...new Set(ids)].filter(id => id !== entry.id && registry.has(id)).slice(0,9).map(id => registry.get(id));
+  }
+
+  function escapeHtml(value) {
+    return String(value).replace(/[&<>"']/g,ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+  }
+
+  function detailTrail(entry) {
+    const core = registry.get(`c${entry.coreIndex}`);
+    const parts = [`<button type="button" data-select="${core.id}">${escapeHtml(core.word[language])}</button>`];
+    if (entry.level === "leaf") {
+      const branch = registry.get(`c${entry.coreIndex}b${entry.branchIndex}`);
+      parts.push(`<span>›</span><button type="button" data-select="${branch.id}">${escapeHtml(branch.word[language])}</button>`);
+    }
+    if (entry.level !== "core") parts.push(`<span>›</span><span>${escapeHtml(entry.word[language])}</span>`);
+    return parts.join("");
+  }
+
+  function renderDetails(entry) {
+    const ui = UI[language];
+    const family = FAMILIES[entry.word.en] || [entry.word.en.toLowerCase()];
+    const related = relatedEntries(entry);
+    const translated = language === "en" ? "" : `<p class="detail-english" lang="en">${escapeHtml(entry.word.en)}</p>`;
+    const spelling = entry.word.en === "Happy" ? `<p class="spelling-note"><strong>Spelling:</strong> happy → happiness (change <em>y</em> to <em>i</em> before <em>-ness</em>).</p>` : "";
+    detailColour.style.background = EMOTIONS[entry.coreIndex].colour;
+    detailInner.innerHTML = `
+      <p class="detail-kicker">${escapeHtml(ui.ring[["core","branch","leaf"].indexOf(entry.level)])}</p>
+      <h2 class="detail-word" lang="${language === "en" ? "en" : language === "vi" ? "vi" : language === "zhHant" ? "zh-Hant" : "zh-Hans"}">${escapeHtml(entry.word[language])}</h2>
+      ${translated}
+      <div class="trail">${detailTrail(entry)}</div>
+      <section class="detail-section">
+        <h3>${escapeHtml(ui.family)}</h3>
+        <div class="chips">${family.map(form => `<span class="chip form-chip" lang="en">${escapeHtml(form)}</span>`).join("")}</div>
+        ${spelling}
+      </section>
+      <section class="detail-section">
+        <h3>${escapeHtml(ui.nearby)}</h3>
+        <div class="chips">${related.map(item => `<button type="button" class="chip related" data-select="${item.id}">${escapeHtml(item.word[language])}</button>`).join("")}</div>
+      </section>
+      <section class="detail-section">
+        <h3>${escapeHtml(ui.tryIt)}</h3>
+        <p class="example">I feel <strong>${escapeHtml(entry.word.en.toLowerCase())}</strong> when …<br>The character seems <strong>${escapeHtml(entry.word.en.toLowerCase())}</strong> because …</p>
+      </section>`;
+  }
+
+  function renderFocus(ci) {
+    const ui = UI[language];
+    const core = EMOTIONS[ci];
+    focusStrip.innerHTML = `
+      <p class="focus-heading"><span class="focus-dot" style="background:${core.colour}"></span><strong>${escapeHtml(ui.focus)} ${escapeHtml(core.core[language])}</strong></p>
+      <div class="focus-words">${core.branches.map((branch,bi) => `<button type="button" class="focus-word" data-select="c${ci}b${bi}">${escapeHtml(branch[0][language])}</button>`).join("")}</div>`;
+  }
+
+  function selectEntry(id,{spin=true,focusPanel=false}={}) {
+    const entry = registry.get(id);
+    if (!entry) return;
+    selectedId = id;
+    selectedCore = entry.coreIndex;
+    if (spin) rotateCoreToTop(entry.coreIndex);
+    updateSelectionClasses();
+    renderFocus(entry.coreIndex);
+    renderDetails(entry);
+    if (focusPanel && window.innerWidth < 1050) document.getElementById("detailCard").scrollIntoView({behavior:"smooth",block:"start"});
+  }
+
+  function setLanguage(next) {
+    language = next;
+    const ui = UI[language];
+    document.documentElement.lang = language === "zhHant" ? "zh-Hant" : language === "zhHans" ? "zh-Hans" : language;
+    document.getElementById("pageTitle").textContent = ui.title;
+    document.getElementById("pageIntro").textContent = ui.intro;
+    document.getElementById("languageLabel").textContent = ui.language;
+    document.getElementById("spinLabel").textContent = ui.spin;
+    document.getElementById("dragHint").textContent = ui.drag;
+    document.querySelectorAll("[data-lang]").forEach(btn => {
+      btn.classList.toggle("active",btn.dataset.lang === language);
+      btn.setAttribute("aria-pressed",String(btn.dataset.lang === language));
+    });
+    const keep = selectedId;
+    renderWheel();
+    if (keep && registry.has(keep)) {
+      selectedId = keep;
+      selectedCore = registry.get(keep).coreIndex;
+      updateSelectionClasses();
+      renderFocus(selectedCore);
+      renderDetails(registry.get(keep));
+    } else {
+      focusStrip.innerHTML = "";
+      detailColour.style.background = "var(--accent-soft)";
+      detailInner.innerHTML = `<div class="empty-detail"><div class="empty-icon">☝️</div><strong>${escapeHtml(ui.choose)}</strong><span>${escapeHtml(ui.chooseHelp)}</span></div>`;
+    }
+  }
+
+  wheelGroup.addEventListener("click",event => {
+    const path = event.target.closest(".sector");
+    if (!path || moved) return;
+    selectEntry(path.dataset.id,{spin:true,focusPanel:true});
+  });
+
+  wheelGroup.addEventListener("keydown",event => {
+    const path = event.target.closest(".sector");
+    if (!path || !["Enter"," "].includes(event.key)) return;
+    event.preventDefault();
+    selectEntry(path.dataset.id,{spin:true,focusPanel:true});
+  });
+
+  function pointerAngle(event) {
+    const rect = svg.getBoundingClientRect();
+    return Math.atan2(event.clientY-(rect.top+rect.height/2),event.clientX-(rect.left+rect.width/2))*180/Math.PI;
+  }
+  svg.addEventListener("pointerdown",event => {
+    if (event.button !== undefined && event.button !== 0) return;
+    dragging = true; moved = false; dragLastAngle = pointerAngle(event); dragDistance = 0;
+    if (svg.setPointerCapture) svg.setPointerCapture(event.pointerId);
+    svg.classList.add("dragging");
+    applyRotation(false);
+  });
+  svg.addEventListener("pointermove",event => {
+    if (!dragging) return;
+    const nextAngle = pointerAngle(event);
+    const delta = ((nextAngle-dragLastAngle+540)%360)-180;
+    dragLastAngle = nextAngle;
+    dragDistance += Math.abs(delta);
+    if (dragDistance > 2) moved = true;
+    rotation += delta;
+    applyRotation(false);
+  });
+  const endDrag = event => {
+    if (!dragging) return;
+    dragging = false;
+    svg.classList.remove("dragging");
+    try { svg.releasePointerCapture(event.pointerId); } catch (_) {}
+    applyRotation(false);
+    window.setTimeout(() => { moved = false; },0);
+  };
+  svg.addEventListener("pointerup",endDrag);
+  svg.addEventListener("pointercancel",endDrag);
+
+  document.addEventListener("click",event => {
+    const langButton = event.target.closest("[data-lang]");
+    if (langButton) { setLanguage(langButton.dataset.lang); return; }
+    const selectButton = event.target.closest("[data-select]");
+    if (selectButton) selectEntry(selectButton.dataset.select,{spin:true,focusPanel:false});
+  });
+
+  document.getElementById("spinLeft").addEventListener("click",() => { rotation -= 360/7; applyRotation(true); });
+  document.getElementById("spinRight").addEventListener("click",() => { rotation += 360/7; applyRotation(true); });
+  document.getElementById("resetWheel").addEventListener("click",() => { rotation = nearestTurn(0); selectedCore = null; selectedId = null; applyRotation(true); updateSelectionClasses(); focusStrip.innerHTML = ""; setLanguage(language); });
+  svg.addEventListener("keydown",event => {
+    if (event.target.classList && event.target.classList.contains("sector")) return;
+    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      event.preventDefault(); rotation += event.key === "ArrowLeft" ? -360/7 : 360/7; applyRotation(true);
+    }
+  });
+
+  renderWheel();
+  setLanguage("en");
+  window.__FEELING_WHEEL__ = {EMOTIONS,FAMILIES,registry,selectEntry,setLanguage,get state(){return {language,rotation,selectedCore,selectedId};}};
+})();
+</script>
+</body>
+</html>
