@@ -91,8 +91,9 @@
   .newrow .bandrow{margin-bottom:8px}
   .newrow .bandrow label{font-size:.73rem;font-weight:700;color:var(--muted);display:block;margin-bottom:3px}
   .newrow textarea{width:100%;font:inherit;font-size:.79rem;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink);resize:vertical;min-height:44px;margin-top:4px}
-  #answer{display:none;margin-top:8px;padding:9px 11px;border-radius:8px;background:var(--bg);border:1px solid var(--line);font-size:.93rem;line-height:1.75}
-  #answer.show{display:block}
+  .answerbox{display:none;margin-top:8px;padding:9px 11px;border-radius:8px;background:var(--bg);border:1px solid var(--line);font-size:.93rem;line-height:1.75}
+  .answerbox.show{display:block}
+  .answerbox .lbl{display:block;font-size:.71rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:700;margin-bottom:5px}
   #shareOut{display:none;margin-top:8px}
   #shareOut.show{display:block}
   #shareOut input{width:100%;font-size:.76rem;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--muted)}
@@ -102,20 +103,14 @@
   footer{border-top:1px solid var(--line);margin-top:30px;padding:16px;text-align:center;color:var(--muted);font-size:.8rem}
 
   /* ---- sticky rubric ---- */
-  #sentinel{height:1px}
-  #stickyRef{position:sticky;top:0;z-index:20;background:var(--bg);padding-top:14px;margin:0 -14px;padding-left:14px;padding-right:14px;transition:box-shadow .15s}
-  #stickyRef.stuck{box-shadow:0 6px 14px -8px rgba(0,0,0,.28);padding-bottom:9px}
-  #stickyRef.stuck h2.sec,#stickyRef.stuck p.sub{display:none}
-  #stickyRef .compact{display:none;align-items:center;gap:9px;margin-top:8px}
-  #stickyRef.stuck .compact{display:flex}
-  #stickyRef .compact .bands{display:flex;gap:5px;flex-wrap:wrap}
-  #stickyRef .compact .bands span{font-size:.71rem;font-weight:700;padding:3px 8px;border-radius:6px;background:var(--card);border:1px solid var(--line);white-space:nowrap}
-  #stickyRef .compact button.toggle{margin-left:auto;font-size:.78rem;padding:6px 11px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap}
-  #stickyRef .compact button.toggle .chev{font-size:.7rem;transition:transform .2s}
-  #stickyRef.stuck.expanded .compact button.toggle .chev{transform:rotate(180deg)}
-  #stickyRef.stuck:not(.expanded) .scroll{display:none}
-  #stickyRef.stuck.expanded .scroll{max-height:46vh;overflow-y:auto;margin-top:9px}
-  #stickyRef .scroll{margin-top:0}
+  /* always-sticky bar — fixed height, never resizes, so it can't cause scroll jank */
+  #stickyBar{position:sticky;top:0;z-index:20;background:var(--bg);display:flex;flex-wrap:wrap;
+             align-items:center;gap:8px 9px;padding:10px 14px;margin:0 -14px 4px;box-shadow:0 4px 10px -8px rgba(0,0,0,.3)}
+  #stickyBar .bands{display:flex;gap:5px;flex-wrap:wrap}
+  #stickyBar .bands span{font-size:.71rem;font-weight:700;padding:3px 8px;border-radius:6px;background:var(--card);border:1px solid var(--line)}
+  #stickyBar #jumpRubric{margin-left:auto;font-size:.78rem;padding:6px 11px;border-radius:8px;border:1px solid var(--line);
+                          background:var(--card);color:var(--ink);cursor:pointer;white-space:nowrap}
+  #rubricAnchor{scroll-margin-top:60px}
 </style>
 </head>
 <body>
@@ -137,13 +132,16 @@
       <span class="sp"></span>
       <select id="load"><option value="">Load an example…</option></select>
       <button id="reveal">Reveal original</button>
-      <button id="share" style="border-color:#16a34a;color:#16a34a;font-weight:700">Share with class</button>
       <button id="addToggle">+ New text</button>
     </div>
-    <div id="answer"></div>
+    <div id="answer" class="answerbox"></div>
+    <div class="tools" style="margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)">
+      <input id="shareLabel" placeholder="Label for the class (optional)" style="flex:1;min-width:160px">
+      <button id="share" style="border-color:#16a34a;color:#16a34a;font-weight:700">Share with class</button>
+    </div>
     <div id="shareOut">
       <input id="shareUrl" readonly onclick="this.select()">
-      <div class="hint">Copied. Post this link for the class — they open it once and it's saved on their device.</div>
+      <div class="hint" id="shareHint">Post this link for the class — they open it once and it's saved on their device.</div>
     </div>
 
     <div class="newrow" id="newrow">
@@ -162,25 +160,23 @@
     </div>
   </div>
 
-  <div id="sentinel"></div>
-  <div id="stickyRef">
+  <div id="stickyBar">
     <div class="bar" id="bar">
       <button data-f="" aria-pressed="true">Show all</button>
       <button class="f-evid" data-f="evid" aria-pressed="false"><span class="dot"></span>Evidence &amp; metalanguage</button>
       <button class="f-purp" data-f="purp" aria-pressed="false"><span class="dot"></span>Purpose &amp; interpretation</button>
       <button class="f-idea" data-f="idea" aria-pressed="false"><span class="dot"></span>Ideas &amp; themes</button>
     </div>
-    <h2 class="sec">Rubric</h2>
-    <div class="compact">
-      <span class="bands"><span>C2</span><span>C3</span><span>C4</span><span>VCE1</span></span>
-      <button class="toggle" id="rubricToggle">Rubric <span class="chev">▾</span></button>
-    </div>
-    <div class="scroll">
-      <table class="rubric">
-        <thead><tr><th>Skill area</th><th>C2 · Describe</th><th>C3 · Explain</th><th>C4 · Analyse</th><th>VCE 1 · Interpret</th></tr></thead>
-        <tbody id="rubricBody"></tbody>
-      </table>
-    </div>
+    <span class="bands"><span>C2</span><span>C3</span><span>C4</span><span>VCE1</span></span>
+    <button id="jumpRubric">↑ Rubric</button>
+  </div>
+
+  <h2 class="sec" id="rubricAnchor">Rubric</h2>
+  <div class="scroll">
+    <table class="rubric">
+      <thead><tr><th>Skill area</th><th>C2 · Describe</th><th>C3 · Explain</th><th>C4 · Analyse</th><th>VCE 1 · Interpret</th></tr></thead>
+      <tbody id="rubricBody"></tbody>
+    </table>
   </div>
 
   <div class="bar" style="margin-top:16px">
@@ -189,6 +185,27 @@
   </div>
   <div id="classBox" class="types" style="margin-bottom:9px"></div>
   <div class="types" id="types"></div>
+
+  <div class="type" id="practiceCard" style="margin-top:9px">
+    <button class="head"><span class="emoji">🎯</span>
+      <span><h3>Try it yourself</h3><div class="subt">Highlight a sentence, then check it against the original</div></span>
+      <span class="chev">▸</span></button>
+    <div class="body">
+      <div class="tools" style="margin-top:0">
+        <select id="pLoad"></select>
+      </div>
+      <div class="mkbox" id="pCanvas" contenteditable="true" data-ph="Pick a sentence above, then select part of it and tap a colour…" style="margin-top:9px"></div>
+      <div class="tools">
+        <button class="mk-b" data-pmk="b"><span class="dot"></span>Evidence</button>
+        <button class="mk-g" data-pmk="g"><span class="dot"></span>Purpose</button>
+        <button class="mk-o" data-pmk="o"><span class="dot"></span>Ideas</button>
+        <button data-pmk="">Clear</button>
+        <span class="sp"></span>
+        <button id="pCheck" style="border-color:var(--evid);color:var(--evid);font-weight:700">Check my answer</button>
+      </div>
+      <div id="pAnswer" class="answerbox"></div>
+    </div>
+  </div>
 </main>
 
 <footer>Colours: <span class="b">evidence</span> · <span class="g">purpose</span> · <span class="o">ideas</span></footer>
@@ -294,6 +311,27 @@ const colour = s => esc(s).replace(/\[b\]/g,'<span class="b">').replace(/\[g\]/g
 const markers = s => s.replace(/🟦/g,'<span class="b">🟦</span>').replace(/🟩/g,'<span class="g">🟩</span>')
                       .replace(/🟧/g,'<span class="o">🟧</span>');
 const plain = s => s.replace(/\[\/?[bgo]\]/g,"");
+const toMarkup = el => {
+  let out="";
+  el.childNodes.forEach(n=>{
+    if(n.nodeType===3) out+=n.textContent;
+    else if(n.nodeType===1){ const c=["b","g","o"].find(x=>n.classList.contains(x));
+      out += c ? `[${c}]${n.textContent}[/${c}]` : n.textContent; }
+  });
+  return out;
+};
+/* select+tag a colour onto text inside a contenteditable box, from a live selection */
+function markSelection(box, colourClass){
+  const s = window.getSelection();
+  if(!s.rangeCount || s.isCollapsed) return;
+  const r = s.getRangeAt(0);
+  if(!box.contains(r.commonAncestorContainer)) return;
+  const f = r.extractContents();
+  f.querySelectorAll("span.b,span.g,span.o").forEach(sp=>sp.replaceWith(...sp.childNodes));
+  if(colourClass){ const w=document.createElement("span"); w.className=colourClass; w.appendChild(f); r.insertNode(w); }
+  else r.insertNode(f);
+  box.normalize(); s.removeAllRanges();
+}
 const allTypes = () => TYPES.concat(custom());
 
 /* class examples shared by the teacher via a link */
@@ -376,13 +414,8 @@ if(justImported){
   setTimeout(()=>bn.remove(), 6000);
 }
 
-/* sticky rubric: collapse to a compact strip once scrolled past, expand on tap */
-const stickyRef = document.getElementById("stickyRef");
-new IntersectionObserver(([e])=>{
-  stickyRef.classList.toggle("stuck", !e.isIntersecting && e.boundingClientRect.top < 0);
-  if(e.isIntersecting) stickyRef.classList.remove("expanded");
-}, {threshold:0}).observe(document.getElementById("sentinel"));
-document.getElementById("rubricToggle").onclick = ()=> stickyRef.classList.toggle("expanded");
+document.getElementById("jumpRubric").onclick = ()=>
+  document.getElementById("rubricAnchor").scrollIntoView({behavior:"smooth", block:"start"});
 
 const setAll = o => document.querySelectorAll(".type").forEach(t=>t.classList.toggle("open",o));
 document.getElementById("expandAll").onclick = ()=>setAll(true);
@@ -429,14 +462,16 @@ if(TEACHER){
   document.getElementById("share").onclick = ()=>{
     const markup = toMarkup(canvas);
     if(!markup.trim()){ canvas.focus(); return; }
-    const label = prompt("Label for the class (e.g. 'Of Mice and Men — C3 together')", "Class example");
-    if(label === null) return;
-    const item = { t: label.trim() || "Class example", x: markup };
+    const item = { t: document.getElementById("shareLabel").value.trim() || "Class example", x: markup };
     const url = location.origin + location.pathname + "#ex=" + b64.enc(JSON.stringify(item));
-    const out = document.getElementById("shareOut");
-    document.getElementById("shareUrl").value = url;
-    out.classList.add("show");
-    navigator.clipboard?.writeText(url);
+    const urlBox = document.getElementById("shareUrl");
+    const hint = document.getElementById("shareHint");
+    urlBox.value = url;
+    document.getElementById("shareOut").classList.add("show");
+    urlBox.select();
+    navigator.clipboard?.writeText(url)
+      .then(()=> hint.textContent = "Copied. Post this link for the class — they open it once and it's saved on their device.")
+      .catch(()=> hint.textContent = "Couldn't copy automatically — the link is selected above, press Ctrl/Cmd+C.");
     const list = classEx();
     if(!list.some(x=>x.x===item.x)){ list.push(item); localStorage.setItem(CLASS, JSON.stringify(list)); renderClass(); }
   };
@@ -463,16 +498,6 @@ if(TEACHER){
     };
   });
 
-  const toMarkup = el => {
-    let out="";
-    el.childNodes.forEach(n=>{
-      if(n.nodeType===3) out+=n.textContent;
-      else if(n.nodeType===1){ const c=["b","g","o"].find(x=>n.classList.contains(x));
-        out += c ? `[${c}]${n.textContent}[/${c}]` : n.textContent; }
-    });
-    return out;
-  };
-
   document.getElementById("addToggle").onclick = ()=> newrow.classList.toggle("show");
   document.getElementById("nCancel").onclick = ()=> newrow.classList.remove("show");
 
@@ -498,6 +523,40 @@ if(TEACHER){
     alert("Copied.\n\nRows you add here are saved in this browser only — students won't see them. Paste this into the TYPES list in writing-wall.html and commit to publish it to everyone.");
   };
 }
+
+/* ---- Try it yourself: open to everyone, not just teacher view ---- */
+(function(){
+  const pCanvas = document.getElementById("pCanvas"), pLoad = document.getElementById("pLoad"),
+        pAnswer = document.getElementById("pAnswer");
+  let current = null;
+
+  allTypes().forEach((t,ti)=>{
+    const og = document.createElement("optgroup"); og.label = t.title + (t.sub?" — "+t.sub:"");
+    BANDS.forEach((b,bi)=>{ const o=document.createElement("option"); o.value=ti+":"+bi; o.textContent=b.label; og.appendChild(o); });
+    pLoad.appendChild(og);
+  });
+  pLoad.insertBefore(new Option("Pick a sentence…",""), pLoad.firstChild);
+  pLoad.value = "";
+
+  pLoad.onchange = ()=>{
+    pAnswer.innerHTML = ""; pAnswer.classList.remove("show");
+    if(!pLoad.value){ pCanvas.textContent = ""; current = null; return; }
+    const [ti,bi] = pLoad.value.split(":").map(Number);
+    current = allTypes()[ti].examples[bi] || "";
+    pCanvas.textContent = plain(current);
+  };
+
+  document.querySelectorAll("#practiceCard [data-pmk]").forEach(btn=>{
+    btn.addEventListener("mousedown", e=>e.preventDefault());
+    btn.addEventListener("click", ()=> markSelection(pCanvas, btn.dataset.pmk));
+  });
+
+  document.getElementById("pCheck").onclick = ()=>{
+    if(!current){ pLoad.focus(); return; }
+    pAnswer.innerHTML = `<span class="lbl">The original</span>` + colour(current);
+    pAnswer.classList.add("show");
+  };
+})();
 </script>
 </body>
 </html>
