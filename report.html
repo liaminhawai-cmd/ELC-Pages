@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Report — ELC Hub</title>
+<style>
+  :root { --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2; --accent:#2563eb; --radius:14px; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048; --accent:#7aa5ff; } }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; padding:24px 16px 60px; }
+  .wrap { max-width:640px; margin:0 auto; }
+  a.back { color:var(--accent); text-decoration:none; font-size:.9rem; font-weight:600; }
+  .sheet { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:24px; margin-top:16px; box-shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06); }
+  h1 { font-size:1.5rem; margin-bottom:2px; }
+  .meta { color:var(--muted); font-size:.9rem; margin-bottom:18px; }
+  table { width:100%; border-collapse:collapse; margin:10px 0 4px; }
+  td { padding:6px 0; border-bottom:1px solid var(--line); font-size:.95rem; }
+  td.k { color:var(--muted); width:38%; }
+  ul.log { list-style:none; padding:0; margin-top:8px; }
+  ul.log li { display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); font-size:.92rem; }
+  ul.log li span.cat { color:var(--muted); font-size:.8rem; }
+  .empty { color:var(--muted); font-size:.9rem; padding:14px 0; }
+  .actions { margin-top:20px; display:flex; gap:10px; }
+  button { padding:10px 16px; border-radius:8px; border:1px solid var(--line); background:var(--card); color:var(--ink); font-weight:600; cursor:pointer; font-size:.9rem; }
+  button.primary { background:var(--accent); color:#fff; border:none; }
+  .noprint { }
+  @media print {
+    .noprint, a.back { display:none !important; }
+    body { background:#fff; color:#000; padding:0; }
+    .sheet { border:none; box-shadow:none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back noprint" href="index.html">← Back to ELC Hub</a>
+  <div class="sheet">
+    <h1>My ELC Report</h1>
+    <p class="meta" id="dateLine"></p>
+    <table>
+      <tr><td class="k">First name</td><td id="rFirst">—</td></tr>
+      <tr><td class="k">Last name</td><td id="rLast">—</td></tr>
+      <tr><td class="k">Student ID</td><td id="rId">—</td></tr>
+    </table>
+
+    <h2 style="margin-top:20px; font-size:1.05rem;">Activities completed</h2>
+    <ul class="log" id="log"></ul>
+    <p class="empty" id="emptyMsg" style="display:none;">Nothing opened yet — go back and try a tool, then come back here.</p>
+
+    <div class="actions noprint">
+      <button class="primary" onclick="window.print()">🖨️ Print / Save</button>
+      <button onclick="location.href='index.html'">Do another activity</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const s = JSON.parse(localStorage.getItem("elc_student") || "null");
+document.getElementById("dateLine").textContent = "Printed " + new Date().toLocaleDateString();
+if (s) {
+  rFirst.textContent = s.first || "—";
+  rLast.textContent = s.last || "—";
+  rId.textContent = s.id || "—";
+}
+let v = []; try{ v = JSON.parse(localStorage.getItem("elc_visited") || "[]"); }catch(e){}
+v.sort((a,b)=> a.ts - b.ts);
+const log = document.getElementById("log");
+if (v.length === 0) { document.getElementById("emptyMsg").style.display = "block"; }
+v.forEach(item=>{
+  const li = document.createElement("li");
+  const time = new Date(item.ts).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"});
+  li.innerHTML = `<span>${item.title}</span><span class="cat">${item.cat} · ${time}</span>`;
+  log.appendChild(li);
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Linear Motion Scenarios — Q2–Q5 Simulator</title>
+<style>
+  :root{
+    --bg:#0f172a; --panel:#111827; --card:#1f2937; --muted:#94a3b8; --text:#e5e7eb;
+    --car:#22c55e; --train:#f59e0b; --ali:#60a5fa; --grid:#374151; --accent:#38bdf8;
+  }
+  *{box-sizing:border-box}
+  body{ margin:0; font-family:system-ui, -apple-system, Segoe UI, Roboto, Arial;
+        background:linear-gradient(180deg,#0b1021,#0f172a 30%); color:var(--text); }
+  header{ padding:14px 16px; border-bottom:1px solid #1e293b; position:sticky; top:0;
+          background:rgba(15,23,42,.7); backdrop-filter:saturate(120%) blur(6px); }
+  h1{ margin:0; font-size:18px; letter-spacing:.2px }
+  .wrap{ display:grid; grid-template-columns: 360px 1fr; gap:14px; padding:14px; }
+  @media (max-width: 980px){ .wrap{ grid-template-columns:1fr; } }
+  .panel{ background:var(--panel); border:1px solid #1f2937; border-radius:14px; padding:12px; }
+  .tabs{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px; }
+  .tab{ padding:8px 10px; border-radius:10px; border:1px solid #334155; background:#0b1326; cursor:pointer; font-weight:600; }
+  .tab.active{ background:linear-gradient(180deg,#0ea5e9,#0284c7); border-color:#075985; }
+  .group{ background:var(--card); border:1px solid #293244; border-radius:12px; padding:10px; margin-bottom:10px; }
+  .row{ display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center; margin:.2rem 0 .6rem; }
+  label{ font-size:12px; color:var(--muted); } output{ min-width:8ch; text-align:right; font-variant-numeric:tabular-nums; }
+  input[type="range"], input[type="number"], input[type="time"]{ width:100%; }
+  .legend{ display:flex; gap:8px; align-items:center; font-size:12px; color:var(--muted); margin-bottom:6px; }
+  .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .dot.car{ background:var(--car) } .dot.train{ background:var(--train) } .dot.ali{ background:var(--ali) }
+  .simgrid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:1100px){ .simgrid{ grid-template-columns:1fr; } }
+  canvas{ width:100%; height:auto; }
+  .readouts{ display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:8px; }
+  .card{ background:var(--card); border:1px solid #293244; border-radius:12px; padding:10px; }
+  .k{ font-size:11px; color:var(--muted) } .v{ font-size:16px; font-weight:700; margin-top:2px; font-variant-numeric:tabular-nums }
+  .btn{ background:linear-gradient(180deg,#0ea5e9,#0284c7); color:white; border:0; padding:8px 10px; border-radius:10px; font-weight:700; cursor:pointer; }
+  .footer{ color:var(--muted); font-size:12px; margin-top:6px; }
+  .badge{ font-size:11px; padding:2px 8px; border-radius:999px; background:#0b2a35; color:#bff0ff; border:1px solid #1e3a8a; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Linear Motion Scenarios — Q2–Q5</h1>
+</header>
+
+<div class="wrap">
+  <section class="panel">
+    <div class="tabs">
+      <button class="tab active" data-mode="q2">Q2: Train stop at Midway (piecewise)</button>
+      <button class="tab" data-mode="q3">Q3: Opposite trains (meet time)</button>
+      <button class="tab" data-mode="q4">Q4: Single-track near Midway</button>
+      <button class="tab" data-mode="q5">Q5: Sunday graph (train + walk)</button>
+    </div>
+
+    <!-- Q2 controls -->
+    <div class="group" data-panel="q2">
+      <div class="legend"><span class="badge">World: West (0 km) → East City (+70 km)</span></div>
+      <div class="legend"><span class="dot car"></span> Hannah (car): constant speed from West</div>
+      <div class="row"><label>Hannah speed (km/h)</label><output id="q2_hv_out">60</output></div>
+      <input id="q2_hv" type="range" min="0" max="140" step="1" value="60" />
+      <div class="legend" style="margin-top:6px;"><span class="dot train"></span> City Line (train): 0→+25 km, stop, then to +70 km</div>
+      <div class="row"><label>Train speed (km/h)</label><output id="q2_tv_out">80</output></div>
+      <input id="q2_tv" type="range" min="0" max="180" step="1" value="80" />
+      <div class="row"><label>Dwell at Midway (minutes)</label><output id="q2_dwell_out">10</output></div>
+      <input id="q2_dwell" type="range" min="0" max="40" step="1" value="10" />
+      <div class="row"><label>Time scale (×)</label><output id="q2_scale_out">600×</output></div>
+      <input id="q2_scale" type="range" min="30" max="3600" step="10" value="600" />
+      <button class="btn" id="q2_reset">↺ Reset</button>
+      <div class="footer">Tip: use dwell slider to solve “stop time so that they arrive together”.</div>
+    </div>
+
+    <!-- Q3 controls -->
+    <div class="group" data-panel="q3" style="display:none">
+      <div class="legend"><span class="badge">Reference: West (0 km), East City (+70 km)</span></div>
+      <div class="legend"><span class="dot train"></span> Hannah’s train east from West</div>
+      <div class="row"><label>Hannah speed (km/h)</label><output id="q3_hv_out">75</output></div>
+      <input id="q3_hv" type="range" min="0" max="160" step="1" value="75" />
+      <div class="legend"><span class="dot ali"></span> Ali’s train west from East City</div>
+      <div class="row"><label>Ali speed (km/h)</label><output id="q3_av_out">60</output></div>
+      <input id="q3_av" type="range" min="0" max="160" step="1" value="60" />
+      <div class="row"><label>Departure clock time</label><input id="q3_clock" type="time" value="06:45" /></div>
+      <div class="row"><label>Time scale (×)</label><output id="q3_scale_out">600×</output></div>
+      <input id="q3_scale" type="range" min="30" max="3600" step="10" value="600" />
+      <button class="btn" id="q3_reset">↺ Reset</button>
+      <div class="footer">Meet time is computed analytically: t = distance / (sum of speeds).</div>
+    </div>
+
+    <!-- Q4 controls -->
+    <div class="group" data-panel="q4" style="display:none">
+      <div class="legend"><span class="badge">Single-track block around Midway</span></div>
+      <div class="row"><label>Block start (km)</label><output id="q4_bstart_out">20</output></div>
+      <input id="q4_bstart" type="range" min="0" max="60" step="1" value="20" />
+      <div class="row"><label>Block end (km)</label><output id="q4_bend_out">30</output></div>
+      <input id="q4_bend" type="range" min="10" max="70" step="1" value="30" />
+      <div class="row"><label>Hannah speed east (km/h)</label><output id="q4_hv_out">75</output></div>
+      <input id="q4_hv" type="range" min="0" max="160" step="1" value="75" />
+      <div class="row"><label>Ali speed west (km/h)</label><output id="q4_av_out">60</output></div>
+      <input id="q4_av" type="range" min="0" max="160" step="1" value="60" />
+      <div class="row"><label>Time scale (×)</label><output id="q4_scale_out">600×</output></div>
+      <input id="q4_scale" type="range" min="30" max="3600" step="10" value="600" />
+      <button class="btn" id="q4_reset">↺ Reset</button>
+      <div class="footer">We schedule the second train to wait before entering the block until the first clears it.</div>
+    </div>
+
+    <!-- Q5 controls -->
+    <div class="group" data-panel="q5" style="display:none">
+      <div class="legend"><span class="badge">Displacement from West Station (0 km)</span></div>
+      <div class="legend">Train from +70 → +25, walk +25 → 0 (you can add a stop)</div>
+      <div class="row"><label>Train speed west (km/h)</label><output id="q5_tv_out">80</output></div>
+      <input id="q5_tv" type="range" min="0" max="160" step="1" value="80" />
+      <div class="row"><label>Walk speed west (km/h)</label><output id="q5_wv_out">5</output></div>
+      <input id="q5_wv" type="range" min="1" max="10" step="0.5" value="5" />
+      <div class="row"><label>Optional stop at Midway (min)</label><output id="q5_stop_out">0</output></div>
+      <input id="q5_stop" type="range" min="0" max="30" step="1" value="0" />
+      <div class="row"><label>Time scale (×)</label><output id="q5_scale_out">600×</output></div>
+      <input id="q5_scale" type="range" min="30" max="3600" step="10" value="600" />
+      <button class="btn" id="q5_reset">↺ Reset</button>
+      <div class="footer">Interpret slopes (speed), flat segments (stops), and where mode changes occur.</div>
+    </div>
+
+    <div class="readouts">
+      <div class="card"><div class="k">Sim time (h)</div><div class="v" id="tOut">0.000</div></div>
+      <div class="card"><div class="k">Key result</div><div class="v" id="keyOut">—</div></div>
+      <div class="card"><div class="k">Extra</div><div class="v" id="extraOut">—</div></div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="simgrid">
+      <div class="card">
+        <div class="legend" style="justify-content:space-between;">
+          <strong>Track View</strong>
+          <span class="footer">West 0 km • Midway 25 km • East City 70 km</span>
+        </div>
+        <canvas id="scene" width="900" height="280"></canvas>
+      </div>
+      <div class="card">
+        <div class="legend" style="justify-content:space-between;">
+          <strong>Position vs Time</strong>
+          <span class="footer">t (h) →, d (km) ↑</span>
+        </div>
+        <canvas id="graph" width="900" height="280"></canvas>
+        <div class="footer" id="graphNote"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  const el = id => document.getElementById(id);
+  const scene = el('scene'), graph = el('graph');
+  const ctxS = scene.getContext('2d'), ctxG = graph.getContext('2d');
+
+  const tabs = [...document.querySelectorAll('.tab')];
+  const panels = [...document.querySelectorAll('[data-panel]')];
+
+  const tOut = el('tOut'), keyOut = el('keyOut'), extraOut = el('extraOut'), graphNote = el('graphNote');
+
+  // world constants
+  const WEST = 0, MID = 25, EAST = 70;
+
+  const state = {
+    mode: 'q2',
+    t: 0, running: true, lastStamp: 0,
+    series: { t: [], A: [], B: [] }, // generic series for current mode
+    scale: 600,
+    // Q2
+    q2: { hv: 60, tv: 80, dwellMin: 10, scale: 600 },
+    // Q3
+    q3: { hv: 75, av: 60, clock: '06:45', scale: 600 },
+    // Q4
+    q4: { bStart: 20, bEnd: 30, hv: 75, av: 60, scale: 600 },
+    // Q5
+    q5: { tv: 80, wv: 5, stopMin: 0, scale: 600 },
+  };
+
+  // helpers
+  function fmt(n,dp=3){ return (+n).toFixed(dp); }
+  function map(v,a,b,c,d){ return c+(v-a)*(d-c)/(b-a); }
+  function niceStep(span, target=8){
+    const raw=span/target, pow=Math.pow(10,Math.floor(Math.log10(raw))), norm=raw/pow;
+    return norm>=5?5*pow: norm>=2?2*pow: pow;
+  }
+
+  // UI wiring
+  tabs.forEach(tab => tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    const mode = tab.dataset.mode;
+    state.mode = mode;
+    panels.forEach(p => p.style.display = (p.dataset.panel===mode)?'block':'none');
+    resetSeries();
+    resetToModeDefaults();
+    render();
+  }));
+
+  // Q2 controls
+  bindRange('q2_hv','q2_hv_out',v=>state.q2.hv=v);
+  bindRange('q2_tv','q2_tv_out',v=>state.q2.tv=v);
+  bindRange('q2_dwell','q2_dwell_out',v=>state.q2.dwellMin=v);
+  bindRange('q2_scale','q2_scale_out',v=>state.q2.scale=v, v=>v+'×');
+  el('q2_reset').onclick=()=>{ resetSeries(); render(); };
+
+  // Q3 controls
+  bindRange('q3_hv','q3_hv_out',v=>state.q3.hv=v);
+  bindRange('q3_av','q3_av_out',v=>state.q3.av=v);
+  el('q3_clock').addEventListener('input', e=>state.q3.clock=e.target.value);
+  bindRange('q3_scale','q3_scale_out',v=>state.q3.scale=v, v=>v+'×');
+  el('q3_reset').onclick=()=>{ resetSeries(); render(); };
+
+  // Q4 controls
+  bindRange('q4_bstart','q4_bstart_out',v=>state.q4.bStart=v);
+  bindRange('q4_bend','q4_bend_out',v=>state.q4.bEnd=v);
+  bindRange('q4_hv','q4_hv_out',v=>state.q4.hv=v);
+  bindRange('q4_av','q4_av_out',v=>state.q4.av=v);
+  bindRange('q4_scale','q4_scale_out',v=>state.q4.scale=v, v=>v+'×');
+  el('q4_reset').onclick=()=>{ resetSeries(); render(); };
+
+  // Q5 controls
+  bindRange('q5_tv','q5_tv_out',v=>state.q5.tv=v);
+  bindRange('q5_wv','q5_wv_out',v=>state.q5.wv=v);
+  bindRange('q5_stop','q5_stop_out',v=>state.q5.stopMin=v);
+  bindRange('q5_scale','q5_scale_out',v=>state.q5.scale=v, v=>v+'×');
+  el('q5_reset').onclick=()=>{ resetSeries(); render(); };
+
+  function bindRange(id, outId, setter, fmtText){
+    const input = el(id), out = el(outId);
+    const update = ()=>{ const v = +input.value; setter(v); out.textContent = fmtText?fmtText(v):v; resetSeries(); render(); };
+    input.addEventListener('input', update); update();
+  }
+
+  function resetSeries(){ state.t=0; state.series.t.length=0; state.series.A.length=0; state.series.B.length=0; }
+
+  function resetToModeDefaults(){
+    // nothing persistent needed; sliders already set
+  }
+
+  function pushPoint(a,b){
+    state.series.t.push(state.t); state.series.A.push(a); state.series.B.push(b);
+  }
+
+  // scenario evaluators return positions [A(t), B(t)] for current mode
+  function evalQ2(t){
+    // A=Hannah from WEST at hv, B=Train with stop at MID
+    const {hv,tv,dwellMin} = state.q2;
+    const dwellH = dwellMin/60;
+    // Train leg 1 to MID
+    const tToMid = (MID - WEST)/tv; // hours
+    let train;
+    if (t <= tToMid) train = WEST + tv*t;
+    else if (t <= tToMid + dwellH) train = MID; // dwell
+    else train = MID + tv*(t - tToMid - dwellH);
+
+    const hannah = WEST + hv*t;
+    return [hannah, train];
+  }
+
+  function q2KeyResults(){
+    // arrival times at EAST for each; find dwell that equalizes
+    const {hv,tv,dwellMin} = state.q2;
+    const dwellH = dwellMin/60;
+    const tHannah = (EAST - WEST)/hv;
+    const tToMid = (MID - WEST)/tv;
+    const tTrain = tToMid + dwellH + (EAST - MID)/tv;
+    const meetT = solveIntersection(t => evalQ2(t)[0] - evalQ2(t)[1]);
+    keyOut.textContent = `Arrivals — Car: ${fmt(tHannah,2)} h, Train: ${fmt(tTrain,2)} h`;
+    extraOut.textContent = meetT!=null ? `Pass at t=${fmt(meetT,3)} h, d=${fmt(evalQ2(meetT)[0],1)} km` : 'No passing';
+  }
+
+  function evalQ3(t){
+    // A=Hannah from WEST east at hv; B=Ali from EAST west at av
+    const {hv,av} = state.q3;
+    const H = WEST + hv*t;
+    const A = EAST - av*t;
+    return [H,A];
+  }
+  function q3KeyResults(){
+    const {hv,av,clock} = state.q3;
+    const meetT = (EAST - WEST) / (hv + av);
+    const meetD = WEST + hv*meetT;
+    keyOut.textContent = `Meet at t=${fmt(meetT,3)} h, d=${fmt(meetD,1)} km`;
+    // clock time
+    const [hh,mm] = clock.split(':').map(Number);
+    const totalMin = hh*60+mm + Math.round(meetT*60);
+    const h2 = Math.floor(totalMin/60)%24, m2 = totalMin%60;
+    extraOut.textContent = `If depart ${clock}, meet at ${String(h2).padStart(2,'0')}:${String(m2).padStart(2,'0')}`;
+  }
+
+  function evalQ4(t, schedule=null){
+    // Two trains like Q3 but enforce block [bStart,bEnd]: only one can be inside at a time.
+    // We'll return positions given a computed schedule with possible waiting.
+    // Build schedule once analytically (determine who reaches block first and apply wait).
+    if(!schedule){
+      schedule = buildQ4Schedule();
+      state._q4schedule = schedule;
+    }
+    const {hv,av,bStart,bEnd} = schedule;
+    // piecewise motion with potential waits at block edges
+    const H = posWithWait(WEST, hv, +1, t, schedule.HwaitAt);
+    const A = posWithWait(EAST, av, -1, t, schedule.AwaitAt);
+    return [H,A];
+  }
+
+  function buildQ4Schedule(){
+    const {bStart,bEnd,hv,av} = state.q4;
+    // times to reach block edges
+    const tH_to_bStart = (bStart - WEST)/hv;
+    const tA_to_bEnd   = (EAST - bEnd)/av;
+    // times to traverse block
+    const tH_block = (bEnd - bStart)/hv;
+    const tA_block = (bEnd - bStart)/av;
+
+    // Who enters first if no restriction?
+    let Hfirst = tH_to_bStart <= tA_to_bEnd;
+
+    // Determine waits
+    let HwaitAt = null, AwaitAt = null;
+    if (Hfirst){
+      // Hannah enters at tH_to_bStart and would exit at tH_to_bStart + tH_block
+      const H_exit = tH_to_bStart + tH_block;
+      // Ali must not be inside before H_exit; if Ali arrival tA_to_bEnd < H_exit, he must wait until H_exit
+      if (tA_to_bEnd < H_exit){ AwaitAt = { x: bEnd, start: tA_to_bEnd, release: H_exit }; }
+    } else {
+      const A_exit = tA_to_bEnd + tA_block;
+      if (tH_to_bStart < A_exit){ HwaitAt = { x: bStart, start: tH_to_bStart, release: A_exit }; }
+    }
+    return { hv,av,bStart,bEnd,HwaitAt,AwaitAt };
+  }
+
+  function posWithWait(x0, v, dir, t, wait){
+    // dir: +1 eastbound, -1 westbound
+    if(!wait) return x0 + dir*v*t;
+    // travel until reaching wait.x at time wait.start
+    if (t <= wait.start) return x0 + dir*v*t;
+    // hold until release
+    if (t <= wait.release) return wait.x;
+    // resume after release
+    const dtAfter = t - wait.release;
+    const distBefore = dir*v*wait.start;
+    const distAfter  = dir*v*dtAfter;
+    return x0 + distBefore + (wait.x - (x0 + distBefore)) + distAfter; // simplifies to wait.x + dir*v*dtAfter
+  }
+
+  function q4KeyResults(){
+    const sch = buildQ4Schedule();
+    const whoFirst = sch.HwaitAt? 'Ali enters first' : (sch.AwaitAt? 'Hannah enters first' : ( ( (sch.HwaitAt||sch.AwaitAt)?'':'No waiting needed') ));
+    let waitMsg = 'No waiting needed';
+    if (sch.HwaitAt){ waitMsg = `Hannah waits at ${sch.HwaitAt.x} km for ${fmt((sch.HwaitAt.release - sch.HwaitAt.start)*60,1)} min`; }
+    if (sch.AwaitAt){ waitMsg = `Ali waits at ${sch.AwaitAt.x} km for ${fmt((sch.AwaitAt.release - sch.AwaitAt.start)*60,1)} min`; }
+    keyOut.textContent = whoFirst || '—';
+    extraOut.textContent = waitMsg;
+  }
+
+  function evalQ5(t){
+    // From EAST toward WEST: train to MID, optional stop, then walk to WEST
+    const {tv,wv,stopMin} = state.q5;
+    const stopH = stopMin/60;
+    const tToMid = (EAST - MID)/tv;
+    let d;
+    if (t <= tToMid){ d = EAST - tv*t; }
+    else if (t <= tToMid + stopH){ d = MID; }
+    else { d = MID - wv*(t - tToMid - stopH); }
+    // Only one actor shown; use A series; B empty
+    return [d, NaN];
+  }
+  function q5KeyResults(){
+    const {tv,wv,stopMin} = state.q5;
+    const stopH = stopMin/60;
+    const tTrain = (EAST - MID)/tv;
+    const tWalk  = (MID - WEST)/wv;
+    const total  = tTrain + stopH + tWalk;
+    keyOut.textContent = `Total time: ${fmt(total,2)} h`;
+    extraOut.textContent = `Segments — Train: ${fmt(tTrain,2)} h, Stop: ${fmt(stopH,2)} h, Walk: ${fmt(tWalk,2)} h`;
+  }
+
+  function solveIntersection(f){
+    // find t >=0 small where f(t)=0 using bracket + bisection up to say 24h
+    const T=24;
+    let a=0, fa=f(0), b=0.01, fb=f(0.01);
+    // expand b until sign change or T
+    while (b<=T && fa*fb>0){ b*=1.5; fb=f(b); }
+    if (b>T || isNaN(fb) || fa*fb>0) return null;
+    for(let i=0;i<60;i++){
+      const m=0.5*(a+b), fm=f(m);
+      if (Math.abs(fm)<1e-7) return m;
+      if (fa*fm<=0){ b=m; fb=fm; } else { a=m; fa=fm; }
+    }
+    return 0.5*(a+b);
+  }
+
+  // animation
+  function tick(now){
+    if(!state.running){ requestAnimationFrame(tick); return; }
+    if(!state.lastStamp) state.lastStamp = now;
+    const dtReal = (now - state.lastStamp)/1000; state.lastStamp = now;
+    const scale = {q2:state.q2.scale,q3:state.q3.scale,q4:state.q4.scale,q5:state.q5.scale}[state.mode];
+    const dtSimH = dtReal * scale / 3600;
+    state.t += dtSimH;
+
+    let a=NaN,b=NaN;
+    if (state.mode==='q2'){ [a,b]=evalQ2(state.t); q2KeyResults(); }
+    if (state.mode==='q3'){ [a,b]=evalQ3(state.t); q3KeyResults(); }
+    if (state.mode==='q4'){ [a,b]=evalQ4(state.t, state._q4schedule); q4KeyResults(); }
+    if (state.mode==='q5'){ [a,b]=evalQ5(state.t); q5KeyResults(); }
+
+    pushPoint(a,b);
+    render();
+    requestAnimationFrame(tick);
+  }
+
+  function render(){
+    tOut.textContent = fmt(state.t,3);
+    drawScene();
+    drawGraph();
+  }
+
+  function drawScene(){
+    const w = scene.width, h = scene.height;
+    ctxS.clearRect(0,0,w,h);
+    // bg
+    ctxS.fillStyle = '#0b1021'; ctxS.fillRect(0,0,w,h);
+    const margin=30, yTrack=h*0.6;
+    // track
+    ctxS.strokeStyle='#334155'; ctxS.lineWidth=18; ctxS.lineCap='round';
+    ctxS.beginPath(); ctxS.moveTo(margin,yTrack); ctxS.lineTo(w-margin,yTrack); ctxS.stroke();
+    // markers
+    const x0=margin, x1=w-margin;
+    const worldMin = -5, worldMax=75; // show  -5..75 to include labels nicely
+    const marks = [0,25,70];
+    ctxS.fillStyle='#94a3b8'; ctxS.font='12px system-ui'; ctxS.textAlign='center';
+    marks.forEach(m=>{
+      const x = map(m, worldMin, worldMax, x0, x1);
+      ctxS.strokeStyle='#1f2937'; ctxS.lineWidth=1; ctxS.beginPath();
+      ctxS.moveTo(x,yTrack-22); ctxS.lineTo(x,yTrack+22); ctxS.stroke();
+      ctxS.fillText((m===0?'West ': (m===25?'Midway ': 'East City '))+`${m} km`, x, yTrack+24);
+    });
+
+    // actors per mode
+    function drawVehicle(xKm, color, label){
+      const x = map(xKm, worldMin, worldMax, x0, x1);
+      const y=yTrack-24;
+      ctxS.fillStyle=color; roundRect(ctxS,x-22,y-18,44,28,8); ctxS.fill();
+      ctxS.fillStyle='#0c111b';
+      ctxS.beginPath(); ctxS.arc(x-14,y+12,6,0,Math.PI*2); ctxS.fill();
+      ctxS.beginPath(); ctxS.arc(x+14,y+12,6,0,Math.PI*2); ctxS.fill();
+      ctxS.fillStyle='#e5e7eb'; ctxS.textAlign='center'; ctxS.font='12px system-ui';
+      ctxS.fillText(`${label}: ${fmt(xKm,1)} km`, x, y-32);
+    }
+
+    if (state.mode==='q2'){
+      const [H,T] = evalQ2(state.t);
+      drawVehicle(H, getCss('--car'),'Hannah');
+      drawVehicle(T, getCss('--train'),'Train');
+    } else if (state.mode==='q3' || state.mode==='q4'){
+      const [H,A] = state.mode==='q3' ? evalQ3(state.t) : evalQ4(state.t, state._q4schedule);
+      drawVehicle(H, getCss('--train'), 'Hannah');
+      drawVehicle(A, getCss('--ali'), 'Ali');
+    } else if (state.mode==='q5'){
+      const [D] = evalQ5(state.t);
+      drawVehicle(D, getCss('--train'),'Hannah');
+    }
+  }
+
+  function drawGraph(){
+    const w = graph.width, h = graph.height;
+    ctxG.clearRect(0,0,w,h);
+    ctxG.fillStyle='#0b1021'; ctxG.fillRect(0,0,w,h);
+    const m = {l:50, r:16, t:10, b:28};
+    const gx0=m.l, gx1=w-m.r, gy0=m.t, gy1=h-m.b;
+
+    // axes
+    ctxG.strokeStyle='#475569'; ctxG.lineWidth=1.2;
+    ctxG.beginPath(); ctxG.moveTo(gx0,gy1); ctxG.lineTo(gx1,gy1);
+    ctxG.moveTo(gx0,gy1); ctxG.lineTo(gx0,gy0); ctxG.stroke();
+
+    // domains
+    const tMax = Math.max(1, Math.ceil((state.series.t[state.series.t.length-1]||1)*1.1*10)/10);
+    const ys = state.series.A.concat(state.series.B).filter(x=>!isNaN(x));
+    let yMin = Math.min(...ys, -5), yMax=Math.max(...ys, 75);
+    const xStep = niceStep(tMax,8), yStep = niceStep(yMax-yMin,8);
+
+    // grid
+    ctxG.strokeStyle='#1f2937'; ctxG.lineWidth=1; ctxG.beginPath();
+    for(let t=0;t<=tMax+1e-9;t+=xStep){ const x = map(t,0,tMax,gx0,gx1); ctxG.moveTo(x,gy0); ctxG.lineTo(x,gy1); }
+    for(let d=Math.ceil(yMin/yStep)*yStep; d<=yMax+1e-9; d+=yStep){ const y = map(d,yMin,yMax,gy1,gy0); ctxG.moveTo(gx0,y); ctxG.lineTo(gx1,y); }
+    ctxG.stroke();
+    // labels
+    ctxG.fillStyle='#94a3b8'; ctxG.font='12px system-ui'; ctxG.textAlign='center'; ctxG.textBaseline='top';
+    for(let t=0;t<=tMax+1e-9;t+=xStep){ const x = map(t,0,tMax,gx0,gx1); ctxG.fillText(t.toFixed(2),x,gy1+6); }
+    ctxG.textAlign='right'; ctxG.textBaseline='middle';
+    for(let d=Math.ceil(yMin/yStep)*yStep; d<=yMax+1e-9; d+=yStep){ const y = map(d,yMin,yMax,gy1,gy0); ctxG.fillText(d.toFixed(0),gx0-6,y); }
+
+    // series
+    function drawSeries(arr, cssVar){
+      if(!arr.length) return;
+      ctxG.strokeStyle=getCss(cssVar); ctxG.lineWidth=2; ctxG.beginPath();
+      for(let i=0;i<state.series.t.length;i++){
+        const t = state.series.t[i]; const yVal = arr[i];
+        if (isNaN(yVal)) continue;
+        const x = map(t,0,tMax,gx0,gx1); const y = map(yVal,yMin,yMax,gy1,gy0);
+        if (i===0) ctxG.moveTo(x,y); else ctxG.lineTo(x,y);
+      }
+      ctxG.stroke();
+    }
+    // choose colors per mode
+    if (state.mode==='q2'){ drawSeries(state.series.A,'--car'); drawSeries(state.series.B,'--train'); }
+    if (state.mode==='q3' || state.mode==='q4'){ drawSeries(state.series.A,'--train'); drawSeries(state.series.B,'--ali'); }
+    if (state.mode==='q5'){ drawSeries(state.series.A,'--train'); }
+
+    graphNote.textContent = `Samples: ${state.series.t.length} • t-range: 0 → ${tMax.toFixed(2)} h`;
+  }
+
+  function getCss(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function roundRect(ctx,x,y,w,h,r){
+    ctx.beginPath(); ctx.moveTo(x+r,y);
+    ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
+    ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+  }
+
+  // start
+  resetSeries(); render(); requestAnimationFrame(tick);
+})();
+</script>
+</body>
+</html>

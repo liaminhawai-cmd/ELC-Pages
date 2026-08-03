@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Geography Flashcards</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #f4f1ec;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    color: #1a1a1a;
+  }
+
+  h1 {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 1.5rem;
+  }
+
+  .score-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 1.25rem;
+  }
+
+  .badge {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 99px;
+    border: 1px solid #ddd;
+    color: #666;
+    background: #fff;
+  }
+  .badge.known { background: #eaf3de; color: #3b6d11; border-color: #c0dd97; }
+  .badge.unknown { background: #fcebeb; color: #a32d2d; border-color: #f7c1c1; }
+
+  .progress {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .card-scene {
+    width: 340px;
+    height: 210px;
+    perspective: 900px;
+    cursor: pointer;
+    margin-bottom: 1.25rem;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card.flipped { transform: rotateY(180deg); }
+
+  .card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.75rem;
+    text-align: center;
+  }
+
+  .card-front {
+    background: #fff;
+    border: 1px solid #e8e4dc;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  }
+
+  .card-back {
+    background: #1a1a1a;
+    color: #f0ece4;
+    transform: rotateY(180deg);
+    box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+  }
+
+  .face-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: 0.45;
+  }
+
+  .term {
+    font-size: 30px;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1.2;
+  }
+
+  .definition {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #e8e4dc;
+  }
+
+  .zh-def {
+    font-size: 13px;
+    color: #888;
+    margin-top: 10px;
+    line-height: 1.5;
+  }
+
+  .hint {
+    font-size: 12px;
+    color: #aaa;
+    margin-bottom: 1.25rem;
+    height: 16px;
+  }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+    min-height: 36px;
+  }
+
+  .btn {
+    padding: 7px 18px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #333;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  .btn:hover { background: #f0ece4; }
+  .btn:active { transform: scale(0.97); }
+  .btn.got-it { border-color: #c0dd97; color: #3b6d11; }
+  .btn.got-it:hover { background: #eaf3de; }
+  .btn.learning { border-color: #f7c1c1; color: #a32d2d; }
+  .btn.learning:hover { background: #fcebeb; }
+
+  .btn-shuffle {
+    background: none;
+    border: none;
+    font-size: 13px;
+    color: #aaa;
+    cursor: pointer;
+    padding: 4px 8px;
+  }
+  .btn-shuffle:hover { color: #555; }
+
+  .done-msg {
+    text-align: center;
+    padding: 2rem;
+  }
+  .done-msg strong { font-size: 22px; display: block; margin-bottom: 8px; }
+  .done-msg span { font-size: 14px; color: #888; }
+</style>
+</head>
+<body>
+
+<h1>Geography Flashcards</h1>
+
+<div class="score-row">
+  <span class="badge known" id="known-badge">✓ Known: 0</span>
+  <span class="badge unknown" id="unknown-badge">✗ To learn: 0</span>
+  <span class="badge" id="remaining-badge">Remaining: 23</span>
+</div>
+
+<p class="progress" id="progress">Card 1 of 23</p>
+
+<div class="card-scene" id="scene" onclick="flipCard()">
+  <div class="card" id="card">
+    <div class="card-face card-front">
+      <div class="face-label">term</div>
+      <div class="term" id="front-term"></div>
+    </div>
+    <div class="card-face card-back">
+      <div class="face-label">definition</div>
+      <div class="definition" id="back-def"></div>
+      <div class="zh-def" id="back-zh-def"></div>
+    </div>
+  </div>
+</div>
+
+<p class="hint" id="hint">Tap card to flip</p>
+
+<div class="controls" id="controls"></div>
+
+<button class="btn-shuffle" onclick="shuffleDeck()">↺ Shuffle &amp; restart</button>
+
+<script>
+const ALL_CARDS = [
+  {term:"Archipelago",zh:"群岛",def:"A group of islands.",zhDef:"一组岛屿。"},
+  {term:"Bay",zh:"海湾",def:"A large, circular indentation of a shoreline.",zhDef:"海岸线的大型弧形凹陷。"},
+  {term:"Canyon",zh:"峡谷",def:"A deep and narrow valley with steep walls.",zhDef:"两侧有陡峭岩壁的深而窄的山谷。"},
+  {term:"Channel",zh:"水道",def:"A deep and relatively narrow body of water that allows the best passage for vessels.",zhDef:"供船只通行的深而相对狭窄的水体。"},
+  {term:"Cliff",zh:"悬崖",def:"A steep, high wall of rock, earth, or ice.",zhDef:"由岩石、土壤或冰构成的陡峭高墙。"},
+  {term:"Delta",zh:"三角洲",def:"A triangular landform made of sediment deposited by river flows.",zhDef:"由河流沉积物形成的三角形地貌。"},
+  {term:"Glacier",zh:"冰川",def:"A slowly moving mass of ice.",zhDef:"缓慢移动的大块冰体。"},
+  {term:"Gulf",zh:"海湾（大）",def:"An arm of a sea or ocean partly enclosed by land.",zhDef:"部分被陆地环绕的海洋臂状水域。"},
+  {term:"Harbour",zh:"港口",def:"A sheltered port where ships can take on or discharge cargo.",zhDef:"供船只装卸货物的避风港。"},
+  {term:"Island",zh:"岛屿",def:"A land mass smaller than a continent that is surrounded by water.",zhDef:"四面环水、面积小于大陆的陆地。"},
+  {term:"Isthmus",zh:"地峡",def:"A relatively narrow strip of land with water on both sides connecting two larger land areas.",zhDef:"连接两块较大陆地、两侧环水的狭长地带。"},
+  {term:"Lowlands",zh:"低地",def:"The valleys and plains below a mountain range.",zhDef:"山脉以下的山谷和平原地带。"},
+  {term:"Mountain Range",zh:"山脉",def:"A series of hills or mountains.",zhDef:"一系列连续的山丘或山峰。"},
+  {term:"Peninsula",zh:"半岛",def:"Land surrounded by water on three sides.",zhDef:"三面环水的陆地。"},
+  {term:"Permafrost",zh:"永久冻土",def:"A permanently frozen layer of soil beneath the surface of the ground.",zhDef:"地表以下永久冻结的土层。"},
+  {term:"Plain",zh:"平原",def:"An area of level land, usually at low elevation and often covered with grasses.",zhDef:"通常位于低海拔、多覆盖草地的平坦地区。"},
+  {term:"Plateau",zh:"高原",def:"A landform that has high elevation and a flat surface.",zhDef:"海拔较高且地面平坦的地形。"},
+  {term:"Prairie",zh:"大草原",def:"A large area of level or rolling land with grass but few or no trees.",zhDef:"大面积平坦或起伏的草地，几乎没有树木。"},
+  {term:"Sea",zh:"海",def:"A division of an ocean or a large body of salt water partially enclosed by land.",zhDef:"部分被陆地环绕的大洋分支或大片咸水水体。"},
+  {term:"Strait",zh:"海峡",def:"A narrow channel of the sea joining two larger bodies of water.",zhDef:"连接两片较大水域的狭窄海道。"},
+  {term:"Tundra",zh:"冻原",def:"A vast, flat, treeless Arctic region in which the subsoil is permanently frozen.",zhDef:"广阔平坦、无树木的北极地区，地下土层永久冻结。"},
+  {term:"Valley",zh:"山谷",def:"Low land between hills or mountains.",zhDef:"山丘或山脉之间的低洼地带。"},
+  {term:"Volcano",zh:"火山",def:"A mountain formed by volcanic material.",zhDef:"由火山物质形成的山体。"},
+];
+
+let deck = [], current = 0, isFlipped = false, known = 0, unknown = 0;
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function loadCard() {
+  if (current >= deck.length) { showDone(); return; }
+  const c = deck[current];
+  document.getElementById('front-term').textContent = c.term;
+  document.getElementById('back-def').textContent = c.def;
+  document.getElementById('back-zh-def').textContent = c.zhDef;
+  document.getElementById('progress').textContent = `Card ${current + 1} of ${deck.length}`;
+  document.getElementById('remaining-badge').textContent = `Remaining: ${deck.length - current}`;
+  isFlipped = false;
+  document.getElementById('card').classList.remove('flipped');
+  document.getElementById('hint').textContent = 'Tap card to flip';
+  document.getElementById('controls').innerHTML = '';
+  document.getElementById('scene').style.display = 'block';
+}
+
+function flipCard() {
+  if (current >= deck.length) return;
+  isFlipped = !isFlipped;
+  document.getElementById('card').classList.toggle('flipped', isFlipped);
+  if (isFlipped) {
+    document.getElementById('hint').textContent = '';
+    document.getElementById('controls').innerHTML = `
+      <button class="btn learning" onclick="markCard(false)">✗ Still learning</button>
+      <button class="btn got-it" onclick="markCard(true)">✓ Got it</button>
+    `;
+  } else {
+    document.getElementById('hint').textContent = 'Tap card to flip';
+    document.getElementById('controls').innerHTML = '';
+  }
+}
+
+function markCard(didKnow) {
+  if (didKnow) { known++; document.getElementById('known-badge').textContent = `✓ Known: ${known}`; }
+  else { unknown++; document.getElementById('unknown-badge').textContent = `✗ To learn: ${unknown}`; }
+  current++;
+  loadCard();
+}
+
+function showDone() {
+  document.getElementById('scene').style.display = 'none';
+  document.getElementById('hint').textContent = '';
+  document.getElementById('controls').innerHTML = '';
+  const total = known + unknown;
+  document.getElementById('progress').innerHTML = `
+    <strong style="font-size:20px">${known}/${total} known</strong><br>
+    <span style="font-size:14px;color:#999">${unknown > 0 ? 'Shuffle to retry the ones you missed.' : 'Perfect score!'}</span>
+  `;
+}
+
+function shuffleDeck() {
+  deck = shuffle([...ALL_CARDS]);
+  current = 0; known = 0; unknown = 0;
+  document.getElementById('known-badge').textContent = '✓ Known: 0';
+  document.getElementById('unknown-badge').textContent = '✗ To learn: 0';
+  document.getElementById('scene').style.display = 'block';
+  loadCard();
+}
+
+shuffleDeck();
+</script>
+</body>
+</html>

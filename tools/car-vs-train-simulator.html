@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Car vs Train — Constant Velocity Simulator (with Equations)</title>
+<style>
+  :root{
+    --bg:#0f172a; --panel:#111827; --card:#1f2937; --muted:#94a3b8; --text:#e5e7eb;
+    --acc:#38bdf8; --car:#22c55e; --train:#f59e0b; --grid:#374151; --warn:#fca5a5;
+  }
+  *{box-sizing:border-box}
+  body{ margin:0; font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Arial;
+        background:linear-gradient(180deg,#0b1021,#0f172a 30%); color:var(--text); }
+  header{ padding:16px 20px; border-bottom:1px solid #1e293b; position:sticky; top:0; background:rgba(15,23,42,.7); backdrop-filter:saturate(120%) blur(6px); }
+  h1{ margin:0; font-size:18px; font-weight:700; letter-spacing:.3px }
+  .wrap{ display:grid; grid-template-columns: 380px 1fr; gap:16px; padding:16px; align-items:start; }
+  @media (max-width: 980px){ .wrap{ grid-template-columns:1fr; } }
+  .panel{ background:var(--panel); border:1px solid #1f2937; border-radius:16px; padding:14px; box-shadow: 0 4px 20px rgba(0,0,0,.25); }
+  .group{ margin-bottom:14px; padding:10px; border-radius:12px; background:var(--card); border:1px solid #293244; }
+  .row{ display:grid; grid-template-columns: 1fr auto; gap:8px; align-items:center; margin:.2rem 0 .6rem; }
+  label{ font-size:12px; color:var(--muted); } output{ font-variant-numeric:tabular-nums; min-width:7ch; text-align:right; color:#fff; }
+  input[type="range"]{ width:100%; }
+  .legend{ display:flex; gap:10px; align-items:center; font-size:12px; color:var(--muted); }
+  .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .dot.car{ background:var(--car); } .dot.train{ background:var(--train); }
+  .btn{ background:linear-gradient(180deg,#0ea5e9,#0284c7); color:white; border:0; padding:10px 12px; border-radius:12px; font-weight:600; cursor:pointer; box-shadow: 0 6px 20px rgba(2,132,199,.35); }
+  .btn.secondary{ background:#374151; box-shadow:none; }
+  .readouts{ display:grid; grid-template-columns: repeat(auto-fit,minmax(140px,1fr)); gap:8px; margin-top:10px; }
+  .card{ background:var(--card); border:1px solid #293244; border-radius:12px; padding:10px; }
+  .k{ font-size:11px; color:var(--muted); } .v{ font-size:16px; font-weight:700; margin-top:2px; font-variant-numeric:tabular-nums; }
+  canvas{ width:100%; height:auto; image-rendering: crisp-edges; }
+  .sim{ display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+  @media (max-width: 1100px){ .sim{ grid-template-columns:1fr; } }
+  .footer{ color:var(--muted); font-size:12px; padding:4px 2px 0; }
+  .eq{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size:13px; line-height:1.5; }
+  .eq b{ font-weight:700; }
+  .eq .t{ color:var(--acc); }
+  .eq .car{ color:var(--car); }
+  .eq .train{ color:var(--train); }
+  .eq .warn{ color:var(--warn); }
+  .eqbox{ background:#0b1326; border:1px solid #1e3a8a; border-radius:12px; padding:10px; margin-top:8px; }
+  .badge{ font-size:11px; padding:2px 8px; border-radius:999px; background:#0b2a35; color:#bff0ff; border:1px solid #1e3a8a; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Constant Velocity Simulator — Car vs Train <span class="badge">with live equations</span></h1>
+</header>
+
+<div class="wrap">
+
+  <!-- Controls -->
+  <section class="panel">
+    <div class="group">
+      <div class="legend"><span class="dot car"></span><strong style="color:#fff">Car</strong></div>
+      <div class="row"><label>Initial position (km)</label><output id="carX0Out">0</output></div>
+      <input id="carX0" type="range" min="-50" max="120" step="1" value="0" />
+      <div class="row"><label>Velocity (km/h)</label><output id="carVOut">60</output></div>
+      <input id="carV" type="range" min="-140" max="140" step="1" value="60" />
+    </div>
+
+    <div class="group">
+      <div class="legend"><span class="dot train"></span><strong style="color:#fff">Train</strong></div>
+      <div class="row"><label>Initial position (km)</label><output id="trainX0Out">0</output></div>
+      <input id="trainX0" type="range" min="-50" max="120" step="1" value="0" />
+      <div class="row"><label>Velocity (km/h)</label><output id="trainVOut">80</output></div>
+      <input id="trainV" type="range" min="-180" max="180" step="1" value="80" />
+    </div>
+
+    <div class="group">
+      <div class="row"><label>Time scale (× real-time)</label><output id="timeScaleOut">600×</output></div>
+      <input id="timeScale" type="range" min="30" max="3600" step="10" value="600" />
+      <div style="display:flex; gap:8px; margin-top:8px;">
+        <button class="btn" id="playPause">▶ Start</button>
+        <button class="btn secondary" id="resetBtn">↺ Reset</button>
+      </div>
+    </div>
+
+    <div class="readouts">
+      <div class="card"><div class="k">Sim time (h)</div><div class="v" id="tOut">0.000</div></div>
+      <div class="card"><div class="k">Car position (km)</div><div class="v" id="carXOut">0.0</div></div>
+      <div class="card"><div class="k">Train position (km)</div><div class="v" id="trainXOut">0.0</div></div>
+      <div class="card"><div class="k">Catch-up (analytic)</div><div class="v" id="intersectOut">—</div></div>
+    </div>
+
+    <div class="group eqbox">
+      <div class="eq">
+        <div><b>Model:</b> <span class="car">x<sub>car</sub>(<span class="t">t</span>)</span> = <span id="eq_cx0" class="car">x<sub>0,car</sub></span> + <span id="eq_cv" class="car">v<sub>car</sub></span>·<span class="t">t</span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="train">x<sub>train</sub>(<span class="t">t</span>)</span> = <span id="eq_tx0" class="train">x<sub>0,train</sub></span> + <span id="eq_tv" class="train">v<sub>train</sub></span>·<span class="t">t</span></div>
+        <div style="margin-top:6px;"><b>Gradient ↔ Velocity:</b> d<span class="car">x<sub>car</sub></span>/d<span class="t">t</span> = <span id="eq_cv2" class="car">v<sub>car</sub></span>, d<span class="train">x<sub>train</sub></span>/d<span class="t">t</span> = <span id="eq_tv2" class="train">v<sub>train</sub></span></div>
+        <div id="eq_inter" style="margin-top:6px;"><b>Intersection time:</b> <span class="t">t</span>* = (<span class="car">x<sub>0,car</sub></span> − <span class="train">x<sub>0,train</sub></span>)/(<span class="train">v<sub>train</sub></span> − <span class="car">v<sub>car</sub></span>) = <span id="eq_tstar" class="badge">—</span></div>
+        <div id="eq_warn" class="warn" style="display:none;margin-top:6px;">Parallel lines (equal velocities): no intersection.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Simulation + Graph -->
+  <section class="panel">
+    <div class="sim">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <strong>Track View</strong>
+          <span class="footer">Units: km, h</span>
+        </div>
+        <canvas id="scene" width="900" height="280" aria-label="Animation canvas"></canvas>
+      </div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <strong>Position vs Time</strong>
+          <span class="footer">Slope = velocity</span>
+        </div>
+        <canvas id="graph" width="900" height="280" aria-label="Graph canvas"></canvas>
+        <div class="footer" id="graphNote"></div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(() => {
+  // ------- State -------
+  const state = {
+    t: 0, running: false, timeScale: 600,
+    car:   { x0: 0,  v: 60,  x: 0 },
+    train: { x0: 0,  v: 80,  x: 0 },
+    series: { t: [], car: [], train: [] },
+    tMax: 1.5, worldMin: -10, worldMax: 120, lastStamp: 0
+  };
+
+  // ------- Elements -------
+  const el = id=>document.getElementById(id);
+  const scene = el('scene'), graph = el('graph');
+  const ctxS = scene.getContext('2d'), ctxG = graph.getContext('2d');
+
+  const carX0 = el('carX0'), carX0Out = el('carX0Out');
+  const carV  = el('carV'),  carVOut  = el('carVOut');
+  const trainX0 = el('trainX0'), trainX0Out = el('trainX0Out');
+  const trainV  = el('trainV'),  trainVOut  = el('trainVOut');
+  const timeScale = el('timeScale'), timeScaleOut = el('timeScaleOut');
+  const tOut = el('tOut'), carXOut = el('carXOut'), trainXOut = el('trainXOut');
+  const intersectOut = el('intersectOut');
+  const playPause = el('playPause'), resetBtn = el('resetBtn');
+
+  const eq = {
+    cx0: el('eq_cx0'), cv: el('eq_cv'), tx0: el('eq_tx0'), tv: el('eq_tv'),
+    cv2: el('eq_cv2'), tv2: el('eq_tv2'), tstar: el('eq_tstar'),
+    warn: el('eq_warn')
+  };
+
+  // ------- Helpers -------
+  const fmt=(n,dp=3)=> (+n).toFixed(dp);
+  const map=(v,a,b,c,d)=> c + (v-a)*(d-c)/(b-a);
+  const niceStep=(span,t=8)=>{ const raw=span/t, p=Math.pow(10,Math.floor(Math.log10(raw))), n=raw/p; return n>=5?5*p:n>=2?2*p:p; };
+
+  const updateEq = () => {
+    eq.cx0.textContent = `x₀,car = ${state.car.x0.toFixed(1)} km`;
+    eq.tx0.textContent = `x₀,train = ${state.train.x0.toFixed(1)} km`;
+    eq.cv.textContent  = `v_car = ${state.car.v.toFixed(1)} km/h`;
+    eq.tv.textContent  = `v_train = ${state.train.v.toFixed(1)} km/h`;
+    eq.cv2.textContent = eq.cv.textContent.replace('v_car','v_car');
+    eq.tv2.textContent = eq.tv.textContent.replace('v_train','v_train');
+    // intersection
+    const dx0 = state.car.x0 - state.train.x0;
+    const dv  = state.train.v - state.car.v;
+    if (Math.abs(dv) < 1e-9){
+      eq.tstar.textContent = '—';
+      eq.warn.style.display = 'block';
+      intersectOut.textContent = '—';
+    } else {
+      const t = dx0 / dv;
+      eq.warn.style.display = 'none';
+      eq.tstar.textContent = t>=0 ? `${t.toFixed(3)} h` : 'no (t<0)';
+      intersectOut.textContent = t>=0 ? `${t.toFixed(3)} h` : '—';
+    }
+  };
+
+  function resetSeries(){ state.series.t.length=0; state.series.car.length=0; state.series.train.length=0; }
+  function reset(){ state.t=0; state.car.x=state.car.x0; state.train.x=state.train.x0; state.tMax=1.5; resetSeries(); pushPoint(); render(); }
+
+  function pushPoint(){ state.series.t.push(state.t); state.series.car.push(state.car.x); state.series.train.push(state.train.x); if (state.t>state.tMax) state.tMax = Math.ceil(state.t*1.1*10)/10; }
+
+  function bindRange(input, out, onChange){
+    const update = ()=>{ out.textContent = input.value; onChange(+input.value); updateEq(); render(true); };
+    input.addEventListener('input', update); update();
+  }
+
+  bindRange(carX0, carX0Out, v => { state.car.x0=v; if(!state.running) reset(); });
+  bindRange(carV , carVOut , v => { state.car.v=v; if(!state.running) reset(); });
+  bindRange(trainX0, trainX0Out, v => { state.train.x0=v; if(!state.running) reset(); });
+  bindRange(trainV , trainVOut , v => { state.train.v=v; if(!state.running) reset(); });
+  bindRange(timeScale, timeScaleOut, v => { state.timeScale=v; timeScaleOut.textContent=v+'×'; });
+
+  playPause.addEventListener('click', ()=>{ state.running=!state.running; playPause.textContent = state.running ? "⏸ Pause" : "▶ Start"; if(state.running){ state.lastStamp=performance.now(); requestAnimationFrame(tick);} });
+  resetBtn.addEventListener('click', ()=>{ state.running=false; playPause.textContent="▶ Start"; reset(); });
+
+  function tick(now){
+    if(!state.running) return;
+    const dtReal=(now-state.lastStamp)/1000; state.lastStamp=now;
+    const dtSimH = dtReal * state.timeScale / 3600;
+    state.t += dtSimH;
+    state.car.x   = state.car.x0   + state.car.v   * state.t;
+    state.train.x = state.train.x0 + state.train.v * state.t;
+    pushPoint(); render(); requestAnimationFrame(tick);
+  }
+
+  function autoWorld(){
+    const xs=[state.car.x,state.train.x,state.car.x0,state.train.x0];
+    let min=Math.min(...xs), max=Math.max(...xs);
+    if(min===max){ min-=10; max+=10; }
+    const pad=(max-min)*0.2+10;
+    state.worldMin=Math.floor((min-pad)/10)*10;
+    state.worldMax=Math.ceil((max+pad)/10)*10;
+  }
+
+  function drawScene(){
+    autoWorld();
+    const {worldMin,worldMax}=state;
+    const w=scene.width,h=scene.height;
+    const ctx=ctxS;
+    ctx.clearRect(0,0,w,h); ctx.fillStyle='#0b1021'; ctx.fillRect(0,0,w,h);
+    const margin=30, yTrack=h*0.6;
+    // track
+    ctx.strokeStyle='#334155'; ctx.lineWidth=18; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(margin,yTrack); ctx.lineTo(w-margin,yTrack); ctx.stroke();
+    // ticks
+    const x0=margin,x1=w-margin, step=niceStep(worldMax-worldMin,8);
+    ctx.strokeStyle='#1f2937'; ctx.lineWidth=1; ctx.beginPath();
+    for(let d=Math.ceil(worldMin/step)*step; d<=worldMax; d+=step){ const x=map(d,worldMin,worldMax,x0,x1); ctx.moveTo(x,yTrack-22); ctx.lineTo(x,yTrack+22); } ctx.stroke();
+    // labels
+    ctx.fillStyle='#94a3b8'; ctx.textAlign='center'; ctx.textBaseline='top'; ctx.font='12px system-ui';
+    for(let d=Math.ceil(worldMin/step)*step; d<=worldMax; d+=step){ const x=map(d,worldMin,worldMax,x0,x1); ctx.fillText(d.toFixed(0)+' km', x, yTrack+24); }
+
+    // vehicles
+    drawVehicle(state.car.x, getCss('--car'), '🚗 Car');
+    drawVehicle(state.train.x, getCss('--train'), '🚆 Train');
+
+    // legend note
+    ctx.font='12px system-ui'; ctx.textAlign='left'; ctx.textBaseline='top'; ctx.fillStyle='#94a3b8';
+    ctx.fillText(`World: [${worldMin.toFixed(0)} … ${worldMax.toFixed(0)}] km`, 12, 8);
+  }
+
+  function drawVehicle(xKm, color, label){
+    const {worldMin,worldMax}=state;
+    const w=scene.width,h=scene.height; const margin=30, yTrack=h*0.6;
+    const x=map(xKm,worldMin,worldMax,margin,w-margin);
+    const y=yTrack-24; const ctx=ctxS;
+    // body
+    ctx.fillStyle=color; roundRect(ctx,x-22,y-18,44,28,8); ctx.fill();
+    // wheels
+    ctx.fillStyle='#0c111b'; ctx.beginPath(); ctx.arc(x-14,y+12,6,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.arc(x+14,y+12,6,0,Math.PI*2); ctx.fill();
+    // label
+    ctx.fillStyle='#e5e7eb'; ctx.textAlign='center'; ctx.textBaseline='bottom'; ctx.font='12px system-ui';
+    ctx.fillText(`${label}: ${xKm.toFixed(1)} km`, x, y-8);
+  }
+
+  function drawGraph(){
+    const w=graph.width,h=graph.height, ctx=ctxG;
+    ctx.clearRect(0,0,w,h); ctx.fillStyle='#0b1021'; ctx.fillRect(0,0,w,h);
+    const m={l:50,r:18,t:10,b:28}; const gx0=m.l,gx1=w-m.r,gy0=m.t,gy1=h-m.b;
+
+    // axes
+    ctx.strokeStyle='#475569'; ctx.lineWidth=1.2; ctx.beginPath();
+    ctx.moveTo(gx0,gy1); ctx.lineTo(gx1,gy1); ctx.moveTo(gx0,gy1); ctx.lineTo(gx0,gy0); ctx.stroke();
+
+    const tMax=Math.max(state.tMax,0.2);
+    const allY=state.series.car.concat(state.series.train);
+    let yMin=Math.min(...allY,state.worldMin), yMax=Math.max(...allY,state.worldMax);
+    if(yMin===Infinity||yMax===-Infinity){ yMin=-10; yMax=10; }
+    const ySpan=yMax-yMin||1, xStep=niceStep(tMax,8), yStep=niceStep(ySpan,8);
+
+    // grid
+    ctx.strokeStyle='#1f2937'; ctx.lineWidth=1; ctx.beginPath();
+    for(let t=0; t<=tMax; t+=xStep){ const x=map(t,0,tMax,gx0,gx1); ctx.moveTo(x,gy0); ctx.lineTo(x,gy1); }
+    for(let d=Math.ceil(yMin/yStep)*yStep; d<=yMax; d+=yStep){ const y=map(d,yMin,yMax,gy1,gy0); ctx.moveTo(gx0,y); ctx.lineTo(gx1,y); }
+    ctx.stroke();
+
+    // labels
+    ctx.fillStyle='#94a3b8'; ctx.font='12px system-ui'; ctx.textAlign='center'; ctx.textBaseline='top';
+    for(let t=0;t<=tMax+1e-9;t+=xStep){ const x=map(t,0,tMax,gx0,gx1); ctx.fillText(t.toFixed(2),x,gy1+6); }
+    ctx.textAlign='right'; ctx.textBaseline='middle';
+    for(let d=Math.ceil(yMin/yStep)*yStep; d<=yMax+1e-9; d+=yStep){ const y=map(d,yMin,yMax,gy1,gy0); ctx.fillText(d.toFixed(0),gx0-6,y); }
+
+    // series
+    function drawSeries(arr,color){
+      ctx.strokeStyle=color; ctx.lineWidth=2; ctx.beginPath();
+      for(let i=0;i<state.series.t.length;i++){ const x=map(state.series.t[i],0,tMax,gx0,gx1); const y=map(arr[i],yMin,yMax,gy1,gy0); if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y); }
+      ctx.stroke();
+      const n=state.series.t.length-1; if(n>=0){ const x=map(state.series.t[n],0,tMax,gx0,gx1); const y=map(arr[n],yMin,yMax,gy1,gy0); ctx.fillStyle=color; ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2); ctx.fill(); }
+    }
+    drawSeries(state.series.car, getCss('--car'));
+    drawSeries(state.series.train, getCss('--train'));
+
+    // display slope = velocity as colored labels
+    const vxLabel = `slope = Δx/Δt = v`;
+    ctx.fillStyle=getCss('--car'); ctx.fillText(vxLabel.replace('v', `v_car=${state.car.v.toFixed(1)}`), gx0+100, gy0+10);
+    ctx.fillStyle=getCss('--train'); ctx.fillText(vxLabel.replace('v', `v_train=${state.train.v.toFixed(1)}`), gx0+120, gy0+26);
+
+    graphNote.textContent = `Samples: ${state.series.t.length} • t-range: 0 → ${tMax.toFixed(2)} h • d-range: ${yMin.toFixed(0)} → ${yMax.toFixed(0)} km`;
+  }
+
+  function render(){ tOut.textContent = fmt(state.t,3); drawScene(); drawGraph(); }
+  function roundRect(ctx,x,y,w,h,r){ ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+  const getCss = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+
+  // init
+  reset(); updateEq();
+})();
+</script>
+</body>
+</html>
