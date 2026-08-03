@@ -1,17 +1,17 @@
 # ELC Pages
 
-The student launcher for the ELC. Links out to the actual tools, each of which
-lives and is deployed in its own repo (`Phonics`, `Grammar-hub`,
-`EAL-Vocabulary-Site`, etc.) — this site never hosts a copy, so there's only
-ever one live version of each tool to keep updated.
+The student launcher for the ELC. Larger tools live and deploy from their own
+repos (`Phonics`, `Grammar-hub`, `EAL-Vocabulary-Site`, etc.), and this hub
+links to those single live versions. Small, self-contained tools such as the
+Learning Compass and Feeling Wheel live here beside the launcher.
 
-Also has a lightweight name/ID intake (saved to the browser only, never
-transmitted anywhere) that feeds a printable "My Report" page, and a
-teacher-view toggle that's cosmetic only — this is a static site, so it isn't
-real access control.
+Activity and saved goals stay in the browser and feed a printable "My Report"
+page; the hub does not ask for names or student IDs. The teacher-view toggle is
+cosmetic only — this is a static site, so it isn't real access control.
 
 **Adding a tool once it's live elsewhere:** add a card to `index.html`
-pointing at its URL. Nothing to copy in.
+pointing at its URL. Nothing to copy in. Hub-native mini tools are standalone
+HTML pages linked from the same card grid.
 
 **Live site:** liaminhawai-cmd.github.io/ELC-Pages/ (Settings → Pages →
 Deploy from a branch → `main` / `/(root)`).
