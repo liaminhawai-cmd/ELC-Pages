@@ -100,6 +100,22 @@
   .banner{background:#16a34a;color:#fff;padding:9px 14px;text-align:center;font-size:.86rem}
   .classnote{font-size:.72rem;color:var(--muted);margin:-2px 0 8px}
   footer{border-top:1px solid var(--line);margin-top:30px;padding:16px;text-align:center;color:var(--muted);font-size:.8rem}
+
+  /* ---- sticky rubric ---- */
+  #sentinel{height:1px}
+  #stickyRef{position:sticky;top:0;z-index:20;background:var(--bg);padding-top:14px;margin:0 -14px;padding-left:14px;padding-right:14px;transition:box-shadow .15s}
+  #stickyRef.stuck{box-shadow:0 6px 14px -8px rgba(0,0,0,.28);padding-bottom:9px}
+  #stickyRef.stuck h2.sec,#stickyRef.stuck p.sub{display:none}
+  #stickyRef .compact{display:none;align-items:center;gap:9px;margin-top:8px}
+  #stickyRef.stuck .compact{display:flex}
+  #stickyRef .compact .bands{display:flex;gap:5px;flex-wrap:wrap}
+  #stickyRef .compact .bands span{font-size:.71rem;font-weight:700;padding:3px 8px;border-radius:6px;background:var(--card);border:1px solid var(--line);white-space:nowrap}
+  #stickyRef .compact button.toggle{margin-left:auto;font-size:.78rem;padding:6px 11px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap}
+  #stickyRef .compact button.toggle .chev{font-size:.7rem;transition:transform .2s}
+  #stickyRef.stuck.expanded .compact button.toggle .chev{transform:rotate(180deg)}
+  #stickyRef.stuck:not(.expanded) .scroll{display:none}
+  #stickyRef.stuck.expanded .scroll{max-height:46vh;overflow-y:auto;margin-top:9px}
+  #stickyRef .scroll{margin-top:0}
 </style>
 </head>
 <body>
@@ -109,13 +125,6 @@
 </header>
 
 <main>
-  <div class="bar" id="bar">
-    <button data-f="" aria-pressed="true">Show all</button>
-    <button class="f-evid" data-f="evid" aria-pressed="false"><span class="dot"></span>Evidence &amp; metalanguage</button>
-    <button class="f-purp" data-f="purp" aria-pressed="false"><span class="dot"></span>Purpose &amp; interpretation</button>
-    <button class="f-idea" data-f="idea" aria-pressed="false"><span class="dot"></span>Ideas &amp; themes</button>
-  </div>
-
   <div class="tbox" id="tbox" hidden>
     <span class="badge">TEACHER VIEW</span>
     <h2>Worked example</h2>
@@ -153,12 +162,25 @@
     </div>
   </div>
 
-  <h2 class="sec">Rubric</h2>
-  <div class="scroll">
-    <table class="rubric">
-      <thead><tr><th>Skill area</th><th>C2 · Describe</th><th>C3 · Explain</th><th>C4 · Analyse</th><th>VCE 1 · Interpret</th></tr></thead>
-      <tbody id="rubricBody"></tbody>
-    </table>
+  <div id="sentinel"></div>
+  <div id="stickyRef">
+    <div class="bar" id="bar">
+      <button data-f="" aria-pressed="true">Show all</button>
+      <button class="f-evid" data-f="evid" aria-pressed="false"><span class="dot"></span>Evidence &amp; metalanguage</button>
+      <button class="f-purp" data-f="purp" aria-pressed="false"><span class="dot"></span>Purpose &amp; interpretation</button>
+      <button class="f-idea" data-f="idea" aria-pressed="false"><span class="dot"></span>Ideas &amp; themes</button>
+    </div>
+    <h2 class="sec">Rubric</h2>
+    <div class="compact">
+      <span class="bands"><span>C2</span><span>C3</span><span>C4</span><span>VCE1</span></span>
+      <button class="toggle" id="rubricToggle">Rubric <span class="chev">▾</span></button>
+    </div>
+    <div class="scroll">
+      <table class="rubric">
+        <thead><tr><th>Skill area</th><th>C2 · Describe</th><th>C3 · Explain</th><th>C4 · Analyse</th><th>VCE 1 · Interpret</th></tr></thead>
+        <tbody id="rubricBody"></tbody>
+      </table>
+    </div>
   </div>
 
   <div class="bar" style="margin-top:16px">
@@ -353,6 +375,14 @@ if(justImported){
   document.body.insertBefore(bn, document.body.firstChild);
   setTimeout(()=>bn.remove(), 6000);
 }
+
+/* sticky rubric: collapse to a compact strip once scrolled past, expand on tap */
+const stickyRef = document.getElementById("stickyRef");
+new IntersectionObserver(([e])=>{
+  stickyRef.classList.toggle("stuck", !e.isIntersecting && e.boundingClientRect.top < 0);
+  if(e.isIntersecting) stickyRef.classList.remove("expanded");
+}, {threshold:0}).observe(document.getElementById("sentinel"));
+document.getElementById("rubricToggle").onclick = ()=> stickyRef.classList.toggle("expanded");
 
 const setAll = o => document.querySelectorAll(".type").forEach(t=>t.classList.toggle("open",o));
 document.getElementById("expandAll").onclick = ()=>setAll(true);
