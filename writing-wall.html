@@ -5,460 +5,389 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Analytical Writing Wall — ELC Hub</title>
 <style>
-  :root {
-    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
-    --accent:#2563eb; --radius:14px;
-    --shadow:0 1px 2px rgba(16,24,40,.05), 0 4px 14px rgba(16,24,40,.06);
-    /* the three teaching strands — same colours in the rubric rows and in the examples */
-    --evid:#006FC0;  --evid-fill:rgba(69,176,225,.30);   --evid-mark:rgba(69,176,225,.34);
-    --purp:#008F4C;  --purp-fill:rgba(141,216,115,.32);  --purp-mark:rgba(141,216,115,.36);
-    --idea:#C03A2B;  --idea-fill:rgba(241,169,131,.34);  --idea-mark:rgba(241,169,131,.38);
+  :root{
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2; --radius:12px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
+    --evid:#006FC0; --evid-fill:#45B0E1;
+    --purp:#008F4C; --purp-fill:#8DD873;
+    --idea:#C03A2B; --idea-fill:#F1A983;
   }
-  @media (prefers-color-scheme: dark) {
-    :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
-      --shadow:0 1px 2px rgba(0,0,0,.4);
-      --evid:#7cc4f5; --purp:#6fd79b; --idea:#f5a08d;
-      --evid-fill:rgba(69,176,225,.17); --purp-fill:rgba(141,216,115,.17); --idea-fill:rgba(241,169,131,.17);
-      --evid-mark:rgba(69,176,225,.26); --purp-mark:rgba(141,216,115,.26); --idea-mark:rgba(241,169,131,.28); }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
+           --shadow:0 1px 2px rgba(0,0,0,.4); --evid:#5FB4EC; --purp:#4FBF83; --idea:#E8836F; }
   }
-  * { box-sizing:border-box; margin:0; }
-  body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; }
-  header { background:linear-gradient(135deg,#2563eb,#7c3aed 60%,#db2777); color:#fff; padding:26px 20px 34px; text-align:center; }
-  header a.back { color:#fff; opacity:.85; text-decoration:none; font-size:.85rem; font-weight:600; }
-  header h1 { font-size:clamp(1.5rem,4.5vw,2.1rem); letter-spacing:-.4px; margin-top:8px; }
-  header p { max-width:620px; margin:8px auto 0; opacity:.94; font-size:.95rem; }
-  main { max-width:1180px; margin:0 auto; padding:24px 16px 60px; }
-  h2.sec { font-size:1.15rem; margin-bottom:3px; }
-  p.sub { color:var(--muted); font-size:.87rem; margin-bottom:12px; }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+  header{background:linear-gradient(135deg,#2563eb,#7c3aed 60%,#db2777);color:#fff;padding:22px 20px 28px;text-align:center}
+  header a{color:#fff;opacity:.85;text-decoration:none;font-size:.85rem;font-weight:600}
+  header h1{font-size:clamp(1.4rem,4vw,1.9rem);margin-top:6px}
+  main{max-width:1240px;margin:0 auto;padding:20px 14px 60px}
+  h2.sec{font-size:1.05rem;margin:0 0 8px}
 
-  /* ---- colour key ---- */
-  .key { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:15px 17px; margin-bottom:24px; }
-  .key h2 { font-size:1rem; margin-bottom:3px; }
-  .key > p { font-size:.85rem; color:var(--muted); margin-bottom:11px; }
-  .key ul { list-style:none; padding:0; display:grid; gap:9px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); }
-  .key li { font-size:.85rem; display:flex; gap:9px; align-items:flex-start; }
-  .key .sw { width:15px; height:15px; border-radius:4px; flex-shrink:0; margin-top:2px; }
-  .key .sw.b { background:var(--evid-fill); border:1.5px solid var(--evid); }
-  .key .sw.g { background:var(--purp-fill); border:1.5px solid var(--purp); }
-  .key .sw.o { background:var(--idea-fill); border:1.5px solid var(--idea); }
-  .key b { display:block; }
-  .key span.d { color:var(--muted); }
+  .bar{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:16px}
+  .bar button{font-size:.8rem;padding:6px 12px;border-radius:999px;border:1px solid var(--line);
+              background:var(--card);color:var(--ink);cursor:pointer;display:flex;align-items:center;gap:7px}
+  .bar button .dot{width:11px;height:11px;border-radius:3px;border:1px solid rgba(0,0,0,.18)}
+  .bar button[aria-pressed="true"]{font-weight:700;box-shadow:0 0 0 2px var(--line)}
+  .f-evid .dot{background:var(--evid-fill)} .f-purp .dot{background:var(--purp-fill)} .f-idea .dot{background:var(--idea-fill)}
 
-  /* highlight styles inside examples — identical hues to the rubric rows */
-  .b,.g,.o { font-weight:600; border-radius:3px; padding:0 2px; }
-  .b { color:var(--evid); box-shadow:inset 0 -.5em 0 var(--evid-mark); }
-  .g { color:var(--purp); box-shadow:inset 0 -.5em 0 var(--purp-mark); }
-  .o { color:var(--idea); box-shadow:inset 0 -.5em 0 var(--idea-mark); }
+  .b,.g,.o{font-weight:600}
+  .b{color:var(--evid)} .g{color:var(--purp)} .o{color:var(--idea)}
+  body.filtering .b,body.filtering .g,body.filtering .o{color:inherit;font-weight:400;opacity:.35}
+  body.filter-evid .b{color:var(--evid);font-weight:600;opacity:1}
+  body.filter-purp .g{color:var(--purp);font-weight:600;opacity:1}
+  body.filter-idea .o{color:var(--idea);font-weight:600;opacity:1}
+  body.filtering .rubric tbody tr{opacity:.3}
+  body.filter-evid tr.evid,body.filter-purp tr.purp,body.filter-idea tr.idea{opacity:1!important}
 
-  /* ---- persistent rubric: rows carry the strand colour, columns stay neutral ---- */
-  .rubric-scroll { overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow); }
-  table.rubric { border-collapse:collapse; width:100%; min-width:760px; }
-  table.rubric th, table.rubric td { padding:11px 13px; text-align:left; vertical-align:top; font-size:.85rem; border-bottom:1px solid var(--line); }
-  table.rubric thead th { font-size:.76rem; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); background:var(--bg); border-bottom:2px solid var(--line); white-space:nowrap; }
-  table.rubric td.name { font-weight:700; white-space:nowrap; border-left:5px solid transparent; }
-  tr.evid td { background:var(--evid-fill); } tr.evid td.name { border-left-color:var(--evid); }
-  tr.purp td { background:var(--purp-fill); } tr.purp td.name { border-left-color:var(--purp); }
-  tr.idea td { background:var(--idea-fill); } tr.idea td.name { border-left-color:var(--idea); }
-  table.rubric tr:last-child td { border-bottom:none; }
+  .scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow)}
+  table.rubric{border-collapse:collapse;width:100%;min-width:820px}
+  .rubric th,.rubric td{padding:9px 12px;text-align:left;vertical-align:top;font-size:.84rem;border:1px solid var(--line)}
+  .rubric thead th{font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);background:var(--bg);white-space:nowrap}
+  .rubric td.name{font-weight:700;white-space:nowrap}
+  tr.evid td{background:var(--evid-fill)} tr.purp td{background:var(--purp-fill)} tr.idea td{background:var(--idea-fill)}
+  tr.evid td,tr.purp td,tr.idea td{color:#1c2333}
+  tr.clickable{cursor:pointer}
 
-  /* ---- collapsible text types ---- */
-  .controls { display:flex; gap:8px; margin:24px 0 12px; }
-  .controls button { font-size:.82rem; padding:7px 13px; border-radius:8px; border:1px solid var(--line); background:var(--card); color:var(--ink); cursor:pointer; }
-  .types { display:flex; flex-direction:column; gap:11px; }
-  .type { border:1px solid var(--line); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow); overflow:hidden; }
-  .type button.head { width:100%; display:flex; align-items:center; gap:12px; padding:15px 17px; background:none; border:none; text-align:left; cursor:pointer; font:inherit; color:inherit; }
-  .type button.head .emoji { font-size:1.45rem; }
-  .type button.head h3 { font-size:1.02rem; }
-  .type button.head p { font-size:.83rem; color:var(--muted); margin-top:2px; }
-  .type button.head .chev { margin-left:auto; color:var(--muted); transition:transform .2s; flex-shrink:0; }
-  .type.open button.head .chev { transform:rotate(90deg); }
-  .type .body { display:none; padding:0 17px 18px; }
-  .type.open .body { display:block; }
+  .types{display:flex;flex-direction:column;gap:9px;margin-top:8px}
+  .type{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);overflow:hidden}
+  .type>button.head{width:100%;display:flex;align-items:center;gap:11px;padding:13px 15px;background:none;border:none;text-align:left;cursor:pointer;font:inherit;color:inherit}
+  .type .emoji{font-size:1.35rem}
+  .type h3{font-size:1rem} .type .subt{font-size:.82rem;color:var(--muted);margin-top:1px}
+  .type .chev{margin-left:auto;color:var(--muted);transition:transform .2s}
+  .type.open .chev{transform:rotate(90deg)}
+  .type .body{display:none;padding:0 15px 15px} .type.open .body{display:block}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+  @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:560px){.grid{grid-template-columns:1fr}}
+  .cell{border:1px solid var(--line);border-radius:9px;padding:11px 12px;display:flex;flex-direction:column}
+  .cell .band{font-size:.73rem;font-weight:800;letter-spacing:.4px}
+  .cell .focus{font-size:.72rem;color:var(--muted);margin:2px 0 8px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+  .cell .ex{font-size:.92rem;line-height:1.7;margin-bottom:9px}
+  .cell .exp{font-size:.77rem;color:var(--muted);line-height:1.5;margin-top:auto;padding-top:7px;border-top:1px dashed var(--line)}
+  .gv{display:grid;gap:9px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+  .gv .col{border:1px solid var(--line);border-radius:9px;padding:11px 13px}
+  .gv h4{font-size:.88rem;margin-bottom:6px}
+  .gv dt{font-size:.71rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);font-weight:700;margin-top:7px}
+  .gv dd{font-size:.82rem;margin:2px 0 0}
+  .type .mine{font-size:.68rem;background:var(--line);color:var(--muted);padding:1px 7px;border-radius:999px;margin-left:8px}
 
-  /* four bands side by side, exactly like the printed wall */
-  .ladder { display:grid; grid-template-columns:repeat(4,1fr); gap:11px; }
-  @media (max-width:900px){ .ladder { grid-template-columns:repeat(2,1fr); } }
-  @media (max-width:560px){ .ladder { grid-template-columns:1fr; } }
-  .step { border:1px solid var(--line); border-radius:10px; padding:12px 13px; display:flex; flex-direction:column; }
-  .step .tag { font-size:.74rem; font-weight:800; letter-spacing:.4px; color:var(--ink); margin-bottom:3px; }
-  .step .focus { font-size:.73rem; color:var(--muted); margin-bottom:9px; padding-bottom:8px; border-bottom:1px solid var(--line); }
-  .step .example { font-size:.92rem; line-height:1.75; margin-bottom:10px; }
-  .step .explain { font-size:.78rem; color:var(--muted); line-height:1.5; margin-top:auto; padding-top:8px; border-top:1px dashed var(--line); }
-
-  /* grammar + vocab */
-  .gv { display:grid; gap:11px; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); }
-  .gv .col { border:1px solid var(--line); border-radius:10px; padding:12px 14px; }
-  .gv h4 { font-size:.9rem; margin-bottom:7px; }
-  .gv dt { font-size:.72rem; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); font-weight:700; margin-top:8px; }
-  .gv dd { font-size:.83rem; margin:2px 0 0; }
-
-  /* ---- strand filter ---- */
-  .chips { display:flex; flex-wrap:wrap; gap:7px; margin:10px 0 12px; }
-  .chips button { font-size:.8rem; padding:6px 12px; border-radius:999px; border:1px solid var(--line);
-                  background:var(--card); color:var(--ink); cursor:pointer; display:flex; align-items:center; gap:6px; }
-  .chips button .dot { width:10px; height:10px; border-radius:50%; }
-  .chips button[aria-pressed="true"] { border-color:currentColor; font-weight:700; box-shadow:0 0 0 2px var(--line); }
-  .chips button.f-evid .dot { background:var(--evid); } .chips button.f-evid[aria-pressed="true"] { color:var(--evid); }
-  .chips button.f-purp .dot { background:var(--purp); } .chips button.f-purp[aria-pressed="true"] { color:var(--purp); }
-  .chips button.f-idea .dot { background:var(--idea); } .chips button.f-idea[aria-pressed="true"] { color:var(--idea); }
-
-  /* when a strand is chosen, everything else recedes */
-  body.filtering .b, body.filtering .g, body.filtering .o {
-    opacity:.3; box-shadow:none; font-weight:400; color:inherit; }
-  body.filter-evid .b { opacity:1; font-weight:600; color:var(--evid); box-shadow:inset 0 -.5em 0 var(--evid-mark); }
-  body.filter-purp .g { opacity:1; font-weight:600; color:var(--purp); box-shadow:inset 0 -.5em 0 var(--purp-mark); }
-  body.filter-idea .o { opacity:1; font-weight:600; color:var(--idea); box-shadow:inset 0 -.5em 0 var(--idea-mark); }
-  body.filtering table.rubric tbody tr { opacity:.3; transition:opacity .15s; }
-  body.filter-evid tr.evid, body.filter-purp tr.purp, body.filter-idea tr.idea { opacity:1 !important; }
-  table.rubric tbody tr.clickable { cursor:pointer; }
-
-  /* ---- teacher worked-example panel ---- */
-  #teacherPanel { background:var(--card); border:1px solid var(--line); border-left:5px solid #16a34a;
-                  border-radius:var(--radius); box-shadow:var(--shadow); padding:15px 17px; margin-bottom:24px; }
-  #teacherPanel .badge { display:inline-block; background:#16a34a; color:#fff; font-size:.7rem; font-weight:800;
-                         letter-spacing:.5px; padding:2px 9px; border-radius:999px; margin-bottom:7px; }
-  #teacherPanel h2 { font-size:1rem; margin-bottom:3px; }
-  #teacherPanel > p { font-size:.85rem; color:var(--muted); margin-bottom:11px; }
-  #wsCanvas { min-height:76px; border:1px dashed var(--line); border-radius:9px; padding:12px 14px;
-              font-size:1.02rem; line-height:1.85; outline:none; background:var(--bg); }
-  #wsCanvas:focus { border-color:var(--accent); border-style:solid; }
-  #wsCanvas:empty::before { content:attr(data-ph); color:var(--muted); }
-  .ws-tools { display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; align-items:center; }
-  .ws-tools button { font-size:.8rem; padding:7px 12px; border-radius:8px; border:1px solid var(--line);
-                     background:var(--card); color:var(--ink); cursor:pointer; display:flex; align-items:center; gap:6px; }
-  .ws-tools button .dot { width:11px; height:11px; border-radius:3px; }
-  .ws-tools button.mk-b .dot { background:var(--evid-mark); border:1.5px solid var(--evid); }
-  .ws-tools button.mk-g .dot { background:var(--purp-mark); border:1.5px solid var(--purp); }
-  .ws-tools button.mk-o .dot { background:var(--idea-mark); border:1.5px solid var(--idea); }
-  .ws-tools select { font-size:.8rem; padding:6px 9px; border-radius:8px; border:1px solid var(--line);
-                     background:var(--card); color:var(--ink); max-width:230px; }
-  .ws-tools .spacer { flex:1; }
-  #wsAnswer { display:none; margin-top:10px; padding:11px 13px; border-radius:9px; background:var(--bg);
-              border:1px solid var(--line); font-size:.95rem; line-height:1.8; }
-  #wsAnswer.show { display:block; }
-  #wsAnswer .lbl { display:block; font-size:.72rem; text-transform:uppercase; letter-spacing:.4px;
-                   color:var(--muted); font-weight:700; margin-bottom:5px; }
-  footer { border-top:1px solid var(--line); margin-top:40px; padding:20px 16px 34px; text-align:center; color:var(--muted); font-size:.84rem; }
+  .tbox{background:var(--card);border:1px solid var(--line);border-left:4px solid #16a34a;border-radius:var(--radius);
+        box-shadow:var(--shadow);padding:13px 15px;margin-bottom:16px}
+  .tbox .badge{display:inline-block;background:#16a34a;color:#fff;font-size:.68rem;font-weight:800;padding:2px 8px;border-radius:999px}
+  .tbox h2{font-size:.98rem;margin:6px 0 8px}
+  .mkbox{min-height:52px;border:1px dashed var(--line);border-radius:8px;padding:9px 11px;font-size:.95rem;line-height:1.75;outline:none;background:var(--bg)}
+  .mkbox:focus{border-style:solid;border-color:#16a34a}
+  .mkbox:empty::before{content:attr(data-ph);color:var(--muted)}
+  .tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+  .tools button,.tools select,.tools input{font-size:.79rem;padding:6px 10px;border-radius:7px;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+  .tools input{cursor:text} .tools .sp{flex:1}
+  .tools button .dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px;border:1px solid rgba(0,0,0,.2)}
+  .mk-b .dot{background:var(--evid-fill)} .mk-g .dot{background:var(--purp-fill)} .mk-o .dot{background:var(--idea-fill)}
+  .newrow{display:none;margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
+  .newrow.show{display:block}
+  .newrow .flds{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+  .newrow .flds input{flex:1;min-width:130px}
+  .newrow .bandrow{margin-bottom:8px}
+  .newrow .bandrow label{font-size:.73rem;font-weight:700;color:var(--muted);display:block;margin-bottom:3px}
+  .newrow textarea{width:100%;font:inherit;font-size:.79rem;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink);resize:vertical;min-height:44px;margin-top:4px}
+  #answer{display:none;margin-top:8px;padding:9px 11px;border-radius:8px;background:var(--bg);border:1px solid var(--line);font-size:.93rem;line-height:1.75}
+  #answer.show{display:block}
+  footer{border-top:1px solid var(--line);margin-top:30px;padding:16px;text-align:center;color:var(--muted);font-size:.8rem}
 </style>
 </head>
 <body>
 <header>
-  <a class="back" href="index.html">← ELC Hub</a>
+  <a href="index.html">← ELC Hub</a>
   <h1>📝 Analytical Writing Wall</h1>
-  <p>The same idea, written at every band. The colours show you exactly what gets added as you move up.</p>
 </header>
 
 <main>
-  <div class="key">
-    <h2>What the colours mean</h2>
-    <p>The same three colours run through the rubric rows and the example sentences, so a highlighted phrase tells you which part of the rubric it is doing.</p>
-    <ul>
-      <li><span class="sw b"></span><span><b>Evidence &amp; metalanguage</b><span class="d">The technique you name, and the quote or moment you use.</span></span></li>
-      <li><span class="sw g"></span><span><b>Purpose &amp; interpretation</b><span class="d">The effect it has on the reader or audience.</span></span></li>
-      <li><span class="sw o"></span><span><b>Ideas &amp; themes</b><span class="d">The bigger idea, message or value it points to.</span></span></li>
-    </ul>
-  </div>
-
-  <div id="teacherPanel" hidden>
-    <span class="badge">TEACHER VIEW</span>
-    <h2>Worked example</h2>
-    <p>Load a sentence (or type your own), select any part of it with the mouse, then tap a colour. Good for marking one up together on the board.</p>
-    <div id="wsCanvas" contenteditable="true" data-ph="Type or paste a sentence here, then highlight part of it…"></div>
-    <div class="ws-tools">
-      <button class="mk-b" data-mk="b"><span class="dot"></span>Evidence</button>
-      <button class="mk-g" data-mk="g"><span class="dot"></span>Purpose</button>
-      <button class="mk-o" data-mk="o"><span class="dot"></span>Ideas</button>
-      <button data-mk="">Clear</button>
-      <span class="spacer"></span>
-      <select id="wsLoad"><option value="">Load an example…</option></select>
-      <button id="wsReveal">Reveal original</button>
-    </div>
-    <div id="wsAnswer"><span class="lbl">How the WAGOLL marks it up</span><span id="wsAnswerText"></span></div>
-  </div>
-
-  <h2 class="sec">The rubric</h2>
-  <p class="sub">The same four skill areas, whatever text type you're writing about. Pick a strand to see just that colour, or click a coloured row.</p>
-  <div class="chips" id="chips">
+  <div class="bar" id="bar">
     <button data-f="" aria-pressed="true">Show all</button>
     <button class="f-evid" data-f="evid" aria-pressed="false"><span class="dot"></span>Evidence &amp; metalanguage</button>
     <button class="f-purp" data-f="purp" aria-pressed="false"><span class="dot"></span>Purpose &amp; interpretation</button>
     <button class="f-idea" data-f="idea" aria-pressed="false"><span class="dot"></span>Ideas &amp; themes</button>
   </div>
-  <div class="rubric-scroll">
+
+  <div class="tbox" id="tbox" hidden>
+    <span class="badge">TEACHER VIEW</span>
+    <h2>Worked example</h2>
+    <div class="mkbox" id="canvas" contenteditable="true" data-ph="Load an example or type a sentence, select part of it, then tap a colour…"></div>
+    <div class="tools">
+      <button class="mk-b" data-mk="b"><span class="dot"></span>Evidence</button>
+      <button class="mk-g" data-mk="g"><span class="dot"></span>Purpose</button>
+      <button class="mk-o" data-mk="o"><span class="dot"></span>Ideas</button>
+      <button data-mk="">Clear</button>
+      <span class="sp"></span>
+      <select id="load"><option value="">Load an example…</option></select>
+      <button id="reveal">Reveal original</button>
+      <button id="addToggle">+ New text</button>
+    </div>
+    <div id="answer"></div>
+
+    <div class="newrow" id="newrow">
+      <div class="flds">
+        <input id="nEmoji" placeholder="📗" maxlength="4" style="max-width:64px">
+        <input id="nTitle" placeholder="Text type (e.g. Recount)">
+        <input id="nSub" placeholder="Text studied (e.g. My Two Blankets)">
+      </div>
+      <div id="nBands"></div>
+      <div class="tools">
+        <button id="nSave" style="border-color:#16a34a;color:#16a34a;font-weight:700">Save row</button>
+        <button id="nCancel">Cancel</button>
+        <span class="sp"></span>
+        <button id="nExport">Export for repo</button>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="sec">Rubric</h2>
+  <div class="scroll">
     <table class="rubric">
-      <thead><tr>
-        <th>Skill area</th>
-        <th>C2 · Describe</th><th>C3 · Explain</th><th>C4 · Analyse</th><th>VCE 1 · Interpret</th>
-      </tr></thead>
+      <thead><tr><th>Skill area</th><th>C2 · Describe</th><th>C3 · Explain</th><th>C4 · Analyse</th><th>VCE 1 · Interpret</th></tr></thead>
       <tbody id="rubricBody"></tbody>
     </table>
   </div>
 
-  <div class="controls">
+  <div class="bar" style="margin-top:16px">
     <button id="expandAll">Expand all</button>
     <button id="collapseAll">Collapse all</button>
   </div>
   <div class="types" id="types"></div>
 </main>
 
-<footer>Examples come from our own WAGOLL documents. To add a text type, add one entry to the <code>TYPES</code> list at the top of this file.</footer>
+<footer>Colours: <span class="b">evidence</span> · <span class="g">purpose</span> · <span class="o">ideas</span></footer>
 
 <script>
-/* ==========================================================================
-   CONTENT — teachers can edit everything in this block. No coding needed.
-   In the examples, wrap words in [b]…[/b] blue  = feature / evidence
-                                  [g]…[/g] green = effect on the reader
-                                  [o]…[/o] orange = idea, theme or value
-   ========================================================================== */
+/* ===== CONTENT — edit here. [b]=evidence  [g]=purpose  [o]=ideas ===== */
 
 const RUBRIC = [
-  ["Ideas &amp; Themes",
+  ["Ideas &amp; Themes","idea",
    "Recognises what happens in the text or scene. Retells key details with little interpretation.",
    "Explains basic feelings or ideas suggested by the text. Begins linking choices to simple themes.",
    "Connects specific language or film techniques to themes or concepts. Explains what the creator might be saying.",
    "Analyses how choices express messages, values, or perspectives. Analyses the creator's purpose in representing social or cultural issues."],
-  ["Evidence &amp; Metalanguage",
+  ["Evidence &amp; Metalanguage","evid",
    "Gives a simple quote or description from the text or scene.",
    "Names a language or film feature and begins linking it to meaning.",
    "Uses terminology accurately with short, embedded evidence.",
    "Integrates evidence and metalanguage fluently to build interpretation."],
-  ["Language &amp; Structure",
-   "Writes short, simple sentences using mostly literal verbs (\"shows\", \"uses\").",
+  ["Language &amp; Structure","",
+   "Writes short, simple sentences using mostly literal verbs (&ldquo;shows&rdquo;, &ldquo;uses&rdquo;).",
    "Expands sentences with connectives such as because, so, or to. Uses basic evaluative words.",
-   "Uses more complex sentences and analytical verbs (\"suggests\", \"highlights\").",
+   "Uses more complex sentences and analytical verbs (&ldquo;suggests&rdquo;, &ldquo;highlights&rdquo;).",
    "Writes fluently in a cohesive formal style, varying sentence structures to show cause, effect and interpretation."],
-  ["Purpose &amp; Interpretation",
+  ["Purpose &amp; Interpretation","purp",
    "Identifies the basic meaning or message.",
    "Explains the effect on the reader or viewer.",
    "Makes inferences about the creator's intent or perspective.",
    "Discusses deeper social, moral or ethical ideas, linking choices to broader context."]
 ];
 
-const BANDS = [
-  {id:"c2",  label:"C2 · Describe"},
-  {id:"c3",  label:"C3 · Explain"},
-  {id:"c4",  label:"C4 · Analyse"},
-  {id:"vce", label:"VCE 1 · Interpret"}
-];
+const BANDS = [{label:"C2 · Describe"},{label:"C3 · Explain"},{label:"C4 · Analyse"},{label:"VCE 1 · Interpret"}];
+
+const FOCUS_TEXT = ["Say what happens","Explain effect or meaning","Link language choices to ideas or themes",
+  "Link literary, structural and stylistic features to messages, values and the creator's intent"];
+const FOCUS_FILM = ["Say what happens","Add meaning","Link to ideas or themes","Discuss message and director's intent"];
 
 const TYPES = [
-{
-  emoji:"📖", title:"Fiction / Narrative", sub:"The Giving Tree — repetition and self-sacrifice",
-  focus:["Say what happens","Explain effect or meaning","Link language choices to ideas or themes",
-         "Link literary, structural and stylistic features to messages, values and the creator's intent"],
+{ emoji:"📖", title:"Fiction / Narrative", sub:"The Giving Tree", focus:FOCUS_TEXT,
   examples:[
     `The author uses [b]repetition[/b] to [g]show[/g] that the tree keeps giving when it says, “And the [b]tree was happy[/b].”`,
     `The [b]repetition of the phrase “the tree was happy”[/b] [g]makes the tree seem[/g] [o]generous[/o], [g]encouraging the reader to feel[/g] [o]sympathy[/o] for her.`,
     `Silverstein uses [b]repetition of the line “And the tree was happy”[/b] [g]to highlight the one-sided relationship[/g], suggesting themes of [o]sacrifice[/o] and [o]imbalance[/o].`,
-    `By repeatedly portraying the tree as endlessly giving [b]through the recurring motif “And the tree was happy,”[/b] Silverstein [g]invites readers to question[/g] cultural expectations around [o]self-sacrifice[/o] in [o]unequal relationships[/o].`
-  ],
+    `By repeatedly portraying the tree as endlessly giving [b]through the recurring motif “And the tree was happy,”[/b] Silverstein [g]invites readers to question[/g] cultural expectations around [o]self-sacrifice[/o] in [o]unequal relationships[/o].`],
   explains:[
     `Simple sentence pattern: subject + verb + object. Names a language feature (🟦) and states what happens in the text. Meaning stays close to the words on the page.`,
     `Adds an effect phrase to explain how the language influences the reader (🟩). Uses evaluative words and basic cause–effect reasoning.`,
     `Links language choice, effect and theme in one sentence. Uses analytical verbs (“highlight”, “suggest”) to move beyond description (🟧).`,
-    `Combines language choice, ideas and values. Analyses the author's message and connects it to broader historical, social and cultural ideas.`
-  ]
-},
-{
-  emoji:"📢", title:"Persuasive — school diets", sub:"Should schools control what students eat?",
-  focus:["Say what happens","Explain effect or meaning","Link language choices to ideas or themes",
-         "Link literary, structural and stylistic features to messages, values and the creator's intent"],
+    `Combines language choice, ideas and values. Analyses the author's message and connects it to broader historical, social and cultural ideas.`]},
+
+{ emoji:"📢", title:"Persuasive", sub:"School diets", focus:FOCUS_TEXT,
   examples:[
     `The writer [b]states[/b] that schools should not tell children what to eat when they argue that [b]“schools should not control students’ diets”[/b].`,
     `This [b]statement[/b][g] encourages readers to agree[/g] because the claim [b]“schools should not control students’ diets”[/b] sounds [o]confident[/o] and [o]reasonable[/o].`,
     `By presenting the claim [b]“schools should not control students’ diets”[/b] as an [b]assertion[/b], [g]the writer reinforces[/g] the idea that [o]parents should control children’s choices[/o].`,
-    `By framing [o]parental responsibility[/o] as [b]“common sense”[/b], the [g]writer promotes [/g][o]individual choice[/o][g] over [/g][o]institutional control[/o], [g]reflecting values of[/g] [o]personal freedom[/o].`
-  ],
+    `By framing [o]parental responsibility[/o] as [b]“common sense”[/b], the [g]writer promotes [/g][o]individual choice[/o][g] over [/g][o]institutional control[/o], [g]reflecting values of[/g] [o]personal freedom[/o].`],
   explains:[
     `Simple sentence pattern: subject + verb + object. Identifies the writer's opinion and states what is said. Verbs are literal (“states”, “says”) and ideas are concrete.`,
     `Adds an effect or reason clause to explain how the statement sounds to the reader (🟩). Begins using evaluative adjectives (“reasonable”, “strong”) and connectives like because or so.`,
     `Links language choice, effect and idea in one longer sentence. Uses analytical verbs (“reinforces”, “frames”) (🟧) and abstract nouns such as control, responsibility or choice.`,
-    `Combines several ideas smoothly. Uses metalanguage to comment on the writer's perspective, connecting language choices to purpose, values or beliefs.`
-  ]
-},
-{
-  emoji:"📱", title:"Persuasive — social media", sub:"Should social media be banned for young people?",
-  focus:["Say what happens","Explain effect or meaning","Link language choices to ideas or themes",
-         "Link literary, structural and stylistic features to messages, values and the creator's intent"],
+    `Combines several ideas smoothly. Uses metalanguage to comment on the writer's perspective, connecting language choices to purpose, values or beliefs.`]},
+
+{ emoji:"📱", title:"Persuasive", sub:"Social media", focus:FOCUS_TEXT,
   examples:[
     `The writer [b]states[/b] that [g]social media should not be banned[/g] [o]when they argue[/o] that [b]“Social media should not be banned because it helps young people build and maintain relationships”[/b].`,
     `This [b]statement[/b][g] encourages readers to agree[/g] because the claim [b]“helps young people build and maintain relationships”[/b] sounds [o]positive[/o] and [o]reasonable[/o].`,
     `By presenting the claim [b]“build and maintain relationships”[/b] as a [b]benefit[/b], [g]the writer reinforces[/g] the idea that [o]social media supports connection rather than distraction[/o].`,
-    `By linking social media to wellbeing during [b]“COVID-19 lockdowns”[/b], the [g]writer promotes [/g][o]guidance[/o][g] over [/g][o]prohibition[/o], [g]reflecting values of[/g] [o]trust and digital responsibility[/o].`
-  ],
+    `By linking social media to wellbeing during [b]“COVID-19 lockdowns”[/b], the [g]writer promotes [/g][o]guidance[/o][g] over [/g][o]prohibition[/o], [g]reflecting values of[/g] [o]trust and digital responsibility[/o].`],
   explains:[
-    `Simple sentence pattern: subject + verb + object. Identifies the writer's opinion and states what is said. Verbs are literal and ideas are concrete.`,
-    `Adds an effect or reason clause to explain how the statement sounds to the reader (🟩). Begins using evaluative adjectives and connectives like because or so.`,
-    `Links language choice, effect and idea in one longer sentence. Uses analytical verbs (“reinforces”, “presents”) (🟧) and abstract nouns such as connection or distraction.`,
-    `Combines several ideas smoothly. Uses metalanguage to comment on the writer's perspective, connecting language choices to values and beliefs.`
-  ]
-},
-{
-  emoji:"🎬", title:"Film", sub:"Rabbit-Proof Fence — the long shot in the desert",
-  focus:["Say what happens","Add meaning","Link to ideas or themes","Discuss message and director's intent"],
+    `Simple sentence pattern: subject + verb + object. Identifies the writer's opinion and states what is said.`,
+    `Adds an effect or reason clause to explain how the statement sounds to the reader (🟩). Uses evaluative adjectives and connectives like because or so.`,
+    `Links language choice, effect and idea in one longer sentence. Uses analytical verbs (🟧) and abstract nouns such as connection or distraction.`,
+    `Combines several ideas smoothly. Uses metalanguage to comment on the writer's perspective, connecting choices to values and beliefs.`]},
+
+{ emoji:"🎬", title:"Film", sub:"Rabbit-Proof Fence", focus:FOCUS_FILM,
   examples:[
     `[b]The film uses a long shot[/b] to[g] show the girls walking alone[/g].`,
     `[b]The long shot[/b] [g]makes the audience see how far the girls must travel,[/g] [o]showing their bravery.[/o]`,
     `[b]Noyce uses a long shot to[/b][g] highlight the girls’ isolation in the vast desert,[/g] symbolising[o] their determination and loss of freedom[/o].`,
-    `[b]Noyce repeatedly uses wide landscape[/b] shots to[g] contrast the beauty of the land with the cruelty of the government’s control,[/g] emphasising[o] the theme of resilience against oppression.[/o]`
-  ],
+    `[b]Noyce repeatedly uses wide landscape[/b] shots to[g] contrast the beauty of the land with the cruelty of the government’s control,[/g] emphasising[o] the theme of resilience against oppression.[/o]`],
   explains:[
     `Simple sentence pattern: subject + verb + object. Names the film technique (🟦) and tells what is happening on screen. Verbs are literal (“shows”, “uses”).`,
     `Adds a purpose phrase using to + verb to show effect on the audience (🟩). Introduces descriptive or feeling words (“brave”, “alone”) and connectives like because or so.`,
     `Links technique, purpose and theme in one longer sentence. Uses analytical verbs (“highlight”, “symbolise”) to connect the image to a bigger idea (🟧).`,
-    `Combines several ideas smoothly. Uses metalanguage to comment on the director's choices, connecting film language, tone and theme in one flowing idea.`
-  ]
-}
+    `Combines several ideas smoothly. Uses metalanguage to comment on the director's choices, connecting film language, tone and theme in one flowing idea.`]}
 ];
 
-/* Grammar & vocabulary expectations — from the EAL Writing Wall. C4+ not yet written. */
 const GRAMMAR_VOCAB = [
-  {band:"c2", label:"C2",
-   grammar:"Mostly consistent use of perspective (1st person, 3rd person).",
+  {label:"C2", grammar:"Mostly consistent use of perspective (1st person, 3rd person).",
    vocab:"Use some interesting adjectives, conjunctions (For, And, Nor, But, Yet, So) and adverbs."},
-  {band:"c3", label:"C3",
-   grammar:"Use some varied grammar structures including passive voice and varied tenses.",
+  {label:"C3", grammar:"Use some varied grammar structures including passive voice and varied tenses.",
    vocab:"Use some connectives (but, because…). Use a variety of specific verbs, nouns and adjectives."},
-  {band:"c4", label:"C4",
-   grammar:"Use complex sentences with accurate use of a variety of tenses and perspectives.",
+  {label:"C4", grammar:"Use complex sentences with accurate use of a variety of tenses and perspectives.",
    vocab:"Make precise word choices to express ideas. Use some technical or poetic language."}
 ];
 
-/* ==========================================================================
-   RENDERING — you shouldn't need to change anything below here.
-   ========================================================================== */
+/* ===== engine ===== */
+const TEACHER = localStorage.getItem("elc_teacher")==="1";
+const STORE = "elc_wall_custom";
+const custom = () => { try{ return JSON.parse(localStorage.getItem(STORE)||"[]"); }catch(e){ return []; } };
+const esc = s => String(s).replace(/&(?!amp;|ldquo;|rdquo;)/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const colour = s => esc(s).replace(/\[b\]/g,'<span class="b">').replace(/\[g\]/g,'<span class="g">')
+                          .replace(/\[o\]/g,'<span class="o">').replace(/\[\/[bgo]\]/g,'</span>');
+const markers = s => s.replace(/🟦/g,'<span class="b">🟦</span>').replace(/🟩/g,'<span class="g">🟩</span>')
+                      .replace(/🟧/g,'<span class="o">🟧</span>');
+const plain = s => s.replace(/\[\/?[bgo]\]/g,"");
+const allTypes = () => TYPES.concat(custom());
 
-const markers = s => s
-  .replace(/🟦/g,'<span class="b">🟦</span>')
-  .replace(/🟩/g,'<span class="g">🟩</span>')
-  .replace(/🟧/g,'<span class="o">🟧</span>');
-const esc = s => s.replace(/&(?!amp;)/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-const colour = s => esc(s)
-  .replace(/\[b\]/g,'<span class="b">').replace(/\[g\]/g,'<span class="g">').replace(/\[o\]/g,'<span class="o">')
-  .replace(/\[\/[bgo]\]/g,'</span>');
+document.getElementById("rubricBody").innerHTML = RUBRIC.map(r =>
+  `<tr class="${r[1]}"><td class="name">${r[0]}</td>` + r.slice(2).map(c=>`<td>${c}</td>`).join("") + `</tr>`).join("");
 
-const STRAND = ["idea","evid","","purp"];   // matches the fills in the source document
-document.getElementById("rubricBody").innerHTML = RUBRIC.map((r,ri) =>
-  `<tr class="${STRAND[ri]}"><td class="name">${r[0]}</td>` +
-  BANDS.map((b,i)=>`<td>${r[i+1]}</td>`).join("") + `</tr>`
-).join("");
-
-document.getElementById("types").innerHTML = TYPES.map(t => `
+function renderTypes(){
+  document.getElementById("types").innerHTML = allTypes().map(t => `
   <div class="type">
-    <button class="head" aria-expanded="false">
-      <span class="emoji">${t.emoji}</span>
-      <span><h3>${t.title}</h3><p>${t.sub}</p></span>
-      <span class="chev">▸</span>
-    </button>
-    <div class="body"><div class="ladder">
-      ${BANDS.map((b,i)=>`
-        <div class="step">
-          <div class="tag">${b.label}</div>
-          <div class="focus">${t.focus[i]}</div>
-          <p class="example">${colour(t.examples[i])}</p>
-          <p class="explain">${markers(esc(t.explains[i]))}</p>
-        </div>`).join("")}
+    <button class="head"><span class="emoji">${esc(t.emoji||"📄")}</span>
+      <span><h3>${esc(t.title)}${t.custom?'<span class="mine">added</span>':''}</h3><div class="subt">${esc(t.sub||"")}</div></span>
+      <span class="chev">▸</span></button>
+    <div class="body"><div class="grid">
+      ${BANDS.map((b,j)=>`<div class="cell">
+        <div class="band">${b.label}</div>
+        <div class="focus">${esc((t.focus||FOCUS_TEXT)[j])}</div>
+        <div class="ex">${colour(t.examples[j]||"")}</div>
+        <div class="exp">${markers(esc(t.explains[j]||""))}</div>
+      </div>`).join("")}
     </div></div>
-  </div>`).join("")
-+ `
-  <div class="type">
-    <button class="head" aria-expanded="false">
-      <span class="emoji">🔤</span>
-      <span><h3>Grammar &amp; vocabulary</h3><p>What your sentences themselves should be doing at each band</p></span>
-      <span class="chev">▸</span>
-    </button>
-    <div class="body"><div class="gv">
-      ${GRAMMAR_VOCAB.map(g=>`
-        <div class="col">
-          <h4>${g.label}</h4>
-          <dl><dt>Grammar</dt><dd>${g.grammar}</dd><dt>Vocab</dt><dd>${g.vocab}</dd></dl>
-        </div>`).join("")}
-    </div></div>
-  </div>`;
+  </div>`).join("") + `
+  <div class="type"><button class="head"><span class="emoji">🔤</span>
+    <span><h3>Grammar &amp; vocabulary</h3></span><span class="chev">▸</span></button>
+    <div class="body"><div class="gv">${GRAMMAR_VOCAB.map(g=>
+      `<div class="col"><h4>${g.label}</h4><dl><dt>Grammar</dt><dd>${g.grammar}</dd><dt>Vocab</dt><dd>${g.vocab}</dd></dl></div>`).join("")}
+    </div></div></div>`;
+  document.querySelectorAll(".type .head").forEach(b =>
+    b.addEventListener("click", ()=> b.closest(".type").classList.toggle("open")));
+}
+renderTypes();
 
-document.querySelectorAll(".type .head").forEach(btn=>{
-  btn.addEventListener("click", ()=>{
-    const open = btn.closest(".type").classList.toggle("open");
-    btn.setAttribute("aria-expanded", open ? "true" : "false");
-  });
-});
-const setAll = open => document.querySelectorAll(".type").forEach(t=>{
-  t.classList.toggle("open", open);
-  t.querySelector(".head").setAttribute("aria-expanded", open ? "true" : "false");
-});
-document.getElementById("expandAll").addEventListener("click", ()=>setAll(true));
-document.getElementById("collapseAll").addEventListener("click", ()=>setAll(false));
+const setAll = o => document.querySelectorAll(".type").forEach(t=>t.classList.toggle("open",o));
+document.getElementById("expandAll").onclick = ()=>setAll(true);
+document.getElementById("collapseAll").onclick = ()=>setAll(false);
 
-/* ---- strand filter: chips + clickable rubric rows ---- */
-const STRAND_OF = {evid:"evid", purp:"purp", idea:"idea"};
 function setFilter(f){
   document.body.classList.remove("filtering","filter-evid","filter-purp","filter-idea");
-  if(f){ document.body.classList.add("filtering","filter-"+f); }
-  document.querySelectorAll("#chips button").forEach(b =>
-    b.setAttribute("aria-pressed", (b.dataset.f||"") === (f||"") ? "true" : "false"));
+  if(f) document.body.classList.add("filtering","filter-"+f);
+  document.querySelectorAll("#bar button[data-f]").forEach(b=>
+    b.setAttribute("aria-pressed",(b.dataset.f||"")===(f||"")?"true":"false"));
 }
-document.querySelectorAll("#chips button").forEach(b =>
-  b.addEventListener("click", ()=> setFilter(b.dataset.f || "")));
-document.querySelectorAll("#rubricBody tr").forEach(tr => {
-  const c = STRAND_OF[tr.className];
+document.querySelectorAll("#bar button[data-f]").forEach(b=>b.onclick=()=>setFilter(b.dataset.f||""));
+document.querySelectorAll("#rubricBody tr").forEach(tr=>{
+  const c = tr.className;
   if(!c) return;
   tr.classList.add("clickable");
-  tr.addEventListener("click", ()=> setFilter(document.body.classList.contains("filter-"+c) ? "" : c));
+  tr.onclick = ()=> setFilter(document.body.classList.contains("filter-"+c) ? "" : c);
 });
 
-/* ---- teacher worked-example markup tool ---- */
-if(localStorage.getItem("elc_teacher") === "1"){
-  const panel = document.getElementById("teacherPanel");
-  panel.hidden = false;
-  const canvas = document.getElementById("wsCanvas");
-  const sel = document.getElementById("wsLoad");
-  const answer = document.getElementById("wsAnswer");
-  const answerText = document.getElementById("wsAnswerText");
-  const plain = str => str.replace(/\[\/?[bgo]\]/g, "");
+if(TEACHER){
+  document.getElementById("tbox").hidden = false;
+  const canvas=document.getElementById("canvas"), load=document.getElementById("load"),
+        answer=document.getElementById("answer"), nBands=document.getElementById("nBands"),
+        newrow=document.getElementById("newrow"),
+        nEmoji=document.getElementById("nEmoji"), nTitle=document.getElementById("nTitle"), nSub=document.getElementById("nSub");
+  let lastBox = canvas;
 
-  TYPES.forEach((t,ti)=>{
-    const og = document.createElement("optgroup"); og.label = t.title;
-    BANDS.forEach((b,bi)=>{
-      const o = document.createElement("option");
-      o.value = ti+":"+bi; o.textContent = b.label;
-      og.appendChild(o);
+  function fillLoader(){
+    load.innerHTML = '<option value="">Load an example…</option>';
+    allTypes().forEach((t,ti)=>{
+      const og=document.createElement("optgroup"); og.label=t.title+(t.sub?" — "+t.sub:"");
+      BANDS.forEach((b,bi)=>{ const o=document.createElement("option"); o.value=ti+":"+bi; o.textContent=b.label; og.appendChild(o); });
+      load.appendChild(og);
     });
-    sel.appendChild(og);
+  }
+  fillLoader();
+
+  load.onchange = ()=>{ if(!load.value) return;
+    const [ti,bi]=load.value.split(":").map(Number);
+    canvas.textContent = plain(allTypes()[ti].examples[bi]||"");
+    answer.innerHTML = colour(allTypes()[ti].examples[bi]||""); answer.classList.remove("show"); };
+  document.getElementById("reveal").onclick = ()=>{ if(load.value) answer.classList.toggle("show"); };
+
+  nBands.innerHTML = BANDS.map((b,i)=>`<div class="bandrow">
+    <label>${b.label}</label>
+    <div class="mkbox" contenteditable="true" data-ex="${i}" data-ph="Example — select part, tap a colour…"></div>
+    <textarea data-exp="${i}" placeholder="Explanation (optional)"></textarea></div>`).join("");
+
+  document.querySelectorAll(".mkbox").forEach(box=>box.addEventListener("focus",()=>lastBox=box));
+
+  document.querySelectorAll(".tools button[data-mk]").forEach(btn=>{
+    btn.addEventListener("mousedown",e=>e.preventDefault());
+    btn.onclick = ()=>{
+      const s=window.getSelection();
+      if(!s.rangeCount||s.isCollapsed) return;
+      const r=s.getRangeAt(0);
+      if(!lastBox.contains(r.commonAncestorContainer)) return;
+      const f=r.extractContents();
+      f.querySelectorAll("span.b,span.g,span.o").forEach(sp=>sp.replaceWith(...sp.childNodes));
+      if(btn.dataset.mk){ const w=document.createElement("span"); w.className=btn.dataset.mk; w.appendChild(f); r.insertNode(w); }
+      else r.insertNode(f);
+      lastBox.normalize(); s.removeAllRanges();
+    };
   });
 
-  sel.addEventListener("change", ()=>{
-    if(!sel.value) return;
-    const [ti,bi] = sel.value.split(":").map(Number);
-    canvas.textContent = plain(TYPES[ti].examples[bi]);
-    answerText.innerHTML = colour(TYPES[ti].examples[bi]);
-    answer.classList.remove("show");
-  });
-
-  document.getElementById("wsReveal").addEventListener("click", ()=>{
-    if(sel.value) answer.classList.toggle("show");
-  });
-
-  document.querySelectorAll(".ws-tools button[data-mk]").forEach(btn=>{
-    btn.addEventListener("mousedown", e => e.preventDefault());   // keep the selection alive
-    btn.addEventListener("click", ()=>{
-      const s = window.getSelection();
-      if(!s.rangeCount || s.isCollapsed) return;
-      const range = s.getRangeAt(0);
-      if(!canvas.contains(range.commonAncestorContainer)) return;
-      const frag = range.extractContents();
-      frag.querySelectorAll("span.b,span.g,span.o").forEach(sp => sp.replaceWith(...sp.childNodes));
-      if(btn.dataset.mk){
-        const wrap = document.createElement("span");
-        wrap.className = btn.dataset.mk;
-        wrap.appendChild(frag);
-        range.insertNode(wrap);
-      } else {
-        range.insertNode(frag);
-      }
-      canvas.normalize();
-      s.removeAllRanges();
+  const toMarkup = el => {
+    let out="";
+    el.childNodes.forEach(n=>{
+      if(n.nodeType===3) out+=n.textContent;
+      else if(n.nodeType===1){ const c=["b","g","o"].find(x=>n.classList.contains(x));
+        out += c ? `[${c}]${n.textContent}[/${c}]` : n.textContent; }
     });
-  });
+    return out;
+  };
+
+  document.getElementById("addToggle").onclick = ()=> newrow.classList.toggle("show");
+  document.getElementById("nCancel").onclick = ()=> newrow.classList.remove("show");
+
+  document.getElementById("nSave").onclick = ()=>{
+    const title=nTitle.value.trim();
+    if(!title){ nTitle.focus(); return; }
+    const row={ custom:true, emoji:(nEmoji.value.trim()||"📄"), title, sub:nSub.value.trim(), focus:FOCUS_TEXT,
+      examples:[...document.querySelectorAll("[data-ex]")].map(toMarkup),
+      explains:[...document.querySelectorAll("[data-exp]")].map(t=>t.value.trim()) };
+    const list=custom(); list.push(row); localStorage.setItem(STORE,JSON.stringify(list));
+    nTitle.value=nSub.value=nEmoji.value="";
+    document.querySelectorAll("[data-ex]").forEach(b=>b.innerHTML="");
+    document.querySelectorAll("[data-exp]").forEach(t=>t.value="");
+    newrow.classList.remove("show");
+    renderTypes(); fillLoader();
+  };
+
+  document.getElementById("nExport").onclick = ()=>{
+    const list=custom();
+    if(!list.length){ alert("No added rows yet."); return; }
+    const text = list.map(r=>`{ emoji:${JSON.stringify(r.emoji)}, title:${JSON.stringify(r.title)}, sub:${JSON.stringify(r.sub)}, focus:FOCUS_TEXT,\n  examples:${JSON.stringify(r.examples,null,2)},\n  explains:${JSON.stringify(r.explains,null,2)}}`).join(",\n");
+    navigator.clipboard?.writeText(text);
+    alert("Copied.\n\nRows you add here are saved in this browser only — students won't see them. Paste this into the TYPES list in writing-wall.html and commit to publish it to everyone.");
+  };
 }
 </script>
 </body>
