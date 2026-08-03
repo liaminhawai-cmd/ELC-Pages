@@ -102,15 +102,22 @@
   .classnote{font-size:.72rem;color:var(--muted);margin:-2px 0 8px}
   footer{border-top:1px solid var(--line);margin-top:30px;padding:16px;text-align:center;color:var(--muted);font-size:.8rem}
 
-  /* ---- sticky rubric ---- */
-  /* always-sticky bar — fixed height, never resizes, so it can't cause scroll jank */
-  #stickyBar{position:sticky;top:0;z-index:20;background:var(--bg);display:flex;flex-wrap:wrap;
-             align-items:center;gap:8px 9px;padding:10px 14px;margin:0 -14px 4px;box-shadow:0 4px 10px -8px rgba(0,0,0,.3)}
-  #stickyBar .bands{display:flex;gap:5px;flex-wrap:wrap}
-  #stickyBar .bands span{font-size:.71rem;font-weight:700;padding:3px 8px;border-radius:6px;background:var(--card);border:1px solid var(--line)}
-  #stickyBar #jumpRubric{margin-left:auto;font-size:.78rem;padding:6px 11px;border-radius:8px;border:1px solid var(--line);
-                          background:var(--card);color:var(--ink);cursor:pointer;white-space:nowrap}
-  #rubricAnchor{scroll-margin-top:60px}
+  /* ---- sticky rubric ----
+     Permanently sticky from page load, fixed max-height with its own internal
+     scroll. Nothing about this box's size ever changes in response to outer
+     scroll, so it cannot cause the reflow-jank the compact-strip version did. */
+  #stickyBar{position:sticky;top:0;z-index:20;background:var(--bg);padding:8px 14px 7px;margin:0 -14px 4px;
+             box-shadow:0 4px 10px -8px rgba(0,0,0,.3)}
+  #stickyBar h2.sec{font-size:.88rem;margin-bottom:5px}
+  #stickyBar .scroll{max-height:34vh;overflow-y:auto}
+  #stickyBar table.rubric{min-width:640px}
+  #stickyBar .rubric th,#stickyBar .rubric td{padding:7px 10px;font-size:.78rem}
+  #stickyBar .bar{margin-bottom:0}
+  @media (max-width:640px){
+    #stickyBar .scroll{max-height:24vh}
+    #stickyBar .bar button{font-size:.72rem;padding:4px 9px;gap:4px}
+    #stickyBar .bar button .dot{width:9px;height:9px}
+  }
 </style>
 </head>
 <body>
@@ -167,16 +174,13 @@
       <button class="f-purp" data-f="purp" aria-pressed="false"><span class="dot"></span>Purpose &amp; interpretation</button>
       <button class="f-idea" data-f="idea" aria-pressed="false"><span class="dot"></span>Ideas &amp; themes</button>
     </div>
-    <span class="bands"><span>C2</span><span>C3</span><span>C4</span><span>VCE1</span></span>
-    <button id="jumpRubric">↑ Rubric</button>
-  </div>
-
-  <h2 class="sec" id="rubricAnchor">Rubric</h2>
-  <div class="scroll">
-    <table class="rubric">
-      <thead><tr><th>Skill area</th><th>C2 · Describe</th><th>C3 · Explain</th><th>C4 · Analyse</th><th>VCE 1 · Interpret</th></tr></thead>
-      <tbody id="rubricBody"></tbody>
-    </table>
+    <h2 class="sec">Rubric</h2>
+    <div class="scroll">
+      <table class="rubric">
+        <thead><tr><th>Skill area</th><th>C2 · Describe</th><th>C3 · Explain</th><th>C4 · Analyse</th><th>VCE 1 · Interpret</th></tr></thead>
+        <tbody id="rubricBody"></tbody>
+      </table>
+    </div>
   </div>
 
   <div class="bar" style="margin-top:16px">
@@ -414,8 +418,6 @@ if(justImported){
   setTimeout(()=>bn.remove(), 6000);
 }
 
-document.getElementById("jumpRubric").onclick = ()=>
-  document.getElementById("rubricAnchor").scrollIntoView({behavior:"smooth", block:"start"});
 
 const setAll = o => document.querySelectorAll(".type").forEach(t=>t.classList.toggle("open",o));
 document.getElementById("expandAll").onclick = ()=>setAll(true);
