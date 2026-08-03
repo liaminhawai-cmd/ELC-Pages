@@ -93,6 +93,12 @@
   .newrow textarea{width:100%;font:inherit;font-size:.79rem;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--ink);resize:vertical;min-height:44px;margin-top:4px}
   #answer{display:none;margin-top:8px;padding:9px 11px;border-radius:8px;background:var(--bg);border:1px solid var(--line);font-size:.93rem;line-height:1.75}
   #answer.show{display:block}
+  #shareOut{display:none;margin-top:8px}
+  #shareOut.show{display:block}
+  #shareOut input{width:100%;font-size:.76rem;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--bg);color:var(--muted)}
+  #shareOut .hint{font-size:.73rem;color:var(--muted);margin-top:4px}
+  .banner{background:#16a34a;color:#fff;padding:9px 14px;text-align:center;font-size:.86rem}
+  .classnote{font-size:.72rem;color:var(--muted);margin:-2px 0 8px}
   footer{border-top:1px solid var(--line);margin-top:30px;padding:16px;text-align:center;color:var(--muted);font-size:.8rem}
 </style>
 </head>
@@ -122,9 +128,14 @@
       <span class="sp"></span>
       <select id="load"><option value="">Load an example…</option></select>
       <button id="reveal">Reveal original</button>
+      <button id="share" style="border-color:#16a34a;color:#16a34a;font-weight:700">Share with class</button>
       <button id="addToggle">+ New text</button>
     </div>
     <div id="answer"></div>
+    <div id="shareOut">
+      <input id="shareUrl" readonly onclick="this.select()">
+      <div class="hint">Copied. Post this link for the class — they open it once and it's saved on their device.</div>
+    </div>
 
     <div class="newrow" id="newrow">
       <div class="flds">
@@ -154,6 +165,7 @@
     <button id="expandAll">Expand all</button>
     <button id="collapseAll">Collapse all</button>
   </div>
+  <div id="classBox" class="types" style="margin-bottom:9px"></div>
   <div class="types" id="types"></div>
 </main>
 
@@ -262,6 +274,50 @@ const markers = s => s.replace(/🟦/g,'<span class="b">🟦</span>').replace(/�
 const plain = s => s.replace(/\[\/?[bgo]\]/g,"");
 const allTypes = () => TYPES.concat(custom());
 
+/* class examples shared by the teacher via a link */
+const CLASS = "elc_class_examples";
+const classEx = () => { try{ return JSON.parse(localStorage.getItem(CLASS)||"[]"); }catch(e){ return []; } };
+const b64 = {
+  enc: s => btoa(String.fromCharCode(...new TextEncoder().encode(s))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,""),
+  dec: s => new TextDecoder().decode(Uint8Array.from(atob(s.replace(/-/g,"+").replace(/_/g,"/")), c=>c.charCodeAt(0)))
+};
+function importFromLink(){
+  const m = location.hash.match(/^#ex=(.+)$/);
+  if(!m) return false;
+  try{
+    const item = JSON.parse(b64.dec(m[1]));
+    const list = classEx();
+    if(!list.some(x => x.x === item.x)){ list.push(item); localStorage.setItem(CLASS, JSON.stringify(list)); }
+    history.replaceState(null,"",location.pathname);
+    return true;
+  }catch(e){ return false; }
+}
+const justImported = importFromLink();
+
+function renderClass(){
+  const list = classEx();
+  const box = document.getElementById("classBox");
+  if(!list.length){ box.innerHTML = ""; return; }
+  box.innerHTML = `
+    <div class="type open">
+      <button class="head"><span class="emoji">⭐</span>
+        <span><h3>From class</h3><div class="subt">${list.length} example${list.length>1?"s":""} marked up together</div></span>
+        <span class="chev">▸</span></button>
+      <div class="body">
+        <div class="classnote">Saved on this device. ${TEACHER?'':'Ask your teacher for the link if you are missing one.'}</div>
+        ${list.map((it,i)=>`<div class="cell" style="margin-bottom:8px">
+          <div class="band">${esc(it.t||"Class example")}</div>
+          <div class="ex" style="margin:8px 0 0">${colour(it.x)}</div>
+          ${TEACHER?`<div style="margin-top:8px"><button class="rm" data-i="${i}" style="font-size:.75rem;padding:4px 9px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--muted);cursor:pointer">Remove</button></div>`:""}
+        </div>`).join("")}
+      </div>
+    </div>`;
+  box.querySelector(".head").onclick = e => e.currentTarget.closest(".type").classList.toggle("open");
+  box.querySelectorAll(".rm").forEach(b => b.onclick = ()=>{
+    const l = classEx(); l.splice(+b.dataset.i,1); localStorage.setItem(CLASS,JSON.stringify(l)); renderClass();
+  });
+}
+
 document.getElementById("rubricBody").innerHTML = RUBRIC.map(r =>
   `<tr class="${r[1]}"><td class="name">${r[0]}</td>` + r.slice(2).map(c=>`<td>${c}</td>`).join("") + `</tr>`).join("");
 
@@ -289,6 +345,14 @@ function renderTypes(){
     b.addEventListener("click", ()=> b.closest(".type").classList.toggle("open")));
 }
 renderTypes();
+renderClass();
+if(justImported){
+  const bn = document.createElement("div");
+  bn.className = "banner";
+  bn.textContent = "⭐ Saved — your teacher's example is now in “From class” below.";
+  document.body.insertBefore(bn, document.body.firstChild);
+  setTimeout(()=>bn.remove(), 6000);
+}
 
 const setAll = o => document.querySelectorAll(".type").forEach(t=>t.classList.toggle("open",o));
 document.getElementById("expandAll").onclick = ()=>setAll(true);
@@ -331,6 +395,21 @@ if(TEACHER){
     canvas.textContent = plain(allTypes()[ti].examples[bi]||"");
     answer.innerHTML = colour(allTypes()[ti].examples[bi]||""); answer.classList.remove("show"); };
   document.getElementById("reveal").onclick = ()=>{ if(load.value) answer.classList.toggle("show"); };
+
+  document.getElementById("share").onclick = ()=>{
+    const markup = toMarkup(canvas);
+    if(!markup.trim()){ canvas.focus(); return; }
+    const label = prompt("Label for the class (e.g. 'Of Mice and Men — C3 together')", "Class example");
+    if(label === null) return;
+    const item = { t: label.trim() || "Class example", x: markup };
+    const url = location.origin + location.pathname + "#ex=" + b64.enc(JSON.stringify(item));
+    const out = document.getElementById("shareOut");
+    document.getElementById("shareUrl").value = url;
+    out.classList.add("show");
+    navigator.clipboard?.writeText(url);
+    const list = classEx();
+    if(!list.some(x=>x.x===item.x)){ list.push(item); localStorage.setItem(CLASS, JSON.stringify(list)); renderClass(); }
+  };
 
   nBands.innerHTML = BANDS.map((b,i)=>`<div class="bandrow">
     <label>${b.label}</label>
