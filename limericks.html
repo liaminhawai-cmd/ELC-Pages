@@ -7,26 +7,27 @@
 <title>Limerick Builder — ELC Hub</title>
 <style>
   :root{
-    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2; --radius:12px;
-    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
-    --accent:#2563eb; --accent-soft:#dbeafe;
-    --rhymeA:#2563eb; --rhymeA-soft:#dbeafe; --rhymeB:#d97706; --rhymeB-soft:#fef0d5;
-    --good:#16a34a; --good-soft:#dcfce7;
+    --bg:#f4efe6; --card:#fffdf8; --ink:#1f2522; --muted:#69655e; --line:#d8cfbb; --radius:14px;
+    --shadow:0 10px 28px rgba(65,51,31,.08);
+    --accent:#225b48; --accent-soft:#e2ede6;
+    --rhymeA:#2d6481; --rhymeA-soft:#e3f0f6; --rhymeB:#a96716; --rhymeB-soft:#f7ecd8;
+    --good:#2f6a3e; --good-soft:#e2f0e5;
   }
   @media (prefers-color-scheme:dark){
-    :root{ --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
-           --accent:#7aa5ff; --accent-soft:#1d2c4d; --rhymeA:#7aa5ff; --rhymeA-soft:#1d2c4d;
-           --rhymeB:#f0a84a; --rhymeB-soft:#3a2508; --good-soft:#14331f;
-           --shadow:0 1px 2px rgba(0,0,0,.4); }
+    :root{ --bg:#17140f; --card:#201c15; --ink:#eae6dd; --muted:#a89f90; --line:#3a342a;
+           --accent:#8fc2ab; --accent-soft:#22352c; --rhymeA:#8db8d1; --rhymeA-soft:#1e2f3a;
+           --rhymeB:#d9a75f; --rhymeB-soft:#38290f; --good:#8fc79b; --good-soft:#1f3324;
+           --shadow:0 10px 28px rgba(0,0,0,.4); }
   }
   *{box-sizing:border-box;margin:0}
   body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
-  header{background:linear-gradient(135deg,#7c3aed,#2563eb 55%,#0d9488);color:#fff;padding:20px 20px 26px;text-align:center}
-  header a.back{color:#fff;opacity:.85;text-decoration:none;font-size:.85rem;font-weight:600}
-  header h1{font-size:clamp(1.4rem,4vw,1.95rem);margin-top:6px}
-  header p{max-width:640px;margin:6px auto 0;opacity:.94;font-size:.9rem}
+  header{padding:22px 20px 6px;text-align:center}
+  header a.back{color:var(--accent);text-decoration:none;font-size:.85rem;font-weight:700}
+  header .eyebrow{margin:10px 0 4px;color:var(--accent);font-size:.74rem;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+  header h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(1.7rem,4.5vw,2.6rem);letter-spacing:-.02em}
+  header p{max-width:640px;margin:8px auto 0;color:var(--muted);font-size:.92rem}
   main{max-width:900px;margin:0 auto;padding:18px 14px 60px}
-  h2.sec{font-size:1.05rem;margin:22px 0 4px}
+  h2.sec{font-family:Georgia,"Times New Roman",serif;font-size:1.15rem;margin:24px 0 4px}
   p.hint{font-size:.83rem;color:var(--muted);margin-bottom:10px}
   .gcard{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);padding:14px 15px;margin-top:10px}
   .btn{font-size:.8rem;padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);
@@ -102,7 +103,8 @@
 <body>
 <header>
   <a class="back" href="index.html">← ELC Hub</a>
-  <h1>🎩 Limerick Builder</h1>
+  <p class="eyebrow">Rhyme · rhythm · one good joke</p>
+  <h1>Limerick Builder</h1>
   <p>Five lines, two rhymes, a bouncy beat and a joke at the end. Pick your rhymes, build your lines, then clap-check the syllables.</p>
 </header>
 
@@ -113,7 +115,7 @@
 
   <h2 class="sec">2 · Pick your two rhyme families</h2>
   <p class="hint">One family for the <b class="rA">A</b> lines, a different one for the <b class="rB">B</b> lines. Tap once for A, tap a second family for B.</p>
-  <div class="gcard"><div class="fams" id="famPick"></div></div>
+  <div class="gcard" id="famPick"></div>
 
   <h2 class="sec">3 · Build it, line by line</h2>
   <p class="hint">Tap a grey stem to start the line, type the middle, tap a coloured rhyme word to end it. Then <b>Count</b> — tap a dot between syllables if the computer split a word wrongly. Your claps are the judge, not the computer.</p>
@@ -161,19 +163,21 @@ const MODELS = [
     ends:["kangaroo|A","zoo|A","bears|B","stairs|B","due|A"] }
 ];
 
+/* ph: the Pronunciation Hub phonemes each family practises. Families that
+   match a sound the student starred ⭐ in the hub float to the front. */
 const FAMILIES = [
-  { name:"-oo",   say:"/ʉː/",  words:["kangaroo","zoo","blue","flew","too","stew","shampoo","canoe"] },
-  { name:"-ay",   say:"/eɪ/",  words:["day","play","away","stay","grey","today","hooray"] },
-  { name:"-ee",   say:"/iː/",  words:["sea","tree","free","three","agree","knee","chimpanzee"] },
-  { name:"-ight", say:"/aɪt/", words:["night","light","bright","fright","kite","right","sight"] },
-  { name:"-ake",  say:"/eɪk/", words:["snake","cake","lake","shake","awake","mistake","milkshake"] },
-  { name:"-ore",  say:"/ɔː/",  words:["snore","door","floor","roar","more","galore"] },
-  { name:"-oon",  say:"/ʉːn/", words:["moon","spoon","soon","balloon","baboon","cartoon"] },
-  { name:"-at",   say:"/æt/",  words:["cat","hat","flat","mat","bat","that"] },
-  { name:"-ed",   say:"/ed/",  words:["bed","red","head","said","spread","shed"] },
-  { name:"-og",   say:"/ɔg/",  words:["dog","frog","log","jog","blog"] },
-  { name:"-op",   say:"/ɔp/",  words:["hop","shop","stop","drop","mop"] },
-  { name:"-ish",  say:"/ɪʃ/",  words:["fish","wish","dish","swish"] }
+  { name:"-oo",   say:"/ʉː/",  ph:["/ʉː/"],       words:["kangaroo","zoo","blue","flew","too","stew","shampoo","canoe"] },
+  { name:"-ay",   say:"/eɪ/",  ph:["/eɪ/"],       words:["day","play","away","stay","grey","today","hooray"] },
+  { name:"-ee",   say:"/iː/",  ph:["/iː/"],       words:["sea","tree","free","three","agree","knee","chimpanzee"] },
+  { name:"-ight", say:"/aɪt/", ph:["/aɪ/","/t/"], words:["night","light","bright","fright","kite","right","sight"] },
+  { name:"-ake",  say:"/eɪk/", ph:["/eɪ/","/k/"], words:["snake","cake","lake","shake","awake","mistake","milkshake"] },
+  { name:"-ore",  say:"/ɔː/",  ph:["/ɔː/","/r/"], words:["snore","door","floor","roar","more","galore"] },
+  { name:"-oon",  say:"/ʉːn/", ph:["/ʉː/","/n/"], words:["moon","spoon","soon","balloon","baboon","cartoon"] },
+  { name:"-at",   say:"/æt/",  ph:["/æ/","/t/"],  words:["cat","hat","flat","mat","bat","that"] },
+  { name:"-ed",   say:"/ed/",  ph:["/e/","/d/"],  words:["bed","red","head","said","spread","shed"] },
+  { name:"-og",   say:"/ɔg/",  ph:["/ɔ/","/g/"],  words:["dog","frog","log","jog","blog"] },
+  { name:"-op",   say:"/ɔp/",  ph:["/ɔ/","/p/"],  words:["hop","shop","stop","drop","mop"] },
+  { name:"-ish",  say:"/ɪʃ/",  ph:["/ɪ/","/ʃ/"],  words:["fish","wish","dish","swish"] }
 ];
 
 const LINES = [
@@ -196,6 +200,10 @@ const KEY="elc_limericks";
 const load=()=>{ try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return{}} };
 const save=s=>localStorage.setItem(KEY,JSON.stringify(s));
 let state=load();                 // {draft:[5 strings], famA, famB, saved:[{title,lines,ts}]}
+/* the Pronunciation Hub's goals live in localStorage on this same device */
+const PRON=(()=>{ try{return JSON.parse(localStorage.getItem("elc_pron_state")||"{}")}catch(e){return{}} })();
+const TARGETS=Object.keys(PRON).filter(k=>PRON[k]&&PRON[k].st==="target");
+const isStarred=f=>!!(f.ph&&f.ph.some(ph=>TARGETS.includes(ph)));
 state.draft=state.draft||["","","","",""];
 state.saved=state.saved||[];
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
@@ -266,10 +274,15 @@ function drawModels(){
 
 /* --- rhyme family pickers --- */
 function drawFams(){
-  document.getElementById("famPick").innerHTML=FAMILIES.map((f,i)=>{
+  const order=FAMILIES.map((f,i)=>i).sort((a,b)=>(isStarred(FAMILIES[b])?1:0)-(isStarred(FAMILIES[a])?1:0));
+  const goalNote=TARGETS.length
+    ? `<p class="hint" style="margin:0 0 8px">⭐ = practises a sound you starred in the <a href="pronunciation.html">Pronunciation Hub</a> (${TARGETS.map(esc).join(" · ")}).</p>`
+    : `<p class="hint" style="margin:0 0 8px">Tip: star a ⭐ target sound in the <a href="pronunciation.html">Pronunciation Hub</a> and the rhyme families that practise it will be suggested first here.</p>`;
+  document.getElementById("famPick").innerHTML=goalNote+`<div class="fams">`+order.map(i=>{
+    const f=FAMILIES[i];
     const cls=state.famA===i?"onA":state.famB===i?"onB":"";
-    return `<button class="fam ${cls}" data-fam="${i}">${esc(f.name)} <small>${esc(f.say)} · ${esc(f.words.slice(0,3).join(", "))}…</small></button>`;
-  }).join("");
+    return `<button class="fam ${cls}" data-fam="${i}">${isStarred(f)?"⭐ ":""}${esc(f.name)} <small>${esc(f.say)} · ${esc(f.words.slice(0,3).join(", "))}…</small></button>`;
+  }).join("")+`</div>`;
 }
 function pickFam(i){
   if(state.famA===i){ state.famA=null; }

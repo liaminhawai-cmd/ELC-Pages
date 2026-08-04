@@ -80,6 +80,8 @@
   .mouthface .feature.bold{stroke-width:2}
   .mouthface .tooth{fill:#fff;stroke:#704b3d;stroke-width:1;vector-effect:non-scaling-stroke;opacity:.85}
   .mouthface .tongue{fill:#de7f7d;stroke:#8f4745;stroke-width:1.4;vector-effect:non-scaling-stroke;opacity:.5}
+  .mouthface .mouthgap{fill:#6d403a;opacity:.55}
+  .mouth-mini .mouthgap{opacity:.75}
   @media (prefers-color-scheme:dark){
     .mouthface .skin{opacity:.15}
     .mouthface .feature{opacity:.4}
@@ -412,7 +414,11 @@ function makeVoice(){
     }
   };
 }
-function playVowelAt(x,y,ms=650){ const v=makeVoice(); v.set(x,y,.001); setTimeout(()=>v.stop(),ms); }
+function playVowelAt(x,y,ms=650){
+  const v=makeVoice(); v.set(x,y,.001);
+  const f=faceOf("vowelChart"); if(f) f.set(x,y);
+  setTimeout(()=>{ v.stop(); if(f) f.idle(); },ms);
+}
 function playDip(d){ const v=makeVoice(); v.glide(d.from[0],d.from[1],d.to[0],d.to[1],620); setTimeout(()=>v.stop(),700); flyDot(d); }
 function flyDot(d){
   const el=document.getElementById("dipChart"); const dot=el&&el.querySelector(".glidedot");
@@ -424,16 +430,53 @@ function flyDot(d){
   if(path) path.classList.add("show");
   const t0=performance.now(), dur=620;
   const ease=k=>k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+  const face=faceOf("dipChart");
   const step=now=>{
     const k=Math.min(1,(now-t0)/dur), e=ease(k);
+    const px=d.from[0]+(d.to[0]-d.from[0])*e, py=d.from[1]+(d.to[1]-d.from[1])*e;
     dot.style.display="block";
-    dot.style.left=(d.from[0]+(d.to[0]-d.from[0])*e)+"%";
-    dot.style.top =(d.from[1]+(d.to[1]-d.from[1])*e)+"%";
+    dot.style.left=px+"%"; dot.style.top=py+"%";
+    if(face) face.set(px,py);
     if(path) path.style.strokeDashoffset=1-e;
-    if(k<1) requestAnimationFrame(step); else setTimeout(()=>dot.style.display="none",250);
+    if(k<1) requestAnimationFrame(step);
+    else { setTimeout(()=>dot.style.display="none",250); if(face) face.idle(); }
   };
   requestAnimationFrame(step);
 }
+/* animated articulation: jaw hinges open with vowel openness, the tongue
+   hump travels to the chart position being played (the dot IS the hump). */
+function makeFaceCtl(container){
+  const svg=container.querySelector("svg");
+  const jaw=svg&&svg.querySelector(".jawgrp"), tongue=svg&&svg.querySelector(".tonguepath");
+  if(!jaw||!tongue) return null;
+  const IDLE={x:52,y:38};
+  let cur={...IDLE}, tgt={...IDLE}, hold=false, raf=0;
+  function frame(){
+    cur.x+=(tgt.x-cur.x)*.28; cur.y+=(tgt.y-cur.y)*.28;
+    const ang=(cur.y/100)*6.5;
+    jaw.setAttribute("transform",`rotate(${ang.toFixed(2)} 115 30)`);
+    const drop=Math.sin(ang*Math.PI/180)*101;
+    const ax=Math.max(20,Math.min(122,cur.x*1.35));
+    const ay=Math.max(10,Math.min(90,cur.y));
+    const tipY=46+drop*.9;
+    tongue.setAttribute("d",
+      `M14,${tipY.toFixed(1)} C${((14+ax)/2).toFixed(1)},${tipY.toFixed(1)} ${(ax-16).toFixed(1)},${ay} ${ax.toFixed(1)},${ay}`+
+      ` C${(ax+16).toFixed(1)},${ay} ${Math.max(ax+22,106).toFixed(1)},${((ay+96)/2).toFixed(1)} 118,96 L118,100 L44,100 Z`);
+    if(hold||Math.abs(tgt.x-cur.x)+Math.abs(tgt.y-cur.y)>.4) raf=requestAnimationFrame(frame);
+    else raf=0;
+  }
+  const kick=()=>{ if(!raf) raf=requestAnimationFrame(frame); };
+  return {
+    set(x,y){ tgt={x,y}; hold=true; kick(); },
+    idle(){ tgt={...IDLE}; hold=false; kick(); }
+  };
+}
+const faceCtls={};
+function faceOf(elOrId){
+  const id=typeof elOrId==="string"?elOrId:elOrId.id;
+  return faceCtls[id]||null;
+}
+
 function chartXY(el,e){
   const r=el.getBoundingClientRect();
   return {x:Math.min(98,Math.max(2,(e.clientX-r.left)/r.width*100)),
@@ -473,12 +516,16 @@ function drawCons(){
 /* side-profile face, facing left — shared by the charts and the consonant diagrams.
    Colours follow the classic articulation-diagram look: skin, brown features, rosy tongue. */
 const FACE_PATHS=`
-  <path class="skin" d="M23,0 C17,5 14,10 11,14 L3,17 C0,19 0,21 3,23 L8,25 C5,27 5,30 8,32 C4,34 4,36 8,38 C5,41 6,45 11,48 C8,54 10,61 16,67 C23,77 31,87 39,97 L42,100 L135,100 L135,0 Z"/>
+  <path class="skin" d="M23,0 C17,5 14,10 11,14 L3,17 C0,19 0,21 3,23 L8,25 C5,27 5,30 8,32 L16,33 C22,55 30,78 42,100 L135,100 L135,0 Z"/>
+  <path class="mouthgap" d="M3,29 C8,30 13,31 17,33 C14,41 10,44 5,44 C2,40 2,34 3,29 Z"/>
+  <g class="jawgrp">
+    <path class="skin" d="M8,33 C4,34 4,36 8,38 C5,41 6,45 11,48 C8,54 10,61 16,67 C23,77 31,87 39,97 L42,100 L52,100 C42,78 32,55 26,33 Z"/>
+    <rect class="tooth" x="12" y="33.5" width="3.2" height="5" rx="1.2"/>
+  </g>
+  <path class="tongue tonguepath" d="M15,52 C22,68 34,80 52,86 C75,93 100,93 116,96 L118,100 L44,100 C34,88 22,68 15,52 Z"/>
   <path class="feature" d="M4,21 C5,22 6,22 7,21.5"/>
   <path class="feature" d="M14,7 C16,9.5 19,9.5 21,7"/>
   <rect class="tooth" x="11" y="24.5" width="3.2" height="6" rx="1.2"/>
-  <rect class="tooth" x="12" y="33.5" width="3.2" height="5" rx="1.2"/>
-  <path class="tongue" d="M15,52 C22,68 34,80 52,86 C75,93 100,93 116,96 L118,100 L44,100 C34,88 22,68 15,52 Z"/>
   <path class="feature bold" d="M15,22 C30,7 55,2.5 80,2.5 C100,2.5 112,4.5 118,8.5 C121,10.5 122,13 121,16 C120.5,18 119,19.5 119.5,21.5 C120,23.5 122,23.5 122.5,21.5"/>
   <path class="feature bold" d="M122,27 C120,46 118,70 120,98"/>`;
 const PLACE_SPOTS={ "Bilabial":[6,30], "Labio-dental":[11,34], "Dental":[13,23],
@@ -660,6 +707,13 @@ hisse<em>s</em> at the bird<em>s</em>, then misse<em>s</em> the mice.</div>
       <p class="k" style="margin-top:10px">Dropped endings = dropped grammar. Practise the grammar side in the Grammar Hub:
         <a href="${GRAMMAR_HUB}?skill=agree-c1" target="_blank" rel="noopener">subject–verb agreement</a> ·
         <a href="${GRAMMAR_HUB}?skill=tense-c1" target="_blank" rel="noopener">-s and -ed verb endings</a></p>
+    </div>
+    <div class="gcard" style="grid-column:1/-1">
+      <h3>🎩 Limerick Builder</h3>
+      <p class="k">▷ put your rhymes to work — five lines, two rhymes, one good joke</p>
+      <p style="font-size:.86rem">Model limericks, rhyme-family word banks, starter stems and a clap-check syllable counter.
+      Rhyme families that practise your ⭐ target sounds are suggested first.</p>
+      <p style="margin-top:9px"><a class="btn" href="limericks.html" style="text-decoration:none;display:inline-block">Open the Limerick Builder →</a></p>
     </div>`;
 }
 
@@ -714,24 +768,30 @@ let dragVoice=null, suppressClick=false;
     chart=ch;
     dragVoice={v:makeVoice(),id:e.pointerId}; downAt=[e.clientX,e.clientY]; t0=performance.now(); suppressClick=false;
     dragVoice.v.set(x,y,.001); moveDot(ch,x,y,true);
+    const f=faceOf(ch); if(f) f.set(x,y);
   }));
   window.addEventListener("pointermove",e=>{
     if(!dragVoice||e.pointerId!==dragVoice.id) return;
     if(Math.hypot(e.clientX-downAt[0],e.clientY-downAt[1])>7) suppressClick=true;
     const p=chartXY(chart,e);
     dragVoice.v.set(p.x,p.y); moveDot(chart,p.x,p.y,true);
+    const f=faceOf(chart); if(f) f.set(p.x,p.y);
   });
   const end=e=>{
     if(!dragVoice||e.pointerId!==dragVoice.id) return;
     const v=dragVoice.v, held=performance.now()-t0;
     if(held<350) setTimeout(()=>v.stop(),380-held); else v.stop();
-    dragVoice=null; if(chart) moveDot(chart,0,0,false);
+    dragVoice=null;
+    if(chart){ moveDot(chart,0,0,false); const f=faceOf(chart); if(f) f.idle(); }
   };
   window.addEventListener("pointerup",end);
   window.addEventListener("pointercancel",end);
 })();
 
-function drawAll(){ drawCons(); drawVowels(); drawDips(); }
+function drawAll(){ drawCons(); drawVowels(); drawDips();
+  faceCtls.vowelChart=makeFaceCtl(document.getElementById("vowelChart"));
+  faceCtls.dipChart=makeFaceCtl(document.getElementById("dipChart"));
+}
 drawAll(); drawStress(); drawPatterns(); refreshProgress();
 </script>
 </body>
