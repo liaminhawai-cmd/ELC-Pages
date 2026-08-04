@@ -90,24 +90,18 @@
   @media (prefers-color-scheme:dark){ .trap{stroke:var(--line);opacity:1} .cavity{fill:#0f1420;opacity:.45} }
   .dpath{stroke:var(--accent);stroke-width:2;fill:none;stroke-linecap:round;opacity:0;transition:opacity .2s;vector-effect:non-scaling-stroke}
   .dpath.show{opacity:.55}
-  .mouthface .skin{fill:#f7d7c1;stroke:#8c6a58;stroke-width:1.4;vector-effect:non-scaling-stroke;opacity:.5}
-  .mouthface .feature{fill:none;stroke:#704b3d;stroke-width:1.6;vector-effect:non-scaling-stroke;stroke-linecap:round;opacity:.55}
+  /* the face is composited as ONE group: parts are opaque inside it (so the
+     jaw slab, skull and tongue overlap seamlessly) and the whole face fades
+     together via group opacity */
+  .mouthface{opacity:.52}
+  .mouthface .skin{fill:#f7d7c1;stroke:#8c6a58;stroke-width:1.4;vector-effect:non-scaling-stroke}
+  .mouthface .feature{fill:none;stroke:#704b3d;stroke-width:1.6;vector-effect:non-scaling-stroke;stroke-linecap:round}
   .mouthface .feature.bold{stroke-width:2}
-  .mouthface .tooth{fill:#fff;stroke:#704b3d;stroke-width:1;vector-effect:non-scaling-stroke;opacity:.85}
-  .mouthface .tongue{fill:#de7f7d;stroke:#8f4745;stroke-width:1.4;vector-effect:non-scaling-stroke;opacity:.34}
-  .mouthface .mouthgap{fill:#6d403a;opacity:.55}
-  .mouth-mini .mouthgap{opacity:.75}
-  @media (prefers-color-scheme:dark){
-    .mouthface .skin{opacity:.15}
-    .mouthface .feature{opacity:.4}
-    .mouthface .tooth{opacity:.35}
-    .mouthface .tongue{opacity:.22}
-  }
-  .mouth-mini{width:100%;max-width:260px;margin-top:8px;display:block}
-  .mouth-mini .skin{opacity:.95}
-  .mouth-mini .feature{opacity:.9}
-  .mouth-mini .tooth{opacity:1}
-  .mouth-mini .tongue{opacity:.8}
+  .mouthface .tooth{fill:#fff;stroke:#704b3d;stroke-width:1;vector-effect:non-scaling-stroke}
+  .mouthface .tongue{fill:#de7f7d;stroke:#8f4745;stroke-width:1.4;vector-effect:non-scaling-stroke;fill-opacity:.75}
+  .mouthface .mouthgap{fill:#6d403a}
+  @media (prefers-color-scheme:dark){ .mouthface{opacity:.3} }
+  .mouth-mini{width:100%;max-width:260px;margin-top:8px;display:block;opacity:1}
   .place-dot{fill:var(--accent);stroke:#fff;stroke-width:1.5;animation:pulseDot 1.2s infinite}
   @keyframes pulseDot{0%,100%{r:4px}50%{r:6.5px}}
   @media (prefers-reduced-motion:reduce){ .place-dot{animation:none} }
@@ -601,7 +595,7 @@ function drawCons(){
    Colours follow the classic articulation-diagram look: skin, brown features, rosy tongue. */
 const FACE_PATHS=`
   <path class="skin" d="M23,0 C17,5 14,10 11,14 L3,17 C0,19 0,21 3,23 L8,25 C5,27 5,30 8,32 L16,33 C22,55 30,78 42,100 L135,100 L135,0 Z"/>
-  <path class="mouthgap" d="M3,29 C8,30 13,31 17,33 C14,41 10,44 5,44 C2,40 2,34 3,29 Z"/>
+  <path class="mouthgap" d="M3,30 C7,30.5 10,31.5 12,33 C10,38 7,40 4,40 C2,37 2,33 3,30 Z"/>
   <g class="jawgrp">
     <path class="skin" d="M8,33 C4,34 4,36 8,38 C5,41 6,45 11,48 C8,54 10,61 16,67 C23,77 31,87 39,97 L42,100 L52,100 C42,78 32,55 26,33 Z"/>
     <rect class="tooth" x="12" y="33.5" width="3.2" height="5" rx="1.2"/>
@@ -977,6 +971,7 @@ let dragVoice=null, suppressClick=false;
 function drawAll(){ drawCons(); drawVowels(); drawDips();
   faceCtls.vowelChart=makeFaceCtl(document.getElementById("vowelChart"));
   faceCtls.dipChart=makeFaceCtl(document.getElementById("dipChart"));
+  Object.values(faceCtls).forEach(f=>{ if(f) f.idle(); });
 }
 drawAll(); drawStress(); drawPatterns(); drawFocusArea(); refreshProgress();
 </script>
