@@ -106,6 +106,10 @@
   @keyframes pulseDot{0%,100%{r:4px}50%{r:6.5px}}
   @media (prefers-reduced-motion:reduce){ .place-dot{animation:none} }
   .mouthlabel{position:absolute;font-size:.66rem;color:var(--muted);opacity:.75;pointer-events:none}
+  .accbar{display:inline-flex;gap:4px;margin-left:6px;vertical-align:middle}
+  .accbar button{font-size:.72rem;padding:3px 10px;border-radius:999px;border:1px solid var(--line);
+    background:var(--card);cursor:pointer;color:var(--muted);font-weight:700}
+  .accbar button.on{background:var(--accent);color:#fff;border-color:transparent}
   .glidedot{position:absolute;width:15px;height:15px;border-radius:50%;background:var(--accent);
             box-shadow:0 0 12px var(--accent);transform:translate(-50%,-50%);pointer-events:none;z-index:6;display:none}
   .vowel-inner .ph{touch-action:none}
@@ -186,13 +190,13 @@
 
   <section class="panel" id="tab-vow">
     <h2 class="sec">Vowels</h2>
-    <p class="hint">Where your tongue sits in your mouth — front is towards your teeth, close is towards the roof. <b>Press a vowel to hear it. Hold it and drag anywhere to bend it into other sounds.</b></p>
+    <p class="hint">Where your tongue sits in your mouth — front is towards your teeth, close is towards the roof. <b>Press a vowel to hear it. Hold it and drag anywhere to bend it into other sounds.</b> Accent: <span class="accbar" data-accbar></span></p>
     <div class="vowel-wrap"><div class="vowel-inner" id="vowelChart"></div></div>
   </section>
 
   <section class="panel" id="tab-dip">
     <h2 class="sec">Diphthongs</h2>
-    <p class="hint">Two vowels in one — your mouth <b>moves</b>. Tap one to watch the dot travel — or press and hold anywhere, then drag, to glide it yourself.</p>
+    <p class="hint">Two vowels in one — your mouth <b>moves</b>. Tap one to watch the dot travel — or press and hold anywhere, then drag, to glide it yourself. Accent: <span class="accbar" data-accbar></span></p>
     <div class="vowel-wrap"><div class="vowel-inner" id="dipChart"></div></div>
     <div class="chips" id="dipChips" style="margin-top:11px"></div>
   </section>
@@ -281,6 +285,34 @@ const DIPHTHONGS = [
   {s:"/əʉ/", eg:"go, snow, home",  from:[52,52], to:[72,8], note:"the GOAT vowel"},
   {s:"/aʊ/", eg:"now, about",      from:[45,88], to:[78,22]}
 ];
+
+/* Accent variants — classroom-model positions, not gospel. Base chart is
+   Australian English; each accent overrides positions, glide paths and the
+   symbol students see. Progress, twisters and recordings stay keyed to the
+   Aussie symbols. */
+const ACCENTS = {
+  aus:{ label:"Aussie", vowels:{}, dips:{} },
+  rp:{ label:"UK RP",
+    vowels:{ "/e/":{x:16,y:38}, "/æ/":{x:14,y:74}, "/ɐ/":{x:62,y:68,sym:"/ʌ/"},
+      "/ʉː/":{x:88,y:8,sym:"/uː/"}, "/ʊ/":{x:80,y:20}, "/ɔ/":{x:86,y:80,sym:"/ɒ/"},
+      "/ɔː/":{x:90,y:42}, "/aː/":{x:84,y:88,sym:"/ɑː/"} },
+    dips:{ "/eɪ/":{from:[16,40],to:[20,18]}, "/aɪ/":{from:[36,86],to:[20,18]},
+      "/ɔɪ/":{from:[88,55],to:[20,18]}, "/əʉ/":{from:[52,52],to:[80,20],sym:"/əʊ/"},
+      "/aʊ/":{from:[40,86],to:[80,20]} } },
+  us:{ label:"US",
+    vowels:{ "/e/":{x:16,y:44,sym:"/ɛ/"}, "/æ/":{x:16,y:72}, "/ɜː/":{x:48,y:44,sym:"/ɝ/"},
+      "/ɐ/":{x:58,y:64,sym:"/ʌ/"}, "/ʉː/":{x:84,y:10,sym:"/uː/"}, "/ɔ/":{x:78,y:88,sym:"/ɑ/"},
+      "/ɔː/":{x:88,y:52}, "/aː/":{x:82,y:90,sym:"/ɑː/"} },
+    dips:{ "/eɪ/":{from:[14,40],to:[20,18]}, "/aɪ/":{from:[40,88],to:[20,18]},
+      "/ɔɪ/":{from:[86,52],to:[20,18]}, "/əʉ/":{from:[72,40],to:[80,18],sym:"/oʊ/"},
+      "/aʊ/":{from:[36,86],to:[80,20]} } }
+};
+let accent=localStorage.getItem("elc_pron_accent")||"aus";
+if(!ACCENTS[accent]) accent="aus";
+const accVowel=o=>{ const ov=ACCENTS[accent].vowels[o.s]||{};
+  return {...o, x:ov.x!==undefined?ov.x:o.x, y:ov.y!==undefined?ov.y:o.y, showSym:ov.sym||o.s}; };
+const accDip=d=>{ const ov=ACCENTS[accent].dips[d.s]||{};
+  return {...d, from:ov.from||d.from, to:ov.to||d.to, showSym:ov.sym||d.s}; };
 
 /* Tongue twisters — from the phonics notebook */
 const TWISTERS = {
@@ -482,11 +514,12 @@ function playVowelAt(x,y,ms=650){
   const f=faceOf("vowelChart"); if(f) f.set(x,y);
   setTimeout(()=>{ v.stop(); if(f) f.idle(); },ms);
 }
-function playDip(d){ const v=makeVoice(); v.glide(d.from[0],d.from[1],d.to[0],d.to[1],620); setTimeout(()=>v.stop(),700); flyDot(d); }
-function flyDot(d){
+function playDip(d0){ const d=accDip(d0); const v=makeVoice(); v.glide(d.from[0],d.from[1],d.to[0],d.to[1],620); setTimeout(()=>v.stop(),700); flyDot(d); }
+function flyDot(d0){
+  const d=d0.showSym?d0:accDip(d0);
   const el=document.getElementById("dipChart"); const dot=el&&el.querySelector(".glidedot");
   if(!dot) return;
-  const path=document.getElementById("dp"+DIPHTHONGS.indexOf(d));
+  const path=document.getElementById("dp"+DIPHTHONGS.findIndex(x=>x.s===d.s));
   document.querySelectorAll(".dpath").forEach(x=>{
     x.classList.remove("show"); x.style.strokeDashoffset=1;
   });
@@ -571,7 +604,7 @@ function chipHTML(o,cls){
   const n=stepCount(v);
   return `<button class="ph ${cls}" data-s="${esc(o.s)}" ${stAttr?`data-state="${stAttr}"`:""}>
     ${flag?`<span class="flag">${flag}</span>`:""}
-    <span class="sym">${esc(o.s)}</span>
+    <span class="sym">${esc(o.showSym||o.s)}</span>
     <span class="eg">${esc(o.eg.split(",")[0])}</span>
     ${v.focus?`<span class="pips">${"●".repeat(n)}${"○".repeat(4-n)}</span>`:o.pos?`<span class="pos">${posMark(o.pos)}</span>`:""}
   </button>`;
@@ -632,16 +665,16 @@ function chartSVG(){
 }
 function drawVowels(){
   const el=document.getElementById("vowelChart");
-  el.innerHTML=chartSVG()+VOWELS.map(v=>
-    `<span style="position:absolute;left:${cpx(v.x)}%;top:${v.y}%">${chipHTML(v,"vowelph")}</span>`).join("")+
+  el.innerHTML=chartSVG()+VOWELS.map(v0=>{const v=accVowel(v0);
+    return `<span style="position:absolute;left:${cpx(v.x)}%;top:${v.y}%">${chipHTML(v,"vowelph")}</span>`;}).join("")+
     `<div class="glidedot"></div>`;
 }
 function drawDips(){
   const el=document.getElementById("dipChart");
   el.innerHTML=chartSVG()+
-    `<svg viewBox="0 0 135 100" preserveAspectRatio="none">${DIPHTHONGS.map((d,i)=>
-      `<path class="dpath" id="dp${i}" d="M${CX(cpx(d.from[0]))},${d.from[1]} L${CX(cpx(d.to[0]))},${d.to[1]}" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1"/>`).join("")}</svg>`+
-    DIPHTHONGS.map(d=>{const at=d.chipAt||d.from;return `<span style="position:absolute;left:${cpx(at[0])}%;top:${at[1]}%">${chipHTML(d,"vowelph")}</span>`;}).join("")+
+    `<svg viewBox="0 0 135 100" preserveAspectRatio="none">${DIPHTHONGS.map((d0,i)=>{const d=accDip(d0);
+      return `<path class="dpath" id="dp${i}" d="M${CX(cpx(d.from[0]))},${d.from[1]} L${CX(cpx(d.to[0]))},${d.to[1]}" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1"/>`;}).join("")}</svg>`+
+    DIPHTHONGS.map(d0=>{const d=accDip(d0);const at=d.chipAt||d.from;return `<span style="position:absolute;left:${cpx(at[0])}%;top:${at[1]}%">${chipHTML(d,"vowelph")}</span>`;}).join("")+
     `<div class="glidedot"></div>`;
   document.getElementById("dipChips").innerHTML=DIPHTHONGS.map((d,i)=>
     `<span><button class="ph vowelph" data-s="${esc(d.s)}" data-dp="${i}" style="min-width:0">
@@ -657,6 +690,8 @@ function showDetail(sym){
   document.querySelectorAll(".ph").forEach(b=>b.classList.toggle("sel",b.dataset.s===sym));
 
   const isVow=VOWELS.includes(o);
+  const accSym=isVow?accVowel(o).showSym:(isDip?accDip(o).showSym:o.s);
+  const symNote=accSym!==sym?` · written ${esc(sym)} on our Aussie map`:"";
   const rec=o.audio?AUDIO_BASE+o.audio:(SOUND_FILES&&SOUND_FILES[sym])||"";
   const player=rec?`<audio controls preload="none" src="${esc(rec)}" style="width:100%;margin-top:8px"></audio>`:"";
   let hear;
@@ -678,8 +713,8 @@ function showDetail(sym){
   document.getElementById("detail").innerHTML=`
     <div class="detail">
       <div class="dhead">
-        <span class="big">${esc(o.s)}</span>
-        <span class="meta">as in <b>${esc(o.eg)}</b>${o.pos?` · heard at the ${posWords(o.pos)} of words`:""}
+        <span class="big">${esc(accSym)}</span>
+        <span class="meta">as in <b>${esc(o.eg)}</b>${symNote}${o.pos?` · heard at the ${posWords(o.pos)} of words`:""}
           ${o.note?` · ${esc(o.note)}`:""}
           ${o.v!==undefined?`<br>${o.v?"Voiced — your throat buzzes":"Unvoiced — no buzz, just air"}`:""}
           ${isDip?`<br>Your mouth moves from one vowel to the next`:""}</span>
@@ -716,6 +751,14 @@ function showDetail(sym){
       </div>
     </div>`;
   document.getElementById("detail").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+/* accent toggle */
+function drawAccbar(){
+  document.querySelectorAll("[data-accbar]").forEach(el=>{
+    el.innerHTML=Object.keys(ACCENTS).map(k=>
+      `<button data-accent="${k}" class="${k===accent?"on":""}">${ACCENTS[k].label}</button>`).join("");
+  });
 }
 
 /* focus banner (student) / assignment builder (teacher) */
@@ -791,13 +834,22 @@ document.addEventListener("click",e=>{
       if(DIPHTHONGS.includes(o)){
         if(played) flyDot(o); else playDip(o);
       }else if(played&&(VOWELS.includes(o))){
-        const f=faceOf("vowelChart"); if(f){ f.set(o.x,o.y); setTimeout(()=>f.idle(),700); }
+        const f=faceOf("vowelChart"); if(f){ const a=accVowel(o); f.set(a.x,a.y); setTimeout(()=>f.idle(),700); }
       }
     }
     showDetail(ph.dataset.s); return;
   }
+  const acc=e.target.closest("[data-accent]");
+  if(acc){
+    accent=acc.dataset.accent;
+    try{ localStorage.setItem("elc_pron_accent",accent); }catch(_){}
+    drawAccbar(); drawVowels(); drawDips();
+    const open=document.querySelector(".detail .big");
+    if(open){ const cur=ALL.find(x=>(x.s===open.textContent)||(accVowel(x).showSym===open.textContent)||(accDip(x).showSym===open.textContent)); if(cur) showDetail(cur.s); }
+    return;
+  }
   const pv=e.target.closest("[data-play-vowel]");
-  if(pv){ const v=VOWELS.find(x=>x.s===pv.dataset.playVowel); if(v&&!playRec(v.s)) playVowelAt(v.x,v.y); return; }
+  if(pv){ const v0=VOWELS.find(x=>x.s===pv.dataset.playVowel); if(v0&&!playRec(v0.s)){ const v=accVowel(v0); playVowelAt(v.x,v.y); } return; }
   const pd=e.target.closest("[data-play-dip]");
   if(pd){ const d=DIPHTHONGS.find(x=>x.s===pd.dataset.playDip); if(d){ if(playRec(d.s)) flyDot(d); else playDip(d); } return; }
   if(e.target.id==="copyAssign"){
@@ -932,7 +984,11 @@ let dragVoice=null, suppressClick=false;
 (function(){
   const charts=["vowelChart","dipChart"].map(id=>document.getElementById(id));
   let downAt=null, t0=0, chart=null;
-  const posOf=o=>o&&(o.x!==undefined?[o.x,o.y]:o.from);
+  const posOf=o=>{
+    if(!o) return null;
+    if(o.x!==undefined){ const a=accVowel(o); return [a.x,a.y]; }
+    const a=accDip(o); return a.from;
+  };
   charts.forEach(ch=>ch.addEventListener("pointerdown",e=>{
     if(e.button!==undefined&&e.button>0) return;
     const chip=e.target.closest(".ph");
@@ -978,7 +1034,7 @@ function drawAll(){ drawCons(); drawVowels(); drawDips();
   faceCtls.dipChart=makeFaceCtl(document.getElementById("dipChart"));
   Object.values(faceCtls).forEach(f=>{ if(f) f.idle(); });
 }
-drawAll(); drawStress(); drawPatterns(); drawFocusArea(); refreshProgress();
+drawAll(); drawStress(); drawPatterns(); drawFocusArea(); drawAccbar(); refreshProgress();
 </script>
 </body>
 </html>
