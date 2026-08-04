@@ -471,12 +471,49 @@ function audioCtx(){
   if(AC.state==="suspended"&&AC.resume) AC.resume().catch(()=>{});
   return AC;
 }
+/* Formants are NOT a linear function of chart position — this was the
+   simplification before. Two real, well-established facts about vowel
+   acoustics fix that:
+   1. Pitch/formant perception follows an auditory scale (Bark, here —
+      Traunmüller 1990), not raw Hz. The IPA trapezium is laid out for even
+      PERCEPTUAL spacing; interpolating in linear Hz distorts that (steps
+      near the top of the chart span far more Hz than equal-looking steps
+      near the middle). Interpolating in Bark and converting to Hz only at
+      the end fixes this — equal chart distance ≈ equal auditory distance.
+   2. F1 and F2 are coupled, not independent axes. Real F1×F2 plots form a
+      bowed/triangular shape, not a rectangle: an open vowel's F2 can't
+      reach as far front or back as a close vowel's can, because an open
+      oral cavity has less front/back cavity-length contrast to work with.
+      A bilinear interpolation across the trapezium's four corners gives
+      this for free — F2 at any point already depends on y as well as x.
+   Corner values below are the standard cross-dialect "corner vowel"
+   reference points used across general phonetics teaching (the same
+   /i/-/u/-/ɑ/-ish anchors most intro-phonetics formant charts use), not
+   digitised from a specific published table — this session's network
+   policy blocked every fetch to the primary sources (Hillenbrand's data
+   page, Deterding 1997, a NZE formants PDF, even Wikipedia) so live
+   verification wasn't possible. Swap in exact per-study numbers here if
+   they become reachable; the dialectal shape of each accent already comes
+   from the chart x,y positions in ACCENTS above, so only the four corner
+   anchors below would need editing, not the interpolation itself.        */
+const hzToBark=f=>26.81*f/(1960+f)-0.53;
+const barkToHz=z=>1960*(z+0.53)/(26.81-(z+0.53));
+const CORNER_HZ={                 //          F1    F2    F3
+  closeFront:[280,2250,2950],     // x=0,  y=0   (near /i/)
+  closeBack: [310, 870,2300],     // x=100,y=0   (near /u/)
+  openFront: [750,1700,2550],     // x=0,  y=100 (near /æ/)
+  openBack:  [700,1100,2450]      // x=100,y=100 (near /ɑ/)
+};
+const CORNER_BARK={};
+for(const k in CORNER_HZ) CORNER_BARK[k]=CORNER_HZ[k].map(hzToBark);
 /* x: 0 front → 100 back · y: 0 close → 100 open */
 function formantsFor(x,y){
-  const F1=250+Math.pow(y/100,1.12)*620;
-  const F2=2280-(x/100)*1540;
-  const F3=2400+((100-x)/100)*500;
-  return [F1,F2,F3];
+  const u=Math.min(1,Math.max(0,x/100)), v=Math.min(1,Math.max(0,y/100));
+  const {closeFront:Q11,closeBack:Q21,openFront:Q12,openBack:Q22}=CORNER_BARK;
+  return Q11.map((_,i)=>{
+    const bark=Q11[i]*(1-u)*(1-v)+Q21[i]*u*(1-v)+Q12[i]*(1-u)*v+Q22[i]*u*v;
+    return barkToHz(bark);
+  });
 }
 function makeVoice(){
   const c=audioCtx(), t=c.currentTime;
