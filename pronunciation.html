@@ -592,27 +592,27 @@ function makeFaceCtl(container){
   let cur={...IDLE}, tgt={...IDLE}, hold=false, raf=0;
   function frame(){
     cur.x+=(tgt.x-cur.x)*.28; cur.y+=(tgt.y-cur.y)*.28;
-    /* jaw: hinges at the TMJ (115,30); never fully shut, opens harder for low vowels */
-    const ang=1+Math.pow(cur.y/100,1.15)*6.8;
-    jaw.setAttribute("transform",`rotate(${ang.toFixed(2)} 115 30)`);
+    /* jaw: hinges near the TMJ, just below the "ear" — never fully shut, opens harder for low vowels */
+    const ang=1+Math.pow(cur.y/100,1.15)*9.5;
+    jaw.setAttribute("transform",`rotate(${ang.toFixed(2)} 46 26)`);
     const rad=ang*Math.PI/180, cs=Math.cos(rad), sn=Math.sin(rad);
-    const R=(px,py)=>[115+(px-115)*cs-(py-30)*sn, 30+(px-115)*sn+(py-30)*cs];
+    const R=(px,py)=>[46+(px-46)*cs-(py-26)*sn, 26+(px-46)*sn+(py-26)*cs];
     /* the tongue rides the mandible: tip and mouth floor rotate with the jaw */
-    const [tx,ty]=R(17,47);
-    const [fx,fy]=R(38,74);
-    const ax=Math.max(28,Math.min(116,cpx(cur.x)*1.35));
-    const ay=Math.max(12,Math.min(86,cur.y));
+    const [tx,ty]=R(12,40);
+    const [fx,fy]=R(26,60);
+    const ax=Math.max(64,Math.min(126,cpx(cur.x)*1.35));
+    const ay=Math.max(10,Math.min(90,cur.y));
     /* constant-volume feel: a high hump is narrow, a low hump spreads */
-    const w=8+ay*.22;
-    /* tongue root advances for front articulations, retracts for back */
-    const rx=Math.min(118,103+(ax-60)*.14);
-    const ry=Math.max(ay+20,58);
+    const w=8+ay*.24;
+    /* tongue root advances for front articulations, retracts for back, staying near the pharynx wall */
+    const rx=Math.min(72,58+(ax-95)*.09);
+    const ry=Math.max(ay+22,60);
     tongue.setAttribute("d",
       `M${tx.toFixed(1)},${ty.toFixed(1)}`+
-      ` C${(tx+(ax-tx)*.3).toFixed(1)},${(ay+(ty-ay)*.25).toFixed(1)} ${(ax-w).toFixed(1)},${ay.toFixed(1)} ${ax.toFixed(1)},${ay.toFixed(1)}`+
+      ` C${(tx+(ax-tx)*.32).toFixed(1)},${(ay+(ty-ay)*.22).toFixed(1)} ${(ax-w).toFixed(1)},${ay.toFixed(1)} ${ax.toFixed(1)},${ay.toFixed(1)}`+
       ` C${(ax+w).toFixed(1)},${ay.toFixed(1)} ${rx.toFixed(1)},${((ay+ry)/2).toFixed(1)} ${rx.toFixed(1)},${ry.toFixed(1)}`+
-      ` C${(rx+3).toFixed(1)},${(ry+16).toFixed(1)} 118,90 118,98 L118,100 L${(fx+6).toFixed(1)},100`+
-      ` C${fx.toFixed(1)},${(fy+12).toFixed(1)} ${(tx+3).toFixed(1)},${(ty+14).toFixed(1)} ${tx.toFixed(1)},${ty.toFixed(1)} Z`);
+      ` C${(rx+4).toFixed(1)},${(ry+15).toFixed(1)} 65,91 65,98.5 L65,100.6 L${(fx+6).toFixed(1)},100.6`+
+      ` C${fx.toFixed(1)},${(fy+12).toFixed(1)} ${(tx+3).toFixed(1)},${(ty+13).toFixed(1)} ${tx.toFixed(1)},${ty.toFixed(1)} Z`);
     if(hold||Math.abs(tgt.x-cur.x)+Math.abs(tgt.y-cur.y)>.4) raf=requestAnimationFrame(frame);
     else raf=0;
   }
@@ -671,28 +671,43 @@ function drawCons(){
 /* side-profile face, facing left — shared by the charts and the consonant diagrams.
    Colours follow the classic articulation-diagram look: skin, brown features, rosy tongue. */
 const FACE_PATHS=`
-  <path class="skin" d="M30,0 C22,4 17,9 15,14 C13,17 9,18 6,21 C3,23.5 3,26 6,27.5 L12,29.5 C9,31 8.5,33 10.5,34.5 L20,35 C24,56 32,78 44,100 L135,100 L135,0 Z"/>
-  <path class="mouthgap" d="M8,32 C13,32.5 17,33.5 20,35 C17,41 12,43.5 8,43 C6,39 6,35 8,32 Z"/>
+  <path class="skin" d="M45,1 C30,0 15,4 6,15 C3,20 0.5,25 4,28 L10,31.5
+    C7,34.5 7,38 10,40.5 L14,42 C22,55 28,68 36,80 C44,90 52,97 60,102 L76,102
+    C77,85 72,68 70,50 C72,32 76,15 68,6 C62,1 53,0.5 45,1 Z"/>
+  <path class="mouthgap" d="M9,31.5 C14,32.2 18,33.8 22,36.5 C18,43.5 13,47 9,46.5 C6.3,42 6.3,36.5 9,31.5 Z"/>
   <g class="jawgrp">
-    <path class="skin" d="M10,36 C7,37.5 7,40 10,42 C7,45.5 8,50 13,53 C10,59 13,66 20,72 C27,81 35,91 44,100 L56,100 C46,78 36,56 30,35 Z"/>
-    <path class="feature bold" d="M10,36 C7,37.5 7,40 10,42 C7,45.5 8,50 13,53 C10,59 13,66 20,72 C27,81 35,91 44,100"/>
-    <rect class="tooth" x="15" y="35" width="3.6" height="6" rx="1.3"/>
+    <path class="skin" d="M11,36 C6,39 5,43 8,46.5 C4,50 5,55 10,58.5 C6,64 11,68 17,70 C13,77 17,84 26,90
+      C34,97 42,100 50,102 C40,96 32,88 28,78 C24,68 26,60 30,54 C26,48 24,42 26,36 Z"/>
+    <path class="feature bold" d="M11,36 C6,39 5,43 8,46.5 C4,50 5,55 10,58.5 C6,64 11,68 17,70 C13,77 17,84 26,90 C34,97 42,100 50,102"/>
+    <rect class="tooth" x="16.5" y="35" width="4" height="7" rx="1.4"/>
   </g>
-  <path class="tongue tonguepath" d="M18,52 C25,68 37,80 54,86 C76,93 100,93 116,96 L118,100 L46,100 C36,88 25,68 18,52 Z"/>
-  <path class="feature bold" d="M30,0 C22,4 17,9 15,14 C13,17 9,18 6,21 C3,23.5 3,26 6,27.5 L12,29.5 C9,31 8.5,33 10.5,34.5"/>
-  <path class="feature" d="M7,24 C8.5,25 10,25 11.5,24.3"/>
-  <path class="feature" d="M17,8 C19.5,10.5 23,10.5 25.5,8"/>
-  <rect class="tooth" x="14" y="26.5" width="3.6" height="7" rx="1.3"/>
-  <path class="feature bold" d="M19,24 C32,8 55,3 80,3 C100,3 112,5 118,9 C121,11 122,13.5 121,16.5 C120.5,18.5 119,20 119.5,22 C120,24 122,24 122.5,22"/>
-  <path class="feature bold" d="M122,27 C120,46 118,70 120,98"/>`;
-const PLACE_SPOTS={ "Bilabial":[9,34], "Labio-dental":[15,37], "Dental":[17,26],
-  "Alveolar":[25,15], "Post-alveolar":[35,9], "Velar":[102,7], "Glottal":[120,56] };
+  <path class="tongue tonguepath" d="M21,58 C29,76 41,89 57,95 C73,100 88,100 96,100 L96,100.6 L50,100.6
+    C39,90 27,74 21,58 Z"/>
+  <path class="feature bold" d="M32,0 C24,3 18,7 15,12 C12,16 9,18 5,20 C1.5,22 1,25.5 4,28 L10,31.5 C7,34.5 7,38 10,40.5"/>
+  <path class="feature" d="M4.5,25 C6.3,26.3 8.3,26.3 10,24.9"/>
+  <path class="feature" d="M16,8 C19.5,11 24,11 27.5,8"/>
+  <rect class="tooth" x="14.5" y="28" width="4" height="7.5" rx="1.4"/>
+  <!-- alveolar ridge -->
+  <path class="feature bold" d="M24,34.5 C26,31 28.5,30 31,31.5"/>
+  <!-- hard palate: domed, not a single sweep -->
+  <path class="feature bold" d="M24,34.5 C27,22 34,13 42,9.5 C48,7.6 52,7.4 56,8"/>
+  <!-- velum (soft palate) hanging into a uvula -->
+  <path class="feature bold" d="M56,8 C61,10.5 64,15 63,20 C62.4,23.7 60,26.1 57,26.1
+    C55.8,28.3 56,31.1 57.5,33.5"/>
+  <!-- nasal cavity roof, a separate passage above the palate -->
+  <path class="feature" d="M8,22 C16,13 28,6.5 40,4 C48,2.4 55,2.2 60,3.6"/>
+  <!-- pharynx back wall -->
+  <path class="feature bold" d="M57,26.1 C50,36 47,48 50,60 C52.5,68 52.5,77 48,85 C45,91 46,96 50,100"/>
+  <!-- epiglottis -->
+  <path class="feature" d="M40,86 C44,82.5 49,82.7 52,86.3"/>`;
+const PLACE_SPOTS={ "Bilabial":[9,35], "Labio-dental":[15,39], "Dental":[18,28],
+  "Alveolar":[27,26], "Post-alveolar":[35,16], "Velar":[59,8], "Glottal":[62,86] };
 function mouthDiagram(place){
   const spot=PLACE_SPOTS[place]; if(!spot) return "";
-  return `<svg class="mouthface mouth-mini" viewBox="0 0 135 100" aria-hidden="true">${FACE_PATHS}
-    <circle class="place-dot" cx="${spot[0]}" cy="${spot[1]}" r="4.5"/></svg>`;
+  return `<svg class="mouthface mouth-mini" viewBox="0 0 76 102" aria-hidden="true">${FACE_PATHS}
+    <circle class="place-dot" cx="${spot[0]}" cy="${spot[1]}" r="2.4"/></svg>`;
 }
-const CHART_OFF=13, CHART_SCALE=.85;
+const CHART_OFF=44, CHART_SCALE=.54;
 const cpx=x=>CHART_OFF+x*CHART_SCALE;          /* chart x (0-100) → container % */
 const CX=v=>(v*1.35).toFixed(1);
 function chartSVG(){
