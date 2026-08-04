@@ -292,6 +292,12 @@ const DIPHTHONGS = [
    Aussie symbols. */
 const ACCENTS = {
   aus:{ label:"Aussie", vowels:{}, dips:{} },
+  nz:{ label:"Kiwi",
+    vowels:{ "/ɪ/":{x:50,y:40,sym:"/ɘ/"}, "/e/":{x:14,y:26}, "/æ/":{x:16,y:56},
+      "/ɜː/":{x:38,y:36,sym:"/ɵː/"}, "/aː/":{x:66,y:88,sym:"/ɐː/"} },
+    dips:{ "/eɪ/":{from:[24,64],to:[18,26],sym:"/æe/"}, "/aɪ/":{from:[58,90],to:[22,32],sym:"/ɑe/"},
+      "/ɔɪ/":{from:[88,56],to:[22,30]}, "/əʉ/":{from:[52,64],to:[72,10],sym:"/ɐʉ/"},
+      "/aʊ/":{from:[28,82],to:[58,42],sym:"/æɔ/"} } },
   rp:{ label:"UK RP",
     vowels:{ "/e/":{x:16,y:38}, "/æ/":{x:14,y:74}, "/ɐ/":{x:62,y:68,sym:"/ʌ/"},
       "/ʉː/":{x:88,y:8,sym:"/uː/"}, "/ʊ/":{x:80,y:20}, "/ɔ/":{x:86,y:80,sym:"/ɒ/"},
