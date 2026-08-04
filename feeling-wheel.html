@@ -696,8 +696,18 @@
     }
   }
 
+  /* Resolve the sector under the pointer. event.target alone is unreliable here:
+     once the SVG has pointer capture, click events retarget to the <svg>. */
+  function sectorFromEvent(event) {
+    const direct = event.target.closest && event.target.closest(".sector");
+    if (direct) return direct;
+    if (typeof event.clientX !== "number") return null;
+    const el = document.elementFromPoint(event.clientX,event.clientY);
+    return el && el.closest ? el.closest(".sector") : null;
+  }
+
   wheelGroup.addEventListener("click",event => {
-    const path = event.target.closest(".sector");
+    const path = sectorFromEvent(event);
     if (!path || moved) return;
     selectEntry(path.dataset.id,{spin:true,focusPanel:true});
   });
@@ -716,7 +726,8 @@
   svg.addEventListener("pointerdown",event => {
     if (event.button !== undefined && event.button !== 0) return;
     dragging = true; moved = false; dragLastAngle = pointerAngle(event); dragDistance = 0;
-    if (svg.setPointerCapture) svg.setPointerCapture(event.pointerId);
+    /* Capture is deferred until the pointer actually moves — capturing here
+       would retarget the click to the <svg> and break sector selection. */
     svg.classList.add("dragging");
     applyRotation(false);
   });
@@ -726,7 +737,10 @@
     const delta = ((nextAngle-dragLastAngle+540)%360)-180;
     dragLastAngle = nextAngle;
     dragDistance += Math.abs(delta);
-    if (dragDistance > 2) moved = true;
+    if (dragDistance > 2 && !moved) {
+      moved = true;
+      if (svg.setPointerCapture) { try { svg.setPointerCapture(event.pointerId); } catch (_) {} }
+    }
     rotation += delta;
     applyRotation(false);
   });
