@@ -71,8 +71,8 @@
   .vowel-inner .ph:hover{transform:translate(-50%,-50%) scale(1.06)}
   .axis{font-size:.68rem;fill:var(--muted)}
   .trap{fill:none;stroke:var(--line);stroke-width:2;vector-effect:non-scaling-stroke}
-  .dpath{stroke:var(--accent);stroke-width:2.5;fill:none;stroke-linecap:round;opacity:0;transition:opacity .2s}
-  .dpath.show{opacity:1}
+  .dpath{stroke:var(--accent);stroke-width:2;fill:none;stroke-linecap:round;opacity:0;transition:opacity .2s;vector-effect:non-scaling-stroke}
+  .dpath.show{opacity:.55}
   .mouthbg path{stroke:var(--muted);opacity:.34;fill:none;stroke-width:1.3;vector-effect:non-scaling-stroke;stroke-linecap:round}
   .mouthlabel{position:absolute;font-size:.66rem;color:var(--muted);opacity:.75;pointer-events:none}
   .glidedot{position:absolute;width:15px;height:15px;border-radius:50%;background:var(--accent);
@@ -159,7 +159,7 @@
 
   <section class="panel" id="tab-dip">
     <h2 class="sec">Diphthongs</h2>
-    <p class="hint">Two vowels in one — your mouth <b>moves</b>. Tap one to hear it fly across the mouth.</p>
+    <p class="hint">Two vowels in one — your mouth <b>moves</b>. Tap one to watch the dot travel — or press and hold anywhere, then drag, to glide it yourself.</p>
     <div class="vowel-wrap"><div class="vowel-inner" id="dipChart"></div></div>
     <div class="chips" id="dipChips" style="margin-top:11px"></div>
   </section>
@@ -397,6 +397,11 @@ function playDip(d){ const v=makeVoice(); v.glide(d.from[0],d.from[1],d.to[0],d.
 function flyDot(d){
   const el=document.getElementById("dipChart"); const dot=el&&el.querySelector(".glidedot");
   if(!dot) return;
+  const path=document.getElementById("dp"+DIPHTHONGS.indexOf(d));
+  document.querySelectorAll(".dpath").forEach(x=>{
+    x.classList.remove("show"); x.style.strokeDashoffset=1;
+  });
+  if(path) path.classList.add("show");
   const t0=performance.now(), dur=620;
   const ease=k=>k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
   const step=now=>{
@@ -404,6 +409,7 @@ function flyDot(d){
     dot.style.display="block";
     dot.style.left=(d.from[0]+(d.to[0]-d.from[0])*e)+"%";
     dot.style.top =(d.from[1]+(d.to[1]-d.from[1])*e)+"%";
+    if(path) path.style.strokeDashoffset=1-e;
     if(k<1) requestAnimationFrame(step); else setTimeout(()=>dot.style.display="none",250);
   };
   requestAnimationFrame(step);
@@ -472,9 +478,7 @@ function drawDips(){
   const el=document.getElementById("dipChart");
   el.innerHTML=chartSVG()+
     `<svg viewBox="0 0 100 100" preserveAspectRatio="none">${DIPHTHONGS.map((d,i)=>
-      `<path class="dpath" id="dp${i}" d="M${d.from[0]},${d.from[1]} L${d.to[0]},${d.to[1]}" marker-end="url(#ah)"/>`).join("")}
-      <defs><marker id="ah" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
-        <path d="M0,0 L5,2.5 L0,5 z" fill="var(--accent)"/></marker></defs></svg>`+
+      `<path class="dpath" id="dp${i}" d="M${d.from[0]},${d.from[1]} L${d.to[0]},${d.to[1]}" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1"/>`).join("")}</svg>`+
     DIPHTHONGS.map(d=>{const at=d.chipAt||d.from;return `<span style="position:absolute;left:${at[0]}%;top:${at[1]}%">${chipHTML(d,"vowelph")}</span>`;}).join("")+
     `<div class="glidedot"></div>`;
   document.getElementById("dipChips").innerHTML=DIPHTHONGS.map((d,i)=>
@@ -567,12 +571,7 @@ document.addEventListener("click",e=>{
   if(ph){
     if(suppressClick){ suppressClick=false; return; }
     const o=find(ph.dataset.s);
-    if(o&&DIPHTHONGS.includes(o)){
-      const i=DIPHTHONGS.indexOf(o);
-      document.querySelectorAll(".dpath").forEach(p=>p.classList.remove("show"));
-      const path=document.getElementById("dp"+i); if(path) path.classList.add("show");
-      playDip(o);
-    }
+    if(o&&DIPHTHONGS.includes(o)) playDip(o);
     showDetail(ph.dataset.s); return;
   }
   const pv=e.target.closest("[data-play-vowel]");
@@ -667,32 +666,34 @@ I do not like them, Sam-I-am.</div>
   document.getElementById("regRoll").onclick=pick(REGISTER_ROLES,"regOut");
 }
 
-/* hold-and-drag on the vowel chart = live morphing vowel */
+/* hold-and-drag on either chart = live morphing vowel — trace a diphthong yourself */
 let dragVoice=null, suppressClick=false;
 (function(){
-  const vch=document.getElementById("vowelChart");
-  let downAt=null, t0=0;
-  vch.addEventListener("pointerdown",e=>{
+  const charts=["vowelChart","dipChart"].map(id=>document.getElementById(id));
+  let downAt=null, t0=0, chart=null;
+  const posOf=o=>o&&(o.x!==undefined?[o.x,o.y]:o.from);
+  charts.forEach(ch=>ch.addEventListener("pointerdown",e=>{
     if(e.button!==undefined&&e.button>0) return;
     const chip=e.target.closest(".ph");
-    if(!chip&&e.pointerType==="touch") return;   /* touch pans the chart unless you grab a vowel */
-    const start=chip?VOWELS.find(v=>v.s===chip.dataset.s):null;
-    const p=chartXY(vch,e);
-    const x=start?start.x:p.x, y=start?start.y:p.y;
+    if(!chip&&e.pointerType==="touch") return;   /* touch pans the chart unless you grab a sound */
+    const start=chip?posOf(find(chip.dataset.s)):null;
+    const p=chartXY(ch,e);
+    const x=start?start[0]:p.x, y=start?start[1]:p.y;
+    chart=ch;
     dragVoice={v:makeVoice(),id:e.pointerId}; downAt=[e.clientX,e.clientY]; t0=performance.now(); suppressClick=false;
-    dragVoice.v.set(x,y,.001); moveDot(vch,x,y,true);
-  });
+    dragVoice.v.set(x,y,.001); moveDot(ch,x,y,true);
+  }));
   window.addEventListener("pointermove",e=>{
     if(!dragVoice||e.pointerId!==dragVoice.id) return;
     if(Math.hypot(e.clientX-downAt[0],e.clientY-downAt[1])>7) suppressClick=true;
-    const p=chartXY(vch,e);
-    dragVoice.v.set(p.x,p.y); moveDot(vch,p.x,p.y,true);
+    const p=chartXY(chart,e);
+    dragVoice.v.set(p.x,p.y); moveDot(chart,p.x,p.y,true);
   });
   const end=e=>{
     if(!dragVoice||e.pointerId!==dragVoice.id) return;
     const v=dragVoice.v, held=performance.now()-t0;
     if(held<350) setTimeout(()=>v.stop(),380-held); else v.stop();
-    dragVoice=null; moveDot(vch,0,0,false);
+    dragVoice=null; if(chart) moveDot(chart,0,0,false);
   };
   window.addEventListener("pointerup",end);
   window.addEventListener("pointercancel",end);
