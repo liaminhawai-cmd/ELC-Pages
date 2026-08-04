@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pronunciation Hub — the sounds of Australian English, with a tongue twister to read and write for each one.">
+<title>Pronunciation Hub — ELC Hub</title>
+<style>
+  :root{
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2; --radius:12px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
+    --accent:#2563eb; --accent-soft:#dbeafe;
+    --voiced:#8DD873; --unvoiced:#45B0E1; --vowel:#F1A983;
+    --done:#16a34a; --done-soft:#dcfce7; --target:#d97706; --target-soft:#fef0d5;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
+           --accent:#7aa5ff; --accent-soft:#1d2c4d; --shadow:0 1px 2px rgba(0,0,0,.4);
+           --done-soft:#14331f; --target-soft:#3a2508; }
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+  header{background:linear-gradient(135deg,#0d9488,#2563eb 55%,#7c3aed);color:#fff;padding:20px 20px 26px;text-align:center}
+  header a.back{color:#fff;opacity:.85;text-decoration:none;font-size:.85rem;font-weight:600}
+  header h1{font-size:clamp(1.4rem,4vw,1.95rem);margin-top:6px}
+  header p{max-width:600px;margin:6px auto 0;opacity:.94;font-size:.9rem}
+  main{max-width:1180px;margin:0 auto;padding:18px 14px 60px}
+
+  /* progress + tabs */
+  .topbar{position:sticky;top:0;z-index:20;background:var(--bg);padding:10px 14px;margin:0 -14px 14px;
+          box-shadow:0 4px 10px -8px rgba(0,0,0,.3);display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px}
+  .tabs button{font-size:.82rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line);
+               background:var(--card);color:var(--ink);cursor:pointer}
+  .tabs button[aria-selected="true"]{background:var(--accent);color:#fff;border-color:transparent;font-weight:700}
+  .prog{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--muted)}
+  .prog .bar{width:110px;height:7px;border-radius:99px;background:var(--line);overflow:hidden}
+  .prog .bar i{display:block;height:100%;background:var(--done);width:0}
+
+  .panel{display:none} .panel.on{display:block}
+  h2.sec{font-size:1rem;margin:14px 0 3px}
+  p.hint{font-size:.82rem;color:var(--muted);margin-bottom:9px}
+
+  /* phoneme grids */
+  .ipa-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow)}
+  table.ipa{border-collapse:collapse;width:100%;min-width:760px}
+  table.ipa th,table.ipa td{border:1px solid var(--line);padding:6px;vertical-align:top;text-align:center}
+  table.ipa th{font-size:.68rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);background:var(--bg);font-weight:700}
+  table.ipa th.rowh{text-align:left;white-space:nowrap;font-size:.7rem}
+  .ph{display:inline-flex;flex-direction:column;align-items:center;gap:1px;min-width:62px;margin:2px;
+      padding:6px 7px;border:1px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;
+      font:inherit;color:inherit;position:relative;transition:transform .1s,border-color .1s}
+  .ph:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .ph .sym{font-size:1.02rem;font-weight:800;letter-spacing:.5px;white-space:nowrap}
+  .ph .eg{font-size:.68rem;color:var(--muted)}
+  .ph .pos{font-size:.6rem;color:var(--muted);letter-spacing:2px;line-height:1}
+  .ph.voiced{border-left:4px solid var(--voiced)}
+  .ph.unvoiced{border-left:4px solid var(--unvoiced)}
+  .ph.vowelph{border-left:4px solid var(--vowel)}
+  .ph[data-state="target"]{background:var(--target-soft);border-color:var(--target)}
+  .ph[data-state="done"]{background:var(--done-soft);border-color:var(--done)}
+  .ph .flag{position:absolute;top:-6px;right:-6px;font-size:.68rem}
+  .ph.sel{outline:3px solid var(--accent);outline-offset:1px}
+
+  /* vowel chart */
+  .vowel-wrap{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+              box-shadow:var(--shadow);padding:14px;overflow-x:auto}
+  .vowel-inner{position:relative;width:100%;min-width:520px;aspect-ratio:1.35/1;max-height:420px}
+  .vowel-inner svg{position:absolute;inset:0;width:100%;height:100%}
+  .vowel-inner .ph{position:absolute;transform:translate(-50%,-50%);min-width:56px;margin:0;white-space:nowrap;padding:5px 8px}
+  .vowel-inner .ph:hover{transform:translate(-50%,-50%) scale(1.06)}
+  .axis{font-size:.68rem;fill:var(--muted)}
+  .trap{fill:none;stroke:var(--line);stroke-width:2}
+  .dpath{stroke:var(--accent);stroke-width:2.5;fill:none;stroke-linecap:round;opacity:0;transition:opacity .2s}
+  .dpath.show{opacity:1}
+
+  /* detail */
+  .detail{margin-top:14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);
+          box-shadow:var(--shadow);padding:0;overflow:hidden}
+  .detail .dhead{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+  .detail .big{font-size:2rem;font-weight:800;letter-spacing:1px}
+  .detail .meta{font-size:.82rem;color:var(--muted)}
+  .detail .meta b{color:var(--ink)}
+  .detail .acts{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  .btn{font-size:.79rem;padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);
+       color:var(--ink);cursor:pointer;font-weight:600}
+  .btn.on-target{background:var(--target-soft);border-color:var(--target);color:var(--target)}
+  .btn.on-done{background:var(--done-soft);border-color:var(--done);color:var(--done)}
+  .dbody{padding:14px 16px}
+  .steps{display:grid;gap:11px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+  .step{border:1px solid var(--line);border-radius:10px;padding:12px 13px;background:var(--bg)}
+  .step .n{display:inline-block;width:19px;height:19px;line-height:19px;text-align:center;border-radius:50%;
+           background:var(--accent);color:#fff;font-size:.72rem;font-weight:800;margin-right:6px}
+  .step h4{display:inline;font-size:.88rem}
+  .step p{font-size:.83rem;color:var(--muted);margin-top:7px}
+  .tw{font-size:.98rem;line-height:1.75;margin-top:8px;padding:10px 12px;background:var(--card);
+      border:1px solid var(--line);border-radius:9px;white-space:pre-line}
+  .tw em{font-style:normal;font-weight:800;color:var(--accent)}
+  textarea{width:100%;font:inherit;font-size:.88rem;padding:9px 11px;border:1px solid var(--line);
+           border-radius:8px;background:var(--card);color:var(--ink);resize:vertical;min-height:74px;margin-top:8px}
+  video{width:100%;max-width:280px;border-radius:9px;background:#000;margin-top:8px;display:block}
+  .novid{font-size:.78rem;color:var(--muted);margin-top:8px}
+
+  /* stress + rhythm cards */
+  .cards{display:grid;gap:11px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .gcard{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);padding:14px 15px}
+  .gcard h3{font-size:.98rem;margin-bottom:3px}
+  .gcard p.k{font-size:.78rem;color:var(--muted);margin-bottom:9px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .chips span{font-size:.76rem;padding:4px 9px;border-radius:999px;background:var(--bg);border:1px solid var(--line)}
+  .say{font-size:1.05rem;font-weight:700;padding:10px 12px;background:var(--accent-soft);border-radius:9px;text-align:center}
+  .dice{margin-top:9px;padding:11px;border:1px dashed var(--line);border-radius:9px;text-align:center;font-size:.9rem;min-height:44px;display:flex;align-items:center;justify-content:center}
+  footer{border-top:1px solid var(--line);margin-top:30px;padding:16px;text-align:center;color:var(--muted);font-size:.8rem}
+  .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.75rem;color:var(--muted);margin:8px 0 2px}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← ELC Hub</a>
+  <h1>🗣️ Pronunciation Hub</h1>
+  <p>Every sound of Australian English. Tap one to hear it, read its tongue twister, then write your own.</p>
+</header>
+
+<main>
+  <div class="topbar">
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="cons">Consonants</button>
+      <button role="tab" aria-selected="false" data-tab="vow">Vowels</button>
+      <button role="tab" aria-selected="false" data-tab="dip">Diphthongs</button>
+      <button role="tab" aria-selected="false" data-tab="stress">Stress &amp; rhythm</button>
+    </div>
+    <div class="prog"><span id="progText">0 achieved</span><span class="bar"><i id="progBar"></i></span></div>
+  </div>
+
+  <section class="panel on" id="tab-cons">
+    <h2 class="sec">Consonants</h2>
+    <p class="hint">Grouped by where and how you make the sound. <b>◁</b> start of word · <b>◇</b> middle · <b>▷</b> end.</p>
+    <div class="legend">
+      <span><i style="background:var(--unvoiced)"></i>Unvoiced (no throat buzz)</span>
+      <span><i style="background:var(--voiced)"></i>Voiced (throat buzzes)</span>
+      <span>⭐ my target · ✅ achieved</span>
+    </div>
+    <div class="ipa-scroll"><table class="ipa" id="consTable"></table></div>
+  </section>
+
+  <section class="panel" id="tab-vow">
+    <h2 class="sec">Vowels</h2>
+    <p class="hint">Where your tongue sits in your mouth. Front is towards your teeth, close is towards the roof.</p>
+    <div class="vowel-wrap"><div class="vowel-inner" id="vowelChart"></div></div>
+  </section>
+
+  <section class="panel" id="tab-dip">
+    <h2 class="sec">Diphthongs</h2>
+    <p class="hint">Two vowels in one — your mouth <b>moves</b>. Tap one to see the path it travels.</p>
+    <div class="vowel-wrap"><div class="vowel-inner" id="dipChart"></div></div>
+    <div class="chips" id="dipChips" style="margin-top:11px"></div>
+  </section>
+
+  <section class="panel" id="tab-stress">
+    <h2 class="sec">Stress, rhythm and register</h2>
+    <p class="hint">Same words, different meaning — it depends how you say them.</p>
+    <div class="cards" id="stressCards"></div>
+  </section>
+
+  <div id="detail"></div>
+</main>
+
+<footer>Sounds and example words from our own Australian English phoneme map. Progress is saved on this device only.</footer>
+
+<script>
+/* ============================================================
+   CONTENT — safe to edit. Phonemes, tongue twisters and games.
+   pos: which positions the sound appears in — I=start, M=middle, F=end
+   vid: filename in the Phonics repo (leave "" if there's no clip yet)
+   ============================================================ */
+const VIDEO_BASE = "https://liaminhawai-cmd.github.io/Phonics/";
+
+/* place × manner grid, exactly as the phoneme map draws it */
+const MANNERS = ["Plosive / Stop","Fricative","Affricate","Nasal","Approximant"];
+const PLACES  = ["Bilabial","Labio-dental","Dental","Alveolar","Post-alveolar","Velar","Glottal"];
+
+const CONSONANTS = [
+  {s:"/p/", eg:"pen",    m:"Plosive / Stop", p:"Bilabial",      v:0, pos:"IMF", vid:"P.mp4"},
+  {s:"/b/", eg:"bed",    m:"Plosive / Stop", p:"Bilabial",      v:1, pos:"IMF", vid:"B.mp4"},
+  {s:"/t/", eg:"two",    m:"Plosive / Stop", p:"Alveolar",      v:0, pos:"IMF", vid:"T.mp4"},
+  {s:"/d/", eg:"do",     m:"Plosive / Stop", p:"Alveolar",      v:1, pos:"IMF", vid:"D.mp4"},
+  {s:"/k/", eg:"kite",   m:"Plosive / Stop", p:"Velar",         v:0, pos:"IMF", vid:"K.mp4"},
+  {s:"/g/", eg:"go",     m:"Plosive / Stop", p:"Velar",         v:1, pos:"IMF", vid:"G.mp4"},
+  {s:"/f/", eg:"fish",   m:"Fricative",      p:"Labio-dental",  v:0, pos:"IMF", vid:"F.mp4"},
+  {s:"/v/", eg:"very",   m:"Fricative",      p:"Labio-dental",  v:1, pos:"IMF", vid:"V.mp4", tw:"w-v"},
+  {s:"/θ/", eg:"thin",   m:"Fricative",      p:"Dental",        v:0, pos:"IMF", vid:"Th.mp4", tw:"th-sh"},
+  {s:"/ð/", eg:"this",   m:"Fricative",      p:"Dental",        v:1, pos:"IMF", vid:"Th.mp4", tw:"th-sh"},
+  {s:"/s/", eg:"see",    m:"Fricative",      p:"Alveolar",      v:0, pos:"IMF", vid:"S.mp4", tw:"s-sh"},
+  {s:"/z/", eg:"zoo",    m:"Fricative",      p:"Alveolar",      v:1, pos:"IMF", vid:"Z.mp4"},
+  {s:"/ʃ/", eg:"she",    m:"Fricative",      p:"Post-alveolar", v:0, pos:"IMF", vid:"Sh.mp4", tw:"s-sh"},
+  {s:"/ʒ/", eg:"vision", m:"Fricative",      p:"Post-alveolar", v:1, pos:"IMF", vid:"Si.mp4"},
+  {s:"/h/", eg:"hat",    m:"Fricative",      p:"Glottal",       v:0, pos:"IM",  vid:"H.mp4"},
+  {s:"/tʃ/",eg:"chair",  m:"Affricate",      p:"Post-alveolar", v:0, pos:"IMF", vid:"Ch.mp4", tw:"ch-j"},
+  {s:"/dʒ/",eg:"jam",    m:"Affricate",      p:"Post-alveolar", v:1, pos:"IMF", vid:"J.mp4", tw:"ch-j"},
+  {s:"/m/", eg:"me",     m:"Nasal",          p:"Bilabial",      v:1, pos:"IMF", vid:"M.mp4"},
+  {s:"/n/", eg:"no",     m:"Nasal",          p:"Alveolar",      v:1, pos:"IMF", vid:"N.mp4"},
+  {s:"/ŋ/", eg:"sing",   m:"Nasal",          p:"Velar",         v:1, pos:"MF",  vid:"Ng.mp4"},
+  {s:"/w/", eg:"we",     m:"Approximant",    p:"Bilabial",      v:1, pos:"IM",  vid:"W.mp4", tw:"w-v"},
+  {s:"/l/", eg:"look",   m:"Approximant",    p:"Alveolar",      v:1, pos:"IM",  vid:"L.mp4", tw:"l-r"},
+  {s:"/r/", eg:"red",    m:"Approximant",    p:"Post-alveolar", v:1, pos:"IM",  vid:"R.mp4", tw:"l-r"}
+];
+
+/* x = front→back (0–100), y = close→open (0–100) */
+const VOWELS = [
+  {s:"/iː/", eg:"see",   x:6,  y:6,  pos:"IMF", vid:"Ee.mp4", tw:"i-ii"},
+  {s:"/ɪ/",  eg:"sit",   x:20, y:18, pos:"IM",  vid:"I.mp4",  tw:"i-ii"},
+  {s:"/e/",  eg:"bed",   x:16, y:42, pos:"IM",  vid:"E.mp4"},
+  {s:"/æ/",  eg:"cat",   x:20, y:82, pos:"IM",  vid:"A.mp4"},
+  {s:"/ɜː/", eg:"her",   x:50, y:44, pos:"IMF", vid:"Er.mp4"},
+  {s:"/ə/",  eg:"about", x:52, y:52, pos:"MF",  vid:""},
+  {s:"/ɐ/",  eg:"cut",   x:54, y:72, pos:"IM",  vid:"U.mp4"},
+  {s:"/ʉː/", eg:"food",  x:72, y:8,  pos:"IMF", vid:"Oo.mp4", tw:"u-uu"},
+  {s:"/ʊ/",  eg:"put",   x:78, y:22, pos:"M",   vid:"U.mp4",  tw:"u-uu"},
+  {s:"/ɔ/",  eg:"hot",   x:88, y:70, pos:"IM",  vid:"O.mp4"},
+  {s:"/ɔː/", eg:"door",  x:92, y:48, pos:"IMF", vid:"Or.mp4"},
+  {s:"/aː/", eg:"spa",   x:80, y:90, pos:"IMF", vid:"Ar.mp4"}
+];
+
+const DIPHTHONGS = [
+  {s:"/eɪ/", eg:"day, make, play", from:[16,42], to:[20,18], vid:"Ay.mp4"},
+  {s:"/aɪ/", eg:"my, time, ride",  from:[45,88], to:[20,18], vid:"Igh.mp4"},
+  {s:"/ɔɪ/", eg:"boy, choice",     from:[90,58], to:[20,18], vid:"Oy.mp4"},
+  {s:"/əʉ/", eg:"go, snow, home",  from:[52,52], to:[72,8],  vid:"Oa.mp4", note:"the GOAT vowel"},
+  {s:"/aʊ/", eg:"now, about",      from:[45,88], to:[78,22], vid:"Ou.mp4"}
+];
+
+/* Tongue twisters — from the phonics notebook */
+const TWISTERS = {
+  "ch-j":{ title:"Ch / J", sounds:"/tʃ/ and /dʒ/",
+    quick:"Charlie jumped on the itchy giraffe.",
+    text:"Charlie jumped on the itchy giraffe.\nJust chew the cheese, Jack — don't juggle it!\nThe jolly children chose cheap chocolate chips." },
+  "th-sh":{ title:"Th / Sh", sounds:"/θ/, /ð/ and /ʃ/",
+    quick:"Think and share, don't shrink them there.",
+    text:"Think and share, don't shrink them there.\nThose three shy thieves shared thirty thick shells.\nThis thin shirt is thicker than that one." },
+  "l-r":{ title:"L / R", sounds:"/l/ and /r/",
+    quick:"I lead the red robot, rake the leaves by the lake.",
+    text:"Jerry's jelly berries taste really rare.\nRory's lawn rake rarely rakes really right.\nA really leery Larry rolls readily to the road.\nThe road's load is lessened lightly.\nLassie Lilly likes Ronny's rulers.\nBarry's belly riles with bile.\nBilly and Lilly pile pyres for file fires." },
+  "s-sh":{ title:"S / Sh", sounds:"/s/ and /ʃ/",
+    quick:"She sells sea shells by the sea shore.",
+    text:"Shelly should shine her shoes each Saturday,\nShe sits by the shore where the soft waves sway.\nSally says, “Surely your shoes are too shiny!”\nShelly smiles shyly and shines them more finely.\nSome seashells shimmer; some shells stay still,\nShe sorts them silently with skill and will.\n“Should I sell these shiny shells?” she sighs —\nAnd the seagulls sing softly as sunshine dries." },
+  "w-v":{ title:"W / V", sounds:"/w/ and /v/",
+    quick:"Victor waved while washing the van.",
+    text:"Wendy went walking with Victor one day,\nThey wandered through willows that waved on the way.\nVictor's velvet vest was vivid and new,\nWhile Wendy wore wool that the wild wind blew.\nThey viewed the wide valley, the village, the view,\nThey whispered and wondered what weather was due.\nVictor vowed, “We'll visit whenever we can!”\nAnd Wendy just winked — “You're a very wise man.”" },
+  "u-uu":{ title:"/ʊ/ vs /ʉː/", sounds:"short and long oo",
+    quick:"Put your foot in the food of anyone who is in a hood.",
+    text:"Luke looked at Lulu in the blue schoolroom,\n“Could you cook good soup this afternoon?”\nLulu shook her wooden spoon and stood,\n“I could, if you put in the food you should.”\nThey pushed and pulled a crooked stool,\nTo scoop some noodles — not too cool.\nThe cookbook stood where the sunlight shone,\n“The soup's too smooth!” said Luke with a groan.\nLulu laughed, “You should choose to chew!”\nLuke blew on his spoon — “It's too hot to do!”" },
+  "i-ii":{ title:"/ɪ/ and /iː/", sounds:"short and long ee",
+    quick:"Milly sits still on the hill and sees three green sheep.",
+    text:"Milly sits still on the hill and sees three green sheep.\nEach sheep is eating sweet peas near the creek.\n“Keep still!” Milly whispers, “They'll leap if you creep.”\nThe breeze slips through the trees and tickles her cheek.\nShe grins, feeling silly but free in the spring heat." }
+};
+
+/* Stress, rhythm and register games from the notebook */
+const REGISTER_ROLES = ["Military officer giving an order","Kindergarten teacher","CEO at a meeting",
+  "Parent calming a toddler","Judge in court","Friend at a party","Stand-up comedian","Angry sports coach",
+  "Customer service rep at a bank","Police officer during an arrest","Flight attendant before take-off",
+  "Doctor before bad news"];
+
+const EMPHASIS_MEANINGS = ["It's fine somewhere else, but not here","Whispered warning",
+  "Suspicious (you're hiding something)","Absolute prohibition","Playful teasing","Confused",
+  "Different clothing would be fine","Over-the-top dramatic","Someone else can, but not you",
+  "Polite but firm","Shocked","You could carry it, but not wear it"];
+
+/* ============================================================
+   ENGINE
+   ============================================================ */
+const KEY="elc_pron_state";
+const load=()=>{ try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return{}} };
+const save=s=>localStorage.setItem(KEY,JSON.stringify(s));
+let state=load();                         // {"/r/":{st:"done"|"target", mine:"..."}}
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const posMark=p=>(p.includes("I")?"◁":"")+(p.includes("M")?"◇":"")+(p.includes("F")?"▷":"");
+const posWords=p=>[p.includes("I")&&"start",p.includes("M")&&"middle",p.includes("F")&&"end"].filter(Boolean).join(" · ");
+const ALL=[...CONSONANTS,...VOWELS,...DIPHTHONGS];
+const find=s=>ALL.find(x=>x.s===s);
+
+function chipHTML(o,cls){
+  const st=state[o.s]?.st;
+  return `<button class="ph ${cls}" data-s="${esc(o.s)}" ${st?`data-state="${st}"`:""}>
+    ${st?`<span class="flag">${st==="done"?"✅":"⭐"}</span>`:""}
+    <span class="sym">${esc(o.s)}</span>
+    <span class="eg">${esc(o.eg.split(",")[0])}</span>
+    ${o.pos?`<span class="pos">${posMark(o.pos)}</span>`:""}
+  </button>`;
+}
+
+/* consonant table */
+function drawCons(){
+  let h=`<tr><th class="rowh"></th>${PLACES.map(p=>`<th>${p}</th>`).join("")}</tr>`;
+  MANNERS.forEach(m=>{
+    h+=`<tr><th class="rowh">${m}</th>`;
+    PLACES.forEach(p=>{
+      const cell=CONSONANTS.filter(c=>c.m===m&&c.p===p);
+      h+=`<td>${cell.length?cell.map(c=>chipHTML(c,c.v?"voiced":"unvoiced")).join(""):'<span style="color:var(--muted)">–</span>'}</td>`;
+    });
+    h+=`</tr>`;
+  });
+  document.getElementById("consTable").innerHTML=h;
+}
+
+/* vowel trapezium */
+function chartSVG(){
+  return `<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+    <polygon class="trap" points="4,4 96,4 88,96 30,96"/>
+  </svg>
+  <div style="position:absolute;top:-2px;left:2px;font-size:.68rem;color:var(--muted)">close ↑ · front ←</div>
+  <div style="position:absolute;bottom:-2px;right:2px;font-size:.68rem;color:var(--muted)">→ back · ↓ open</div>`;
+}
+function drawVowels(){
+  const el=document.getElementById("vowelChart");
+  el.innerHTML=chartSVG()+VOWELS.map(v=>
+    `<span style="position:absolute;left:${v.x}%;top:${v.y}%">${chipHTML(v,"vowelph")}</span>`).join("");
+}
+function drawDips(){
+  const el=document.getElementById("dipChart");
+  el.innerHTML=chartSVG()+
+    `<svg viewBox="0 0 100 100" preserveAspectRatio="none">${DIPHTHONGS.map((d,i)=>
+      `<path class="dpath" id="dp${i}" d="M${d.from[0]},${d.from[1]} L${d.to[0]},${d.to[1]}" marker-end="url(#ah)"/>`).join("")}
+      <defs><marker id="ah" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+        <path d="M0,0 L5,2.5 L0,5 z" fill="var(--accent)"/></marker></defs></svg>`+
+    DIPHTHONGS.map(d=>`<span style="position:absolute;left:${d.from[0]}%;top:${d.from[1]}%">${chipHTML(d,"vowelph")}</span>`).join("");
+  document.getElementById("dipChips").innerHTML=DIPHTHONGS.map((d,i)=>
+    `<span><button class="ph vowelph" data-s="${esc(d.s)}" data-dp="${i}" style="min-width:0">
+      <span class="sym">${esc(d.s)}</span><span class="eg">${esc(d.eg)}</span></button></span>`).join("");
+}
+
+/* detail panel */
+function showDetail(sym){
+  const o=find(sym); if(!o) return;
+  const st=state[sym]?.st||"";
+  const tw=o.tw?TWISTERS[o.tw]:null;
+  const isDip=DIPHTHONGS.includes(o);
+  document.querySelectorAll(".ph").forEach(b=>b.classList.toggle("sel",b.dataset.s===sym));
+
+  const vid=o.vid?`<video controls preload="none" playsinline src="${VIDEO_BASE}${o.vid}"
+      onerror="this.style.display='none';this.nextElementSibling.style.display='block'"></video>
+      <p class="novid" style="display:none">No clip for this sound yet.</p>`
+    :`<p class="novid">No clip for this sound yet.</p>`;
+
+  document.getElementById("detail").innerHTML=`
+    <div class="detail">
+      <div class="dhead">
+        <span class="big">${esc(o.s)}</span>
+        <span class="meta">as in <b>${esc(o.eg)}</b>${o.pos?` · heard at the ${posWords(o.pos)} of words`:""}
+          ${o.note?` · ${esc(o.note)}`:""}
+          ${o.v!==undefined?`<br>${o.v?"Voiced — your throat buzzes":"Unvoiced — no buzz, just air"}`:""}
+          ${isDip?`<br>Your mouth moves from one vowel to the next`:""}</span>
+        <span class="acts">
+          <button class="btn ${st==="target"?"on-target":""}" data-mark="target" data-s="${esc(sym)}">⭐ My target</button>
+          <button class="btn ${st==="done"?"on-done":""}" data-mark="done" data-s="${esc(sym)}">✅ I can say it</button>
+        </span>
+      </div>
+      <div class="dbody">
+        <div class="steps">
+          <div class="step">
+            <span class="n">1</span><h4>Hear it &amp; watch</h4>
+            <p>Watch the mouth, then say it five times.</p>
+            ${vid}
+          </div>
+          <div class="step">
+            <span class="n">2</span><h4>Read it</h4>
+            ${tw?`<p>${esc(tw.title)} tongue twister — read it three times, faster each time.</p>
+                  <div class="tw">${esc(tw.text)}</div>`
+                :`<p>No tongue twister for this sound yet. Say the example word <b>${esc(o.eg)}</b> in a sentence, then try the Stress &amp; rhythm tab.</p>`}
+          </div>
+          <div class="step">
+            <span class="n">3</span><h4>Write your own</h4>
+            <p>Use the sound at least four times. Silly is good — that's the point.</p>
+            <textarea data-mine="${esc(sym)}" placeholder="My ${esc(o.s)} tongue twister…">${esc(state[sym]?.mine||"")}</textarea>
+            <p class="novid" id="savedNote"></p>
+          </div>
+          <div class="step">
+            <span class="n">4</span><h4>Read it to someone</h4>
+            <p>Swap with a partner and read each other's out loud. Then mark it above if you can say the sound clearly.</p>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById("detail").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+/* progress */
+function refreshProgress(){
+  const done=Object.values(state).filter(v=>v.st==="done").length;
+  const total=CONSONANTS.length+VOWELS.length+DIPHTHONGS.length;
+  document.getElementById("progText").textContent=`${done} of ${total} achieved`;
+  document.getElementById("progBar").style.width=(done/total*100)+"%";
+}
+
+/* events */
+document.addEventListener("click",e=>{
+  const tab=e.target.closest("[data-tab]");
+  if(tab){
+    document.querySelectorAll("[data-tab]").forEach(b=>b.setAttribute("aria-selected",String(b===tab)));
+    document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id==="tab-"+tab.dataset.tab));
+    return;
+  }
+  const ph=e.target.closest(".ph");
+  if(ph){
+    if(ph.dataset.dp!==undefined){
+      document.querySelectorAll(".dpath").forEach(p=>p.classList.remove("show"));
+      document.getElementById("dp"+ph.dataset.dp)?.classList.add("show");
+    }
+    showDetail(ph.dataset.s); return;
+  }
+  const mark=e.target.closest("[data-mark]");
+  if(mark){
+    const s=mark.dataset.s, want=mark.dataset.mark;
+    state[s]=state[s]||{};
+    state[s].st = state[s].st===want ? "" : want;
+    if(!state[s].st) delete state[s].st;
+    save(state); drawAll(); showDetail(s); refreshProgress();
+  }
+});
+document.addEventListener("input",e=>{
+  const t=e.target.closest("[data-mine]");
+  if(!t) return;
+  const s=t.dataset.mine;
+  state[s]=state[s]||{}; state[s].mine=t.value; save(state);
+  const n=document.getElementById("savedNote"); if(n) n.textContent="Saved on this device ✓";
+});
+
+/* stress / rhythm cards */
+function drawStress(){
+  document.getElementById("stressCards").innerHTML=`
+    <div class="gcard">
+      <h3>Say it twelve ways</h3>
+      <p class="k">Emphasis game — same sentence, different meaning</p>
+      <div class="say" id="emphSent" contenteditable="true">You can't wear that in here.</div>
+      <p class="k" style="margin-top:9px">One person picks a meaning in secret and reads the sentence to match it. The others guess which one.</p>
+      <button class="btn" id="emphRoll" style="margin-top:8px">🎲 Give me a meaning</button>
+      <div class="dice" id="emphOut">Tap the button for a secret meaning.</div>
+      <div class="chips">${EMPHASIS_MEANINGS.map(m=>`<span>${esc(m)}</span>`).join("")}</div>
+    </div>
+    <div class="gcard">
+      <h3>Please sit down</h3>
+      <p class="k">Register game — who is speaking?</p>
+      <div class="say">Please sit down.</div>
+      <p class="k" style="margin-top:9px">Read it as the person on your card. Everyone else guesses who you are.</p>
+      <button class="btn" id="regRoll" style="margin-top:8px">🎲 Give me a role</button>
+      <div class="dice" id="regOut">Tap the button for a secret role.</div>
+      <div class="chips">${REGISTER_ROLES.map(m=>`<span>${esc(m)}</span>`).join("")}</div>
+    </div>
+    <div class="gcard">
+      <h3>Clap the rhythm</h3>
+      <p class="k">Rhythm — feel the beat of the line</p>
+      <p style="font-size:.86rem;color:var(--muted)">Read a rhyming line out loud and clap on every strong beat. Then read it again and
+      change which word you stress — does it still sound right?</p>
+      <div class="tw" style="margin-top:9px">I do not like green eggs and ham.
+I do not like them, Sam-I-am.</div>
+      <p class="k" style="margin-top:9px">Try a long poem next: a ballad like <i>The Man from Ironbark</i> has a strong four-beat swing.</p>
+    </div>`;
+  const pick=(arr,out)=>()=>{ document.getElementById(out).textContent=arr[Math.floor(Math.random()*arr.length)]; };
+  document.getElementById("emphRoll").onclick=pick(EMPHASIS_MEANINGS,"emphOut");
+  document.getElementById("regRoll").onclick=pick(REGISTER_ROLES,"regOut");
+}
+
+function drawAll(){ drawCons(); drawVowels(); drawDips(); }
+drawAll(); drawStress(); refreshProgress();
+</script>
+</body>
+</html>
