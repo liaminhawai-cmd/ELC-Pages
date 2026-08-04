@@ -94,14 +94,14 @@
   .mouthface .feature{fill:none;stroke:#704b3d;stroke-width:1.6;vector-effect:non-scaling-stroke;stroke-linecap:round;opacity:.55}
   .mouthface .feature.bold{stroke-width:2}
   .mouthface .tooth{fill:#fff;stroke:#704b3d;stroke-width:1;vector-effect:non-scaling-stroke;opacity:.85}
-  .mouthface .tongue{fill:#de7f7d;stroke:#8f4745;stroke-width:1.4;vector-effect:non-scaling-stroke;opacity:.5}
+  .mouthface .tongue{fill:#de7f7d;stroke:#8f4745;stroke-width:1.4;vector-effect:non-scaling-stroke;opacity:.34}
   .mouthface .mouthgap{fill:#6d403a;opacity:.55}
   .mouth-mini .mouthgap{opacity:.75}
   @media (prefers-color-scheme:dark){
     .mouthface .skin{opacity:.15}
     .mouthface .feature{opacity:.4}
     .mouthface .tooth{opacity:.35}
-    .mouthface .tongue{opacity:.3}
+    .mouthface .tongue{opacity:.22}
   }
   .mouth-mini{width:100%;max-width:260px;margin-top:8px;display:block}
   .mouth-mini .skin{opacity:.95}
@@ -398,6 +398,21 @@ const QS=new URLSearchParams(location.search);
 const ASSIGN_MODE=QS.has("assign");
 const assignSel=new Set();
 const stepCount=v=>v&&v.steps?["m","r","w","p"].filter(k=>v.steps[k]).length:0;
+
+/* tap = the teacher's recorded voice (when one exists) · hold-drag = synth */
+const recFor=sym=>{
+  const o=find(sym);
+  if(o&&o.audio) return AUDIO_BASE+o.audio;
+  return (SOUND_FILES&&SOUND_FILES[sym])||null;
+};
+let recEl=null;
+function playRec(sym){
+  const u=recFor(sym); if(!u) return false;
+  if(!recEl) recEl=new Audio();
+  recEl.pause(); recEl.src=u;
+  recEl.play().catch(()=>{});
+  return true;
+}
 const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const posMark=p=>(p.includes("I")?"◁":"")+(p.includes("M")?"◇":"")+(p.includes("F")?"▷":"");
 const posWords=p=>[p.includes("I")&&"start",p.includes("M")&&"middle",p.includes("F")&&"end"].filter(Boolean).join(" · ");
@@ -507,15 +522,27 @@ function makeFaceCtl(container){
   let cur={...IDLE}, tgt={...IDLE}, hold=false, raf=0;
   function frame(){
     cur.x+=(tgt.x-cur.x)*.28; cur.y+=(tgt.y-cur.y)*.28;
-    const ang=(cur.y/100)*6.5;
+    /* jaw: hinges at the TMJ (115,30); never fully shut, opens harder for low vowels */
+    const ang=1+Math.pow(cur.y/100,1.15)*6.8;
     jaw.setAttribute("transform",`rotate(${ang.toFixed(2)} 115 30)`);
-    const drop=Math.sin(ang*Math.PI/180)*101;
-    const ax=Math.max(20,Math.min(122,cur.x*1.35));
-    const ay=Math.max(10,Math.min(90,cur.y));
-    const tipY=46+drop*.9;
+    const rad=ang*Math.PI/180, cs=Math.cos(rad), sn=Math.sin(rad);
+    const R=(px,py)=>[115+(px-115)*cs-(py-30)*sn, 30+(px-115)*sn+(py-30)*cs];
+    /* the tongue rides the mandible: tip and mouth floor rotate with the jaw */
+    const [tx,ty]=R(13.5,44);
+    const [fx,fy]=R(34,72);
+    const ax=Math.max(24,Math.min(116,cur.x*1.35));
+    const ay=Math.max(12,Math.min(86,cur.y));
+    /* constant-volume feel: a high hump is narrow, a low hump spreads */
+    const w=8+ay*.22;
+    /* tongue root advances for front articulations, retracts for back */
+    const rx=Math.min(118,103+(ax-60)*.14);
+    const ry=Math.max(ay+20,58);
     tongue.setAttribute("d",
-      `M14,${tipY.toFixed(1)} C${((14+ax)/2).toFixed(1)},${tipY.toFixed(1)} ${(ax-16).toFixed(1)},${ay} ${ax.toFixed(1)},${ay}`+
-      ` C${(ax+16).toFixed(1)},${ay} ${Math.max(ax+22,106).toFixed(1)},${((ay+96)/2).toFixed(1)} 118,96 L118,100 L44,100 Z`);
+      `M${tx.toFixed(1)},${ty.toFixed(1)}`+
+      ` C${(tx+(ax-tx)*.3).toFixed(1)},${(ay+(ty-ay)*.25).toFixed(1)} ${(ax-w).toFixed(1)},${ay.toFixed(1)} ${ax.toFixed(1)},${ay.toFixed(1)}`+
+      ` C${(ax+w).toFixed(1)},${ay.toFixed(1)} ${rx.toFixed(1)},${((ay+ry)/2).toFixed(1)} ${rx.toFixed(1)},${ry.toFixed(1)}`+
+      ` C${(rx+3).toFixed(1)},${(ry+16).toFixed(1)} 118,90 118,98 L118,100 L${(fx+6).toFixed(1)},100`+
+      ` C${fx.toFixed(1)},${(fy+12).toFixed(1)} ${(tx+3).toFixed(1)},${(ty+14).toFixed(1)} ${tx.toFixed(1)},${ty.toFixed(1)} Z`);
     if(hold||Math.abs(tgt.x-cur.x)+Math.abs(tgt.y-cur.y)>.4) raf=requestAnimationFrame(frame);
     else raf=0;
   }
@@ -760,13 +787,20 @@ document.addEventListener("click",e=>{
   if(ph){
     if(suppressClick){ suppressClick=false; return; }
     const o=find(ph.dataset.s);
-    if(o&&DIPHTHONGS.includes(o)) playDip(o);
+    if(o){
+      const played=playRec(o.s);
+      if(DIPHTHONGS.includes(o)){
+        if(played) flyDot(o); else playDip(o);
+      }else if(played&&(VOWELS.includes(o))){
+        const f=faceOf("vowelChart"); if(f){ f.set(o.x,o.y); setTimeout(()=>f.idle(),700); }
+      }
+    }
     showDetail(ph.dataset.s); return;
   }
   const pv=e.target.closest("[data-play-vowel]");
-  if(pv){ const v=VOWELS.find(x=>x.s===pv.dataset.playVowel); if(v) playVowelAt(v.x,v.y); return; }
+  if(pv){ const v=VOWELS.find(x=>x.s===pv.dataset.playVowel); if(v&&!playRec(v.s)) playVowelAt(v.x,v.y); return; }
   const pd=e.target.closest("[data-play-dip]");
-  if(pd){ const d=DIPHTHONGS.find(x=>x.s===pd.dataset.playDip); if(d){ playDip(d); } return; }
+  if(pd){ const d=DIPHTHONGS.find(x=>x.s===pd.dataset.playDip); if(d){ if(playRec(d.s)) flyDot(d); else playDip(d); } return; }
   if(e.target.id==="copyAssign"){
     const inp=document.getElementById("assignLink");
     inp.select();
@@ -904,17 +938,27 @@ let dragVoice=null, suppressClick=false;
     if(e.button!==undefined&&e.button>0) return;
     const chip=e.target.closest(".ph");
     if(!chip&&e.pointerType==="touch") return;   /* touch pans the chart unless you grab a sound */
-    const start=chip?posOf(find(chip.dataset.s)):null;
+    const sym=chip&&chip.dataset.s;
+    const start=chip?posOf(find(sym)):null;
     const p=chartXY(ch,e);
     const x=start?start[0]:p.x, y=start?start[1]:p.y;
     chart=ch;
-    dragVoice={v:makeVoice(),id:e.pointerId}; downAt=[e.clientX,e.clientY]; t0=performance.now(); suppressClick=false;
-    dragVoice.v.set(x,y,.001); moveDot(ch,x,y,true);
+    /* a chip with a teacher recording: hold off the synth — a plain tap will
+       play the recording; the synth only starts if this becomes a drag */
+    const deferred=!!(sym&&recFor(sym));
+    dragVoice={v:deferred?null:makeVoice(),id:e.pointerId,at:{x,y}};
+    downAt=[e.clientX,e.clientY]; t0=performance.now(); suppressClick=false;
+    if(dragVoice.v) dragVoice.v.set(x,y,.001);
+    moveDot(ch,x,y,true);
     const f=faceOf(ch); if(f) f.set(x,y);
   }));
   window.addEventListener("pointermove",e=>{
     if(!dragVoice||e.pointerId!==dragVoice.id) return;
-    if(Math.hypot(e.clientX-downAt[0],e.clientY-downAt[1])>7) suppressClick=true;
+    if(Math.hypot(e.clientX-downAt[0],e.clientY-downAt[1])>7){
+      suppressClick=true;
+      if(!dragVoice.v){ dragVoice.v=makeVoice(); dragVoice.v.set(dragVoice.at.x,dragVoice.at.y,.001); }
+    }
+    if(!dragVoice.v) return;
     const p=chartXY(chart,e);
     dragVoice.v.set(p.x,p.y); moveDot(chart,p.x,p.y,true);
     const f=faceOf(chart); if(f) f.set(p.x,p.y);
@@ -922,7 +966,7 @@ let dragVoice=null, suppressClick=false;
   const end=e=>{
     if(!dragVoice||e.pointerId!==dragVoice.id) return;
     const v=dragVoice.v, held=performance.now()-t0;
-    if(held<350) setTimeout(()=>v.stop(),380-held); else v.stop();
+    if(v){ if(held<350) setTimeout(()=>v.stop(),380-held); else v.stop(); }
     dragVoice=null;
     if(chart){ moveDot(chart,0,0,false); const f=faceOf(chart); if(f) f.idle(); }
   };
