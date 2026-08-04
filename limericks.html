@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Limerick Builder — pick rhymes, use starter stems, and clap-check the syllables in every line.">
+<title>Limerick Builder — ELC Hub</title>
+<style>
+  :root{
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2; --radius:12px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
+    --accent:#2563eb; --accent-soft:#dbeafe;
+    --rhymeA:#2563eb; --rhymeA-soft:#dbeafe; --rhymeB:#d97706; --rhymeB-soft:#fef0d5;
+    --good:#16a34a; --good-soft:#dcfce7;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
+           --accent:#7aa5ff; --accent-soft:#1d2c4d; --rhymeA:#7aa5ff; --rhymeA-soft:#1d2c4d;
+           --rhymeB:#f0a84a; --rhymeB-soft:#3a2508; --good-soft:#14331f;
+           --shadow:0 1px 2px rgba(0,0,0,.4); }
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+  header{background:linear-gradient(135deg,#7c3aed,#2563eb 55%,#0d9488);color:#fff;padding:20px 20px 26px;text-align:center}
+  header a.back{color:#fff;opacity:.85;text-decoration:none;font-size:.85rem;font-weight:600}
+  header h1{font-size:clamp(1.4rem,4vw,1.95rem);margin-top:6px}
+  header p{max-width:640px;margin:6px auto 0;opacity:.94;font-size:.9rem}
+  main{max-width:900px;margin:0 auto;padding:18px 14px 60px}
+  h2.sec{font-size:1.05rem;margin:22px 0 4px}
+  p.hint{font-size:.83rem;color:var(--muted);margin-bottom:10px}
+  .gcard{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);padding:14px 15px;margin-top:10px}
+  .btn{font-size:.8rem;padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);
+       color:var(--ink);cursor:pointer;font-weight:600}
+  .btn.primary{background:var(--accent);border-color:transparent;color:#fff}
+  .btn.danger{color:#b42318}
+  a{color:var(--accent)}
+
+  /* models */
+  .model p.who{font-size:.78rem;color:var(--muted);margin-bottom:6px}
+  .mline{display:flex;align-items:baseline;gap:10px;padding:3px 0;cursor:pointer;border-radius:8px}
+  .mline:hover{background:var(--accent-soft)}
+  .mline .txt{font-size:1rem;line-height:1.55}
+  .mline .beats{margin-left:auto;font-size:.72rem;color:var(--muted);white-space:nowrap}
+  .rA{color:var(--rhymeA);font-weight:800}
+  .rB{color:var(--rhymeB);font-weight:800}
+  .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.76rem;color:var(--muted);margin-top:9px}
+  .legend b.a{color:var(--rhymeA)} .legend b.b{color:var(--rhymeB)}
+  .mtiles{padding:4px 0 7px}
+
+  /* rhyme family pickers */
+  .fams{display:flex;flex-wrap:wrap;gap:7px;margin-top:8px}
+  .fam{border:1px solid var(--line);border-radius:999px;background:var(--card);padding:6px 12px;cursor:pointer;
+       font-size:.82rem;font-weight:600;color:inherit}
+  .fam small{color:var(--muted);font-weight:400}
+  .fam.onA{background:var(--rhymeA-soft);border-color:var(--rhymeA);color:var(--rhymeA)}
+  .fam.onB{background:var(--rhymeB-soft);border-color:var(--rhymeB);color:var(--rhymeB)}
+
+  /* build rows */
+  .brow{border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:11px 12px;margin-top:10px}
+  .brow .top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .brow .tag{font-size:.72rem;font-weight:800;padding:2px 9px;border-radius:999px}
+  .brow .tag.A{background:var(--rhymeA-soft);color:var(--rhymeA)}
+  .brow .tag.B{background:var(--rhymeB-soft);color:var(--rhymeB)}
+  .brow .aim{font-size:.74rem;color:var(--muted)}
+  .brow input{width:100%;font:inherit;font-size:.95rem;padding:9px 11px;margin-top:8px;
+              border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+  .stems{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+  .stems button,.rw{font-size:.75rem;padding:4px 9px;border-radius:999px;border:1px solid var(--line);
+       background:var(--card);color:var(--muted);cursor:pointer}
+  .stems button:hover{border-color:var(--accent);color:var(--accent)}
+  .rw{font-weight:700}
+  .rw.A{color:var(--rhymeA);border-color:var(--rhymeA);background:var(--rhymeA-soft)}
+  .rw.B{color:var(--rhymeB);border-color:var(--rhymeB);background:var(--rhymeB-soft)}
+  .countbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:8px}
+  .total{font-size:.8rem;font-weight:800;padding:3px 10px;border-radius:999px;background:var(--line)}
+  .total.good{background:var(--good-soft);color:var(--good)}
+  .total.off{background:var(--rhymeB-soft);color:var(--rhymeB)}
+  .stepper{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;color:var(--muted)}
+  .stepper button{width:24px;height:24px;border-radius:50%;border:1px solid var(--line);background:var(--card);cursor:pointer;color:inherit}
+
+  /* syllable tiles */
+  .tiles{display:flex;flex-wrap:wrap;gap:8px;row-gap:9px;margin-top:9px;align-items:center}
+  .wordgrp{display:inline-flex;align-items:center}
+  .syl{padding:4px 8px;border:1px solid var(--line);border-radius:8px;background:var(--card);
+       font-size:.88rem;font-weight:600}
+  .joint{width:16px;height:22px;border:0;background:transparent;cursor:pointer;color:var(--muted);
+         font-weight:800;font-size:.8rem;line-height:1;padding:0}
+  .joint:hover{color:var(--accent)}
+  .joint[data-merged="1"]{color:var(--rhymeB)}
+  .tiles .note{width:100%;font-size:.72rem;color:var(--muted)}
+
+  /* finish + gallery */
+  .poem{white-space:pre-line;font-size:1rem;line-height:1.7;padding:11px 13px;background:var(--bg);
+        border:1px solid var(--line);border-radius:9px;margin-top:8px}
+  .saved{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px dashed var(--line);padding:8px 0}
+  .saved .t{font-weight:700;font-size:.9rem}
+  .saved .d{font-size:.72rem;color:var(--muted)}
+  .saved .sp{margin-left:auto;display:flex;gap:6px}
+  footer{border-top:1px solid var(--line);margin-top:30px;padding:16px;text-align:center;color:var(--muted);font-size:.8rem}
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← ELC Hub</a>
+  <h1>🎩 Limerick Builder</h1>
+  <p>Five lines, two rhymes, a bouncy beat and a joke at the end. Pick your rhymes, build your lines, then clap-check the syllables.</p>
+</header>
+
+<main>
+  <h2 class="sec">1 · Read one first</h2>
+  <p class="hint">Lines <b>1, 2 and 5</b> are long and rhyme together (<b class="rA">A</b>). Lines <b>3 and 4</b> are short and rhyme with each other (<b class="rB">B</b>). Tap any line to see its syllables.</p>
+  <div id="models"></div>
+
+  <h2 class="sec">2 · Pick your two rhyme families</h2>
+  <p class="hint">One family for the <b class="rA">A</b> lines, a different one for the <b class="rB">B</b> lines. Tap once for A, tap a second family for B.</p>
+  <div class="gcard"><div class="fams" id="famPick"></div></div>
+
+  <h2 class="sec">3 · Build it, line by line</h2>
+  <p class="hint">Tap a grey stem to start the line, type the middle, tap a coloured rhyme word to end it. Then <b>Count</b> — tap a dot between syllables if the computer split a word wrongly. Your claps are the judge, not the computer.</p>
+  <div id="builder"></div>
+
+  <h2 class="sec">4 · Finish</h2>
+  <div class="gcard">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <button class="btn primary" id="saveBtn">💾 Save this limerick</button>
+      <button class="btn" id="clearBtn">Start a new one</button>
+      <span class="hint" style="margin:0">Read it aloud with the limerick bounce — clap the strong beats. Then read it to someone.</span>
+    </div>
+    <div id="preview" class="poem" hidden></div>
+    <div id="gallery" style="margin-top:10px"></div>
+  </div>
+
+  <p class="hint" style="margin-top:16px">The habit line — <i>who <b>always</b> hops</i>, <i>who <b>usually</b> sleeps</i>, <i>who <b>never once</b> stops</i> — is the present simple doing its favourite job. More of that in the
+  <a href="https://liaminhawai-cmd.github.io/Grammar-hub/?skill=tense-c1" target="_blank" rel="noopener">Grammar Hub</a>, and more rhyme in the
+  <a href="pronunciation.html">Pronunciation Hub</a>.</p>
+</main>
+
+<footer>Limericks save on this device only. Model limerick “There was an Old Man with a beard” by Edward Lear (1846, public domain).</footer>
+
+<script>
+/* ============================================================
+   CONTENT — safe to edit.
+   MODELS: ends = which words to tint (A/B). Counts are computed live.
+   FAMILIES: rhyme word banks; the last word of a line should come from one.
+   LINES: the five line definitions — scheme, syllable target, starter stems.
+   ============================================================ */
+const MODELS = [
+  { who:"Edward Lear, 1846 — the man who made limericks famous",
+    lines:["There was an Old Man with a beard,",
+           "Who said, “It is just as I feared!",
+           "Two Owls and a Hen,",
+           "Four Larks and a Wren,",
+           "Have all built their nests in my beard!”"],
+    ends:["beard|A","feared|A","Hen|B","Wren|B","beard|A"] },
+  { who:"One of ours",
+    lines:["There once was a young kangaroo",
+           "who always hopped in to the zoo.",
+           "She'd wave at the bears,",
+           "then bounce down the stairs,",
+           "and hop on the bus when it's due."],
+    ends:["kangaroo|A","zoo|A","bears|B","stairs|B","due|A"] }
+];
+
+const FAMILIES = [
+  { name:"-oo",   say:"/ʉː/",  words:["kangaroo","zoo","blue","flew","too","stew","shampoo","canoe"] },
+  { name:"-ay",   say:"/eɪ/",  words:["day","play","away","stay","grey","today","hooray"] },
+  { name:"-ee",   say:"/iː/",  words:["sea","tree","free","three","agree","knee","chimpanzee"] },
+  { name:"-ight", say:"/aɪt/", words:["night","light","bright","fright","kite","right","sight"] },
+  { name:"-ake",  say:"/eɪk/", words:["snake","cake","lake","shake","awake","mistake","milkshake"] },
+  { name:"-ore",  say:"/ɔː/",  words:["snore","door","floor","roar","more","galore"] },
+  { name:"-oon",  say:"/ʉːn/", words:["moon","spoon","soon","balloon","baboon","cartoon"] },
+  { name:"-at",   say:"/æt/",  words:["cat","hat","flat","mat","bat","that"] },
+  { name:"-ed",   say:"/ed/",  words:["bed","red","head","said","spread","shed"] },
+  { name:"-og",   say:"/ɔg/",  words:["dog","frog","log","jog","blog"] },
+  { name:"-op",   say:"/ɔp/",  words:["hop","shop","stop","drop","mop"] },
+  { name:"-ish",  say:"/ɪʃ/",  words:["fish","wish","dish","swish"] }
+];
+
+const LINES = [
+  { scheme:"A", target:[8,9],
+    stems:["There once was a ","There was an old ","I once met a "] },
+  { scheme:"A", target:[8,9],
+    stems:["who always ","who usually ","who never once ","whose hair was so "] },
+  { scheme:"B", target:[5,6],
+    stems:["One day it ","It started to ","She'd ","He'd "] },
+  { scheme:"B", target:[5,6],
+    stems:["and then it would ","but never would ","then back to the ","while eating a "] },
+  { scheme:"A", target:[8,9],
+    stems:["and now it ","so never trust a ","and that was the end of the ","which proves you should always "] }
+];
+
+/* ============================================================
+   ENGINE
+   ============================================================ */
+const KEY="elc_limericks";
+const load=()=>{ try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return{}} };
+const save=s=>localStorage.setItem(KEY,JSON.stringify(s));
+let state=load();                 // {draft:[5 strings], famA, famB, saved:[{title,lines,ts}]}
+state.draft=state.draft||["","","","",""];
+state.saved=state.saved||[];
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+/* --- syllable splitter (a good guess, not the law) --- */
+function syllabify(raw){
+  const word=raw.toLowerCase().replace(/[^a-z']/g,"");
+  if(!word) return null;
+  const isV=c=>"aeiouy".includes(c);
+  const groups=[];
+  for(let i=0;i<word.length;i++){
+    const c=word[i];
+    if(!isV(c)) continue;
+    if(c==="u"&&i>0&&word[i-1]==="q") continue;
+    if(c==="y"&&i===0) continue;
+    if(groups.length&&groups[groups.length-1].end===i-1) groups[groups.length-1].end=i;
+    else groups.push({start:i,end:i});
+  }
+  if(!groups.length) return [word];
+  if(word.length>2&&word.endsWith("e")&&!word.endsWith("le")&&groups.length>1){
+    const last=groups[groups.length-1];
+    if(last.start===word.length-1) groups.pop();
+  }
+  if(word.endsWith("ed")&&groups.length>1){
+    const last=groups[groups.length-1];
+    if(last.start===word.length-2&&last.end===word.length-2&&word[word.length-3]!=="t"&&word[word.length-3]!=="d")
+      groups.pop();
+  }
+  const cuts=[];
+  for(let k=0;k<groups.length-1;k++){
+    const a=groups[k].end,b=groups[k+1].start;
+    cuts.push(b-a-1<=1?a+1:a+2);
+  }
+  const chunks=[];let prev=0;
+  for(const c of cuts){ chunks.push(word.slice(prev,c)); prev=c; }
+  chunks.push(word.slice(prev));
+  return chunks;
+}
+const lineWords=text=>text.split(/\s+/).filter(w=>/[a-zA-Z]/.test(w));
+const countLine=text=>lineWords(text).reduce((n,w)=>n+(syllabify(w)||[w]).length,0);
+
+/* --- models --- */
+function tilesHTML(text,id){
+  const words=lineWords(text);
+  return `<div class="tiles" id="${id||""}">${words.map(w=>{
+    const ch=syllabify(w)||[w];
+    return `<span class="wordgrp">${ch.map((c,i)=>
+      `<span class="syl">${esc(c)}</span>${i<ch.length-1?`<span class="joint" style="cursor:default">·</span>`:""}`).join("")}</span>`;
+  }).join("")}</div>`;
+}
+function drawModels(){
+  document.getElementById("models").innerHTML=MODELS.map((m,mi)=>`
+    <div class="gcard model">
+      <p class="who">${esc(m.who)}</p>
+      ${m.lines.map((ln,li)=>{
+        const [endWord,scheme]=m.ends[li].split("|");
+        const shown=esc(ln).replace(new RegExp(esc(endWord).replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"(?=[^a-zA-Z]*$)"),
+          `<span class="r${scheme}">${esc(endWord)}</span>`);
+        return `<div class="mline" data-model="${mi}" data-line="${li}">
+          <span class="txt">${shown}</span>
+          <span class="beats">${countLine(ln)} beats · ${scheme}</span>
+        </div><div class="mtiles" id="mt${mi}-${li}" hidden>${tilesHTML(ln)}</div>`;
+      }).join("")}
+      <div class="legend"><span><b class="a">A rhyme</b> — lines 1 · 2 · 5, aim 8–9 beats</span>
+      <span><b class="b">B rhyme</b> — lines 3 · 4, aim 5–6 beats</span></div>
+    </div>`).join("");
+}
+
+/* --- rhyme family pickers --- */
+function drawFams(){
+  document.getElementById("famPick").innerHTML=FAMILIES.map((f,i)=>{
+    const cls=state.famA===i?"onA":state.famB===i?"onB":"";
+    return `<button class="fam ${cls}" data-fam="${i}">${esc(f.name)} <small>${esc(f.say)} · ${esc(f.words.slice(0,3).join(", "))}…</small></button>`;
+  }).join("");
+}
+function pickFam(i){
+  if(state.famA===i){ state.famA=null; }
+  else if(state.famB===i){ state.famB=null; }
+  else if(state.famA==null){ state.famA=i; }
+  else if(state.famB==null&&i!==state.famA){ state.famB=i; }
+  else { state.famA=i; if(state.famB===i) state.famB=null; }
+  save(state); drawFams(); drawBuilder();
+}
+
+/* --- builder rows --- */
+const counts=[null,null,null,null,null];   // per line: {auto, merged:{wordIdx:Set}, adjust}
+function drawBuilder(){
+  document.getElementById("builder").innerHTML=LINES.map((L,i)=>{
+    const fam=L.scheme==="A"?FAMILIES[state.famA]:FAMILIES[state.famB];
+    return `<div class="brow">
+      <div class="top">
+        <span class="tag ${L.scheme}">Line ${i+1} · ${L.scheme}</span>
+        <span class="aim">aim for ${L.target[0]}–${L.target[1]} beats${i===4?" · land the joke":""}</span>
+      </div>
+      <input data-line="${i}" value="${esc(state.draft[i])}" placeholder="${i===0?"There once was a hungry snake…":""}" autocomplete="off">
+      <div class="stems">
+        ${L.stems.map(st=>`<button data-stem="${esc(st)}" data-for="${i}">${esc(st.trim())} …</button>`).join("")}
+        ${fam?fam.words.map(w=>`<button class="rw ${L.scheme}" data-rhyme="${esc(w)}" data-for="${i}">${esc(w)}</button>`).join(""):`<span class="aim">← pick a rhyme family above for ${L.scheme}-line endings</span>`}
+      </div>
+      <div class="countbar">
+        <button class="btn" data-count="${i}">🖐 Count</button>
+        <span id="tot${i}"></span>
+      </div>
+      <div id="tiles${i}"></div>
+    </div>`;
+  }).join("");
+  for(let i=0;i<5;i++) if(counts[i]) renderCount(i);
+}
+function renderCount(i){
+  const c=counts[i]; if(!c) return;
+  const words=lineWords(state.draft[i]);
+  const el=document.getElementById("tiles"+i);
+  el.innerHTML=`<div class="tiles">${words.map((w,wi)=>{
+    const ch=syllabify(w)||[w];
+    const merged=c.merged[wi]||new Set();
+    return `<span class="wordgrp">${ch.map((s,si)=>
+      `<span class="syl">${esc(s)}</span>${si<ch.length-1?`<button class="joint" data-j="${i}:${wi}:${si}" data-merged="${merged.has(si)?1:0}" title="tap if this split is wrong">${merged.has(si)?"◡":"·"}</button>`:""}`).join("")}</span>`;
+  }).join("")}
+  <span class="note">· splits two syllables — tap one to join them (◡) if the computer guessed wrongly.</span></div>`;
+  const total=words.reduce((n,w,wi)=>{
+    const ch=syllabify(w)||[w];
+    return n+ch.length-((c.merged[wi]&&c.merged[wi].size)||0);
+  },0)+c.adjust;
+  const [lo,hi]=LINES[i].target;
+  const cls=total>=lo&&total<=hi?"good":"off";
+  document.getElementById("tot"+i).outerHTML=`<span id="tot${i}">
+    <span class="total ${cls}">${total} beat${total===1?"":"s"} ${cls==="good"?"✓":`· aim ${lo}–${hi}`}</span>
+    <span class="stepper">clapped differently?
+      <button data-adj="${i}:-1">−</button><button data-adj="${i}:1">+</button>${c.adjust?`<b>${c.adjust>0?"+":""}${c.adjust}</b>`:""}
+    </span></span>`;
+}
+
+/* --- finish: save + gallery --- */
+function drawGallery(){
+  const g=document.getElementById("gallery");
+  g.innerHTML=state.saved.length?state.saved.map((p,i)=>`
+    <div class="saved">
+      <span class="t">${esc(p.title)}</span><span class="d">${new Date(p.ts).toLocaleDateString()}</span>
+      <span class="sp">
+        <button class="btn" data-show="${i}">Read</button>
+        <button class="btn" data-load="${i}">Edit</button>
+        <button class="btn danger" data-del="${i}">Delete</button>
+      </span>
+    </div>`).join(""):"";
+}
+
+/* --- events --- */
+document.addEventListener("input",e=>{
+  const inp=e.target.closest("input[data-line]");
+  if(!inp) return;
+  const i=+inp.dataset.line;
+  state.draft[i]=inp.value; save(state);
+  counts[i]=null; document.getElementById("tiles"+i).innerHTML="";
+  document.getElementById("tot"+i).innerHTML="";
+});
+document.addEventListener("click",e=>{
+  const fam=e.target.closest("[data-fam]");
+  if(fam){ pickFam(+fam.dataset.fam); return; }
+  const stem=e.target.closest("[data-stem]");
+  if(stem){
+    const i=+stem.dataset.for, inp=document.querySelector(`input[data-line="${i}"]`);
+    inp.value=stem.dataset.stem+inp.value.replace(/^\s+/,"");
+    state.draft[i]=inp.value; save(state); counts[i]=null; renderClear(i); inp.focus();
+    return;
+  }
+  const rw=e.target.closest("[data-rhyme]");
+  if(rw){
+    const i=+rw.dataset.for, inp=document.querySelector(`input[data-line="${i}"]`);
+    inp.value=(inp.value.replace(/\s+$/,"")+" "+rw.dataset.rhyme).replace(/^\s+/,"");
+    state.draft[i]=inp.value; save(state); counts[i]=null; renderClear(i); inp.focus();
+    return;
+  }
+  const cnt=e.target.closest("[data-count]");
+  if(cnt){
+    const i=+cnt.dataset.count;
+    counts[i]={merged:{},adjust:0};
+    renderCount(i); return;
+  }
+  const j=e.target.closest("[data-j]");
+  if(j){
+    const [i,wi,si]=j.dataset.j.split(":").map(Number);
+    const c=counts[i]; c.merged[wi]=c.merged[wi]||new Set();
+    c.merged[wi].has(si)?c.merged[wi].delete(si):c.merged[wi].add(si);
+    renderCount(i); return;
+  }
+  const adj=e.target.closest("[data-adj]");
+  if(adj){
+    const [i,d]=adj.dataset.adj.split(":").map(Number);
+    counts[i].adjust+=d; renderCount(i); return;
+  }
+  const ml=e.target.closest(".mline");
+  if(ml){
+    const t=document.getElementById(`mt${ml.dataset.model}-${ml.dataset.line}`);
+    t.hidden=!t.hidden; return;
+  }
+  if(e.target.id==="saveBtn"){
+    if(!state.draft.some(l=>l.trim())) return;
+    const title=(lineWords(state.draft[0]).slice(-1)[0]||"My limerick");
+    state.saved.unshift({title:"The "+title,lines:[...state.draft],ts:Date.now()});
+    save(state); drawGallery();
+    const pv=document.getElementById("preview");
+    pv.hidden=false; pv.textContent=state.draft.join("\n");
+    return;
+  }
+  if(e.target.id==="clearBtn"){
+    state.draft=["","","","",""]; save(state);
+    for(let i=0;i<5;i++) counts[i]=null;
+    document.getElementById("preview").hidden=true;
+    drawBuilder(); return;
+  }
+  const show=e.target.closest("[data-show]");
+  if(show){
+    const pv=document.getElementById("preview");
+    pv.hidden=false; pv.textContent=state.saved[+show.dataset.show].lines.join("\n");
+    pv.scrollIntoView({behavior:"smooth",block:"nearest"}); return;
+  }
+  const ld=e.target.closest("[data-load]");
+  if(ld){
+    state.draft=[...state.saved[+ld.dataset.load].lines]; save(state);
+    for(let i=0;i<5;i++) counts[i]=null;
+    drawBuilder(); return;
+  }
+  const del=e.target.closest("[data-del]");
+  if(del){ state.saved.splice(+del.dataset.del,1); save(state); drawGallery(); return; }
+});
+function renderClear(i){
+  document.getElementById("tiles"+i).innerHTML="";
+  document.getElementById("tot"+i).innerHTML="";
+}
+
+drawModels(); drawFams(); drawBuilder(); drawGallery();
+</script>
+</body>
+</html>

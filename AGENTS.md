@@ -35,8 +35,8 @@ pronunciation hubs in one day because neither looked. If something similar
 exists, extend it or flag the overlap; don't ship a parallel version.
 
 Current pages: `index.html` (launcher) · `writing-wall.html` ·
-`pronunciation.html` · `feeling-wheel.html` · `learning-compass.html` ·
-`report.html`.
+`pronunciation.html` · `feeling-wheel.html` · `limericks.html` ·
+`learning-compass.html` · `report.html`.
 
 ## Conventions
 
