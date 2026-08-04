@@ -726,6 +726,7 @@ function drawVowels(){
   el.innerHTML=chartSVG()+VOWELS.map(v0=>{const v=accVowel(v0);
     return `<span style="position:absolute;left:${cpx(v.x)}%;top:${v.y}%">${chipHTML(v,"vowelph")}</span>`;}).join("")+
     `<div class="glidedot"></div>`;
+  faceCtls.vowelChart=makeFaceCtl(el);   /* innerHTML above replaced the jaw/tongue nodes — rebind */
 }
 function drawDips(){
   const el=document.getElementById("dipChart");
@@ -734,6 +735,7 @@ function drawDips(){
       return `<path class="dpath" id="dp${i}" d="M${CX(cpx(d.from[0]))},${d.from[1]} L${CX(cpx(d.to[0]))},${d.to[1]}" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1"/>`;}).join("")}</svg>`+
     DIPHTHONGS.map(d0=>{const d=accDip(d0);const at=d.chipAt||d.from;return `<span style="position:absolute;left:${cpx(at[0])}%;top:${at[1]}%">${chipHTML(d,"vowelph")}</span>`;}).join("")+
     `<div class="glidedot"></div>`;
+  faceCtls.dipChart=makeFaceCtl(el);       /* same — the svg was just rebuilt, old jaw/tongue refs are stale */
   document.getElementById("dipChips").innerHTML=DIPHTHONGS.map((d,i)=>
     `<span><button class="ph vowelph" data-s="${esc(d.s)}" data-dp="${i}" style="min-width:0">
       <span class="sym">${esc(d.s)}</span><span class="eg">${esc(d.eg)}</span></button></span>`).join("");
@@ -1088,8 +1090,6 @@ let dragVoice=null, suppressClick=false;
 })();
 
 function drawAll(){ drawCons(); drawVowels(); drawDips();
-  faceCtls.vowelChart=makeFaceCtl(document.getElementById("vowelChart"));
-  faceCtls.dipChart=makeFaceCtl(document.getElementById("dipChart"));
   Object.values(faceCtls).forEach(f=>{ if(f) f.idle(); });
 }
 drawAll(); drawStress(); drawPatterns(); drawFocusArea(); drawAccbar(); refreshProgress();
