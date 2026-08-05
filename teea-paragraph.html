@@ -95,6 +95,28 @@
                     background:var(--accent-soft); color:var(--ink); border-radius:6px; padding:4px 7px; }
   .gloss b { font-weight:700; margin-right:2px; }
 
+  /* highlighted spans inside the worked sentences — stay inline so the
+     sentence still wraps normally; their gloss drops below the whole sentence */
+  .glossable { cursor:pointer; border-bottom:1px dotted currentColor; }
+  .glossable:hover { filter:brightness(.93); }
+  .glossable.open { outline:2px solid currentColor; outline-offset:1px; }
+  .sent .gloss, .rulebox .gloss { display:block; margin-top:6px; font-size:.85rem; font-weight:400;
+                    background:var(--accent-soft); color:var(--ink); border-radius:6px; padding:5px 8px; }
+  .gloss .src { font-weight:600; display:block; margin-bottom:2px; font-size:.95em; }
+
+  /* analytical verb bank */
+  .verbs { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
+  .verb { cursor:pointer; border:1px solid var(--purp); background:var(--purp-soft); color:var(--purp);
+          border-radius:999px; padding:4px 11px; font-size:.88rem; font-weight:600; font-family:inherit; }
+  .verb:hover { filter:brightness(.95); }
+  .verb.open { outline:2px solid var(--purp); outline-offset:1px; }
+  .verbgloss { background:var(--accent-soft); color:var(--ink); border-radius:8px;
+               padding:7px 10px; margin-top:9px; font-size:.88rem; display:none; }
+  .verbgloss.show { display:block; }
+  .verbgloss .w { font-weight:700; color:var(--purp); }
+  .avoid { margin-top:12px; font-size:.85rem; color:var(--muted); }
+  .avoid s { opacity:.75; }
+
   footer { border-top:1px solid var(--line); margin-top:40px; padding:20px 18px 34px; text-align:center; color:var(--muted); font-size:.85rem; }
   footer a { color:var(--accent); }
   @media (max-width:540px) { header { padding:20px 16px 24px; } }
@@ -104,7 +126,7 @@
 <header>
   <a class="back" href="rubrics.html">← Rubrics</a>
   <h1>T&middot;E&middot;E&middot;A, colour-coded</h1>
-  <p>The Giving Tree, worked example. Tap explanations for Vietnamese and Chinese.</p>
+  <p>The Giving Tree, worked example. Tap any explanation, highlighted phrase or verb for Vietnamese and Chinese.</p>
 </header>
 
 <main>
@@ -131,6 +153,12 @@
         <span class="starter">By ___, [Author] suggests that ___, which turns ___ into ___.</span>
       </div>
     </div>
+
+    <h2 class="sec" style="margin-top:24px">Analytical verbs</h2>
+    <p class="lead">The green word is the one doing the work in an E or A sentence. Tap a verb for Vietnamese and Chinese.</p>
+    <div class="verbs" id="verbBank"></div>
+    <div class="verbgloss" id="verbGloss"></div>
+    <div class="avoid" id="avoidVerbs"></div>
 
     <h2 class="sec" style="margin-top:24px">Bump up the A sentence</h2>
     <p class="lead">Colour shows up once you're actually analysing — the bottom two rungs earn none.</p>
@@ -245,6 +273,111 @@ const DATA = {
       whyZh:"把这个特征与作者的目的以及超越文本本身的观念联系起来。" }
   ],
 
+  /* Key analytical verbs — the green "purpose" word that does the work in an
+     E or A sentence. Tapping one shows what it means in VI and ZH. */
+  verbs: [
+    { w:"shows",      vi:"cho thấy",                     zh:"表明" },
+    { w:"suggests",   vi:"gợi ý, ngụ ý",                 zh:"暗示" },
+    { w:"highlights", vi:"làm nổi bật",                  zh:"突显、强调" },
+    { w:"reveals",    vi:"hé lộ, bộc lộ",                zh:"揭示" },
+    { w:"emphasises", vi:"nhấn mạnh",                    zh:"强调" },
+    { w:"presents",   vi:"trình bày, khắc hoạ",          zh:"呈现、刻画" },
+    { w:"portrays",   vi:"khắc hoạ, miêu tả",            zh:"描绘、刻画" },
+    { w:"reinforces", vi:"củng cố, làm mạnh thêm",       zh:"强化" },
+    { w:"symbolises", vi:"tượng trưng cho",              zh:"象征" },
+    { w:"contrasts",  vi:"đối lập, tương phản",          zh:"对比、形成反差" },
+    { w:"conveys",    vi:"truyền tải",                   zh:"传达" },
+    { w:"implies",    vi:"ngụ ý",                        zh:"暗指" },
+    { w:"illustrates",vi:"minh hoạ, cho thấy rõ",        zh:"说明、印证" },
+    { w:"explores",   vi:"khám phá, đi sâu vào",         zh:"探讨" },
+    { w:"invites readers to question", vi:"mời gọi người đọc đặt câu hỏi về", zh:"邀请读者去质疑" },
+    { w:"positions the reader to",     vi:"đặt người đọc vào vị thế để",      zh:"引导读者去" }
+  ],
+  avoidVerbs: [
+    { w:"is about",    why:"names the book, not an idea", vi:"nói về", zh:"是关于" },
+    { w:"says",        why:"reports, doesn't analyse",    vi:"nói",    zh:"说" },
+    { w:"talks about", why:"too vague to earn a band",    vi:"nói về", zh:"谈论" }
+  ],
+
+  /* Glosses for the highlighted (coloured) spans inside the worked sentences.
+     Matched on the span's own text, so the same phrase glosses everywhere it
+     appears. Add an entry and it applies automatically — no code to touch. */
+  gloss: {
+    /* evidence & metalanguage */
+    "repetition":
+      { vi:"sự lặp lại", zh:"重复" },
+    "repetition of the line \"and the tree was happy\"":
+      { vi:"sự lặp lại của câu \"Và cây đã hạnh phúc\"", zh:"「那棵树很快乐」这一句的重复" },
+    "repetition of the phrase \"the tree was happy\"":
+      { vi:"sự lặp lại của cụm từ \"cây đã hạnh phúc\"", zh:"「那棵树很快乐」这个短语的重复" },
+    "tree was happy":
+      { vi:"cây đã hạnh phúc", zh:"那棵树很快乐" },
+    "through the recurring motif \"and the tree was happy,\"":
+      { vi:"qua mô-típ lặp đi lặp lại \"Và cây đã hạnh phúc,\"", zh:"通过反复出现的母题「那棵树很快乐」" },
+    "\"build a house\"":
+      { vi:"\"xây một ngôi nhà\"", zh:"「建一座房子」" },
+    "\"can you give me…?\"":
+      { vi:"\"Bạn có thể cho tôi… không?\"", zh:"「你能给我……吗？」" },
+    "\"i am too big to climb and play\"":
+      { vi:"\"Tôi đã quá lớn để trèo cây và chơi đùa\"", zh:"「我太大了，不能再爬树玩耍了」" },
+
+    /* purpose & interpretation */
+    "show":
+      { vi:"cho thấy", zh:"表明" },
+    "shows":
+      { vi:"cho thấy", zh:"表明" },
+    "to highlight the one-sided relationship":
+      { vi:"để làm nổi bật mối quan hệ một chiều", zh:"以突显这段单向的关系" },
+    "makes the tree seem":
+      { vi:"khiến cây có vẻ", zh:"使这棵树显得" },
+    "encouraging the reader to feel":
+      { vi:"khuyến khích người đọc cảm thấy", zh:"促使读者感到" },
+    "invites readers to question":
+      { vi:"mời gọi người đọc đặt câu hỏi về", zh:"邀请读者去质疑" },
+    "shows that she will give away parts of her own body":
+      { vi:"cho thấy rằng cây sẽ cho đi từng phần cơ thể của chính mình", zh:"表明她愿意献出自己身体的一部分" },
+    "the tree's happiness depends completely on the boy's needs":
+      { vi:"hạnh phúc của cây hoàn toàn phụ thuộc vào nhu cầu của cậu bé", zh:"树的快乐完全取决于男孩的需求" },
+    "the boy never gives the tree anything":
+      { vi:"cậu bé không bao giờ cho cây bất cứ thứ gì", zh:"男孩从未给过这棵树任何东西" },
+    "growing up in this story means learning to take":
+      { vi:"trưởng thành trong câu chuyện này nghĩa là học cách lấy đi", zh:"在这个故事里，长大意味着学会索取" },
+    "readers must decide whether unconditional love is a virtue or a cost":
+      { vi:"người đọc phải tự quyết định liệu tình yêu vô điều kiện là một đức tính hay một cái giá phải trả", zh:"读者必须自行判断：无条件的爱究竟是一种美德，还是一种代价" },
+
+    /* ideas & themes */
+    "love as something that is given away, not shared":
+      { vi:"tình yêu như một thứ được cho đi, chứ không phải được chia sẻ", zh:"把爱视为一种付出，而不是分享" },
+    "sacrifice":
+      { vi:"sự hy sinh", zh:"牺牲" },
+    "imbalance":
+      { vi:"sự mất cân bằng", zh:"失衡" },
+    "sacrifice and imbalance":
+      { vi:"sự hy sinh và sự mất cân bằng", zh:"牺牲与失衡" },
+    "no limit and no protection":
+      { vi:"không có giới hạn và không có sự bảo vệ bản thân", zh:"没有界限，也没有自我保护" },
+    "generous":
+      { vi:"rộng lượng, hào phóng", zh:"慷慨" },
+    "sympathy":
+      { vi:"sự đồng cảm, lòng thương cảm", zh:"同情" },
+    "generous and damaging":
+      { vi:"vừa rộng lượng vừa gây tổn thương", zh:"既慷慨又具有伤害性" },
+    "growing up as learning to take":
+      { vi:"trưởng thành như việc học cách lấy đi", zh:"把长大视为学会索取" },
+    "something to use rather than someone to play with":
+      { vi:"một thứ để sử dụng, thay vì một người để cùng chơi", zh:"一个可利用的东西，而不是一个可以一起玩的人" },
+    "childhood":
+      { vi:"tuổi thơ", zh:"童年" },
+    "a warning rather than a happy ending":
+      { vi:"một lời cảnh báo thay vì một kết thúc có hậu", zh:"一个警示，而不是圆满的结局" },
+    "self-sacrifice":
+      { vi:"sự hy sinh bản thân", zh:"自我牺牲" },
+    "unequal relationships":
+      { vi:"những mối quan hệ bất bình đẳng", zh:"不平等的关系" },
+    "giver and a taker":
+      { vi:"một người cho đi và một người lấy đi", zh:"一个付出者和一个索取者" }
+  },
+
   paragraphs: [
     { title:"Paragraph 1 — Love is sacrifice", slots:[
       { letter:"T", job:"Names the idea. Orange only.", touches:["id"],
@@ -326,8 +459,65 @@ document.getElementById("paragraphs").innerHTML = DATA.paragraphs.map(p => `
   <div class="out"><b>Whole paragraph:</b> ${esc(p.slots.map(s => stripTags(s.html)).join(" "))}</div>
 `).join("");
 
-/* Tap a phrase -> show/hide its translation. */
+/* ---- analytical verb bank ---- */
+const verbGloss = document.getElementById("verbGloss");
+document.getElementById("verbBank").innerHTML = DATA.verbs.map((v,i)=>
+  `<button class="verb" data-v="${i}">${esc(v.w)}</button>`).join("");
+document.getElementById("avoidVerbs").innerHTML =
+  "<b>Not these —</b> " + DATA.avoidVerbs.map(v =>
+    `<s>${esc(v.w)}</s> <span style="font-size:.95em">(${esc(v.why)})</span>`).join(" &nbsp;·&nbsp; ");
+
+document.getElementById("verbBank").addEventListener("click", e=>{
+  const b = e.target.closest(".verb");
+  if(!b) return;
+  const wasOpen = b.classList.contains("open");
+  document.querySelectorAll(".verb.open").forEach(x=>x.classList.remove("open"));
+  if(wasOpen){ verbGloss.classList.remove("show"); return; }
+  const v = DATA.verbs[Number(b.dataset.v)];
+  b.classList.add("open");
+  verbGloss.innerHTML = `<span class="w">${esc(v.w)}</span> &mdash; <b>VI</b> ${esc(v.vi)} &nbsp;&middot;&nbsp; <b>ZH</b> ${esc(v.zh)}`;
+  verbGloss.classList.add("show");
+});
+
+/* ---- glosses on the highlighted spans inside the worked sentences ---- */
+function normalise(s){
+  return s.replace(/[“”„]/g,'"').replace(/[‘’]/g,"'")
+          .replace(/\s+/g," ").trim().toLowerCase();
+}
+let gid = 0;
+function applyGlosses(){
+  const missing = [];
+  document.querySelectorAll("span.ev, span.pu, span.id").forEach(sp=>{
+    const key = normalise(sp.textContent);
+    const g = DATA.gloss[key];
+    if(!g){ missing.push(key); return; }
+    sp.classList.add("glossable");
+    sp.dataset.vi = g.vi; sp.dataset.zh = g.zh;
+    sp.dataset.gid = "g" + (gid++);
+  });
+  /* Surfaced in the console so a missing translation is findable, not silent. */
+  if(missing.length) console.info("[teea] highlighted spans with no translation yet:", missing);
+}
+applyGlosses();
+
+/* Tap a highlighted span -> its translation drops in below the whole sentence,
+   so the sentence itself keeps flowing normally. */
 document.addEventListener("click", e=>{
+  const gl = e.target.closest(".glossable");
+  if(gl){
+    const host = gl.closest(".sent") || gl.closest(".rulebox") || gl.parentElement;
+    const open = host.querySelector(`:scope > .gloss[data-for="${gl.dataset.gid}"]`);
+    if(open){ open.remove(); gl.classList.remove("open"); return; }
+    const g = document.createElement("span");
+    g.className = "gloss";
+    g.dataset.for = gl.dataset.gid;
+    g.innerHTML = `<span class="src">${esc(gl.textContent)}</span>` +
+                  `<b>VI</b> ${esc(gl.dataset.vi)} &nbsp;&middot;&nbsp; <b>ZH</b> ${esc(gl.dataset.zh)}`;
+    host.appendChild(g);
+    gl.classList.add("open");
+    return;
+  }
+  /* Tap an explanatory phrase -> translation appears under it. */
   const ph = e.target.closest(".phrase");
   if(!ph) return;
   const existing = ph.querySelector(":scope > .gloss");
