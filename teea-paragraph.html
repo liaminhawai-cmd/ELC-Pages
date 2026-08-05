@@ -79,8 +79,72 @@
   .band .sent { font-size:1.05rem; }
   .band .why { font-size:.83rem; color:var(--muted); margin-top:8px; padding-top:8px; border-top:1px dashed var(--line); }
 
+  /* ---- essay skeleton + mindmap, and the shared theme highlighting ---- */
+  .plan { display:grid; grid-template-columns:minmax(250px,310px) 1fr; gap:18px; align-items:start; }
+  @media (max-width:760px) { .plan { grid-template-columns:1fr; } }
+
+  .skeleton { display:flex; flex-direction:column; gap:7px; }
+  .epart { width:100%; text-align:left; font:inherit; background:var(--card); border:1px solid var(--line);
+           border-radius:12px; padding:9px 11px; box-shadow:var(--shadow); color:inherit; }
+  .epart.clickable { cursor:pointer; }
+  .epart.clickable:hover { border-color:var(--ink); }
+  .epart .ptop { display:flex; align-items:baseline; gap:7px; margin-bottom:6px; }
+  .epart .pname { font-weight:800; font-size:.95rem; }
+  .epart .ptitle { font-size:.8rem; color:var(--muted); }
+  .epart .pnote { font-size:.78rem; color:var(--muted); margin-top:5px; }
+  .erow { display:flex; align-items:center; gap:7px; margin-top:4px; }
+  .elab { font-size:.72rem; font-weight:800; color:var(--accent); width:11px; flex:none; }
+  .ebar { display:flex; flex:1; height:8px; border-radius:4px; overflow:hidden; }
+  .ebar i { flex:1; }
+  .ebar i.s-ev { background:var(--evid-fill); }
+  .ebar i.s-pu { background:var(--purp-fill); }
+  .ebar i.s-id { background:var(--idea-fill); }
+  .ebar i.s-n  { background:var(--line); }
+
+  .mapwrap { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+             box-shadow:var(--shadow); padding:10px 12px 12px; }
+  .mapwrap svg { width:100%; height:auto; display:block; }
+  .bub { cursor:default; }
+  .bub.pick { cursor:pointer; }
+  .bub ellipse { fill:var(--card); stroke:var(--idea); stroke-width:1.6; }
+  .bub.pick ellipse { fill:var(--idea-fill); stroke-width:2; }
+  .bub:not(.pick) ellipse { stroke-dasharray:4 3; opacity:.8; }
+  .bub text { fill:var(--idea); font-size:14px; font-weight:700; font-family:inherit; }
+  .bub.pick text { fill:#1c2333; }
+  .bub.pick:hover ellipse { stroke:var(--ink); }
+  .mapline { stroke:var(--line); stroke-width:2; }
+  .mapcentre ellipse { fill:var(--ink); stroke:none; }
+  .mapcentre text { fill:var(--bg); font-size:16px; font-weight:700; font-family:inherit; }
+  .mapfoot { font-size:.8rem; color:var(--muted); margin-top:8px; }
+
+  /* Selected-theme state, following writing-wall.html's filtering pattern.
+     The ring is --ink, deliberately NOT a scheme colour: a blue ring round an
+     orange bubble would read as "evidence" on a page about what colours mean. */
+  body.theming [data-theme]:not(.on) { opacity:.28; }
+  [data-theme].on.epart { border-color:var(--ink); box-shadow:0 0 0 2px var(--ink); }
+  .bub[data-theme].on ellipse { stroke:var(--ink); stroke-width:3.5; }
+  .parablock[data-theme].on { box-shadow:0 0 0 2px var(--ink); border-radius:var(--radius); }
+  .parablock { padding:2px; transition:box-shadow .12s; }
+  /* keep the pill from permanently covering the last line of the page */
+  body.theming { padding-bottom:62px; }
+
+  .themepill { position:fixed; left:50%; transform:translateX(-50%); bottom:14px; z-index:50;
+               display:none; align-items:center; gap:10px; background:var(--ink); color:var(--bg);
+               border-radius:999px; padding:8px 9px 8px 15px; font-size:.85rem;
+               box-shadow:0 4px 18px rgba(16,24,40,.28); max-width:calc(100vw - 24px); }
+  body.theming .themepill { display:flex; }
+  .themepill .lbl { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .themepill button { border:none; background:rgba(255,255,255,.18); color:inherit; font:inherit;
+                      border-radius:999px; padding:4px 11px; cursor:pointer; flex:none; }
+  .themepill button:hover { background:rgba(255,255,255,.32); }
+  /* off-centre on wide screens so it doesn't sit over the text being read */
+  @media (min-width:820px) { .themepill { left:auto; right:18px; transform:none; } }
+
   .paratitle { font-weight:700; font-size:1.05rem; margin:20px 0 8px; }
   .paratitle:first-child { margin-top:0; }
+  button.paratitle { display:block; width:100%; text-align:left; background:none; border:none;
+                     font-family:inherit; color:inherit; cursor:pointer; padding:0; }
+  button.paratitle:hover { color:var(--accent); }
   .slot { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:11px 14px; margin-bottom:8px; box-shadow:var(--shadow); }
   .slot .head { display:flex; align-items:baseline; gap:9px; margin-bottom:6px; flex-wrap:wrap; }
   .slot .letter { font-size:1.4rem; font-weight:800; color:var(--accent); width:1.2rem; flex:none; }
@@ -173,6 +237,20 @@
     <div id="wagollBands"></div>
   </section>
 
+  <section id="plan">
+    <h2 class="sec">The whole essay &mdash; and where these paragraphs sit</h2>
+    <p class="lead">Each little bar is one sentence, coloured by what it earns. Tap <b>P1</b>, <b>P2</b>
+      or a filled idea bubble to follow that idea through the mindmap and into the worked paragraph below.</p>
+    <div class="plan">
+      <div class="skeleton" id="skeleton"></div>
+      <div class="mapwrap">
+        <svg id="mindmap" role="img" aria-label="Mindmap of ideas for The Giving Tree"></svg>
+        <p class="mapfoot">Two of these became paragraphs. The rest are still good ideas &mdash;
+          you just can&rsquo;t use everything in one essay.</p>
+      </div>
+    </div>
+  </section>
+
   <section id="built">
     <h2 class="sec">Now built as T&middot;E&middot;E&middot;A</h2>
     <p class="lead">Two ideas, each turned into a paragraph. Read the dots before you read the sentence.</p>
@@ -181,6 +259,11 @@
 
   <p class="hint" style="margin-top:26px;text-align:center">Full rubric on the <a href="rubrics.html">Analytical Writing</a> page.</p>
 </main>
+
+<div class="themepill" id="themePill">
+  <span class="lbl" id="themePillLabel"></span>
+  <button type="button" id="themeClear">Show all</button>
+</div>
 
 <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
 
@@ -379,6 +462,36 @@ const DATA = {
       { vi:"một người cho đi và một người lấy đi", zh:"一个付出者和一个索取者" }
   },
 
+  /* The essay skeleton from the board. Each row is one sentence; `seg` lists
+     the colours that sentence earns — ev/pu/id, or n for none yet. */
+  essay: [
+    { part:"Intro", note:"Responds to the prompt and names both ideas.",
+      rows:[ {lab:"", seg:["n"]}, {lab:"", seg:["id"]}, {lab:"", seg:["id"]} ] },
+    { part:"P1", theme:1, title:"Love is sacrifice",
+      rows:[ {lab:"T", seg:["id"]}, {lab:"E", seg:["ev","pu","id"]},
+             {lab:"E", seg:["ev","pu","id"]}, {lab:"A", seg:["pu","id"]} ] },
+    { part:"P2", theme:2, title:"Growing up is learning to take",
+      rows:[ {lab:"T", seg:["id"]}, {lab:"E", seg:["ev","pu","id"]},
+             {lab:"E", seg:["ev","pu","id"]}, {lab:"A", seg:["pu","id"]} ] },
+    { part:"C", note:"What both ideas together suggest.",
+      rows:[ {lab:"", seg:["pu"]}, {lab:"", seg:["pu","id"]} ] }
+  ],
+
+  /* The class's own brainstorm. Two of these became paragraphs; the rest were
+     good ideas we didn't have room for. x/y are viewBox coordinates. */
+  mindmap: {
+    centre:"The Giving Tree",
+    view:[620,380], cx:310, cy:190, crx:94, cry:36,
+    bubbles:[
+      { label:["Gratitude"],            theme:2, x:310, y:46,  rx:70, ry:28 },
+      { label:["Generosity"],           theme:1, x:502, y:100, rx:76, ry:28 },
+      { label:["Motherhood"],           theme:1, x:506, y:286, rx:80, ry:28 },
+      { label:["Sacrifice"],            theme:1, x:300, y:336, rx:70, ry:28 },
+      { label:["Fairness","& imbalance"], theme:2, x:108, y:96, rx:84, ry:34 },
+      { label:["Gender"],               theme:null, x:106, y:288, rx:62, ry:26 }
+    ]
+  },
+
   paragraphs: [
     { title:"Paragraph 1 — Love is sacrifice", slots:[
       { letter:"T", job:"Names the idea. Orange only.", touches:["id"],
@@ -446,19 +559,79 @@ document.getElementById("wagollBands").innerHTML = DATA.wagollExample.map(b => `
     <div class="why">${tphrase(b.why, b.whyVi, b.whyZh)}</div>
   </div>`).join("");
 
-document.getElementById("paragraphs").innerHTML = DATA.paragraphs.map(p => `
-  <div class="paratitle">${esc(p.title)}</div>
-  ${p.slots.map(s => `
-    <div class="slot">
-      <div class="head">
-        <span class="letter">${s.letter}</span>
-        <span class="job">${esc(s.job)}</span>
-        ${dots(s.touches)}
-      </div>
-      <div class="sent">${s.html}</div>
-    </div>`).join("")}
-  <div class="out"><b>Whole paragraph:</b> ${esc(p.slots.map(s => stripTags(s.html)).join(" "))}</div>
+document.getElementById("paragraphs").innerHTML = DATA.paragraphs.map((p,i) => `
+  <div class="parablock" data-theme="${i+1}">
+    <button class="paratitle" type="button" data-theme-trigger="${i+1}">${esc(p.title)}</button>
+    ${p.slots.map(s => `
+      <div class="slot">
+        <div class="head">
+          <span class="letter">${s.letter}</span>
+          <span class="job">${esc(s.job)}</span>
+          ${dots(s.touches)}
+        </div>
+        <div class="sent">${s.html}</div>
+      </div>`).join("")}
+    <div class="out"><b>Whole paragraph:</b> ${esc(p.slots.map(s => stripTags(s.html)).join(" "))}</div>
+  </div>
 `).join("");
+
+/* ---- essay skeleton ---- */
+document.getElementById("skeleton").innerHTML = DATA.essay.map(part => {
+  const rows = part.rows.map(r =>
+    `<div class="erow"><span class="elab">${r.lab}</span><span class="ebar">` +
+    r.seg.map(s => `<i class="s-${s}"></i>`).join("") + `</span></div>`).join("");
+  const head = `<div class="ptop"><span class="pname">${esc(part.part)}</span>` +
+    (part.title ? `<span class="ptitle">${esc(part.title)}</span>` : "") + `</div>`;
+  const note = part.note ? `<div class="pnote">${esc(part.note)}</div>` : "";
+  return part.theme
+    ? `<button type="button" class="epart clickable" data-theme="${part.theme}" data-theme-trigger="${part.theme}">${head}${rows}${note}</button>`
+    : `<div class="epart">${head}${rows}${note}</div>`;
+}).join("");
+
+/* ---- mindmap ---- */
+(function drawMap(){
+  const m = DATA.mindmap;
+  const lines = m.bubbles.map(b =>
+    `<line class="mapline" x1="${m.cx}" y1="${m.cy}" x2="${b.x}" y2="${b.y}"/>`).join("");
+  const centre =
+    `<g class="mapcentre"><ellipse cx="${m.cx}" cy="${m.cy}" rx="${m.crx}" ry="${m.cry}"/>` +
+    `<text x="${m.cx}" y="${m.cy}" text-anchor="middle" dominant-baseline="central">${esc(m.centre)}</text></g>`;
+  const bubbles = m.bubbles.map(b => {
+    const pick = b.theme !== null;
+    const dy = b.label.length > 1 ? -7 : 0;
+    const txt = b.label.map((l,i) =>
+      `<tspan x="${b.x}" dy="${i === 0 ? dy : 16}">${esc(l)}</tspan>`).join("");
+    return `<g class="bub${pick ? " pick" : ""}"${pick ? ` data-theme="${b.theme}" data-theme-trigger="${b.theme}" tabindex="0" role="button"` : ""}>` +
+      `<ellipse cx="${b.x}" cy="${b.y}" rx="${b.rx}" ry="${b.ry}"/>` +
+      `<text x="${b.x}" y="${b.y}" text-anchor="middle" dominant-baseline="central">${txt}</text></g>`;
+  }).join("");
+  const svg = document.getElementById("mindmap");
+  svg.setAttribute("viewBox", `0 0 ${m.view[0]} ${m.view[1]}`);
+  svg.innerHTML = lines + centre + bubbles;
+})();
+
+/* ---- one selected theme lights up everywhere it appears ---- */
+const THEME_NAMES = DATA.paragraphs.map(p => p.title.replace(/^Paragraph \d+ — /, ""));
+let activeTheme = null;
+const pill = document.getElementById("themePillLabel");
+
+function setTheme(t){
+  activeTheme = (activeTheme === t) ? null : t;
+  document.body.classList.toggle("theming", activeTheme !== null);
+  document.querySelectorAll("[data-theme]").forEach(el =>
+    el.classList.toggle("on", activeTheme !== null && el.dataset.theme === String(activeTheme)));
+  document.querySelectorAll("[data-theme-trigger]").forEach(el =>
+    el.setAttribute("aria-pressed", String(activeTheme !== null && el.dataset.themeTrigger === String(activeTheme))));
+  if(activeTheme !== null) pill.textContent = "Idea " + activeTheme + ": " + THEME_NAMES[activeTheme - 1];
+}
+document.getElementById("themeClear").addEventListener("click", ()=>setTheme(activeTheme));
+document.addEventListener("keydown", e=>{
+  if(e.key === "Escape" && activeTheme !== null) setTheme(activeTheme);
+  if((e.key === "Enter" || e.key === " ") && e.target.closest && e.target.closest("g[data-theme-trigger]")){
+    e.preventDefault();
+    setTheme(Number(e.target.closest("g[data-theme-trigger]").dataset.themeTrigger));
+  }
+});
 
 /* ---- analytical verb bank ---- */
 const verbGloss = document.getElementById("verbGloss");
@@ -520,13 +693,18 @@ document.addEventListener("click", e=>{
   }
   /* Tap an explanatory phrase -> translation appears under it. */
   const ph = e.target.closest(".phrase");
-  if(!ph) return;
-  const existing = ph.querySelector(":scope > .gloss");
-  if(existing){ existing.remove(); return; }
-  const g = document.createElement("span");
-  g.className = "gloss";
-  g.innerHTML = `<b>VI</b> ${esc(ph.dataset.vi)} &nbsp;&middot;&nbsp; <b>ZH</b> ${esc(ph.dataset.zh)}`;
-  ph.appendChild(g);
+  if(ph){
+    const existing = ph.querySelector(":scope > .gloss");
+    if(existing){ existing.remove(); return; }
+    const g = document.createElement("span");
+    g.className = "gloss";
+    g.innerHTML = `<b>VI</b> ${esc(ph.dataset.vi)} &nbsp;&middot;&nbsp; <b>ZH</b> ${esc(ph.dataset.zh)}`;
+    ph.appendChild(g);
+    return;
+  }
+  /* Tap a paragraph title, an essay part or an idea bubble -> select that idea. */
+  const trig = e.target.closest("[data-theme-trigger]");
+  if(trig) setTheme(Number(trig.dataset.themeTrigger));
 });
 </script>
 </body>
