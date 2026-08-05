@@ -46,10 +46,11 @@
   .touch .dot.on.idea { opacity:1; background:var(--idea-fill); border-color:transparent; }
   .touch { display:inline-flex; gap:4px; vertical-align:middle; }
 
-  /* inline colour spans within the worked sentences */
-  span.ev { color:var(--evid); background:var(--evid-soft); font-weight:600; border-radius:4px; padding:0 3px; }
-  span.pu { color:var(--purp); background:var(--purp-soft); font-weight:600; border-radius:4px; padding:0 3px; }
-  span.id { color:var(--idea); background:var(--idea-soft); font-weight:600; border-radius:4px; padding:0 3px; }
+  /* inline colour spans within the worked sentences — coloured text, no fill,
+     exactly as the A3 handout and writing-wall.html do it (.b/.g/.o there) */
+  span.ev { color:var(--evid); font-weight:600; }
+  span.pu { color:var(--purp); font-weight:600; }
+  span.id { color:var(--idea); font-weight:600; }
 
   .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; margin-bottom:16px; }
   .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px 15px; box-shadow:var(--shadow); }
@@ -98,8 +99,8 @@
   /* highlighted spans inside the worked sentences — stay inline so the
      sentence still wraps normally; their gloss drops below the whole sentence */
   .glossable { cursor:pointer; border-bottom:1px dotted currentColor; }
-  .glossable:hover { filter:brightness(.93); }
-  .glossable.open { outline:2px solid currentColor; outline-offset:1px; }
+  .glossable:hover { border-bottom-style:solid; }
+  .glossable.open { border-bottom-style:solid; border-bottom-width:2px; }
   .sent .gloss, .rulebox .gloss { display:block; margin-top:6px; font-size:.85rem; font-weight:400;
                     background:var(--accent-soft); color:var(--ink); border-radius:6px; padding:5px 8px; }
   .gloss .src { font-weight:600; display:block; margin-bottom:2px; font-size:.95em; }
