@@ -98,6 +98,16 @@
   .band { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:12px 15px; margin-bottom:9px; box-shadow:var(--shadow); }
   .band .nmb { font-weight:700; margin-bottom:5px; }
   .band .nmb b { color:var(--accent); }
+  .band .focus { font-weight:400; font-size:.82rem; color:var(--muted); margin-left:6px; }
+  .band .expl { margin-top:7px; font-size:.85rem; }
+  .band .expl summary { cursor:pointer; color:var(--accent); font-weight:600; }
+  .band .expl p { margin-top:6px; color:var(--muted); background:var(--bg);
+                  border-radius:8px; padding:8px 11px; }
+  .tabs { display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap; }
+  .tab { border:1px solid var(--line); background:var(--card); color:var(--ink);
+         border-radius:999px; padding:5px 14px; font:inherit; font-size:.88rem; cursor:pointer; }
+  .tab:hover { border-color:var(--ink); }
+  .tab.on { background:var(--ink); color:var(--bg); border-color:var(--ink); font-weight:600; }
   .band .sent { font-size:1.05rem; }
   .band .why { font-size:.83rem; color:var(--muted); margin-top:7px; padding-top:7px; border-top:1px dashed var(--line); }
 
@@ -142,6 +152,10 @@
   .n-purp text { fill:var(--purp); }
   .n-other rect { fill:var(--card); stroke:var(--idea); stroke-width:1.5; stroke-dasharray:4 3; }
   .n-other text { fill:var(--idea); font-weight:600; }
+  .n-other.on rect { stroke:var(--ink); stroke-width:3; stroke-dasharray:none; }
+  .n-oev rect { fill:var(--card); stroke:var(--muted); stroke-width:1.2; stroke-dasharray:3 3; }
+  .n-oev text { fill:var(--muted); font-weight:500; }
+  .mapedge.e-oev { stroke:var(--muted); }
   .mapedge { fill:none; stroke:var(--line); stroke-width:2.5;
              transition:stroke-dashoffset .55s ease, opacity .3s ease; }
   .mapedge.e-quote { stroke:var(--evid); opacity:.5; }
@@ -173,12 +187,12 @@
   body.theming [data-theme]:not(.on) { opacity:.28; }
   [data-theme].on.epart { border-color:var(--ink); box-shadow:0 0 0 2px var(--ink); }
   .parablock[data-theme].on { box-shadow:0 0 0 2px var(--ink); border-radius:var(--radius); }
-  body.theming { padding-bottom:62px; }
+  body.ideating { padding-bottom:62px; }
   .themepill { position:fixed; left:50%; transform:translateX(-50%); bottom:14px; z-index:50;
                display:none; align-items:center; gap:10px; background:var(--ink); color:var(--bg);
                border-radius:999px; padding:8px 9px 8px 15px; font-size:.85rem;
                box-shadow:0 4px 18px rgba(16,24,40,.28); max-width:calc(100vw - 24px); }
-  body.theming .themepill { display:flex; }
+  body.ideating .themepill { display:flex; }
   .themepill .lbl { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .themepill button { border:none; background:rgba(255,255,255,.18); color:inherit; font:inherit;
                       border-radius:999px; padding:4px 11px; cursor:pointer; flex:none; }
@@ -344,31 +358,92 @@ const DATA = {
     "a warning rather than a happy ending": { vi:"một lời cảnh báo thay vì một kết thúc có hậu", zh:"一个警示，而不是圆满的结局" },
     "self-sacrifice": { vi:"sự hy sinh bản thân", zh:"自我牺牲" },
     "unequal relationships": { vi:"những mối quan hệ bất bình đẳng", zh:"不平等的关系" },
-    "giver and a taker": { vi:"một người cho đi và một người lấy đi", zh:"一个付出者和一个索取者" }
+    "giver and a taker": { vi:"một người cho đi và một người lấy đi", zh:"一个付出者和一个索取者" },
+
+    /* persuasive row */
+    "states": { vi:"tuyên bố, nêu rõ", zh:"陈述、声称" },
+    "statement": { vi:"lời tuyên bố, phát biểu", zh:"陈述、说法" },
+    "assertion": { vi:"lời khẳng định", zh:"断言" },
+    "\"schools should not control students' diets\"": { vi:"\"trường học không nên kiểm soát chế độ ăn của học sinh\"", zh:"「学校不应控制学生的饮食」" },
+    "\"common sense\"": { vi:"\"lẽ thường\"", zh:"「常识」" },
+    "encourages readers to agree": { vi:"khuyến khích người đọc đồng tình", zh:"促使读者表示赞同" },
+    "the writer reinforces": { vi:"người viết củng cố", zh:"作者强化了" },
+    "writer promotes": { vi:"người viết đề cao", zh:"作者提倡" },
+    "reflecting values of": { vi:"phản ánh những giá trị của", zh:"反映了……的价值观" },
+    "confident": { vi:"tự tin", zh:"自信" },
+    "reasonable": { vi:"hợp lý", zh:"合理" },
+    "parents should control children's choices": { vi:"cha mẹ nên kiểm soát lựa chọn của con cái", zh:"父母应当控制孩子的选择" },
+    "parental responsibility": { vi:"trách nhiệm của cha mẹ", zh:"父母的责任" },
+    "individual choice": { vi:"lựa chọn cá nhân", zh:"个人选择" },
+    "institutional control": { vi:"sự kiểm soát của thể chế", zh:"制度性的控制" },
+    "personal freedom": { vi:"tự do cá nhân", zh:"个人自由" },
+
+    /* film row */
+    "the film uses a long shot": { vi:"bộ phim sử dụng một cảnh quay xa", zh:"影片使用了一个远景镜头" },
+    "the long shot": { vi:"cảnh quay xa", zh:"这个远景镜头" },
+    "noyce uses a long shot to": { vi:"Noyce sử dụng cảnh quay xa để", zh:"诺伊斯用远景镜头来" },
+    "noyce repeatedly uses wide landscape shots": { vi:"Noyce nhiều lần sử dụng những cảnh quay phong cảnh rộng", zh:"诺伊斯反复使用广阔的风景镜头" },
+    "show the girls walking alone": { vi:"cho thấy những cô bé đang đi một mình", zh:"表现女孩们独自行走" },
+    "makes the audience see how far the girls must travel,": { vi:"khiến khán giả thấy được các cô bé phải đi xa đến mức nào,", zh:"让观众看到女孩们必须走多远，" },
+    "highlight the girls' isolation in the vast desert,": { vi:"làm nổi bật sự cô lập của các cô bé giữa sa mạc mênh mông,", zh:"突显女孩们在广袤沙漠中的孤立无援，" },
+    "contrast the beauty of the land with the cruelty of the government's control,": { vi:"đối lập vẻ đẹp của vùng đất với sự tàn nhẫn trong sự kiểm soát của chính phủ,", zh:"将这片土地的美丽与政府控制的残酷形成对比，" },
+    "showing their bravery": { vi:"cho thấy sự dũng cảm của các em", zh:"显示出她们的勇敢" },
+    "their determination and loss of freedom": { vi:"sự quyết tâm và sự mất tự do của các em", zh:"她们的决心与自由的丧失" },
+    "the theme of resilience against oppression": { vi:"chủ đề về sự kiên cường trước áp bức", zh:"面对压迫时坚韧不屈的主题" }
   },
 
-  wagollExample: [
-    { band:"C2", label:"Describe",
-      html:"The author uses <span class=\"ev\">repetition</span> to <span class=\"pu\">show</span> that the tree keeps giving when it says, &ldquo;And the <span class=\"ev\">tree was happy</span>.&rdquo;",
-      why:"Names the feature, says what happens. Meaning stays close to the words on the page.",
-      whyVi:"Nêu tên đặc điểm, nói điều gì xảy ra. Ý nghĩa vẫn bám sát các từ trên trang sách.",
-      whyZh:"说出特征，说明发生了什么。含义仍然紧贴文本表面。" },
-    { band:"C3", label:"Explain",
-      html:"The <span class=\"ev\">repetition of the phrase &ldquo;the tree was happy&rdquo;</span> <span class=\"pu\">makes the tree seem</span> <span class=\"id\">generous</span>, <span class=\"pu\">encouraging the reader to feel</span> <span class=\"id\">sympathy</span> for her.",
-      why:"Adds an effect on the reader and starts naming a feeling.",
-      whyVi:"Thêm vào tác động đến người đọc và bắt đầu gọi tên một cảm xúc.",
-      whyZh:"加入了对读者的影响，并开始说出一种感受。" },
-    { band:"C4", label:"Analyse",
-      html:"Silverstein uses <span class=\"ev\">repetition of the line &ldquo;And the tree was happy&rdquo;</span> <span class=\"pu\">to highlight the one-sided relationship</span>, suggesting themes of <span class=\"id\">sacrifice</span> and <span class=\"id\">imbalance</span>.",
-      why:"Links the feature, its effect and the theme in one sentence — all three colours.",
-      whyVi:"Kết nối đặc điểm, tác động của nó và chủ đề trong một câu — cả ba màu.",
-      whyZh:"在一句话中把特征、效果和主题联系起来——三种颜色齐全。" },
-    { band:"VCE 1", label:"Interpret",
-      html:"By repeatedly portraying the tree as endlessly giving <span class=\"ev\">through the recurring motif &ldquo;And the tree was happy,&rdquo;</span> Silverstein <span class=\"pu\">invites readers to question</span> cultural expectations around <span class=\"id\">self-sacrifice</span> in <span class=\"id\">unequal relationships</span>.",
-      why:"Connects the feature to the author's purpose and an idea beyond the text itself.",
-      whyVi:"Kết nối đặc điểm với mục đích của tác giả và một ý tưởng vượt ra ngoài văn bản.",
-      whyZh:"把这个特征与作者的目的以及超越文本本身的观念联系起来。" }
+  /* All three rows of the WAGOLL. `expl` is the handout's own Explanation text,
+     verbatim; `why` is our shorter analysis note, kept alongside it. */
+  bandFocus: [
+    { band:"C2",    label:"Describe",  focus:"Say what happens" },
+    { band:"C3",    label:"Explain",   focus:"Explain effect or meaning" },
+    { band:"C4",    label:"Analyse",   focus:"Link language choices to ideas or themes" },
+    { band:"VCE 1", label:"Interpret", focus:"Link literary, structural and stylistic features, to messages, values, and creator’s intents" }
   ],
+  wagoll: {
+    fiction: [
+      { html:"The author uses <span class=\"ev\">repetition</span> to <span class=\"pu\">show</span> that the tree keeps giving when it says, &ldquo;And the <span class=\"ev\">tree was happy</span>.&rdquo;",
+        expl:"Simple sentence pattern: subject + verb + object. Names a language feature (🟦) and states what happens in the text. Meaning stays close to the words on the page.",
+        why:"Names the feature, says what happens. Meaning stays close to the words on the page.",
+        whyVi:"Nêu tên đặc điểm, nói điều gì xảy ra. Ý nghĩa vẫn bám sát các từ trên trang sách.",
+        whyZh:"说出特征，说明发生了什么。含义仍然紧贴文本表面。" },
+      { html:"The <span class=\"ev\">repetition of the phrase &ldquo;the tree was happy&rdquo;</span> <span class=\"pu\">makes the tree seem</span> <span class=\"id\">generous</span>, <span class=\"pu\">encouraging the reader to feel</span> <span class=\"id\">sympathy</span> for her.",
+        expl:"Adds an effect phrase to explain how the language influences the reader (🟩). Uses evaluative words and basic cause–effect reasoning.",
+        why:"Adds an effect on the reader and starts naming a feeling.",
+        whyVi:"Thêm vào tác động đến người đọc và bắt đầu gọi tên một cảm xúc.",
+        whyZh:"加入了对读者的影响，并开始说出一种感受。" },
+      { html:"Silverstein uses <span class=\"ev\">repetition of the line &ldquo;And the tree was happy&rdquo;</span> <span class=\"pu\">to highlight the one-sided relationship</span>, suggesting themes of <span class=\"id\">sacrifice</span> and <span class=\"id\">imbalance</span>.",
+        expl:"Links language choice, effect, and theme in one sentence. Uses analytical verbs (“highlight”, “suggest”) to move beyond description (🟧).",
+        why:"Links the feature, its effect and the theme in one sentence — all three colours.",
+        whyVi:"Kết nối đặc điểm, tác động của nó và chủ đề trong một câu — cả ba màu.",
+        whyZh:"在一句话中把特征、效果和主题联系起来——三种颜色齐全。" },
+      { html:"By repeatedly portraying the tree as endlessly giving <span class=\"ev\">through the recurring motif &ldquo;And the tree was happy,&rdquo;</span> Silverstein <span class=\"pu\">invites readers to question</span> cultural expectations around <span class=\"id\">self-sacrifice</span> in <span class=\"id\">unequal relationships</span>.",
+        expl:"Combines language choice, ideas, and values. Analyses the author’s message and connects it to broader historical, social and cultural ideas.",
+        why:"Connects the feature to the author's purpose and an idea beyond the text itself.",
+        whyVi:"Kết nối đặc điểm với mục đích của tác giả và một ý tưởng vượt ra ngoài văn bản.",
+        whyZh:"把这个特征与作者的目的以及超越文本本身的观念联系起来。" }
+    ],
+    persuasive: [
+      { html:"The writer <span class=\"ev\">states</span> that schools should not tell children what to eat when they argue that <span class=\"ev\">&ldquo;schools should not control students&rsquo; diets&rdquo;</span>.",
+        expl:"Simple sentence pattern: subject + verb + object. Identifies the writer’s opinion and states what is said. Meaning stays close to the claim itself. Verbs are literal (“states”, “says”) and ideas are concrete." },
+      { html:"This <span class=\"ev\">statement</span> <span class=\"pu\">encourages readers to agree</span> because the claim <span class=\"ev\">&ldquo;schools should not control students&rsquo; diets&rdquo;</span> sounds <span class=\"id\">confident</span> and <span class=\"id\">reasonable</span>.",
+        expl:"Adds an effect or reason clause to explain how the statement sounds to the reader (🟩). Begins using evaluative adjectives (“reasonable”, “strong”). Uses connectives like because or so to show reader response." },
+      { html:"By presenting the claim <span class=\"ev\">&ldquo;schools should not control students&rsquo; diets&rdquo;</span> as an <span class=\"ev\">assertion</span>, <span class=\"pu\">the writer reinforces</span> the idea that <span class=\"id\">parents should control children&rsquo;s choices</span>.",
+        expl:"Links language choice, effect, and idea in one longer sentence. Uses analytical verbs (“reinforces”, “frames”) to explain how wording supports an argument or viewpoint (🟧). Introduces abstract nouns such as control, responsibility, or choice." },
+      { html:"By framing <span class=\"id\">parental responsibility</span> as <span class=\"ev\">&ldquo;common sense&rdquo;</span>, the <span class=\"pu\">writer promotes</span> <span class=\"id\">individual choice</span> over <span class=\"id\">institutional control</span>, <span class=\"pu\">reflecting values of</span> <span class=\"id\">personal freedom</span>.",
+        expl:"Combines several ideas smoothly. Uses metalanguage to comment on the writer’s perspective. Connects language choices to purpose, values or beliefs, explaining how the reader is positioned within a broader social or cultural debate." }
+    ],
+    film: [
+      { html:"<span class=\"ev\">The film uses a long shot</span> to <span class=\"pu\">show the girls walking alone</span>.",
+        expl:"Simple sentence pattern: subject + verb + object. Names the film technique (🟦) and tells what is happening on screen. Meaning stays close to what can be seen. Verbs are literal (“shows”, “uses”) and ideas are concrete." },
+      { html:"<span class=\"ev\">The long shot</span> <span class=\"pu\">makes the audience see how far the girls must travel,</span> <span class=\"id\">showing their bravery</span>.",
+        expl:"Adds a purpose phrase using to + verb to show effect on the audience (🟩). Starts to include short reasons or reactions. Introduces descriptive adjectives or feeling words (“brave”, “alone”). Uses connectives like because or so." },
+      { html:"<span class=\"ev\">Noyce uses a long shot to</span> <span class=\"pu\">highlight the girls&rsquo; isolation in the vast desert,</span> symbolising <span class=\"id\">their determination and loss of freedom</span>.",
+        expl:"Links technique, purpose, and theme in one longer sentence. Uses analytical verbs (“highlight”, “symbolise”) to connect the image to a bigger idea (🟧). Adds extra detail with adjectives or short relative clauses (“which shows…”). Moves from describing to explaining meaning." },
+      { html:"<span class=\"ev\">Noyce repeatedly uses wide landscape shots</span> to <span class=\"pu\">contrast the beauty of the land with the cruelty of the government&rsquo;s control,</span> emphasising <span class=\"id\">the theme of resilience against oppression</span>.",
+        expl:"Combines several ideas smoothly. Uses metalanguage to comment on the director’s choices. Connects film language, tone, and theme in one flowing idea. Verbs are more interpretive “emphasises” and express the director’s message or values." }
+    ]
+  },
 
   essay: [
     { part:"Intro", title:"Names both ideas.",
@@ -400,7 +475,16 @@ const DATA = {
           { angle:42,  q:["&ldquo;I am too big to","climb and play&rdquo;"], purpose:["after this he never","gives anything back"] }
         ] }
     ],
-    others:["Generosity","Motherhood","Gratitude","Fairness","Gender"]
+    /* The rest of the board. Not used in this essay, but they had evidence on
+       them too — tapping one grows its branch, it just doesn't drive a
+       paragraph. */
+    others:[
+      { label:["Generosity"],            ev:["tree gives apples,","branches, wood, leaves"] },
+      { label:["Motherhood"],            ev:["&ldquo;She was happy&rdquo; · calls him","&ldquo;boy&rdquo; even when he is old"] },
+      { label:["Gratitude"],             ev:["the boy is never","generous back"] },
+      { label:["Fairness","& imbalance"],ev:["she gives, he takes,","and it never evens out"] },
+      { label:["Gender"],                ev:["the tree is &ldquo;she&rdquo;,","the boy is &ldquo;he&rdquo;"] }
+    ]
   },
 
   paragraphs: [
@@ -502,7 +586,8 @@ const BANDS = ["C2","C3","C4","VCE 1"];
   </section>
 
   <section>
-    <h2 class="sec">The wall&rsquo;s own example</h2>
+    <h2 class="sec">The wall&rsquo;s own examples</h2>
+    <div class="tabs" id="bandTabs"></div>
     <div id="wagollBands"></div>
   </section>
 
@@ -605,13 +690,28 @@ document.getElementById("verbBank").addEventListener("click", e=>{
   verbGloss.classList.add("show");
 });
 
-/* ---------- bands ---------- */
-document.getElementById("wagollBands").innerHTML = DATA.wagollExample.map(b => `
-  <div class="band">
-    <div class="nmb"><b>${esc(b.band)}</b> &middot; ${esc(b.label)}</div>
-    <div class="sent">${b.html}</div>
-    <div class="why">${tphrase(b.why, b.whyVi, b.whyZh)}</div>
-  </div>`).join("");
+/* ---------- bands: three WAGOLL rows, band by band ---------- */
+const TEXTTYPES = [["fiction","Fiction"],["persuasive","Persuasive"],["film","Film"]];
+let bandType = "fiction";
+function renderBands(){
+  document.getElementById("bandTabs").innerHTML = TEXTTYPES.map(([k,n])=>
+    `<button type="button" class="tab${k===bandType?" on":""}" data-tt="${k}">${n}</button>`).join("");
+  document.getElementById("wagollBands").innerHTML = DATA.wagoll[bandType].map((b,i) => {
+    const f = DATA.bandFocus[i];
+    return `<div class="band">
+      <div class="nmb"><b>${esc(f.band)}</b> &middot; ${esc(f.label)}
+        <span class="focus">${esc(f.focus)}</span></div>
+      <div class="sent">${b.html}</div>
+      ${b.why ? `<div class="why">${tphrase(b.why, b.whyVi, b.whyZh)}</div>` : ""}
+      <details class="expl"><summary>Explanation</summary><p>${esc(b.expl)}</p></details>
+    </div>`;
+  }).join("");
+  applyGlosses();
+}
+document.getElementById("bandTabs").addEventListener("click", e=>{
+  const t = e.target.closest(".tab"); if(!t) return;
+  bandType = t.dataset.tt; renderBands();
+});
 
 /* ---------- essay skeleton ---------- */
 document.getElementById("skeleton").innerHTML = DATA.essay.map(part => {
@@ -725,20 +825,28 @@ MAP.themes.forEach(t=>{
     q.pnode = makeNode("n-purp", q.purpose, 13, false);
   });
 });
-MAP.others = MAP.others.map((label,i,arr)=>{
-  const n = makeNode("n-other", [label], 13, false);
+MAP.others = MAP.others.map((o,i,arr)=>{
   const span = VIEW.w - 300;
-  return { node:n, edge:makeEdge(""), home:{ x:150 + span*(i/(arr.length-1)), y:VIEW.h-40 } };
+  const home = { x:150 + span*(i/(arr.length-1)), y:VIEW.h-150 };
+  const n = makeNode("n-other pickable", o.label, 13, false);
+  n.g.setAttribute("data-idea", "o"+i);
+  n.g.setAttribute("data-idea-trigger", "o"+i);
+  n.g.setAttribute("tabindex","0");
+  n.g.setAttribute("role","button");
+  return { label:o.label, node:n, edge:makeEdge(""), home,
+           evNode:makeNode("n-oev", o.ev, 12, false), evEdge:makeEdge("e-oev"), key:"o"+i };
 });
 
-let activeTheme = null;
+/* activeIdea is the map selection ("t1"/"t2" or "o0".."o4");
+   activeTheme is the essay idea it corresponds to, if any. */
+let activeIdea = null, activeTheme = null;
 const mapFoot = document.getElementById("mapFoot");
 
 /* At rest the whole map is visible with its branches drawn in close and faded.
    Selecting an idea extends that branch to full length and full size — the
    growing-outward motion is the "branching out", and the canvas stays full. */
 function layout(){
-  const any = activeTheme !== null;
+  const any = activeIdea !== null;
   place(centreNode, C, 1, 1);
   MAP.themes.forEach(t=>{
     const on = activeTheme === t.id;
@@ -750,7 +858,7 @@ function layout(){
     drawEdge(t.edge, C, tp, true, 0);
     t.edge.style.opacity = dim ? 0.25 : 1;
 
-    const reach = on ? 1 : (dim ? 0.48 : 0.6);      // how far the branch extends
+    const reach = on ? 1 : (dim ? 0.48 : 0.74);     // how far the branch extends
     const sc    = on ? 1 : (dim ? 0.68 : 0.8);      // child node size
     const op    = on ? 1 : (dim ? 0.13 : 0.55);     // child node opacity
     const eop   = on ? 0.75 : (dim ? 0.1 : 0.3);    // branch line opacity
@@ -767,37 +875,62 @@ function layout(){
     });
   });
   MAP.others.forEach(o=>{
-    place(o.node, o.home, any ? 0.85 : 1, any ? 0.12 : 0.75);
+    const on  = activeIdea === o.key;
+    const dim = activeIdea !== null && !on;
+    place(o.node, o.home, on ? 1.14 : (dim ? 0.85 : 1), dim ? 0.12 : (on ? 1 : 0.8));
+    o.node.g.classList.toggle("on", on);
+    o.node.g.setAttribute("aria-pressed", String(on));
     drawEdge(o.edge, C, o.home, true, 0);
-    o.edge.style.opacity = any ? 0.08 : 0.3;
+    o.edge.style.opacity = dim ? 0.08 : (on ? 0.6 : 0.28);
+    const ep = { x:o.home.x, y:o.home.y + (on ? 86 : 64) };
+    place(o.evNode, ep, on ? 1 : 0.7, on ? 1 : (dim ? 0.08 : 0.4));
+    drawEdge(o.evEdge, o.home, ep, true, on ? 0.06 : 0);
+    o.evEdge.style.opacity = on ? 0.6 : (dim ? 0.06 : 0.22);
   });
   const t = MAP.themes.find(x=>x.id===activeTheme);
-  mapFoot.innerHTML = t ? `<b>A:</b> ${t.analysis}` : "";
+  const o = MAP.others.find(x=>x.key===activeIdea);
+  mapFoot.innerHTML = t ? `<b>A:</b> ${t.analysis}`
+    : (o ? "Not used in this essay — there wasn&rsquo;t room for it." : "");
 }
 
 /* ---------- selected idea, shared across skeleton / map / paragraphs ---------- */
 const THEME_NAMES = DATA.paragraphs.map(p => p.title.replace(/^Paragraph \d+ — /, ""));
 const pillLabel = document.getElementById("themePillLabel");
-function setTheme(t){
-  activeTheme = (activeTheme === t) ? null : t;
+
+function selectIdea(key){
+  activeIdea = (activeIdea === key) ? null : key;
+  activeTheme = (activeIdea === "t1") ? 1 : (activeIdea === "t2") ? 2 : null;
+  /* Only the two essay ideas dim the skeleton and paragraphs; the others are
+     map-only, so selecting one shouldn't grey out the whole page. The pill
+     shows for any selection, so there is always a way back. */
   document.body.classList.toggle("theming", activeTheme !== null);
+  document.body.classList.toggle("ideating", activeIdea !== null);
   document.querySelectorAll("[data-theme]").forEach(el =>
     el.classList.toggle("on", activeTheme !== null && el.getAttribute("data-theme") === String(activeTheme)));
-  if(activeTheme !== null) pillLabel.textContent = THEME_NAMES[activeTheme-1];
+  if(activeTheme !== null){
+    pillLabel.textContent = THEME_NAMES[activeTheme-1];
+  } else if(activeIdea !== null){
+    const o = MAP.others.find(x=>x.key===activeIdea);
+    if(o) pillLabel.textContent = stripTags(o.label.join(" ")) + " — not in this essay";
+  }
   layout();
 }
-document.getElementById("themeClear").addEventListener("click", ()=>setTheme(activeTheme));
+function setTheme(t){ selectIdea("t"+t); }
+function clearIdea(){ if(activeIdea !== null) selectIdea(activeIdea); }
+
+document.getElementById("themeClear").addEventListener("click", clearIdea);
 centreNode.g.style.cursor = "pointer";
-centreNode.g.addEventListener("click", ()=>{ if(activeTheme !== null) setTheme(activeTheme); });
+centreNode.g.addEventListener("click", clearIdea);
 
 /* ---------- translations ---------- */
 function normalise(s){
   return s.replace(/[“”„]/g,'"').replace(/[‘’]/g,"'").replace(/\s+/g," ").trim().toLowerCase();
 }
 let gid = 0;
-(function applyGlosses(){
+function applyGlosses(){
   const missing = [];
   document.querySelectorAll("span.ev, span.pu, span.id").forEach(sp=>{
+    if(sp.dataset.gid) return;                       // already wired
     const g = DATA.gloss[normalise(sp.textContent)];
     if(!g){ missing.push(normalise(sp.textContent)); return; }
     sp.classList.add("glossable");
@@ -805,7 +938,8 @@ let gid = 0;
     sp.dataset.gid = "g" + (gid++);
   });
   if(missing.length) console.info("[teea] highlighted spans with no translation yet:", missing);
-})();
+}
+applyGlosses();
 
 document.addEventListener("click", e=>{
   const gl = e.target.closest(".glossable");
@@ -829,18 +963,22 @@ document.addEventListener("click", e=>{
     ph.appendChild(g);
     return;
   }
+  const idea = e.target.closest("[data-idea-trigger]");
+  if(idea){ selectIdea(idea.getAttribute("data-idea-trigger")); return; }
   const trig = e.target.closest("[data-theme-trigger]");
   if(trig) setTheme(Number(trig.getAttribute("data-theme-trigger")));
 });
 document.addEventListener("keydown", e=>{
-  if(e.key === "Escape" && activeTheme !== null){ setTheme(activeTheme); return; }
-  const g = e.target.closest && e.target.closest("g[data-theme-trigger]");
-  if(g && (e.key === "Enter" || e.key === " ")){
-    e.preventDefault();
-    setTheme(Number(g.getAttribute("data-theme-trigger")));
-  }
+  if(e.key === "Escape"){ clearIdea(); return; }
+  if(e.key !== "Enter" && e.key !== " ") return;
+  const g = e.target.closest && e.target.closest("g[data-theme-trigger], g[data-idea-trigger]");
+  if(!g) return;
+  e.preventDefault();
+  if(g.hasAttribute("data-idea-trigger")) selectIdea(g.getAttribute("data-idea-trigger"));
+  else setTheme(Number(g.getAttribute("data-theme-trigger")));
 });
 
+renderBands();
 layout();
 </script>
 </body>
