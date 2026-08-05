@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="ELC Hub — T·E·E·A analytical paragraphs, colour-coded, worked example from The Giving Tree.">
-<title>T·E·E·A, colour-coded — ELC Hub</title>
+<meta name="description" content="ELC Hub — T·E·E·A analytical paragraphs, colour-coded, worked from The Giving Tree.">
+<title>T·E·E·A — ELC Hub</title>
 <style>
   :root {
     --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
@@ -13,86 +13,104 @@
     --evid:#006FC0; --evid-fill:#45B0E1;
     --purp:#008F4C; --purp-fill:#8DD873;
     --idea:#C03A2B; --idea-fill:#F1A983;
-    --evid-soft:#DCEEFB; --purp-soft:#DEF3E6; --idea-soft:#FBE4DE;
+    --purp-soft:#DEF3E6; --idea-soft:#FBE4DE;
   }
   @media (prefers-color-scheme:dark) {
     :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
             --accent:#7aa5ff; --accent-soft:#1d2c4d; --shadow:0 1px 2px rgba(0,0,0,.4);
             --evid:#5FB4EC; --purp:#4FBF83; --idea:#E8836F;
-            --evid-soft:#122B3D; --purp-soft:#10291B; --idea-soft:#3A1E17; }
+            --purp-soft:#10291B; --idea-soft:#3A1E17; }
   }
   * { box-sizing:border-box; margin:0; }
   body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.55; }
-  header { background:linear-gradient(135deg,#2563eb,#7c3aed 60%,#db2777); color:#fff; padding:22px 20px 28px; text-align:center; }
+  header { background:linear-gradient(135deg,#2563eb,#7c3aed 60%,#db2777); color:#fff; padding:20px 20px 26px; text-align:center; }
   header a.back { color:#fff; opacity:.85; text-decoration:none; font-size:.85rem; font-weight:600; }
   header h1 { font-size:clamp(1.4rem,4vw,1.9rem); margin-top:6px; }
-  header p { max-width:640px; margin:8px auto 0; opacity:.94; font-size:.92rem; }
-  main { max-width:900px; margin:0 auto; padding:20px 14px 60px; }
+  header p { margin:6px auto 0; opacity:.94; font-size:.9rem; }
+  main { max-width:1180px; margin:0 auto; padding:20px 14px 70px; }
   section { margin-top:30px; }
-  h2.sec { font-size:1.2rem; margin:0 0 6px; }
-  p.lead { color:var(--muted); font-size:.9rem; margin:0 0 14px; max-width:70ch; }
-  .hint { font-size:.82rem; color:var(--muted); margin-bottom:10px; }
+  h2.sec { font-size:1.2rem; margin:0 0 10px; }
 
   .legend { display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; font-size:.82rem;
             background:var(--card); border:1px solid var(--line); border-radius:10px;
-            padding:9px 13px; margin-bottom:18px; }
-  .legend b { font-weight:700; }
+            padding:9px 13px; }
   .sw { display:inline-flex; align-items:center; gap:6px; }
   .dot { width:11px; height:11px; border-radius:3px; border:1px solid rgba(0,0,0,.18); flex:none; }
   .dot.evid { background:var(--evid-fill); } .dot.purp { background:var(--purp-fill); } .dot.idea { background:var(--idea-fill); }
+  .touch { display:inline-flex; gap:4px; vertical-align:middle; }
   .touch .dot { opacity:.25; border:1px solid var(--muted); background:transparent; }
   .touch .dot.on.evid { opacity:1; background:var(--evid-fill); border-color:transparent; }
   .touch .dot.on.purp { opacity:1; background:var(--purp-fill); border-color:transparent; }
   .touch .dot.on.idea { opacity:1; background:var(--idea-fill); border-color:transparent; }
-  .touch { display:inline-flex; gap:4px; vertical-align:middle; }
 
-  /* inline colour spans within the worked sentences — coloured text, no fill,
-     exactly as the A3 handout and writing-wall.html do it (.b/.g/.o there) */
+  /* coloured text only — as the A3 handout and writing-wall.html do it */
   span.ev { color:var(--evid); font-weight:600; }
   span.pu { color:var(--purp); font-weight:600; }
   span.id { color:var(--idea); font-weight:600; }
 
-  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:12px; margin-bottom:16px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px 15px; box-shadow:var(--shadow); }
-  .card .top { display:flex; align-items:baseline; gap:9px; margin-bottom:5px; }
-  .card .letter { font-size:1.7rem; font-weight:800; color:var(--accent); line-height:1; }
-  .card .name { font-weight:700; }
-  .card .job { font-size:.87rem; color:var(--muted); margin-bottom:8px; }
-  .card .note { font-size:.84rem; margin-top:8px; padding-top:8px; border-top:1px dashed var(--line); }
+  /* ---------- T / E / A accordion ---------- */
+  .letters { display:flex; flex-direction:column; gap:9px; }
+  .lt { border:1px solid var(--line); border-radius:var(--radius); background:var(--card);
+        box-shadow:var(--shadow); overflow:hidden; }
+  .lt > button.head { width:100%; display:flex; align-items:center; gap:12px; padding:12px 15px;
+        background:none; border:none; text-align:left; cursor:pointer; font:inherit; color:inherit; }
+  .lt > button.head:hover { background:var(--accent-soft); }
+  .lt .big { font-size:1.7rem; font-weight:800; color:var(--accent); line-height:1; width:1.3rem; flex:none; }
+  .lt .nm { font-weight:700; }
+  .lt .jb { font-size:.85rem; color:var(--muted); }
+  .lt .chev { margin-left:auto; color:var(--muted); transition:transform .2s; flex:none; }
+  .lt.open .chev { transform:rotate(90deg); }
+  .lt .body { display:none; padding:0 15px 15px; }
+  .lt.open .body { display:block; }
+  .ex { background:var(--bg); border-radius:10px; padding:10px 13px; font-size:1.05rem; margin-bottom:10px; }
+  .gd { font-size:.9rem; margin-bottom:9px; }
+  .warn { font-size:.88rem; color:var(--muted); border-left:3px solid var(--idea); padding-left:10px; margin-bottom:9px; }
+  .stems { display:flex; flex-wrap:wrap; gap:6px; }
+  .stem { border:1px dashed var(--line); background:var(--bg); border-radius:8px; padding:4px 10px; font-size:.83rem; color:var(--muted); }
+  .subh { font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); margin:14px 0 5px; font-weight:700; }
 
-  .callout { border:1px solid var(--idea); background:var(--idea-soft); border-radius:var(--radius);
-             padding:14px 16px; margin-bottom:16px; color:var(--ink); }
-  .callout h3 { color:var(--idea); font-size:1.02rem; margin-bottom:8px; }
-  .rulebox { background:var(--card); border-radius:10px; padding:9px 12px; margin:8px 0; font-size:.9rem; }
-  .starters { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
-  .starter { border:1px dashed var(--line); background:var(--card); border-radius:8px; padding:4px 9px; font-size:.82rem; color:var(--muted); }
+  /* ---------- verbs ---------- */
+  .verbs { display:flex; flex-wrap:wrap; gap:6px; }
+  .verb { cursor:pointer; border:1px solid var(--purp); background:var(--purp-soft); color:var(--purp);
+          border-radius:999px; padding:4px 11px; font-size:.88rem; font-weight:600; font-family:inherit; }
+  .verb.open { outline:2px solid var(--purp); outline-offset:1px; }
+  .verbgloss { background:var(--accent-soft); color:var(--ink); border-radius:8px; padding:7px 10px;
+               margin-top:9px; font-size:.88rem; display:none; }
+  .verbgloss.show { display:block; }
+  .verbgloss .w { font-weight:700; color:var(--purp); }
+  .avoid { margin-top:10px; font-size:.85rem; color:var(--muted); }
 
-  .scroll { overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow); margin-bottom:10px; }
-  table.grid { border-collapse:collapse; width:100%; min-width:640px; }
-  .grid th, .grid td { padding:9px 12px; text-align:left; vertical-align:top; font-size:.84rem; border:1px solid var(--line); }
+  /* ---------- tables ---------- */
+  .scroll { overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow); }
+  table.grid { border-collapse:collapse; width:100%; min-width:660px; }
+  .grid th, .grid td { padding:9px 12px; text-align:left; vertical-align:top; font-size:.85rem; border:1px solid var(--line); }
   .grid thead th { font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); background:var(--bg); white-space:nowrap; }
   .grid td.why { color:var(--muted); font-size:.82rem; }
 
-  .band { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:13px 15px; margin-bottom:10px; box-shadow:var(--shadow); }
-  .band .head { display:flex; align-items:baseline; gap:8px; margin-bottom:6px; }
-  .band .name b { color:var(--accent); }
+  table.rubric { border-collapse:collapse; width:100%; min-width:820px; }
+  .rubric th, .rubric td { padding:10px 13px; text-align:left; vertical-align:top; font-size:.86rem; border:1px solid var(--line); }
+  .rubric thead th { font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); background:var(--bg); white-space:nowrap; }
+  .rubric td.skill { font-weight:700; white-space:nowrap; }
+  tr.evid td { background:var(--evid-fill); } tr.purp td { background:var(--purp-fill); } tr.idea td { background:var(--idea-fill); }
+  tr.evid td, tr.purp td, tr.idea td { color:#1c2333; }
+
+  /* ---------- bands ---------- */
+  .band { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:12px 15px; margin-bottom:9px; box-shadow:var(--shadow); }
+  .band .nmb { font-weight:700; margin-bottom:5px; }
+  .band .nmb b { color:var(--accent); }
   .band .sent { font-size:1.05rem; }
-  .band .why { font-size:.83rem; color:var(--muted); margin-top:8px; padding-top:8px; border-top:1px dashed var(--line); }
+  .band .why { font-size:.83rem; color:var(--muted); margin-top:7px; padding-top:7px; border-top:1px dashed var(--line); }
 
-  /* ---- essay skeleton + mindmap, and the shared theme highlighting ---- */
-  .plan { display:grid; grid-template-columns:minmax(250px,310px) 1fr; gap:18px; align-items:start; }
-  @media (max-width:760px) { .plan { grid-template-columns:1fr; } }
-
-  .skeleton { display:flex; flex-direction:column; gap:7px; }
-  .epart { width:100%; text-align:left; font:inherit; background:var(--card); border:1px solid var(--line);
-           border-radius:12px; padding:9px 11px; box-shadow:var(--shadow); color:inherit; }
+  /* ---------- essay skeleton, horizontal ---------- */
+  .skeleton { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  @media (max-width:760px) { .skeleton { grid-template-columns:repeat(2,1fr); } }
+  .epart { text-align:left; font:inherit; background:var(--card); border:1px solid var(--line);
+           border-radius:12px; padding:10px 12px; box-shadow:var(--shadow); color:inherit; }
   .epart.clickable { cursor:pointer; }
   .epart.clickable:hover { border-color:var(--ink); }
-  .epart .ptop { display:flex; align-items:baseline; gap:7px; margin-bottom:6px; }
   .epart .pname { font-weight:800; font-size:.95rem; }
-  .epart .ptitle { font-size:.8rem; color:var(--muted); }
-  .epart .pnote { font-size:.78rem; color:var(--muted); margin-top:5px; }
-  .erow { display:flex; align-items:center; gap:7px; margin-top:4px; }
+  .epart .ptitle { display:block; font-size:.78rem; color:var(--muted); margin-top:1px; min-height:2.2em; }
+  .erow { display:flex; align-items:center; gap:7px; margin-top:5px; }
   .elab { font-size:.72rem; font-weight:800; color:var(--accent); width:11px; flex:none; }
   .ebar { display:flex; flex:1; height:8px; border-radius:4px; overflow:hidden; }
   .ebar i { flex:1; }
@@ -101,33 +119,61 @@
   .ebar i.s-id { background:var(--idea-fill); }
   .ebar i.s-n  { background:var(--line); }
 
+  /* ---------- mindmap ---------- */
   .mapwrap { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-             box-shadow:var(--shadow); padding:10px 12px 12px; }
-  .mapwrap svg { width:100%; height:auto; display:block; }
-  .bub { cursor:default; }
-  .bub.pick { cursor:pointer; }
-  .bub ellipse { fill:var(--card); stroke:var(--idea); stroke-width:1.6; }
-  .bub.pick ellipse { fill:var(--idea-fill); stroke-width:2; }
-  .bub:not(.pick) ellipse { stroke-dasharray:4 3; opacity:.8; }
-  .bub text { fill:var(--idea); font-size:14px; font-weight:700; font-family:inherit; }
-  .bub.pick text { fill:#1c2333; }
-  .bub.pick:hover ellipse { stroke:var(--ink); }
-  .mapline { stroke:var(--line); stroke-width:2; }
-  .mapcentre ellipse { fill:var(--ink); stroke:none; }
-  .mapcentre text { fill:var(--bg); font-size:16px; font-weight:700; font-family:inherit; }
-  .mapfoot { font-size:.8rem; color:var(--muted); margin-top:8px; }
+             box-shadow:var(--shadow); padding:6px 8px 10px; }
+  /* the map needs room to stay legible — on a phone it pans rather than
+     shrinking to unreadable, same as the wide tables on this page */
+  .mapscroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .mapwrap svg { width:100%; min-width:880px; height:auto; display:block; overflow:visible; }
+  .mapnode { transition:transform .5s cubic-bezier(.34,1.3,.5,1), opacity .38s ease; }
+  .mapnode rect, .mapnode ellipse { transition:stroke-width .2s, stroke .2s; }
+  .mapnode text { font-family:inherit; font-weight:600; }
+  .mapnode.hid { pointer-events:none; }
+  .mapnode.pickable { cursor:pointer; }
+  .n-centre ellipse { fill:var(--ink); stroke:none; }
+  .n-centre text { fill:var(--bg); font-weight:700; }
+  .n-theme rect { fill:var(--idea-fill); stroke:var(--idea); stroke-width:2; }
+  .n-theme text { fill:#1c2333; }
+  .n-theme.on rect { stroke:var(--ink); stroke-width:3.5; }
+  .n-quote rect { fill:var(--card); stroke:var(--evid); stroke-width:2; }
+  .n-quote text { fill:var(--evid); }
+  .n-purp rect { fill:var(--card); stroke:var(--purp); stroke-width:2; }
+  .n-purp text { fill:var(--purp); }
+  .n-other rect { fill:var(--card); stroke:var(--idea); stroke-width:1.5; stroke-dasharray:4 3; }
+  .n-other text { fill:var(--idea); font-weight:600; }
+  .mapedge { fill:none; stroke:var(--line); stroke-width:2.5;
+             transition:stroke-dashoffset .55s ease, opacity .3s ease; }
+  .mapedge.e-quote { stroke:var(--evid); opacity:.5; }
+  .mapedge.e-purp { stroke:var(--purp); opacity:.5; }
+  .mapfoot { font-size:.85rem; color:var(--muted); margin-top:6px; padding:0 6px; min-height:2.6em; }
+  .mapfoot b { color:var(--ink); }
+  @media (prefers-reduced-motion:reduce) {
+    .mapnode, .mapedge { transition:none !important; }
+  }
 
-  /* Selected-theme state, following writing-wall.html's filtering pattern.
-     The ring is --ink, deliberately NOT a scheme colour: a blue ring round an
-     orange bubble would read as "evidence" on a page about what colours mean. */
+  /* ---------- worked paragraphs ---------- */
+  #paragraphs { display:grid; gap:16px; }
+  @media (min-width:900px) { #paragraphs { grid-template-columns:1fr 1fr; align-items:start; } }
+  .parablock { padding:2px; transition:box-shadow .12s; }
+  button.paratitle { display:block; width:100%; text-align:left; background:none; border:none;
+        font-family:inherit; color:inherit; cursor:pointer; padding:0; font-weight:700;
+        font-size:1.05rem; margin-bottom:8px; }
+  button.paratitle:hover { color:var(--accent); }
+  .slot { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+          padding:11px 14px; margin-bottom:8px; box-shadow:var(--shadow); }
+  .slot .shead { display:flex; align-items:baseline; gap:9px; margin-bottom:6px; flex-wrap:wrap; }
+  .slot .letter { font-size:1.4rem; font-weight:800; color:var(--accent); width:1.2rem; flex:none; }
+  .slot .job { font-size:.78rem; color:var(--muted); flex:1; }
+  .slot .sent { font-size:1.06rem; }
+  .out { background:var(--accent-soft); border-radius:10px; padding:10px 13px; font-size:.9rem; color:var(--muted); }
+  .out b { color:var(--ink); }
+
+  /* ---------- selected idea ---------- */
   body.theming [data-theme]:not(.on) { opacity:.28; }
   [data-theme].on.epart { border-color:var(--ink); box-shadow:0 0 0 2px var(--ink); }
-  .bub[data-theme].on ellipse { stroke:var(--ink); stroke-width:3.5; }
   .parablock[data-theme].on { box-shadow:0 0 0 2px var(--ink); border-radius:var(--radius); }
-  .parablock { padding:2px; transition:box-shadow .12s; }
-  /* keep the pill from permanently covering the last line of the page */
   body.theming { padding-bottom:62px; }
-
   .themepill { position:fixed; left:50%; transform:translateX(-50%); bottom:14px; z-index:50;
                display:none; align-items:center; gap:10px; background:var(--ink); color:var(--bg);
                border-radius:999px; padding:8px 9px 8px 15px; font-size:.85rem;
@@ -136,204 +182,171 @@
   .themepill .lbl { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .themepill button { border:none; background:rgba(255,255,255,.18); color:inherit; font:inherit;
                       border-radius:999px; padding:4px 11px; cursor:pointer; flex:none; }
-  .themepill button:hover { background:rgba(255,255,255,.32); }
-  /* off-centre on wide screens so it doesn't sit over the text being read */
   @media (min-width:820px) { .themepill { left:auto; right:18px; transform:none; } }
 
-  .paratitle { font-weight:700; font-size:1.05rem; margin:20px 0 8px; }
-  .paratitle:first-child { margin-top:0; }
-  button.paratitle { display:block; width:100%; text-align:left; background:none; border:none;
-                     font-family:inherit; color:inherit; cursor:pointer; padding:0; }
-  button.paratitle:hover { color:var(--accent); }
-  .slot { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:11px 14px; margin-bottom:8px; box-shadow:var(--shadow); }
-  .slot .head { display:flex; align-items:baseline; gap:9px; margin-bottom:6px; flex-wrap:wrap; }
-  .slot .letter { font-size:1.4rem; font-weight:800; color:var(--accent); width:1.2rem; flex:none; }
-  .slot .job { font-size:.8rem; color:var(--muted); flex:1; }
-  .slot .sent { font-size:1.08rem; }
-  .out { background:var(--accent-soft); border-radius:10px; padding:10px 13px; font-size:.92rem; color:var(--muted); margin-top:4px; }
-  .out b { color:var(--ink); }
-
-  /* click-a-phrase translations, same pattern as the rubrics page */
+  /* ---------- tap-to-translate ---------- */
   .phrase { display:inline-block; cursor:pointer; border-bottom:1px dotted currentColor; }
-  .phrase:hover { background:rgba(0,0,0,.06); }
   .phrase .gloss { display:block; margin-top:4px; font-size:.85em; font-weight:400; border-bottom:none;
                     background:var(--accent-soft); color:var(--ink); border-radius:6px; padding:4px 7px; }
-  .gloss b { font-weight:700; margin-right:2px; }
-
-  /* highlighted spans inside the worked sentences — stay inline so the
-     sentence still wraps normally; their gloss drops below the whole sentence */
   .glossable { cursor:pointer; border-bottom:1px dotted currentColor; }
   .glossable:hover { border-bottom-style:solid; }
   .glossable.open { border-bottom-style:solid; border-bottom-width:2px; }
-  .sent .gloss, .rulebox .gloss { display:block; margin-top:6px; font-size:.85rem; font-weight:400;
+  .sent .gloss, .ex .gloss { display:block; margin-top:6px; font-size:.85rem; font-weight:400;
                     background:var(--accent-soft); color:var(--ink); border-radius:6px; padding:5px 8px; }
   .gloss .src { font-weight:600; display:block; margin-bottom:2px; font-size:.95em; }
+  .gloss b { font-weight:700; margin-right:2px; }
+  tr.evid .phrase .gloss, tr.purp .phrase .gloss, tr.idea .phrase .gloss {
+    background:rgba(255,255,255,.55); color:#1c2333; }
 
-  /* analytical verb bank */
-  .verbs { display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; }
-  .verb { cursor:pointer; border:1px solid var(--purp); background:var(--purp-soft); color:var(--purp);
-          border-radius:999px; padding:4px 11px; font-size:.88rem; font-weight:600; font-family:inherit; }
-  .verb:hover { filter:brightness(.95); }
-  .verb.open { outline:2px solid var(--purp); outline-offset:1px; }
-  .verbgloss { background:var(--accent-soft); color:var(--ink); border-radius:8px;
-               padding:7px 10px; margin-top:9px; font-size:.88rem; display:none; }
-  .verbgloss.show { display:block; }
-  .verbgloss .w { font-weight:700; color:var(--purp); }
-  .avoid { margin-top:12px; font-size:.85rem; color:var(--muted); }
-  .avoid s { opacity:.75; }
-
-  footer { border-top:1px solid var(--line); margin-top:40px; padding:20px 18px 34px; text-align:center; color:var(--muted); font-size:.85rem; }
-  footer a { color:var(--accent); }
-  @media (max-width:540px) { header { padding:20px 16px 24px; } }
+  footer { border-top:1px solid var(--line); margin-top:44px; padding:20px 18px 34px; text-align:center; color:var(--muted); font-size:.85rem; }
 </style>
 </head>
 <body>
 <header>
   <a class="back" href="rubrics.html">← Rubrics</a>
-  <h1>T&middot;E&middot;E&middot;A, colour-coded</h1>
-  <p>The Giving Tree, worked example. Tap any explanation, highlighted phrase or verb for Vietnamese and Chinese.</p>
+  <h1>T&middot;E&middot;E&middot;A</h1>
+  <p>The Giving Tree</p>
 </header>
 
 <main>
   <div class="legend">
-    <b>The wall's three colours:</b>
     <span class="sw"><span class="dot evid"></span>Evidence &amp; metalanguage</span>
     <span class="sw"><span class="dot purp"></span>Purpose &amp; interpretation</span>
     <span class="sw"><span class="dot idea"></span>Ideas &amp; themes</span>
   </div>
 
-  <section id="letters">
-    <h2 class="sec">What do T &middot; E &middot; E &middot; A mean?</h2>
-    <p class="lead">Watch which colours each letter is allowed to touch.</p>
-    <div class="cards" id="letterCards"></div>
-
-    <div class="callout">
-      <h3>Writing the A sentence</h3>
-      <p id="aIntro"></p>
-      <div class="rulebox" id="aRule"></div>
-      <p style="margin-top:8px;font-size:.86rem">Starters:</p>
-      <div class="starters">
-        <span class="starter">Together these choices show that ___, so ___.</span>
-        <span class="starter">Taken together, ___ and ___ show that ___.</span>
-        <span class="starter">By ___, [Author] suggests that ___, which turns ___ into ___.</span>
-      </div>
-    </div>
-
-    <h2 class="sec" style="margin-top:24px">Analytical verbs</h2>
-    <p class="lead">The green word is the one doing the work in an E or A sentence. Tap a verb for Vietnamese and Chinese.</p>
-    <div class="verbs" id="verbBank"></div>
-    <div class="verbgloss" id="verbGloss"></div>
-    <div class="avoid" id="avoidVerbs"></div>
-
-    <h2 class="sec" style="margin-top:24px">Bump up the A sentence</h2>
-    <p class="lead">Colour shows up once you're actually analysing — the bottom two rungs earn none.</p>
-    <div class="scroll"><table class="grid"><thead><tr id="ladderHead"></tr></thead>
-      <tbody><tr id="ladderEx"></tr><tr id="ladderWhy"></tr></tbody></table></div>
-  </section>
-
-  <section id="wagoll">
-    <h2 class="sec">The Giving Tree — the wall's own example</h2>
-    <p class="lead">Straight from the writing wall's fiction row, band by band. Same idea, same words, more colour every time.</p>
-    <div id="wagollBands"></div>
-  </section>
-
-  <section id="plan">
-    <h2 class="sec">The whole essay &mdash; and where these paragraphs sit</h2>
-    <p class="lead">Each little bar is one sentence, coloured by what it earns. Tap <b>P1</b>, <b>P2</b>
-      or a filled idea bubble to follow that idea through the mindmap and into the worked paragraph below.</p>
-    <div class="plan">
-      <div class="skeleton" id="skeleton"></div>
-      <div class="mapwrap">
-        <svg id="mindmap" role="img" aria-label="Mindmap of ideas for The Giving Tree"></svg>
-        <p class="mapfoot">Two of these became paragraphs. The rest are still good ideas &mdash;
-          you just can&rsquo;t use everything in one essay.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="built">
-    <h2 class="sec">Now built as T&middot;E&middot;E&middot;A</h2>
-    <p class="lead">Two ideas, each turned into a paragraph. Read the dots before you read the sentence.</p>
-    <div id="paragraphs"></div>
-  </section>
-
-  <p class="hint" style="margin-top:26px;text-align:center">Full rubric on the <a href="rubrics.html">Analytical Writing</a> page.</p>
-</main>
-
-<div class="themepill" id="themePill">
-  <span class="lbl" id="themePillLabel"></span>
-  <button type="button" id="themeClear">Show all</button>
-</div>
-
-<footer>ELC Hub — made by ELC teachers for ELC students.</footer>
-
+<!-- ================================================================= -->
+<!--  CONTENT BLOCK — everything on the page lives here.                -->
+<!--  Sentences use <span class="ev|pu|id"> round the words that earn   -->
+<!--  that colour. `touches` drives the little dot indicator.           -->
+<!--  {vi,zh} anywhere = tap-to-translate. `gloss` maps a highlighted   -->
+<!--  phrase to its translation wherever it appears.                    -->
+<!--  To use a different text, rewrite this block — no code to touch.   -->
+<!-- ================================================================= -->
 <script>
-/* ================================================================= */
-/*  CONTENT BLOCK — everything on the page lives here.                */
-/*  The three colours are the writing wall's own. Sentences use       */
-/*  <span class="ev|pu|id"> around the words that earn that colour.   */
-/*  Explanatory text (not the worked quotes) carries {vi, zh} for the */
-/*  tap-a-phrase translation. To use a different text, rewrite this   */
-/*  block — no code to touch.                                         */
-/* ================================================================= */
 const DATA = {
   letters: [
-    { letter:"T", name:"Topic sentence", touches:["id"],
-      job:"Your claim. What idea are you arguing?",
-      jobVi:"Luận điểm của bạn. Bạn đang tranh luận về ý tưởng nào?",
-      jobZh:"你的论点。你在论证什么想法？",
-      note:"Names the idea and nothing else. No quote yet, no stated effect yet — that's what the E sentences are for.",
-      noteVi:"Chỉ nêu tên ý tưởng, không gì khác. Chưa có trích dẫn, chưa nêu tác động — đó là việc của các câu E.",
-      noteZh:"只说明想法，别无其他。还没有引用，也还没有说明效果——那是E句子的任务。" },
-    { letter:"E", name:"Explanation — write two", touches:["ev","pu","id"],
-      job:"The quote, its effect, and the theme it points to — fused into one sentence.",
-      jobVi:"Trích dẫn, tác động của nó, và chủ đề mà nó hướng tới — gộp thành một câu.",
-      jobZh:"引用、它的效果，以及它所指向的主题——融合成一个句子。",
-      note:"This is the sentence you already write on the wall. All three colours, every time.",
-      noteVi:"Đây chính là câu bạn đã viết trên tường. Cả ba màu, mỗi lần đều vậy.",
-      noteZh:"这正是你已经在墙上写过的句子。每次都包含全部三种颜色。" },
-    { letter:"A", name:"Analysis", touches:["pu","id"],
-      job:"What do the two E's show only when you read them together?",
-      jobVi:"Hai câu E cho thấy điều gì chỉ khi đọc chúng cùng nhau?",
-      jobZh:"这两个E句子只有放在一起读时，才显示出什么？",
-      note:"Purpose and theme — never a fresh quote. Need a new quote here? That's actually a third E, not an A.",
-      noteVi:"Mục đích và chủ đề — không bao giờ có trích dẫn mới. Cần một trích dẫn mới ở đây? Thực ra đó là câu E thứ ba, không phải câu A.",
-      noteZh:"目的与主题——绝不出现新的引用。这里需要新的引用吗？那其实是第三个E句，而不是A句。" }
-  ],
+    { k:"T", name:"Topic sentence", touches:["id"],
+      job:"Your claim — the idea you are arguing.",
+      jobVi:"Luận điểm của bạn — ý tưởng bạn đang tranh luận.",
+      jobZh:"你的论点——你要论证的想法。",
+      example:"Silverstein presents <span class=\"id\">love as something that is given away, not shared</span>.",
+      guide:"The subject is an idea, not a character and not the book. The verb is an analytical verb. No quote yet, no effect yet — those belong in the E sentences.",
+      guideVi:"Chủ ngữ là một ý tưởng, không phải nhân vật và không phải cuốn sách. Động từ là một động từ phân tích. Chưa có trích dẫn, chưa nêu tác động — những thứ đó thuộc về câu E.",
+      guideZh:"主语是一个想法，不是人物，也不是这本书。动词要用分析性动词。还不需要引用，也不需要说明效果——那些属于E句。",
+      warn:"✗ The Giving Tree is about a tree that gives things to a boy. — that names the book, not an idea.",
+      stems:["[Author] presents ___ as ___.","Through ___, [Author] suggests that ___.","[Author] also presents ___ as ___."] },
 
-  aIntro:{
-    en:"A answers one question: what do the two E's show only when you put them side by side? Not a summary of the first E. Not a summary of the second. The pattern between them.",
-    vi:"Câu A trả lời một câu hỏi duy nhất: hai câu E cho thấy điều gì chỉ khi đặt chúng cạnh nhau? Không phải tóm tắt câu E thứ nhất. Không phải tóm tắt câu E thứ hai. Mà là mối liên hệ giữa chúng.",
-    zh:"A句只回答一个问题：这两个E句只有并排放在一起时，才显示出什么？不是第一个E句的总结，也不是第二个E句的总结，而是它们之间的关联模式。" },
-  aRule:{
-    en:"The no-blue rule: if you feel like your A sentence needs a brand-new quote, stop — that quote belongs in a third E, not in your A. A sentence only earns purpose and theme.",
-    vi:"Quy tắc không-màu-xanh-dương: nếu bạn cảm thấy câu A cần một trích dẫn hoàn toàn mới, hãy dừng lại — trích dẫn đó thuộc về câu E thứ ba, không phải câu A. Câu A chỉ được phép có màu mục đích và màu chủ đề.",
-    zh:"无蓝色规则：如果你觉得A句需要一个全新的引用，那就停下来——那个引用应该属于第三个E句，而不是A句。A句只能获得“目的”和“主题”这两种颜色。" },
+    { k:"E", name:"Explanation — write two", touches:["ev","pu","id"],
+      job:"The quote, its effect and the theme, fused into one sentence.",
+      jobVi:"Trích dẫn, tác động của nó và chủ đề, gộp lại thành một câu.",
+      jobZh:"引用、它的效果和主题，融合成一个句子。",
+      example:"Silverstein uses <span class=\"ev\">repetition of the line &ldquo;And the tree was happy&rdquo;</span> <span class=\"pu\">to highlight the one-sided relationship</span>, suggesting themes of <span class=\"id\">sacrifice</span> and <span class=\"id\">imbalance</span>.",
+      guide:"The quote sits inside the sentence, never on its own. Then what it does, then the idea it points to. All three colours, every time — this is the sentence you already write on the wall.",
+      guideVi:"Trích dẫn nằm bên trong câu, không bao giờ đứng riêng. Sau đó là điều nó làm được, rồi đến ý tưởng nó hướng tới. Cả ba màu, mỗi lần đều vậy — đây chính là câu bạn đã viết trên tường.",
+      guideZh:"引用要放在句子内部，绝不单独成句。接着说明它的作用，然后指出它所指向的想法。每次都要包含三种颜色——这正是你已经在墙上写过的句子。",
+      warn:"✗ The quote is: “And the tree was happy.” — a quote on its own earns nothing.",
+      stems:["[Author] uses ___ in “___” to highlight ___.","The ___ of “___” shows that ___.","When ___, [Author] suggests that ___."] },
+
+    { k:"A", name:"Analysis", touches:["pu","id"],
+      job:"What the two E sentences show only when you read them together.",
+      jobVi:"Điều mà hai câu E chỉ cho thấy khi bạn đọc chúng cùng nhau.",
+      jobZh:"这两个E句只有放在一起读时才显示出来的东西。",
+      example:"Together these choices show that <span class=\"pu\">the tree&rsquo;s happiness depends completely on the boy&rsquo;s needs</span>, so Silverstein presents her love as <span class=\"id\">generous and damaging</span> at the same time.",
+      guide:"Not a summary of the first E, not a summary of the second — the pattern between them. Purpose and theme only.",
+      guideVi:"Không phải tóm tắt câu E thứ nhất, cũng không phải tóm tắt câu E thứ hai — mà là mối liên hệ giữa chúng. Chỉ có mục đích và chủ đề.",
+      guideZh:"不是第一个E句的总结，也不是第二个E句的总结——而是它们之间的关联。只有目的和主题。",
+      warn:"The no-blue rule: if your A sentence needs a brand-new quote, that quote belongs in a third E.",
+      warnVi:"Quy tắc không-màu-xanh-dương: nếu câu A của bạn cần một trích dẫn hoàn toàn mới, trích dẫn đó thuộc về câu E thứ ba.",
+      warnZh:"无蓝色规则：如果你的A句需要一个全新的引用，那个引用应该属于第三个E句。",
+      stems:["Together these choices show that ___, so ___.","Taken together, ___ and ___ show that ___.","By ___, [Author] suggests that ___, which turns ___ into ___."],
+      ladder:true }
+  ],
 
   ladder: [
     { rung:"Restate", band:"C2", touches:[],
       html:"This shows that the tree gives a lot.",
-      why:"Repeats the T. Vague subject (“this”), weak verb (“shows”). No colour earned yet.",
-      whyVi:"Lặp lại câu T. Chủ ngữ mơ hồ (“this”), động từ yếu (“shows”). Chưa có màu nào.",
-      whyZh:"重复了T句。主语模糊（“this”），动词薄弱（“shows”）。还没有获得任何颜色。" },
+      why:"Repeats the T. Vague subject (“this”), weak verb (“shows”).",
+      whyVi:"Lặp lại câu T. Chủ ngữ mơ hồ (“this”), động từ yếu (“shows”).",
+      whyZh:"重复了T句。主语模糊（“this”），动词薄弱（“shows”）。" },
     { rung:"Generalise", band:"C3", touches:[],
       html:"These examples prove that the tree loves the boy.",
-      why:"More concrete subject, but still no link between the evidence and a cause. Still no colour.",
-      whyVi:"Chủ ngữ cụ thể hơn, nhưng vẫn chưa có mối liên hệ giữa bằng chứng và nguyên nhân. Vẫn chưa có màu.",
-      whyZh:"主语更具体了，但证据与原因之间仍然没有联系。仍然没有颜色。" },
+      why:"More concrete subject, but still no link between the evidence and a cause.",
+      whyVi:"Chủ ngữ cụ thể hơn, nhưng vẫn chưa có mối liên hệ giữa bằng chứng và nguyên nhân.",
+      whyZh:"主语更具体了，但证据与原因之间仍然没有联系。" },
     { rung:"Analyse", band:"C4", touches:["pu","id"],
       html:"Together, these moments show that <span class=\"pu\">the tree&rsquo;s happiness depends completely on the boy&rsquo;s needs</span>, so Silverstein presents her love as <span class=\"id\">generous and damaging</span> at the same time.",
-      why:"Purpose (what it shows) plus theme (generous/damaging) — and still no blue. This is the target.",
-      whyVi:"Mục đích (nó cho thấy điều gì) cộng với chủ đề (rộng lượng/gây tổn thương) — và vẫn không có màu xanh dương. Đây là mục tiêu cần đạt.",
-      whyZh:"目的（它表明了什么）加上主题（慷慨／有害）——并且仍然没有蓝色。这就是目标。" },
+      why:"Purpose plus theme, with a cause–effect clause. This is the target.",
+      whyVi:"Mục đích cộng với chủ đề, kèm mệnh đề nguyên nhân–kết quả. Đây là mục tiêu.",
+      whyZh:"目的加上主题，并带有因果从句。这就是目标。" },
     { rung:"Synthesise", band:"VCE 1", touches:["pu","id"],
       html:"Taken together, the tree&rsquo;s shrinking body and the boy&rsquo;s growing demands show that Silverstein is not writing about kindness alone: he places a <span class=\"id\">giver and a taker</span> in one relationship so that <span class=\"pu\">readers must decide whether unconditional love is a virtue or a cost</span>, and the final image of the stump leaves that question open.",
-      why:"Same two colours, richer, and joining both branches. Purpose and theme earn the top band — not more evidence.",
-      whyVi:"Vẫn hai màu đó, nhưng phong phú hơn, và kết hợp cả hai nhánh ý. Mục đích và chủ đề mới là điều đạt được bậc cao nhất — không phải thêm bằng chứng.",
-      whyZh:"还是同样的两种颜色，但更丰富，并且连接了两个分支。目的与主题才是达到最高等级的关键——而不是更多的证据。" }
+      why:"Same two colours, richer, joining both ideas.",
+      whyVi:"Vẫn hai màu đó, nhưng phong phú hơn, kết hợp cả hai ý tưởng.",
+      whyZh:"还是那两种颜色，但更丰富，并连接了两个想法。" }
   ],
 
-  /* Verbatim from eal-analytical-writing-wagoll.docx — the fiction row. */
+  verbs: [
+    { w:"shows", vi:"cho thấy", zh:"表明" },
+    { w:"suggests", vi:"gợi ý, ngụ ý", zh:"暗示" },
+    { w:"highlights", vi:"làm nổi bật", zh:"突显、强调" },
+    { w:"reveals", vi:"hé lộ, bộc lộ", zh:"揭示" },
+    { w:"emphasises", vi:"nhấn mạnh", zh:"强调" },
+    { w:"presents", vi:"trình bày, khắc hoạ", zh:"呈现、刻画" },
+    { w:"portrays", vi:"khắc hoạ, miêu tả", zh:"描绘、刻画" },
+    { w:"reinforces", vi:"củng cố, làm mạnh thêm", zh:"强化" },
+    { w:"symbolises", vi:"tượng trưng cho", zh:"象征" },
+    { w:"contrasts", vi:"đối lập, tương phản", zh:"对比、形成反差" },
+    { w:"conveys", vi:"truyền tải", zh:"传达" },
+    { w:"implies", vi:"ngụ ý", zh:"暗指" },
+    { w:"illustrates", vi:"minh hoạ, cho thấy rõ", zh:"说明、印证" },
+    { w:"explores", vi:"khám phá, đi sâu vào", zh:"探讨" },
+    { w:"invites readers to question", vi:"mời gọi người đọc đặt câu hỏi về", zh:"邀请读者去质疑" },
+    { w:"positions the reader to", vi:"đặt người đọc vào vị thế để", zh:"引导读者去" }
+  ],
+  avoidVerbs: [
+    { w:"is about", why:"names the book, not an idea" },
+    { w:"says", why:"reports, doesn't analyse" },
+    { w:"talks about", why:"too vague to earn a band" }
+  ],
+
+  gloss: {
+    "repetition": { vi:"sự lặp lại", zh:"重复" },
+    "repetition of the line \"and the tree was happy\"": { vi:"sự lặp lại của câu \"Và cây đã hạnh phúc\"", zh:"「那棵树很快乐」这一句的重复" },
+    "repetition of the phrase \"the tree was happy\"": { vi:"sự lặp lại của cụm từ \"cây đã hạnh phúc\"", zh:"「那棵树很快乐」这个短语的重复" },
+    "tree was happy": { vi:"cây đã hạnh phúc", zh:"那棵树很快乐" },
+    "through the recurring motif \"and the tree was happy,\"": { vi:"qua mô-típ lặp đi lặp lại \"Và cây đã hạnh phúc,\"", zh:"通过反复出现的母题「那棵树很快乐」" },
+    "\"build a house\"": { vi:"\"xây một ngôi nhà\"", zh:"「建一座房子」" },
+    "\"can you give me…?\"": { vi:"\"Bạn có thể cho tôi… không?\"", zh:"「你能给我……吗？」" },
+    "\"i am too big to climb and play\"": { vi:"\"Tôi đã quá lớn để trèo cây và chơi đùa\"", zh:"「我太大了，不能再爬树玩耍了」" },
+    "show": { vi:"cho thấy", zh:"表明" },
+    "shows": { vi:"cho thấy", zh:"表明" },
+    "to highlight the one-sided relationship": { vi:"để làm nổi bật mối quan hệ một chiều", zh:"以突显这段单向的关系" },
+    "makes the tree seem": { vi:"khiến cây có vẻ", zh:"使这棵树显得" },
+    "encouraging the reader to feel": { vi:"khuyến khích người đọc cảm thấy", zh:"促使读者感到" },
+    "invites readers to question": { vi:"mời gọi người đọc đặt câu hỏi về", zh:"邀请读者去质疑" },
+    "shows that she will give away parts of her own body": { vi:"cho thấy rằng cây sẽ cho đi từng phần cơ thể của chính mình", zh:"表明她愿意献出自己身体的一部分" },
+    "the tree's happiness depends completely on the boy's needs": { vi:"hạnh phúc của cây hoàn toàn phụ thuộc vào nhu cầu của cậu bé", zh:"树的快乐完全取决于男孩的需求" },
+    "the boy never gives the tree anything": { vi:"cậu bé không bao giờ cho cây bất cứ thứ gì", zh:"男孩从未给过这棵树任何东西" },
+    "growing up in this story means learning to take": { vi:"trưởng thành trong câu chuyện này nghĩa là học cách lấy đi", zh:"在这个故事里，长大意味着学会索取" },
+    "readers must decide whether unconditional love is a virtue or a cost": { vi:"người đọc phải tự quyết định liệu tình yêu vô điều kiện là một đức tính hay một cái giá phải trả", zh:"读者必须自行判断：无条件的爱究竟是一种美德，还是一种代价" },
+    "love as something that is given away, not shared": { vi:"tình yêu như một thứ được cho đi, chứ không phải được chia sẻ", zh:"把爱视为一种付出，而不是分享" },
+    "sacrifice": { vi:"sự hy sinh", zh:"牺牲" },
+    "imbalance": { vi:"sự mất cân bằng", zh:"失衡" },
+    "sacrifice and imbalance": { vi:"sự hy sinh và sự mất cân bằng", zh:"牺牲与失衡" },
+    "no limit and no protection": { vi:"không có giới hạn và không có sự bảo vệ bản thân", zh:"没有界限，也没有自我保护" },
+    "generous": { vi:"rộng lượng, hào phóng", zh:"慷慨" },
+    "sympathy": { vi:"sự đồng cảm, lòng thương cảm", zh:"同情" },
+    "generous and damaging": { vi:"vừa rộng lượng vừa gây tổn thương", zh:"既慷慨又具有伤害性" },
+    "growing up as learning to take": { vi:"trưởng thành như việc học cách lấy đi", zh:"把长大视为学会索取" },
+    "something to use rather than someone to play with": { vi:"một thứ để sử dụng, thay vì một người để cùng chơi", zh:"一个可利用的东西，而不是一个可以一起玩的人" },
+    "childhood": { vi:"tuổi thơ", zh:"童年" },
+    "a warning rather than a happy ending": { vi:"một lời cảnh báo thay vì một kết thúc có hậu", zh:"一个警示，而不是圆满的结局" },
+    "self-sacrifice": { vi:"sự hy sinh bản thân", zh:"自我牺牲" },
+    "unequal relationships": { vi:"những mối quan hệ bất bình đẳng", zh:"不平等的关系" },
+    "giver and a taker": { vi:"một người cho đi và một người lấy đi", zh:"一个付出者和一个索取者" }
+  },
+
   wagollExample: [
     { band:"C2", label:"Describe",
       html:"The author uses <span class=\"ev\">repetition</span> to <span class=\"pu\">show</span> that the tree keeps giving when it says, &ldquo;And the <span class=\"ev\">tree was happy</span>.&rdquo;",
@@ -357,115 +370,8 @@ const DATA = {
       whyZh:"把这个特征与作者的目的以及超越文本本身的观念联系起来。" }
   ],
 
-  /* Key analytical verbs — the green "purpose" word that does the work in an
-     E or A sentence. Tapping one shows what it means in VI and ZH. */
-  verbs: [
-    { w:"shows",      vi:"cho thấy",                     zh:"表明" },
-    { w:"suggests",   vi:"gợi ý, ngụ ý",                 zh:"暗示" },
-    { w:"highlights", vi:"làm nổi bật",                  zh:"突显、强调" },
-    { w:"reveals",    vi:"hé lộ, bộc lộ",                zh:"揭示" },
-    { w:"emphasises", vi:"nhấn mạnh",                    zh:"强调" },
-    { w:"presents",   vi:"trình bày, khắc hoạ",          zh:"呈现、刻画" },
-    { w:"portrays",   vi:"khắc hoạ, miêu tả",            zh:"描绘、刻画" },
-    { w:"reinforces", vi:"củng cố, làm mạnh thêm",       zh:"强化" },
-    { w:"symbolises", vi:"tượng trưng cho",              zh:"象征" },
-    { w:"contrasts",  vi:"đối lập, tương phản",          zh:"对比、形成反差" },
-    { w:"conveys",    vi:"truyền tải",                   zh:"传达" },
-    { w:"implies",    vi:"ngụ ý",                        zh:"暗指" },
-    { w:"illustrates",vi:"minh hoạ, cho thấy rõ",        zh:"说明、印证" },
-    { w:"explores",   vi:"khám phá, đi sâu vào",         zh:"探讨" },
-    { w:"invites readers to question", vi:"mời gọi người đọc đặt câu hỏi về", zh:"邀请读者去质疑" },
-    { w:"positions the reader to",     vi:"đặt người đọc vào vị thế để",      zh:"引导读者去" }
-  ],
-  avoidVerbs: [
-    { w:"is about",    why:"names the book, not an idea", vi:"nói về", zh:"是关于" },
-    { w:"says",        why:"reports, doesn't analyse",    vi:"nói",    zh:"说" },
-    { w:"talks about", why:"too vague to earn a band",    vi:"nói về", zh:"谈论" }
-  ],
-
-  /* Glosses for the highlighted (coloured) spans inside the worked sentences.
-     Matched on the span's own text, so the same phrase glosses everywhere it
-     appears. Add an entry and it applies automatically — no code to touch. */
-  gloss: {
-    /* evidence & metalanguage */
-    "repetition":
-      { vi:"sự lặp lại", zh:"重复" },
-    "repetition of the line \"and the tree was happy\"":
-      { vi:"sự lặp lại của câu \"Và cây đã hạnh phúc\"", zh:"「那棵树很快乐」这一句的重复" },
-    "repetition of the phrase \"the tree was happy\"":
-      { vi:"sự lặp lại của cụm từ \"cây đã hạnh phúc\"", zh:"「那棵树很快乐」这个短语的重复" },
-    "tree was happy":
-      { vi:"cây đã hạnh phúc", zh:"那棵树很快乐" },
-    "through the recurring motif \"and the tree was happy,\"":
-      { vi:"qua mô-típ lặp đi lặp lại \"Và cây đã hạnh phúc,\"", zh:"通过反复出现的母题「那棵树很快乐」" },
-    "\"build a house\"":
-      { vi:"\"xây một ngôi nhà\"", zh:"「建一座房子」" },
-    "\"can you give me…?\"":
-      { vi:"\"Bạn có thể cho tôi… không?\"", zh:"「你能给我……吗？」" },
-    "\"i am too big to climb and play\"":
-      { vi:"\"Tôi đã quá lớn để trèo cây và chơi đùa\"", zh:"「我太大了，不能再爬树玩耍了」" },
-
-    /* purpose & interpretation */
-    "show":
-      { vi:"cho thấy", zh:"表明" },
-    "shows":
-      { vi:"cho thấy", zh:"表明" },
-    "to highlight the one-sided relationship":
-      { vi:"để làm nổi bật mối quan hệ một chiều", zh:"以突显这段单向的关系" },
-    "makes the tree seem":
-      { vi:"khiến cây có vẻ", zh:"使这棵树显得" },
-    "encouraging the reader to feel":
-      { vi:"khuyến khích người đọc cảm thấy", zh:"促使读者感到" },
-    "invites readers to question":
-      { vi:"mời gọi người đọc đặt câu hỏi về", zh:"邀请读者去质疑" },
-    "shows that she will give away parts of her own body":
-      { vi:"cho thấy rằng cây sẽ cho đi từng phần cơ thể của chính mình", zh:"表明她愿意献出自己身体的一部分" },
-    "the tree's happiness depends completely on the boy's needs":
-      { vi:"hạnh phúc của cây hoàn toàn phụ thuộc vào nhu cầu của cậu bé", zh:"树的快乐完全取决于男孩的需求" },
-    "the boy never gives the tree anything":
-      { vi:"cậu bé không bao giờ cho cây bất cứ thứ gì", zh:"男孩从未给过这棵树任何东西" },
-    "growing up in this story means learning to take":
-      { vi:"trưởng thành trong câu chuyện này nghĩa là học cách lấy đi", zh:"在这个故事里，长大意味着学会索取" },
-    "readers must decide whether unconditional love is a virtue or a cost":
-      { vi:"người đọc phải tự quyết định liệu tình yêu vô điều kiện là một đức tính hay một cái giá phải trả", zh:"读者必须自行判断：无条件的爱究竟是一种美德，还是一种代价" },
-
-    /* ideas & themes */
-    "love as something that is given away, not shared":
-      { vi:"tình yêu như một thứ được cho đi, chứ không phải được chia sẻ", zh:"把爱视为一种付出，而不是分享" },
-    "sacrifice":
-      { vi:"sự hy sinh", zh:"牺牲" },
-    "imbalance":
-      { vi:"sự mất cân bằng", zh:"失衡" },
-    "sacrifice and imbalance":
-      { vi:"sự hy sinh và sự mất cân bằng", zh:"牺牲与失衡" },
-    "no limit and no protection":
-      { vi:"không có giới hạn và không có sự bảo vệ bản thân", zh:"没有界限，也没有自我保护" },
-    "generous":
-      { vi:"rộng lượng, hào phóng", zh:"慷慨" },
-    "sympathy":
-      { vi:"sự đồng cảm, lòng thương cảm", zh:"同情" },
-    "generous and damaging":
-      { vi:"vừa rộng lượng vừa gây tổn thương", zh:"既慷慨又具有伤害性" },
-    "growing up as learning to take":
-      { vi:"trưởng thành như việc học cách lấy đi", zh:"把长大视为学会索取" },
-    "something to use rather than someone to play with":
-      { vi:"một thứ để sử dụng, thay vì một người để cùng chơi", zh:"一个可利用的东西，而不是一个可以一起玩的人" },
-    "childhood":
-      { vi:"tuổi thơ", zh:"童年" },
-    "a warning rather than a happy ending":
-      { vi:"một lời cảnh báo thay vì một kết thúc có hậu", zh:"一个警示，而不是圆满的结局" },
-    "self-sacrifice":
-      { vi:"sự hy sinh bản thân", zh:"自我牺牲" },
-    "unequal relationships":
-      { vi:"những mối quan hệ bất bình đẳng", zh:"不平等的关系" },
-    "giver and a taker":
-      { vi:"một người cho đi và một người lấy đi", zh:"一个付出者和一个索取者" }
-  },
-
-  /* The essay skeleton from the board. Each row is one sentence; `seg` lists
-     the colours that sentence earns — ev/pu/id, or n for none yet. */
   essay: [
-    { part:"Intro", note:"Responds to the prompt and names both ideas.",
+    { part:"Intro", title:"Names both ideas.",
       rows:[ {lab:"", seg:["n"]}, {lab:"", seg:["id"]}, {lab:"", seg:["id"]} ] },
     { part:"P1", theme:1, title:"Love is sacrifice",
       rows:[ {lab:"T", seg:["id"]}, {lab:"E", seg:["ev","pu","id"]},
@@ -473,30 +379,35 @@ const DATA = {
     { part:"P2", theme:2, title:"Growing up is learning to take",
       rows:[ {lab:"T", seg:["id"]}, {lab:"E", seg:["ev","pu","id"]},
              {lab:"E", seg:["ev","pu","id"]}, {lab:"A", seg:["pu","id"]} ] },
-    { part:"C", note:"What both ideas together suggest.",
+    { part:"C", title:"What both ideas together suggest.",
       rows:[ {lab:"", seg:["pu"]}, {lab:"", seg:["pu","id"]} ] }
   ],
 
-  /* The class's own brainstorm. Two of these became paragraphs; the rest were
-     good ideas we didn't have room for. x/y are viewBox coordinates. */
-  mindmap: {
-    centre:"The Giving Tree",
-    view:[620,380], cx:310, cy:190, crx:94, cry:36,
-    bubbles:[
-      { label:["Gratitude"],            theme:2, x:310, y:46,  rx:70, ry:28 },
-      { label:["Generosity"],           theme:1, x:502, y:100, rx:76, ry:28 },
-      { label:["Motherhood"],           theme:1, x:506, y:286, rx:80, ry:28 },
-      { label:["Sacrifice"],            theme:1, x:300, y:336, rx:70, ry:28 },
-      { label:["Fairness","& imbalance"], theme:2, x:108, y:96, rx:84, ry:34 },
-      { label:["Gender"],               theme:null, x:106, y:288, rx:62, ry:26 }
-    ]
+  /* Everything the two paragraphs are built from, as a branching map. */
+  map: {
+    centre:["The Giving Tree"],
+    themes:[
+      { id:1, label:["Love is","sacrifice"], angle:180,
+        analysis:"her happiness depends completely on the boy&rsquo;s needs, so the love is generous and damaging at once",
+        quotes:[
+          { angle:-42, q:["&ldquo;And the tree","was happy&rdquo;"], purpose:["she measures happiness","by what he takes"] },
+          { angle:42,  q:["&ldquo;build a house&rdquo;"],            purpose:["she gives away parts","of her own body"] }
+        ] },
+      { id:2, label:["Growing up is","learning to take"], angle:0,
+        analysis:"his demands grow while she is left with nothing, so the quiet ending is a warning",
+        quotes:[
+          { angle:-42, q:["&ldquo;Can you give me…?&rdquo;"],        purpose:["he sees her as something","to use, not play with"] },
+          { angle:42,  q:["&ldquo;I am too big to","climb and play&rdquo;"], purpose:["after this he never","gives anything back"] }
+        ] }
+    ],
+    others:["Generosity","Motherhood","Gratitude","Fairness","Gender"]
   },
 
   paragraphs: [
     { title:"Paragraph 1 — Love is sacrifice", slots:[
-      { letter:"T", job:"Names the idea. Orange only.", touches:["id"],
+      { letter:"T", job:"Names the idea.", touches:["id"],
         html:"Silverstein presents <span class=\"id\">love as something that is given away, not shared</span>." },
-      { letter:"E", job:"Quote + effect + theme, one sentence.", touches:["ev","pu","id"],
+      { letter:"E", job:"Quote + effect + theme.", touches:["ev","pu","id"],
         html:"Silverstein uses <span class=\"ev\">repetition of the line &ldquo;And the tree was happy&rdquo;</span> <span class=\"pu\">to highlight the one-sided relationship</span>, suggesting themes of <span class=\"id\">sacrifice and imbalance</span>." },
       { letter:"E", job:"Second quote, same pattern.", touches:["ev","pu","id"],
         html:"When the tree offers her branches so the boy can <span class=\"ev\">&ldquo;build a house&rdquo;</span>, Silverstein <span class=\"pu\">shows that she will give away parts of her own body</span>, suggesting that her love has <span class=\"id\">no limit and no protection</span>." },
@@ -504,9 +415,9 @@ const DATA = {
         html:"Together these choices show that <span class=\"pu\">the tree&rsquo;s happiness depends completely on the boy&rsquo;s needs</span>, so Silverstein presents her love as <span class=\"id\">generous and damaging</span> at the same time." }
     ]},
     { title:"Paragraph 2 — Growing up is learning to take", slots:[
-      { letter:"T", job:"Names the idea. Orange only.", touches:["id"],
+      { letter:"T", job:"Names the idea.", touches:["id"],
         html:"Silverstein also presents <span class=\"id\">growing up as learning to take</span>." },
-      { letter:"E", job:"Quote + effect + theme, one sentence.", touches:["ev","pu","id"],
+      { letter:"E", job:"Quote + effect + theme.", touches:["ev","pu","id"],
         html:"The boy&rsquo;s repeated question, <span class=\"ev\">&ldquo;Can you give me&hellip;?&rdquo;</span>, changes from money to a house to a boat, which <span class=\"pu\">shows</span> that he now sees the tree as <span class=\"id\">something to use rather than someone to play with</span>." },
       { letter:"E", job:"Second quote, same pattern.", touches:["ev","pu","id"],
         html:"Silverstein marks the end of <span class=\"id\">childhood</span> with the boy&rsquo;s own words, <span class=\"ev\">&ldquo;I am too big to climb and play&rdquo;</span>, and after this line <span class=\"pu\">the boy never gives the tree anything</span>." },
@@ -515,15 +426,125 @@ const DATA = {
     ]}
   ]
 };
+
+function P(en, vi, zh){ return {en, vi, zh}; }
+
+const RUBRIC = [
+  { skill:"Ideas & Themes", vi:"Ý tưởng & Chủ đề", zh:"思想与主题", cls:"idea",
+    cells:[
+      [ P("Recognises what happens in the text or scene.",
+          "Nhận biết điều gì xảy ra trong văn bản hoặc cảnh.", "识别文本或场景中发生的事情。"),
+        P("Retells key details with little interpretation.",
+          "Kể lại các chi tiết chính với rất ít diễn giải.", "复述关键细节，几乎不作解读。") ],
+      [ P("Explains basic feelings or ideas suggested by the text.",
+          "Giải thích những cảm xúc hoặc ý tưởng cơ bản mà văn bản gợi ý.", "解释文本所暗示的基本情感或想法。"),
+        P("Begins linking choices to simple themes.",
+          "Bắt đầu liên kết các lựa chọn với những chủ đề đơn giản.", "开始将作者的选择与简单的主题联系起来。") ],
+      [ P("Connects specific language or film techniques to themes or concepts.",
+          "Kết nối các kỹ thuật ngôn ngữ hoặc điện ảnh cụ thể với chủ đề hoặc khái niệm.", "将具体的语言或电影技巧与主题或概念联系起来。"),
+        P("Explains what the creator might be saying.",
+          "Giải thích điều mà tác giả có thể đang muốn nói.", "解释作者可能想表达的意思。") ],
+      [ P("Analyses how choices express messages, values, or perspectives.",
+          "Phân tích cách các lựa chọn thể hiện thông điệp, giá trị hoặc quan điểm.", "分析这些选择如何表达信息、价值观或观点。"),
+        P("Analyses the creator's purpose in representing social or cultural issues.",
+          "Phân tích mục đích của tác giả khi thể hiện các vấn đề xã hội hoặc văn hoá.", "分析作者在呈现社会或文化议题时的目的。") ]
+    ] },
+  { skill:"Evidence & Metalanguage", vi:"Bằng chứng & Siêu ngôn ngữ", zh:"证据与元语言", cls:"evid",
+    cells:[
+      [ P("Gives a simple quote or description from the text or scene.",
+          "Đưa ra một trích dẫn hoặc mô tả đơn giản từ văn bản hoặc cảnh.", "从文本或场景中给出一个简单的引用或描述。") ],
+      [ P("Names a language or film feature and begins linking it to meaning.",
+          "Gọi tên một đặc điểm ngôn ngữ hoặc điện ảnh và bắt đầu liên kết nó với ý nghĩa.", "说出一个语言或电影特征，并开始将其与含义联系起来。") ],
+      [ P("Uses terminology accurately with short, embedded evidence.",
+          "Sử dụng thuật ngữ chính xác cùng với bằng chứng ngắn gọn được lồng ghép.", "准确使用术语，并嵌入简短的证据。") ],
+      [ P("Integrates evidence and metalanguage fluently to build interpretation.",
+          "Tích hợp bằng chứng và siêu ngôn ngữ một cách trôi chảy để xây dựng cách diễn giải.", "流畅地整合证据与元语言，以建立解读。") ]
+    ] },
+  { skill:"Language & Structure", vi:"Ngôn ngữ & Cấu trúc", zh:"语言与结构", cls:"",
+    cells:[
+      [ P("Writes short, simple sentences using mostly literal verbs (“shows”, “uses”).",
+          "Viết những câu ngắn, đơn giản, chủ yếu dùng động từ nghĩa đen (“cho thấy”, “sử dụng”).", "写简短、简单的句子，主要使用字面意义的动词（如“表明”、“使用”）。") ],
+      [ P("Expands sentences with connectives such as because, so, or to.",
+          "Mở rộng câu bằng các từ nối như vì, vì vậy, hoặc để.", "使用连接词（如因为、所以、为了）来扩展句子。"),
+        P("Uses basic evaluative words.",
+          "Dùng các từ đánh giá cơ bản.", "使用基本的评价性词语。") ],
+      [ P("Uses more complex sentences and analytical verbs (“suggests”, “highlights”).",
+          "Sử dụng câu phức tạp hơn và các động từ phân tích (“gợi ý”, “làm nổi bật”).", "使用更复杂的句子和分析性动词（如“暗示”、“突显”）。") ],
+      [ P("Writes fluently in a cohesive formal style, varying sentence structures to show cause, effect, and interpretation.",
+          "Viết trôi chảy theo phong cách trang trọng, mạch lạc, thay đổi cấu trúc câu để thể hiện nguyên nhân, kết quả và cách diễn giải.", "以连贯、正式的风格流畅写作，运用多样的句子结构来表现因果关系与解读。") ]
+    ] },
+  { skill:"Purpose & Interpretation", vi:"Mục đích & Diễn giải", zh:"目的与解读", cls:"purp",
+    cells:[
+      [ P("Identifies the basic meaning or message.",
+          "Xác định ý nghĩa hoặc thông điệp cơ bản.", "识别基本的含义或信息。") ],
+      [ P("Explains the effect on the reader or viewer.",
+          "Giải thích tác động đến người đọc hoặc người xem.", "解释对读者或观众产生的效果。") ],
+      [ P("Makes inferences about the creator's intent or perspective.",
+          "Suy luận về ý định hoặc quan điểm của tác giả.", "推断作者的意图或观点。") ],
+      [ P("Discusses deeper social, moral, or ethical ideas, linking choices to broader context.",
+          "Bàn luận về những ý tưởng xã hội, đạo đức sâu sắc hơn, liên kết các lựa chọn với bối cảnh rộng hơn.", "探讨更深层的社会、道德或伦理观念，将选择与更广泛的语境联系起来。") ]
+    ] }
+];
+const BANDS = ["C2","C3","C4","VCE 1"];
 </script>
 <!-- ===================== END CONTENT BLOCK ======================= -->
 
+  <section>
+    <h2 class="sec">T &middot; E &middot; E &middot; A</h2>
+    <div class="letters" id="letters"></div>
+  </section>
+
+  <section>
+    <h2 class="sec">Analytical verbs</h2>
+    <div class="verbs" id="verbBank"></div>
+    <div class="verbgloss" id="verbGloss"></div>
+    <div class="avoid" id="avoidVerbs"></div>
+  </section>
+
+  <section>
+    <h2 class="sec">The wall&rsquo;s own example</h2>
+    <div id="wagollBands"></div>
+  </section>
+
+  <section>
+    <h2 class="sec">The whole essay</h2>
+    <div class="skeleton" id="skeleton"></div>
+  </section>
+
+  <section>
+    <h2 class="sec">Where the paragraphs come from</h2>
+    <div class="mapwrap">
+      <div class="mapscroll">
+        <svg id="mindmap" role="img" aria-label="Mindmap of the ideas, quotes and effects behind the two paragraphs"></svg>
+      </div>
+      <p class="mapfoot" id="mapFoot"></p>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec">Built as T&middot;E&middot;E&middot;A</h2>
+    <div id="paragraphs"></div>
+  </section>
+
+  <section>
+    <h2 class="sec">Rubric</h2>
+    <div class="scroll"><table class="rubric" id="rubricTable"></table></div>
+  </section>
+</main>
+
+<div class="themepill" id="themePill">
+  <span class="lbl" id="themePillLabel"></span>
+  <button type="button" id="themeClear">Show all</button>
+</div>
+
+<footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+
 <script>
+const NS = "http://www.w3.org/2000/svg";
 function esc(s){ return String(s).replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
 function stripTags(html){ const d=document.createElement("div"); d.innerHTML=html; return d.textContent; }
-
-/* A phrase of explanatory text with a Vietnamese/Chinese gloss on tap. */
 function tphrase(en, vi, zh){
+  if(!vi) return esc(en);
   return `<span class="phrase" data-vi="${esc(vi)}" data-zh="${esc(zh)}">${esc(en)}</span>`;
 }
 function dots(touches){
@@ -533,117 +554,48 @@ function dots(touches){
   }).join("") + '</span>';
 }
 
-document.getElementById("letterCards").innerHTML = DATA.letters.map(l => `
-  <div class="card">
-    <div class="top"><span class="letter">${l.letter}</span><span class="name">${esc(l.name)}</span></div>
-    <div class="job">${tphrase(l.job, l.jobVi, l.jobZh)}</div>
-    ${dots(l.touches)}
-    <div class="note">${tphrase(l.note, l.noteVi, l.noteZh)}</div>
-  </div>`).join("");
-
-document.getElementById("aIntro").innerHTML = tphrase(DATA.aIntro.en, DATA.aIntro.vi, DATA.aIntro.zh);
-document.getElementById("aRule").innerHTML = "<b>The no-blue rule:</b> " +
-  tphrase(DATA.aRule.en.replace(/^The no-blue rule: /,""), DATA.aRule.vi, DATA.aRule.zh);
-
-document.getElementById("ladderHead").innerHTML =
-  DATA.ladder.map(r => `<th>${esc(r.rung)} &middot; ${esc(r.band)}</th>`).join("");
-document.getElementById("ladderEx").innerHTML =
-  DATA.ladder.map(r => `<td>${r.html}<div style="margin-top:6px">${dots(r.touches)}</div></td>`).join("");
-document.getElementById("ladderWhy").innerHTML =
-  DATA.ladder.map(r => `<td class="why">${tphrase(r.why, r.whyVi, r.whyZh)}</td>`).join("");
-
-document.getElementById("wagollBands").innerHTML = DATA.wagollExample.map(b => `
-  <div class="band">
-    <div class="head"><span class="name"><b>${esc(b.band)}</b> &middot; ${esc(b.label)}</span></div>
-    <div class="sent">${b.html}</div>
-    <div class="why">${tphrase(b.why, b.whyVi, b.whyZh)}</div>
-  </div>`).join("");
-
-document.getElementById("paragraphs").innerHTML = DATA.paragraphs.map((p,i) => `
-  <div class="parablock" data-theme="${i+1}">
-    <button class="paratitle" type="button" data-theme-trigger="${i+1}">${esc(p.title)}</button>
-    ${p.slots.map(s => `
-      <div class="slot">
-        <div class="head">
-          <span class="letter">${s.letter}</span>
-          <span class="job">${esc(s.job)}</span>
-          ${dots(s.touches)}
-        </div>
-        <div class="sent">${s.html}</div>
-      </div>`).join("")}
-    <div class="out"><b>Whole paragraph:</b> ${esc(p.slots.map(s => stripTags(s.html)).join(" "))}</div>
-  </div>
-`).join("");
-
-/* ---- essay skeleton ---- */
-document.getElementById("skeleton").innerHTML = DATA.essay.map(part => {
-  const rows = part.rows.map(r =>
-    `<div class="erow"><span class="elab">${r.lab}</span><span class="ebar">` +
-    r.seg.map(s => `<i class="s-${s}"></i>`).join("") + `</span></div>`).join("");
-  const head = `<div class="ptop"><span class="pname">${esc(part.part)}</span>` +
-    (part.title ? `<span class="ptitle">${esc(part.title)}</span>` : "") + `</div>`;
-  const note = part.note ? `<div class="pnote">${esc(part.note)}</div>` : "";
-  return part.theme
-    ? `<button type="button" class="epart clickable" data-theme="${part.theme}" data-theme-trigger="${part.theme}">${head}${rows}${note}</button>`
-    : `<div class="epart">${head}${rows}${note}</div>`;
-}).join("");
-
-/* ---- mindmap ---- */
-(function drawMap(){
-  const m = DATA.mindmap;
-  const lines = m.bubbles.map(b =>
-    `<line class="mapline" x1="${m.cx}" y1="${m.cy}" x2="${b.x}" y2="${b.y}"/>`).join("");
-  const centre =
-    `<g class="mapcentre"><ellipse cx="${m.cx}" cy="${m.cy}" rx="${m.crx}" ry="${m.cry}"/>` +
-    `<text x="${m.cx}" y="${m.cy}" text-anchor="middle" dominant-baseline="central">${esc(m.centre)}</text></g>`;
-  const bubbles = m.bubbles.map(b => {
-    const pick = b.theme !== null;
-    const dy = b.label.length > 1 ? -7 : 0;
-    const txt = b.label.map((l,i) =>
-      `<tspan x="${b.x}" dy="${i === 0 ? dy : 16}">${esc(l)}</tspan>`).join("");
-    return `<g class="bub${pick ? " pick" : ""}"${pick ? ` data-theme="${b.theme}" data-theme-trigger="${b.theme}" tabindex="0" role="button"` : ""}>` +
-      `<ellipse cx="${b.x}" cy="${b.y}" rx="${b.rx}" ry="${b.ry}"/>` +
-      `<text x="${b.x}" y="${b.y}" text-anchor="middle" dominant-baseline="central">${txt}</text></g>`;
-  }).join("");
-  const svg = document.getElementById("mindmap");
-  svg.setAttribute("viewBox", `0 0 ${m.view[0]} ${m.view[1]}`);
-  svg.innerHTML = lines + centre + bubbles;
-})();
-
-/* ---- one selected theme lights up everywhere it appears ---- */
-const THEME_NAMES = DATA.paragraphs.map(p => p.title.replace(/^Paragraph \d+ — /, ""));
-let activeTheme = null;
-const pill = document.getElementById("themePillLabel");
-
-function setTheme(t){
-  activeTheme = (activeTheme === t) ? null : t;
-  document.body.classList.toggle("theming", activeTheme !== null);
-  document.querySelectorAll("[data-theme]").forEach(el =>
-    el.classList.toggle("on", activeTheme !== null && el.dataset.theme === String(activeTheme)));
-  document.querySelectorAll("[data-theme-trigger]").forEach(el =>
-    el.setAttribute("aria-pressed", String(activeTheme !== null && el.dataset.themeTrigger === String(activeTheme))));
-  if(activeTheme !== null) pill.textContent = "Idea " + activeTheme + ": " + THEME_NAMES[activeTheme - 1];
+/* ---------- T / E / A accordion ---------- */
+function ladderHTML(){
+  return `<div class="subh">Bump up the A sentence</div>
+    <div class="scroll"><table class="grid">
+      <thead><tr>${DATA.ladder.map(r=>`<th>${esc(r.rung)} &middot; ${esc(r.band)}</th>`).join("")}</tr></thead>
+      <tbody>
+        <tr>${DATA.ladder.map(r=>`<td>${r.html}<div style="margin-top:6px">${dots(r.touches)}</div></td>`).join("")}</tr>
+        <tr>${DATA.ladder.map(r=>`<td class="why">${tphrase(r.why,r.whyVi,r.whyZh)}</td>`).join("")}</tr>
+      </tbody></table></div>`;
 }
-document.getElementById("themeClear").addEventListener("click", ()=>setTheme(activeTheme));
-document.addEventListener("keydown", e=>{
-  if(e.key === "Escape" && activeTheme !== null) setTheme(activeTheme);
-  if((e.key === "Enter" || e.key === " ") && e.target.closest && e.target.closest("g[data-theme-trigger]")){
-    e.preventDefault();
-    setTheme(Number(e.target.closest("g[data-theme-trigger]").dataset.themeTrigger));
-  }
-});
+document.getElementById("letters").innerHTML = DATA.letters.map((l,i) => `
+  <div class="lt" data-lt="${i}">
+    <button class="head" type="button" aria-expanded="false">
+      <span class="big">${l.k}</span>
+      <span><span class="nm">${esc(l.name)}</span><br><span class="jb">${esc(l.job)}</span></span>
+      ${dots(l.touches)}
+      <span class="chev">›</span>
+    </button>
+    <div class="body">
+      <div class="ex">${l.example}</div>
+      <div class="gd">${tphrase(l.guide, l.guideVi, l.guideZh)}</div>
+      <div class="warn">${tphrase(l.warn, l.warnVi, l.warnZh)}</div>
+      <div class="subh">Sentence stems</div>
+      <div class="stems">${l.stems.map(s=>`<span class="stem">${esc(s.replace(/\[Author\]/g,"Silverstein"))}</span>`).join("")}</div>
+      ${l.ladder ? ladderHTML() : ""}
+    </div>
+  </div>`).join("");
+document.querySelectorAll(".lt > .head").forEach(b => b.addEventListener("click", ()=>{
+  const box = b.closest(".lt");
+  const open = box.classList.toggle("open");
+  b.setAttribute("aria-expanded", String(open));
+}));
 
-/* ---- analytical verb bank ---- */
+/* ---------- verbs ---------- */
 const verbGloss = document.getElementById("verbGloss");
 document.getElementById("verbBank").innerHTML = DATA.verbs.map((v,i)=>
-  `<button class="verb" data-v="${i}">${esc(v.w)}</button>`).join("");
+  `<button class="verb" type="button" data-v="${i}">${esc(v.w)}</button>`).join("");
 document.getElementById("avoidVerbs").innerHTML =
   "<b>Not these —</b> " + DATA.avoidVerbs.map(v =>
     `<s>${esc(v.w)}</s> <span style="font-size:.95em">(${esc(v.why)})</span>`).join(" &nbsp;·&nbsp; ");
-
 document.getElementById("verbBank").addEventListener("click", e=>{
-  const b = e.target.closest(".verb");
-  if(!b) return;
+  const b = e.target.closest(".verb"); if(!b) return;
   const wasOpen = b.classList.contains("open");
   document.querySelectorAll(".verb.open").forEach(x=>x.classList.remove("open"));
   if(wasOpen){ verbGloss.classList.remove("show"); return; }
@@ -653,45 +605,220 @@ document.getElementById("verbBank").addEventListener("click", e=>{
   verbGloss.classList.add("show");
 });
 
-/* ---- glosses on the highlighted spans inside the worked sentences ---- */
+/* ---------- bands ---------- */
+document.getElementById("wagollBands").innerHTML = DATA.wagollExample.map(b => `
+  <div class="band">
+    <div class="nmb"><b>${esc(b.band)}</b> &middot; ${esc(b.label)}</div>
+    <div class="sent">${b.html}</div>
+    <div class="why">${tphrase(b.why, b.whyVi, b.whyZh)}</div>
+  </div>`).join("");
+
+/* ---------- essay skeleton ---------- */
+document.getElementById("skeleton").innerHTML = DATA.essay.map(part => {
+  const rows = part.rows.map(r =>
+    `<div class="erow"><span class="elab">${r.lab}</span><span class="ebar">` +
+    r.seg.map(s => `<i class="s-${s}"></i>`).join("") + `</span></div>`).join("");
+  const head = `<span class="pname">${esc(part.part)}</span><span class="ptitle">${esc(part.title||"")}</span>`;
+  return part.theme
+    ? `<button type="button" class="epart clickable" data-theme="${part.theme}" data-theme-trigger="${part.theme}">${head}${rows}</button>`
+    : `<div class="epart">${head}${rows}</div>`;
+}).join("");
+
+/* ---------- paragraphs ---------- */
+document.getElementById("paragraphs").innerHTML = DATA.paragraphs.map((p,i) => `
+  <div class="parablock" data-theme="${i+1}">
+    <button class="paratitle" type="button" data-theme-trigger="${i+1}">${esc(p.title)}</button>
+    ${p.slots.map(s => `
+      <div class="slot">
+        <div class="shead">
+          <span class="letter">${s.letter}</span>
+          <span class="job">${esc(s.job)}</span>
+          ${dots(s.touches)}
+        </div>
+        <div class="sent">${s.html}</div>
+      </div>`).join("")}
+    <div class="out"><b>Whole paragraph:</b> ${esc(p.slots.map(s => stripTags(s.html)).join(" "))}</div>
+  </div>`).join("");
+
+/* ---------- rubric ---------- */
+(function(){
+  const t = document.getElementById("rubricTable");
+  t.innerHTML = "<thead><tr><th>Skill area</th>" + BANDS.map(b=>`<th>${b}</th>`).join("") + "</tr></thead><tbody>" +
+    RUBRIC.map(row => `<tr class="${row.cls}">` +
+      `<td class="skill">${tphrase(row.skill, row.vi, row.zh)}</td>` +
+      row.cells.map(ph => `<td>${ph.map(p=>tphrase(p.en,p.vi,p.zh)).join(" ")}</td>`).join("") +
+      `</tr>`).join("") + "</tbody>";
+})();
+
+/* ================= animated mindmap ================= */
+const MAP = DATA.map;
+const VIEW = { w:1100, h:556 }, C = { x:550, y:250 };
+const R1 = 185, R2 = 140, R3 = 138;
+const svg = document.getElementById("mindmap");
+svg.setAttribute("viewBox", `0 0 ${VIEW.w} ${VIEW.h}`);
+const gEdges = document.createElementNS(NS,"g");
+const gNodes = document.createElementNS(NS,"g");
+svg.appendChild(gEdges); svg.appendChild(gNodes);
+
+function dir(deg, r){ const a = deg*Math.PI/180; return { x:Math.cos(a)*r, y:Math.sin(a)*r }; }
+function at(p, deg, r){ const d = dir(deg,r); return { x:p.x+d.x, y:p.y+d.y }; }
+
+function makeNode(cls, lines, fs, round){
+  const g = document.createElementNS(NS,"g");
+  g.setAttribute("class","mapnode "+cls);
+  const plain = lines.map(l => stripTags(l));
+  const w = Math.max(...plain.map(l=>l.length)) * fs * 0.56 + 26;
+  const h = plain.length * (fs+5) + 17;
+  const shape = document.createElementNS(NS, round ? "ellipse" : "rect");
+  if(round){ shape.setAttribute("rx", w/2); shape.setAttribute("ry", h/2); }
+  else { shape.setAttribute("x",-w/2); shape.setAttribute("y",-h/2);
+         shape.setAttribute("width",w); shape.setAttribute("height",h);
+         shape.setAttribute("rx", Math.min(h/2,14)); }
+  const t = document.createElementNS(NS,"text");
+  t.setAttribute("text-anchor","middle");
+  t.setAttribute("dominant-baseline","central");
+  t.setAttribute("font-size", fs);
+  plain.forEach((l,i)=>{
+    const ts = document.createElementNS(NS,"tspan");
+    ts.setAttribute("x", 0);
+    ts.setAttribute("dy", i===0 ? -((plain.length-1)*(fs+4))/2 : fs+4);
+    ts.textContent = l;
+    t.appendChild(ts);
+  });
+  g.appendChild(shape); g.appendChild(t);
+  gNodes.appendChild(g);
+  return { g, w, h };
+}
+function makeEdge(cls){
+  const l = document.createElementNS(NS,"line");
+  l.setAttribute("class","mapedge "+cls);
+  gEdges.appendChild(l);
+  return l;
+}
+function place(n, p, scale, op){
+  n.g.style.transform = `translate(${p.x}px, ${p.y}px) scale(${scale})`;
+  n.g.style.opacity = op;
+  n.g.classList.toggle("hid", op < 0.05);
+}
+function drawEdge(l, a, b, on, delay){
+  l.setAttribute("x1",a.x); l.setAttribute("y1",a.y);
+  l.setAttribute("x2",b.x); l.setAttribute("y2",b.y);
+  const len = Math.hypot(b.x-a.x, b.y-a.y) || 1;
+  l.style.strokeDasharray = len;
+  l.style.strokeDashoffset = on ? 0 : len;
+  l.style.transitionDelay = on ? delay+"s" : "0s";
+}
+
+/* build */
+const centreNode = makeNode("n-centre", MAP.centre, 20, true);
+MAP.themes.forEach(t=>{
+  t.edge = makeEdge("");
+  t.node = makeNode("n-theme pickable", t.label, 17, false);
+  t.node.g.setAttribute("data-theme", t.id);
+  t.node.g.setAttribute("data-theme-trigger", t.id);
+  t.node.g.setAttribute("tabindex","0");
+  t.node.g.setAttribute("role","button");
+  t.quotes.forEach(q=>{
+    q.edge  = makeEdge("e-quote");
+    q.node  = makeNode("n-quote", q.q, 14, false);
+    q.pedge = makeEdge("e-purp");
+    q.pnode = makeNode("n-purp", q.purpose, 13, false);
+  });
+});
+MAP.others = MAP.others.map((label,i,arr)=>{
+  const n = makeNode("n-other", [label], 13, false);
+  const span = VIEW.w - 300;
+  return { node:n, edge:makeEdge(""), home:{ x:150 + span*(i/(arr.length-1)), y:VIEW.h-40 } };
+});
+
+let activeTheme = null;
+const mapFoot = document.getElementById("mapFoot");
+
+/* At rest the whole map is visible with its branches drawn in close and faded.
+   Selecting an idea extends that branch to full length and full size — the
+   growing-outward motion is the "branching out", and the canvas stays full. */
+function layout(){
+  const any = activeTheme !== null;
+  place(centreNode, C, 1, 1);
+  MAP.themes.forEach(t=>{
+    const on = activeTheme === t.id;
+    const dim = any && !on;
+    const tp = at(C, t.angle, R1);
+    place(t.node, tp, on ? 1.16 : (dim ? 0.84 : 1), dim ? 0.3 : 1);
+    t.node.g.classList.toggle("on", on);
+    t.node.g.setAttribute("aria-pressed", String(on));
+    drawEdge(t.edge, C, tp, true, 0);
+    t.edge.style.opacity = dim ? 0.25 : 1;
+
+    const reach = on ? 1 : (dim ? 0.48 : 0.6);      // how far the branch extends
+    const sc    = on ? 1 : (dim ? 0.68 : 0.8);      // child node size
+    const op    = on ? 1 : (dim ? 0.13 : 0.55);     // child node opacity
+    const eop   = on ? 0.75 : (dim ? 0.1 : 0.3);    // branch line opacity
+
+    t.quotes.forEach(q=>{
+      const qp = at(tp, t.angle + q.angle, R2 * reach);
+      place(q.node, qp, sc, op);
+      drawEdge(q.edge, tp, qp, true, on ? 0.05 : 0);
+      q.edge.style.opacity = eop;
+      const pp = at(qp, t.angle + q.angle, R3 * reach);
+      place(q.pnode, pp, sc, op);
+      drawEdge(q.pedge, qp, pp, true, on ? 0.16 : 0);
+      q.pedge.style.opacity = eop;
+    });
+  });
+  MAP.others.forEach(o=>{
+    place(o.node, o.home, any ? 0.85 : 1, any ? 0.12 : 0.75);
+    drawEdge(o.edge, C, o.home, true, 0);
+    o.edge.style.opacity = any ? 0.08 : 0.3;
+  });
+  const t = MAP.themes.find(x=>x.id===activeTheme);
+  mapFoot.innerHTML = t ? `<b>A:</b> ${t.analysis}` : "";
+}
+
+/* ---------- selected idea, shared across skeleton / map / paragraphs ---------- */
+const THEME_NAMES = DATA.paragraphs.map(p => p.title.replace(/^Paragraph \d+ — /, ""));
+const pillLabel = document.getElementById("themePillLabel");
+function setTheme(t){
+  activeTheme = (activeTheme === t) ? null : t;
+  document.body.classList.toggle("theming", activeTheme !== null);
+  document.querySelectorAll("[data-theme]").forEach(el =>
+    el.classList.toggle("on", activeTheme !== null && el.getAttribute("data-theme") === String(activeTheme)));
+  if(activeTheme !== null) pillLabel.textContent = THEME_NAMES[activeTheme-1];
+  layout();
+}
+document.getElementById("themeClear").addEventListener("click", ()=>setTheme(activeTheme));
+centreNode.g.style.cursor = "pointer";
+centreNode.g.addEventListener("click", ()=>{ if(activeTheme !== null) setTheme(activeTheme); });
+
+/* ---------- translations ---------- */
 function normalise(s){
-  return s.replace(/[“”„]/g,'"').replace(/[‘’]/g,"'")
-          .replace(/\s+/g," ").trim().toLowerCase();
+  return s.replace(/[“”„]/g,'"').replace(/[‘’]/g,"'").replace(/\s+/g," ").trim().toLowerCase();
 }
 let gid = 0;
-function applyGlosses(){
+(function applyGlosses(){
   const missing = [];
   document.querySelectorAll("span.ev, span.pu, span.id").forEach(sp=>{
-    const key = normalise(sp.textContent);
-    const g = DATA.gloss[key];
-    if(!g){ missing.push(key); return; }
+    const g = DATA.gloss[normalise(sp.textContent)];
+    if(!g){ missing.push(normalise(sp.textContent)); return; }
     sp.classList.add("glossable");
     sp.dataset.vi = g.vi; sp.dataset.zh = g.zh;
     sp.dataset.gid = "g" + (gid++);
   });
-  /* Surfaced in the console so a missing translation is findable, not silent. */
   if(missing.length) console.info("[teea] highlighted spans with no translation yet:", missing);
-}
-applyGlosses();
+})();
 
-/* Tap a highlighted span -> its translation drops in below the whole sentence,
-   so the sentence itself keeps flowing normally. */
 document.addEventListener("click", e=>{
   const gl = e.target.closest(".glossable");
   if(gl){
-    const host = gl.closest(".sent") || gl.closest(".rulebox") || gl.parentElement;
+    const host = gl.closest(".sent") || gl.closest(".ex") || gl.parentElement;
     const open = host.querySelector(`:scope > .gloss[data-for="${gl.dataset.gid}"]`);
     if(open){ open.remove(); gl.classList.remove("open"); return; }
     const g = document.createElement("span");
-    g.className = "gloss";
-    g.dataset.for = gl.dataset.gid;
-    g.innerHTML = `<span class="src">${esc(gl.textContent)}</span>` +
-                  `<b>VI</b> ${esc(gl.dataset.vi)} &nbsp;&middot;&nbsp; <b>ZH</b> ${esc(gl.dataset.zh)}`;
-    host.appendChild(g);
-    gl.classList.add("open");
+    g.className = "gloss"; g.dataset.for = gl.dataset.gid;
+    g.innerHTML = `<span class="src">${esc(gl.textContent)}</span><b>VI</b> ${esc(gl.dataset.vi)} &nbsp;&middot;&nbsp; <b>ZH</b> ${esc(gl.dataset.zh)}`;
+    host.appendChild(g); gl.classList.add("open");
     return;
   }
-  /* Tap an explanatory phrase -> translation appears under it. */
   const ph = e.target.closest(".phrase");
   if(ph){
     const existing = ph.querySelector(":scope > .gloss");
@@ -702,10 +829,19 @@ document.addEventListener("click", e=>{
     ph.appendChild(g);
     return;
   }
-  /* Tap a paragraph title, an essay part or an idea bubble -> select that idea. */
   const trig = e.target.closest("[data-theme-trigger]");
-  if(trig) setTheme(Number(trig.dataset.themeTrigger));
+  if(trig) setTheme(Number(trig.getAttribute("data-theme-trigger")));
 });
+document.addEventListener("keydown", e=>{
+  if(e.key === "Escape" && activeTheme !== null){ setTheme(activeTheme); return; }
+  const g = e.target.closest && e.target.closest("g[data-theme-trigger]");
+  if(g && (e.key === "Enter" || e.key === " ")){
+    e.preventDefault();
+    setTheme(Number(g.getAttribute("data-theme-trigger")));
+  }
+});
+
+layout();
 </script>
 </body>
 </html>
