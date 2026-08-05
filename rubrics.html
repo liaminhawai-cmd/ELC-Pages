@@ -27,8 +27,7 @@
   header h1 { font-size:clamp(1.4rem,4vw,1.9rem); margin-top:6px; }
   main { max-width:1180px; margin:0 auto; padding:18px 14px 70px; }
   section { margin-top:34px; scroll-margin-top:12px; }
-  h2.sec { font-size:1.2rem; margin:0 0 2px; }
-  p.sub { color:var(--muted); font-size:.88rem; margin:0 0 12px; }
+  h2.sec { font-size:1.2rem; margin:0 0 12px; }
 
   .jump { display:flex; flex-wrap:wrap; gap:7px; }
   .jump a { border:1px solid var(--line); background:var(--card); border-radius:999px;
@@ -69,11 +68,8 @@
   details.ext summary::-webkit-details-marker { display:none; }
   details.ext summary::before { content:"▸"; color:var(--muted); font-weight:400; }
   details.ext[open] summary::before { content:"▾"; }
-  details.ext summary .exsub { font-weight:400; color:var(--muted); font-size:.84rem; }
   details.ext .extbody { padding:0 14px 14px; }
   .extgroup { margin-top:14px; }
-  .extgroup > .lbl { font-size:.74rem; text-transform:uppercase; letter-spacing:.5px;
-                      color:var(--muted); margin-bottom:6px; }
   table.plain { border-collapse:collapse; width:100%; min-width:640px; }
   table.plain th, table.plain td { padding:9px 12px; text-align:left; vertical-align:top;
                       font-size:.85rem; border:1px solid var(--line); }
@@ -120,7 +116,6 @@ const RUBRICS = [
 
 /* ---------------------------------------------------------------- */
 { id:"analytical", emoji:"✍️", title:"Analytical Writing",
-  sub:"Writing about a text. Colour-coded to match the Analytical Writing Wall.",
   legend:true,
   cta:{ href:"teea-paragraph.html", emoji:"🌳", h:"See it in a paragraph — T·E·E·A, colour-coded",
         p:"The Giving Tree, worked example, coloured sentence by sentence." },
@@ -185,7 +180,7 @@ const RUBRICS = [
     /* Same four skill areas and four bands as Analytical Writing, reworded
        for film — from teaching/assessment/rubrics/film-analysis-rubric.docx.
        Chinese is the docx's own; Vietnamese is ours. */
-    { title:"Film Analysis", sub:"Same shape as this rubric, reworded for film.",
+    { title:"Film Analysis",
       bands:["C2","C3","C4","VCE 1"],
       rows:[
         { skill:"Ideas & Themes", vi:"Ý tưởng & Chủ đề", zh:"主题与思想", cls:"idea",
@@ -237,7 +232,6 @@ const RUBRICS = [
 
 /* ---------------------------------------------------------------- */
 { id:"reading", emoji:"📖", title:"Reading",
-  sub:"Reading aloud, and responding to what you have read.",
   bands:["C2","C3","C4","VCE 1","VCE 2"],
   rows:[
     { skill:"Reading aloud", vi:"Đọc thành tiếng", zh:"朗读", cls:"",
@@ -293,7 +287,6 @@ const RUBRICS = [
 
 /* ---------------------------------------------------------------- */
 { id:"speaking", emoji:"🗣️", title:"Speaking & Listening",
-  sub:"What you can do when you speak and listen.",
   bands:["C2","C3","C4"],
   rows:[
     { skill:"Speech sounds, intonation and stress", vi:"Âm, ngữ điệu và trọng âm", zh:"语音、语调与重音", cls:"",
@@ -355,7 +348,6 @@ const RUBRICS = [
 
 /* ---------------------------------------------------------------- */
 { id:"writing", emoji:"✏️", title:"Writing",
-  sub:"Grammar and word choice in your own writing.",
   bands:["C2","C3","C4"],
   rows:[
     { skill:"Grammar", vi:"Ngữ pháp", zh:"语法", cls:"",
@@ -395,7 +387,7 @@ const RUBRICS = [
      content, not reused from elsewhere on the page. Verbatim from
      teaching/assessment/rubrics/*.docx. */
   extensions:[
-    { title:"Persuasive Writing", sub:"Grammar + Vocabulary, plus Structure and Persuasive Techniques.",
+    { title:"Persuasive Writing",
       bands:["C2","C3","C4"],
       rows:[
         { skill:"Grammar", cells:[
@@ -419,7 +411,7 @@ const RUBRICS = [
           ["Uses carefully selected persuasive techniques strategically to influence and position the reader."]
         ] }
       ] },
-    { title:"Recount Writing", sub:"Grammar + Vocabulary, plus Orientation and Reflection.",
+    { title:"Recount Writing",
       bands:["C2","C3","C4"],
       rows:[
         { skill:"Grammar", cells:[
@@ -443,7 +435,7 @@ const RUBRICS = [
           ["Share a detailed reflection about some aspect of the trip that impacted you"]
         ] }
       ] },
-    { title:"Magazine Writing", sub:"Grammar + Vocabulary, plus Structure, Experience/Reflections and Visual Design.",
+    { title:"Magazine Writing",
       bands:["C2","C3","C4"],
       rows:[
         { skill:"Grammar", cells:[
@@ -472,7 +464,7 @@ const RUBRICS = [
           ["The magazine uses colour, images, and font variation creatively and effectively"]
         ] }
       ] },
-    { title:"Procedural Text Writing", sub:"Grammar + Vocabulary, plus a procedural Structure row.",
+    { title:"Procedural Text Writing",
       bands:["C2","C3","C4"],
       rows:[
         { skill:"Grammar", cells:[
@@ -491,7 +483,7 @@ const RUBRICS = [
           ["The text is structured using features chosen for its specific purpose or genre."]
         ] }
       ] },
-    { title:"Wiki Writing", sub:"Grammar + Vocabulary, plus Structure and Information & Evidence.",
+    { title:"Wiki Writing",
       bands:["C2","C3","C4"],
       rows:[
         { skill:"Grammar", cells:[
@@ -554,10 +546,9 @@ document.getElementById("sections").innerHTML = RUBRICS.map(r => {
   const extras = (r.extensions||[]).map(extHTML).join("");
   return `<section id="${r.id}">
       <h2 class="sec">${r.emoji} ${esc(r.title)}</h2>
-      <p class="sub">${esc(r.sub)}</p>
       ${cta}${legend}
       <div class="scroll"><table class="rubric">${head}${body}</table></div>
-      ${extras ? `<div class="extgroup"><div class="lbl">Related rubrics — same shape, extra rows</div>${extras}</div>` : ""}
+      ${extras ? `<div class="extgroup">${extras}</div>` : ""}
     </section>`;
 }).join("");
 
@@ -583,7 +574,7 @@ function extHTML(x){
     ? `<table class="rubric">${head}${body}</table>`
     : `<table class="plain">${head}${body}</table>`;
   return `<details class="ext">
-      <summary>${esc(x.title)} <span class="exsub">${esc(x.sub)}</span></summary>
+      <summary>${esc(x.title)}</summary>
       <div class="extbody"><div class="scroll">${table}</div></div>
     </details>`;
 }
