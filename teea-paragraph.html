@@ -7,17 +7,20 @@
 <title>T·E·E·A — ELC Hub</title>
 <style>
   :root {
-    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
-    --accent:#2563eb; --accent-soft:#dbeafe; --radius:14px;
-    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
+    /* warm paper, not hub blue-grey — the teacher display's palette, kept for
+       this page's content area only. Header stays the hub's shared chrome. */
+    --bg:#FAF7F2; --card:#fff; --ink:#1F2430; --muted:#6B6458; --line:#D9D3C7;
+    --accent:#8A1C1C; --accent-soft:#F2EFE9; --radius:14px;
+    --shadow:none;
+    /* the writing wall's own three colours — untouched by the reskin */
     --evid:#006FC0; --evid-fill:#45B0E1;
     --purp:#008F4C; --purp-fill:#8DD873;
     --idea:#C03A2B; --idea-fill:#F1A983;
     --purp-soft:#DEF3E6; --idea-soft:#FBE4DE;
   }
   @media (prefers-color-scheme:dark) {
-    :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
-            --accent:#7aa5ff; --accent-soft:#1d2c4d; --shadow:0 1px 2px rgba(0,0,0,.4);
+    :root { --bg:#17140F; --card:#1E1B16; --ink:#EDE8DE; --muted:#A79E8F; --line:#4A4238;
+            --accent:#E2897E; --accent-soft:#2A2620; --shadow:none;
             --evid:#5FB4EC; --purp:#4FBF83; --idea:#E8836F;
             --purp-soft:#10291B; --idea-soft:#3A1E17; }
   }
@@ -29,7 +32,7 @@
   header p { margin:6px auto 0; opacity:.94; font-size:.9rem; }
   main { max-width:1180px; margin:0 auto; padding:20px 14px 70px; }
   section { margin-top:30px; }
-  h2.sec { font-size:1.2rem; margin:0 0 10px; }
+  h2.sec { font-family:Georgia,serif; font-size:1.25rem; margin:0 0 10px; }
 
   .legend { display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; font-size:.82rem;
             background:var(--card); border:1px solid var(--line); border-radius:10px;
@@ -55,7 +58,7 @@
   .lt > button.head { width:100%; display:flex; align-items:center; gap:12px; padding:12px 15px;
         background:none; border:none; text-align:left; cursor:pointer; font:inherit; color:inherit; }
   .lt > button.head:hover { background:var(--accent-soft); }
-  .lt .big { font-size:1.7rem; font-weight:800; color:var(--accent); line-height:1; width:1.3rem; flex:none; }
+  .lt .big { font-family:Georgia,serif; font-size:1.7rem; font-weight:700; color:var(--accent); line-height:1; width:1.3rem; flex:none; }
   .lt .nm { font-weight:700; }
   .lt .jb { font-size:.85rem; color:var(--muted); }
   .lt .chev { margin-left:auto; color:var(--muted); transition:transform .2s; flex:none; }
@@ -64,7 +67,8 @@
   .lt.open .body { display:block; }
   .ex { background:var(--bg); border-radius:10px; padding:10px 13px; font-size:1.05rem; margin-bottom:10px; }
   .gd { font-size:.9rem; margin-bottom:9px; }
-  .warn { font-size:.88rem; color:var(--muted); border-left:3px solid var(--idea); padding-left:10px; margin-bottom:9px; }
+  .warn { font-size:.9rem; border:1px solid var(--idea); background:var(--idea-soft); color:var(--ink);
+          border-radius:10px; padding:.6rem .8rem; margin-bottom:9px; }
   .stems { display:flex; flex-wrap:wrap; gap:6px; }
   .stem { border:1px dashed var(--line); background:var(--bg); border-radius:8px; padding:4px 10px; font-size:.83rem; color:var(--muted); }
   .subh { font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); margin:14px 0 5px; font-weight:700; }
@@ -96,7 +100,7 @@
 
   /* ---------- bands ---------- */
   .band { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:12px 15px; margin-bottom:9px; box-shadow:var(--shadow); }
-  .band .nmb { font-weight:700; margin-bottom:5px; }
+  .band .nmb { font-family:Georgia,serif; font-weight:700; font-size:1.05rem; margin-bottom:5px; }
   .band .nmb b { color:var(--accent); }
   .band .focus { font-weight:400; font-size:.82rem; color:var(--muted); margin-left:6px; }
   .band .expl { margin-top:7px; font-size:.85rem; }
@@ -113,7 +117,7 @@
            border-radius:12px; padding:10px 12px; box-shadow:var(--shadow); color:inherit; }
   .epart.clickable { cursor:pointer; }
   .epart.clickable:hover { border-color:var(--ink); }
-  .epart .pname { font-weight:800; font-size:.95rem; }
+  .epart .pname { font-family:Georgia,serif; font-weight:700; font-size:1.02rem; }
   .epart .ptitle { display:block; font-size:.78rem; color:var(--muted); margin-top:1px; min-height:2.2em; }
   .erow { display:flex; align-items:center; gap:7px; margin-top:5px; }
   .elab { font-size:.72rem; font-weight:800; color:var(--accent); width:11px; flex:none; }
@@ -137,7 +141,7 @@
   .mapnode.hid { pointer-events:none; }
   .mapnode.pickable { cursor:pointer; }
   .n-centre ellipse { fill:var(--ink); stroke:none; }
-  .n-centre text { fill:var(--bg); font-weight:700; }
+  .n-centre text { fill:var(--bg); font-family:Georgia,serif; font-weight:700; }
   .n-theme rect { fill:var(--idea-fill); stroke:var(--idea); stroke-width:2; }
   .n-theme text { fill:#1c2333; }
   .n-theme.on rect { stroke:var(--ink); stroke-width:3.5; }
@@ -166,13 +170,13 @@
   @media (min-width:900px) { #paragraphs { grid-template-columns:1fr 1fr; align-items:start; } }
   .parablock { padding:2px; transition:box-shadow .12s; }
   button.paratitle { display:block; width:100%; text-align:left; background:none; border:none;
-        font-family:inherit; color:inherit; cursor:pointer; padding:0; font-weight:700;
-        font-size:1.05rem; margin-bottom:8px; }
+        font-family:Georgia,serif; color:inherit; cursor:pointer; padding:0; font-weight:700;
+        font-size:1.12rem; margin-bottom:8px; }
   button.paratitle:hover { color:var(--accent); }
   .slot { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
           padding:11px 14px; margin-bottom:8px; box-shadow:var(--shadow); }
   .slot .shead { display:flex; align-items:baseline; gap:9px; margin-bottom:6px; flex-wrap:wrap; }
-  .slot .letter { font-size:1.4rem; font-weight:800; color:var(--accent); width:1.2rem; flex:none; }
+  .slot .letter { font-family:Georgia,serif; font-size:1.4rem; font-weight:700; color:var(--accent); width:1.2rem; flex:none; }
   .slot .job { font-size:.78rem; color:var(--muted); flex:1; }
   .slot .sent { font-size:1.06rem; }
   .out { background:var(--accent-soft); border-radius:10px; padding:10px 13px; font-size:.9rem; color:var(--muted); }
