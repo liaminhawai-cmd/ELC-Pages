@@ -103,11 +103,6 @@
   .band .expl summary { cursor:pointer; color:var(--accent); font-weight:600; }
   .band .expl p { margin-top:6px; color:var(--muted); background:var(--bg);
                   border-radius:8px; padding:8px 11px; }
-  .tabs { display:flex; gap:6px; margin-bottom:10px; flex-wrap:wrap; }
-  .tab { border:1px solid var(--line); background:var(--card); color:var(--ink);
-         border-radius:999px; padding:5px 14px; font:inherit; font-size:.88rem; cursor:pointer; }
-  .tab:hover { border-color:var(--ink); }
-  .tab.on { background:var(--ink); color:var(--bg); border-color:var(--ink); font-weight:600; }
   .band .sent { font-size:1.05rem; }
   .band .why { font-size:.83rem; color:var(--muted); margin-top:7px; padding-top:7px; border-top:1px dashed var(--line); }
 
@@ -358,38 +353,7 @@ const DATA = {
     "a warning rather than a happy ending": { vi:"một lời cảnh báo thay vì một kết thúc có hậu", zh:"一个警示，而不是圆满的结局" },
     "self-sacrifice": { vi:"sự hy sinh bản thân", zh:"自我牺牲" },
     "unequal relationships": { vi:"những mối quan hệ bất bình đẳng", zh:"不平等的关系" },
-    "giver and a taker": { vi:"một người cho đi và một người lấy đi", zh:"一个付出者和一个索取者" },
-
-    /* persuasive row */
-    "states": { vi:"tuyên bố, nêu rõ", zh:"陈述、声称" },
-    "statement": { vi:"lời tuyên bố, phát biểu", zh:"陈述、说法" },
-    "assertion": { vi:"lời khẳng định", zh:"断言" },
-    "\"schools should not control students' diets\"": { vi:"\"trường học không nên kiểm soát chế độ ăn của học sinh\"", zh:"「学校不应控制学生的饮食」" },
-    "\"common sense\"": { vi:"\"lẽ thường\"", zh:"「常识」" },
-    "encourages readers to agree": { vi:"khuyến khích người đọc đồng tình", zh:"促使读者表示赞同" },
-    "the writer reinforces": { vi:"người viết củng cố", zh:"作者强化了" },
-    "writer promotes": { vi:"người viết đề cao", zh:"作者提倡" },
-    "reflecting values of": { vi:"phản ánh những giá trị của", zh:"反映了……的价值观" },
-    "confident": { vi:"tự tin", zh:"自信" },
-    "reasonable": { vi:"hợp lý", zh:"合理" },
-    "parents should control children's choices": { vi:"cha mẹ nên kiểm soát lựa chọn của con cái", zh:"父母应当控制孩子的选择" },
-    "parental responsibility": { vi:"trách nhiệm của cha mẹ", zh:"父母的责任" },
-    "individual choice": { vi:"lựa chọn cá nhân", zh:"个人选择" },
-    "institutional control": { vi:"sự kiểm soát của thể chế", zh:"制度性的控制" },
-    "personal freedom": { vi:"tự do cá nhân", zh:"个人自由" },
-
-    /* film row */
-    "the film uses a long shot": { vi:"bộ phim sử dụng một cảnh quay xa", zh:"影片使用了一个远景镜头" },
-    "the long shot": { vi:"cảnh quay xa", zh:"这个远景镜头" },
-    "noyce uses a long shot to": { vi:"Noyce sử dụng cảnh quay xa để", zh:"诺伊斯用远景镜头来" },
-    "noyce repeatedly uses wide landscape shots": { vi:"Noyce nhiều lần sử dụng những cảnh quay phong cảnh rộng", zh:"诺伊斯反复使用广阔的风景镜头" },
-    "show the girls walking alone": { vi:"cho thấy những cô bé đang đi một mình", zh:"表现女孩们独自行走" },
-    "makes the audience see how far the girls must travel,": { vi:"khiến khán giả thấy được các cô bé phải đi xa đến mức nào,", zh:"让观众看到女孩们必须走多远，" },
-    "highlight the girls' isolation in the vast desert,": { vi:"làm nổi bật sự cô lập của các cô bé giữa sa mạc mênh mông,", zh:"突显女孩们在广袤沙漠中的孤立无援，" },
-    "contrast the beauty of the land with the cruelty of the government's control,": { vi:"đối lập vẻ đẹp của vùng đất với sự tàn nhẫn trong sự kiểm soát của chính phủ,", zh:"将这片土地的美丽与政府控制的残酷形成对比，" },
-    "showing their bravery": { vi:"cho thấy sự dũng cảm của các em", zh:"显示出她们的勇敢" },
-    "their determination and loss of freedom": { vi:"sự quyết tâm và sự mất tự do của các em", zh:"她们的决心与自由的丧失" },
-    "the theme of resilience against oppression": { vi:"chủ đề về sự kiên cường trước áp bức", zh:"面对压迫时坚韧不屈的主题" }
+    "giver and a taker": { vi:"một người cho đi và một người lấy đi", zh:"一个付出者和一个索取者" }
   },
 
   /* All three rows of the WAGOLL. `expl` is the handout's own Explanation text,
@@ -400,8 +364,7 @@ const DATA = {
     { band:"C4",    label:"Analyse",   focus:"Link language choices to ideas or themes" },
     { band:"VCE 1", label:"Interpret", focus:"Link literary, structural and stylistic features, to messages, values, and creator’s intents" }
   ],
-  wagoll: {
-    fiction: [
+  wagoll: [
       { html:"The author uses <span class=\"ev\">repetition</span> to <span class=\"pu\">show</span> that the tree keeps giving when it says, &ldquo;And the <span class=\"ev\">tree was happy</span>.&rdquo;",
         expl:"Simple sentence pattern: subject + verb + object. Names a language feature (🟦) and states what happens in the text. Meaning stays close to the words on the page.",
         why:"Names the feature, says what happens. Meaning stays close to the words on the page.",
@@ -422,28 +385,7 @@ const DATA = {
         why:"Connects the feature to the author's purpose and an idea beyond the text itself.",
         whyVi:"Kết nối đặc điểm với mục đích của tác giả và một ý tưởng vượt ra ngoài văn bản.",
         whyZh:"把这个特征与作者的目的以及超越文本本身的观念联系起来。" }
-    ],
-    persuasive: [
-      { html:"The writer <span class=\"ev\">states</span> that schools should not tell children what to eat when they argue that <span class=\"ev\">&ldquo;schools should not control students&rsquo; diets&rdquo;</span>.",
-        expl:"Simple sentence pattern: subject + verb + object. Identifies the writer’s opinion and states what is said. Meaning stays close to the claim itself. Verbs are literal (“states”, “says”) and ideas are concrete." },
-      { html:"This <span class=\"ev\">statement</span> <span class=\"pu\">encourages readers to agree</span> because the claim <span class=\"ev\">&ldquo;schools should not control students&rsquo; diets&rdquo;</span> sounds <span class=\"id\">confident</span> and <span class=\"id\">reasonable</span>.",
-        expl:"Adds an effect or reason clause to explain how the statement sounds to the reader (🟩). Begins using evaluative adjectives (“reasonable”, “strong”). Uses connectives like because or so to show reader response." },
-      { html:"By presenting the claim <span class=\"ev\">&ldquo;schools should not control students&rsquo; diets&rdquo;</span> as an <span class=\"ev\">assertion</span>, <span class=\"pu\">the writer reinforces</span> the idea that <span class=\"id\">parents should control children&rsquo;s choices</span>.",
-        expl:"Links language choice, effect, and idea in one longer sentence. Uses analytical verbs (“reinforces”, “frames”) to explain how wording supports an argument or viewpoint (🟧). Introduces abstract nouns such as control, responsibility, or choice." },
-      { html:"By framing <span class=\"id\">parental responsibility</span> as <span class=\"ev\">&ldquo;common sense&rdquo;</span>, the <span class=\"pu\">writer promotes</span> <span class=\"id\">individual choice</span> over <span class=\"id\">institutional control</span>, <span class=\"pu\">reflecting values of</span> <span class=\"id\">personal freedom</span>.",
-        expl:"Combines several ideas smoothly. Uses metalanguage to comment on the writer’s perspective. Connects language choices to purpose, values or beliefs, explaining how the reader is positioned within a broader social or cultural debate." }
-    ],
-    film: [
-      { html:"<span class=\"ev\">The film uses a long shot</span> to <span class=\"pu\">show the girls walking alone</span>.",
-        expl:"Simple sentence pattern: subject + verb + object. Names the film technique (🟦) and tells what is happening on screen. Meaning stays close to what can be seen. Verbs are literal (“shows”, “uses”) and ideas are concrete." },
-      { html:"<span class=\"ev\">The long shot</span> <span class=\"pu\">makes the audience see how far the girls must travel,</span> <span class=\"id\">showing their bravery</span>.",
-        expl:"Adds a purpose phrase using to + verb to show effect on the audience (🟩). Starts to include short reasons or reactions. Introduces descriptive adjectives or feeling words (“brave”, “alone”). Uses connectives like because or so." },
-      { html:"<span class=\"ev\">Noyce uses a long shot to</span> <span class=\"pu\">highlight the girls&rsquo; isolation in the vast desert,</span> symbolising <span class=\"id\">their determination and loss of freedom</span>.",
-        expl:"Links technique, purpose, and theme in one longer sentence. Uses analytical verbs (“highlight”, “symbolise”) to connect the image to a bigger idea (🟧). Adds extra detail with adjectives or short relative clauses (“which shows…”). Moves from describing to explaining meaning." },
-      { html:"<span class=\"ev\">Noyce repeatedly uses wide landscape shots</span> to <span class=\"pu\">contrast the beauty of the land with the cruelty of the government&rsquo;s control,</span> emphasising <span class=\"id\">the theme of resilience against oppression</span>.",
-        expl:"Combines several ideas smoothly. Uses metalanguage to comment on the director’s choices. Connects film language, tone, and theme in one flowing idea. Verbs are more interpretive “emphasises” and express the director’s message or values." }
-    ]
-  },
+  ],
 
   essay: [
     { part:"Intro", title:"Names both ideas.",
@@ -586,8 +528,7 @@ const BANDS = ["C2","C3","C4","VCE 1"];
   </section>
 
   <section>
-    <h2 class="sec">The wall&rsquo;s own examples</h2>
-    <div class="tabs" id="bandTabs"></div>
+    <h2 class="sec">The wall&rsquo;s own example</h2>
     <div id="wagollBands"></div>
   </section>
 
@@ -690,28 +631,17 @@ document.getElementById("verbBank").addEventListener("click", e=>{
   verbGloss.classList.add("show");
 });
 
-/* ---------- bands: three WAGOLL rows, band by band ---------- */
-const TEXTTYPES = [["fiction","Fiction"],["persuasive","Persuasive"],["film","Film"]];
-let bandType = "fiction";
-function renderBands(){
-  document.getElementById("bandTabs").innerHTML = TEXTTYPES.map(([k,n])=>
-    `<button type="button" class="tab${k===bandType?" on":""}" data-tt="${k}">${n}</button>`).join("");
-  document.getElementById("wagollBands").innerHTML = DATA.wagoll[bandType].map((b,i) => {
-    const f = DATA.bandFocus[i];
-    return `<div class="band">
-      <div class="nmb"><b>${esc(f.band)}</b> &middot; ${esc(f.label)}
-        <span class="focus">${esc(f.focus)}</span></div>
-      <div class="sent">${b.html}</div>
-      ${b.why ? `<div class="why">${tphrase(b.why, b.whyVi, b.whyZh)}</div>` : ""}
-      <details class="expl"><summary>Explanation</summary><p>${esc(b.expl)}</p></details>
-    </div>`;
-  }).join("");
-  applyGlosses();
-}
-document.getElementById("bandTabs").addEventListener("click", e=>{
-  const t = e.target.closest(".tab"); if(!t) return;
-  bandType = t.dataset.tt; renderBands();
-});
+/* ---------- bands ---------- */
+document.getElementById("wagollBands").innerHTML = DATA.wagoll.map((b,i) => {
+  const f = DATA.bandFocus[i];
+  return `<div class="band">
+    <div class="nmb"><b>${esc(f.band)}</b> &middot; ${esc(f.label)}
+      <span class="focus">${esc(f.focus)}</span></div>
+    <div class="sent">${b.html}</div>
+    <div class="why">${tphrase(b.why, b.whyVi, b.whyZh)}</div>
+    <details class="expl"><summary>Explanation</summary><p>${esc(b.expl)}</p></details>
+  </div>`;
+}).join("");
 
 /* ---------- essay skeleton ---------- */
 document.getElementById("skeleton").innerHTML = DATA.essay.map(part => {
@@ -978,7 +908,6 @@ document.addEventListener("keydown", e=>{
   else setTheme(Number(g.getAttribute("data-theme-trigger")));
 });
 
-renderBands();
 layout();
 </script>
 </body>
