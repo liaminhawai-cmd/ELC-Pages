@@ -1,0 +1,84 @@
+      <path class="an-air an-nasal-air" d="M65,101 C65,84 68,69 67,52 C66,38 58,25 45,22 C31,19 17,24 7,32"/>
+      ${marker}${labelMarkup}`;
+  }
+
+  const chartX = x => 44 + x * .54;
+  const svgX = v => (v * 1.35).toFixed(1);
+
+  function enhancedChartSVG(){
+    return `<svg viewBox="0 0 135 100" preserveAspectRatio="none" aria-hidden="true">
+      <g class="anatomy-head" transform="translate(0,-1) scale(.9)">${anatomyParts({labels:true})}</g>
+      <polygon class="cavity" points="${svgX(chartX(4))},4 ${svgX(chartX(96))},4 ${svgX(chartX(88))},96 ${svgX(chartX(30))},96"/>
+      <polygon class="trap" points="${svgX(chartX(4))},4 ${svgX(chartX(96))},4 ${svgX(chartX(88))},96 ${svgX(chartX(30))},96"/>
+    </svg>
+    <div style="position:absolute;top:-2px;left:2px;font-size:.68rem;color:var(--muted)">close ↑ · front ←</div>
+    <div style="position:absolute;bottom:-2px;right:2px;font-size:.68rem;color:var(--muted)">→ back · ↓ open</div>
+    <div class="mouthlabel" style="left:.5%;top:46%">lips</div>
+    <div class="mouthlabel" style="left:47%;top:7%">tongue high</div>
+    <div class="mouthlabel" style="left:47%;bottom:5%">tongue low</div>`;
+  }
+
+  function enhancedFaceCtl(container){
+    const svg = container.querySelector("svg");
+    if(!svg) return null;
+    const jaw = svg.querySelector(".an-jaw");
+    const tongue = svg.querySelector(".an-tongue");
+    const upperLip = svg.querySelector(".an-upper-lip");
+    const lowerLip = svg.querySelector(".an-lower-lip");
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(!jaw || !tongue || !upperLip || !lowerLip) return null;
+
+    const idle = {x:50,y:42};
+    let cur = {...idle};
+    let target = {...idle};
+    let speaking = false;
+    let raf = 0;
+
+    function rounding(x,y){
+      const back = Math.max(0,Math.min(1,(x-46)/38));
+      const openness = Math.max(0,Math.min(1,(y-55)/45));
+      return back * (1 - Math.pow(openness,.85));
+    }
+
+    function draw(){
+      const ease = reduced ? 1 : .25;
+      cur.x += (target.x-cur.x)*ease;
+      cur.y += (target.y-cur.y)*ease;
+
+      const open = Math.max(0,Math.min(1,cur.y/100));
+      const angle = .8 + Math.pow(open,1.12)*10.5;
+      jaw.setAttribute("transform",`rotate(${angle.toFixed(2)} 66 54)`);
+
+      const humpX = 32 + (cur.x/100)*26;
+      const humpY = 34 + (cur.y/100)*27;
+      const width = 6 + open*8;
+      const tipY = 48 + open*2.2;
+      const rootX = 59 + (cur.x-50)*.035;
+      const rootY = 61 + open*6;
+      tongue.setAttribute("d",
+        `M20,${tipY.toFixed(1)} `+
+        `C${(24+open*2).toFixed(1)},${(44+open*4).toFixed(1)} ${(humpX-width).toFixed(1)},${(humpY+1).toFixed(1)} ${humpX.toFixed(1)},${humpY.toFixed(1)} `+
+        `C${(humpX+width).toFixed(1)},${(humpY-1).toFixed(1)} ${rootX.toFixed(1)},${(rootY-8).toFixed(1)} ${rootX.toFixed(1)},${rootY.toFixed(1)} `+
+        `C${rootX.toFixed(1)},${(rootY+10).toFixed(1)} 52,76 43,75 `+
+        `C32,74 23,65 20,56 C19,53 19,51 20,${tipY.toFixed(1)} Z`);
+
+      const round = rounding(cur.x,cur.y);
+      const protrude = 3.2*round;
+      const gap = 3.2 + open*3.1 - round*2.2;
+      upperLip.setAttribute("d",`M8,38 Q${(4.8-protrude).toFixed(1)},${(39.5-round).toFixed(1)} ${(7.8-protrude).toFixed(1)},${(40.5-gap*.16).toFixed(1)} Q12,41.4 16,41`);
+      lowerLip.setAttribute("d",`M8,${(42+gap).toFixed(1)} Q${(4.8-protrude).toFixed(1)},${(43.5+gap*.25).toFixed(1)} ${(8-protrude).toFixed(1)},${(42.3+gap*.35).toFixed(1)} Q12,42.2 16,43.4`);
+
+      svg.classList.toggle("an-speaking",speaking);
+      const moving = Math.abs(target.x-cur.x)+Math.abs(target.y-cur.y)>.25;
+      if(speaking || moving) raf=requestAnimationFrame(draw); else raf=0;
+    }
+    function kick(){ if(!raf) raf=requestAnimationFrame(draw); }
+    draw();
+    return {
+      set(x,y){ target={x,y}; speaking=true; kick(); },
+      idle(){ target={...idle}; speaking=false; kick(); }
+    };
+  }
+
+  function enhancedMouthDiagram(place){
+    return `<svg class="anatomy-mini" viewBox="0 0 88 110" role="img" aria-label="Side-view vocal tract showing the ${escAttr(place)} place of articulation" data-place="${escAttr(place)}" data-active="1">

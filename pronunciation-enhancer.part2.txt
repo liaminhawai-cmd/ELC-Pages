@@ -1,0 +1,68 @@
+    .anatomy-mini[data-voiced="1"][data-active="1"] .an-vocal-folds{animation:anBuzz .12s ease-in-out infinite alternate;transform-origin:64px 91px;transform-box:fill-box}
+    .an-motion-note{font-size:.78rem;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:5px 0 8px}
+    .an-motion-note b{color:var(--ink)}
+    .an-motion-note button{font-size:.72rem;padding:4px 9px}
+    .anatomy-note{display:block;margin-top:5px;color:var(--muted)}
+    .anatomy-note b{color:var(--ink)}
+    .vowel-inner .anatomy-head{opacity:.78}
+    .vowel-inner .an-jaw,.vowel-inner .an-tongue,.vowel-inner .an-lip,.vowel-inner .an-velum{transition:none}
+    @media (max-width:680px){
+      .vowel-inner .an-labels{display:none}
+      .anatomy-head{opacity:.7}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .an-air,.an-vocal-folds,.an-place-ring{animation:none!important}
+    }
+  `;
+
+  const style = document.createElement("style");
+  style.id = "pronunciation-anatomy-enhancement";
+  style.textContent = STYLE;
+  document.head.appendChild(style);
+
+  const escAttr = value => String(value).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
+
+  function anatomyParts({labels=true, place=null}={}){
+    const spots = {
+      "Bilabial":[7.5,41.5], "Labio-dental":[12.5,42.2], "Dental":[18.2,40.2],
+      "Alveolar":[25.6,34.3], "Post-alveolar":[34.5,31.5], "Velar":[56.5,34.5], "Glottal":[64,91]
+    };
+    const marker = place && spots[place] ? `
+      <circle class="an-place-ring" cx="${spots[place][0]}" cy="${spots[place][1]}" r="4.8"/>
+      <circle class="an-place" cx="${spots[place][0]}" cy="${spots[place][1]}" r="2.2"/>` : "";
+    const labelMarkup = labels ? `
+      <g class="an-labels">
+        <line x1="25.5" y1="34" x2="15" y2="26"/><text x="2" y="25">alveolar ridge</text>
+        <line x1="42" y1="26" x2="43" y2="15"/><text x="32" y="13.5">hard palate</text>
+        <line x1="58" y1="33" x2="72" y2="25"/><text x="72" y="24">velum</text>
+        <line x1="64" y1="91" x2="78" y2="88"/><text x="72" y="86">vocal folds</text>
+      </g>` : "";
+
+    return `
+      <path class="an-tissue" d="M38,2 C22,2 11,9 8,22 C7,26 8,29 3,32 C1,34 2,37 7,38
+        C5,40 5,43 8,45 C6,49 7,54 11,57 C8,63 11,71 18,77 C24,83 29,90 30,108
+        L79,108 C78,96 77,86 79,73 C82,57 87,42 85,26 C83,10 69,2 54,2 Z"/>
+      <path class="an-cavity" d="M7,29 C16,19 29,14 44,15 C53,15 60,18 65,23 C59,24 55,27 52,31
+        C42,29 31,30 23,33 C17,35 12,35 7,34 Z"/>
+      <path class="an-cavity" d="M10,39 C18,35 26,34 36,34 C47,34 57,38 61,46 C64,52 65,61 64,68
+        C60,66 56,63 51,60 C40,56 27,55 16,58 C12,54 10,48 10,39 Z"/>
+      <path class="an-cavity" d="M61,43 C68,44 71,51 70,61 L69,78 C69,84 72,90 72,108 L58,108
+        C58,96 60,88 59,80 C58,71 57,61 58,53 C58,49 59,46 61,43 Z"/>
+      <path class="an-palate" d="M21,35 Q34,25 49,26 Q55,27 59,31"/>
+      <path class="an-outline" d="M8,33 Q14,36 21,35"/>
+      <rect class="an-tooth" x="17" y="34" width="4.2" height="8" rx="1"/>
+      <rect class="an-tooth" x="17.7" y="48" width="4.1" height="7" rx="1" transform="rotate(5 19.7 51.5)"/>
+      <path class="an-lip an-upper-lip" d="M8,38 Q4.8,39.6 7.8,42 Q12,42.4 16,41"/>
+      <path class="an-lip an-lower-lip" d="M8,45 Q4.8,43.5 8,42.2 Q12,42 16,43.4"/>
+      <g class="an-jaw">
+        <path class="an-jawbone" d="M20,52 Q26,69 43,74 Q55,76 66,63"/>
+      </g>
+      <path class="an-tongue" d="M20,49 C25,43 34,41 43,42 C52,43 58,49 59,59
+        C60,68 57,73 50,75 C39,78 26,69 21,59 C19,55 18,52 20,49 Z"/>
+      <path class="an-velum" d="M58,31 Q65,34 63,42"/>
+      <ellipse class="an-uvula" cx="62.3" cy="43.5" rx="1.5" ry="2.6"/>
+      <path class="an-pharynx" d="M68,43 Q71,56 68,72 Q66,80 67,87"/>
+      <path class="an-epiglottis" d="M58,78 Q63,73 66,79 Q62,82 60,87"/>
+      <path class="an-larynx" d="M58,88 Q64,85 71,89 M58,94 L72,94 M58,100 L72,100"/>
+      <g class="an-vocal-folds"><path d="M61,90.5 L65,92.3"/><path d="M68,90.5 L65,92.3"/></g>
+      <path class="an-air an-oral-air" d="M65,101 C65,88 64,75 64,63 C61,54 52,47 43,44 C32,41 20,42 8,42"/>

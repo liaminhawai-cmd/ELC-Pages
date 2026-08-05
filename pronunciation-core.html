@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Pronunciation Hub — the sounds of Australian English, with a tongue twister to read and write for each one.">
+<title>Pronunciation Hub — ELC Hub</title>
+<style>
+  :root{
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2; --radius:12px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
+    --accent:#2563eb; --accent-soft:#dbeafe;
+    --voiced:#8DD873; --unvoiced:#45B0E1; --vowel:#F1A983;
+    --done:#16a34a; --done-soft:#dcfce7; --target:#d97706; --target-soft:#fef0d5;
+    --focus:#b3442e; --focus-soft:#f6e3dc;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{ --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
+           --accent:#7aa5ff; --accent-soft:#1d2c4d; --shadow:0 1px 2px rgba(0,0,0,.4);
+           --done-soft:#14331f; --target-soft:#3a2508;
+           --focus:#e08a70; --focus-soft:#3c221a; }
+  }
+  *{box-sizing:border-box;margin:0}
+  body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+  header{background:linear-gradient(135deg,#0d9488,#2563eb 55%,#7c3aed);color:#fff;padding:20px 20px 26px;text-align:center}
+  header a.back{color:#fff;opacity:.85;text-decoration:none;font-size:.85rem;font-weight:600}
+  header h1{font-size:clamp(1.4rem,4vw,1.95rem);margin-top:6px}
+  header p{max-width:600px;margin:6px auto 0;opacity:.94;font-size:.9rem}
+  main{max-width:1180px;margin:0 auto;padding:18px 14px 60px}
+
+  /* progress + tabs */
+  .topbar{position:sticky;top:0;z-index:20;background:var(--bg);padding:10px 14px;margin:0 -14px 14px;
+          box-shadow:0 4px 10px -8px rgba(0,0,0,.3);display:flex;flex-wrap:wrap;gap:9px;align-items:center}
+  .tabs{display:flex;flex-wrap:wrap;gap:6px}
+  .tabs button{font-size:.82rem;padding:7px 13px;border-radius:999px;border:1px solid var(--line);
+               background:var(--card);color:var(--ink);cursor:pointer}
+  .tabs button[aria-selected="true"]{background:var(--accent);color:#fff;border-color:transparent;font-weight:700}
+  .prog{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--muted)}
+  .prog .bar{width:110px;height:7px;border-radius:99px;background:var(--line);overflow:hidden}
+  .prog .bar i{display:block;height:100%;background:var(--done);width:0}
+
+  .panel{display:none} .panel.on{display:block}
+  h2.sec{font-size:1rem;margin:14px 0 3px}
+  p.hint{font-size:.82rem;color:var(--muted);margin-bottom:9px}
+
+  /* phoneme grids */
+  .ipa-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow)}
+  table.ipa{border-collapse:collapse;width:100%;min-width:760px}
+  table.ipa th,table.ipa td{border:1px solid var(--line);padding:6px;vertical-align:top;text-align:center}
+  table.ipa th{font-size:.68rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);background:var(--bg);font-weight:700}
+  table.ipa th.rowh{text-align:left;white-space:nowrap;font-size:.7rem}
+  .ph{display:inline-flex;flex-direction:column;align-items:center;gap:1px;min-width:62px;margin:2px;
+      padding:6px 7px;border:1px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;
+      font:inherit;color:inherit;position:relative;transition:transform .1s,border-color .1s}
+  .ph:hover{transform:translateY(-2px);border-color:var(--accent)}
+  .ph .sym{font-size:1.02rem;font-weight:800;letter-spacing:.5px;white-space:nowrap}
+  .ph .eg{font-size:.68rem;color:var(--muted)}
+  .ph .pos{font-size:.6rem;color:var(--muted);letter-spacing:2px;line-height:1}
+  .ph.voiced{border-left:4px solid var(--voiced)}
+  .ph.unvoiced{border-left:4px solid var(--unvoiced)}
+  .ph.vowelph{border-left:4px solid var(--vowel)}
+  .ph[data-state="target"]{background:var(--target-soft);border-color:var(--target)}
+  .ph[data-state="done"]{background:var(--done-soft);border-color:var(--done)}
+  .ph[data-state="focus"]{background:var(--focus-soft);border-color:var(--focus)}
+  .pips{font-size:.5rem;letter-spacing:1.5px;color:var(--focus);line-height:1}
+  .focusbar,.assignbar{border:1px solid var(--focus);border-radius:var(--radius);background:var(--card);
+    box-shadow:var(--shadow);padding:12px 14px;margin-bottom:14px;font-size:.88rem}
+  .assignbar{border-color:var(--accent)}
+  .focusbar .ph,.assignbar .ph{min-width:0;padding:4px 8px}
+  .copyrow{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-top:8px}
+  .copyrow input{flex:1;min-width:190px;font-size:.76rem;padding:7px 9px;border:1px solid var(--line);
+    border-radius:8px;background:var(--card);color:var(--ink)}
+  .checklist label{display:flex;gap:9px;align-items:flex-start;font-size:.85rem;padding:5px 0;cursor:pointer}
+  .checklist input{width:17px;height:17px;margin-top:1px;accent-color:var(--focus)}
+  .checklist label.tcheck{border-top:1px dashed var(--line);margin-top:5px;padding-top:9px}
+  .checklist .dis{opacity:.55}
+  .ph .flag{position:absolute;top:-6px;right:-6px;font-size:.68rem}
+  .ph.sel{outline:3px solid var(--accent);outline-offset:1px}
+
+  /* vowel chart */
+  .vowel-wrap{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+              box-shadow:var(--shadow);padding:14px;overflow-x:auto}
+  .vowel-inner{position:relative;width:100%;max-width:620px;margin:0 auto;min-width:520px;aspect-ratio:1.35/1}
+  .vowel-inner svg{position:absolute;inset:0;width:100%;height:100%}
+  .vowel-inner .ph{position:absolute;transform:translate(-50%,-50%);min-width:56px;margin:0;white-space:nowrap;padding:5px 8px}
+  .vowel-inner .ph:hover{transform:translate(-50%,-50%) scale(1.06)}
+  .axis{font-size:.68rem;fill:var(--muted)}
+  .trap{fill:none;stroke:#a5836f;opacity:.55;stroke-width:2;vector-effect:non-scaling-stroke}
+  .cavity{fill:#fffdf8;opacity:.4}
+  @media (prefers-color-scheme:dark){ .trap{stroke:var(--line);opacity:1} .cavity{fill:#0f1420;opacity:.45} }
+  .dpath{stroke:var(--accent);stroke-width:2;fill:none;stroke-linecap:round;opacity:0;transition:opacity .2s;vector-effect:non-scaling-stroke}
+  .dpath.show{opacity:.55}
+  /* the face is composited as ONE group: parts are opaque inside it (so the
+     jaw slab, skull and tongue overlap seamlessly) and the whole face fades
+     together via group opacity */
+  .mouthface{opacity:.52}
+  .mouthface .skin{fill:#f7d7c1;stroke:#8c6a58;stroke-width:1.4;vector-effect:non-scaling-stroke}
+  .mouthface .feature{fill:none;stroke:#704b3d;stroke-width:1.6;vector-effect:non-scaling-stroke;stroke-linecap:round}
+  .mouthface .feature.bold{stroke-width:2}
+  .mouthface .tooth{fill:#fff;stroke:#704b3d;stroke-width:1;vector-effect:non-scaling-stroke}
+  .mouthface .tongue{fill:#de7f7d;stroke:#8f4745;stroke-width:1.4;vector-effect:non-scaling-stroke;fill-opacity:.75}
+  .mouthface .mouthgap{fill:#6d403a;stroke:#5a3229;stroke-width:1.2;vector-effect:non-scaling-stroke}
+  @media (prefers-color-scheme:dark){ .mouthface{opacity:.3} }
+  .mouth-mini{width:100%;max-width:260px;margin-top:8px;display:block;opacity:1}
+  .place-dot{fill:var(--accent);stroke:#fff;stroke-width:1.5;animation:pulseDot 1.2s infinite}
+  @keyframes pulseDot{0%,100%{r:4px}50%{r:6.5px}}
+  @media (prefers-reduced-motion:reduce){ .place-dot{animation:none} }
+  .mouthlabel{position:absolute;font-size:.66rem;color:var(--muted);opacity:.75;pointer-events:none}
+  .accbar{display:inline-flex;gap:4px;margin-left:6px;vertical-align:middle}
+  .accbar button{font-size:.72rem;padding:3px 10px;border-radius:999px;border:1px solid var(--line);
+    background:var(--card);cursor:pointer;color:var(--muted);font-weight:700}
+  .accbar button.on{background:var(--accent);color:#fff;border-color:transparent}
+  .glidedot{position:absolute;width:15px;height:15px;border-radius:50%;background:var(--accent);
+            box-shadow:0 0 12px var(--accent);transform:translate(-50%,-50%);pointer-events:none;z-index:6;display:none}
+  .vowel-inner .ph{touch-action:none}
+  .vowel-inner{user-select:none;-webkit-user-select:none}
+
+  /* detail */
+  .detail{margin-top:14px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);
+          box-shadow:var(--shadow);padding:0;overflow:hidden}
+  .detail .dhead{display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line)}
+  .detail .big{font-size:2rem;font-weight:800;letter-spacing:1px}
+  .detail .meta{font-size:.82rem;color:var(--muted)}
+  .detail .meta b{color:var(--ink)}
+  .detail .acts{margin-left:auto;display:flex;gap:6px;flex-wrap:wrap}
+  .btn{font-size:.79rem;padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:var(--card);
+       color:var(--ink);cursor:pointer;font-weight:600}
+  .btn.on-target{background:var(--target-soft);border-color:var(--target);color:var(--target)}
+  .btn.on-done{background:var(--done-soft);border-color:var(--done);color:var(--done)}
+  .dbody{padding:14px 16px}
+  .steps{display:grid;gap:11px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+  .step{border:1px solid var(--line);border-radius:10px;padding:12px 13px;background:var(--bg)}
+  .step .n{display:inline-block;width:19px;height:19px;line-height:19px;text-align:center;border-radius:50%;
+           background:var(--accent);color:#fff;font-size:.72rem;font-weight:800;margin-right:6px}
+  .step h4{display:inline;font-size:.88rem}
+  .step p{font-size:.83rem;color:var(--muted);margin-top:7px}
+  .tw{font-size:.98rem;line-height:1.75;margin-top:8px;padding:10px 12px;background:var(--card);
+      border:1px solid var(--line);border-radius:9px;white-space:pre-line}
+  .tw em{font-style:normal;font-weight:800;color:var(--accent)}
+  textarea{width:100%;font:inherit;font-size:.88rem;padding:9px 11px;border:1px solid var(--line);
+           border-radius:8px;background:var(--card);color:var(--ink);resize:vertical;min-height:74px;margin-top:8px}
+  .novid{font-size:.78rem;color:var(--muted);margin-top:8px}
+
+  /* stress + rhythm cards */
+  .cards{display:grid;gap:11px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+  .gcard{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);padding:14px 15px}
+  .gcard h3{font-size:.98rem;margin-bottom:3px}
+  .gcard p.k{font-size:.78rem;color:var(--muted);margin-bottom:9px}
+  .gcard a{color:var(--accent)}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+  .chips span{font-size:.76rem;padding:4px 9px;border-radius:999px;background:var(--bg);border:1px solid var(--line)}
+  .say{font-size:1.05rem;font-weight:700;padding:10px 12px;background:var(--accent-soft);border-radius:9px;text-align:center}
+  .dice{margin-top:9px;padding:11px;border:1px dashed var(--line);border-radius:9px;text-align:center;font-size:.9rem;min-height:44px;display:flex;align-items:center;justify-content:center}
+  footer{border-top:1px solid var(--line);margin-top:30px;padding:16px;text-align:center;color:var(--muted);font-size:.8rem}
+  .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.75rem;color:var(--muted);margin:8px 0 2px}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← ELC Hub</a>
+  <h1>🗣️ Pronunciation Hub</h1>
+  <p>Every sound of Australian English. Press the vowels to hear them, read the tongue twisters, then write your own.</p>
+</header>
+
+<main>
+  <div class="topbar">
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" data-tab="cons">Consonants</button>
+      <button role="tab" aria-selected="false" data-tab="vow">Vowels</button>
+      <button role="tab" aria-selected="false" data-tab="dip">Diphthongs</button>
+      <button role="tab" aria-selected="false" data-tab="pat">Sound patterns</button>
+      <button role="tab" aria-selected="false" data-tab="stress">Stress &amp; rhythm</button>
+    </div>
+    <div class="prog"><span id="progText">0 achieved</span><span class="bar"><i id="progBar"></i></span></div>
+  </div>
+
+  <div id="focusArea"></div>
+
+  <section class="panel on" id="tab-cons">
+    <h2 class="sec">Consonants</h2>
+    <p class="hint">Grouped by where and how you make the sound. <b>◁</b> start of word · <b>◇</b> middle · <b>▷</b> end.</p>
+    <div class="legend">
+      <span><i style="background:var(--unvoiced)"></i>Unvoiced (no throat buzz)</span>
+      <span><i style="background:var(--voiced)"></i>Voiced (throat buzzes)</span>
+      <span>⭐ my target · ✅ achieved</span>
+    </div>
+    <div class="ipa-scroll"><table class="ipa" id="consTable"></table></div>
+  </section>
+
+  <section class="panel" id="tab-vow">
+    <h2 class="sec">Vowels</h2>
+    <p class="hint">Where your tongue sits in your mouth — front is towards your teeth, close is towards the roof. <b>Press a vowel to hear it. Hold it and drag anywhere to bend it into other sounds.</b> Accent: <span class="accbar" data-accbar></span></p>
+    <div class="vowel-wrap"><div class="vowel-inner" id="vowelChart"></div></div>
+  </section>
+
+  <section class="panel" id="tab-dip">
+    <h2 class="sec">Diphthongs</h2>
+    <p class="hint">Two vowels in one — your mouth <b>moves</b>. Tap one to watch the dot travel — or press and hold anywhere, then drag, to glide it yourself. Accent: <span class="accbar" data-accbar></span></p>
+    <div class="vowel-wrap"><div class="vowel-inner" id="dipChart"></div></div>
+    <div class="chips" id="dipChips" style="margin-top:11px"></div>
+  </section>
+
+  <section class="panel" id="tab-pat">
+    <h2 class="sec">Sound patterns</h2>
+    <p class="hint">Writers repeat sounds on purpose. The markers match the map: <b>◁</b> start of word · <b>◇</b> middle · <b>▷</b> end.</p>
+    <div class="cards" id="patternCards"></div>
+  </section>
+
+  <section class="panel" id="tab-stress">
+    <h2 class="sec">Stress, rhythm and register</h2>
+    <p class="hint">Same words, different meaning — it depends how you say them.</p>
+    <div class="cards" id="stressCards"></div>
+  </section>
+
+  <div id="detail"></div>
+</main>
+
+<footer>Sounds and example words from our own Australian English phoneme map. Vowel sounds are synthesised in your browser until a teacher recording exists for them. Progress and writing are saved on this device only. <a href="?assign" style="color:var(--muted)">Teacher: assign focus sounds</a></footer>
+
+<script>
+/* ============================================================
+   CONTENT — safe to edit. Phonemes, tongue twisters and games.
+   pos: which positions the sound appears in — I=start, M=middle, F=end
+   Recordings: drop any audio file into its sound's folder in the Phonics
+          repo (Phonics/sounds/θ (thin)/ etc). The deploy builds a manifest and
+          this page plays the recording automatically — no renaming, no code
+          edits. An explicit audio:"file.mp3" field on a phoneme overrides it.
+          Until a recording exists, vowels/diphthongs are synthesised and
+          consonants get make-it-with-your-mouth instructions.
+   ============================================================ */
+const AUDIO_BASE = "https://liaminhawai-cmd.github.io/Phonics/";
+const GRAMMAR_HUB = "https://liaminhawai-cmd.github.io/Grammar-hub/";
+
+/* place × manner grid, exactly as the phoneme map draws it */
+const MANNERS = ["Plosive / Stop","Fricative","Affricate","Nasal","Approximant"];
+const PLACES  = ["Bilabial","Labio-dental","Dental","Alveolar","Post-alveolar","Velar","Glottal"];
+
+const CONSONANTS = [
+  {s:"/p/", eg:"pen",    m:"Plosive / Stop", p:"Bilabial",      v:0, pos:"IMF"},
+  {s:"/b/", eg:"bed",    m:"Plosive / Stop", p:"Bilabial",      v:1, pos:"IMF"},
+  {s:"/t/", eg:"two",    m:"Plosive / Stop", p:"Alveolar",      v:0, pos:"IMF"},
+  {s:"/d/", eg:"do",     m:"Plosive / Stop", p:"Alveolar",      v:1, pos:"IMF"},
+  {s:"/k/", eg:"kite",   m:"Plosive / Stop", p:"Velar",         v:0, pos:"IMF"},
+  {s:"/g/", eg:"go",     m:"Plosive / Stop", p:"Velar",         v:1, pos:"IMF"},
+  {s:"/f/", eg:"fish",   m:"Fricative",      p:"Labio-dental",  v:0, pos:"IMF"},
+  {s:"/v/", eg:"very",   m:"Fricative",      p:"Labio-dental",  v:1, pos:"IMF", tw:"w-v"},
+  {s:"/θ/", eg:"thin",   m:"Fricative",      p:"Dental",        v:0, pos:"IMF", tw:"th-sh"},
+  {s:"/ð/", eg:"this",   m:"Fricative",      p:"Dental",        v:1, pos:"IMF", tw:"th-sh"},
+  {s:"/s/", eg:"see",    m:"Fricative",      p:"Alveolar",      v:0, pos:"IMF", tw:"s-sh"},
+  {s:"/z/", eg:"zoo",    m:"Fricative",      p:"Alveolar",      v:1, pos:"IMF"},
+  {s:"/ʃ/", eg:"she",    m:"Fricative",      p:"Post-alveolar", v:0, pos:"IMF", tw:"s-sh"},
+  {s:"/ʒ/", eg:"vision", m:"Fricative",      p:"Post-alveolar", v:1, pos:"IMF"},
+  {s:"/h/", eg:"hat",    m:"Fricative",      p:"Glottal",       v:0, pos:"IM"},
+  {s:"/tʃ/",eg:"chair",  m:"Affricate",      p:"Post-alveolar", v:0, pos:"IMF", tw:"ch-j"},
+  {s:"/dʒ/",eg:"jam",    m:"Affricate",      p:"Post-alveolar", v:1, pos:"IMF", tw:"ch-j"},
+  {s:"/m/", eg:"me",     m:"Nasal",          p:"Bilabial",      v:1, pos:"IMF"},
+  {s:"/n/", eg:"no",     m:"Nasal",          p:"Alveolar",      v:1, pos:"IMF"},
+  {s:"/ŋ/", eg:"sing",   m:"Nasal",          p:"Velar",         v:1, pos:"MF"},
+  {s:"/w/", eg:"we",     m:"Approximant",    p:"Bilabial",      v:1, pos:"IM", tw:"w-v"},
+  {s:"/l/", eg:"look",   m:"Approximant",    p:"Alveolar",      v:1, pos:"IM", tw:"l-r"},
+  {s:"/r/", eg:"red",    m:"Approximant",    p:"Post-alveolar", v:1, pos:"IM", tw:"l-r"}
+];
+
+/* x = front→back (0–100), y = close→open (0–100) */
+const VOWELS = [
+  {s:"/iː/", eg:"see",   x:6,  y:6,  pos:"IMF", tw:"i-ii"},
+  {s:"/ɪ/",  eg:"sit",   x:20, y:18, pos:"IM",  tw:"i-ii"},
+  {s:"/e/",  eg:"bed",   x:16, y:42, pos:"IM"},
+  {s:"/æ/",  eg:"cat",   x:20, y:82, pos:"IM"},
+  {s:"/ɜː/", eg:"her",   x:50, y:44, pos:"IMF"},
+  {s:"/ə/",  eg:"about", x:52, y:52, pos:"MF"},
+  {s:"/ɐ/",  eg:"cut",   x:54, y:72, pos:"IM"},
+  {s:"/ʉː/", eg:"food",  x:72, y:8,  pos:"IMF", tw:"u-uu"},
+  {s:"/ʊ/",  eg:"put",   x:78, y:22, pos:"M",  tw:"u-uu"},
+  {s:"/ɔ/",  eg:"hot",   x:88, y:70, pos:"IM"},
+  {s:"/ɔː/", eg:"door",  x:92, y:48, pos:"IMF"},
+  {s:"/aː/", eg:"spa",   x:80, y:90, pos:"IMF"}
+];
+
+const DIPHTHONGS = [
+  {s:"/eɪ/", eg:"day, make, play", from:[16,42], to:[20,18]},
+  {s:"/aɪ/", eg:"my, time, ride",  from:[60,90], to:[20,18]},
+  {s:"/ɔɪ/", eg:"boy, choice",     from:[90,58], to:[20,18]},
+  {s:"/əʉ/", eg:"go, snow, home",  from:[52,52], to:[72,8], note:"the GOAT vowel"},
+  {s:"/aʊ/", eg:"now, about",      from:[45,88], to:[78,22]}
+];
+
+/* Accent variants — classroom-model positions, not gospel. Base chart is
+   Australian English; each accent overrides positions, glide paths and the
+   symbol students see. Progress, twisters and recordings stay keyed to the
+   Aussie symbols. */
+const ACCENTS = {
+  aus:{ label:"Aussie", vowels:{}, dips:{} },
+  nz:{ label:"Kiwi",
+    vowels:{ "/ɪ/":{x:50,y:40,sym:"/ɘ/"}, "/e/":{x:14,y:26}, "/æ/":{x:16,y:56},
+      "/ɜː/":{x:38,y:36,sym:"/ɵː/"}, "/aː/":{x:66,y:88,sym:"/ɐː/"} },
+    dips:{ "/eɪ/":{from:[24,64],to:[18,26],sym:"/æe/"}, "/aɪ/":{from:[58,90],to:[22,32],sym:"/ɑe/"},
+      "/ɔɪ/":{from:[88,56],to:[22,30]}, "/əʉ/":{from:[52,64],to:[72,10],sym:"/ɐʉ/"},
+      "/aʊ/":{from:[28,82],to:[58,42],sym:"/æɔ/"} } },
+  rp:{ label:"UK RP",
+    vowels:{ "/e/":{x:16,y:38}, "/æ/":{x:14,y:74}, "/ɐ/":{x:62,y:68,sym:"/ʌ/"},
+      "/ʉː/":{x:88,y:8,sym:"/uː/"}, "/ʊ/":{x:80,y:20}, "/ɔ/":{x:86,y:80,sym:"/ɒ/"},
+      "/ɔː/":{x:90,y:42}, "/aː/":{x:84,y:88,sym:"/ɑː/"} },
+    dips:{ "/eɪ/":{from:[16,40],to:[20,18]}, "/aɪ/":{from:[36,86],to:[20,18]},
+      "/ɔɪ/":{from:[88,55],to:[20,18]}, "/əʉ/":{from:[52,52],to:[80,20],sym:"/əʊ/"},
+      "/aʊ/":{from:[40,86],to:[80,20]} } },
+  us:{ label:"US",
+    vowels:{ "/e/":{x:16,y:44,sym:"/ɛ/"}, "/æ/":{x:16,y:72}, "/ɜː/":{x:48,y:44,sym:"/ɝ/"},
+      "/ɐ/":{x:58,y:64,sym:"/ʌ/"}, "/ʉː/":{x:84,y:10,sym:"/uː/"}, "/ɔ/":{x:78,y:88,sym:"/ɑ/"},
+      "/ɔː/":{x:88,y:52}, "/aː/":{x:82,y:90,sym:"/ɑː/"} },
+    dips:{ "/eɪ/":{from:[14,40],to:[20,18]}, "/aɪ/":{from:[40,88],to:[20,18]},
+      "/ɔɪ/":{from:[86,52],to:[20,18]}, "/əʉ/":{from:[72,40],to:[80,18],sym:"/oʊ/"},
+      "/aʊ/":{from:[36,86],to:[80,20]} } }
+};
+let accent=localStorage.getItem("elc_pron_accent")||"aus";
+if(!ACCENTS[accent]) accent="aus";
+const accVowel=o=>{ const ov=ACCENTS[accent].vowels[o.s]||{};
+  return {...o, x:ov.x!==undefined?ov.x:o.x, y:ov.y!==undefined?ov.y:o.y, showSym:ov.sym||o.s}; };
+const accDip=d=>{ const ov=ACCENTS[accent].dips[d.s]||{};
+  return {...d, from:ov.from||d.from, to:ov.to||d.to, showSym:ov.sym||d.s}; };
+
+/* Tongue twisters — from the phonics notebook */
+const TWISTERS = {
+  "ch-j":{ title:"Ch / J", sounds:"/tʃ/ and /dʒ/",
+    quick:"Charlie jumped on the itchy giraffe.",
+    text:"Charlie jumped on the itchy giraffe.\nJust chew the cheese, Jack — don't juggle it!\nThe jolly children chose cheap chocolate chips." },
+  "th-sh":{ title:"Th / Sh", sounds:"/θ/, /ð/ and /ʃ/",
+    quick:"Think and share, don't shrink them there.",
+    text:"Think and share, don't shrink them there.\nThose three shy thieves shared thirty thick shells.\nThis thin shirt is thicker than that one." },
+  "l-r":{ title:"L / R", sounds:"/l/ and /r/",
+    quick:"I lead the red robot, rake the leaves by the lake.",
+    text:"Jerry's jelly berries taste really rare.\nRory's lawn rake rarely rakes really right.\nA really leery Larry rolls readily to the road.\nThe road's load is lessened lightly.\nLassie Lilly likes Ronny's rulers.\nBarry's belly riles with bile.\nBilly and Lilly pile pyres for file fires." },
+  "s-sh":{ title:"S / Sh", sounds:"/s/ and /ʃ/",
+    quick:"She sells sea shells by the sea shore.",
+    text:"Shelly should shine her shoes each Saturday,\nShe sits by the shore where the soft waves sway.\nSally says, “Surely your shoes are too shiny!”\nShelly smiles shyly and shines them more finely.\nSome seashells shimmer; some shells stay still,\nShe sorts them silently with skill and will.\n“Should I sell these shiny shells?” she sighs —\nAnd the seagulls sing softly as sunshine dries." },
+  "w-v":{ title:"W / V", sounds:"/w/ and /v/",
+    quick:"Victor waved while washing the van.",
+    text:"Wendy went walking with Victor one day,\nThey wandered through willows that waved on the way.\nVictor's velvet vest was vivid and new,\nWhile Wendy wore wool that the wild wind blew.\nThey viewed the wide valley, the village, the view,\nThey whispered and wondered what weather was due.\nVictor vowed, “We'll visit whenever we can!”\nAnd Wendy just winked — “You're a very wise man.”" },
+  "u-uu":{ title:"/ʊ/ vs /ʉː/", sounds:"short and long oo",
+    quick:"Put your foot in the food of anyone who is in a hood.",
+    text:"Luke looked at Lulu in the blue schoolroom,\n“Could you cook good soup this afternoon?”\nLulu shook her wooden spoon and stood,\n“I could, if you put in the food you should.”\nThey pushed and pulled a crooked stool,\nTo scoop some noodles — not too cool.\nThe cookbook stood where the sunlight shone,\n“The soup's too smooth!” said Luke with a groan.\nLulu laughed, “You should choose to chew!”\nLuke blew on his spoon — “It's too hot to do!”" },
+  "i-ii":{ title:"/ɪ/ and /iː/", sounds:"short and long ee",
+    quick:"Milly sits still on the hill and sees three green sheep.",
+    text:"Milly sits still on the hill and sees three green sheep.\nEach sheep is eating sweet peas near the creek.\n“Keep still!” Milly whispers, “They'll leap if you creep.”\nThe breeze slips through the trees and tickles her cheek.\nShe grins, feeling silly but free in the spring heat." }
+};
+
+/* How to make each consonant — spoken instructions built from the grid */
+const PLACE_HOW = {
+  "Bilabial":"both lips together",
+  "Labio-dental":"top teeth on your bottom lip",
+  "Dental":"tongue tip between your teeth",
+  "Alveolar":"tongue tip on the bumpy ridge behind your top teeth",
+  "Post-alveolar":"tongue curled just behind the ridge",
+  "Velar":"back of your tongue against the soft roof",
+  "Glottal":"just your throat — mouth relaxed and open"
+};
+const MANNER_HOW = {
+  "Plosive / Stop":"block the air completely, then let it pop out",
+  "Fricative":"leave a tiny gap and squeeze the air through so it hisses",
+  "Affricate":"block the air, then release it into a hiss",
+  "Nasal":"block the mouth and let the sound hum out through your nose",
+  "Approximant":"glide — the parts come close but never quite touch"
+};
+
+/* Sound patterns tab — alliteration, assonance, rhyme + snake endings */
+const PATTERNS = [
+  { marker:"◁", title:"Alliteration", sub:"the same sound at the START of nearby words",
+    lines:["She sells sea shells by the sea shore.",
+           "Wendy went walking with Victor one day.",
+           "Six sizzling sausages slide off the barbie."],
+    note:"Every tongue twister on the Consonants tab is alliteration training in disguise.",
+    task:"Pick one consonant from the map. Write a line where at least four words start with it.",
+    mine:"pat-allit", ph:"My alliteration line…" },
+  { marker:"◇", title:"Assonance", sub:"the same VOWEL sound INSIDE nearby words — they don't have to rhyme",
+    lines:["Green sheep sleep near the creek.  (/iː/)",
+           "The cat sat on the black mat.  (/æ/)",
+           "Go slow on the road home.  (/əʉ/)"],
+    note:"Press the vowel on the chart first, so your ear knows what it is hunting.",
+    task:"Choose one vowel. Find five words with that sound inside them and pack them into one line.",
+    mine:"pat-asson", ph:"My assonance line…" },
+  { marker:"▷", title:"Rhyme", sub:"the same sounds from the last vowel to the END of the word",
+    lines:["Shelly should shine her shoes each Saturday,",
+           "she sits by the shore where the soft waves sway.",
+           "I do not like green eggs and ham.",
+           "I do not like them, Sam-I-am."],
+    note:"Rhyme is for your ears, not your eyes: said rhymes with bed, but laughed does not rhyme with thought. Families to raid: -ay (day, play, sway) · -ight (night, bright) · -eep (sheep, creep) · -ake (make, snake, lake).",
+    task:"Write a two-line rhyme about your week. The last word of each line must rhyme by sound. Ready for a whole poem? The Limerick Builder is at the bottom of this Sound patterns tab.",
+    mine:"pat-rhyme", ph:"My couplet…" }
+];
+
+/* Stress, rhythm and register games from the notebook */
+const REGISTER_ROLES = ["Military officer giving an order","Kindergarten teacher","CEO at a meeting",
+  "Parent calming a toddler","Judge in court","Friend at a party","Stand-up comedian","Angry sports coach",
+  "Customer service rep at a bank","Police officer during an arrest","Flight attendant before take-off",
+  "Doctor before bad news"];
+
+const EMPHASIS_MEANINGS = ["It's fine somewhere else, but not here","Whispered warning",
+  "Suspicious (you're hiding something)","Absolute prohibition","Playful teasing","Confused",
+  "Different clothing would be fine","Over-the-top dramatic","Someone else can, but not you",
+  "Polite but firm","Shocked","You could carry it, but not wear it"];
+
+/* ============================================================
+   ENGINE
+   ============================================================ */
+const KEY="elc_pron_state";
+const load=()=>{ try{return JSON.parse(localStorage.getItem(KEY)||"{}")}catch(e){return{}} };
+const save=s=>localStorage.setItem(KEY,JSON.stringify(s));
+let state=load();   // {"/r/":{st:"done"|"target", mine:"...", focus:true, steps:{m,r,w,p}, clearedAt}}
+
+/* teacher recordings — manifest generated by the Phonics deploy */
+let SOUND_FILES=null;
+fetch(AUDIO_BASE+"sounds/manifest.json")
+  .then(r=>r.ok?r.json():null)
+  .then(m=>{
+    if(!m) return;
+    SOUND_FILES={};
+    for(const folder in m){
+      const sym="/"+folder.split(" (")[0]+"/";
+      const f=m[folder].files&&m[folder].files[0];
+      if(f) SOUND_FILES[sym]=AUDIO_BASE+"sounds/"+encodeURIComponent(folder)+"/"+encodeURIComponent(f);
+    }
+    const open=document.querySelector(".detail .big");
+    if(open) showDetail(open.textContent);
+  }).catch(()=>{});
+
+/* grammar-hub-style assignment links: ?focus=θ,s sets those sounds red on
+   this device; ?assign turns the page into the teacher's link builder */
+const QS=new URLSearchParams(location.search);
+const ASSIGN_MODE=QS.has("assign");
+const assignSel=new Set();
+const stepCount=v=>v&&v.steps?["m","r","w","p"].filter(k=>v.steps[k]).length:0;
+
+/* tap = the teacher's recorded voice (when one exists) · hold-drag = synth */
+const recFor=sym=>{
+  const o=find(sym);
+  if(o&&o.audio) return AUDIO_BASE+o.audio;
+  return (SOUND_FILES&&SOUND_FILES[sym])||null;
+};
+let recEl=null;
+function playRec(sym){
+  const u=recFor(sym); if(!u) return false;
+  if(!recEl) recEl=new Audio();
+  recEl.pause(); recEl.src=u;
+  recEl.play().catch(()=>{});
+  return true;
+}
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const posMark=p=>(p.includes("I")?"◁":"")+(p.includes("M")?"◇":"")+(p.includes("F")?"▷":"");
+const posWords=p=>[p.includes("I")&&"start",p.includes("M")&&"middle",p.includes("F")&&"end"].filter(Boolean).join(" · ");
+const ALL=[...CONSONANTS,...VOWELS,...DIPHTHONGS];
+const find=s=>ALL.find(x=>x.s===s);
+(function importFocus(){
+  const f=QS.get("focus"); if(!f) return;
+  f.split(",").forEach(raw=>{
+    const sym="/"+raw.trim().replace(/\//g,"")+"/";
+    if(!find(sym)) return;
+    state[sym]=state[sym]||{};
+    state[sym].focus=true;
+    state[sym].steps={};
+    if(state[sym].st==="done") delete state[sym].st;
+  });
+  save(state);
+  try{ history.replaceState(null,"",location.pathname); }catch(_){/* file:// */}
+})();
+
+/* ---------- vowel synth: formants from chart position ---------- */
+let AC=null;
+function audioCtx(){
+  AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+  if(AC.state==="suspended"&&AC.resume) AC.resume().catch(()=>{});
+  return AC;
+}
+/* Formants are NOT a linear function of chart position — this was the
+   simplification before. Two real, well-established facts about vowel
+   acoustics fix that:
+   1. Pitch/formant perception follows an auditory scale (Bark, here —
+      Traunmüller 1990), not raw Hz. The IPA trapezium is laid out for even
+      PERCEPTUAL spacing; interpolating in linear Hz distorts that (steps
+      near the top of the chart span far more Hz than equal-looking steps
+      near the middle). Interpolating in Bark and converting to Hz only at
+      the end fixes this — equal chart distance ≈ equal auditory distance.
+   2. F1 and F2 are coupled, not independent axes. Real F1×F2 plots form a
+      bowed/triangular shape, not a rectangle: an open vowel's F2 can't
+      reach as far front or back as a close vowel's can, because an open
+      oral cavity has less front/back cavity-length contrast to work with.
+      A bilinear interpolation across the trapezium's four corners gives
+      this for free — F2 at any point already depends on y as well as x.
+   Corner values below are the standard cross-dialect "corner vowel"
+   reference points used across general phonetics teaching (the same
+   /i/-/u/-/ɑ/-ish anchors most intro-phonetics formant charts use), not
+   digitised from a specific published table — this session's network
+   policy blocked every fetch to the primary sources (Hillenbrand's data
+   page, Deterding 1997, a NZE formants PDF, even Wikipedia) so live
+   verification wasn't possible. Swap in exact per-study numbers here if
+   they become reachable; the dialectal shape of each accent already comes
+   from the chart x,y positions in ACCENTS above, so only the four corner
+   anchors below would need editing, not the interpolation itself.        */
+const hzToBark=f=>26.81*f/(1960+f)-0.53;
+const barkToHz=z=>1960*(z+0.53)/(26.81-(z+0.53));
+const CORNER_HZ={                 //          F1    F2    F3
+  closeFront:[280,2250,2950],     // x=0,  y=0   (near /i/)
+  closeBack: [310, 870,2300],     // x=100,y=0   (near /u/)
+  openFront: [750,1700,2550],     // x=0,  y=100 (near /æ/)
+  openBack:  [700,1100,2450]      // x=100,y=100 (near /ɑ/)
+};
+const CORNER_BARK={};
+for(const k in CORNER_HZ) CORNER_BARK[k]=CORNER_HZ[k].map(hzToBark);
+/* x: 0 front → 100 back · y: 0 close → 100 open */
+function formantsFor(x,y){
+  const u=Math.min(1,Math.max(0,x/100)), v=Math.min(1,Math.max(0,y/100));
+  const {closeFront:Q11,closeBack:Q21,openFront:Q12,openBack:Q22}=CORNER_BARK;
+  return Q11.map((_,i)=>{
+    const bark=Q11[i]*(1-u)*(1-v)+Q21[i]*u*(1-v)+Q12[i]*(1-u)*v+Q22[i]*u*v;
+    return barkToHz(bark);
+  });
+}
+function makeVoice(){
+  const c=audioCtx(), t=c.currentTime;
+  const src=c.createOscillator(); src.type="sawtooth";
+  src.frequency.setValueAtTime(132,t);
+  src.frequency.linearRampToValueAtTime(112,t+.9);
+  const vib=c.createOscillator(); vib.frequency.value=5.2;
+  const vibG=c.createGain(); vibG.gain.value=4;
+  vib.connect(vibG); vibG.connect(src.frequency);
+  const lp=c.createBiquadFilter(); lp.type="lowpass"; lp.frequency.value=4200;
+  const master=c.createGain(); master.gain.value=0;
+  const bands=[[8,1],[10,.5],[12,.22]].map(([q,g])=>{
+    const f=c.createBiquadFilter(); f.type="bandpass"; f.Q.value=q;
+    const fg=c.createGain(); fg.gain.value=g;
+    src.connect(f); f.connect(fg); fg.connect(lp);
+    return f;
+  });
+  lp.connect(master); master.connect(c.destination);
+  src.start(); vib.start();
+  master.gain.linearRampToValueAtTime(.24,t+.05);
+  return {
+    set(x,y,tc=.045){
+      const F=formantsFor(x,y), tt=c.currentTime;
+      bands.forEach((b,i)=>b.frequency.setTargetAtTime(F[i],tt,tc));
+    },
+    glide(x0,y0,x1,y1,ms){
+      const A=formantsFor(x0,y0), B=formantsFor(x1,y1), tt=c.currentTime;
+      bands.forEach((b,i)=>{ b.frequency.setValueAtTime(A[i],tt);
+        b.frequency.linearRampToValueAtTime(B[i],tt+ms/1000); });
+    },
+    stop(){
+      const tt=c.currentTime;
+      master.gain.cancelScheduledValues(tt);
+      master.gain.setTargetAtTime(0,tt,.07);
+      setTimeout(()=>{ try{src.stop();vib.stop()}catch(_){} },500);
+    }
+  };
+}
+function playVowelAt(x,y,ms=650){
+  const v=makeVoice(); v.set(x,y,.001);
+  const f=faceOf("vowelChart"); if(f) f.set(x,y);
+  setTimeout(()=>{ v.stop(); if(f) f.idle(); },ms);
+}
+function playDip(d0){ const d=accDip(d0); const v=makeVoice(); v.glide(d.from[0],d.from[1],d.to[0],d.to[1],620); setTimeout(()=>v.stop(),700); flyDot(d); }
+function flyDot(d0){
+  const d=d0.showSym?d0:accDip(d0);
+  const el=document.getElementById("dipChart"); const dot=el&&el.querySelector(".glidedot");
+  if(!dot) return;
+  const path=document.getElementById("dp"+DIPHTHONGS.findIndex(x=>x.s===d.s));
+  document.querySelectorAll(".dpath").forEach(x=>{
+    x.classList.remove("show"); x.style.strokeDashoffset=1;
+  });
+  if(path) path.classList.add("show");
+  const t0=performance.now(), dur=620;
+  const ease=k=>k<.5?2*k*k:1-Math.pow(-2*k+2,2)/2;
+  const face=faceOf("dipChart");
+  const step=now=>{
+    const k=Math.min(1,(now-t0)/dur), e=ease(k);
+    const px=d.from[0]+(d.to[0]-d.from[0])*e, py=d.from[1]+(d.to[1]-d.from[1])*e;
+    dot.style.display="block";
+    dot.style.left=cpx(px)+"%"; dot.style.top=py+"%";
+    if(face) face.set(px,py);
+    if(path) path.style.strokeDashoffset=1-e;
+    if(k<1) requestAnimationFrame(step);
+    else { setTimeout(()=>dot.style.display="none",250); if(face) face.idle(); }
+  };
+  requestAnimationFrame(step);
+}
+/* Lip rounding is a SEPARATE dimension from jaw height — the two move
+   independently, which is the whole point of these diphthongs:
+     /eɪ/ day   jaw closes through the glide, lips stay spread
+     /aɪ/ my    jaw drops wide open, lips never round
+     /əʉ/ go    lips start wide and round up at the end
+     /aʊ/ now   starts wide open, closes and rounds
+   Rounding rises towards the back of the chart and falls away again at the
+   very open end (so /ɔː/ door is rounded but /aː/ spa is not). Classroom
+   model, calibrated against the vowels on our own chart — not measured data. */
+function roundAt(x,y){
+  const back=Math.min(1,Math.max(0,(x-50)/25));
+  const open=Math.min(1,Math.max(0,(y-45)/50));
+  return back*(1-Math.pow(open,1.5));
+}
+/* animated articulation: jaw hinges open with vowel openness, the tongue
+   hump travels to the chart position being played (the dot IS the hump),
+   and the lips round/spread on their own axis. */
+function makeFaceCtl(container){
+  const svg=container.querySelector("svg");
+  const jaw=svg&&svg.querySelector(".jawgrp"), tongue=svg&&svg.querySelector(".tonguepath");
+  const lipgap=svg&&svg.querySelector(".mouthgap");
+  if(!jaw||!tongue) return null;
+  const IDLE={x:52,y:38};
+  let cur={...IDLE}, tgt={...IDLE}, hold=false, raf=0;
+  function frame(){
+    cur.x+=(tgt.x-cur.x)*.28; cur.y+=(tgt.y-cur.y)*.28;
+    /* jaw: hinges near the TMJ, just below the "ear" — never fully shut, opens harder for low vowels */
+    const ang=1+Math.pow(cur.y/100,1.15)*9.5;
+    jaw.setAttribute("transform",`rotate(${ang.toFixed(2)} 46 26)`);
+    const rad=ang*Math.PI/180, cs=Math.cos(rad), sn=Math.sin(rad);
+    const R=(px,py)=>[46+(px-46)*cs-(py-26)*sn, 26+(px-46)*sn+(py-26)*cs];
+    /* the tongue rides the mandible: tip and mouth floor rotate with the jaw */
+    const [tx,ty]=R(12,40);
+    const [fx,fy]=R(24,60);
+    /* map the chart position into the MOUTH's own coordinates: the front of
+       the cavity behind the teeth back to the velum, and from just under the
+       palate down to the floor. Using the chart's drawing coordinates here is
+       what sent the tongue spearing out through the side of the face. */
+    const ax=26+(cur.x/100)*26;          /* 26 front → 52 back */
+    const ay=18+(cur.y/100)*34;          /* 18 close (near the palate) → 52 open */
+    /* constant-volume feel: a high hump is narrow, a low hump spreads */
+    const w=6+(cur.y/100)*7;
+    /* tongue root advances for front articulations, retracts for back, staying near the pharynx wall */
+    const rx=Math.min(57,48+(ax-39)*.25);
+    const ry=ay+24;
+    tongue.setAttribute("d",
+      `M${tx.toFixed(1)},${ty.toFixed(1)}`+
+      ` C${(tx+7).toFixed(1)},${(ay-2).toFixed(1)} ${(ax-w).toFixed(1)},${ay.toFixed(1)} ${ax.toFixed(1)},${ay.toFixed(1)}`+
+      ` C${(ax+w).toFixed(1)},${ay.toFixed(1)} ${rx.toFixed(1)},${(ay+8).toFixed(1)} ${rx.toFixed(1)},${ry.toFixed(1)}`+
+      ` C${rx.toFixed(1)},${(ry+8).toFixed(1)} ${(rx-8).toFixed(1)},${(ry+11).toFixed(1)} ${(fx+7).toFixed(1)},${(fy+4).toFixed(1)}`+
+      ` C${(fx+1).toFixed(1)},${(fy+2).toFixed(1)} ${(tx+2).toFixed(1)},${(ty+8).toFixed(1)} ${tx.toFixed(1)},${ty.toFixed(1)} Z`);
+    /* lips: protrude and close down when rounded, pull back and open wide when spread */
+    if(lipgap){
+      const rnd=roundAt(cur.x,cur.y);
+      const px=2.2*rnd;                       /* protrude, but stay inside the lip line */
+      const ux=9.5-px, uy=31.5+2.1*rnd;       /* rounded = smaller opening */
+      const [lx,ly]=R(9.5-px,40.5-2.1*rnd);
+      lipgap.setAttribute("d",
+        `M${ux.toFixed(1)},${uy.toFixed(1)}`+
+        ` C${(ux+7).toFixed(1)},${(uy+0.4).toFixed(1)} 17,33.6 23,36`+
+        ` C17,38.4 ${(lx+7).toFixed(1)},${(ly-0.4).toFixed(1)} ${lx.toFixed(1)},${ly.toFixed(1)} Z`);
+    }
+    if(hold||Math.abs(tgt.x-cur.x)+Math.abs(tgt.y-cur.y)>.4) raf=requestAnimationFrame(frame);
+    else raf=0;
+  }
+  const kick=()=>{ if(!raf) raf=requestAnimationFrame(frame); };
+  cur={...IDLE}; frame();      /* pose immediately — never leave the raw static markup showing */
+  return {
+    set(x,y){ tgt={x,y}; hold=true; kick(); },
+    idle(){ tgt={...IDLE}; hold=false; kick(); }
+  };
+}
+const faceCtls={};
+function faceOf(elOrId){
+  const id=typeof elOrId==="string"?elOrId:elOrId.id;
+  return faceCtls[id]||null;
+}
+
+function chartXY(el,e){
+  const r=el.getBoundingClientRect();
+  const pct=(e.clientX-r.left)/r.width*100;
+  return {x:Math.min(98,Math.max(2,(pct-CHART_OFF)/CHART_SCALE)),
+          y:Math.min(97,Math.max(3,(e.clientY-r.top)/r.height*100))};
+}
+function moveDot(el,x,y,show){
+  const d=el.querySelector(".glidedot"); if(!d) return;
+  d.style.display=show?"block":"none";
+  if(show){ d.style.left=cpx(x)+"%"; d.style.top=y+"%"; }
+}
+
+function chipHTML(o,cls){
+  const v=state[o.s]||{};
+  const stAttr=v.focus?"focus":v.st;
+  const flag=v.focus?"🎯":v.st==="done"?"✅":v.st==="target"?"⭐":"";
+  const n=stepCount(v);
+  return `<button class="ph ${cls}" data-s="${esc(o.s)}" ${stAttr?`data-state="${stAttr}"`:""}>
+    ${flag?`<span class="flag">${flag}</span>`:""}
+    <span class="sym">${esc(o.showSym||o.s)}</span>
+    <span class="eg">${esc(o.eg.split(",")[0])}</span>
+    ${v.focus?`<span class="pips">${"●".repeat(n)}${"○".repeat(4-n)}</span>`:o.pos?`<span class="pos">${posMark(o.pos)}</span>`:""}
+  </button>`;
+}
+
+/* consonant table */
+function drawCons(){
+  let h=`<tr><th class="rowh"></th>${PLACES.map(p=>`<th>${p}</th>`).join("")}</tr>`;
+  MANNERS.forEach(m=>{
+    h+=`<tr><th class="rowh">${m}</th>`;
+    PLACES.forEach(p=>{
+      const cell=CONSONANTS.filter(c=>c.m===m&&c.p===p);
+      h+=`<td>${cell.length?cell.map(c=>chipHTML(c,c.v?"voiced":"unvoiced")).join(""):'<span style="color:var(--muted)">–</span>'}</td>`;
+    });
+    h+=`</tr>`;
+  });
+  document.getElementById("consTable").innerHTML=h;
+}
+
+/* vowel trapezium */
+/* side-profile face, facing left — shared by the charts and the consonant diagrams.
+   Colours follow the classic articulation-diagram look: skin, brown features, rosy tongue. */
+const FACE_PATHS=`
+  <path class="skin" d="M45,1 C30,0 15,4 6,15 C3,20 0.5,25 4,28 L10,31.5
+    C7,34.5 7,38 10,40.5 L14,42 C15,54 18,66 26,78 C34,90 44,98 54,102 L76,102
+    C77,85 72,68 70,50 C72,32 76,15 68,6 C62,1 53,0.5 45,1 Z"/>
+  <path class="mouthgap" d="M9,31.5 C14,32.2 18,33.8 22,36.5 C18,43.5 13,47 9,46.5 C6.3,42 6.3,36.5 9,31.5 Z"/>
+  <g class="jawgrp">
+    <path class="skin" d="M11,36 C6,39 5,43 8,46.5 C4,50 5,55 10,58.5 C6,64 11,68 17,70 C13,77 17,84 26,90
+      C34,97 42,100 50,102 C40,96 32,88 28,78 C24,68 26,60 30,54 C26,48 24,42 26,36 Z"/>
+    <path class="feature bold" d="M11,36 C6,39 5,43 8,46.5 C4,50 5,55 10,58.5 C6,64 11,68 17,70 C13,77 17,84 26,90 C34,97 42,100 50,102"/>
+    <rect class="tooth" x="16.5" y="35" width="4" height="7" rx="1.4"/>
+  </g>
+  <path class="tongue tonguepath" d="M13,40 C20,34 30,30 39,31 C46,32 49,40 49,52
+    C49,60 45,65 39,66 C30,67 20,60 15,52 C13,47 12,43 13,40 Z"/>
+  <path class="feature bold" d="M32,0 C24,3 18,7 15,12 C12,16 9,18 5,20 C1.5,22 1,25.5 4,28 L10,31.5 C7,34.5 7,38 10,40.5"/>
+  <path class="feature" d="M4.5,25 C6.3,26.3 8.3,26.3 10,24.9"/>
+  <path class="feature" d="M16,8 C19.5,11 24,11 27.5,8"/>
+  <rect class="tooth" x="14.5" y="28" width="4" height="7.5" rx="1.4"/>
+  <!-- alveolar ridge -->
+  <path class="feature bold" d="M24,34.5 C26,31 28.5,30 31,31.5"/>
+  <!-- hard palate: domed, not a single sweep -->
+  <path class="feature bold" d="M24,34.5 C27,22 34,13 42,9.5 C48,7.6 52,7.4 56,8"/>
+  <!-- velum (soft palate) hanging into a uvula -->
+  <path class="feature bold" d="M56,8 C61,10.5 64,15 63,20 C62.4,23.7 60,26.1 57,26.1
+    C55.8,28.3 56,31.1 57.5,33.5"/>
+  <!-- nasal cavity roof, a separate passage above the palate -->
+  <path class="feature" d="M8,22 C16,13 28,6.5 40,4 C48,2.4 55,2.2 60,3.6"/>
+  <!-- pharynx back wall -->
+  <path class="feature bold" d="M57,26.1 C50,36 47,48 50,60 C52.5,68 52.5,77 48,85 C45,91 46,96 50,100"/>
+  <!-- epiglottis -->
+  <path class="feature" d="M40,86 C44,82.5 49,82.7 52,86.3"/>`;
+const PLACE_SPOTS={ "Bilabial":[9,35], "Labio-dental":[15,39], "Dental":[18,28],
+  "Alveolar":[27,26], "Post-alveolar":[35,16], "Velar":[59,8], "Glottal":[62,86] };
+function mouthDiagram(place){
+  const spot=PLACE_SPOTS[place]; if(!spot) return "";
+  return `<svg class="mouthface mouth-mini" viewBox="0 0 76 102" aria-hidden="true">${FACE_PATHS}
+    <circle class="place-dot" cx="${spot[0]}" cy="${spot[1]}" r="2.4"/></svg>`;
+}
+const CHART_OFF=44, CHART_SCALE=.54;
+const cpx=x=>CHART_OFF+x*CHART_SCALE;          /* chart x (0-100) → container % */
+const CX=v=>(v*1.35).toFixed(1);
+function chartSVG(){
+  return `<svg viewBox="0 0 135 100" preserveAspectRatio="none" aria-hidden="true">
+    <g class="mouthface">${FACE_PATHS}</g>
+    <polygon class="cavity" points="${CX(cpx(4))},4 ${CX(cpx(96))},4 ${CX(cpx(88))},96 ${CX(cpx(30))},96"/>
+    <polygon class="trap" points="${CX(cpx(4))},4 ${CX(cpx(96))},4 ${CX(cpx(88))},96 ${CX(cpx(30))},96"/>
+  </svg>
+  <div style="position:absolute;top:-2px;left:2px;font-size:.68rem;color:var(--muted)">close ↑ · front ←</div>
+  <div style="position:absolute;bottom:-2px;right:2px;font-size:.68rem;color:var(--muted)">→ back · ↓ open</div>
+  <div class="mouthlabel" style="left:.5%;top:46%">lips</div>
+  <div class="mouthlabel" style="right:.5%;top:60%">throat</div>`;
+}
+function drawVowels(){
+  const el=document.getElementById("vowelChart");
+  el.innerHTML=chartSVG()+VOWELS.map(v0=>{const v=accVowel(v0);
+    return `<span style="position:absolute;left:${cpx(v.x)}%;top:${v.y}%">${chipHTML(v,"vowelph")}</span>`;}).join("")+
+    `<div class="glidedot"></div>`;
+  faceCtls.vowelChart=makeFaceCtl(el);   /* innerHTML above replaced the jaw/tongue nodes — rebind */
+}
+function drawDips(){
+  const el=document.getElementById("dipChart");
+  el.innerHTML=chartSVG()+
+    `<svg viewBox="0 0 135 100" preserveAspectRatio="none">${DIPHTHONGS.map((d0,i)=>{const d=accDip(d0);
+      return `<path class="dpath" id="dp${i}" d="M${CX(cpx(d.from[0]))},${d.from[1]} L${CX(cpx(d.to[0]))},${d.to[1]}" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1"/>`;}).join("")}</svg>`+
+    DIPHTHONGS.map(d0=>{const d=accDip(d0);const at=d.chipAt||d.from;return `<span style="position:absolute;left:${cpx(at[0])}%;top:${at[1]}%">${chipHTML(d,"vowelph")}</span>`;}).join("")+
+    `<div class="glidedot"></div>`;
+  faceCtls.dipChart=makeFaceCtl(el);       /* same — the svg was just rebuilt, old jaw/tongue refs are stale */
+  document.getElementById("dipChips").innerHTML=DIPHTHONGS.map((d,i)=>
+    `<span><button class="ph vowelph" data-s="${esc(d.s)}" data-dp="${i}" style="min-width:0">
+      <span class="sym">${esc(d.s)}</span><span class="eg">${esc(d.eg)}</span></button></span>`).join("");
+}
+
+/* detail panel */
+function showDetail(sym){
+  const o=find(sym); if(!o) return;
+  const st=state[sym]?.st||"";
+  const tw=o.tw?TWISTERS[o.tw]:null;
+  const isDip=DIPHTHONGS.includes(o);
+  document.querySelectorAll(".ph").forEach(b=>b.classList.toggle("sel",b.dataset.s===sym));
+
+  const isVow=VOWELS.includes(o);
+  const accSym=isVow?accVowel(o).showSym:(isDip?accDip(o).showSym:o.s);
+  const symNote=accSym!==sym?` · written ${esc(sym)} on our Aussie map`:"";
+  const rec=o.audio?AUDIO_BASE+o.audio:(SOUND_FILES&&SOUND_FILES[sym])||"";
+  const player=rec?`<audio controls preload="none" src="${esc(rec)}" style="width:100%;margin-top:8px"></audio>`:"";
+  let hear;
+  if(player&&!isDip&&!isVow){
+    hear=`${mouthDiagram(o.p)}${player}<p style="margin-top:7px"><b>${esc(PLACE_HOW[o.p]||"")}</b> — ${esc(MANNER_HOW[o.m]||"")}${o.v!==undefined?(o.v?", with your throat buzzing":", with no buzz — just air"):""}.</p>`;
+  }else if(player){
+    hear=`${player}<p class="novid">Recorded by your teacher. You can still press and drag the chart to play with the sound.</p>`;
+  }else if(isDip){
+    hear=`<p style="margin-top:8px"><button class="btn" data-play-dip="${esc(sym)}">▶ Hear it</button></p>
+      <p class="novid">Synthesised — watch it fly across the chart. Teacher recording coming.</p>`;
+  }else if(isVow){
+    hear=`<p style="margin-top:8px"><button class="btn" data-play-vowel="${esc(sym)}">▶ Hear it</button></p>
+      <p class="novid">Synthesised vowel — hold and drag it on the chart to bend it. Teacher recording coming.</p>`;
+  }else{
+    hear=`${mouthDiagram(o.p)}<p style="margin-top:7px"><b>${esc(PLACE_HOW[o.p]||"")}</b> — ${esc(MANNER_HOW[o.m]||"")}${o.v!==undefined?(o.v?", with your throat buzzing":", with no buzz — just air"):""}.</p>
+      <p class="novid">The dot shows where it happens. Teacher recording coming.</p>`;
+  }
+
+  document.getElementById("detail").innerHTML=`
+    <div class="detail">
+      <div class="dhead">
+        <span class="big">${esc(accSym)}</span>
+        <span class="meta">as in <b>${esc(o.eg)}</b>${symNote}${o.pos?` · heard at the ${posWords(o.pos)} of words`:""}
+          ${o.note?` · ${esc(o.note)}`:""}
+          ${o.v!==undefined?`<br>${o.v?"Voiced — your throat buzzes":"Unvoiced — no buzz, just air"}`:""}
+          ${isDip?`<br>Your mouth moves from one vowel to the next`:""}</span>
+        <span class="acts">
+          <button class="btn ${st==="target"?"on-target":""}" data-mark="target" data-s="${esc(sym)}">⭐ My target</button>
+          <button class="btn ${st==="done"?"on-done":""}" data-mark="done" data-s="${esc(sym)}">✅ I can say it</button>
+        </span>
+      </div>
+      <div class="dbody">
+        ${state[sym]&&state[sym].focus?checklistHTML(sym):""}
+        <div class="steps">
+          <div class="step">
+            <span class="n">1</span><h4>${(isDip||isVow||o.audio)?"Hear it":"Make it"}</h4>
+            ${hear}
+            <p>Say it five times, bigger each time.</p>
+          </div>
+          <div class="step">
+            <span class="n">2</span><h4>Read it</h4>
+            ${tw?`<p>${esc(tw.title)} tongue twister — read it three times, faster each time.</p>
+                  <div class="tw">${esc(tw.text)}</div>`
+                :`<p>No tongue twister for this sound yet. Say the example word <b>${esc(o.eg)}</b> in a sentence, then try the Stress &amp; rhythm tab.</p>`}
+          </div>
+          <div class="step">
+            <span class="n">3</span><h4>Write your own</h4>
+            <p>Use the sound at least four times. Silly is good — that's the point.</p>
+            <textarea data-mine="${esc(sym)}" placeholder="My ${esc(o.s)} tongue twister…">${esc(state[sym]?.mine||"")}</textarea>
+            <p class="novid" id="savedNote"></p>
+          </div>
+          <div class="step">
+            <span class="n">4</span><h4>Read it to someone</h4>
+            <p>Swap with a partner and read each other's out loud. Then mark it above if you can say the sound clearly.</p>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById("detail").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+/* accent toggle */
+function drawAccbar(){
+  document.querySelectorAll("[data-accbar]").forEach(el=>{
+    el.innerHTML=Object.keys(ACCENTS).map(k=>
+      `<button data-accent="${k}" class="${k===accent?"on":""}">${ACCENTS[k].label}</button>`).join("");
+  });
+}
+
+/* focus banner (student) / assignment builder (teacher) */
+function drawFocusArea(){
+  const el=document.getElementById("focusArea");
+  if(ASSIGN_MODE){
+    const syms=[...assignSel];
+    const link=syms.length?`${location.origin==="null"?"":location.origin}${location.pathname}?focus=${encodeURIComponent(syms.map(x=>x.replace(/\//g,"")).join(","))}`:"";
+    el.innerHTML=`<div class="assignbar">
+      <b>Teacher · assign focus sounds.</b> Tap sounds on any tab to add them, then send students the link.
+      <div style="margin-top:7px;display:flex;gap:5px;flex-wrap:wrap">${
+        syms.length?syms.map(x=>{const o=find(x);return chipHTML(o,"vowelph")}).join(""):`<span style="color:var(--muted)">nothing selected yet</span>`}</div>
+      ${link?`<div class="copyrow"><input readonly id="assignLink" value="${esc(link)}"><button class="btn" id="copyAssign">Copy link</button></div>`:""}
+      <p style="font-size:.76rem;color:var(--muted);margin-top:7px">Students open the link once — the sounds turn 🎯 red on their device and each has a checklist that only goes ✅ green when you tick “teacher heard me”. <a href="${location.pathname}">Done assigning</a></p>
+    </div>`;
+    return;
+  }
+  const foci=ALL.filter(o=>state[o.s]&&state[o.s].focus);
+  const cleared=ALL.filter(o=>state[o.s]&&state[o.s].clearedAt).length;
+  if(!foci.length){ el.innerHTML=""; return; }
+  el.innerHTML=`<div class="focusbar">
+    <b>🎯 Focus sounds from your teacher</b> — tap one to start.
+    <span style="display:inline-flex;gap:5px;flex-wrap:wrap;vertical-align:middle;margin-left:4px">${foci.map(o=>chipHTML(o,"vowelph")).join("")}</span>
+    <p style="font-size:.78rem;color:var(--muted);margin-top:6px">Work through the checklist on each sound. It turns ✅ green when your teacher hears you say it clearly.${cleared?` Cleared so far: ${cleared} 🏆`:""}</p>
+  </div>`;
+}
+
+function checklistHTML(sym){
+  const st=(state[sym]&&state[sym].steps)||{};
+  const ready=st.m&&st.r&&st.w&&st.p;
+  const box=(k,label)=>`<label><input type="checkbox" data-step="${k}" data-sym="${esc(sym)}" ${st[k]?"checked":""}> ${label}</label>`;
+  return `<div class="step" style="border-color:var(--focus);margin-bottom:11px">
+    <h4>🎯 Focus sound — work back to green</h4>
+    <div class="checklist">
+      ${box("m","Watch the mouth and say it five times")}
+      ${box("r","Read the tongue twister aloud three times")}
+      ${box("w","Write your own twister (ticks itself when you write one below)")}
+      ${box("p","Read yours to a partner")}
+      <label class="tcheck ${ready?"":"dis"}"><input type="checkbox" data-step="T" data-sym="${esc(sym)}" ${ready?"":"disabled"}>
+        <span><b>Teacher heard me say it clearly</b> — hand your teacher the screen for this last tick</span></label>
+    </div>
+  </div>`;
+}
+
+/* progress */
+function refreshProgress(){
+  const done=Object.values(state).filter(v=>v.st==="done").length;
+  const total=CONSONANTS.length+VOWELS.length+DIPHTHONGS.length;
+  const foci=Object.values(state).filter(v=>v&&v.focus).length;
+  document.getElementById("progText").textContent=`${done} of ${total} achieved${foci?` · 🎯 ${foci} focus`:""}`;
+  document.getElementById("progBar").style.width=(done/total*100)+"%";
+}
+
+/* events */
+document.addEventListener("click",e=>{
+  const tab=e.target.closest("[data-tab]");
+  if(tab){
+    document.querySelectorAll("[data-tab]").forEach(b=>b.setAttribute("aria-selected",String(b===tab)));
+    document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id==="tab-"+tab.dataset.tab));
+    return;
+  }
+  const ph=e.target.closest(".ph");
+  if(ph&&ASSIGN_MODE){
+    const s2=ph.dataset.s;
+    assignSel.has(s2)?assignSel.delete(s2):assignSel.add(s2);
+    drawFocusArea(); return;
+  }
+  if(ph){
+    if(suppressClick){ suppressClick=false; return; }
+    const o=find(ph.dataset.s);
+    if(o){
+      const played=playRec(o.s);
+      if(DIPHTHONGS.includes(o)){
+        if(played) flyDot(o); else playDip(o);
+      }else if(played&&(VOWELS.includes(o))){
+        const f=faceOf("vowelChart"); if(f){ const a=accVowel(o); f.set(a.x,a.y); setTimeout(()=>f.idle(),700); }
+      }
+    }
+    showDetail(ph.dataset.s); return;
+  }
+  const acc=e.target.closest("[data-accent]");
+  if(acc){
+    accent=acc.dataset.accent;
+    try{ localStorage.setItem("elc_pron_accent",accent); }catch(_){}
+    drawAccbar(); drawVowels(); drawDips();
+    const open=document.querySelector(".detail .big");
+    if(open){ const cur=ALL.find(x=>(x.s===open.textContent)||(accVowel(x).showSym===open.textContent)||(accDip(x).showSym===open.textContent)); if(cur) showDetail(cur.s); }
+    return;
+  }
+  const pv=e.target.closest("[data-play-vowel]");
+  if(pv){ const v0=VOWELS.find(x=>x.s===pv.dataset.playVowel); if(v0&&!playRec(v0.s)){ const v=accVowel(v0); playVowelAt(v.x,v.y); } return; }
+  const pd=e.target.closest("[data-play-dip]");
+  if(pd){ const d=DIPHTHONGS.find(x=>x.s===pd.dataset.playDip); if(d){ if(playRec(d.s)) flyDot(d); else playDip(d); } return; }
+  if(e.target.id==="copyAssign"){
+    const inp=document.getElementById("assignLink");
+    inp.select();
+    if(navigator.clipboard&&navigator.clipboard.writeText) navigator.clipboard.writeText(inp.value).catch(()=>{});
+    else document.execCommand("copy");
+    e.target.textContent="Copied ✓"; setTimeout(()=>{e.target.textContent="Copy link";},1500);
+    return;
+  }
+  const mark=e.target.closest("[data-mark]");
+  if(mark){
+    const s=mark.dataset.s, want=mark.dataset.mark;
+    state[s]=state[s]||{};
+    state[s].st = state[s].st===want ? "" : want;
+    if(!state[s].st) delete state[s].st;
+    save(state); drawAll(); showDetail(s); refreshProgress();
+  }
+});
+document.addEventListener("input",e=>{
+  const t=e.target.closest("[data-mine]");
+  if(!t) return;
+  const s=t.dataset.mine;
+  state[s]=state[s]||{}; state[s].mine=t.value; save(state);
+  if(state[s].focus&&t.value.trim().length>=10&&!(state[s].steps&&state[s].steps.w)){
+    state[s].steps=state[s].steps||{}; state[s].steps.w=1; save(state);
+    const cb=document.querySelector(`[data-step="w"][data-sym="${CSS.escape(s)}"]`); if(cb) cb.checked=true;
+    const T=document.querySelector(`[data-step="T"][data-sym="${CSS.escape(s)}"]`);
+    const st=state[s].steps;
+    if(T&&st.m&&st.r&&st.w&&st.p){ T.disabled=false; T.closest("label").classList.remove("dis"); }
+    drawAll(); drawFocusArea();
+  }
+  const n=document.getElementById("savedNote"); if(n) n.textContent="Saved on this device ✓";
+});
+document.addEventListener("change",e=>{
+  const cb=e.target.closest("[data-step]");
+  if(!cb) return;
+  const sym=cb.dataset.sym, k=cb.dataset.step;
+  state[sym]=state[sym]||{}; state[sym].steps=state[sym].steps||{};
+  if(k==="T"){
+    if(!cb.checked) return;
+    state[sym].focus=false;
+    state[sym].clearedAt=Date.now();
+    state[sym].st="done";
+    save(state); drawAll(); drawFocusArea(); refreshProgress(); showDetail(sym);
+    return;
+  }
+  cb.checked?state[sym].steps[k]=1:delete state[sym].steps[k];
+  save(state); drawAll(); drawFocusArea(); showDetail(sym);
+});
+
+/* sound patterns cards */
+function drawPatterns(){
+  const card=pt=>`
+    <div class="gcard">
+      <h3>${pt.marker} ${esc(pt.title)}</h3>
+      <p class="k">${esc(pt.sub)}</p>
+      <div class="tw">${pt.lines.map(esc).join("\n")}</div>
+      <p class="k" style="margin-top:9px">${esc(pt.note)}</p>
+      <p style="font-size:.86rem"><b>Your turn:</b> ${esc(pt.task)}</p>
+      <textarea data-mine="${pt.mine}" placeholder="${esc(pt.ph)}">${esc(state[pt.mine]?.mine||"")}</textarea>
+    </div>`;
+  document.getElementById("patternCards").innerHTML=PATTERNS.map(card).join("")+`
+    <div class="gcard" style="grid-column:1/-1">
+      <h3>🐍 Snake sentences — hiss the endings</h3>
+      <p class="k">▷ final /s/ and /z/ — the endings that carry the grammar</p>
+      <p style="font-size:.86rem">A snake can't say “six cat”. It says “sssix catsss”. In English the END of a word does the grammar:
+        cat<b>s</b> = more than one · she hisse<b>s</b> = she does it · Sam'<b>s</b> = it belongs to Sam.
+        Many first languages (Vietnamese, Mandarin, Cantonese…) never end a word with /s/, so the endings take training.
+        Ask your teacher to play Kaa's song from The Jungle Book — or Sir Hiss from Robin Hood — then talk like that.</p>
+      <div class="steps" style="margin-top:10px">
+        <div class="step"><span class="n">1</span><h4>Say it like a snake</h4>
+          <div class="tw">The snake slide<em>s</em> past six sleeping cat<em>s</em>,
+hisse<em>s</em> at the bird<em>s</em>, then misse<em>s</em> the mice.</div>
+          <p>Stretch every marked ending. If a word ends in an s-sound — hiss it.</p></div>
+        <div class="step"><span class="n">2</span><h4>Write your own</h4>
+          <p>One snake sentence, at least <b>six</b> words ending in /s/ or /z/. Plurals (snakes, birds), verbs (runs, hisses) and little words (is, was, does) all count.</p>
+          <textarea data-mine="pat-snake" placeholder="My snake sentence…">${esc(state["pat-snake"]?.mine||"")}</textarea></div>
+        <div class="step"><span class="n">3</span><h4>Read one you made earlier</h4>
+          <p>Read your saved sentence — or a partner's — hissing every ending. Your partner counts the s-sounds they <b>hear</b>. Fewer than you wrote? The snake got lazy — go again.</p></div>
+      </div>
+      <p class="k" style="margin-top:10px">Dropped endings = dropped grammar. Practise the grammar side in the Grammar Hub:
+        <a href="${GRAMMAR_HUB}?skill=agree-c1" target="_blank" rel="noopener">subject–verb agreement</a> ·
+        <a href="${GRAMMAR_HUB}?skill=tense-c1" target="_blank" rel="noopener">-s and -ed verb endings</a></p>
+    </div>
+    <div class="gcard" style="grid-column:1/-1">
+      <h3>🎩 Limerick Builder</h3>
+      <p class="k">▷ put your rhymes to work — five lines, two rhymes, one good joke</p>
+      <p style="font-size:.86rem">Model limericks, rhyme-family word banks, starter stems and a clap-check syllable counter.
+      Rhyme families that practise your ⭐ target sounds are suggested first.</p>
+      <p style="margin-top:9px"><a class="btn" href="limericks.html" style="text-decoration:none;display:inline-block">Open the Limerick Builder →</a></p>
+    </div>`;
+}
+
+/* stress / rhythm cards */
+function drawStress(){
+  document.getElementById("stressCards").innerHTML=`
+    <div class="gcard">
+      <h3>Say it twelve ways</h3>
+      <p class="k">Emphasis game — same sentence, different meaning</p>
+      <div class="say" id="emphSent" contenteditable="true">You can't wear that in here.</div>
+      <p class="k" style="margin-top:9px">One person picks a meaning in secret and reads the sentence to match it. The others guess which one.</p>
+      <button class="btn" id="emphRoll" style="margin-top:8px">🎲 Give me a meaning</button>
+      <div class="dice" id="emphOut">Tap the button for a secret meaning.</div>
+      <div class="chips">${EMPHASIS_MEANINGS.map(m=>`<span>${esc(m)}</span>`).join("")}</div>
+    </div>
+    <div class="gcard">
+      <h3>Please sit down</h3>
+      <p class="k">Register game — who is speaking?</p>
+      <div class="say">Please sit down.</div>
+      <p class="k" style="margin-top:9px">Read it as the person on your card. Everyone else guesses who you are.</p>
+      <button class="btn" id="regRoll" style="margin-top:8px">🎲 Give me a role</button>
+      <div class="dice" id="regOut">Tap the button for a secret role.</div>
+      <div class="chips">${REGISTER_ROLES.map(m=>`<span>${esc(m)}</span>`).join("")}</div>
+    </div>
+    <div class="gcard">
+      <h3>Clap the rhythm</h3>
+      <p class="k">Rhythm — feel the beat of the line</p>
+      <p style="font-size:.86rem;color:var(--muted)">Read a rhyming line out loud and clap on every strong beat. Then read it again and
+      change which word you stress — does it still sound right?</p>
+      <div class="tw" style="margin-top:9px">I do not like green eggs and ham.
+I do not like them, Sam-I-am.</div>
+      <p class="k" style="margin-top:9px">Try a long poem next: a ballad like <i>The Man from Ironbark</i> has a strong four-beat swing.</p>
+    </div>`;
+  const pick=(arr,out)=>()=>{ document.getElementById(out).textContent=arr[Math.floor(Math.random()*arr.length)]; };
+  document.getElementById("emphRoll").onclick=pick(EMPHASIS_MEANINGS,"emphOut");
+  document.getElementById("regRoll").onclick=pick(REGISTER_ROLES,"regOut");
+}
+
+/* hold-and-drag on either chart = live morphing vowel — trace a diphthong yourself */
+let dragVoice=null, suppressClick=false;
+(function(){
+  const charts=["vowelChart","dipChart"].map(id=>document.getElementById(id));
+  let downAt=null, t0=0, chart=null;
+  const posOf=o=>{
+    if(!o) return null;
+    if(o.x!==undefined){ const a=accVowel(o); return [a.x,a.y]; }
+    const a=accDip(o); return a.from;
+  };
+  charts.forEach(ch=>ch.addEventListener("pointerdown",e=>{
+    if(e.button!==undefined&&e.button>0) return;
+    const chip=e.target.closest(".ph");
+    if(!chip&&e.pointerType==="touch") return;   /* touch pans the chart unless you grab a sound */
+    const sym=chip&&chip.dataset.s;
+    const start=chip?posOf(find(sym)):null;
+    const p=chartXY(ch,e);
+    const x=start?start[0]:p.x, y=start?start[1]:p.y;
+    chart=ch;
+    /* a chip with a teacher recording: hold off the synth — a plain tap will
+       play the recording; the synth only starts if this becomes a drag */
+    const deferred=!!(sym&&recFor(sym));
+    dragVoice={v:deferred?null:makeVoice(),id:e.pointerId,at:{x,y}};
+    downAt=[e.clientX,e.clientY]; t0=performance.now(); suppressClick=false;
+    if(dragVoice.v) dragVoice.v.set(x,y,.001);
+    moveDot(ch,x,y,true);
+    const f=faceOf(ch); if(f) f.set(x,y);
+  }));
+  window.addEventListener("pointermove",e=>{
+    if(!dragVoice||e.pointerId!==dragVoice.id) return;
+    if(Math.hypot(e.clientX-downAt[0],e.clientY-downAt[1])>7){
+      suppressClick=true;
+      if(!dragVoice.v){ dragVoice.v=makeVoice(); dragVoice.v.set(dragVoice.at.x,dragVoice.at.y,.001); }
+    }
+    if(!dragVoice.v) return;
+    const p=chartXY(chart,e);
+    dragVoice.v.set(p.x,p.y); moveDot(chart,p.x,p.y,true);
+    const f=faceOf(chart); if(f) f.set(p.x,p.y);
+  });
+  const end=e=>{
+    if(!dragVoice||e.pointerId!==dragVoice.id) return;
+    const v=dragVoice.v, held=performance.now()-t0;
+    if(v){ if(held<350) setTimeout(()=>v.stop(),380-held); else v.stop(); }
+    dragVoice=null;
+    if(chart){ moveDot(chart,0,0,false); const f=faceOf(chart); if(f) f.idle(); }
+  };
+  window.addEventListener("pointerup",end);
+  window.addEventListener("pointercancel",end);
+})();
+
+function drawAll(){ drawCons(); drawVowels(); drawDips();
+  Object.values(faceCtls).forEach(f=>{ if(f) f.idle(); });
+}
+drawAll(); drawStress(); drawPatterns(); drawFocusArea(); drawAccbar(); refreshProgress();
+</script>
+</body>
+</html>

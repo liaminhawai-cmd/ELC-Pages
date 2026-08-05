@@ -1,0 +1,41 @@
+    note.querySelector("button").addEventListener("click",()=>{
+      svg.dataset.active="0";
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{ svg.dataset.active="1"; }));
+    });
+    svg.insertAdjacentElement("afterend",note);
+  }
+
+  function addChartNotes(){
+    const notes = [
+      ["#tab-vow .hint","The cutaway now moves the <b>tongue body, jaw and lips</b> together as you press or drag."],
+      ["#tab-dip .hint","Watch the <b>whole vocal tract change continuously</b> as the sound glides."],
+    ];
+    notes.forEach(([selector,text])=>{
+      const el=document.querySelector(selector);
+      if(el && !el.querySelector(".anatomy-note")) el.insertAdjacentHTML("beforeend",`<span class="anatomy-note">${text}</span>`);
+    });
+  }
+
+  try{
+    window.chartSVG = enhancedChartSVG;
+    window.makeFaceCtl = enhancedFaceCtl;
+    window.mouthDiagram = enhancedMouthDiagram;
+
+    if(typeof window.showDetail === "function" && !window.showDetail.__anatomyPatched){
+      const originalShowDetail = window.showDetail;
+      const patched = function(sym){
+        const out = originalShowDetail.apply(this,arguments);
+        requestAnimationFrame(()=>enhanceConsonantDetail(sym));
+        return out;
+      };
+      patched.__anatomyPatched = true;
+      window.showDetail = patched;
+    }
+
+    if(typeof window.drawVowels === "function") window.drawVowels();
+    if(typeof window.drawDips === "function") window.drawDips();
+    addChartNotes();
+  }catch(err){
+    console.error("Pronunciation anatomy enhancement failed",err);
+  }
+})();
