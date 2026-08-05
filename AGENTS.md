@@ -14,9 +14,13 @@ to paste what you need; don't guess.
 
 1. **No student or staff names, ever** — in code, content, examples, commit
    messages, or file metadata.
-2. **No copyrighted material** — no textbook scans, picture books, film
-   scripts, subtitle files, or teacher planning documents. Planning docs get
-   rebuilt as interactive activities; they are never published as-is.
+2. **No reproducing copyrighted works** — no textbook scans, picture-book
+   pages or page images, film scripts, subtitle files, or teacher planning
+   documents. **Short quotes inside original analytical commentary are
+   fine** — a phrase or a line, same as any published book review or the
+   writing wall already does — that's ordinary fair-dealing criticism/
+   review, not reproduction. Planning docs get rebuilt as interactive
+   activities; they are never published as-is.
 3. **Nothing vulgar**, nothing that collects personal data. No accounts, no
    tracking, no analytics. `localStorage` only, and the UI says so honestly.
 4. **The teacher-view toggle is cosmetic.** This is a static site — never

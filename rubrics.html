@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ELC Hub — rubrics with worked examples, banded by C-level.">
+<title>Rubrics — ELC Hub</title>
+<style>
+  :root {
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#2563eb; --accent-soft:#dbeafe; --radius:14px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
+    /* same three colours as the Analytical Writing Wall, same hex values */
+    --evid:#006FC0; --evid-fill:#45B0E1;
+    --purp:#008F4C; --purp-fill:#8DD873;
+    --idea:#C03A2B; --idea-fill:#F1A983;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
+            --accent:#7aa5ff; --accent-soft:#1d2c4d; --shadow:0 1px 2px rgba(0,0,0,.4);
+            --evid:#5FB4EC; --purp:#4FBF83; --idea:#E8836F; }
+  }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.55; }
+  header { background:linear-gradient(135deg,#2563eb,#7c3aed 60%,#db2777); color:#fff; padding:22px 20px 28px; text-align:center; }
+  header a.back { color:#fff; opacity:.85; text-decoration:none; font-size:.85rem; font-weight:600; }
+  header a.back:focus-visible { outline:3px solid rgba(255,255,255,.7); outline-offset:3px; }
+  header h1 { font-size:clamp(1.4rem,4vw,1.9rem); margin-top:6px; }
+  header p { max-width:640px; margin:8px auto 0; opacity:.94; font-size:.92rem; }
+  main { max-width:1100px; margin:0 auto; padding:20px 14px 60px; }
+  section { margin-top:8px; }
+  h2.sec { font-size:1.2rem; margin:0 0 6px; }
+  p.lead { color:var(--muted); font-size:.9rem; margin:0 0 14px; max-width:70ch; }
+
+  a.card { display:flex; align-items:center; gap:12px; background:var(--card); border:1px solid var(--line);
+           border-radius:var(--radius); padding:14px 16px; text-decoration:none; color:inherit;
+           box-shadow:var(--shadow); transition:transform .12s,border-color .12s; margin-bottom:18px; max-width:640px; }
+  a.card:hover { transform:translateY(-2px); border-color:var(--accent); }
+  a.card .emoji { font-size:1.7rem; flex:none; }
+  a.card h3 { font-size:1.02rem; margin-bottom:2px; }
+  a.card p { font-size:.85rem; color:var(--muted); }
+  a.card .go { margin-left:auto; color:var(--accent); font-weight:700; font-size:1.3rem; flex:none; }
+
+  .legend { display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; font-size:.82rem;
+            background:var(--card); border:1px solid var(--line); border-radius:10px;
+            padding:9px 13px; margin-bottom:16px; }
+  .legend b { font-weight:700; }
+  .sw { display:inline-flex; align-items:center; gap:6px; }
+  .dot { width:11px; height:11px; border-radius:3px; border:1px solid rgba(0,0,0,.18); flex:none; }
+  .dot.evid { background:var(--evid-fill); } .dot.purp { background:var(--purp-fill); } .dot.idea { background:var(--idea-fill); }
+
+  .hint { font-size:.82rem; color:var(--muted); margin-bottom:10px; }
+
+  .scroll { overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow); }
+  table.rubric { border-collapse:collapse; width:100%; min-width:820px; }
+  .rubric th, .rubric td { padding:10px 13px; text-align:left; vertical-align:top; font-size:.86rem; border:1px solid var(--line); }
+  .rubric thead th { font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); background:var(--bg); white-space:nowrap; }
+  .rubric td.skill { font-weight:700; white-space:nowrap; }
+  tr.evid td { background:var(--evid-fill); } tr.purp td { background:var(--purp-fill); } tr.idea td { background:var(--idea-fill); }
+  tr.evid td, tr.purp td, tr.idea td { color:#1c2333; }
+  tr.evid td.skill, tr.purp td.skill, tr.idea td.skill { color:#1c2333; }
+
+  /* click-a-phrase translations */
+  .phrase { display:inline-block; cursor:pointer; border-bottom:1px dotted currentColor; }
+  .phrase:hover { background:rgba(0,0,0,.06); }
+  tr.evid .phrase:hover, tr.purp .phrase:hover, tr.idea .phrase:hover { background:rgba(255,255,255,.35); }
+  .phrase .gloss { display:block; margin-top:4px; font-size:.84em; font-weight:400; border-bottom:none;
+                    background:var(--accent-soft); color:var(--ink); border-radius:6px; padding:4px 7px; }
+  /* inside a tinted row the cell background is always bright, in both themes —
+     so the gloss there always wants a light overlay with dark text */
+  tr.evid .phrase .gloss, tr.purp .phrase .gloss, tr.idea .phrase .gloss {
+    background:rgba(255,255,255,.55); color:#1c2333; }
+  .gloss b { font-weight:700; margin-right:2px; }
+
+  footer { border-top:1px solid var(--line); margin-top:40px; padding:20px 18px 34px; text-align:center; color:var(--muted); font-size:.85rem; }
+  footer a { color:var(--accent); }
+
+  @media (max-width:540px) {
+    header { padding:20px 16px 24px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="index.html">← ELC Hub</a>
+  <h1>📚 Rubrics</h1>
+  <p>What each band actually looks like — not just the criteria, worked examples too.</p>
+</header>
+
+<main>
+  <section>
+    <h2 class="sec">✍️ Analytical Writing</h2>
+    <p class="lead">The same rubric your teacher marks against, colour-coded to match the
+      Analytical Writing Wall: 🔵 evidence &amp; metalanguage, 🟢 purpose &amp; interpretation,
+      🔴 ideas &amp; themes.</p>
+
+    <a class="card" href="teea-paragraph.html">
+      <span class="emoji">🌳</span>
+      <span>
+        <h3>See it in a paragraph — T·E·E·A, colour-coded</h3>
+        <p>The Giving Tree, worked example. What T·E·E·A mean, the writing wall's own C2→VCE1
+          example, and two full paragraphs, coloured sentence by sentence.</p>
+      </span>
+      <span class="go">→</span>
+    </a>
+
+    <div class="legend">
+      <b>The wall's three colours:</b>
+      <span class="sw"><span class="dot evid"></span>Evidence &amp; metalanguage</span>
+      <span class="sw"><span class="dot purp"></span>Purpose &amp; interpretation</span>
+      <span class="sw"><span class="dot idea"></span>Ideas &amp; themes</span>
+    </div>
+
+    <p class="hint">🌐 Tap any sentence for Vietnamese and Chinese.</p>
+
+    <div class="scroll">
+      <table class="rubric" id="rubricTable"></table>
+    </div>
+  </section>
+</main>
+
+<footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+
+<script>
+/* ================================================================= */
+/*  CONTENT BLOCK — the rubric and its translations live here.       */
+/*  Verbatim from eal-analytical-writing-wagoll.docx (Skill Area      */
+/*  grid). Row colours are the hub's own addition — the docx doesn't  */
+/*  tint this table; Language & Structure has no colour in the wall's */
+/*  system, so its row stays neutral.                                 */
+/*  Each cell is a list of phrases: {en, vi, zh}. Tap a phrase on the */
+/*  page to see its translation. To edit wording or add a language,  */
+/*  change this block — no code to touch.                             */
+/* ================================================================= */
+function P(en, vi, zh){ return {en, vi, zh}; }
+
+const RUBRIC = [
+  { skill:"Ideas & Themes", vi:"Ý tưởng & Chủ đề", zh:"思想与主题", cls:"idea",
+    cells:[
+      [ P("Recognises what happens in the text or scene.",
+          "Nhận biết điều gì xảy ra trong văn bản hoặc cảnh.", "识别文本或场景中发生的事情。"),
+        P("Retells key details with little interpretation.",
+          "Kể lại các chi tiết chính với rất ít diễn giải.", "复述关键细节，几乎不作解读。") ],
+      [ P("Explains basic feelings or ideas suggested by the text.",
+          "Giải thích những cảm xúc hoặc ý tưởng cơ bản mà văn bản gợi ý.", "解释文本所暗示的基本情感或想法。"),
+        P("Begins linking choices to simple themes.",
+          "Bắt đầu liên kết các lựa chọn với những chủ đề đơn giản.", "开始将作者的选择与简单的主题联系起来。") ],
+      [ P("Connects specific language or film techniques to themes or concepts.",
+          "Kết nối các kỹ thuật ngôn ngữ hoặc điện ảnh cụ thể với chủ đề hoặc khái niệm.", "将具体的语言或电影技巧与主题或概念联系起来。"),
+        P("Explains what the creator might be saying.",
+          "Giải thích điều mà tác giả có thể đang muốn nói.", "解释作者可能想表达的意思。") ],
+      [ P("Analyses how choices express messages, values, or perspectives.",
+          "Phân tích cách các lựa chọn thể hiện thông điệp, giá trị hoặc quan điểm.", "分析这些选择如何表达信息、价值观或观点。"),
+        P("Analyses the creator's purpose in representing social or cultural issues.",
+          "Phân tích mục đích của tác giả khi thể hiện các vấn đề xã hội hoặc văn hoá.", "分析作者在呈现社会或文化议题时的目的。") ]
+    ] },
+  { skill:"Evidence & Metalanguage", vi:"Bằng chứng & Siêu ngôn ngữ", zh:"证据与元语言", cls:"evid",
+    cells:[
+      [ P("Gives a simple quote or description from the text or scene.",
+          "Đưa ra một trích dẫn hoặc mô tả đơn giản từ văn bản hoặc cảnh.", "从文本或场景中给出一个简单的引用或描述。") ],
+      [ P("Names a language or film feature and begins linking it to meaning.",
+          "Gọi tên một đặc điểm ngôn ngữ hoặc điện ảnh và bắt đầu liên kết nó với ý nghĩa.", "说出一个语言或电影特征，并开始将其与含义联系起来。") ],
+      [ P("Uses terminology accurately with short, embedded evidence.",
+          "Sử dụng thuật ngữ chính xác cùng với bằng chứng ngắn gọn được lồng ghép.", "准确使用术语，并嵌入简短的证据。") ],
+      [ P("Integrates evidence and metalanguage fluently to build interpretation.",
+          "Tích hợp bằng chứng và siêu ngôn ngữ một cách trôi chảy để xây dựng cách diễn giải.", "流畅地整合证据与元语言，以建立解读。") ]
+    ] },
+  { skill:"Language & Structure", vi:"Ngôn ngữ & Cấu trúc", zh:"语言与结构", cls:"",
+    cells:[
+      [ P("Writes short, simple sentences using mostly literal verbs (“shows”, “uses”).",
+          "Viết những câu ngắn, đơn giản, chủ yếu dùng động từ nghĩa đen (“cho thấy”, “sử dụng”).", "写简短、简单的句子，主要使用字面意义的动词（如“表明”、“使用”）。") ],
+      [ P("Expands sentences with connectives such as because, so, or to.",
+          "Mở rộng câu bằng các từ nối như vì, vì vậy, hoặc để.", "使用连接词（如因为、所以、为了）来扩展句子。"),
+        P("Uses basic evaluative words.",
+          "Dùng các từ đánh giá cơ bản.", "使用基本的评价性词语。") ],
+      [ P("Uses more complex sentences and analytical verbs (“suggests”, “highlights”).",
+          "Sử dụng câu phức tạp hơn và các động từ phân tích (“gợi ý”, “làm nổi bật”).", "使用更复杂的句子和分析性动词（如“暗示”、“突显”）。") ],
+      [ P("Writes fluently in a cohesive formal style, varying sentence structures to show cause, effect, and interpretation.",
+          "Viết trôi chảy theo phong cách trang trọng, mạch lạc, thay đổi cấu trúc câu để thể hiện nguyên nhân, kết quả và cách diễn giải.", "以连贯、正式的风格流畅写作，运用多样的句子结构来表现因果关系与解读。") ]
+    ] },
+  { skill:"Purpose & Interpretation", vi:"Mục đích & Diễn giải", zh:"目的与解读", cls:"purp",
+    cells:[
+      [ P("Identifies the basic meaning or message.",
+          "Xác định ý nghĩa hoặc thông điệp cơ bản.", "识别基本的含义或信息。") ],
+      [ P("Explains the effect on the reader or viewer.",
+          "Giải thích tác động đến người đọc hoặc người xem.", "解释对读者或观众产生的效果。") ],
+      [ P("Makes inferences about the creator's intent or perspective.",
+          "Suy luận về ý định hoặc quan điểm của tác giả.", "推断作者的意图或观点。") ],
+      [ P("Discusses deeper social, moral, or ethical ideas, linking choices to broader context.",
+          "Bàn luận về những ý tưởng xã hội, đạo đức sâu sắc hơn, liên kết các lựa chọn với bối cảnh rộng hơn.", "探讨更深层的社会、道德或伦理观念，将选择与更广泛的语境联系起来。") ]
+    ] }
+];
+const BANDS = ["C2", "C3", "C4", "VCE 1"];
+</script>
+<!-- ===================== END CONTENT BLOCK ======================= -->
+
+<script>
+function esc(s){ return String(s).replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
+
+function phraseHTML(p){
+  return `<span class="phrase" data-vi="${esc(p.vi)}" data-zh="${esc(p.zh)}">${esc(p.en)}</span>`;
+}
+
+function renderTable(){
+  const t = document.getElementById("rubricTable");
+  const thead = "<thead><tr><th>Skill area</th>" + BANDS.map(b=>`<th>${b}</th>`).join("") + "</tr></thead>";
+  const rows = RUBRIC.map(row => {
+    const skillCell = `<td class="skill"><span class="phrase" data-vi="${esc(row.vi)}" data-zh="${esc(row.zh)}">${esc(row.skill)}</span></td>`;
+    const cells = row.cells.map(phrases => `<td>${phrases.map(phraseHTML).join(" ")}</td>`).join("");
+    return `<tr class="${row.cls}">${skillCell}${cells}</tr>`;
+  }).join("");
+  t.innerHTML = thead + "<tbody>" + rows + "</tbody>";
+}
+renderTable();
+
+/* Tap a phrase -> show/hide its Vietnamese + Chinese gloss. One phrase at a
+   time toggles independently; nothing whole-page or whole-cell switches. */
+document.addEventListener("click", e=>{
+  const ph = e.target.closest(".phrase");
+  if(!ph) return;
+  const existing = ph.querySelector(":scope > .gloss");
+  if(existing){ existing.remove(); return; }
+  const g = document.createElement("span");
+  g.className = "gloss";
+  g.innerHTML = `<b>VI</b> ${esc(ph.dataset.vi)} &nbsp;&middot;&nbsp; <b>ZH</b> ${esc(ph.dataset.zh)}`;
+  ph.appendChild(g);
+});
+</script>
+</body>
+</html>
