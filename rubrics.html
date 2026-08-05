@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="ELC Hub — rubrics with worked examples, banded by C-level.">
+<meta name="description" content="ELC Hub — reading, writing, speaking and analytical writing rubrics, band by band.">
 <title>Rubrics — ELC Hub</title>
 <style>
   :root {
@@ -22,199 +22,574 @@
   }
   * { box-sizing:border-box; margin:0; }
   body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.55; }
-  header { background:linear-gradient(135deg,#2563eb,#7c3aed 60%,#db2777); color:#fff; padding:22px 20px 28px; text-align:center; }
+  header { background:linear-gradient(135deg,#2563eb,#7c3aed 60%,#db2777); color:#fff; padding:20px 20px 26px; text-align:center; }
   header a.back { color:#fff; opacity:.85; text-decoration:none; font-size:.85rem; font-weight:600; }
-  header a.back:focus-visible { outline:3px solid rgba(255,255,255,.7); outline-offset:3px; }
   header h1 { font-size:clamp(1.4rem,4vw,1.9rem); margin-top:6px; }
-  header p { max-width:640px; margin:8px auto 0; opacity:.94; font-size:.92rem; }
-  main { max-width:1100px; margin:0 auto; padding:20px 14px 60px; }
-  section { margin-top:8px; }
-  h2.sec { font-size:1.2rem; margin:0 0 6px; }
-  p.lead { color:var(--muted); font-size:.9rem; margin:0 0 14px; max-width:70ch; }
+  main { max-width:1180px; margin:0 auto; padding:18px 14px 70px; }
+  section { margin-top:34px; scroll-margin-top:12px; }
+  h2.sec { font-size:1.2rem; margin:0 0 2px; }
+  p.sub { color:var(--muted); font-size:.88rem; margin:0 0 12px; }
+
+  .jump { display:flex; flex-wrap:wrap; gap:7px; }
+  .jump a { border:1px solid var(--line); background:var(--card); border-radius:999px;
+            padding:6px 14px; text-decoration:none; color:inherit; font-size:.88rem; box-shadow:var(--shadow); }
+  .jump a:hover { border-color:var(--accent); color:var(--accent); }
 
   a.card { display:flex; align-items:center; gap:12px; background:var(--card); border:1px solid var(--line);
-           border-radius:var(--radius); padding:14px 16px; text-decoration:none; color:inherit;
-           box-shadow:var(--shadow); transition:transform .12s,border-color .12s; margin-bottom:18px; max-width:640px; }
+           border-radius:var(--radius); padding:13px 15px; text-decoration:none; color:inherit;
+           box-shadow:var(--shadow); transition:transform .12s,border-color .12s; margin-bottom:14px; max-width:640px; }
   a.card:hover { transform:translateY(-2px); border-color:var(--accent); }
-  a.card .emoji { font-size:1.7rem; flex:none; }
-  a.card h3 { font-size:1.02rem; margin-bottom:2px; }
-  a.card p { font-size:.85rem; color:var(--muted); }
+  a.card .emoji { font-size:1.6rem; flex:none; }
+  a.card h3 { font-size:1rem; margin-bottom:2px; }
+  a.card p { font-size:.84rem; color:var(--muted); }
   a.card .go { margin-left:auto; color:var(--accent); font-weight:700; font-size:1.3rem; flex:none; }
 
   .legend { display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center; font-size:.82rem;
             background:var(--card); border:1px solid var(--line); border-radius:10px;
-            padding:9px 13px; margin-bottom:16px; }
-  .legend b { font-weight:700; }
+            padding:9px 13px; margin-bottom:12px; }
   .sw { display:inline-flex; align-items:center; gap:6px; }
   .dot { width:11px; height:11px; border-radius:3px; border:1px solid rgba(0,0,0,.18); flex:none; }
   .dot.evid { background:var(--evid-fill); } .dot.purp { background:var(--purp-fill); } .dot.idea { background:var(--idea-fill); }
 
-  .hint { font-size:.82rem; color:var(--muted); margin-bottom:10px; }
-
   .scroll { overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow); }
-  table.rubric { border-collapse:collapse; width:100%; min-width:820px; }
+  table.rubric { border-collapse:collapse; width:100%; min-width:760px; }
   .rubric th, .rubric td { padding:10px 13px; text-align:left; vertical-align:top; font-size:.86rem; border:1px solid var(--line); }
   .rubric thead th { font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); background:var(--bg); white-space:nowrap; }
-  .rubric td.skill { font-weight:700; white-space:nowrap; }
+  .rubric td.skill { font-weight:700; }
+  .rubric td.empty { background:var(--bg); }
   tr.evid td { background:var(--evid-fill); } tr.purp td { background:var(--purp-fill); } tr.idea td { background:var(--idea-fill); }
   tr.evid td, tr.purp td, tr.idea td { color:#1c2333; }
-  tr.evid td.skill, tr.purp td.skill, tr.idea td.skill { color:#1c2333; }
 
-  /* click-a-phrase translations */
+  /* ---- extensions: related rubrics that reuse a base rubric's shape ---- */
+  details.ext { border:1px solid var(--line); border-radius:12px; background:var(--card);
+                box-shadow:var(--shadow); margin-top:8px; overflow:hidden; }
+  details.ext + details.ext { margin-top:8px; }
+  details.ext summary { cursor:pointer; padding:10px 14px; font-weight:600; font-size:.92rem;
+                display:flex; align-items:baseline; gap:10px; list-style:none; }
+  details.ext summary::-webkit-details-marker { display:none; }
+  details.ext summary::before { content:"▸"; color:var(--muted); font-weight:400; }
+  details.ext[open] summary::before { content:"▾"; }
+  details.ext summary .exsub { font-weight:400; color:var(--muted); font-size:.84rem; }
+  details.ext .extbody { padding:0 14px 14px; }
+  .extgroup { margin-top:14px; }
+  .extgroup > .lbl { font-size:.74rem; text-transform:uppercase; letter-spacing:.5px;
+                      color:var(--muted); margin-bottom:6px; }
+  table.plain { border-collapse:collapse; width:100%; min-width:640px; }
+  table.plain th, table.plain td { padding:9px 12px; text-align:left; vertical-align:top;
+                      font-size:.85rem; border:1px solid var(--line); }
+  table.plain thead th { font-size:.72rem; text-transform:uppercase; letter-spacing:.5px;
+                      color:var(--muted); background:var(--bg); white-space:nowrap; }
+  table.plain td.skill { font-weight:700; }
+
   .phrase { display:inline-block; cursor:pointer; border-bottom:1px dotted currentColor; }
-  .phrase:hover { background:rgba(0,0,0,.06); }
-  tr.evid .phrase:hover, tr.purp .phrase:hover, tr.idea .phrase:hover { background:rgba(255,255,255,.35); }
   .phrase .gloss { display:block; margin-top:4px; font-size:.84em; font-weight:400; border-bottom:none;
                     background:var(--accent-soft); color:var(--ink); border-radius:6px; padding:4px 7px; }
-  /* inside a tinted row the cell background is always bright, in both themes —
-     so the gloss there always wants a light overlay with dark text */
   tr.evid .phrase .gloss, tr.purp .phrase .gloss, tr.idea .phrase .gloss {
     background:rgba(255,255,255,.55); color:#1c2333; }
   .gloss b { font-weight:700; margin-right:2px; }
 
-  footer { border-top:1px solid var(--line); margin-top:40px; padding:20px 18px 34px; text-align:center; color:var(--muted); font-size:.85rem; }
-  footer a { color:var(--accent); }
-
-  @media (max-width:540px) {
-    header { padding:20px 16px 24px; }
-  }
+  footer { border-top:1px solid var(--line); margin-top:44px; padding:20px 18px 34px; text-align:center; color:var(--muted); font-size:.85rem; }
 </style>
 </head>
 <body>
 <header>
   <a class="back" href="index.html">← ELC Hub</a>
   <h1>📚 Rubrics</h1>
-  <p>What each band actually looks like — not just the criteria, worked examples too.</p>
 </header>
 
 <main>
-  <section>
-    <h2 class="sec">✍️ Analytical Writing</h2>
-    <p class="lead">The same rubric your teacher marks against, colour-coded to match the
-      Analytical Writing Wall: 🔵 evidence &amp; metalanguage, 🟢 purpose &amp; interpretation,
-      🔴 ideas &amp; themes.</p>
-
-    <a class="card" href="teea-paragraph.html">
-      <span class="emoji">🌳</span>
-      <span>
-        <h3>See it in a paragraph — T·E·E·A, colour-coded</h3>
-        <p>The Giving Tree, worked example. What T·E·E·A mean, the writing wall's own C2→VCE1
-          example, and two full paragraphs, coloured sentence by sentence.</p>
-      </span>
-      <span class="go">→</span>
-    </a>
-
-    <div class="legend">
-      <b>The wall's three colours:</b>
-      <span class="sw"><span class="dot evid"></span>Evidence &amp; metalanguage</span>
-      <span class="sw"><span class="dot purp"></span>Purpose &amp; interpretation</span>
-      <span class="sw"><span class="dot idea"></span>Ideas &amp; themes</span>
-    </div>
-
-    <p class="hint">🌐 Tap any sentence for Vietnamese and Chinese.</p>
-
-    <div class="scroll">
-      <table class="rubric" id="rubricTable"></table>
-    </div>
-  </section>
+  <nav class="jump" id="jump"></nav>
+  <div id="sections"></div>
 </main>
 
 <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
 
+<!-- ================================================================= -->
+<!--  CONTENT BLOCK — the rubrics live here, one object each.          -->
+<!--  Wording is verbatim from the EAL rubric documents.               -->
+<!--  Each cell is a list of phrases: P("English", "Tiếng Việt", "中文") -->
+<!--  — tapping a phrase on the page shows its translation.            -->
+<!--  `cls` tints a row with the writing wall's colours; only the      -->
+<!--  analytical writing rubric uses it. Leave it "" for the others.   -->
+<!--  To add a rubric, copy the pattern. No code to touch.             -->
+<!-- ================================================================= -->
 <script>
-/* ================================================================= */
-/*  CONTENT BLOCK — the rubric and its translations live here.       */
-/*  Verbatim from eal-analytical-writing-wagoll.docx (Skill Area      */
-/*  grid). Row colours are the hub's own addition — the docx doesn't  */
-/*  tint this table; Language & Structure has no colour in the wall's */
-/*  system, so its row stays neutral.                                 */
-/*  Each cell is a list of phrases: {en, vi, zh}. Tap a phrase on the */
-/*  page to see its translation. To edit wording or add a language,  */
-/*  change this block — no code to touch.                             */
-/* ================================================================= */
 function P(en, vi, zh){ return {en, vi, zh}; }
 
-const RUBRIC = [
-  { skill:"Ideas & Themes", vi:"Ý tưởng & Chủ đề", zh:"思想与主题", cls:"idea",
-    cells:[
-      [ P("Recognises what happens in the text or scene.",
-          "Nhận biết điều gì xảy ra trong văn bản hoặc cảnh.", "识别文本或场景中发生的事情。"),
-        P("Retells key details with little interpretation.",
-          "Kể lại các chi tiết chính với rất ít diễn giải.", "复述关键细节，几乎不作解读。") ],
-      [ P("Explains basic feelings or ideas suggested by the text.",
-          "Giải thích những cảm xúc hoặc ý tưởng cơ bản mà văn bản gợi ý.", "解释文本所暗示的基本情感或想法。"),
-        P("Begins linking choices to simple themes.",
-          "Bắt đầu liên kết các lựa chọn với những chủ đề đơn giản.", "开始将作者的选择与简单的主题联系起来。") ],
-      [ P("Connects specific language or film techniques to themes or concepts.",
-          "Kết nối các kỹ thuật ngôn ngữ hoặc điện ảnh cụ thể với chủ đề hoặc khái niệm.", "将具体的语言或电影技巧与主题或概念联系起来。"),
-        P("Explains what the creator might be saying.",
-          "Giải thích điều mà tác giả có thể đang muốn nói.", "解释作者可能想表达的意思。") ],
-      [ P("Analyses how choices express messages, values, or perspectives.",
-          "Phân tích cách các lựa chọn thể hiện thông điệp, giá trị hoặc quan điểm.", "分析这些选择如何表达信息、价值观或观点。"),
-        P("Analyses the creator's purpose in representing social or cultural issues.",
-          "Phân tích mục đích của tác giả khi thể hiện các vấn đề xã hội hoặc văn hoá.", "分析作者在呈现社会或文化议题时的目的。") ]
-    ] },
-  { skill:"Evidence & Metalanguage", vi:"Bằng chứng & Siêu ngôn ngữ", zh:"证据与元语言", cls:"evid",
-    cells:[
-      [ P("Gives a simple quote or description from the text or scene.",
-          "Đưa ra một trích dẫn hoặc mô tả đơn giản từ văn bản hoặc cảnh.", "从文本或场景中给出一个简单的引用或描述。") ],
-      [ P("Names a language or film feature and begins linking it to meaning.",
-          "Gọi tên một đặc điểm ngôn ngữ hoặc điện ảnh và bắt đầu liên kết nó với ý nghĩa.", "说出一个语言或电影特征，并开始将其与含义联系起来。") ],
-      [ P("Uses terminology accurately with short, embedded evidence.",
-          "Sử dụng thuật ngữ chính xác cùng với bằng chứng ngắn gọn được lồng ghép.", "准确使用术语，并嵌入简短的证据。") ],
-      [ P("Integrates evidence and metalanguage fluently to build interpretation.",
-          "Tích hợp bằng chứng và siêu ngôn ngữ một cách trôi chảy để xây dựng cách diễn giải.", "流畅地整合证据与元语言，以建立解读。") ]
-    ] },
-  { skill:"Language & Structure", vi:"Ngôn ngữ & Cấu trúc", zh:"语言与结构", cls:"",
-    cells:[
-      [ P("Writes short, simple sentences using mostly literal verbs (“shows”, “uses”).",
-          "Viết những câu ngắn, đơn giản, chủ yếu dùng động từ nghĩa đen (“cho thấy”, “sử dụng”).", "写简短、简单的句子，主要使用字面意义的动词（如“表明”、“使用”）。") ],
-      [ P("Expands sentences with connectives such as because, so, or to.",
-          "Mở rộng câu bằng các từ nối như vì, vì vậy, hoặc để.", "使用连接词（如因为、所以、为了）来扩展句子。"),
-        P("Uses basic evaluative words.",
-          "Dùng các từ đánh giá cơ bản.", "使用基本的评价性词语。") ],
-      [ P("Uses more complex sentences and analytical verbs (“suggests”, “highlights”).",
-          "Sử dụng câu phức tạp hơn và các động từ phân tích (“gợi ý”, “làm nổi bật”).", "使用更复杂的句子和分析性动词（如“暗示”、“突显”）。") ],
-      [ P("Writes fluently in a cohesive formal style, varying sentence structures to show cause, effect, and interpretation.",
-          "Viết trôi chảy theo phong cách trang trọng, mạch lạc, thay đổi cấu trúc câu để thể hiện nguyên nhân, kết quả và cách diễn giải.", "以连贯、正式的风格流畅写作，运用多样的句子结构来表现因果关系与解读。") ]
-    ] },
-  { skill:"Purpose & Interpretation", vi:"Mục đích & Diễn giải", zh:"目的与解读", cls:"purp",
-    cells:[
-      [ P("Identifies the basic meaning or message.",
-          "Xác định ý nghĩa hoặc thông điệp cơ bản.", "识别基本的含义或信息。") ],
-      [ P("Explains the effect on the reader or viewer.",
-          "Giải thích tác động đến người đọc hoặc người xem.", "解释对读者或观众产生的效果。") ],
-      [ P("Makes inferences about the creator's intent or perspective.",
-          "Suy luận về ý định hoặc quan điểm của tác giả.", "推断作者的意图或观点。") ],
-      [ P("Discusses deeper social, moral, or ethical ideas, linking choices to broader context.",
-          "Bàn luận về những ý tưởng xã hội, đạo đức sâu sắc hơn, liên kết các lựa chọn với bối cảnh rộng hơn.", "探讨更深层的社会、道德或伦理观念，将选择与更广泛的语境联系起来。") ]
-    ] }
+const RUBRICS = [
+
+/* ---------------------------------------------------------------- */
+{ id:"analytical", emoji:"✍️", title:"Analytical Writing",
+  sub:"Writing about a text. Colour-coded to match the Analytical Writing Wall.",
+  legend:true,
+  cta:{ href:"teea-paragraph.html", emoji:"🌳", h:"See it in a paragraph — T·E·E·A, colour-coded",
+        p:"The Giving Tree, worked example, coloured sentence by sentence." },
+  bands:["C2","C3","C4","VCE 1"],
+  rows:[
+    { skill:"Ideas & Themes", vi:"Ý tưởng & Chủ đề", zh:"思想与主题", cls:"idea",
+      cells:[
+        [ P("Recognises what happens in the text or scene.",
+            "Nhận biết điều gì xảy ra trong văn bản hoặc cảnh.", "识别文本或场景中发生的事情。"),
+          P("Retells key details with little interpretation.",
+            "Kể lại các chi tiết chính với rất ít diễn giải.", "复述关键细节，几乎不作解读。") ],
+        [ P("Explains basic feelings or ideas suggested by the text.",
+            "Giải thích những cảm xúc hoặc ý tưởng cơ bản mà văn bản gợi ý.", "解释文本所暗示的基本情感或想法。"),
+          P("Begins linking choices to simple themes.",
+            "Bắt đầu liên kết các lựa chọn với những chủ đề đơn giản.", "开始将作者的选择与简单的主题联系起来。") ],
+        [ P("Connects specific language or film techniques to themes or concepts.",
+            "Kết nối các kỹ thuật ngôn ngữ hoặc điện ảnh cụ thể với chủ đề hoặc khái niệm.", "将具体的语言或电影技巧与主题或概念联系起来。"),
+          P("Explains what the creator might be saying.",
+            "Giải thích điều mà tác giả có thể đang muốn nói.", "解释作者可能想表达的意思。") ],
+        [ P("Analyses how choices express messages, values, or perspectives.",
+            "Phân tích cách các lựa chọn thể hiện thông điệp, giá trị hoặc quan điểm.", "分析这些选择如何表达信息、价值观或观点。"),
+          P("Analyses the creator's purpose in representing social or cultural issues.",
+            "Phân tích mục đích của tác giả khi thể hiện các vấn đề xã hội hoặc văn hoá.", "分析作者在呈现社会或文化议题时的目的。") ]
+      ] },
+    { skill:"Evidence & Metalanguage", vi:"Bằng chứng & Siêu ngôn ngữ", zh:"证据与元语言", cls:"evid",
+      cells:[
+        [ P("Gives a simple quote or description from the text or scene.",
+            "Đưa ra một trích dẫn hoặc mô tả đơn giản từ văn bản hoặc cảnh.", "从文本或场景中给出一个简单的引用或描述。") ],
+        [ P("Names a language or film feature and begins linking it to meaning.",
+            "Gọi tên một đặc điểm ngôn ngữ hoặc điện ảnh và bắt đầu liên kết nó với ý nghĩa.", "说出一个语言或电影特征，并开始将其与含义联系起来。") ],
+        [ P("Uses terminology accurately with short, embedded evidence.",
+            "Sử dụng thuật ngữ chính xác cùng với bằng chứng ngắn gọn được lồng ghép.", "准确使用术语，并嵌入简短的证据。") ],
+        [ P("Integrates evidence and metalanguage fluently to build interpretation.",
+            "Tích hợp bằng chứng và siêu ngôn ngữ một cách trôi chảy để xây dựng cách diễn giải.", "流畅地整合证据与元语言，以建立解读。") ]
+      ] },
+    { skill:"Language & Structure", vi:"Ngôn ngữ & Cấu trúc", zh:"语言与结构", cls:"",
+      cells:[
+        [ P("Writes short, simple sentences using mostly literal verbs (“shows”, “uses”).",
+            "Viết những câu ngắn, đơn giản, chủ yếu dùng động từ nghĩa đen (“cho thấy”, “sử dụng”).", "写简短、简单的句子，主要使用字面意义的动词（如“表明”、“使用”）。") ],
+        [ P("Expands sentences with connectives such as because, so, or to.",
+            "Mở rộng câu bằng các từ nối như vì, vì vậy, hoặc để.", "使用连接词（如因为、所以、为了）来扩展句子。"),
+          P("Uses basic evaluative words.",
+            "Dùng các từ đánh giá cơ bản.", "使用基本的评价性词语。") ],
+        [ P("Uses more complex sentences and analytical verbs (“suggests”, “highlights”).",
+            "Sử dụng câu phức tạp hơn và các động từ phân tích (“gợi ý”, “làm nổi bật”).", "使用更复杂的句子和分析性动词（如“暗示”、“突显”）。") ],
+        [ P("Writes fluently in a cohesive formal style, varying sentence structures to show cause, effect, and interpretation.",
+            "Viết trôi chảy theo phong cách trang trọng, mạch lạc, thay đổi cấu trúc câu để thể hiện nguyên nhân, kết quả và cách diễn giải.", "以连贯、正式的风格流畅写作，运用多样的句子结构来表现因果关系与解读。") ]
+      ] },
+    { skill:"Purpose & Interpretation", vi:"Mục đích & Diễn giải", zh:"目的与解读", cls:"purp",
+      cells:[
+        [ P("Identifies the basic meaning or message.",
+            "Xác định ý nghĩa hoặc thông điệp cơ bản.", "识别基本的含义或信息。") ],
+        [ P("Explains the effect on the reader or viewer.",
+            "Giải thích tác động đến người đọc hoặc người xem.", "解释对读者或观众产生的效果。") ],
+        [ P("Makes inferences about the creator's intent or perspective.",
+            "Suy luận về ý định hoặc quan điểm của tác giả.", "推断作者的意图或观点。") ],
+        [ P("Discusses deeper social, moral, or ethical ideas, linking choices to broader context.",
+            "Bàn luận về những ý tưởng xã hội, đạo đức sâu sắc hơn, liên kết các lựa chọn với bối cảnh rộng hơn.", "探讨更深层的社会、道德或伦理观念，将选择与更广泛的语境联系起来。") ]
+      ] }
+  ],
+  extensions:[
+    /* Same four skill areas and four bands as Analytical Writing, reworded
+       for film — from teaching/assessment/rubrics/film-analysis-rubric.docx.
+       Chinese is the docx's own; Vietnamese is ours. */
+    { title:"Film Analysis", sub:"Same shape as this rubric, reworded for film.",
+      bands:["C2","C3","C4","VCE 1"],
+      rows:[
+        { skill:"Ideas & Themes", vi:"Ý tưởng & Chủ đề", zh:"主题与思想", cls:"idea",
+          cells:[
+            [ P("Recognises what happens in the scene or shot. Retells visible details (actions, settings, emotions) with little interpretation.",
+                "Nhận biết điều gì xảy ra trong cảnh quay. Kể lại các chi tiết có thể nhìn thấy (hành động, bối cảnh, cảm xúc) với rất ít diễn giải.", "识别画面中的事件；复述可见细节。") ],
+            [ P("Explains basic feelings or ideas suggested by the scene. Begins linking visuals or sounds to emotions or simple themes (fear, courage, family).",
+                "Giải thích những cảm xúc hoặc ý tưởng cơ bản mà cảnh quay gợi ý. Bắt đầu liên kết hình ảnh hoặc âm thanh với cảm xúc hoặc các chủ đề đơn giản (sợ hãi, can đảm, gia đình).", "解释情感/想法并联系简单主题。") ],
+            [ P("Connects specific techniques and moments to themes or concepts such as belonging, freedom, or control. Explains what the director might be saying.",
+                "Kết nối các kỹ thuật và khoảnh khắc cụ thể với chủ đề hoặc khái niệm như sự thuộc về, tự do, hoặc sự kiểm soát. Giải thích điều mà đạo diễn có thể đang muốn nói.", "将技巧与主题关联。") ],
+            [ P("Analyses how techniques and ideas express messages, values, or perspectives. Evaluates the director's purpose in representing culture, identity, or social issues.",
+                "Phân tích cách các kỹ thuật và ý tưởng thể hiện thông điệp, giá trị hoặc quan điểm. Đánh giá mục đích của đạo diễn khi thể hiện văn hoá, bản sắc hoặc các vấn đề xã hội.", "分析技巧如何传达信息与价值。") ]
+          ] },
+        { skill:"Evidence & Metalanguage", vi:"Bằng chứng & Thuật ngữ", zh:"证据与术语", cls:"evid",
+          cells:[
+            [ P("Gives a simple quote or description of what is seen or heard.",
+                "Đưa ra một trích dẫn hoặc mô tả đơn giản về những gì được nhìn thấy hoặc nghe thấy.", "简单描述/引用。") ],
+            [ P("Adds a technique word (“close-up”, “sound”, “lighting”) and begins linking it to meaning.",
+                "Thêm một từ kỹ thuật (“cận cảnh”, “âm thanh”, “ánh sáng”) và bắt đầu liên kết nó với ý nghĩa.", "添加技巧术语并解释意义。") ],
+            [ P("Uses film terms accurately to discuss how techniques create meaning. Supports ideas with short embedded evidence.",
+                "Sử dụng thuật ngữ điện ảnh chính xác để thảo luận cách các kỹ thuật tạo ra ý nghĩa. Hỗ trợ ý tưởng bằng bằng chứng ngắn gọn được lồng ghép.", "使用准确术语和证据。") ],
+            [ P("Integrates technique and theme naturally. Embeds evidence and terminology fluently to build analysis.",
+                "Tích hợp kỹ thuật và chủ đề một cách tự nhiên. Lồng ghép bằng chứng và thuật ngữ một cách trôi chảy để xây dựng phân tích.", "流畅整合证据与术语。") ]
+          ] },
+        { skill:"Language & Structure", vi:"Ngôn ngữ & Cấu trúc", zh:"语言与结构", cls:"",
+          cells:[
+            [ P("Writes short, simple sentences. Uses mostly literal verbs (“shows”, “is”, “looks”).",
+                "Viết những câu ngắn, đơn giản. Chủ yếu dùng động từ nghĩa đen (“cho thấy”, “là”, “trông có vẻ”).", "简短句子。") ],
+            [ P("Expands sentences with connectives like because or so. Begins using evaluative words (“important”, “brave”).",
+                "Mở rộng câu bằng các từ nối như vì hoặc vì vậy. Bắt đầu dùng các từ đánh giá (“quan trọng”, “can đảm”).", "更长句子与评价词。") ],
+            [ P("Uses complex and precise sentences. Combines description and explanation smoothly with analytical verbs (“symbolises”, “reveals”).",
+                "Sử dụng câu phức tạp và chính xác. Kết hợp miêu tả và giải thích một cách trôi chảy cùng các động từ phân tích (“tượng trưng cho”, “hé lộ”).", "复杂句与分析动词。") ],
+            [ P("Writes fluently in a formal and cohesive style. Varies sentence structures to show cause, effect, and interpretation.",
+                "Viết trôi chảy theo phong cách trang trọng, mạch lạc. Thay đổi cấu trúc câu để thể hiện nguyên nhân, kết quả và cách diễn giải.", "正式、流畅、多样句式。") ]
+          ] },
+        { skill:"Purpose & Interpretation", vi:"Mục đích & Diễn giải", zh:"目的与解读", cls:"purp",
+          cells:[
+            [ P("Identifies the basic meaning or message of a scene.",
+                "Xác định ý nghĩa hoặc thông điệp cơ bản của một cảnh quay.", "识别基本信息。") ],
+            [ P("Explains the purpose or audience effect (“to make us feel sad”, “to show distance”).",
+                "Giải thích mục đích hoặc tác động đến khán giả (“để khiến chúng ta cảm thấy buồn”, “để thể hiện khoảng cách”).", "解释受众效果。") ],
+            [ P("Makes inferences about the director's intent or cultural perspective.",
+                "Suy luận về ý định của đạo diễn hoặc góc nhìn văn hoá.", "推断导演视角。") ],
+            [ P("Discusses deeper social or moral ideas, linking the director's choices to historical or ethical context.",
+                "Bàn luận về những ý tưởng xã hội hoặc đạo đức sâu sắc hơn, liên kết các lựa chọn của đạo diễn với bối cảnh lịch sử hoặc đạo đức.", "探讨更深层社会/道德意义。") ]
+          ] }
+      ] }
+  ] },
+
+/* ---------------------------------------------------------------- */
+{ id:"reading", emoji:"📖", title:"Reading",
+  sub:"Reading aloud, and responding to what you have read.",
+  bands:["C2","C3","C4","VCE 1","VCE 2"],
+  rows:[
+    { skill:"Reading aloud", vi:"Đọc thành tiếng", zh:"朗读", cls:"",
+      cells:[
+        [ P("Read with some rhythm emphasis and tone variation.",
+            "Đọc với một chút nhịp điệu, nhấn mạnh và thay đổi giọng điệu.", "朗读时有一定的节奏、重音和语调变化。") ],
+        [ P("Rhythm and emphasis match text's purpose",
+            "Nhịp điệu và trọng âm phù hợp với mục đích của văn bản.", "节奏与重音与文本的目的相匹配。") ],
+        [ P("Read with precise and subtle rhythm tone and emphasis",
+            "Đọc với nhịp điệu, giọng điệu và trọng âm chính xác và tinh tế.", "以精确而细腻的节奏、语调和重音朗读。") ],
+        [], []
+      ] },
+    { skill:"Summary", vi:"Tóm tắt", zh:"概括", cls:"",
+      cells:[
+        [ P("Extract main ideas from texts",
+            "Rút ra những ý chính từ văn bản.", "从文本中提取主要观点。") ],
+        [ P("Explain main ideas and plot developments",
+            "Giải thích những ý chính và diễn biến cốt truyện.", "解释主要观点与情节发展。") ],
+        [ P("Use appropriate language to Identify and infer ideas, themes, and plot details",
+            "Sử dụng ngôn ngữ phù hợp để xác định và suy luận các ý tưởng, chủ đề và chi tiết cốt truyện.", "使用恰当的语言识别并推断观点、主题与情节细节。") ],
+        [ P("Uses precise and appropriate language to explore interconnected ideas and values presented in the text, including discussion of character, setting and other aspects of the text",
+            "Sử dụng ngôn ngữ chính xác và phù hợp để khám phá những ý tưởng và giá trị liên kết với nhau được trình bày trong văn bản, bao gồm thảo luận về nhân vật, bối cảnh và các khía cạnh khác của văn bản.", "使用精准恰当的语言，探讨文本中相互关联的观点与价值观，包括对人物、背景及文本其他方面的讨论。") ],
+        [ P("Uses nuanced and appropriate language to examine the text fluently and critically.",
+            "Sử dụng ngôn ngữ tinh tế và phù hợp để phân tích văn bản một cách trôi chảy và có phản biện.", "使用细腻恰当的语言，流畅而具批判性地审视文本。") ]
+      ] },
+    { skill:"Evidence", vi:"Bằng chứng", zh:"证据", cls:"",
+      cells:[
+        [ P("Use quotes to link to ideas.",
+            "Dùng trích dẫn để liên kết với các ý tưởng.", "用引用来连接观点。") ],
+        [ P("Use metalanguage, and quotes to support ideas",
+            "Dùng siêu ngôn ngữ và trích dẫn để hỗ trợ các ý tưởng.", "运用元语言和引用来支持观点。") ],
+        [ P("Embed evidence and use appropriate metalanguage to discuss. Make clear links to themes and ideas",
+            "Lồng ghép bằng chứng và dùng siêu ngôn ngữ phù hợp để thảo luận. Tạo liên kết rõ ràng với chủ đề và ý tưởng.", "嵌入证据并使用恰当的元语言进行论述，与主题和观点建立清晰的联系。") ],
+        [ P("Embeds relevant textual evidence to explain how the author has conveyed ideas in the text presented in response to the topic.",
+            "Lồng ghép bằng chứng văn bản phù hợp để giải thích cách tác giả truyền tải các ý tưởng trong văn bản, đáp ứng đúng đề bài.", "嵌入相关的文本证据，解释作者如何在文本中传达观点，并紧扣题目作出回应。") ],
+        [ P("Integrates relevant textual evidence with precision and control to examine critically the ways in which ideas are presented in the text in consideration of the topic.",
+            "Tích hợp bằng chứng văn bản phù hợp một cách chính xác và có kiểm soát để phân tích phản biện cách các ý tưởng được trình bày trong văn bản, gắn với đề bài.", "精准而有把控地整合相关文本证据，结合题目批判性地审视文本中呈现观点的方式。") ]
+      ] },
+    { skill:"Text purpose", vi:"Mục đích của văn bản", zh:"文本的目的", cls:"",
+      cells:[
+        [ P("Identify common text types and features",
+            "Nhận biết các loại văn bản và đặc điểm phổ biến.", "识别常见的文本类型与特征。") ],
+        [ P("Identify the main purpose of the text and describe text features",
+            "Xác định mục đích chính của văn bản và mô tả các đặc điểm của văn bản.", "确定文本的主要目的，并描述文本特征。") ],
+        [ P("Discuss how specific text features relate to the purpose. Make inferences about the author's intent",
+            "Thảo luận về việc các đặc điểm cụ thể của văn bản liên quan thế nào đến mục đích. Suy luận về ý định của tác giả.", "讨论具体的文本特征如何与目的相关联，并推断作者的意图。") ],
+        [ P("Discuss and examine how structures, language features and vocabulary choices relate to the purpose. Make inferences about the author's complex and nuanced ideas.",
+            "Thảo luận và phân tích cách cấu trúc, đặc điểm ngôn ngữ và lựa chọn từ vựng liên quan đến mục đích. Suy luận về những ý tưởng phức tạp và tinh tế của tác giả.", "讨论并考察结构、语言特征与词汇选择如何与目的相关联，并推断作者复杂而细腻的观点。") ],
+        [ P("Discuss and Critically examine how structures, language features and vocabulary choices relate to the purpose. Make inferences about the author's ideas, concerns and values",
+            "Thảo luận và phân tích phản biện cách cấu trúc, đặc điểm ngôn ngữ và lựa chọn từ vựng liên quan đến mục đích. Suy luận về các ý tưởng, mối quan tâm và giá trị của tác giả.", "讨论并批判性地考察结构、语言特征与词汇选择如何与目的相关联，并推断作者的观点、关切与价值观。") ]
+      ] }
+  ] },
+
+/* ---------------------------------------------------------------- */
+{ id:"speaking", emoji:"🗣️", title:"Speaking & Listening",
+  sub:"What you can do when you speak and listen.",
+  bands:["C2","C3","C4"],
+  rows:[
+    { skill:"Speech sounds, intonation and stress", vi:"Âm, ngữ điệu và trọng âm", zh:"语音、语调与重音", cls:"",
+      cells:[
+        [ P("I can speak clearly.", "Tôi có thể nói rõ ràng.", "我能说得清楚。"),
+          P("I am building my skills in intonation, pronunciation, stress, and eye contact.",
+            "Tôi đang rèn luyện kỹ năng về ngữ điệu, phát âm, trọng âm và giao tiếp bằng mắt.", "我正在培养语调、发音、重音和眼神交流方面的能力。") ],
+        [ P("I can control rhythm, stress, non-verbal cues, and intonation when speaking.",
+            "Tôi có thể kiểm soát nhịp điệu, trọng âm, tín hiệu phi ngôn ngữ và ngữ điệu khi nói.", "说话时我能掌控节奏、重音、非语言信号和语调。") ],
+        [ P("I can pronounce most sounds correctly.", "Tôi có thể phát âm đúng hầu hết các âm.", "我能正确发出大部分音。"),
+          P("I can manipulate Rhythm and intonation to make subtle changes in meaning",
+            "Tôi có thể điều chỉnh nhịp điệu và ngữ điệu để tạo ra những thay đổi tinh tế về nghĩa.", "我能调整节奏与语调，从而带来细微的意义变化。") ]
+      ] },
+    { skill:"Interaction", vi:"Tương tác", zh:"互动", cls:"",
+      cells:[
+        [ P("I can participate in structured discussions.",
+            "Tôi có thể tham gia vào các cuộc thảo luận có cấu trúc.", "我能参与有结构的讨论。") ],
+        [ P("I can listen, question and respond in structured academic and social settings.",
+            "Tôi có thể lắng nghe, đặt câu hỏi và phản hồi trong các bối cảnh học thuật và xã hội có cấu trúc.", "在有结构的学术和社交场合中，我能倾听、提问并作出回应。") ],
+        [ P("I can engage in extended discussions on a wide range of topics, respond appropriately to audience",
+            "Tôi có thể tham gia các cuộc thảo luận dài về nhiều chủ đề khác nhau và phản hồi phù hợp với người nghe.", "我能就广泛的话题展开深入讨论，并对听众作出恰当回应。") ]
+      ] },
+    { skill:"Listening", vi:"Nghe", zh:"听力", cls:"",
+      cells:[
+        [ P("I can identify key ideas from spoken texts.",
+            "Tôi có thể nhận ra những ý chính từ văn bản nói.", "我能从口头材料中识别出关键观点。") ],
+        [ P("I can extract specific information from spoken texts.",
+            "Tôi có thể rút ra thông tin cụ thể từ văn bản nói.", "我能从口头материалов中提取具体信息。") ],
+        [ P("I can use the speaker's tone and rhythm to make inferences about their meaning.",
+            "Tôi có thể dựa vào giọng điệu và nhịp điệu của người nói để suy luận ý của họ.", "我能根据说话者的语调和节奏推断其含义。") ]
+      ] },
+    { skill:"Connectives", vi:"Từ nối", zh:"连接词", cls:"",
+      cells:[
+        [ P("I can use basic connectives to show relationships between ideas.",
+            "Tôi có thể dùng các từ nối cơ bản để thể hiện mối quan hệ giữa các ý.", "我能使用基本的连接词来表达观点之间的关系。") ],
+        [ P("I can use question types, time signals, and conjunctions effectively when speaking to link ideas and events.",
+            "Khi nói, tôi có thể dùng hiệu quả các dạng câu hỏi, dấu hiệu thời gian và liên từ để liên kết các ý và sự kiện.", "说话时我能有效使用各类疑问句、时间信号词和连词，将观点与事件连接起来。") ],
+        [ P("I can use complex, detailed sentences to express myself.",
+            "Tôi có thể dùng những câu phức tạp, chi tiết để diễn đạt bản thân.", "我能用复杂、详细的句子来表达自己。") ]
+      ] },
+    { skill:"Grammar", vi:"Ngữ pháp", zh:"语法", cls:"",
+      cells:[
+        [ P("I can use a variety of common sentence patterns.",
+            "Tôi có thể dùng nhiều mẫu câu thông dụng.", "我能使用多种常见的句型。"),
+          P("I can speak with accuracy in one tense.",
+            "Tôi có thể nói chính xác ở một thì.", "我能准确地使用一种时态说话。"),
+          P("I can use some complex grammatical structures with support",
+            "Tôi có thể dùng một số cấu trúc ngữ pháp phức tạp khi có hỗ trợ.", "在有帮助的情况下，我能使用一些复杂的语法结构。") ],
+        [ P("I can speak with consistent accuracy in one tense.",
+            "Tôi có thể nói chính xác và nhất quán ở một thì.", "我能始终准确地使用一种时态说话。"),
+          P("I can use modal verbs accurately.",
+            "Tôi có thể dùng động từ khuyết thiếu một cách chính xác.", "我能准确使用情态动词。"),
+          P("I can use some complex grammatical features with accuracy.",
+            "Tôi có thể dùng chính xác một số đặc điểm ngữ pháp phức tạp.", "我能准确使用一些复杂的语法特征。") ],
+        [ P("I can accurately apply complex grammatical features such as modal verbs, passive voice, and varied tenses",
+            "Tôi có thể áp dụng chính xác các đặc điểm ngữ pháp phức tạp như động từ khuyết thiếu, thể bị động và các thì khác nhau.", "我能准确运用复杂的语法特征，例如情态动词、被动语态和多种时态。") ]
+      ] }
+  ] },
+
+/* ---------------------------------------------------------------- */
+{ id:"writing", emoji:"✏️", title:"Writing",
+  sub:"Grammar and word choice in your own writing.",
+  bands:["C2","C3","C4"],
+  rows:[
+    { skill:"Grammar", vi:"Ngữ pháp", zh:"语法", cls:"",
+      cells:[
+        [ P("Mostly consistent use of tense and perspective (usually stays in 1st person).",
+            "Sử dụng thì và ngôi kể khá nhất quán (thường giữ ở ngôi thứ nhất).", "时态和人称的使用大体一致（通常保持第一人称）。"),
+          P("Sentences are mostly simple.", "Câu chủ yếu là câu đơn.", "句子以简单句为主。") ],
+        [ P("Uses a range of tenses (past, present, future) with some control.",
+            "Sử dụng nhiều thì khác nhau (quá khứ, hiện tại, tương lai) với mức kiểm soát nhất định.", "能在一定程度上掌控多种时态（过去、现在、将来）。"),
+          P("Attempts compound and some complex sentences.",
+            "Thử viết câu ghép và một số câu phức.", "尝试写并列句和一些复合句。") ],
+        [ P("Uses a variety of sentence structures (simple, compound, complex) accurately.",
+            "Sử dụng chính xác nhiều cấu trúc câu khác nhau (câu đơn, câu ghép, câu phức).", "能准确使用多种句子结构（简单句、并列句、复合句）。"),
+          P("Controls tense shifts and perspective confidently.",
+            "Kiểm soát tự tin việc chuyển thì và ngôi kể.", "能自信地掌控时态转换与叙述视角。") ]
+      ] },
+    { skill:"Vocabulary and word choice", vi:"Từ vựng và lựa chọn từ", zh:"词汇与用词", cls:"",
+      cells:[
+        [ P("Uses some adjectives, conjunctions (and, but, because), and adverbs.",
+            "Dùng một số tính từ, liên từ (and, but, because) và trạng từ.", "使用一些形容词、连词（and、but、because）和副词。"),
+          P("Vocabulary is mostly general.", "Từ vựng chủ yếu là từ chung chung.", "词汇大多较为笼统。") ],
+        [ P("Uses a wider range of verbs, nouns, adjectives.",
+            "Dùng nhiều loại động từ, danh từ, tính từ hơn.", "使用范围更广的动词、名词和形容词。"),
+          P("Begins to choose more specific words.",
+            "Bắt đầu chọn những từ cụ thể hơn.", "开始选用更具体的词语。"),
+          P("Uses connectives to link ideas.",
+            "Dùng từ nối để liên kết các ý.", "使用连接词来串联观点。") ],
+        [ P("Chooses precise vocabulary to express meaning clearly.",
+            "Chọn từ vựng chính xác để diễn đạt ý nghĩa rõ ràng.", "选用精准的词汇来清晰表达意思。"),
+          P("Uses subject-specific or technical vocabulary where appropriate.",
+            "Dùng từ vựng chuyên ngành hoặc kỹ thuật khi phù hợp.", "在合适的情况下使用学科专用或专业术语。") ]
+      ] }
+  ],
+  /* Five task-specific writing rubrics that share this rubric's Grammar and
+     Vocabulary criteria (near-identical wording) and add their own extra
+     rows for that genre. Plain English, not yet translated — these are new
+     content, not reused from elsewhere on the page. Verbatim from
+     teaching/assessment/rubrics/*.docx. */
+  extensions:[
+    { title:"Persuasive Writing", sub:"Grammar + Vocabulary, plus Structure and Persuasive Techniques.",
+      bands:["C2","C3","C4"],
+      rows:[
+        { skill:"Grammar", cells:[
+          ["Uses simple sentences that are mostly clear. Mostly consistent use of one perspective (e.g. first or third person)."],
+          ["Uses a mix of sentence types and tenses. Attempts more complex structures (e.g. because, although, passive voice)."],
+          ["Uses a range of complex sentences accurately and controls tense and perspective to communicate ideas clearly to the reader."]
+        ] },
+        { skill:"Vocabulary & Word Choice", cells:[
+          ["Uses basic descriptive and persuasive words (e.g. good, harmful, important). Uses simple connectives (and, but, so)."],
+          ["Uses topic-specific vocabulary and a range of verbs, nouns and adjectives. Uses connectives to show reasons and ideas (because, however, therefore)."],
+          ["Uses precise and varied vocabulary to express ideas clearly and persuasively. Chooses language to influence the reader."]
+        ] },
+        { skill:"Structure", cells:[
+          ["Includes an introduction and at least one body paragraph. Some paragraphing."],
+          ["Includes a clear introduction, body paragraphs and conclusion. Ideas are organised logically."],
+          ["Writing is clearly organised with strong paragraph structure (e.g. TEEL) and clear links that guide the reader through the argument."]
+        ] },
+        { skill:"Persuasive Techniques", cells:[
+          ["Uses at least one persuasive technique (e.g. opinion statement, emotive words, rhetorical question)."],
+          ["Uses a range of persuasive techniques to support ideas and engage the reader."],
+          ["Uses carefully selected persuasive techniques strategically to influence and position the reader."]
+        ] }
+      ] },
+    { title:"Recount Writing", sub:"Grammar + Vocabulary, plus Orientation and Reflection.",
+      bands:["C2","C3","C4"],
+      rows:[
+        { skill:"Grammar", cells:[
+          ["Mostly consistent use of perspective (1st person, 3rd person)"],
+          ["Use some varied grammar structures including passive voice, and varied tenses"],
+          ["Use complex sentences with an accurate use of a variety of tenses and perspectives."]
+        ] },
+        { skill:"Vocabulary and word choice", cells:[
+          ["Use some interesting adjectives, conjunctions (for, and, nor, but, yet, so), and adverbs"],
+          ["Use some connectives (but, because…etc). Use a variety of specific verbs, nouns and adjectives"],
+          ["Make precise word choices to express ideas. Use some technical or poetic language"]
+        ] },
+        { skill:"Orientation", cells:[
+          ["Include the 5 W's"],
+          ["Set the scene using interesting descriptive language with a mix of senses included"],
+          ["Use sensory descriptions to “show don't tell”"]
+        ] },
+        { skill:"Reflection", cells:[
+          ["Share something that was new to you on the trip"],
+          ["Describe what you learned or will remember most about the trip"],
+          ["Share a detailed reflection about some aspect of the trip that impacted you"]
+        ] }
+      ] },
+    { title:"Magazine Writing", sub:"Grammar + Vocabulary, plus Structure, Experience/Reflections and Visual Design.",
+      bands:["C2","C3","C4"],
+      rows:[
+        { skill:"Grammar", cells:[
+          ["Mostly consistent use of perspective (1st person, 3rd person)"],
+          ["Use some varied grammar structures including passive voice, and varied tenses"],
+          ["Use complex sentences with an accurate use of a variety of tenses and perspectives."]
+        ] },
+        { skill:"Vocabulary and word choice", cells:[
+          ["Use some interesting adjectives, conjunctions (for, and, nor, but, yet, so), and adverbs"],
+          ["Use some connectives (but, because…etc). Use a variety of specific verbs, nouns and adjectives"],
+          ["Make precise word choices to express ideas. Use some technical or poetic language"]
+        ] },
+        { skill:"Structure", cells:[
+          ["The text is organised with paragraphs and headings. Includes an introduction"],
+          ["Text uses some of the following: subheadings, numbers, lists, different font sizes, diagrams and photos."],
+          ["Text is clearly and effectively organised, drawing attention to key ideas"]
+        ] },
+        { skill:"Experience & Reflections", cells:[
+          ["Share something that was new to you this semester"],
+          ["Describe what you learned or will remember most about your first term at Kew High School. Include some useful tips for future ELC students"],
+          ["Share a detailed reflection about some aspect of this term that impacted you. Demonstrate a strong understanding of the perspective of future ELC students."]
+        ] },
+        { skill:"Visual Design", cells:[
+          ["Magazine uses varied colours, fonts, and images"],
+          ["The magazine uses carefully selected colours, fonts, and images"],
+          ["The magazine uses colour, images, and font variation creatively and effectively"]
+        ] }
+      ] },
+    { title:"Procedural Text Writing", sub:"Grammar + Vocabulary, plus a procedural Structure row.",
+      bands:["C2","C3","C4"],
+      rows:[
+        { skill:"Grammar", cells:[
+          ["Mostly consistent use of perspective (1st person, 3rd person)"],
+          ["Use some varied grammar structures including passive voice, and varied tenses"],
+          ["Use complex sentences with accurate use of a variety of tenses and perspectives."]
+        ] },
+        { skill:"Vocabulary and word choice", cells:[
+          ["Use some interesting adjectives, conjunctions (for, and, nor, but, yet, so), and adverbs"],
+          ["Use some connectives (but, because…etc). Use a variety of specific verbs, nouns and adjectives"],
+          ["Make precise word choices to express ideas. Use some technical or poetic language"]
+        ] },
+        { skill:"Structure", cells:[
+          ["Text is organised into parts showing the goal, materials, method, and results"],
+          ["The text has an interesting introduction and organises parts clearly using some of the following: subheadings, numbers, lists, different font sizes, diagrams and photos."],
+          ["The text is structured using features chosen for its specific purpose or genre."]
+        ] }
+      ] },
+    { title:"Wiki Writing", sub:"Grammar + Vocabulary, plus Structure and Information & Evidence.",
+      bands:["C2","C3","C4"],
+      rows:[
+        { skill:"Grammar", cells:[
+          ["Mostly consistent use of perspective (1st person, 3rd person)"],
+          ["Use some varied grammar structures including passive voice, and varied tenses"],
+          ["Use complex sentences with an accurate use of a variety of tenses and perspectives."]
+        ] },
+        { skill:"Vocabulary and word choice", cells:[
+          ["Use some interesting adjectives, conjunctions (for, and, nor, but, yet, so), and adverbs"],
+          ["Use some connectives (but, because…etc). Use a variety of specific verbs, nouns and adjectives"],
+          ["Make precise word choices to express ideas. Use some technical language"]
+        ] },
+        { skill:"Structure", cells:[
+          ["The text is organised with paragraphs and headings. Includes an introduction"],
+          ["Text uses some of the following: subheadings, numbers, lists, different font sizes, diagrams and photos."],
+          ["Text is clearly and effectively organised, drawing attention to key ideas"]
+        ] },
+        { skill:"Information & Evidence", cells:[
+          ["Important information is included with some references listed"],
+          ["Detailed relevant information is included with mostly reliable references in a reference section"],
+          ["Detailed relevant information is included with reliable references numbered for each fact."]
+        ] }
+      ] }
+  ]
+}
+
 ];
-const BANDS = ["C2", "C3", "C4", "VCE 1"];
 </script>
 <!-- ===================== END CONTENT BLOCK ======================= -->
 
 <script>
 function esc(s){ return String(s).replace(/[&<>]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c])); }
-
 function phraseHTML(p){
   return `<span class="phrase" data-vi="${esc(p.vi)}" data-zh="${esc(p.zh)}">${esc(p.en)}</span>`;
 }
 
-function renderTable(){
-  const t = document.getElementById("rubricTable");
-  const thead = "<thead><tr><th>Skill area</th>" + BANDS.map(b=>`<th>${b}</th>`).join("") + "</tr></thead>";
-  const rows = RUBRIC.map(row => {
-    const skillCell = `<td class="skill"><span class="phrase" data-vi="${esc(row.vi)}" data-zh="${esc(row.zh)}">${esc(row.skill)}</span></td>`;
-    const cells = row.cells.map(phrases => `<td>${phrases.map(phraseHTML).join(" ")}</td>`).join("");
-    return `<tr class="${row.cls}">${skillCell}${cells}</tr>`;
-  }).join("");
-  t.innerHTML = thead + "<tbody>" + rows + "</tbody>";
-}
-renderTable();
+document.getElementById("jump").innerHTML = RUBRICS.map(r =>
+  `<a href="#${r.id}">${r.emoji} ${esc(r.title)}</a>`).join("");
 
-/* Tap a phrase -> show/hide its Vietnamese + Chinese gloss. One phrase at a
-   time toggles independently; nothing whole-page or whole-cell switches. */
+document.getElementById("sections").innerHTML = RUBRICS.map(r => {
+  const legend = r.legend ? `<div class="legend">
+      <span class="sw"><span class="dot evid"></span>Evidence &amp; metalanguage</span>
+      <span class="sw"><span class="dot purp"></span>Purpose &amp; interpretation</span>
+      <span class="sw"><span class="dot idea"></span>Ideas &amp; themes</span>
+    </div>` : "";
+  const cta = r.cta ? `<a class="card" href="${r.cta.href}">
+      <span class="emoji">${r.cta.emoji}</span>
+      <span><h3>${esc(r.cta.h)}</h3><p>${esc(r.cta.p)}</p></span>
+      <span class="go">→</span></a>` : "";
+  const head = `<thead><tr><th>Skill area</th>${r.bands.map(b=>`<th>${esc(b)}</th>`).join("")}</tr></thead>`;
+  const body = "<tbody>" + r.rows.map(row => {
+    const cells = r.bands.map((_,i) => {
+      const ph = row.cells[i] || [];
+      return ph.length
+        ? `<td>${ph.map(phraseHTML).join(" ")}</td>`
+        : `<td class="empty"></td>`;
+    }).join("");
+    return `<tr class="${row.cls}"><td class="skill">${phraseHTML(P(row.skill,row.vi,row.zh))}</td>${cells}</tr>`;
+  }).join("") + "</tbody>";
+  const extras = (r.extensions||[]).map(extHTML).join("");
+  return `<section id="${r.id}">
+      <h2 class="sec">${r.emoji} ${esc(r.title)}</h2>
+      <p class="sub">${esc(r.sub)}</p>
+      ${cta}${legend}
+      <div class="scroll"><table class="rubric">${head}${body}</table></div>
+      ${extras ? `<div class="extgroup"><div class="lbl">Related rubrics — same shape, extra rows</div>${extras}</div>` : ""}
+    </section>`;
+}).join("");
+
+/* An extension: a related rubric that reuses its parent's row/band shape.
+   A cell is either a plain string (no translation yet) or a P(en,vi,zh)
+   object (translated) — both render, mixed freely within one table. */
+function extHTML(x){
+  const head = `<thead><tr><th>Skill area</th>${x.bands.map(b=>`<th>${esc(b)}</th>`).join("")}</tr></thead>`;
+  const body = "<tbody>" + x.rows.map(row => {
+    const cells = x.bands.map((_,i) => {
+      const ph = row.cells[i] || [];
+      if(!ph.length) return `<td class="empty"></td>`;
+      const first = ph[0];
+      const translated = typeof first === "object";
+      return `<td>${translated ? ph.map(phraseHTML).join(" ") : ph.map(esc).join(" ")}</td>`;
+    }).join("");
+    const skillCell = row.vi
+      ? `<td class="skill">${phraseHTML(P(row.skill,row.vi,row.zh))}</td>`
+      : `<td class="skill">${esc(row.skill)}</td>`;
+    return `<tr class="${row.cls||""}">${skillCell}${cells}</tr>`;
+  }).join("") + "</tbody>";
+  const table = x.rows.some(r=>r.vi) || x.rows.some(r=>(r.cells[0]||[])[0] && typeof (r.cells[0]||[])[0]==="object")
+    ? `<table class="rubric">${head}${body}</table>`
+    : `<table class="plain">${head}${body}</table>`;
+  return `<details class="ext">
+      <summary>${esc(x.title)} <span class="exsub">${esc(x.sub)}</span></summary>
+      <div class="extbody"><div class="scroll">${table}</div></div>
+    </details>`;
+}
+
+/* Tap a phrase -> its Vietnamese and Chinese. One phrase at a time,
+   independent of every other. */
 document.addEventListener("click", e=>{
   const ph = e.target.closest(".phrase");
   if(!ph) return;
