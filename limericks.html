@@ -4,20 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Limerick Workshop — ELC Hub</title>
-<style>
-html,body{height:100%;margin:0;background:#f4efe6}
-iframe{display:block;width:100%;height:100%;border:0}
-</style>
+<style>html,body{height:100%;margin:0;background:#f4efe6}iframe{display:block;width:100%;height:100%;border:0}</style>
 </head>
 <body>
-<iframe id="workshop" src="limericks-workshop-shell.html?v=20260807-annotated-1" title="Limerick Workshop"></iframe>
+<iframe id="workshop" src="limericks-workshop-shell.html?v=20260807-analysis-tabs-1" title="Limerick Workshop"></iframe>
 <script>
 const frame=document.getElementById('workshop');
 frame.addEventListener('load',async()=>{
   try{
-    const response=await fetch('limericks-runtime.js?v=20260807-annotated-1',{cache:'no-store'});
+    const response=await fetch('limericks-runtime.js?v=20260807-analysis-tabs-1',{cache:'no-store'});
     if(!response.ok) throw new Error(`Runtime request failed: ${response.status}`);
-    const source=await response.text();
+    let source=await response.text();
     const oldCheck=`    if (slots.some((item, index) => item.slot !== index)) {
       setFeedback($('#classFeedback'), 'No. The rhyme works, but at least one line does not make sense. Move the words and try again.', false);
       return;
@@ -25,106 +22,59 @@ frame.addEventListener('load',async()=>{
     setFeedback($('#classFeedback'), 'Yes. This is one of four correct poems: AABBA, sensible lines and two clear rhyme families.', true);`;
     const newCheck=`    const aWords = [slots[0].word, slots[1].word, slots[4].word].map(normalise);
     const bWords = [slots[2].word, slots[3].word].map(normalise);
-    const validA = [
-      ['drew', 'blue', 'canoe'],
-      ['may', 'day', 'hooray']
-    ];
-    const validB = [
-      ['hat', 'cat'],
-      ['bat', 'cat'],
-      ['cat', 'bat'],
-      ['floor', 'door']
-    ];
-    const sensibleA = validA.some((combination) => combination.every((word, index) => word === aWords[index]));
-    const sensibleB = validB.some((combination) => combination.every((word, index) => word === bWords[index]));
+    const validA = [['drew','blue','canoe'],['may','day','hooray']];
+    const validB = [['hat','cat'],['bat','cat'],['cat','bat'],['floor','door']];
+    const sensibleA = validA.some((combination) => combination.every((word,index) => word === aWords[index]));
+    const sensibleB = validB.some((combination) => combination.every((word,index) => word === bWords[index]));
     if (!sensibleA || !sensibleB) {
       setFeedback($('#classFeedback'), 'No. The rhymes match, but this word order does not make a sensible poem. Try a different arrangement.', false);
       return;
     }
     setFeedback($('#classFeedback'), 'Yes. This is one of eight correct poems: AABBA, sensible lines and two clear rhyme families.', true);`;
-    const patched=source.replace(oldCheck,newCheck);
-    if(patched===source) throw new Error('The rhyme-tub checker patch did not match the current runtime.');
+    source=source.replace(oldCheck,newCheck);
+    source=source.replace("completed: new Set([0, 1])","completed: new Set([0])");
+    source=source.replace("const isComplete = (index) => Boolean(slides[index]?.dataset.free) || state.completed.has(index);","const isComplete = (index) => index === 1 ? state.completed.has(1) : Boolean(slides[index]?.dataset.free) || state.completed.has(index);");
+    source=source.replace("function completeSlide(index) {\n    state.completed.add(index);","function completeSlide(index) {\n    state.completed.add(index);\n    window.__completeLimerickSlide = completeSlide;");
     const doc=frame.contentDocument;
     const script=doc.createElement('script');
-    script.textContent=patched;
+    script.textContent=source;
     doc.body.appendChild(script);
-    installAnnotatedReveal(doc);
-  }catch(error){
-    console.error('Could not start the limerick workshop.',error);
-    const message=frame.contentDocument.createElement('p');
-    message.textContent='The workshop did not load. Please refresh the page.';
-    message.style.cssText='font:700 16px system-ui;padding:24px;color:#a7352a';
-    frame.contentDocument.body.appendChild(message);
-  }
+    installModelAnalysis(doc);
+  }catch(error){console.error('Could not start the limerick workshop.',error)}
 });
 
-function installAnnotatedReveal(doc){
+function installModelAnalysis(doc){
   const button=doc.getElementById('revealBtn');
   const poem=doc.querySelector('.poem');
   const oldReveal=doc.getElementById('reveal');
   if(!button||!poem||!oldReveal)return;
-
+  button.remove();oldReveal.remove();
   const style=doc.createElement('style');
   style.textContent=`
-    .model-breakdown{position:relative;display:grid;gap:8px;padding:8px 2px 2px}
-    .model-row{display:grid;grid-template-columns:42px minmax(0,1fr) 190px;align-items:center;gap:10px;position:relative;min-height:48px;padding:6px 8px;border-radius:11px;transition:.25s}
-    .model-row.short{margin-inline:34px}
-    .model-letter{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:950;opacity:0;transform:scale(.7);transition:.25s}
-    .model-text{font-size:1.05rem;line-height:1.55}
-    .rhyme-word{position:relative;font-weight:950;padding:1px 4px;border-radius:6px;transition:.25s}
-    .model-note{opacity:0;transform:translateX(10px);font-size:.78rem;font-weight:800;padding:7px 9px;border-radius:9px;transition:.25s}
-    .rhythm-track{display:none;height:8px;border-radius:999px;background:#ddd3c2;overflow:hidden;margin:4px 0 0 42px;max-width:390px}
-    .rhythm-fill{height:100%;border-radius:inherit;transform-origin:left;animation:growBar .4s ease both}
-    .syllable-count{display:none;margin-left:8px;font-size:.72rem;font-weight:900;color:var(--muted)}
-    .model-breakdown.step1 .model-letter,.model-breakdown.step2 .model-letter,.model-breakdown.step3 .model-letter,.model-breakdown.step4 .model-letter{opacity:1;transform:none}
-    .model-breakdown.step1 .Arow .model-letter,.model-breakdown.step2 .Arow .model-letter,.model-breakdown.step3 .Arow .model-letter,.model-breakdown.step4 .Arow .model-letter{background:var(--a-soft);color:var(--a)}
-    .model-breakdown.step1 .Brow .model-letter,.model-breakdown.step2 .Brow .model-letter,.model-breakdown.step3 .Brow .model-letter,.model-breakdown.step4 .Brow .model-letter{background:var(--b-soft);color:var(--b)}
-    .model-breakdown.step1 .Aword,.model-breakdown.step2 .Aword,.model-breakdown.step3 .Aword,.model-breakdown.step4 .Aword{background:var(--a-soft);color:var(--a);box-shadow:inset 0 -3px 0 var(--a)}
-    .model-breakdown.step1 .Bword,.model-breakdown.step2 .Bword,.model-breakdown.step3 .Bword,.model-breakdown.step4 .Bword{background:var(--b-soft);color:var(--b);box-shadow:inset 0 -3px 0 var(--b)}
-    .model-breakdown.step1 .rhyme-word::after,.model-breakdown.step2 .rhyme-word::after,.model-breakdown.step3 .rhyme-word::after,.model-breakdown.step4 .rhyme-word::after{content:'↙';position:absolute;right:-22px;top:-17px;font-size:1rem}
-    .model-breakdown.step1 .Aword::after,.model-breakdown.step2 .Aword::after,.model-breakdown.step3 .Aword::after,.model-breakdown.step4 .Aword::after{color:var(--a)}
-    .model-breakdown.step1 .Bword::after,.model-breakdown.step2 .Bword::after,.model-breakdown.step3 .Bword::after,.model-breakdown.step4 .Bword::after{color:var(--b)}
-    .model-breakdown.step2 .model-note,.model-breakdown.step3 .model-note,.model-breakdown.step4 .model-note{opacity:1;transform:none}
-    .model-breakdown.step2 .Arow .model-note,.model-breakdown.step3 .Arow .model-note,.model-breakdown.step4 .Arow .model-note{background:var(--a-soft);color:var(--a)}
-    .model-breakdown.step2 .Brow .model-note,.model-breakdown.step3 .Brow .model-note,.model-breakdown.step4 .Brow .model-note{background:var(--b-soft);color:var(--b)}
-    .model-breakdown.step3 .rhythm-track,.model-breakdown.step4 .rhythm-track,.model-breakdown.step3 .syllable-count,.model-breakdown.step4 .syllable-count{display:inline-block}
-    .model-breakdown.step3 .model-row.short,.model-breakdown.step4 .model-row.short{background:color-mix(in srgb,var(--b-soft) 55%,transparent)}
-    .annotation-key{display:none;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
-    .annotation-key div{padding:9px;border-radius:10px;border:1px solid var(--line);font-size:.78rem}
-    .model-breakdown.step4 + .annotation-key{display:grid}
-    .reveal-caption{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--accent-soft);font-weight:750;font-size:.86rem}
-    @keyframes growBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-    @media(max-width:760px){.model-row{grid-template-columns:34px 1fr}.model-note{grid-column:2}.model-row.short{margin-inline:10px}.annotation-key{grid-template-columns:1fr 1fr}}
-  `;
-  doc.head.appendChild(style);
-
-  poem.innerHTML=`<div class="model-breakdown" id="modelBreakdown">
-    <div class="model-row Arow"><span class="model-letter">A</span><div><div class="model-text">There once was a young man from <span class="rhyme-word Aword">Ealing</span>,</div><span class="rhythm-track"><span class="rhythm-fill" style="display:block;width:100%;background:var(--a)"></span></span><span class="syllable-count">9 syllables · long line</span></div><span class="model-note">Introduces the character and place</span></div>
-    <div class="model-row Arow"><span class="model-letter">A</span><div><div class="model-text">Who would always hang from the <span class="rhyme-word Aword">ceiling</span>.</div><span class="rhythm-track"><span class="rhythm-fill" style="display:block;width:100%;background:var(--a)"></span></span><span class="syllable-count">9 syllables · long line</span></div><span class="model-note">Adds the strange or funny habit</span></div>
-    <div class="model-row Brow short"><span class="model-letter">B</span><div><div class="model-text">He couldn’t wear a <span class="rhyme-word Bword">hat</span>,</div><span class="rhythm-track"><span class="rhythm-fill" style="display:block;width:66%;background:var(--b)"></span></span><span class="syllable-count">6 syllables · short line</span></div><span class="model-note">Starts the problem or complication</span></div>
-    <div class="model-row Brow short"><span class="model-letter">B</span><div><div class="model-text">But could hang like a <span class="rhyme-word Bword">bat</span>,</div><span class="rhythm-track"><span class="rhythm-fill" style="display:block;width:66%;background:var(--b)"></span></span><span class="syllable-count">6 syllables · short line</span></div><span class="model-note">Develops the action with a matching B rhyme</span></div>
-    <div class="model-row Arow"><span class="model-letter">A</span><div><div class="model-text">And said, “What a wonderful <span class="rhyme-word Aword">feeling</span>!”</div><span class="rhythm-track"><span class="rhythm-fill" style="display:block;width:100%;background:var(--a)"></span></span><span class="syllable-count">9 syllables · long line</span></div><span class="model-note">Returns to A and lands the ending</span></div>
-  </div><div class="annotation-key" id="annotationKey"><div><b style="color:var(--a)">Blue A rhyme</b><br>Lines 1, 2 and 5 connect.</div><div><b style="color:var(--b)">Orange B rhyme</b><br>Lines 3 and 4 connect.</div><div><b>Line length</b><br>Long, long, short, short, long.</div><div><b>Meaning</b><br>Character → habit → problem → action → ending.</div></div><div class="reveal-caption" id="revealCaption">Read it aloud first. What do you notice?</div>`;
-  oldReveal.style.display='none';
-
-  const captions=[
-    'Read it aloud first. What do you notice?',
-    'The end words are colour coded. Follow the arrows: A rhymes with A; B rhymes with B.',
-    'Now read the annotations. Each line has a job in the tiny story.',
-    'Compare the rhythm bars: the middle B lines are shorter than the A lines.',
-    'The whole poem is pulled apart: AABBA rhyme, long–long–short–short–long rhythm, and a final line that closes the joke.'
+  .analysis-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.analysis-tab{border:2px solid var(--line);background:var(--card);padding:9px 14px;border-radius:999px;font-weight:900;cursor:pointer}.analysis-tab.active{background:var(--accent);color:white;border-color:var(--accent)}.analysis-tab.seen::after{content:' ✓'}
+  .analysis-board{display:grid;gap:8px}.analysis-row{display:grid;grid-template-columns:38px minmax(0,1fr) 220px;gap:10px;align-items:center;padding:8px;border-radius:12px}.analysis-row.short{margin-inline:34px}.letter-badge{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:950}.line-text{font-size:1.06rem;line-height:1.55}.end-word{font-weight:950;padding:1px 5px;border-radius:6px}.line-note{font-size:.79rem;font-weight:800;padding:8px 10px;border-radius:9px}.analysis-board[data-mode='rhyme'] .Arow .letter-badge,.analysis-board[data-mode='rhyme'] .Arow .end-word{background:var(--a-soft);color:var(--a)}.analysis-board[data-mode='rhyme'] .Brow .letter-badge,.analysis-board[data-mode='rhyme'] .Brow .end-word{background:var(--b-soft);color:var(--b)}.analysis-board[data-mode='rhyme'] .end-word{box-shadow:inset 0 -3px 0 currentColor;position:relative}.analysis-board[data-mode='rhyme'] .end-word::after{content:'↙';position:absolute;right:-22px;top:-17px}.analysis-board[data-mode='content'] .line-note{display:block}.analysis-board:not([data-mode='content']) .line-note{display:none}.analysis-board[data-mode='content'] .analysis-row{background:var(--accent-soft)}
+  .syllable-line{display:none;flex-wrap:wrap;gap:5px;margin-top:7px}.analysis-board[data-mode='syllables'] .syllable-line{display:flex}.analysis-board[data-mode='syllables'] .plain-line{display:none}.syllable-word{display:inline-flex;gap:3px;margin-right:7px}.syllable-box{border:2px solid var(--line);background:var(--card);padding:6px 8px;border-radius:8px;font-weight:900;min-width:34px;text-align:center}.analysis-board[data-mode='syllables'] .Arow .syllable-box{border-color:var(--a)}.analysis-board[data-mode='syllables'] .Brow .syllable-box{border-color:var(--b)}.syllable-total{margin-left:auto;font-size:.76rem;font-weight:900;color:var(--muted);align-self:center}.analysis-status{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--accent-soft);font-weight:800}.analysis-status.done{background:var(--good-soft);color:var(--good)}
+  @media(max-width:760px){.analysis-row{grid-template-columns:34px 1fr}.line-note{grid-column:2}.analysis-row.short{margin-inline:8px}.syllable-total{width:100%;margin-left:0}}
+  `;doc.head.appendChild(style);
+  const lines=[
+   {s:'A',text:'There once was a young man from Ealing,',end:'Ealing',note:'Introduces the character and place.',syll:[['There'],['once'],['was'],['a'],['young'],['man'],['from'],['Eal','ing']]},
+   {s:'A',text:'Who would always hang from the ceiling.',end:'ceiling',note:'Adds the strange or funny habit.',syll:[['Who'],['would'],['al','ways'],['hang'],['from'],['the'],['ceil','ing']]},
+   {s:'B',text:'He couldn’t wear a hat,',end:'hat',note:'Starts the problem or complication.',syll:[['He'],['could','n’t'],['wear'],['a'],['hat']]},
+   {s:'B',text:'But could hang like a bat,',end:'bat',note:'Develops the action and keeps the B rhyme.',syll:[['But'],['could'],['hang'],['like'],['a'],['bat']]},
+   {s:'A',text:'And said, “What a wonderful feeling!”',end:'feeling',note:'Returns to A and lands the ending.',syll:[['And'],['said'],['What'],['a'],['won','der','ful'],['feel','ing']]}
   ];
-  let step=0;
-  button.textContent='Reveal rhyme pattern';
-  const replacement=button.cloneNode(true);
-  button.replaceWith(replacement);
-  replacement.addEventListener('click',()=>{
-    step=step<4?step+1:0;
-    const board=doc.getElementById('modelBreakdown');
-    board.className=`model-breakdown${step?` step${step}`:''}`;
-    doc.getElementById('revealCaption').textContent=captions[step];
-    replacement.textContent=['Reveal rhyme pattern','Reveal line jobs','Reveal rhythm and syllables','Show the full annotation','Start the reveal again'][step];
-  });
+  const renderSyllables=(groups)=>groups.map(parts=>`<span class="syllable-word">${parts.map(p=>`<span class="syllable-box">${p}</span>`).join('')}</span>`).join('');
+  poem.innerHTML=`<div class="analysis-tabs"><button class="analysis-tab" data-mode="rhyme">Rhyme</button><button class="analysis-tab" data-mode="content">Content</button><button class="analysis-tab" data-mode="syllables">Syllables</button></div><div class="analysis-board" id="analysisBoard" data-mode="rhyme">${lines.map((l,i)=>`<div class="analysis-row ${l.s}row ${i===2||i===3?'short':''}"><span class="letter-badge">${l.s}</span><div><div class="plain-line line-text">${l.text.replace(l.end,`<span class="end-word">${l.end}</span>`)}</div><div class="syllable-line">${renderSyllables(l.syll)}<span class="syllable-total">${l.syll.reduce((n,w)=>n+w.length,0)} syllables</span></div></div><span class="line-note">${l.note}</span></div>`).join('')}</div><div class="analysis-status" id="analysisStatus">Open all three views before moving on: Rhyme, Content and Syllables.</div>`;
+  const seen=new Set();
+  const tabs=[...poem.querySelectorAll('.analysis-tab')];
+  function select(mode){
+    poem.querySelector('#analysisBoard').dataset.mode=mode;seen.add(mode);
+    tabs.forEach(t=>{t.classList.toggle('active',t.dataset.mode===mode);t.classList.toggle('seen',seen.has(t.dataset.mode));});
+    const status=poem.querySelector('#analysisStatus');
+    if(seen.size===3){status.className='analysis-status done';status.textContent='All three views checked. You can move to the class activity.';frame.contentWindow.__completeLimerickSlide?.(1)}else status.textContent=`Keep investigating: ${3-seen.size} view${3-seen.size===1?'':'s'} left.`;
+  }
+  tabs.forEach(t=>t.addEventListener('click',()=>select(t.dataset.mode)));
+  select('rhyme');
 }
 </script>
 </body>
