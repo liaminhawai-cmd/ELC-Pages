@@ -7,12 +7,12 @@
 <style>html,body{height:100%;margin:0;background:#f4efe6}iframe{display:block;width:100%;height:100%;border:0}</style>
 </head>
 <body>
-<iframe id="workshop" src="limericks-workshop-shell.html?v=20260807-open-rhymes-1" title="Limerick Workshop"></iframe>
+<iframe id="workshop" src="limericks-workshop-shell.html?v=20260807-open-builder-2" title="Limerick Workshop"></iframe>
 <script>
 const frame=document.getElementById('workshop');
 frame.addEventListener('load',async()=>{
   try{
-    const response=await fetch('limericks-runtime.js?v=20260807-open-rhymes-1',{cache:'no-store'});
+    const response=await fetch('limericks-runtime.js?v=20260807-open-builder-2',{cache:'no-store'});
     if(!response.ok) throw new Error(`Runtime request failed: ${response.status}`);
     let source=await response.text();
     const oldCheck=`    if (slots.some((item, index) => item.slot !== index)) {
@@ -42,11 +42,16 @@ frame.addEventListener('load',async()=>{
     return Boolean(familyA && familyA === familyB);
   };`;
     const newFamily=`  const irregularRhymes = {
-    through:'u-long',threw:'u-long',blue:'u-long',shoe:'u-long',too:'u-long',two:'u-long',do:'u-long',you:'u-long',
+    through:'u-long',threw:'u-long',drew:'u-long',sue:'u-long',blue:'u-long',shoe:'u-long',too:'u-long',two:'u-long',do:'u-long',you:'u-long',
+    may:'ay',ray:'ay',jay:'ay',day:'ay',play:'ay',stay:'ay',grey:'ay',away:'ay',tray:'ay',hooray:'ay',
+    june:'oon',moon:'oon',spoon:'oon',soon:'oon',noon:'oon',balloon:'oon',
+    lee:'ee',sea:'ee',tree:'ee',free:'ee',three:'ee',agree:'ee',knee:'ee',bee:'ee',
+    fred:'ed',ned:'ed',bed:'ed',red:'ed',head:'ed',said:'ed',spread:'ed',shed:'ed',
+    jake:'ake',cake:'ake',lake:'ake',snake:'ake',shake:'ake',awake:'ake',mistake:'ake',break:'ake',
     rough:'uff',tough:'uff',enough:'uff',cough:'off',though:'oh',go:'oh',show:'oh',flow:'oh',
     thought:'awt',bought:'awt',caught:'awt',bough:'ow',cow:'ow',now:'ow',how:'ow',
     one:'un',won:'un',sun:'un',done:'un',none:'un',come:'um',some:'um',home:'ohm',
-    said:'ed',head:'ed',bread:'ed',readpast:'ed',read:'eed',leadmetal:'ed',lead:'eed'
+    readpast:'ed',read:'eed',leadmetal:'ed',lead:'eed'
   };
   const spellingRhymeKey = (word) => {
     const normal = normalise(word);
@@ -71,11 +76,189 @@ frame.addEventListener('load',async()=>{
     const script=doc.createElement('script');
     script.textContent=source;
     doc.body.appendChild(script);
+    installIntroVisuals(doc);
     installModelAnalysis(doc);
+    installOpenClassBuilder(doc);
+    installGuidedRoleHelp(doc);
     const rhymeLead=doc.querySelector('#anchorA')?.closest('.slide')?.querySelector('.lead');
     if(rhymeLead)rhymeLead.innerHTML='Choose an anchor word for A and B, then type <b>your own</b> possible rhymes. The checker knows many sound families and also tests common word endings. English spelling can be tricky, so say uncertain pairs aloud and use the Pronunciation Hub.';
   }catch(error){console.error('Could not start the limerick workshop.',error)}
 });
+
+function installIntroVisuals(doc){
+  const slide=doc.querySelector('.slide[data-title="What is a limerick?"]');
+  const grid=slide?.querySelector('.feature-grid');
+  if(!slide||!grid)return;
+  const style=doc.createElement('style');
+  style.textContent=`
+    .limerick-shape{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(250px,.85fr);gap:14px;align-items:stretch;margin-top:14px}
+    .shape-poem,.shape-key{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+    .shape-poem{display:grid;gap:8px}.shape-row{display:grid;grid-template-columns:34px 1fr auto;gap:9px;align-items:center}.shape-row.short{padding-inline:42px}.shape-letter{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-weight:950}.shape-row.A .shape-letter{background:var(--a-soft);color:var(--a)}.shape-row.B .shape-letter{background:var(--b-soft);color:var(--b)}
+    .shape-bar{height:18px;border-radius:999px;position:relative;overflow:hidden}.shape-row.A .shape-bar{background:var(--a-soft);border:2px solid var(--a)}.shape-row.B .shape-bar{background:var(--b-soft);border:2px solid var(--b)}.shape-row.short .shape-bar{height:15px}
+    .shape-end{font-weight:950;font-size:.78rem;padding:4px 9px;border-radius:999px;white-space:nowrap}.shape-row.A .shape-end{background:var(--a-soft);color:var(--a)}.shape-row.B .shape-end{background:var(--b-soft);color:var(--b)}
+    .shape-beats{display:flex;gap:4px;position:absolute;inset:0;align-items:center;padding-inline:10px}.shape-beats i{width:7px;height:7px;border-radius:50%;background:currentColor;opacity:.55}.shape-row.A .shape-beats{color:var(--a)}.shape-row.B .shape-beats{color:var(--b)}
+    .shape-key{display:grid;gap:10px;align-content:start}.visual-rule{display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;padding:9px;border-radius:11px;background:var(--bg)}.visual-rule strong{display:block;font-size:.88rem}.visual-rule span{display:block;color:var(--muted);font-size:.78rem;margin-top:2px}.mini-aa{display:flex;gap:3px}.mini-aa i{width:12px;height:12px;border-radius:4px;background:var(--a)}.mini-aa i:nth-child(3),.mini-aa i:nth-child(4){background:var(--b)}.mini-length{display:grid;gap:4px}.mini-length i{display:block;height:5px;border-radius:99px;background:var(--a)}.mini-length i:nth-child(2){width:58%;background:var(--b)}.mini-bounce{font-weight:950;letter-spacing:.12em;color:var(--accent)}
+    .intro-caption{margin-top:10px;font-size:.8rem;color:var(--muted);text-align:center}.feature-grid.visual-hidden{display:none}
+    @media(max-width:760px){.limerick-shape{grid-template-columns:1fr}.shape-row.short{padding-inline:18px}}
+  `;
+  doc.head.appendChild(style);
+  grid.classList.add('visual-hidden');
+  const visual=doc.createElement('div');
+  visual.className='limerick-shape';
+  visual.innerHTML=`<div class="shape-poem" aria-label="Visual shape of a limerick">
+    <div class="shape-row A"><span class="shape-letter">A</span><span class="shape-bar"><span class="shape-beats"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span><span class="shape-end">same rhyme</span></div>
+    <div class="shape-row A"><span class="shape-letter">A</span><span class="shape-bar"><span class="shape-beats"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span><span class="shape-end">same rhyme</span></div>
+    <div class="shape-row B short"><span class="shape-letter">B</span><span class="shape-bar"><span class="shape-beats"><i></i><i></i><i></i><i></i><i></i></span></span><span class="shape-end">new rhyme</span></div>
+    <div class="shape-row B short"><span class="shape-letter">B</span><span class="shape-bar"><span class="shape-beats"><i></i><i></i><i></i><i></i><i></i></span></span><span class="shape-end">same B rhyme</span></div>
+    <div class="shape-row A"><span class="shape-letter">A</span><span class="shape-bar"><span class="shape-beats"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span></span><span class="shape-end">back to A</span></div>
+    <div class="intro-caption">See it first: <b>A A</b> are long, <b>B B</b> dip shorter, then line 5 returns to <b>A</b>.</div>
+  </div><div class="shape-key">
+    <div class="visual-rule"><span class="mini-aa"><i></i><i></i><i></i><i></i><i></i></span><div><strong>Colour = rhyme family</strong><span>Blue lines rhyme together. Orange lines rhyme together.</span></div></div>
+    <div class="visual-rule"><span class="mini-length"><i></i><i></i><i></i></span><div><strong>Length = the shape</strong><span>Lines 3–4 are usually shorter than 1, 2 and 5.</span></div></div>
+    <div class="visual-rule"><span class="mini-bounce">• • •</span><div><strong>Dots = syllable beats</strong><span>Say it aloud. The exact count can vary, but matching lines should bounce alike.</span></div></div>
+  </div>`;
+  grid.insertAdjacentElement('beforebegin',visual);
+}
+
+function installOpenClassBuilder(doc){
+  const tubs=doc.getElementById('tubs');
+  const poem=doc.getElementById('classPoem');
+  const checkOld=doc.getElementById('checkClassPoem');
+  const resetOld=doc.getElementById('resetClassPoem');
+  const feedback=doc.getElementById('classFeedback');
+  if(!tubs||!poem||!checkOld||!resetOld||!feedback)return;
+
+  const style=doc.createElement('style');
+  style.textContent=`
+    .open-family-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.open-family{border:1px solid var(--line);background:var(--card);border-radius:13px;padding:11px}.open-family h3{font-family:system-ui,sans-serif;font-size:.8rem;margin:0 0 7px}.open-family-buttons{display:flex;gap:6px;flex-wrap:wrap}.family-choice{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:6px 10px;font-weight:900;cursor:pointer}.family-choice.onA{background:var(--a);color:white;border-color:transparent}.family-choice.onB{background:var(--b);color:white;border-color:transparent}.open-note{grid-column:1/-1;background:var(--accent-soft);border-left:4px solid var(--accent);border-radius:9px;padding:9px 11px;font-size:.8rem}.open-options{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px}.line-choice{border:1px solid var(--line);background:var(--card);border-radius:9px;padding:7px 10px;font-weight:800;cursor:pointer;text-align:left}.line-choice:hover{border-color:var(--accent)}.line-choice.selected{outline:3px solid color-mix(in srgb,var(--accent) 34%,transparent);border-color:var(--accent)}.open-line-text{font-size:.98rem;line-height:1.5}.open-placeholder{color:var(--muted);font-style:italic}.role-label{font-size:.72rem;color:var(--muted);font-weight:800}.build-line.open-short{margin-inline:42px}.combo-count{font-size:.74rem;color:var(--muted);margin-top:7px}
+    @media(max-width:800px){.open-family-grid{grid-template-columns:1fr}.open-note{grid-column:auto}}@media(max-width:520px){.build-line.open-short{margin-inline:8px}}
+  `;
+  doc.head.appendChild(style);
+
+  const A={
+    oo:{label:'A · /ʉː/',slots:{
+      0:[['Drew','There once was a dancer named Drew'],['Sue','There once was a singer named Sue']],
+      1:[['blue','Who always wore a jacket of blue'],['shoe','Who danced every day in one shoe']],
+      4:[['canoe','Then sailed home at noon in a canoe'],['zoo','Then took the whole crowd to the zoo']]
+    }},
+    ay:{label:'A · /eɪ/',slots:{
+      0:[['May','There once was a skater named May'],['Ray','There once was a drummer named Ray']],
+      1:[['day','Who practised their steps every day'],['away','Who danced till the music faded away']],
+      4:[['hooray','Then bowed as the crowd cried hooray'],['away','Then laughed and went dancing away']]
+    }},
+    oon:{label:'A · /ʉːn/',slots:{
+      0:[['Moon','There once was a traveller from the Moon'],['June','There once was a child born in June']],
+      1:[['moon','Who rehearsed every night by the moon'],['noon','Who promised to practise by noon']],
+      4:[['moon','Then danced one last step by the moon'],['noon','Then promised to stop before noon']]
+    }},
+    ee:{label:'A · /iː/',slots:{
+      0:[['sea','There once was a sailor at sea'],['Lee','There once was a climber named Lee']],
+      1:[['tree','Who rehearsed by a tall old tree'],['be','Who said, “Watch how quick I can be!”']],
+      4:[['free','Then danced off at last feeling free'],['bee','Then bowed to a buzzing old bee']]
+    }},
+    ed:{label:'A · /ed/',slots:{
+      0:[['Fred','There once was a sleepyhead named Fred'],['Ned','There once was a baker called Ned']],
+      1:[['red','Who always wore bright clothes of red'],['bed','Who danced on the foot of the bed']],
+      4:[['bed','Then laughed and went straight back to bed'],['head','Then bowed with a bucket on their head']]
+    }},
+    ake:{label:'A · /eɪk/',slots:{
+      0:[['lake','There once was a chef by the lake'],['Jake','There once was a traveller named Jake']],
+      1:[['lake','Who practised each morning by the lake'],['cake','Who danced while they carried a cake']],
+      4:[['cake','Then celebrated later with cake'],['lake','Then splashed with a leap in the lake']]
+    }}
+  };
+  const B={
+    at:{label:'B · /æt/',slots:{
+      2:[['hat','They balanced a hat'],['bat','They startled a bat']],
+      3:[['cat','Then woke up a cat'],['mat','And slipped on a mat']]
+    }},
+    ore:{label:'B · /ɔː/',slots:{
+      2:[['floor','They slipped on the floor'],['shore','They danced by the shore']],
+      3:[['door','Then rolled through the door'],['more','And asked for one more']]
+    }},
+    og:{label:'B · /ɔg/',slots:{
+      2:[['log','They tripped on a log'],['dog','They startled a dog']],
+      3:[['frog','Then splashed near a frog'],['log','And hid behind a log']]
+    }},
+    ake:{label:'B · /eɪk/',slots:{
+      2:[['cake','They dropped the cake'],['lake','They jumped in the lake']],
+      3:[['snake','Beside a small snake'],['shake','Then danced with a shake']]
+    }}
+  };
+  const roles=['opening: person, animal or place','detail about the subject','short problem or action','short response or action','ending or punchline'];
+  let familyA='oo',familyB='at';
+  const chosen=[null,null,null,null,null];
+
+  function currentSet(index){return (index===0||index===1||index===4?A[familyA]:B[familyB]).slots[index]}
+  function selectOption(index,optIndex){
+    const option=currentSet(index)[optIndex];
+    chosen[index]={word:option[0],text:option[1],family:index===0||index===1||index===4?familyA:familyB};
+    renderPoem();
+  }
+  function renderFamilies(){
+    tubs.innerHTML=`<div class="open-family-grid"><div class="open-family"><h3 class="A">A rhyme · lines 1, 2 and 5</h3><div class="open-family-buttons">${Object.entries(A).map(([key,val])=>`<button class="family-choice ${key===familyA?'onA':''}" data-open-a="${key}">${val.label}</button>`).join('')}</div></div><div class="open-family"><h3 class="B">B rhyme · lines 3 and 4</h3><div class="open-family-buttons">${Object.entries(B).map(([key,val])=>`<button class="family-choice ${key===familyB?'onB':''}" data-open-b="${key}">${val.label}</button>`).join('')}</div></div><div class="open-note"><b>The opening frame changes with the rhyme.</b> A limerick does <em>not</em> need “from a place” every time. It can begin with a name, an animal, a place or another clear subject. Pick a family, then choose any sensible line below.</div></div>`;
+    tubs.querySelectorAll('[data-open-a]').forEach(btn=>btn.onclick=()=>{familyA=btn.dataset.openA;chosen[0]=chosen[1]=chosen[4]=null;renderFamilies();renderPoem()});
+    tubs.querySelectorAll('[data-open-b]').forEach(btn=>btn.onclick=()=>{familyB=btn.dataset.openB;chosen[2]=chosen[3]=null;renderFamilies();renderPoem()});
+  }
+  function renderPoem(){
+    poem.innerHTML=[0,1,2,3,4].map(index=>{
+      const scheme=index===0||index===1||index===4?'A':'B';
+      const options=currentSet(index);
+      const picked=chosen[index];
+      return `<div class="build-line ${index===2||index===3?'open-short':''}"><span class="badge ${scheme}">${scheme}</span><div><div class="role-label">Line ${index+1} · ${roles[index]}</div><div class="open-line-text ${picked?'':'open-placeholder'}">${picked?picked.text:'Choose one of the sensible options.'}</div><div class="open-options">${options.map((o,i)=>`<button class="line-choice ${picked&&picked.word===o[0]?'selected':''}" data-open-slot="${index}" data-open-option="${i}"><b>${o[0]}</b><span style="display:block;font-size:.72rem;color:var(--muted);font-weight:600">${o[1]}</span></button>`).join('')}</div></div></div>`;
+    }).join('')+`<div class="combo-count">Two choices on each line = <b>32 possible poems</b> for this pair of rhyme families. Change the A or B family for a different set.</div>`;
+    poem.querySelectorAll('[data-open-slot]').forEach(btn=>btn.onclick=()=>selectOption(Number(btn.dataset.openSlot),Number(btn.dataset.openOption)));
+  }
+  function clearFeedback(){feedback.className='';feedback.textContent=''}
+  const check=checkOld.cloneNode(true);checkOld.replaceWith(check);
+  const reset=resetOld.cloneNode(true);resetOld.replaceWith(reset);
+  reset.onclick=()=>{chosen.fill(null);clearFeedback();renderPoem()};
+  check.onclick=()=>{
+    if(chosen.some(x=>!x)){feedback.className='feedback bad';feedback.textContent='Choose one line option for all five lines first.';return}
+    const repeatedA=new Set([chosen[0].word.toLowerCase(),chosen[1].word.toLowerCase(),chosen[4].word.toLowerCase()]).size<3;
+    feedback.className='feedback good';
+    feedback.textContent=repeatedA?'Yes — the AABBA rhyme works and the lines make sense. You repeated one exact A ending, so try another option if you want a stronger poem.':'Yes — AABBA works, the line jobs make sense, and this is one of many valid combinations. Read it aloud and listen for the bounce.';
+  };
+  renderFamilies();renderPoem();
+}
+
+function installGuidedRoleHelp(doc){
+  const firstPick=doc.getElementById('pickA');
+  const builder=doc.getElementById('guidedBuilder');
+  if(!firstPick||!builder)return;
+  const starts={
+    '-oo':'There once was a dancer named Drew',
+    '-ay':'There once was a skater named May',
+    '-ight':'There once was a traveller out at night',
+    '-at':'There once was a very odd cat',
+    '-ake':'There once was a chef by the lake',
+    '-ore':'There once was a sailor on shore',
+    '-oon':'There once was a child born in June',
+    '-ee':'There once was a sailor at sea',
+    '-ed':'There once was a baker named Fred',
+    '-og':'There once was a frog on a log'
+  };
+  const slide=builder.closest('.slide');
+  const familyGrid=firstPick.closest('.family-grid');
+  if(familyGrid&&!slide.querySelector('.opening-help')){
+    const note=doc.createElement('div');note.className='callout opening-help';
+    note.innerHTML='<b>Line 1 can change shape.</b> You do not need a place word in every rhyme family. Use a name, animal, place or situation that naturally ends with your A rhyme.';
+    familyGrid.insertAdjacentElement('afterend',note);
+  }
+  function updateOpening(){
+    const active=doc.querySelector('#pickA [data-fam="A"].onA');
+    const family=active?.dataset.name||'-oo';
+    const button=doc.querySelector('[data-gstem="0"]');
+    if(button)button.textContent=starts[family]||'There once was a ___ who ___';
+    const row=doc.querySelector('[data-guided="0"]')?.closest('.builder-row');
+    const hint=row?.querySelector('.rowtop .hint');
+    if(hint)hint.textContent='introduce a person, animal, place or situation';
+  }
+  updateOpening();
+  doc.addEventListener('click',event=>{
+    if(event.target.closest('#pickA [data-fam="A"]'))setTimeout(updateOpening,0);
+  },true);
+}
 
 function installModelAnalysis(doc){
   const button=doc.getElementById('revealBtn');
@@ -100,7 +283,6 @@ function installModelAnalysis(doc){
   ];
   const renderSyllables=(groups)=>groups.map(parts=>`<span class="syllable-word">${parts.map(p=>`<span class="syllable-box">${p}</span>`).join('')}</span>`).join('');
   poem.innerHTML=`<div class="analysis-tabs"><button class="analysis-tab" data-mode="rhyme">Rhyme</button><button class="analysis-tab" data-mode="content">Content</button><button class="analysis-tab" data-mode="syllables">Syllables</button></div><div class="analysis-board" id="analysisBoard" data-mode="rhyme">${lines.map((l,i)=>`<div class="analysis-row ${l.s}row ${i===2||i===3?'short':''}"><span class="letter-badge">${l.s}</span><div><div class="plain-line line-text">${l.text.replace(l.end,`<span class="end-word">${l.end}</span>`)}</div><div class="syllable-line">${renderSyllables(l.syll)}<span class="syllable-total">${l.syll.reduce((n,w)=>n+w.length,0)} syllables<span class="count-tag">${l.s} line</span></span></div></div><span class="line-note">${l.note}</span></div>`).join('')}</div><div class="analysis-rule" id="analysisRule"></div>`;
-  /* Each view states the RULE it demonstrates, not just the example. */
   const RULES={
     rhyme:`<b>The rule:</b> a limerick rhymes <b class="ra">A A</b> <b class="rb">B B</b> <b class="ra">A</b>.
       Lines 1, 2 and 5 end on the same rhyme (<b class="ra">Ealing · ceiling · feeling</b>);
