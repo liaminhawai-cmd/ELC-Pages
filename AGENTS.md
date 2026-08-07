@@ -31,6 +31,31 @@ to paste what you need; don't guess.
    privacy/copyright check on every file and say in the commit what you
    checked. This mode ends when the teachers say so.
 
+## Core principles — these override everything except the hard rules
+
+1. **No fluff. Ever.** Do not invent progress chatter, streaks, points, badges,
+   encouragement banners, "keep going!", "1 view left", or any other filler
+   that pretends to be teaching. If a line of text does not teach something,
+   instruct something, or report a real state, delete it. Teachers notice
+   padding instantly and it costs the tool its credibility.
+2. **Teach the rule, with the example — not the example alone.** Showing a
+   model is not teaching. Every model must be annotated with the rule it
+   demonstrates, the way a good slide is: name the pattern, show where it
+   lives in the example, and state the range/limits so students can apply it
+   to their own work. Point at the specific words, don't just assert.
+3. **Never lock a teacher or student out of content.** No gates, no "complete
+   this first", no forced sequences. Teachers jump around mid-lesson, re-teach
+   a slide, skip what the class already knows. Sequence is a *suggestion* —
+   show progress ticks if useful, but every part is always reachable.
+4. **Annotate generously.** Labels, callouts, arrows, colour-coding tied to
+   meaning — the density of a well-made PowerPoint, not a bare demo. The
+   student should be able to read the screen without the teacher narrating.
+5. **Say the honest thing.** If the computer is guessing (syllable splits,
+   accent models, synthesised sound), say so and let the human overrule it.
+   Never present a guess as an authority.
+6. **Plain instructions.** Short sentences, common words, one instruction per
+   line. The readers are EAL learners.
+
 ## Before you build
 
 **Check what already exists** — here, and in the other live repos

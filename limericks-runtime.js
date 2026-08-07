@@ -98,29 +98,26 @@
     completed: new Set([0, 1]),
     classSlots: Array(5).fill(null),
     selected: null,
-    syllableDone: 0,
+    syllableChecked: new Set(),
     banks: { A: [], B: [] }
   };
 
   const isComplete = (index) => Boolean(slides[index]?.dataset.free) || state.completed.has(index);
-  const canVisit = (index) => {
-    if (index <= state.slide) return true;
-    for (let i = 0; i < index; i += 1) {
-      if (!isComplete(i)) return false;
-    }
-    return true;
-  };
+  /* Every slide is always reachable. Teachers jump around mid-lesson, re-teach
+     a slide, or skip what the class already knows — the tick marks report
+     progress, they never gate it. */
+  const canVisit = () => true;
 
   function drawDots() {
     const dots = $('#dots');
     if (!dots) return;
     dots.innerHTML = slides.map((_, index) => (
-      `<button class="dot ${index === state.slide ? 'active' : ''} ${isComplete(index) ? 'done' : ''} ${canVisit(index) ? '' : 'locked'}" data-slide="${index}" aria-label="Slide ${index + 1}"></button>`
+      `<button class="dot ${index === state.slide ? 'active' : ''} ${isComplete(index) ? 'done' : ''}" data-slide="${index}" aria-label="Slide ${index + 1}"></button>`
     )).join('');
   }
 
   function showSlide(index) {
-    if (index < 0 || index >= slides.length || !canVisit(index)) return;
+    if (index < 0 || index >= slides.length) return;
     state.slide = index;
     slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
     if ($('#slideLabel')) $('#slideLabel').textContent = slides[index].dataset.title || '';
@@ -129,7 +126,7 @@
     if ($('#prevBtn')) $('#prevBtn').disabled = index === 0;
     if ($('#nextBtn')) {
       $('#nextBtn').textContent = index === slides.length - 1 ? 'Finish' : 'Next →';
-      $('#nextBtn').disabled = index < slides.length - 1 && !isComplete(index);
+      $('#nextBtn').disabled = false;
     }
     drawDots();
     slides[index].scrollTop = 0;
@@ -137,7 +134,6 @@
 
   function completeSlide(index) {
     state.completed.add(index);
-    if ($('#nextBtn')) $('#nextBtn').disabled = false;
     drawDots();
   }
 
@@ -349,11 +345,11 @@
   function renderSyllables() {
     if (!$('#syllableTask')) return;
     $('#syllableTask').innerHTML = SYLLABLE_LINES.map((line, lineIndex) => {
-      const unlocked = lineIndex <= state.syllableDone;
-      const done = lineIndex < state.syllableDone;
+      const unlocked = true;                 /* every line is always workable — no forced order */
+      const done = state.syllableChecked.has(lineIndex);
       const wordsHtml = line.words.map((word, wordIndex) => {
         const letters = [...word.w].map((letter, characterIndex) => {
-          const cutButton = characterIndex ? `<button class="cut ${syllableState[lineIndex][wordIndex].has(characterIndex) ? 'on' : ''}" data-cut="${lineIndex},${wordIndex},${characterIndex}" ${!unlocked || done ? 'disabled' : ''}></button>` : '';
+          const cutButton = characterIndex ? `<button class="cut ${syllableState[lineIndex][wordIndex].has(characterIndex) ? 'on' : ''}" data-cut="${lineIndex},${wordIndex},${characterIndex}"></button>` : '';
           return `${cutButton}<span class="letter">${letter}</span>`;
         }).join('');
         return `<span class="split-word">${letters}</span>`;
@@ -364,9 +360,9 @@
       }).join('');
       return `<div class="syllable-card ${!unlocked ? 'locked' : ''} ${done ? 'good' : ''}" data-scard="${lineIndex}">
         <div class="rowtop"><span class="badge ${SCHEME[lineIndex]}">Line ${lineIndex + 1}</span><b>${line.text}</b></div>
-        <div class="split-instruction">${done ? 'Correct — locked.' : unlocked ? 'Tap a dotted gap to split a word.' : 'Complete the previous line first.'}</div>
+        <div class="split-instruction">${done ? 'Correct ✓ — tap any gap to change it again.' : 'Tap a dotted gap to split a word.'}</div>
         <div class="split-words">${wordsHtml}</div><div class="box-preview">${boxesHtml}</div>
-        <div class="syllable-actions"><button class="btn primary" data-check-syl="${lineIndex}" ${!unlocked || done ? 'disabled' : ''}>Check this line</button><span class="attempts">${attempts[lineIndex] ? `Attempts: ${attempts[lineIndex]}` : ''}</span><span data-syl-result="${lineIndex}"></span></div>
+        <div class="syllable-actions"><button class="btn primary" data-check-syl="${lineIndex}">Check this line</button><span class="attempts">${attempts[lineIndex] ? `Attempts: ${attempts[lineIndex]}` : ''}</span><span data-syl-result="${lineIndex}"></span></div>
       </div>`;
     }).join('');
 
@@ -387,7 +383,7 @@
       });
 
       if (correct) {
-        state.syllableDone = lineIndex + 1;
+        state.syllableChecked.add(lineIndex);
         renderSyllables();
         const result = $(`[data-scard="${lineIndex}"] [data-syl-result="${lineIndex}"]`);
         if (result) {
@@ -395,7 +391,7 @@
           result.textContent = `Yes — ${count} syllables.`;
           result.style.color = 'var(--good)';
         }
-        if (state.syllableDone === SYLLABLE_LINES.length) completeSlide(4);
+        if (state.syllableChecked.size === SYLLABLE_LINES.length) completeSlide(4);
       } else {
         renderSyllables();
         const card = $(`[data-scard="${lineIndex}"]`);

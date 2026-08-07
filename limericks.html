@@ -32,9 +32,6 @@ frame.addEventListener('load',async()=>{
     }
     setFeedback($('#classFeedback'), 'Yes. This is one of eight correct poems: AABBA, sensible lines and two clear rhyme families.', true);`;
     source=source.replace(oldCheck,newCheck);
-    source=source.replace("completed: new Set([0, 1])","completed: new Set([0])");
-    source=source.replace("const isComplete = (index) => Boolean(slides[index]?.dataset.free) || state.completed.has(index);","const isComplete = (index) => index === 1 ? state.completed.has(1) : Boolean(slides[index]?.dataset.free) || state.completed.has(index);");
-    source=source.replace("function completeSlide(index) {\n    state.completed.add(index);","function completeSlide(index) {\n    state.completed.add(index);\n    window.__completeLimerickSlide = completeSlide;");
     const oldFamily=`  const familyOf = (word) => {
     const normal = normalise(word);
     return Object.entries(FAMILIES).find(([, data]) => data.words.some((item) => normalise(item) === normal))?.[0] || null;
@@ -90,7 +87,8 @@ function installModelAnalysis(doc){
   style.textContent=`
   .analysis-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.analysis-tab{border:2px solid var(--line);background:var(--card);padding:9px 14px;border-radius:999px;font-weight:900;cursor:pointer}.analysis-tab.active{background:var(--accent);color:white;border-color:var(--accent)}.analysis-tab.seen::after{content:' ✓'}
   .analysis-board{display:grid;gap:8px}.analysis-row{display:grid;grid-template-columns:38px minmax(0,1fr) 220px;gap:10px;align-items:center;padding:8px;border-radius:12px}.analysis-row.short{margin-inline:34px}.letter-badge{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:950}.line-text{font-size:1.06rem;line-height:1.55}.end-word{font-weight:950;padding:1px 5px;border-radius:6px}.line-note{font-size:.79rem;font-weight:800;padding:8px 10px;border-radius:9px}.analysis-board[data-mode='rhyme'] .Arow .letter-badge,.analysis-board[data-mode='rhyme'] .Arow .end-word{background:var(--a-soft);color:var(--a)}.analysis-board[data-mode='rhyme'] .Brow .letter-badge,.analysis-board[data-mode='rhyme'] .Brow .end-word{background:var(--b-soft);color:var(--b)}.analysis-board[data-mode='rhyme'] .end-word{box-shadow:inset 0 -3px 0 currentColor;position:relative}.analysis-board[data-mode='rhyme'] .end-word::after{content:'↙';position:absolute;right:-22px;top:-17px}.analysis-board[data-mode='content'] .line-note{display:block}.analysis-board:not([data-mode='content']) .line-note{display:none}.analysis-board[data-mode='content'] .analysis-row{background:var(--accent-soft)}
-  .syllable-line{display:none;flex-wrap:wrap;gap:5px;margin-top:7px}.analysis-board[data-mode='syllables'] .syllable-line{display:flex}.analysis-board[data-mode='syllables'] .plain-line{display:none}.syllable-word{display:inline-flex;gap:3px;margin-right:7px}.syllable-box{border:2px solid var(--line);background:var(--card);padding:6px 8px;border-radius:8px;font-weight:900;min-width:34px;text-align:center}.analysis-board[data-mode='syllables'] .Arow .syllable-box{border-color:var(--a)}.analysis-board[data-mode='syllables'] .Brow .syllable-box{border-color:var(--b)}.syllable-total{margin-left:auto;font-size:.76rem;font-weight:900;color:var(--muted);align-self:center}.analysis-status{margin-top:10px;padding:10px 12px;border-radius:10px;background:var(--accent-soft);font-weight:800}.analysis-status.done{background:var(--good-soft);color:var(--good)}
+  .syllable-line{display:none;flex-wrap:wrap;gap:5px;margin-top:7px}.analysis-board[data-mode='syllables'] .syllable-line{display:flex}.analysis-board[data-mode='syllables'] .plain-line{display:none}.syllable-word{display:inline-flex;gap:3px;margin-right:7px}.syllable-box{border:2px solid var(--line);background:var(--card);padding:6px 8px;border-radius:8px;font-weight:900;min-width:34px;text-align:center}.analysis-board[data-mode='syllables'] .Arow .syllable-box{border-color:var(--a)}.analysis-board[data-mode='syllables'] .Brow .syllable-box{border-color:var(--b)}.syllable-total{margin-left:auto;font-size:.76rem;font-weight:900;color:var(--muted);align-self:center}.analysis-rule{margin-top:12px;padding:12px 14px;border-radius:11px;background:var(--accent-soft);border-left:5px solid var(--accent);font-size:.9rem;line-height:1.65}.analysis-rule .ra{color:var(--a)}.analysis-rule .rb{color:var(--b)}.rule-warn{display:inline-block;background:var(--card);border:1px dashed var(--line);border-radius:7px;padding:1px 7px;font-weight:800}
+  .count-tag{font-size:.72rem;font-weight:900;padding:2px 8px;border-radius:999px;margin-left:6px}.Arow .count-tag{background:var(--a-soft);color:var(--a)}.Brow .count-tag{background:var(--b-soft);color:var(--b)}
   @media(max-width:760px){.analysis-row{grid-template-columns:34px 1fr}.line-note{grid-column:2}.analysis-row.short{margin-inline:8px}.syllable-total{width:100%;margin-left:0}}
   `;doc.head.appendChild(style);
   const lines=[
@@ -101,14 +99,33 @@ function installModelAnalysis(doc){
    {s:'A',text:'And said, “What a wonderful feeling!”',end:'feeling',note:'Returns to A and lands the ending.',syll:[['And'],['said'],['What'],['a'],['won','der','ful'],['feel','ing']]}
   ];
   const renderSyllables=(groups)=>groups.map(parts=>`<span class="syllable-word">${parts.map(p=>`<span class="syllable-box">${p}</span>`).join('')}</span>`).join('');
-  poem.innerHTML=`<div class="analysis-tabs"><button class="analysis-tab" data-mode="rhyme">Rhyme</button><button class="analysis-tab" data-mode="content">Content</button><button class="analysis-tab" data-mode="syllables">Syllables</button></div><div class="analysis-board" id="analysisBoard" data-mode="rhyme">${lines.map((l,i)=>`<div class="analysis-row ${l.s}row ${i===2||i===3?'short':''}"><span class="letter-badge">${l.s}</span><div><div class="plain-line line-text">${l.text.replace(l.end,`<span class="end-word">${l.end}</span>`)}</div><div class="syllable-line">${renderSyllables(l.syll)}<span class="syllable-total">${l.syll.reduce((n,w)=>n+w.length,0)} syllables</span></div></div><span class="line-note">${l.note}</span></div>`).join('')}</div><div class="analysis-status" id="analysisStatus">Open all three views before moving on: Rhyme, Content and Syllables.</div>`;
+  poem.innerHTML=`<div class="analysis-tabs"><button class="analysis-tab" data-mode="rhyme">Rhyme</button><button class="analysis-tab" data-mode="content">Content</button><button class="analysis-tab" data-mode="syllables">Syllables</button></div><div class="analysis-board" id="analysisBoard" data-mode="rhyme">${lines.map((l,i)=>`<div class="analysis-row ${l.s}row ${i===2||i===3?'short':''}"><span class="letter-badge">${l.s}</span><div><div class="plain-line line-text">${l.text.replace(l.end,`<span class="end-word">${l.end}</span>`)}</div><div class="syllable-line">${renderSyllables(l.syll)}<span class="syllable-total">${l.syll.reduce((n,w)=>n+w.length,0)} syllables<span class="count-tag">${l.s} line</span></span></div></div><span class="line-note">${l.note}</span></div>`).join('')}</div><div class="analysis-rule" id="analysisRule"></div>`;
+  /* Each view states the RULE it demonstrates, not just the example. */
+  const RULES={
+    rhyme:`<b>The rule:</b> a limerick rhymes <b class="ra">A A</b> <b class="rb">B B</b> <b class="ra">A</b>.
+      Lines 1, 2 and 5 end on the same rhyme (<b class="ra">Ealing · ceiling · feeling</b>);
+      lines 3 and 4 share a different one (<b class="rb">hat · bat</b>).
+      <span class="rule-warn">Rhyme is by <b>sound</b>, not spelling</span> — <i>Ealing</i> and <i>ceiling</i>
+      look nothing alike but end the same way.`,
+    content:`<b>The rule:</b> the five lines do five jobs — <b>who and where</b> → <b>the strange habit</b> →
+      <b>the problem</b> → <b>what happens</b> → <b>the punchline</b>.
+      The last line is the joke: it has to land, which is why it returns to the <b class="ra">A</b> rhyme.`,
+    syllables:`<b>The rule — two things at once:</b>
+      <br>1. <b>Stay in range.</b> The long <b class="ra">A</b> lines run about <b>8–9 syllables</b>;
+      the short <b class="rb">B</b> lines run about <b>5–6</b>. It is a range, not one exact number.
+      <br>2. <b>Match your own lines.</b> This matters more than the range:
+      all three <b class="ra">A</b> lines must have the <b>same</b> count as each other, and both
+      <b class="rb">B</b> lines must match each other.
+      <span class="rule-warn">9 · 9 · 6 · 6 · 9 works. So does 8 · 8 · 5 · 5 · 8. But 9 · 8 · 6 · 5 · 9 limps</span>
+      — the ear hears the line that does not match.
+      <br>This model is <b class="ra">9 · 9</b> · <b class="rb">6 · 6</b> · <b class="ra">9</b>. Clap it and you feel why it works.`
+  };
   const seen=new Set();
   const tabs=[...poem.querySelectorAll('.analysis-tab')];
   function select(mode){
     poem.querySelector('#analysisBoard').dataset.mode=mode;seen.add(mode);
     tabs.forEach(t=>{t.classList.toggle('active',t.dataset.mode===mode);t.classList.toggle('seen',seen.has(t.dataset.mode));});
-    const status=poem.querySelector('#analysisStatus');
-    if(seen.size===3){status.className='analysis-status done';status.textContent='All three views checked. You can move to the class activity.';frame.contentWindow.__completeLimerickSlide?.(1)}else status.textContent=`Keep investigating: ${3-seen.size} view${3-seen.size===1?'':'s'} left.`;
+    poem.querySelector('#analysisRule').innerHTML=RULES[mode];
   }
   tabs.forEach(t=>t.addEventListener('click',()=>select(t.dataset.mode)));
   select('rhyme');
