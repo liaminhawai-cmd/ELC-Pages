@@ -10,17 +10,49 @@ iframe{display:block;width:100%;height:100%;border:0}
 </style>
 </head>
 <body>
-<iframe id="workshop" src="limericks-workshop-shell.html?v=20260807-navfix-1" title="Limerick Workshop"></iframe>
+<iframe id="workshop" src="limericks-workshop-shell.html?v=20260807-rhymetubs-2" title="Limerick Workshop"></iframe>
 <script>
 const frame=document.getElementById('workshop');
-frame.addEventListener('load',()=>{
+frame.addEventListener('load',async()=>{
   try{
+    const response=await fetch('limericks-runtime.js?v=20260807-rhymetubs-2',{cache:'no-store'});
+    if(!response.ok) throw new Error(`Runtime request failed: ${response.status}`);
+    const source=await response.text();
+    const oldCheck=`    if (slots.some((item, index) => item.slot !== index)) {
+      setFeedback($('#classFeedback'), 'No. The rhyme works, but at least one line does not make sense. Move the words and try again.', false);
+      return;
+    }
+    setFeedback($('#classFeedback'), 'Yes. This is one of four correct poems: AABBA, sensible lines and two clear rhyme families.', true);`;
+    const newCheck=`    const aWords = [slots[0].word, slots[1].word, slots[4].word].map(normalise);
+    const bWords = [slots[2].word, slots[3].word].map(normalise);
+    const validA = [
+      ['drew', 'blue', 'canoe'],
+      ['may', 'day', 'hooray']
+    ];
+    const validB = [
+      ['hat', 'cat'],
+      ['bat', 'cat'],
+      ['cat', 'bat'],
+      ['floor', 'door']
+    ];
+    const sensibleA = validA.some((combination) => combination.every((word, index) => word === aWords[index]));
+    const sensibleB = validB.some((combination) => combination.every((word, index) => word === bWords[index]));
+    if (!sensibleA || !sensibleB) {
+      setFeedback($('#classFeedback'), 'No. The rhymes match, but this word order does not make a sensible poem. Try a different arrangement.', false);
+      return;
+    }
+    setFeedback($('#classFeedback'), 'Yes. This is one of eight correct poems: AABBA, sensible lines and two clear rhyme families.', true);`;
+    const patched=source.replace(oldCheck,newCheck);
+    if(patched===source) throw new Error('The rhyme-tub checker patch did not match the current runtime.');
     const script=frame.contentDocument.createElement('script');
-    script.src='limericks-runtime.js?v=20260807-navfix-1';
-    script.onerror=()=>console.error('Could not load the limerick workshop runtime.');
+    script.textContent=patched;
     frame.contentDocument.body.appendChild(script);
   }catch(error){
     console.error('Could not start the limerick workshop.',error);
+    const message=frame.contentDocument.createElement('p');
+    message.textContent='The workshop did not load. Please refresh the page.';
+    message.style.cssText='font:700 16px system-ui;padding:24px;color:#a7352a';
+    frame.contentDocument.body.appendChild(message);
   }
 });
 </script>
