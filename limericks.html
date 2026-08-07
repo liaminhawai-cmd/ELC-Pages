@@ -7,12 +7,12 @@
 <style>html,body{height:100%;margin:0;background:#f4efe6}iframe{display:block;width:100%;height:100%;border:0}</style>
 </head>
 <body>
-<iframe id="workshop" src="limericks-workshop-shell.html?v=20260807-analysis-tabs-1" title="Limerick Workshop"></iframe>
+<iframe id="workshop" src="limericks-workshop-shell.html?v=20260807-open-rhymes-1" title="Limerick Workshop"></iframe>
 <script>
 const frame=document.getElementById('workshop');
 frame.addEventListener('load',async()=>{
   try{
-    const response=await fetch('limericks-runtime.js?v=20260807-analysis-tabs-1',{cache:'no-store'});
+    const response=await fetch('limericks-runtime.js?v=20260807-open-rhymes-1',{cache:'no-store'});
     if(!response.ok) throw new Error(`Runtime request failed: ${response.status}`);
     let source=await response.text();
     const oldCheck=`    if (slots.some((item, index) => item.slot !== index)) {
@@ -35,11 +35,48 @@ frame.addEventListener('load',async()=>{
     source=source.replace("completed: new Set([0, 1])","completed: new Set([0])");
     source=source.replace("const isComplete = (index) => Boolean(slides[index]?.dataset.free) || state.completed.has(index);","const isComplete = (index) => index === 1 ? state.completed.has(1) : Boolean(slides[index]?.dataset.free) || state.completed.has(index);");
     source=source.replace("function completeSlide(index) {\n    state.completed.add(index);","function completeSlide(index) {\n    state.completed.add(index);\n    window.__completeLimerickSlide = completeSlide;");
+    const oldFamily=`  const familyOf = (word) => {
+    const normal = normalise(word);
+    return Object.entries(FAMILIES).find(([, data]) => data.words.some((item) => normalise(item) === normal))?.[0] || null;
+  };
+  const rhymes = (a, b) => {
+    const familyA = familyOf(a);
+    const familyB = familyOf(b);
+    return Boolean(familyA && familyA === familyB);
+  };`;
+    const newFamily=`  const irregularRhymes = {
+    through:'u-long',threw:'u-long',blue:'u-long',shoe:'u-long',too:'u-long',two:'u-long',do:'u-long',you:'u-long',
+    rough:'uff',tough:'uff',enough:'uff',cough:'off',though:'oh',go:'oh',show:'oh',flow:'oh',
+    thought:'awt',bought:'awt',caught:'awt',bough:'ow',cow:'ow',now:'ow',how:'ow',
+    one:'un',won:'un',sun:'un',done:'un',none:'un',come:'um',some:'um',home:'ohm',
+    said:'ed',head:'ed',bread:'ed',readpast:'ed',read:'eed',leadmetal:'ed',lead:'eed'
+  };
+  const spellingRhymeKey = (word) => {
+    const normal = normalise(word);
+    if (!normal) return null;
+    if (irregularRhymes[normal]) return 'sound:' + irregularRhymes[normal];
+    const ending = normal.match(/([aeiouy]+[^aeiouy]*)$/)?.[1];
+    if (!ending) return null;
+    return 'spelling:' + ending;
+  };
+  const familyOf = (word) => {
+    const normal = normalise(word);
+    const listed = Object.entries(FAMILIES).find(([, data]) => data.words.some((item) => normalise(item) === normal))?.[0];
+    return listed || spellingRhymeKey(normal);
+  };
+  const rhymes = (a, b) => {
+    const familyA = familyOf(a);
+    const familyB = familyOf(b);
+    return Boolean(familyA && familyA === familyB);
+  };`;
+    source=source.replace(oldFamily,newFamily);
     const doc=frame.contentDocument;
     const script=doc.createElement('script');
     script.textContent=source;
     doc.body.appendChild(script);
     installModelAnalysis(doc);
+    const rhymeLead=doc.querySelector('#anchorA')?.closest('.slide')?.querySelector('.lead');
+    if(rhymeLead)rhymeLead.innerHTML='Choose an anchor word for A and B, then type <b>your own</b> possible rhymes. The checker knows many sound families and also tests common word endings. English spelling can be tricky, so say uncertain pairs aloud and use the Pronunciation Hub.';
   }catch(error){console.error('Could not start the limerick workshop.',error)}
 });
 
