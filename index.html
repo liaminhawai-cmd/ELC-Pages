@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="ELC Hub — practice tools and simulations for ELC students.">
+<meta name="description" content="ELC Hub — practice tools and simulations.">
 <title>ELC Hub</title>
 <style>
   :root {
@@ -34,7 +34,6 @@
   .report-link-row { text-align:center; margin-top:8px; }
   .report-link-row a { color:var(--accent); font-weight:700; text-decoration:none; }
   .privacy-note { max-width:640px; margin:17px auto 0; padding:9px 12px; border-radius:10px; background:var(--accent-soft); color:var(--muted); font-size:.8rem; text-align:center; }
-  footer { border-top:1px solid var(--line); margin-top:50px; padding:22px 18px 36px; text-align:center; color:var(--muted); font-size:.85rem; }
   .teacher-badge { display:none; background:#16a34a; color:#fff; font-size:.72rem; font-weight:700; padding:4px 10px; border-radius:999px; position:fixed; bottom:14px; right:14px; z-index:40; }
   body.teacher-on .teacher-badge { display:block; }
   @media (max-width:540px) {
@@ -49,7 +48,7 @@
 <header>
   <button class="teacher-link" id="teacherToggle" aria-pressed="false">Teacher view</button>
   <h1>🌟 ELC Hub</h1>
-  <p>Practice tools, trainers and simulations made for ELC students. No account needed — your activity record stays in this browser.</p>
+  <p>Practice tools, trainers and simulations. No account needed — your activity record stays in this browser.</p>
 </header>
 
 <main>
@@ -57,13 +56,13 @@
   <p class="privacy-note">🔒 This hub does not ask for your name or student ID. Activity and goals are stored on this device only.</p>
 
   <section>
-    <h2>🧡 Made for ELC</h2>
+    <h2>🧡 ELC tools</h2>
     <div class="grid">
-      <a class="card" data-cat="Made for ELC" data-title="Learning Compass" href="learning-compass.html"><span class="emoji">🧭</span><h3>Learning Compass</h3><p>Compare Pathway C levels and save one clear next-step goal.</p></a>
-      <a class="card" data-cat="Made for ELC" data-title="Pronunciation Hub" href="pronunciation.html"><span class="emoji">🗣️</span><h3>Pronunciation Hub</h3><p>Every sound of Australian English — hear it, read its tongue twister, write your own.</p></a>
-      <a class="card" data-cat="Made for ELC" data-title="Feeling Wheel" href="feeling-wheel.html"><span class="emoji">🎡</span><h3>Feeling Wheel</h3><p>Spin from a core emotion to precise words in English, Chinese or Vietnamese.</p></a>
-      <a class="card" data-cat="Made for ELC" data-title="Analytical Writing Wall" href="writing-wall.html"><span class="emoji">📝</span><h3>Analytical Writing Wall</h3><p>The same idea written at every band — see what actually changes.</p></a>
-      <a class="card" data-cat="Made for ELC" data-title="Rubrics" href="rubrics.html"><span class="emoji">📚</span><h3>Rubrics</h3><p>What each band looks like, colour-coded, with worked examples.</p></a>
+      <a class="card" data-cat="ELC tools" data-title="Learning Compass" href="learning-compass.html"><span class="emoji">🧭</span><h3>Learning Compass</h3><p>Compare Pathway C levels and save one clear next-step goal.</p></a>
+      <a class="card" data-cat="ELC tools" data-title="Pronunciation Hub" href="pronunciation.html"><span class="emoji">🗣️</span><h3>Pronunciation Hub</h3><p>Every sound of Australian English — hear it, read its tongue twister, write your own.</p></a>
+      <a class="card" data-cat="ELC tools" data-title="Feeling Wheel" href="feeling-wheel.html"><span class="emoji">🎡</span><h3>Feeling Wheel</h3><p>Spin from a core emotion to precise words in English, Chinese or Vietnamese.</p></a>
+      <a class="card" data-cat="ELC tools" data-title="Analytical Writing Wall" href="writing-wall.html"><span class="emoji">📝</span><h3>Analytical Writing Wall</h3><p>The same idea written at every band — see what actually changes.</p></a>
+      <a class="card" data-cat="ELC tools" data-title="Rubrics" href="rubrics.html"><span class="emoji">📚</span><h3>Rubrics</h3><p>What each band looks like, colour-coded, with worked examples.</p></a>
     </div>
   </section>
 
@@ -76,8 +75,6 @@
     </div>
   </section>
 </main>
-
-<footer>ELC Hub — made by ELC teachers for ELC students.</footer>
 
 <script>
 const VISITS_KEY = "elc_visited", TEACHER_KEY = "elc_teacher";
