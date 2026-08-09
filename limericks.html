@@ -7,15 +7,16 @@
 <style>html,body{height:100%;margin:0;background:#f4efe6}iframe{display:block;width:100%;height:100%;border:0}</style>
 </head>
 <body>
-<iframe id="workshop" src="limericks-workshop-shell.html?v=20260807-ppt-we-do-3" title="Limerick Workshop"></iframe>
+<iframe id="workshop" src="limericks-workshop-shell.html?v=20260810-we-do-stems-4" title="Limerick Workshop"></iframe>
 <script>
 const frame=document.getElementById('workshop');
 frame.addEventListener('load',async()=>{
   try{
-    const response=await fetch('limericks-runtime.js?v=20260807-ppt-we-do-3',{cache:'no-store'});
+    const response=await fetch('limericks-runtime.js?v=20260810-we-do-stems-4',{cache:'no-store'});
     if(!response.ok) throw new Error(`Runtime request failed: ${response.status}`);
     let source=await response.text();
 
+    // Keep the open rhyme workshop useful beyond the prepared word lists.
     const oldFamily=`  const familyOf = (word) => {
     const normal = normalise(word);
     return Object.entries(FAMILIES).find(([, data]) => data.words.some((item) => normalise(item) === normal))?.[0] || null;
@@ -212,7 +213,7 @@ function installClassBuilder(doc){
   style.textContent=`
     .class-builder-slide .tubs{grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin-top:8px}.class-builder-slide .tub{padding:9px;min-height:0}.class-builder-slide .tub h3{margin:0 0 5px;font-size:.78rem}.tub-roleline{font-size:.66rem;color:var(--muted);margin-bottom:5px}
     .class-builder-slide .wordbox.rich{display:inline-grid;grid-template-columns:auto auto;gap:5px;align-items:center;padding:5px 7px;margin:2px;font-size:.78rem}.word-role{font-size:.58rem;text-transform:uppercase;letter-spacing:.05em;opacity:.62;font-weight:800}
-    .class-builder-slide .build-poem{gap:6px;margin-top:9px}.class-builder-slide .build-line{padding:7px 9px;min-height:49px}.class-builder-slide .build-line.short{margin-inline:55px}.line-role{font-size:.65rem;color:var(--muted);font-weight:800}.line-sentence{font-size:.9rem;line-height:1.35}.line-sentence .picked-end{font-weight:950}.slot.rich-slot{min-width:150px;min-height:36px}.slot-hint{font-size:.7rem;color:var(--muted)}
+    .class-builder-slide .build-poem{gap:6px;margin-top:9px}.class-builder-slide .build-line{padding:7px 9px;min-height:49px}.class-builder-slide .build-line.short{margin-inline:55px}.line-role{font-size:.65rem;color:var(--muted);font-weight:800}.line-sentence{font-size:.9rem;line-height:1.35}.line-sentence .picked-end{font-weight:950}.starter-blank{display:inline-block;min-width:58px;border-bottom:2px solid currentColor;color:var(--muted);letter-spacing:.08em}.slot.rich-slot{min-width:150px;min-height:36px}.slot-hint{font-size:.7rem;color:var(--muted)}
     .class-key{display:flex;gap:7px;flex-wrap:wrap;margin:7px 0 2px;font-size:.7rem;color:var(--muted)}.class-key span{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px 7px}.class-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:8px}
     @media(max-width:900px){.class-builder-slide .tubs{grid-template-columns:1fr 1fr}.class-builder-slide .build-line.short{margin-inline:22px}}
     @media(max-width:560px){.class-builder-slide .tubs{grid-template-columns:1fr}.class-builder-slide .build-line.short{margin-inline:6px}.slot.rich-slot{min-width:0}}
@@ -259,6 +260,13 @@ function installClassBuilder(doc){
   ];
   const SCHEME=['A','A','B','B','A'];
   const JOBS=['set up the subject','add a detail','start the action','continue the action','finish with the consequence or joke'];
+  const STARTERS=[
+    'There once was a dancer named <span class="starter-blank">_____</span>',
+    'Who wore a bright jacket of <span class="starter-blank">_____</span>',
+    'They balanced a <span class="starter-blank">_____</span>',
+    'On a sleepy old <span class="starter-blank">_____</span>',
+    'Then sailed home at noon in a <span class="starter-blank">_____</span>'
+  ];
   const placed=Array(5).fill(null);
   let selected=null;
 
@@ -284,7 +292,7 @@ function installClassBuilder(doc){
   function renderPoem(){
     poem.innerHTML=`<div class="class-key"><span>name</span><span>place</span><span>colour</span><span>action</span><span>thing</span><span>animal</span></div>`+SCHEME.map((scheme,index)=>{
       const item=placed[index];const sentence=item?.lines?.[index];
-      const shown=sentence?sentence.replace(new RegExp(`(${item.word.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})([!,.?”']*)$`,'i'),'<span class="picked-end">$1$2</span>'):'Choose a word that fits this line.';
+      const shown=sentence?sentence.replace(new RegExp(`(${item.word.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})([!,.?”']*)$`,'i'),'<span class="picked-end">$1$2</span>'):STARTERS[index];
       return `<div class="build-line ${index===2||index===3?'short':''}"><span class="badge ${scheme}">${scheme}</span><div><div class="line-role">Line ${index+1} · ${JOBS[index]}</div><div class="line-sentence">${shown}</div></div><div class="slot rich-slot ${item?'filled':''}" data-rich-slot="${index}">${item?`<button class="wordbox rich" data-rich-return="${index}"><b>${item.word}</b><span class="word-role">${item.role}</span></button>`:'<span class="slot-hint">drop a word</span>'}</div></div>`;
     }).join('');
 
