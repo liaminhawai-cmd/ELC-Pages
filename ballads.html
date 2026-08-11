@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="An introduction to ballads through Banjo Paterson's public-domain poem The Man from Ironbark.">
+<title>Ballads &amp; The Man from Ironbark — ELC Hub</title>
+<style>
+:root{
+  --bg:#f3eee4;--paper:#fffaf0;--card:#fffdf8;--ink:#211d18;--muted:#6d6458;
+  --line:#d9cfbd;--soft:#ebe2d3;--ochre:#9b5f18;--ochre-soft:#f6e6ca;
+  --blue:#2c6478;--blue-soft:#dcecf0;--plum:#754a68;--plum-soft:#eee1eb;
+  --green:#3d6d4c;--green-soft:#e2efe5;--red:#9d4031;--red-soft:#f5e1dc;
+  --prefix:#315f9d;--prefix-bg:#e2ebf8;--root:#8a4f12;--root-bg:#f5e6ce;
+  --suffix:#6b467e;--suffix-bg:#ece2f1;--shadow:0 2px 12px rgba(55,39,19,.08);
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#171512;--paper:#211e19;--card:#29251f;--ink:#f2eadc;--muted:#b9ae9d;
+  --line:#4a4136;--soft:#373027;--ochre:#e2a450;--ochre-soft:#3b2a17;
+  --blue:#79b7c9;--blue-soft:#1c333b;--plum:#c897bc;--plum-soft:#382a35;
+  --green:#8fc09d;--green-soft:#24362a;--red:#df8d7b;--red-soft:#3c2824;
+  --prefix:#a8c7f2;--prefix-bg:#253650;--root:#efbd7c;--root-bg:#49331d;
+  --suffix:#d9b6e8;--suffix-bg:#3d2d45;--shadow:0 2px 12px rgba(0,0,0,.3)
+}}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5}
+button,select,a{font:inherit}.shell{max-width:1260px;margin:auto;padding:18px 18px 64px}
+.topbar{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:14px}
+.back{color:var(--ochre);font-weight:800;text-decoration:none}.back:hover{text-decoration:underline}
+.source-tag{font-size:.74rem;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:5px 9px;background:var(--card)}
+.hero{background:linear-gradient(135deg,#6d3e18,#9a5b18 52%,#315f67);color:#fff;border-radius:22px;padding:clamp(22px,4vw,42px);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;width:280px;height:280px;border:55px solid rgba(255,255,255,.08);border-radius:50%;right:-115px;top:-130px}
+.eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.11em;font-weight:900;opacity:.84;margin:0 0 6px}
+h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.14}h1{font-size:clamp(2rem,5vw,3.5rem);margin:0;max-width:780px}h2{font-size:clamp(1.55rem,3vw,2.2rem);margin:0 0 8px}h3{margin:0 0 6px}.hero p{max-width:760px;margin:10px 0 0;font-size:clamp(.96rem,1.7vw,1.12rem)}
+.hero-actions,.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.hero-actions{margin-top:18px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);border-radius:10px;padding:9px 13px;background:var(--card);color:var(--ink);text-decoration:none;font-weight:800;cursor:pointer}.btn:hover{transform:translateY(-1px);box-shadow:var(--shadow)}.btn.primary{border-color:transparent;background:var(--ochre);color:#fff}.hero .btn.primary{background:#fff;color:#693b16}.hero .btn.ghost{border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.1);color:#fff}
+.intent{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 0}.intent>div{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--ochre);border-radius:13px;padding:12px 14px}.intent b{display:block;color:var(--ochre);margin-bottom:3px}.intent p{margin:0;font-size:.9rem}
+.section{margin-top:28px}.intro-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(285px,.75fr);gap:14px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:var(--shadow)}
+.feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.feature{border:1px solid var(--line);border-radius:12px;padding:11px;background:var(--paper)}.feature b{display:block;color:var(--ochre);margin-bottom:3px}.feature p{margin:0;color:var(--muted);font-size:.84rem}
+.rule-note{margin-top:11px;padding:10px 12px;border-radius:10px;background:var(--blue-soft);border-left:4px solid var(--blue);font-size:.86rem}.rule-note b{color:var(--blue)}
+.model-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}.model-tab{border:1px solid var(--line);border-radius:999px;padding:6px 11px;background:var(--paper);color:var(--ink);font-weight:850;cursor:pointer}.model-tab.active{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.model-lines{display:grid;gap:5px}.model-line{display:grid;grid-template-columns:30px minmax(0,1fr) 185px;gap:9px;align-items:start;padding:7px 8px;border-radius:10px}.model-line:nth-child(odd){background:color-mix(in srgb,var(--paper) 75%,var(--ochre-soft))}.model-n{width:26px;height:26px;border-radius:50%;background:var(--ochre-soft);color:var(--ochre);display:grid;place-items:center;font-weight:900;font-size:.75rem}.model-text{font-family:Georgia,"Times New Roman",serif;font-size:1rem}.model-note{font-size:.76rem;color:var(--muted);font-weight:750}.model-explain{margin-top:9px;min-height:48px;padding:10px 12px;background:var(--ochre-soft);border-radius:10px;font-size:.86rem}
+.plot{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}.plot-step{border-top:4px solid var(--ochre);background:var(--paper);border-radius:8px;padding:8px;font-size:.76rem}.plot-step b{display:block;color:var(--ochre)}
+.reader-head{display:flex;justify-content:space-between;align-items:end;gap:14px;flex-wrap:wrap;margin-bottom:11px}.reader-head p{margin:3px 0 0;color:var(--muted)}
+.controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.seg{border:1px solid var(--line);border-radius:999px;padding:6px 10px;background:var(--card);color:var(--ink);font-size:.79rem;font-weight:800;cursor:pointer}.seg[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}.lang{border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);padding:7px 9px;font-weight:700}
+.reader-grid{display:grid;grid-template-columns:210px minmax(0,1fr);gap:14px;align-items:start}.stanza-nav{position:sticky;top:10px;display:grid;gap:6px}.stanza-link{text-align:left;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);padding:8px 9px;cursor:pointer}.stanza-link b{display:block;color:var(--ochre);font-size:.75rem}.stanza-link span{font-size:.78rem;color:var(--muted)}.stanza-link.active{border-color:var(--ochre);box-shadow:inset 4px 0 var(--ochre)}
+.poem{display:grid;gap:12px}.stanza{scroll-margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px;box-shadow:var(--shadow)}.stanza-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:9px}.stanza-top h3{font-size:1.08rem}.stanza-top a{font-size:.74rem;color:var(--ochre);font-weight:850;text-decoration:none}.poem-line{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:8px;align-items:baseline;padding:4px 2px;border-radius:7px}.line-no{font-size:.66rem;color:var(--muted);text-align:right}.line-text{font-family:Georgia,"Times New Roman",serif;font-size:clamp(.93rem,1.5vw,1.08rem);line-height:1.62}.rhyme-tag{display:none;font-size:.69rem;font-weight:900;border-radius:999px;padding:2px 7px;white-space:nowrap}.show-rhyme .rhyme-tag{display:inline-block}.rhyme-A{background:var(--blue-soft);color:var(--blue)}.rhyme-B{background:var(--plum-soft);color:var(--plum)}.rhyme-C{background:var(--green-soft);color:var(--green)}.show-speech .poem-line.speech{background:var(--ochre-soft);box-shadow:inset 3px 0 var(--ochre)}
+.vocab{display:inline;padding:0 2px;border:0;border-bottom:2px dotted var(--ochre);background:transparent;color:inherit;font:inherit;font-weight:800;cursor:pointer;border-radius:3px}.vocab:hover,.vocab:focus-visible{background:var(--ochre-soft);outline:2px solid transparent}.hide-vocab .vocab{border-bottom-color:transparent;font-weight:inherit;pointer-events:none}
+.stanza-foot{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px;padding-top:9px;border-top:1px solid var(--soft);font-size:.75rem;color:var(--muted)}.stanza-foot a{color:var(--ochre);font-weight:850;text-decoration:none}
+.talk{margin-top:13px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.talk>div{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:10px}.talk b{display:block;color:var(--ochre);font-size:.77rem}.talk p{margin:3px 0 0;font-size:.82rem;color:var(--muted)}
+dialog{border:0;padding:0;background:transparent;color:var(--ink);width:min(620px,calc(100vw - 24px));max-height:88vh}dialog::backdrop{background:rgba(18,14,9,.62);backdrop-filter:blur(2px)}.word-pop{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.35);overflow:hidden}.pop-head{display:flex;justify-content:space-between;gap:14px;align-items:start;padding:17px 18px 12px;background:linear-gradient(135deg,var(--ochre-soft),var(--card))}.pop-head h2{font-size:1.8rem;margin:0}.close{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:50%;width:35px;height:35px;cursor:pointer;font-weight:900}.pop-body{padding:15px 18px 18px;overflow:auto;max-height:68vh}.definition{font-size:1.02rem;margin:0 0 10px}.context{padding:9px 11px;background:var(--blue-soft);border-left:4px solid var(--blue);border-radius:8px;margin:0 0 12px;font-size:.88rem}.pop-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.09em;font-weight:900;color:var(--muted);margin:12px 0 6px}.morphs{display:flex;gap:6px;flex-wrap:wrap}.morph{display:inline-flex;align-items:baseline;gap:4px;border-radius:999px;padding:6px 10px;font-weight:850}.morph small{font-weight:600;opacity:.8}.morph.prefix{background:var(--prefix-bg);color:var(--prefix)}.morph.root{background:var(--root-bg);color:var(--root)}.morph.suffix{background:var(--suffix-bg);color:var(--suffix)}.whole{color:var(--muted);font-size:.86rem;font-style:italic}.translation{font-weight:800;font-size:1.03rem}.related{display:flex;gap:6px;flex-wrap:wrap}.related span{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:4px 8px;font-size:.78rem}.pop-actions{margin-top:15px;padding-top:12px;border-top:1px solid var(--soft)}
+.copyright{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-size:.75rem;color:var(--muted)}.copyright a{color:var(--ochre)}
+@media(max-width:860px){.intro-grid,.reader-grid{grid-template-columns:1fr}.stanza-nav{position:static;display:flex;overflow:auto;padding-bottom:4px}.stanza-link{min-width:150px}.plot{grid-template-columns:1fr 1fr}.talk{grid-template-columns:1fr}.model-line{grid-template-columns:28px 1fr}.model-note{grid-column:2}.intent{grid-template-columns:1fr}}
+@media(max-width:540px){.shell{padding:10px 10px 42px}.source-tag{display:none}.hero{border-radius:16px}.feature-grid{grid-template-columns:1fr}.plot{grid-template-columns:1fr}.stanza{padding:13px 10px}.poem-line{grid-template-columns:20px minmax(0,1fr)}.rhyme-tag{grid-column:2;justify-self:start}.stanza-foot{align-items:flex-start;flex-direction:column}.controls{align-items:stretch}.lang{max-width:100%}}
+@media print{body{background:#fff}.shell{max-width:none;padding:0}.topbar,.hero-actions,.controls,.stanza-nav,.stanza-foot,.talk,dialog{display:none!important}.hero{background:#fff;color:#000;box-shadow:none;border:1px solid #999;padding:16px}.hero:after{display:none}.reader-grid{display:block}.stanza{break-inside:avoid;box-shadow:none}.vocab{border-bottom:1px dotted #555}.section{margin-top:18px}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="topbar">
+    <a class="back" href="index.html">← ELC Hub</a>
+    <span class="source-tag">Public-domain poem · no login · works offline</span>
+  </div>
+
+  <header class="hero">
+    <p class="eyebrow">Poetry workshop</p>
+    <h1>Ballads &amp; <em>The Man from Ironbark</em></h1>
+    <p>A ballad tells a story aloud. Follow the plot, hear the couplets, notice the strong beat, then read Banjo Paterson’s comic bush ballad with its difficult words unpacked.</p>
+    <div class="hero-actions">
+      <a class="btn primary" href="#reader">Read the poem</a>
+      <a class="btn ghost" href="https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/l/elc/english" target="_blank" rel="noopener">Open the stanza word lists ↗</a>
+    </div>
+  </header>
+
+  <div class="intent">
+    <div><b>Learning intention</b><p>We are learning how a ballad uses story, rhyme, rhythm and voice.</p></div>
+    <div><b>Success criteria</b><p>I can retell the events, identify this poem’s AABBCC couplets, hear its strong beat, and explain an old or unfamiliar word in context.</p></div>
+  </div>
+
+  <section class="section intro-grid" aria-labelledby="what-heading">
+    <div class="card">
+      <p class="eyebrow" style="color:var(--ochre)">Before we read</p>
+      <h2 id="what-heading">What is a ballad?</h2>
+      <div class="feature-grid">
+        <div class="feature"><b>It tells a story</b><p>Characters act, a problem develops, and something changes.</p></div>
+        <div class="feature"><b>It is made to be heard</b><p>A regular pulse, repeated patterns and memorable rhyme help a teller perform it.</p></div>
+        <div class="feature"><b>It uses a speaking voice</b><p>Dialogue, exclamations and everyday language can make the action feel immediate.</p></div>
+        <div class="feature"><b>It moves quickly</b><p>Ballads usually select vivid actions and leave the audience to infer some details.</p></div>
+      </div>
+      <div class="rule-note"><b>Ballads do not all use one fixed pattern.</b> Traditional ballads often use four-line stanzas. Paterson’s bush ballad uses six-line stanzas made from three rhyming couplets: <b>AABBCC</b>.</div>
+      <div class="plot" aria-label="The poem's narrative movement">
+        <div class="plot-step"><b>Set-up · 1–2</b>A bush visitor enters a city barber shop.</div>
+        <div class="plot-step"><b>Plan · 3–4</b>The barber prepares a practical joke.</div>
+        <div class="plot-step"><b>Reaction · 5–6</b>The visitor believes it and fights back.</div>
+        <div class="plot-step"><b>Aftermath · 7–8</b>The joke is explained and retold at home.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="eyebrow" style="color:var(--ochre)">I do · stanza 1</p>
+      <h2>Notice the form</h2>
+      <div class="model-tabs" role="tablist" aria-label="Ways to inspect the stanza">
+        <button class="model-tab active" data-mode="story" role="tab">Story</button>
+        <button class="model-tab" data-mode="rhyme" role="tab">Rhyme</button>
+        <button class="model-tab" data-mode="rhythm" role="tab">Rhythm</button>
+        <button class="model-tab" data-mode="voice" role="tab">Voice</button>
+      </div>
+      <div class="model-lines" id="modelLines"></div>
+      <div class="model-explain" id="modelExplain"></div>
+    </div>
+  </section>
+
+  <section class="section" id="reader" aria-labelledby="reader-heading">
+    <div class="reader-head">
+      <div><p class="eyebrow" style="color:var(--ochre)">Develop &amp; discover</p><h2 id="reader-heading">Read <em>The Man from Ironbark</em></h2><p>Tap an underlined word or phrase. Its meaning, word parts and translation will open beside the poem.</p></div>
+      <div class="controls" aria-label="Reader controls">
+        <button class="seg" id="vocabToggle" aria-pressed="true">Vocabulary on</button>
+        <button class="seg" id="rhymeToggle" aria-pressed="false">Rhyme labels</button>
+        <button class="seg" id="speechToggle" aria-pressed="false">Show dialogue</button>
+        <select class="lang" id="langSelect" aria-label="Translation language">
+          <option value="zh-Hans">简体中文</option><option value="ja">日本語</option><option value="fa">فارسی</option><option value="vi">Tiếng Việt</option>
+        </select>
+      </div>
+    </div>
+    <div class="reader-grid">
+      <nav class="stanza-nav" id="stanzaNav" aria-label="Jump to a stanza"></nav>
+      <article class="poem" id="poem" aria-label="The Man from Ironbark"></article>
+    </div>
+    <div class="talk" aria-label="Turn and talk prompts">
+      <div><b>Plot</b><p>Retell the stanza in one sentence. What changed?</p></div>
+      <div><b>Language</b><p>Choose one highlighted word. What does the line help you infer before you open it?</p></div>
+      <div><b>Performance</b><p>Read one couplet aloud. Where do you naturally pause, and which words carry the beat?</p></div>
+    </div>
+  </section>
+
+  <p class="copyright">Text: A. B. “Banjo” Paterson, first published in <em>The Bulletin</em> in 1892 and included in <em>The Man from Snowy River and Other Verses</em> (1895). The poem is in the public domain. Text checked against <a href="https://gutenberg.net.au/ebooks/e00073.html" target="_blank" rel="noopener">Project Gutenberg Australia</a>. Spelling and punctuation are lightly modernised for screen reading; elisions that matter to the voice are retained.</p>
+</div>
+
+<dialog id="wordDialog" aria-labelledby="popWord">
+  <div class="word-pop">
+    <div class="pop-head"><div><p class="eyebrow" style="color:var(--ochre)">Word in context</p><h2 id="popWord"></h2></div><button class="close" id="closeDialog" aria-label="Close">×</button></div>
+    <div class="pop-body" id="popBody"></div>
+  </div>
+</dialog>
+
+<!-- TEACHER-EDITABLE DATA: poem lines, key vocabulary, translations and morphology. -->
+<script id="ironbark-data" type="application/json">
+{
+  "stanzas": [
+    {"title":"Arrival in Sydney","lines":[
+      {"text":"It was the man from [[ironbark|Ironbark]] who [[struck|struck the Sydney town]],","rhyme":"A","end":"town","job":"Introduce the visitor and place.","voice":"Narrator"},
+      {"text":"He [[wandered|wandered]] over street and park, he wandered up and down.","rhyme":"A","end":"down","job":"Show him moving without a plan.","voice":"Narrator"},
+      {"text":"He [[loitered|loitered]] here, he loitered there, till he was like to drop,","rhyme":"B","end":"drop","job":"Build the problem: he is exhausted.","voice":"Narrator"},
+      {"text":"Until at last in sheer [[despair|despair]] he [[sought|sought]] a barber’s shop.","rhyme":"B","end":"shop","job":"Move him into the setting for the action.","voice":"Narrator"},
+      {"text":"“’Ere! shave my beard and [[whiskers|whiskers]] off, I’ll be a [[man-of-mark|man of mark]],","rhyme":"C","end":"mark","job":"Let the visitor state his goal.","voice":"Dialogue","speech":true},
+      {"text":"I’ll go and do the Sydney [[toff|toff]] up home in Ironbark.”","rhyme":"C","end":"Ironbark","job":"Finish the set-up with his mistaken ambition.","voice":"Dialogue","speech":true}
+    ]},
+    {"title":"The barber’s plan","lines":[
+      {"text":"The barber man was small and [[flash|flash]], as barbers mostly are,","rhyme":"A","end":"are","speech":false},
+      {"text":"He wore a [[strike-your-fancy|strike-your-fancy]] sash, he smoked a huge cigar:","rhyme":"A","end":"cigar","speech":false},
+      {"text":"He was a [[humorist|humorist]] [[of-note|of note]] and [[keen|keen]] at [[repartee|repartee]],","rhyme":"B","end":"repartee","speech":false},
+      {"text":"He [[laid-odds|laid the odds]] and kept a [[tote|‘tote’]], whatever that may be,","rhyme":"B","end":"be","speech":false},
+      {"text":"And when he saw our friend arrive, he whispered ‘Here’s a [[lark|lark]]!","rhyme":"C","end":"lark","speech":true},
+      {"text":"Just watch me catch him all alive, this man from Ironbark.’","rhyme":"C","end":"Ironbark","speech":true}
+    ]},
+    {"title":"The joke is signalled","lines":[
+      {"text":"There were some [[gilded|gilded]] youths that sat along the barber’s wall,","rhyme":"A","end":"wall","speech":false},
+      {"text":"Their eyes were [[dull|dull]], their heads were flat, they had no brains at all;","rhyme":"A","end":"all","speech":false},
+      {"text":"To them the barber [[passed-wink|passed the wink]], his [[dexter|dexter]] [[eyelid|eyelid]] shut,","rhyme":"B","end":"shut","speech":false},
+      {"text":"‘I’ll make this [[bloomin|bloomin’]] [[yokel|yokel]] think his bloomin’ throat is cut.’","rhyme":"B","end":"cut","speech":true},
+      {"text":"And as he soaped and rubbed it in he made a rude remark:","rhyme":"C","end":"remark","speech":false},
+      {"text":"‘I s’pose the flats is pretty [[green|green]] up there in Ironbark.’","rhyme":"C","end":"Ironbark","speech":true}
+    ]},
+    {"title":"The fake cut","lines":[
+      {"text":"A [[grunt|grunt]] was all reply he got; he shaved the [[bushman|bushman’s]] chin,","rhyme":"A","end":"chin","speech":false},
+      {"text":"Then made the water [[boiling|boiling hot]] and dipped the razor in.","rhyme":"A","end":"in","speech":false},
+      {"text":"He raised his hand, his [[black-brow|brow grew black]], he paused awhile to [[gloat|gloat]],","rhyme":"B","end":"gloat","speech":false},
+      {"text":"Then slashed the red-hot [[razor-back|razor-back]] across his [[victim|victim’s]] throat;","rhyme":"B","end":"throat","speech":false},
+      {"text":"Upon the newly shaven skin it made a [[livid|livid]] mark —","rhyme":"C","end":"mark","speech":false},
+      {"text":"No doubt it [[took-in|fairly took him in]] — the man from Ironbark.","rhyme":"C","end":"Ironbark","speech":false}
+    ]},
+    {"title":"He believes the trick","lines":[
+      {"text":"He [[fetched-yell|fetched a wild]] [[up-country|up-country]] yell might wake the dead to hear,","rhyme":"A","end":"hear","speech":false},
+      {"text":"And though his throat, he knew [[full-well|full well]], was cut from ear to ear,","rhyme":"A","end":"ear","speech":false},
+      {"text":"He struggled [[gamely|gamely]] to his feet, and faced the [[murderous|murd’rous]] foe:","rhyme":"B","end":"foe","speech":false},
+      {"text":"‘You’ve [[done-for|done for me]]! you dog, I’m beat! one hit before I go!","rhyme":"B","end":"go","speech":true},
+      {"text":"I only wish I had a knife, you [[blessed|blessed]] murdering [[shark|shark]]!","rhyme":"C","end":"shark","speech":true},
+      {"text":"But you’ll remember all your life, the man from Ironbark.’","rhyme":"C","end":"Ironbark","speech":true}
+    ]},
+    {"title":"The fight","lines":[
+      {"text":"He lifted up his [[hairy-paw|hairy paw]], with one [[tremendous|tremendous]] [[clout|clout]],","rhyme":"A","end":"clout","speech":false},
+      {"text":"He landed on the barber’s jaw, and knocked the barber out.","rhyme":"A","end":"out","speech":false},
+      {"text":"He [[set-to-work|set to work]] with [[tooth-and-nail|tooth and nail]], he made the place a [[wreck|wreck]];","rhyme":"B","end":"wreck","speech":false},
+      {"text":"He grabbed the nearest [[gilded|gilded]] youth, and tried to break his neck.","rhyme":"B","end":"neck","speech":false},
+      {"text":"And all the while his throat he held to save his [[vital-spark|vital spark]],","rhyme":"C","end":"spark","speech":false},
+      {"text":"And ‘Murder! Bloody Murder!’ yelled the man from Ironbark.","rhyme":"C","end":"Ironbark","speech":true}
+    ]},
+    {"title":"The explanation","lines":[
+      {"text":"A [[peeler|peeler]] man who heard the [[din|din]] came in to see the show;","rhyme":"A","end":"show","speech":false},
+      {"text":"He tried to [[run-in|run the bushman in]], but he refused to go.","rhyme":"A","end":"go","speech":false},
+      {"text":"And when at last the barber spoke, and said, ‘’Twas all in fun —","rhyme":"B","end":"fun","speech":true},
+      {"text":"’Twas just a little [[harmless|harmless]] joke, a [[trifle|trifle]] [[overdone|overdone]].’","rhyme":"B","end":"overdone","speech":true},
+      {"text":"‘A joke!’ he cried, ‘[[by-george|By George]], that’s fine; a lively sort of [[lark|lark]];","rhyme":"C","end":"lark","speech":true},
+      {"text":"I’d like to catch that [[murdering|murdering]] [[swine|swine]] some night in Ironbark.’","rhyme":"C","end":"Ironbark","speech":true}
+    ]},
+    {"title":"The story returns home","lines":[
+      {"text":"And now while round the [[shearing-floor|shearing floor]] the [[listening|list’ning]] [[shearers|shearers]] [[gape|gape]],","rhyme":"A","end":"gape","speech":false},
+      {"text":"He tells the story [[oer-and-oer|o’er and o’er]], and [[brags|brags]] of his [[escape|escape]].","rhyme":"A","end":"escape","speech":false},
+      {"text":"‘Them barber [[chaps|chaps]] what keeps a [[tote|tote]], By George, I’ve had enough,","rhyme":"B","end":"enough","speech":true},
+      {"text":"One tried to cut my bloomin’ throat, but thank the Lord it’s [[tough|tough]].’","rhyme":"B","end":"tough","speech":true},
+      {"text":"And whether he’s believed or no, there’s one thing to [[remark|remark]],","rhyme":"C","end":"remark","speech":false},
+      {"text":"That [[flowing-beards|flowing beards]] are [[all-the-go|all the go]] way up in Ironbark.","rhyme":"C","end":"Ironbark","speech":false}
+    ]}
+  ],
+  "morphemeTranslations": {
+    "iron|a hard metal":{"zh-Hans":"铁（金属）","ja":"鉄（金属）","fa":"آهن؛ فلز سخت","vi":"sắt; kim loại cứng"},
+    "bark|the outer covering of a tree":{"zh-Hans":"树皮","ja":"樹皮","fa":"پوست درخت","vi":"vỏ cây"},
+    "wander|move without a fixed route":{"zh-Hans":"漫无目的地走","ja":"あてもなく歩く","fa":"بی‌هدف حرکت کردن","vi":"đi không theo lộ trình cố định"},
+    "ed|past tense":{"zh-Hans":"过去时","ja":"過去形","fa":"زمان گذشته","vi":"thì quá khứ"},
+    "loiter|wait or move around idly":{"zh-Hans":"闲逛；逗留","ja":"ぶらぶらする","fa":"بی‌هدف ماندن یا پرسه زدن","vi":"nấn ná; đi quanh quẩn"},
+    "de|away; without":{"zh-Hans":"离开；没有","ja":"離れて；〜なし","fa":"دور؛ بدون","vi":"rời khỏi; không có"},
+    "spair|hope":{"zh-Hans":"希望","ja":"希望","fa":"امید","vi":"hy vọng"},
+    "whisker|a hair or group of facial hairs":{"zh-Hans":"一根或一簇胡须","ja":"ひげの毛","fa":"یک یا چند موی صورت","vi":"một sợi hoặc chùm râu"},
+    "s|more than one":{"zh-Hans":"复数；不止一个","ja":"複数","fa":"نشانهٔ جمع","vi":"số nhiều"},
+    "humor|what is funny; comedy":{"zh-Hans":"幽默；喜剧","ja":"ユーモア；笑い","fa":"طنز؛ شوخی","vi":"sự hài hước"},
+    "ist|a person who practises or specialises":{"zh-Hans":"从事某事的人；专家","ja":"〜する人；専門家","fa":"فرد متخصص یا فعال","vi":"người chuyên về việc đó"},
+    "gild|cover with a thin layer of gold":{"zh-Hans":"镀金","ja":"金を薄くかぶせる","fa":"زراندود کردن","vi":"mạ vàng"},
+    "ed|having been; described as":{"zh-Hans":"被……的；处于……状态","ja":"〜された；〜の状態の","fa":"شده؛ دارای وصف","vi":"đã được; mang đặc điểm"},
+    "eye|the organ used for seeing":{"zh-Hans":"眼睛","ja":"目","fa":"چشم","vi":"mắt"},
+    "lid|a cover":{"zh-Hans":"盖子","ja":"ふた","fa":"درپوش","vi":"nắp"},
+    "bush|rural Australian country":{"zh-Hans":"澳大利亚内陆乡野","ja":"オーストラリアの奥地","fa":"مناطق روستایی استرالیا","vi":"vùng nông thôn nội địa Úc"},
+    "man|an adult male person":{"zh-Hans":"成年男子","ja":"成人男性","fa":"مرد بالغ","vi":"đàn ông trưởng thành"},
+    "boil|heat a liquid until it bubbles":{"zh-Hans":"加热至沸腾","ja":"沸騰させる","fa":"جوشاندن","vi":"đun sôi"},
+    "ing|ongoing action or resulting quality":{"zh-Hans":"正在进行的动作或形成的性质","ja":"進行中の動作・生じた性質","fa":"عمل در جریان یا صفت حاصل","vi":"hành động đang diễn ra hoặc đặc tính tạo thành"},
+    "hot|having a high temperature":{"zh-Hans":"热的","ja":"熱い","fa":"داغ","vi":"nóng"},
+    "razor|a sharp tool used for shaving":{"zh-Hans":"剃刀","ja":"かみそり","fa":"تیغ اصلاح","vi":"dao cạo"},
+    "back|the rear or blunt side":{"zh-Hans":"后部；钝面","ja":"裏側；刃でない側","fa":"پشت یا لبهٔ کند","vi":"mặt sau; cạnh cùn"},
+    "up|away from the main city; inland":{"zh-Hans":"远离大城市；内陆","ja":"都市から離れた内陸へ","fa":"دور از شهر اصلی؛ به داخل کشور","vi":"xa thành phố chính; vào nội địa"},
+    "country|rural land or region":{"zh-Hans":"乡村地区","ja":"田舎；地方","fa":"ناحیهٔ روستایی","vi":"vùng nông thôn"},
+    "game|brave; willing to keep trying":{"zh-Hans":"勇敢；愿意坚持","ja":"勇敢でやり抜く気のある","fa":"شجاع و آمادهٔ ادامه دادن","vi":"gan dạ; sẵn sàng cố gắng"},
+    "ly|in this manner":{"zh-Hans":"以这种方式","ja":"〜のように","fa":"به این شیوه","vi":"theo cách này"},
+    "murder|unlawfully kill a person":{"zh-Hans":"谋杀","ja":"人を殺す","fa":"قتل کردن","vi":"giết người"},
+    "ous|full of; having the quality of":{"zh-Hans":"充满；具有……性质","ja":"〜に満ちた；〜の性質の","fa":"سرشار از؛ دارای ویژگی","vi":"đầy; có đặc tính"},
+    "bless|declare holy; wish good for":{"zh-Hans":"祝福；祈福","ja":"祝福する","fa":"متبرک کردن؛ آرزوی خیر","vi":"ban phước; chúc lành"},
+    "ed|described as":{"zh-Hans":"被描述为……；处于……状态","ja":"〜とされる；〜の状態","fa":"وصف‌شده به؛ در حالت","vi":"được mô tả là"},
+    "hair|strands growing from skin":{"zh-Hans":"毛发","ja":"毛","fa":"مو","vi":"lông; tóc"},
+    "y|full of; having":{"zh-Hans":"充满；具有","ja":"〜の多い；〜を持つ","fa":"پر از؛ دارای","vi":"đầy; có"},
+    "paw|an animal’s foot; here, a rough hand":{"zh-Hans":"动物的爪；此处指粗大的手","ja":"動物の足；ここではごつい手","fa":"پنجهٔ حیوان؛ اینجا دست زمخت","vi":"chân thú; ở đây là bàn tay thô"},
+    "tremend|cause awe or trembling; very great":{"zh-Hans":"引起敬畏或颤抖；极大的","ja":"畏れを起こす；非常に大きい","fa":"هراس‌انگیز یا بسیار بزرگ","vi":"gây kinh sợ; rất lớn"},
+    "Peel|the surname of Robert Peel":{"zh-Hans":"罗伯特·皮尔的姓氏","ja":"ロバート・ピールの姓","fa":"نام خانوادگی رابرت پیل","vi":"họ của Robert Peel"},
+    "er|a person connected with":{"zh-Hans":"与某事有关的人","ja":"〜に関係する人","fa":"فرد مرتبط با","vi":"người liên quan đến"},
+    "harm|hurt or damage":{"zh-Hans":"伤害；损害","ja":"害；傷つける","fa":"آسیب","vi":"tổn hại"},
+    "less|without":{"zh-Hans":"没有；不含","ja":"〜がない","fa":"بدون","vi":"không có"},
+    "over|too much; beyond a limit":{"zh-Hans":"过度；超过限度","ja":"過度に；限度を越えて","fa":"بیش از حد","vi":"quá mức"},
+    "done|completed; carried out":{"zh-Hans":"完成；做完","ja":"完了した；行われた","fa":"انجام‌شده","vi":"đã làm xong"},
+    "ing|doing; characterised by":{"zh-Hans":"正在做；以……为特征","ja":"〜している；〜が特徴の","fa":"در حال انجام؛ دارای ویژگی","vi":"đang làm; mang đặc điểm"},
+    "shear|cut wool from a sheep":{"zh-Hans":"剪羊毛","ja":"羊毛を刈る","fa":"پشم چیدن","vi":"xén lông cừu"},
+    "ing|the activity of":{"zh-Hans":"……活动；……行为","ja":"〜する活動","fa":"عملِ","vi":"hoạt động"},
+    "floor|the work surface of a room":{"zh-Hans":"房间或作业区的地面","ja":"部屋の作業床","fa":"سطح کارِ اتاق","vi":"sàn làm việc"},
+    "listen|pay attention to sound":{"zh-Hans":"听；留心声音","ja":"耳を傾ける","fa":"گوش دادن","vi":"lắng nghe"},
+    "ing|ongoing action":{"zh-Hans":"正在进行的动作","ja":"進行中の動作","fa":"عمل در حال انجام","vi":"hành động đang diễn ra"},
+    "er|a person who does an action":{"zh-Hans":"做某事的人","ja":"〜する人","fa":"کسی که کاری انجام می‌دهد","vi":"người thực hiện hành động"},
+    "brag|speak too proudly":{"zh-Hans":"吹嘘；夸耀","ja":"自慢しすぎる","fa":"لاف زدن","vi":"khoe khoang"},
+    "s|present tense with he/she/it":{"zh-Hans":"第三人称单数现在时","ja":"三人称単数現在","fa":"نشانهٔ سوم‌شخص مفرد حال","vi":"dấu hiện tại ngôi thứ ba số ít"},
+    "re|again; closely":{"zh-Hans":"再次；仔细地","ja":"再び；よく","fa":"دوباره؛ با دقت","vi":"lại; kỹ"},
+    "mark|notice; make a sign":{"zh-Hans":"注意；做标记","ja":"気づく；印を付ける","fa":"توجه کردن؛ علامت زدن","vi":"nhận thấy; đánh dấu"},
+    "flow|move smoothly; hang freely":{"zh-Hans":"流动；自由垂下","ja":"流れる；なめらかに垂れる","fa":"روان شدن؛ آزاد آویختن","vi":"chảy; buông rủ"},
+    "ing|having an ongoing quality":{"zh-Hans":"具有持续的性质或状态","ja":"継続する性質・〜の状態","fa":"دارای حالت ادامه‌دار","vi":"có đặc tính tiếp diễn"},
+    "beard|hair on the chin and cheeks":{"zh-Hans":"胡须","ja":"あごひげ","fa":"ریش","vi":"râu"}
+  },
+  "vocab": {
+    "ironbark":{"word":"Ironbark","meaning":"A hard-barked Australian eucalyptus; here, also the name of the visitor’s bush town.","context":"The title identifies the man by his country home before it tells us his name.","origin":"A transparent compound: iron + bark. The name suggests bark as hard as iron.","parts":[{"surface":"iron","type":"root","meaning":"a hard metal"},{"surface":"bark","type":"root","meaning":"the outer covering of a tree"}],"related":["ironbark tree","bark","barked"],"translations":{"zh-Hans":"铁皮桉；诗中的乡镇名","ja":"アイアンバーク（硬い樹皮のユーカリ；町名）","fa":"درخت آیرون‌بارک؛ نام شهرک در شعر","vi":"cây bạch đàn vỏ sắt; tên thị trấn trong bài thơ"}},
+    "struck":{"word":"struck the Sydney town","meaning":"Reached or arrived in Sydney.","context":"Here struck does not mean hit. It is an old narrative use meaning arrived at a place.","origin":"Struck is the irregular past form of strike: strike → struck.","parts":[],"related":["strike","strikes","striking","struck"],"translations":{"zh-Hans":"到达悉尼城","ja":"シドニーの町に着いた","fa":"به شهر سیدنی رسید","vi":"đến thành phố Sydney"}},
+    "wandered":{"word":"wandered","meaning":"Moved around without a clear route or purpose.","context":"He walks through streets and parks but does not know what to do.","origin":"wander + -ed (past tense).","parts":[{"surface":"wander","type":"root","meaning":"move without a fixed route"},{"surface":"ed","type":"suffix","meaning":"past tense"}],"related":["wander","wanders","wandering","wanderer"],"translations":{"zh-Hans":"四处游荡","ja":"あちこち歩き回った","fa":"بی‌هدف پرسه زد","vi":"đi lang thang"}},
+    "loitered":{"word":"loitered","meaning":"Stayed or moved slowly in a place without an obvious purpose.","context":"The repetition ‘here … there’ makes his aimless waiting easy to hear.","origin":"loiter + -ed (past tense).","parts":[{"surface":"loiter","type":"root","meaning":"wait or move around idly"},{"surface":"ed","type":"suffix","meaning":"past tense"}],"related":["loiter","loiters","loitering"],"translations":{"zh-Hans":"闲逛；逗留","ja":"ぶらぶらした","fa":"پرسه زد؛ بی‌هدف ماند","vi":"đi quanh quẩn; nấn ná"}},
+    "despair":{"word":"despair","meaning":"A complete loss of hope.","context":"Sheer means complete here: he is so tired and hopeless that he finally chooses a shop.","origin":"From Latin de- (away) + sperare (to hope). The spelling changed as the word travelled through French.","parts":[{"surface":"de","type":"prefix","meaning":"away; without"},{"surface":"spair","variant":"sper","type":"root","meaning":"hope"}],"related":["despair","despaired","despairing","desperate"],"translations":{"zh-Hans":"绝望","ja":"絶望","fa":"ناامیدی کامل","vi":"sự tuyệt vọng"}},
+    "sought":{"word":"sought","meaning":"Looked for or tried to find.","context":"He sought a barber’s shop: he looked for one and then entered it.","origin":"The irregular past form of seek: seek → sought.","parts":[],"related":["seek","seeks","seeking","sought"],"translations":{"zh-Hans":"寻找；寻求","ja":"探し求めた","fa":"جست‌وجو کرد","vi":"tìm kiếm"}},
+    "whiskers":{"word":"whiskers","meaning":"Hair growing on a man’s cheeks or around the mouth; facial hair.","context":"He asks the barber to remove both his beard and whiskers.","origin":"whisker + -s (plural).","parts":[{"surface":"whisker","type":"root","meaning":"a hair or group of facial hairs"},{"surface":"s","type":"suffix","meaning":"more than one"}],"related":["whisker","whiskers","whiskered"],"translations":{"zh-Hans":"胡须；络腮胡","ja":"ほおひげ","fa":"سبیل و موی صورت","vi":"râu quai nón; ria"}},
+    "man-of-mark":{"word":"man of mark","meaning":"A man who is noticeable, important or respected.","context":"He thinks a city haircut will make people at home see him as impressive.","origin":"An old fixed expression. Mark here means distinction or reputation, not a written score.","parts":[],"related":["of note","distinguished","notable"],"translations":{"zh-Hans":"有名望的人","ja":"名のある人物","fa":"مردی نامدار و مهم","vi":"người đàn ông có danh tiếng"}},
+    "toff":{"word":"toff","meaning":"An old mocking word for a fashionable upper-class person.","context":"He plans to copy the appearance and manners of a stylish Sydney gentleman.","origin":"Nineteenth-century British slang; it is best learned as a whole word.","parts":[],"related":["toff","toffish"],"translations":{"zh-Hans":"衣着讲究的上流人士（旧俚语）","ja":"しゃれた上流階級の人（古い俗語）","fa":"آدم اشرافی و شیک‌پوش (عامیانهٔ قدیمی)","vi":"người thượng lưu ăn diện (tiếng lóng cũ)"}},
+
+    "flash":{"word":"flash","meaning":"Showy, stylish and trying to attract attention.","context":"The barber’s appearance is impressive but also a little boastful.","origin":"Old slang use of flash. It is not the burst of light meaning.","parts":[],"related":["flashy","flashily","showy"],"translations":{"zh-Hans":"花哨而招摇的","ja":"派手で気取った","fa":"پرزرق‌وبرق و خودنما","vi":"hào nhoáng; thích phô trương"}},
+    "strike-your-fancy":{"word":"strike your fancy","meaning":"Catch your attention or strongly appeal to you.","context":"A strike-your-fancy sash is so bright or unusual that people notice it.","origin":"A fixed idiom. Fancy here means liking or imagination.","parts":[],"related":["catch your eye","appeal to","fancy"],"translations":{"zh-Hans":"吸引你的注意；合你的意","ja":"目を引く；気に入る","fa":"توجه یا پسند کسی را جلب کردن","vi":"thu hút sự chú ý; hợp ý"}},
+    "humorist":{"word":"humorist","meaning":"A person skilled at making people laugh, especially through stories or writing.","context":"The narrator presents the barber as someone known for jokes.","origin":"humor + -ist (a person who practises or specialises in something).","parts":[{"surface":"humor","type":"root","meaning":"what is funny; comedy"},{"surface":"ist","type":"suffix","meaning":"a person who practises or specialises"}],"related":["humour","humorous","humorist"],"translations":{"zh-Hans":"幽默家；爱讲笑话的人","ja":"ユーモア作家；冗談の達人","fa":"طنزپرداز؛ شوخ‌طبع","vi":"nhà hài hước; người giỏi pha trò"}},
+    "of-note":{"word":"of note","meaning":"Important, well known or worth noticing.","context":"A humorist of note is a person with a reputation for humour.","origin":"A fixed expression. It has a similar meaning to notable.","parts":[],"related":["notable","noteworthy","man of mark"],"translations":{"zh-Hans":"著名的；重要的","ja":"著名な；注目すべき","fa":"مشهور یا قابل‌توجه","vi":"nổi tiếng; đáng chú ý"}},
+    "keen":{"word":"keen","meaning":"Quick, sharp or highly skilled.","context":"Keen at repartee means very good at giving clever replies.","origin":"An old sense related to sharpness; compare a keen blade and a keen mind.","parts":[],"related":["keen","keenly","keenness"],"translations":{"zh-Hans":"敏锐的；擅长的","ja":"鋭い；巧みな","fa":"تیز و ماهر","vi":"sắc sảo; rất giỏi"}},
+    "repartee":{"word":"repartee","meaning":"A quick exchange of clever, witty replies.","context":"The barber enjoys fast verbal jokes as well as practical jokes.","origin":"Borrowed from French répartie, meaning a quick reply. It has no useful modern English morpheme split.","parts":[],"related":["banter","witty reply","retort"],"translations":{"zh-Hans":"机智的对答","ja":"機知に富んだ応酬","fa":"جواب‌های سریع و شوخ‌طبعانه","vi":"đối đáp dí dỏm"}},
+    "laid-odds":{"word":"laid the odds","meaning":"Set or offered the betting odds.","context":"This detail links the barber to gambling and horse-racing culture.","origin":"A betting expression; learn the phrase as a whole.","parts":[],"related":["odds","bet","wager"],"translations":{"zh-Hans":"开出赔率","ja":"賭けのオッズを付けた","fa":"ضریب شرط‌بندی تعیین کرد","vi":"đưa ra tỷ lệ cá cược"}},
+    "tote":{"word":"tote","meaning":"A totalisator: a system that pools bets and calculates the payout.","context":"The narrator jokes ‘whatever that may be’, signalling an old specialist word.","contexts":{"8":"The visitor repeats the city word in his own story, but he still treats the tote as part of the barbers’ strange world."},"origin":"Short for totalisator, a machine or system for pool betting.","parts":[],"related":["totalisator","betting pool","odds"],"translations":{"zh-Hans":"赛马总彩池系统（旧称）","ja":"共同投票式の賭けシステム","fa":"سامانهٔ شرط‌بندی تجمیعی","vi":"hệ thống cá cược chung (totalisator)"}},
+    "lark":{"word":"lark","meaning":"A prank, joke or playful adventure.","context":"The barber calls his planned trick a lark, although it will not feel harmless to the visitor.","contexts":{"7":"The visitor repeats the word lark sarcastically: he clearly does not accept that the frightening trick was harmless fun."},"origin":"Old slang. This is different from lark, the bird.","parts":[],"related":["prank","mischief","practical joke"],"translations":{"zh-Hans":"恶作剧；玩笑","ja":"いたずら；悪ふざけ","fa":"شوخی یا شیطنت","vi":"trò đùa nghịch; trò tinh quái"}},
+
+    "gilded":{"word":"gilded","meaning":"Covered with a thin layer of gold; figuratively, rich-looking or showy.","context":"Gilded youths suggests fashionable young men whose bright surface may hide little substance.","contexts":{"6":"The nearest gilded youth is one of the fashionable onlookers who encouraged the joke; now he is pulled into the fight."},"origin":"gild + -ed.","parts":[{"surface":"gild","type":"root","meaning":"cover with a thin layer of gold"},{"surface":"ed","type":"suffix","meaning":"having been; described as"}],"related":["gild","gilded","gilding"],"translations":{"zh-Hans":"镀金的；表面华丽的","ja":"金めっきの；うわべだけ華やかな","fa":"زراندود؛ ظاهراً پرزرق‌وبرق","vi":"mạ vàng; hào nhoáng bề ngoài"}},
+    "dull":{"word":"dull","meaning":"Not sharp or lively; here, slow to think.","context":"The insult describes the watching youths as mentally empty, not merely bored.","origin":"An old English word with several connected meanings: blunt, dim, boring and slow.","parts":[],"related":["dull","dully","dullness"],"translations":{"zh-Hans":"迟钝的；乏味的","ja":"鈍い；頭の働きが遅い","fa":"کندذهن؛ کسل‌کننده","vi":"đần độn; buồn tẻ"}},
+    "passed-wink":{"word":"passed the wink","meaning":"Gave a secret signal by winking.","context":"The barber silently tells the young men that a joke is about to begin.","origin":"An old fixed expression; modern English more often says gave them a wink.","parts":[],"related":["wink","signal","give the nod"],"translations":{"zh-Hans":"使眼色；暗中示意","ja":"ウインクで合図した","fa":"با چشمک علامت مخفی داد","vi":"nháy mắt ra hiệu"}},
+    "dexter":{"word":"dexter","meaning":"On the right-hand side.","context":"His dexter eyelid is his right eyelid. It closes to make the secret wink.","origin":"A Latin word meaning right or right hand. Compare dexterity: skill with the hands.","parts":[],"related":["dexterity","dexterous","ambidextrous"],"translations":{"zh-Hans":"右边的；右手侧的","ja":"右側の","fa":"سمت راست؛ راست‌دست","vi":"bên phải; thuộc tay phải"}},
+    "eyelid":{"word":"eyelid","meaning":"The fold of skin that opens and closes over the eye.","context":"The barber shuts one eyelid to wink at the others.","origin":"A transparent compound: eye + lid.","parts":[{"surface":"eye","type":"root","meaning":"the organ used for seeing"},{"surface":"lid","type":"root","meaning":"a cover"}],"related":["eye","eyelid","eyelids"],"translations":{"zh-Hans":"眼皮","ja":"まぶた","fa":"پلک چشم","vi":"mí mắt"}},
+    "bloomin":{"word":"bloomin’","meaning":"An old mild intensifier meaning very or ‘that annoying …’.","context":"The apostrophe shows casual speech. It strengthens the insult without adding literal flower meaning.","origin":"Old colloquial speech; do not split it as bloom + -ing for this meaning.","parts":[],"related":["blimming","blasted","very"],"translations":{"zh-Hans":"真是的；非常（旧式加强语）","ja":"まったく；ひどく（古い強調語）","fa":"لعنتی؛ خیلی (تأکید قدیمی)","vi":"thật là; cực kỳ (từ nhấn mạnh kiểu cũ)"}},
+    "yokel":{"word":"yokel","meaning":"An insulting old word for a supposedly unsophisticated country person.","context":"The barber looks down on the visitor because he comes from the bush.","origin":"Old slang; learn it as a whole word. It is disrespectful when used about a person.","parts":[],"related":["country bumpkin","rustic","outsider"],"translations":{"zh-Hans":"乡巴佬（侮辱语）","ja":"田舎者（侮辱的）","fa":"دهاتی ساده‌لوح (توهین‌آمیز)","vi":"đồ nhà quê (mang tính xúc phạm)"}},
+    "green":{"word":"green","meaning":"Inexperienced or easily fooled; literally, also the colour green.","context":"The barber makes a pun: the country flats may be green with plants, and country people may be ‘green’ or naïve.","origin":"A figurative extension from unripe green fruit to an inexperienced person.","parts":[],"related":["greenhorn","inexperienced","naïve"],"translations":{"zh-Hans":"幼稚无经验的；绿色的","ja":"未熟な；緑の","fa":"بی‌تجربه؛ سبز","vi":"non nớt; màu xanh"}},
+
+    "grunt":{"word":"grunt","meaning":"A short, low sound made instead of speaking.","context":"The bushman does not answer the barber’s insult with words.","origin":"An imitative sound-word: its sound resembles the noise it names.","parts":[],"related":["grunt","grunted","grunting"],"translations":{"zh-Hans":"咕哝声；哼声","ja":"うなり声；鼻を鳴らす声","fa":"صدای خرخر یا نالهٔ کوتاه","vi":"tiếng càu nhàu; tiếng hừ"}},
+    "bushman":{"word":"bushman","meaning":"A man who lives or works in the Australian bush or inland country.","context":"The narrator contrasts the country visitor with the city barber.","origin":"A transparent compound: bush + man.","parts":[{"surface":"bush","type":"root","meaning":"rural Australian country"},{"surface":"man","type":"root","meaning":"an adult male person"}],"related":["bush","bushman","bushmen"],"translations":{"zh-Hans":"澳大利亚内陆乡下人","ja":"オーストラリア内陸部の男","fa":"مردِ نواحی بوته‌زار و روستایی استرالیا","vi":"người đàn ông vùng bụi rậm/nội địa Úc"}},
+    "boiling":{"word":"boiling hot","meaning":"Extremely hot; hot enough to boil.","context":"The barber heats the water so the blunt back of the razor will leave a painful mark.","origin":"boil + -ing; hot completes the phrase.","parts":[{"surface":"boil","type":"root","meaning":"heat a liquid until it bubbles"},{"surface":"ing","type":"suffix","meaning":"ongoing action or resulting quality"},{"surface":"hot","type":"root","meaning":"having a high temperature"}],"related":["boil","boiled","boiling"],"translations":{"zh-Hans":"滚烫的","ja":"沸騰するほど熱い","fa":"جوشان و بسیار داغ","vi":"nóng sôi; cực nóng"}},
+    "black-brow":{"word":"his brow grew black","meaning":"His face became dark and threatening.","context":"The phrase is figurative: the barber performs anger to make the fake attack convincing.","origin":"An old descriptive idiom. Brow means the forehead and the area around the eyebrows.","parts":[],"related":["scowl","dark expression","threatening"],"translations":{"zh-Hans":"他脸色阴沉下来","ja":"額の表情が険しくなった","fa":"چهره‌اش تیره و تهدیدآمیز شد","vi":"sắc mặt ông ta trở nên dữ tợn"}},
+    "gloat":{"word":"gloat","meaning":"Show pleasure at another person’s trouble or at your own expected success.","context":"The barber pauses to enjoy the fear he expects to create.","origin":"A single modern root; learn it as a whole word.","parts":[],"related":["gloat","gloated","gloating"],"translations":{"zh-Hans":"幸灾乐祸地得意","ja":"他人の不幸を喜ぶ","fa":"از گرفتاری دیگری با بدجنسی لذت بردن","vi":"hả hê trước khó khăn của người khác"}},
+    "razor-back":{"word":"razor-back","meaning":"The blunt back edge of a razor, not its sharp cutting edge.","context":"The barber uses the heated back to make a mark without actually cutting the throat.","origin":"A compound: razor + back.","parts":[{"surface":"razor","type":"root","meaning":"a sharp tool used for shaving"},{"surface":"back","type":"root","meaning":"the rear or blunt side"}],"related":["razor","razor blade","back edge"],"translations":{"zh-Hans":"剃刀的刀背","ja":"かみそりの刃でない背の部分","fa":"پشتِ کُندِ تیغ","vi":"sống dao cạo (phần không sắc)"}},
+    "victim":{"word":"victim","meaning":"A person harmed, attacked or deceived by someone or something.","context":"The narrator briefly adopts the language of a real attack while describing the barber’s target.","origin":"Borrowed through Latin and French; it has no useful modern English split.","parts":[],"related":["victim","victimise","victimisation"],"translations":{"zh-Hans":"受害者","ja":"被害者","fa":"قربانی","vi":"nạn nhân"}},
+    "livid":{"word":"livid","meaning":"Bluish-grey or dark purple, like a bruise.","context":"Here livid describes the colour of the mark on the newly shaved skin. It does not mean extremely angry in this line.","origin":"The colour meaning is older; the angry meaning developed later from the idea of a face changing colour.","parts":[],"related":["livid mark","bruise","livid with anger"],"translations":{"zh-Hans":"青紫色的（像淤青）","ja":"青紫色の；あざのような","fa":"کبود و مایل به بنفش","vi":"tím tái; thâm như vết bầm"}},
+    "took-in":{"word":"took him in","meaning":"Deceived or fooled him.","context":"The bushman believes the razor has really cut his throat.","origin":"A phrasal verb. Took is the past of take, but the whole phrase has a special meaning.","parts":[],"related":["take in","taken in","deceive"],"translations":{"zh-Hans":"骗过了他","ja":"彼をだました","fa":"او را فریب داد","vi":"đã lừa được ông ta"}},
+
+    "fetched-yell":{"word":"fetched a wild yell","meaning":"Let out or produced a loud, wild yell.","context":"Fetched does not mean went and brought here; it introduces the sound he suddenly makes.","origin":"An older use of fetch meaning give, produce or draw out.","parts":[],"related":["let out a yell","gave a cry","shouted"],"translations":{"zh-Hans":"发出一声狂野的叫喊","ja":"荒々しい叫び声を上げた","fa":"فریادی وحشیانه سر داد","vi":"thét lên một tiếng dữ dội"}},
+    "up-country":{"word":"up-country","meaning":"From a rural or inland area, away from the main city.","context":"The description marks the yell—and the man—as coming from the bush.","origin":"A compound expression: up + country. Here up is a free word in the compound, not a bound prefix.","parts":[{"surface":"up","type":"root","meaning":"away from the main city; inland"},{"surface":"country","type":"root","meaning":"rural land or region"}],"related":["up-country","inland","the bush"],"translations":{"zh-Hans":"内陆乡下的","ja":"奥地・田舎の","fa":"مربوط به نواحی دورافتاده و روستایی","vi":"thuộc vùng quê/nội địa"}},
+    "full-well":{"word":"full well","meaning":"Very well; with complete certainty.","context":"He is completely sure—although wrongly—that his throat has been cut.","origin":"An old fixed intensifying expression.","parts":[],"related":["perfectly well","fully aware","certain"],"translations":{"zh-Hans":"非常清楚；完全知道","ja":"十分によく；確かに","fa":"کاملاً و به‌خوبی","vi":"rất rõ; hoàn toàn chắc chắn"}},
+    "gamely":{"word":"gamely","meaning":"Bravely and with determination, especially while hurt or losing.","context":"He stands up to face the barber even though he thinks he is dying.","origin":"game (brave and spirited) + -ly (in that manner).","parts":[{"surface":"game","type":"root","meaning":"brave; willing to keep trying"},{"surface":"ly","type":"suffix","meaning":"in this manner"}],"related":["game","gamely","game effort"],"translations":{"zh-Hans":"勇敢顽强地","ja":"勇敢に；くじけずに","fa":"شجاعانه و با سماجت","vi":"gan dạ và kiên cường"}},
+    "murderous":{"word":"murd’rous (murderous)","meaning":"Intending or seeming ready to kill.","context":"The apostrophe compresses murderous to keep the beat of the line.","origin":"murder + -ous (having the quality of).","parts":[{"surface":"murder","type":"root","meaning":"unlawfully kill a person"},{"surface":"ous","type":"suffix","meaning":"full of; having the quality of"}],"related":["murder","murderer","murderous","murderously"],"translations":{"zh-Hans":"杀气腾腾的；凶残的","ja":"殺意のある；残忍な","fa":"آدم‌کشانه؛ مرگبار","vi":"có ý giết người; đầy sát khí"}},
+    "done-for":{"word":"done for me","meaning":"Killed or ruined me; made it impossible for me to survive.","context":"He believes the barber’s trick has fatally wounded him.","origin":"An informal idiom: be done for means be defeated, ruined or near death.","parts":[],"related":["done for","finished","ruined"],"translations":{"zh-Hans":"把我害死了；我完了","ja":"俺を殺した；もうだめだ","fa":"کارم را ساختی؛ مرا کشتی","vi":"mày làm tao chết rồi; tao tiêu rồi"}},
+    "blessed":{"word":"blessed","meaning":"A mild old intensifier used to strengthen annoyance.","context":"He does not literally mean holy or fortunate; the word intensifies his insult.","origin":"bless + -ed, but the phrase uses a special colloquial meaning.","parts":[{"surface":"bless","type":"root","meaning":"declare holy; wish good for"},{"surface":"ed","type":"suffix","meaning":"described as"}],"related":["bless","blessed","blessing"],"translations":{"zh-Hans":"该死的；真是的（委婉加强语）","ja":"この；まったく（古い強調語）","fa":"لعنتی (تأکید ملایم قدیمی)","vi":"đáng ghét; thật là (từ nhấn mạnh kiểu cũ)"}},
+    "shark":{"word":"shark","meaning":"A ruthless or dishonest person.","context":"He compares the barber to a dangerous predator; he does not mean the sea animal literally.","origin":"A metaphorical extension from the predatory fish.","parts":[],"related":["loan shark","card shark","predator"],"translations":{"zh-Hans":"狠毒的人；恶棍","ja":"冷酷な悪党","fa":"آدم بی‌رحم و درنده‌خو","vi":"kẻ tàn nhẫn; đồ đểu"}},
+
+    "hairy-paw":{"word":"hairy paw","meaning":"A comic, animal-like description of the bushman’s large hairy hand.","context":"The narrator exaggerates his rough physical power before the punch.","origin":"A descriptive compound phrase: hairy + paw.","parts":[{"surface":"hair","type":"root","meaning":"strands growing from skin"},{"surface":"y","type":"suffix","meaning":"full of; having"},{"surface":"paw","type":"root","meaning":"an animal’s foot; here, a rough hand"}],"related":["hair","hairy","paw"],"translations":{"zh-Hans":"毛茸茸的大手（像爪子）","ja":"毛むくじゃらの大きな手（前足のような）","fa":"دست پشمالو و پنجه‌مانند","vi":"bàn tay đầy lông như một cái vuốt"}},
+    "tremendous":{"word":"tremendous","meaning":"Extremely large, powerful or great.","context":"The adjective enlarges the force of the single punch.","origin":"tremend + -ous; historically linked to a Latin word for trembling.","parts":[{"surface":"tremend","type":"root","meaning":"cause awe or trembling; very great"},{"surface":"ous","type":"suffix","meaning":"full of; having the quality of"}],"related":["tremendous","tremendously"],"translations":{"zh-Hans":"巨大的；威力惊人的","ja":"ものすごい；非常に大きな","fa":"بسیار بزرگ و نیرومند","vi":"cực lớn; mạnh khủng khiếp"}},
+    "clout":{"word":"clout","meaning":"A hard hit with the hand or fist.","context":"One clout knocks the barber unconscious.","origin":"An old informal word; learn it as a whole root.","parts":[],"related":["clout","hit","blow"],"translations":{"zh-Hans":"重重一击","ja":"強烈な一撃","fa":"ضربهٔ محکم","vi":"một cú đánh mạnh"}},
+    "set-to-work":{"word":"set to work","meaning":"Began doing something energetically and seriously.","context":"He immediately starts wrecking the shop and attacking the onlookers.","origin":"A fixed verb phrase; learn it as a whole.","parts":[],"related":["get to work","set about","begin"],"translations":{"zh-Hans":"立即动手；卖力干起来","ja":"勢いよく取りかかった","fa":"با جدیت شروع به کار کرد","vi":"bắt tay vào làm một cách quyết liệt"}},
+    "tooth-and-nail":{"word":"tooth and nail","meaning":"With every possible effort; fiercely.","context":"The idiom makes the fight sound animal-like and uncontrolled.","origin":"An old idiom imagining fighting with both teeth and fingernails.","parts":[],"related":["fight tooth and nail","fiercely","with all one’s strength"],"translations":{"zh-Hans":"拼命地；使尽全力地","ja":"必死に；あらゆる手段で","fa":"با تمام توان و به‌شدت","vi":"quyết liệt; bằng mọi sức lực"}},
+    "wreck":{"word":"wreck","meaning":"A badly damaged or destroyed place or thing.","context":"The shop becomes a wreck after the fight.","origin":"A single root that can be a noun or a verb.","parts":[],"related":["wreck","wrecked","wreckage"],"translations":{"zh-Hans":"被严重破坏的地方；废墟","ja":"めちゃくちゃに壊れた状態","fa":"ویرانه؛ چیز به‌شدت خراب","vi":"đống đổ nát; nơi bị phá tan"}},
+    "vital-spark":{"word":"vital spark","meaning":"The life force that keeps a person alive.","context":"He holds his throat because he thinks he must stop his life from escaping.","origin":"A figurative phrase: vital means connected with life; spark suggests a tiny flame of life.","parts":[],"related":["vital","vitality","life force"],"translations":{"zh-Hans":"生命之火；生命力","ja":"命の火；生命力","fa":"جرقهٔ حیات؛ نیروی زندگی","vi":"tia lửa sự sống; sinh lực"}},
+
+    "peeler":{"word":"peeler","meaning":"An old slang word for a police officer.","context":"The peeler hears the noise and enters to arrest the bushman.","origin":"Named after Sir Robert Peel, associated with the creation of modern British policing: Peel + -er.","parts":[{"surface":"Peel","type":"root","meaning":"the surname of Robert Peel"},{"surface":"er","type":"suffix","meaning":"a person connected with"}],"related":["peeler","bobby","police officer"],"translations":{"zh-Hans":"警察（旧俚语）","ja":"警官（古い俗語）","fa":"پلیس (اصطلاح قدیمی)","vi":"cảnh sát (tiếng lóng cũ)"}},
+    "din":{"word":"din","meaning":"A loud, unpleasant and continuing noise.","context":"The shouting, smashing and fighting make enough noise to attract a police officer.","origin":"An old single-root word; learn it as a whole.","parts":[],"related":["din","racket","uproar"],"translations":{"zh-Hans":"喧闹声；嘈杂声","ja":"騒音；どんちゃん騒ぎ","fa":"سروصدای بلند و آزاردهنده","vi":"tiếng ồn inh tai"}},
+    "run-in":{"word":"run someone in","meaning":"Arrest someone and take them to a police station.","context":"The officer tries to arrest the bushman after seeing the damaged shop.","origin":"An old informal phrasal verb; it cannot be understood by adding the usual meanings of run and in.","parts":[],"related":["arrest","take into custody","run-in"],"translations":{"zh-Hans":"逮捕某人；把某人带到警局","ja":"人を逮捕して連行する","fa":"کسی را بازداشت کردن","vi":"bắt và giải ai về đồn"}},
+    "harmless":{"word":"harmless","meaning":"Not able or likely to cause harm.","context":"The barber calls the joke harmless, although it caused fear, injury and damage.","origin":"harm + -less (without).","parts":[{"surface":"harm","type":"root","meaning":"hurt or damage"},{"surface":"less","type":"suffix","meaning":"without"}],"related":["harm","harmful","harmless","harmlessly"],"translations":{"zh-Hans":"无害的","ja":"害のない","fa":"بی‌ضرر","vi":"vô hại"}},
+    "trifle":{"word":"trifle","meaning":"A small or unimportant amount or thing.","context":"Calling the joke a trifle minimises how far it went.","origin":"A single borrowed word; learn it as a whole in this meaning.","parts":[],"related":["a little","minor matter","trivial"],"translations":{"zh-Hans":"一点点；小事","ja":"ほんの少し；ささいなこと","fa":"مقدار ناچیز؛ چیز کم‌اهمیت","vi":"một chút; chuyện nhỏ"}},
+    "overdone":{"word":"overdone","meaning":"Taken too far; done more than was sensible or acceptable.","context":"The barber admits that the joke exceeded a safe limit.","origin":"over- (too much) + done (past form of do).","parts":[{"surface":"over","type":"prefix","meaning":"too much; beyond a limit"},{"surface":"done","type":"root","meaning":"completed; carried out"}],"related":["overdo","overdoes","overdid","overdone"],"translations":{"zh-Hans":"做过头的；过分的","ja":"やり過ぎた","fa":"زیاده‌روی‌شده؛ بیش از حد","vi":"bị làm quá mức; quá đà"}},
+    "by-george":{"word":"By George!","meaning":"An old mild exclamation showing surprise or strong feeling.","context":"The bushman’s reply sounds approving at first, but the next line reveals his anger.","origin":"A euphemistic exclamation; learn it as a whole phrase.","parts":[],"related":["goodness!","good grief!","by golly!"],"translations":{"zh-Hans":"天哪！（旧式感叹语）","ja":"なんとまあ！（古い感嘆表現）","fa":"عجب! به‌به! (تعجب قدیمی)","vi":"trời đất ơi! (thán từ kiểu cũ)"}},
+    "murdering":{"word":"murdering","meaning":"Murderous; behaving like a person who kills.","context":"The bushman uses it as an angry adjective before swine.","origin":"murder + -ing.","parts":[{"surface":"murder","type":"root","meaning":"unlawfully kill a person"},{"surface":"ing","type":"suffix","meaning":"doing; characterised by"}],"related":["murder","murderer","murdering","murderous"],"translations":{"zh-Hans":"杀人的；凶残的","ja":"人殺しの；殺そうとする","fa":"آدم‌کش؛ در حال کشتن","vi":"giết người; sát nhân"}},
+    "swine":{"word":"swine","meaning":"A pig; also an insulting word for a cruel or unpleasant person.","context":"The bushman calls the barber a pig-like villain.","origin":"An old Germanic word. The plural can also be swine.","parts":[],"related":["pig","boar","insult"],"translations":{"zh-Hans":"猪；卑鄙的人（侮辱语）","ja":"豚；卑劣な人（侮辱語）","fa":"خوک؛ آدم پست (توهین)","vi":"lợn; đồ đê tiện (lời xúc phạm)"}},
+
+    "shearing-floor":{"word":"shearing floor","meaning":"The work area in a shearing shed where wool is cut from sheep.","context":"Back home, the man tells his story to workers gathered around the shearing area.","origin":"A compound phrase: shear + -ing + floor.","parts":[{"surface":"shear","type":"root","meaning":"cut wool from a sheep"},{"surface":"ing","type":"suffix","meaning":"the activity of"},{"surface":"floor","type":"root","meaning":"the work surface of a room"}],"related":["shear","shearing","shearing shed"],"translations":{"zh-Hans":"剪羊毛棚的工作地面","ja":"羊毛刈り小屋の作業場","fa":"محوطهٔ کارِ پشم‌چینی","vi":"sàn làm việc trong nhà xén lông cừu"}},
+    "listening":{"word":"list’ning (listening)","meaning":"Paying attention to sound or to someone speaking.","context":"The apostrophe removes a syllable in print so the word fits the performed rhythm.","origin":"listen + -ing. The poem writes list’ning to show the compressed pronunciation.","parts":[{"surface":"listen","type":"root","meaning":"pay attention to sound"},{"surface":"ing","type":"suffix","meaning":"ongoing action"}],"related":["listen","listens","listening","listener"],"translations":{"zh-Hans":"正在听的","ja":"聞いている","fa":"در حال گوش دادن","vi":"đang lắng nghe"}},
+    "shearers":{"word":"shearers","meaning":"Workers who cut wool from sheep.","context":"They form the country audience for the man’s repeated story.","origin":"shear + -er (person who) + -s (plural).","parts":[{"surface":"shear","type":"root","meaning":"cut wool from a sheep"},{"surface":"er","type":"suffix","meaning":"a person who does an action"},{"surface":"s","type":"suffix","meaning":"more than one"}],"related":["shear","shearing","shearer","shearers"],"translations":{"zh-Hans":"剪羊毛工人","ja":"羊毛刈り職人たち","fa":"کارگران پشم‌چین","vi":"những người xén lông cừu"}},
+    "gape":{"word":"gape","meaning":"Stare with the mouth open in surprise.","context":"The shearers listen in amazement as he tells the dramatic story.","origin":"A single root; compare a gaping opening.","parts":[],"related":["gape","gaped","gaping"],"translations":{"zh-Hans":"目瞪口呆地看","ja":"口を開けて見つめる","fa":"با دهان باز خیره شدن","vi":"há hốc miệng nhìn"}},
+    "oer-and-oer":{"word":"o’er and o’er","meaning":"Over and over; repeatedly.","context":"The shortened o’er keeps the rhythm and shows an older poetic spelling.","origin":"O’er is an elided form of over: a sound is omitted and marked by an apostrophe.","parts":[],"related":["over and over","again and again","repeatedly"],"translations":{"zh-Hans":"一遍又一遍","ja":"何度も何度も","fa":"بارها و بارها","vi":"hết lần này đến lần khác"}},
+    "brags":{"word":"brags","meaning":"Talks with too much pride about an achievement.","context":"He makes his escape sound heroic when he retells it at home.","origin":"brag + -s (present tense with he).","parts":[{"surface":"brag","type":"root","meaning":"speak too proudly"},{"surface":"s","type":"suffix","meaning":"present tense with he/she/it"}],"related":["brag","brags","bragged","bragging"],"translations":{"zh-Hans":"吹嘘；自夸","ja":"自慢する","fa":"لاف می‌زند؛ پز می‌دهد","vi":"khoe khoang; khoác lác"}},
+    "escape":{"word":"escape","meaning":"Getting free from danger, control or capture.","context":"He presents leaving the barber shop alive as a great escape.","origin":"Borrowed through French; it has no useful modern English morpheme split here.","parts":[],"related":["escape","escaped","escaping","escapee"],"translations":{"zh-Hans":"逃脱；脱险","ja":"脱出；逃走","fa":"فرار؛ رهایی از خطر","vi":"sự thoát thân; trốn thoát"}},
+    "chaps":{"word":"chaps","meaning":"Men or fellows; an old informal plural.","context":"Them barber chaps means those barber fellows.","origin":"Old informal British English; learn it as a whole word in this meaning.","parts":[],"related":["chap","chaps","fellows"],"translations":{"zh-Hans":"那些家伙；男人们（旧口语）","ja":"男たち；連中（古い口語）","fa":"مردها؛ آن یاروها (قدیمی)","vi":"mấy gã; những người đàn ông (khẩu ngữ cũ)"}},
+    "tough":{"word":"tough","meaning":"Strong and difficult to cut, break or damage.","context":"He jokes that his throat survived because it is physically tough.","origin":"A single old English root with several connected meanings: strong, hard and difficult.","parts":[],"related":["tough","tougher","toughest","toughness"],"translations":{"zh-Hans":"坚韧的；难以割破的","ja":"丈夫で切れにくい","fa":"سفت و مقاوم؛ سخت‌بُر","vi":"dai và khó cắt; bền chắc"}},
+    "remark":{"word":"remark","meaning":"Notice and point out; also, a spoken comment.","context":"There is one thing to remark means there is one result worth noticing.","origin":"re- + mark; the word came through French with the sense notice again or closely.","parts":[{"surface":"re","type":"prefix","meaning":"again; closely"},{"surface":"mark","type":"root","meaning":"notice; make a sign"}],"related":["remark","remarked","remarkable","remarkably"],"translations":{"zh-Hans":"注意到并指出；评论","ja":"気づいて述べる；発言","fa":"توجه و اشاره کردن؛ اظهار نظر","vi":"nhận thấy và nói ra; nhận xét"}},
+    "flowing-beards":{"word":"flowing beards","meaning":"Long, full beards that hang down freely.","context":"The final image shows that men in Ironbark now avoid barbers and let their beards grow.","origin":"flow + -ing; beard + -s.","parts":[{"surface":"flow","type":"root","meaning":"move smoothly; hang freely"},{"surface":"ing","type":"suffix","meaning":"having an ongoing quality"},{"surface":"beard","type":"root","meaning":"hair on the chin and cheeks"},{"surface":"s","type":"suffix","meaning":"more than one"}],"related":["flow","flowing","beard","bearded"],"translations":{"zh-Hans":"飘垂的长胡须","ja":"長く垂れた豊かなひげ","fa":"ریش‌های بلند و روان","vi":"những bộ râu dài rủ xuống"}},
+    "all-the-go":{"word":"all the go","meaning":"Very fashionable or popular.","context":"The joke produces the opposite of the man’s original plan: everyone at home now wants a long beard.","origin":"An old idiom; modern English might say all the rage or in fashion.","parts":[],"related":["all the rage","fashionable","in style"],"translations":{"zh-Hans":"非常流行；正时髦","ja":"大流行している；はやりの","fa":"کاملاً مُد و رایج","vi":"rất thịnh hành; đang là mốt"}}
+  }
+}
+</script>
+
+<script>
+const DATA=JSON.parse(document.getElementById('ironbark-data').textContent);
+const WORD_BUILDER='https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/learn/elc/english/ironbark-stanza-';
+const langNames={'zh-Hans':'简体中文','ja':'日本語','fa':'فارسی','vi':'Tiếng Việt'};
+const modelModes={
+  story:{notes:['visitor + place','movement','problem','decision','goal','plan'],explain:'The first stanza completes the set-up: a country visitor reaches Sydney, becomes tired, chooses a barber and explains what he wants. The action can now begin.'},
+  rhyme:{notes:['A · town','A · down','B · drop','B · shop','C · mark','C · Ironbark'],explain:'The stanza is three rhyming couplets: <b>town/down</b>, <b>drop/shop</b>, <b>mark/Ironbark</b>. Its local pattern is <b>AABBCC</b>.'},
+  rhythm:{notes:['about 7 beats','about 7 beats','about 7 beats','about 7 beats','about 7 beats','about 7 beats'],explain:'Each long printed line carries roughly seven strong beats, often heard as two balanced halves with a pause near the middle. Performance can shift a syllable or stress; the pulse matters more than forcing every word.'},
+  voice:{notes:['narrator','narrator','narrator','narrator','direct speech','direct speech'],explain:'The narrator controls lines 1–4. Direct speech takes over in lines 5–6, so the visitor’s accent, ambition and personality arrive in his own voice.'}
+};
+const modelTexts=DATA.stanzas[0].lines.map(x=>x.text.replace(/\[\[[^|]+\|([^\]]+)\]\]/g,'$1'));
+let modelMode='story';
+function renderModel(){
+  const box=document.getElementById('modelLines');box.innerHTML='';
+  modelTexts.forEach((text,i)=>{const row=document.createElement('div');row.className='model-line';row.innerHTML=`<span class="model-n">${i+1}</span><span class="model-text"></span><span class="model-note">${modelModes[modelMode].notes[i]}</span>`;row.querySelector('.model-text').textContent=text;box.append(row)});
+  document.getElementById('modelExplain').innerHTML=modelModes[modelMode].explain;
+  document.querySelectorAll('.model-tab').forEach(b=>b.classList.toggle('active',b.dataset.mode===modelMode));
+}
+document.querySelectorAll('.model-tab').forEach(b=>b.addEventListener('click',()=>{modelMode=b.dataset.mode;renderModel()}));
+
+function parseLine(text,stanzaNo){
+  const frag=document.createDocumentFragment();let at=0;const re=/\[\[([^|]+)\|([^\]]+)\]\]/g;let m;
+  while((m=re.exec(text))){if(m.index>at)frag.append(document.createTextNode(text.slice(at,m.index)));const key=m[1];const btn=document.createElement('button');btn.type='button';btn.className='vocab';btn.dataset.key=key;btn.textContent=m[2];btn.addEventListener('click',()=>openWord(key,stanzaNo));frag.append(btn);at=re.lastIndex}
+  if(at<text.length)frag.append(document.createTextNode(text.slice(at)));return frag;
+}
+function renderReader(){
+  const nav=document.getElementById('stanzaNav'),poem=document.getElementById('poem');nav.innerHTML='';poem.innerHTML='';
+  DATA.stanzas.forEach((stanza,si)=>{
+    const jump=document.createElement('button');jump.className='stanza-link';jump.innerHTML=`<b>Stanza ${si+1}</b><span>${stanza.title}</span>`;jump.addEventListener('click',()=>document.getElementById(`stanza-${si+1}`).scrollIntoView({behavior:'smooth'}));nav.append(jump);
+    const section=document.createElement('section');section.className='stanza';section.id=`stanza-${si+1}`;
+    const top=document.createElement('div');top.className='stanza-top';top.innerHTML=`<h3>Stanza ${si+1} · ${stanza.title}</h3><a href="${WORD_BUILDER}${si+1}" target="_blank" rel="noopener">Practise this stanza’s words ↗</a>`;section.append(top);
+    stanza.lines.forEach((line,li)=>{const row=document.createElement('div');row.className='poem-line'+(line.speech?' speech':'');row.innerHTML=`<span class="line-no">${li+1}</span><span class="line-text"></span><span class="rhyme-tag rhyme-${line.rhyme}">${line.rhyme} · ${line.end}</span>`;row.querySelector('.line-text').append(parseLine(line.text,si+1));section.append(row)});
+    const foot=document.createElement('div');foot.className='stanza-foot';foot.innerHTML=`<span>${new Set(stanza.lines.flatMap(l=>[...l.text.matchAll(/\[\[([^|]+)\|/g)].map(m=>m[1]))).size} highlighted words or phrases</span><a href="${WORD_BUILDER}${si+1}" target="_blank" rel="noopener">Build, match and revise →</a>`;section.append(foot);poem.append(section)
+  });
+  const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){const i=Number(e.target.id.split('-')[1])-1;document.querySelectorAll('.stanza-link').forEach((b,n)=>b.classList.toggle('active',n===i))}}),{rootMargin:'-20% 0px -65% 0px'});document.querySelectorAll('.stanza').forEach(s=>observer.observe(s));
+}
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function openWord(key,stanzaNo){
+  const w=DATA.vocab[key];if(!w)return;const lang=document.getElementById('langSelect').value;const context=w.contexts?.[String(stanzaNo)]||w.context;document.getElementById('popWord').textContent=w.word;
+  const parts=(w.parts||[]).length?`<div class="morphs">${w.parts.map(p=>{const native=DATA.morphemeTranslations?.[`${p.surface}|${p.meaning}`]?.[lang];return `<span class="morph ${esc(p.type)}"><b>${esc(p.surface)}</b>${p.variant?`<small>≈ ${esc(p.variant)}</small>`:''}<small>${esc(p.meaning)}${native?` · ${esc(native)}`:''}</small></span>`}).join('')}</div>`:`<p class="whole">No useful modern morpheme split here — learn this word or idiom as a whole.</p>`;
+  const related=(w.related||[]).map(x=>`<span>${esc(x)}</span>`).join('');
+  document.getElementById('popBody').innerHTML=`<p class="definition">${esc(w.meaning)}</p><p class="context"><b>In this line:</b> ${esc(context)}</p><div class="pop-label">Word build</div>${parts}<div class="pop-label">Word story</div><p class="definition">${esc(w.origin)}</p><div class="pop-label">${esc(langNames[lang])}</div><div class="translation" dir="${lang==='fa'?'rtl':'auto'}">${esc(w.translations?.[lang]||'—')}</div>${related?`<div class="pop-label">Related forms and phrases</div><div class="related">${related}</div>`:''}<div class="pop-actions"><a class="btn primary" href="${WORD_BUILDER}${stanzaNo||stanzaForKey(key)}" target="_blank" rel="noopener">Practise this stanza in Word Builder ↗</a></div>`;
+  document.getElementById('wordDialog').showModal();
+}
+function stanzaForKey(key){const i=DATA.stanzas.findIndex(s=>s.lines.some(l=>l.text.includes(`[[${key}|`)));return Math.max(1,i+1)}
+document.getElementById('closeDialog').addEventListener('click',()=>document.getElementById('wordDialog').close());document.getElementById('wordDialog').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
+function setToggle(id,cls,onText,offText){const b=document.getElementById(id);b.addEventListener('click',()=>{const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',String(on));document.getElementById('reader').classList.toggle(cls,on);b.textContent=on?onText:offText})}
+setToggle('vocabToggle','show-vocab','Vocabulary on','Vocabulary off');document.getElementById('reader').classList.add('show-vocab');document.getElementById('vocabToggle').addEventListener('click',()=>document.getElementById('reader').classList.toggle('hide-vocab',document.getElementById('vocabToggle').getAttribute('aria-pressed')!=='true'));
+setToggle('rhymeToggle','show-rhyme','Rhyme labels on','Rhyme labels');setToggle('speechToggle','show-speech','Dialogue on','Show dialogue');
+const savedLang=localStorage.getItem('ironbark.lang');if(savedLang&&langNames[savedLang])document.getElementById('langSelect').value=savedLang;document.getElementById('langSelect').addEventListener('change',e=>localStorage.setItem('ironbark.lang',e.target.value));
+renderModel();renderReader();
+</script>
+</body>
+</html>
