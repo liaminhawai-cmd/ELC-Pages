@@ -25,7 +25,7 @@ to paste what you need; don't guess.
    tracking, no analytics. `localStorage` only, and the UI says so honestly.
 4. **Traditional Chinese is required.** Whenever an ELC page offers translated
    content, include reviewed Traditional Chinese as a distinct option and data
-   value. Do not treat Simplified Chinese fallback text as Traditional coverage.
+   value. Traditional Chinese must use Taiwan vocabulary and terminology (`zh-TW`), while Simplified Chinese must use Mainland China usage (`zh-CN`). Do not treat character conversion or Simplified Chinese fallback text as Traditional coverage.
 5. **The teacher-view toggle is cosmetic.** This is a static site — never
    present anything here as access control, and never put teacher-only
    content behind it.

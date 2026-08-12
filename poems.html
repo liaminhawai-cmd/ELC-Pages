@@ -15,7 +15,7 @@
 <main class="shell">
   <div class="top">
     <a class="back" href="index.html" data-i18n="back">← ELC Hub</a>
-    <select class="language-select" id="pageLanguage" aria-label="Page language"><option value="en">English</option><option value="zh-Hans">简体中文</option><option value="zh-Hant">繁體中文</option></select>
+    <select class="language-select" id="pageLanguage" aria-label="Page language"><option value="en">English</option><option value="zh-Hans">简体中文（中国）</option><option value="zh-Hant">繁體中文（台灣）</option></select>
   </div>
   <header class="hero">
     <p class="eyebrow" data-i18n="eyebrow">Poetry collection</p>
@@ -46,7 +46,7 @@ const LANG_KEY="elc_page_language";
 const COPY={
   en:{back:"← ELC Hub",eyebrow:"Poetry collection",title:"📜 Poems",intro:"Choose a poem form. Learn how it works, study an example, then try the interactive activity.",limerickTitle:"Limericks",limerickText:"Explore the rhyme, rhythm and five-line shape of a limerick, then build one from flexible word banks.",limerickOpen:"Open Limericks →",ironbarkTitle:"The Man from Ironbark",ironbarkText:"Learn how ballads tell stories, then read Banjo Paterson’s poem with clickable vocabulary.",ironbarkOpen:"Open the ballad →",note:"No account is needed. Activity records stay in this browser."},
   "zh-Hans":{back:"← ELC 学习中心",eyebrow:"诗歌目录",title:"📜 诗歌",intro:"选择一种诗歌形式。先学习它的特点，研究范例，再完成互动活动。",limerickTitle:"五行打油诗",limerickText:"探索五行打油诗的押韵、节奏和五行结构，再用灵活的词库创作一首。",limerickOpen:"打开五行打油诗 →",ironbarkTitle:"《来自铁皮桉镇的人》",ironbarkText:"学习叙事歌谣怎样讲故事，再阅读班卓·帕特森的诗，并点击重点词汇。",ironbarkOpen:"打开叙事歌谣 →",note:"无需账户。活动记录只保存在此浏览器中。"},
-  "zh-Hant":{back:"← ELC 學習中心",eyebrow:"詩歌目錄",title:"📜 詩歌",intro:"選擇一種詩歌形式。先學習它的特點，研究範例，再完成互動活動。",limerickTitle:"五行打油詩",limerickText:"探索五行打油詩的押韻、節奏和五行結構，再用靈活的詞庫創作一首。",limerickOpen:"開啟五行打油詩 →",ironbarkTitle:"《來自鐵皮桉鎮的人》",ironbarkText:"學習敘事歌謠怎樣講故事，再閱讀班卓·帕特森的詩，並點選重點詞彙。",ironbarkOpen:"開啟敘事歌謠 →",note:"無需帳戶。活動紀錄只保存在此瀏覽器中。"}
+  "zh-Hant":{back:"← ELC 學習中心",eyebrow:"詩歌目錄",title:"📜 詩歌",intro:"選擇一種詩歌形式。先學習它的特點，研究範例，再完成互動活動。",limerickTitle:"五行打油詩",limerickText:"探索五行打油詩的押韻、節奏和五行結構，再用靈活的詞庫創作一首。",limerickOpen:"開啟五行打油詩 →",ironbarkTitle:"《來自鐵皮桉鎮的人》",ironbarkText:"學習敘事歌謠怎樣講故事，再閱讀班卓·帕特森的詩，並點選重點詞彙。",ironbarkOpen:"開啟敘事歌謠 →",note:"無需帳戶。活動紀錄只保存在此瀏覽器中。"},
 };
 function setPageLanguage(lang){const copy=COPY[lang]||COPY.en;document.documentElement.lang=lang;document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=copy[el.dataset.i18n]);document.getElementById("pageLanguage").value=lang;localStorage.setItem(LANG_KEY,lang)}
 document.getElementById("pageLanguage").addEventListener("change",e=>setPageLanguage(e.target.value));

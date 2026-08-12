@@ -51,8 +51,8 @@
 <header>
   <select class="language-select" id="pageLanguage" aria-label="Page language">
     <option value="en">English</option>
-    <option value="zh-Hans">简体中文</option>
-    <option value="zh-Hant">繁體中文</option>
+    <option value="zh-Hans">简体中文（中国）</option>
+    <option value="zh-Hant">繁體中文（台灣）</option>
   </select>
   <button class="teacher-link" id="teacherToggle" aria-pressed="false">Teacher view</button>
   <h1 data-i18n="title">🌟 ELC Hub</h1>
@@ -92,7 +92,7 @@ const LANG_KEY = "elc_page_language";
 const COPY = {
   en:{title:"🌟 ELC Hub",intro:"Practice tools, trainers and simulations. No account needed — your activity record stays in this browser.",record:"📄 My learning record →",privacy:"🔒 This hub does not ask for your name or student ID. Activity and goals are stored on this device only.",elcTools:"🧡 ELC tools",compassTitle:"Learning Compass",compassText:"Compare Pathway C levels and save one clear next-step goal.",pronTitle:"Pronunciation Hub",pronText:"Every sound of Australian English — hear it, read its tongue twister, write your own.",feelingTitle:"Feeling Wheel",feelingText:"Spin from a core emotion to precise words in English, Chinese or Vietnamese.",poemsTitle:"Poems",poemsText:"Open the poetry collection, then choose Limericks or The Man from Ironbark.",wallTitle:"Analytical Writing Wall",wallText:"The same idea written at every band — see what actually changes.",rubricTitle:"Rubrics",rubricText:"What each band looks like, colour-coded, with worked examples.",liveTools:"✏️ Live tools"},
   "zh-Hans":{title:"🌟 ELC 学习中心",intro:"练习工具、训练活动和模拟任务。无需账户——活动记录只保存在此浏览器中。",record:"📄 我的学习记录 →",privacy:"🔒 本学习中心不会要求填写姓名或学号。活动和目标只保存在此设备上。",elcTools:"🧡 ELC 学习工具",compassTitle:"学习指南针",compassText:"比较 Pathway C 各等级，并保存一个清晰的下一步目标。",pronTitle:"发音中心",pronText:"学习澳大利亚英语的每个音：听发音、读绕口令，再自己创作。",feelingTitle:"情绪轮",feelingText:"从核心情绪转到更准确的英语、中文或越南语词汇。",poemsTitle:"诗歌",poemsText:"打开诗歌目录，再选择五行打油诗或《来自铁皮桉镇的人》。",wallTitle:"分析写作墙",wallText:"比较同一个观点在不同等级中的写法，看看真正发生了什么变化。",rubricTitle:"评分标准",rubricText:"查看各等级的表现、颜色标注和完整范例。",liveTools:"✏️ 在线工具"},
-  "zh-Hant":{title:"🌟 ELC 學習中心",intro:"練習工具、訓練活動和模擬任務。無需帳戶——活動紀錄只保存在此瀏覽器中。",record:"📄 我的學習紀錄 →",privacy:"🔒 本學習中心不會要求填寫姓名或學號。活動和目標只保存在此裝置上。",elcTools:"🧡 ELC 學習工具",compassTitle:"學習指南針",compassText:"比較 Pathway C 各級別，並儲存一個清楚的下一步目標。",pronTitle:"發音中心",pronText:"學習澳大利亞英語的每個語音：聽發音、讀繞口令，再自己創作。",feelingTitle:"情緒輪",feelingText:"從核心情緒轉到更精確的英語、中文或越南語詞彙。",poemsTitle:"詩歌",poemsText:"開啟詩歌目錄，再選擇五行打油詩或《來自鐵皮桉鎮的人》。",wallTitle:"分析寫作牆",wallText:"比較同一個觀點在不同級別中的寫法，看看真正發生了甚麼變化。",rubricTitle:"評分標準",rubricText:"查看各級別的表現、顏色標示和完整範例。",liveTools:"✏️ 線上工具"}
+  "zh-Hant":{title:"🌟 ELC 學習中心",intro:"練習工具、訓練活動和模擬任務。無需帳戶——活動紀錄只保存在此瀏覽器中。",record:"📄 我的學習紀錄 →",privacy:"🔒 本學習中心不會要求填寫姓名或學號。活動和目標只保存在此裝置上。",elcTools:"🧡 ELC 學習工具",compassTitle:"學習指南針",compassText:"比較 Pathway C 各級別，並儲存一個清楚的下一步目標。",pronTitle:"發音中心",pronText:"學習澳洲英語的每個語音：聽發音、讀繞口令，再自己創作。",feelingTitle:"情緒輪",feelingText:"從核心情緒轉到更精確的英語、中文或越南語詞彙。",poemsTitle:"詩歌",poemsText:"開啟詩歌目錄，再選擇五行打油詩或《來自鐵皮桉鎮的人》。",wallTitle:"分析寫作牆",wallText:"比較同一個觀點在不同級別中的寫法，看看真正發生了什麼變化。",rubricTitle:"評分標準",rubricText:"查看各級別的表現、顏色標示和完整範例。",liveTools:"✏️ 線上工具"}
 };
 function setPageLanguage(lang){
   const copy=COPY[lang]||COPY.en;
