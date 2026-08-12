@@ -12,7 +12,7 @@
     --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
   }
   @media (prefers-color-scheme:dark) {
-    :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048; --accent:#7aa5ff; --accent-soft:#1d2c4d; --shadow:0 1px 2px rgba(0,0,0,.4); }
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#fff; --muted:#c7d0e2; --line:#34405b; --accent:#8eb4ff; --accent-soft:#1d2c4d; --shadow:0 1px 2px rgba(0,0,0,.4); }
   }
   * { box-sizing:border-box; margin:0; }
   body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; }
@@ -21,6 +21,8 @@
   header p { max-width:600px; margin:10px auto 0; opacity:.94; }
   .teacher-link { position:absolute; top:16px; right:16px; background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.35); color:#fff; padding:6px 13px; border-radius:999px; font-size:.85rem; cursor:pointer; }
   .teacher-link:hover { background:rgba(255,255,255,.28); }
+  .language-select { position:absolute; top:16px; left:16px; border:1px solid rgba(255,255,255,.45); border-radius:999px; padding:7px 12px; background:rgba(255,255,255,.16); color:#fff; font-weight:750; }
+  .language-select option { color:#111; background:#fff; }
   .teacher-link:focus-visible,a:focus-visible { outline:3px solid rgba(255,255,255,.7); outline-offset:3px; }
   main { max-width:1080px; margin:0 auto; padding:24px 18px 60px; }
   section { margin-top:36px; }
@@ -37,8 +39,9 @@
   .teacher-badge { display:none; background:#16a34a; color:#fff; font-size:.72rem; font-weight:700; padding:4px 10px; border-radius:999px; position:fixed; bottom:14px; right:14px; z-index:40; }
   body.teacher-on .teacher-badge { display:block; }
   @media (max-width:540px) {
-    header { padding-top:66px; }
+    header { padding-top:106px; }
     .teacher-link { left:50%; right:auto; transform:translateX(-50%); white-space:nowrap; }
+    .language-select { top:57px; left:50%; transform:translateX(-50%); }
   }
 </style>
 </head>
@@ -46,29 +49,34 @@
 <span class="teacher-badge">Teacher view · display mode only</span>
 
 <header>
+  <select class="language-select" id="pageLanguage" aria-label="Page language">
+    <option value="en">English</option>
+    <option value="zh-Hans">简体中文</option>
+    <option value="zh-Hant">繁體中文</option>
+  </select>
   <button class="teacher-link" id="teacherToggle" aria-pressed="false">Teacher view</button>
-  <h1>🌟 ELC Hub</h1>
-  <p>Practice tools, trainers and simulations. No account needed — your activity record stays in this browser.</p>
+  <h1 data-i18n="title">🌟 ELC Hub</h1>
+  <p data-i18n="intro">Practice tools, trainers and simulations. No account needed — your activity record stays in this browser.</p>
 </header>
 
 <main>
-  <div class="report-link-row"><a href="report.html">📄 My learning record →</a></div>
-  <p class="privacy-note">🔒 This hub does not ask for your name or student ID. Activity and goals are stored on this device only.</p>
+  <div class="report-link-row"><a href="report.html" data-i18n="record">📄 My learning record →</a></div>
+  <p class="privacy-note" data-i18n="privacy">🔒 This hub does not ask for your name or student ID. Activity and goals are stored on this device only.</p>
 
   <section>
-    <h2>🧡 ELC tools</h2>
+    <h2 data-i18n="elcTools">🧡 ELC tools</h2>
     <div class="grid">
-      <a class="card" data-cat="ELC tools" data-title="Learning Compass" href="learning-compass.html"><span class="emoji">🧭</span><h3>Learning Compass</h3><p>Compare Pathway C levels and save one clear next-step goal.</p></a>
-      <a class="card" data-cat="ELC tools" data-title="Pronunciation Hub" href="pronunciation.html"><span class="emoji">🗣️</span><h3>Pronunciation Hub</h3><p>Every sound of Australian English — hear it, read its tongue twister, write your own.</p></a>
-      <a class="card" data-cat="ELC tools" data-title="Feeling Wheel" href="feeling-wheel.html"><span class="emoji">🎡</span><h3>Feeling Wheel</h3><p>Spin from a core emotion to precise words in English, Chinese or Vietnamese.</p></a>
-      <a class="card" data-cat="ELC tools" data-title="Ballads and The Man from Ironbark" href="ballads.html"><span class="emoji">📜</span><h3>Ballads &amp; The Man from Ironbark</h3><p>Learn how ballads tell stories, then read the poem with clickable vocabulary.</p></a>
-      <a class="card" data-cat="ELC tools" data-title="Analytical Writing Wall" href="writing-wall.html"><span class="emoji">📝</span><h3>Analytical Writing Wall</h3><p>The same idea written at every band — see what actually changes.</p></a>
-      <a class="card" data-cat="ELC tools" data-title="Rubrics" href="rubrics.html"><span class="emoji">📚</span><h3>Rubrics</h3><p>What each band looks like, colour-coded, with worked examples.</p></a>
+      <a class="card" data-cat="ELC tools" data-title="Learning Compass" href="learning-compass.html"><span class="emoji">🧭</span><h3 data-i18n="compassTitle">Learning Compass</h3><p data-i18n="compassText">Compare Pathway C levels and save one clear next-step goal.</p></a>
+      <a class="card" data-cat="ELC tools" data-title="Pronunciation Hub" href="pronunciation.html"><span class="emoji">🗣️</span><h3 data-i18n="pronTitle">Pronunciation Hub</h3><p data-i18n="pronText">Every sound of Australian English — hear it, read its tongue twister, write your own.</p></a>
+      <a class="card" data-cat="ELC tools" data-title="Feeling Wheel" href="feeling-wheel.html"><span class="emoji">🎡</span><h3 data-i18n="feelingTitle">Feeling Wheel</h3><p data-i18n="feelingText">Spin from a core emotion to precise words in English, Chinese or Vietnamese.</p></a>
+      <a class="card" data-cat="ELC tools" data-title="Poems" href="poems.html"><span class="emoji">📜</span><h3 data-i18n="poemsTitle">Poems</h3><p data-i18n="poemsText">Open the poetry collection, then choose Limericks or The Man from Ironbark.</p></a>
+      <a class="card" data-cat="ELC tools" data-title="Analytical Writing Wall" href="writing-wall.html"><span class="emoji">📝</span><h3 data-i18n="wallTitle">Analytical Writing Wall</h3><p data-i18n="wallText">The same idea written at every band — see what actually changes.</p></a>
+      <a class="card" data-cat="ELC tools" data-title="Rubrics" href="rubrics.html"><span class="emoji">📚</span><h3 data-i18n="rubricTitle">Rubrics</h3><p data-i18n="rubricText">What each band looks like, colour-coded, with worked examples.</p></a>
     </div>
   </section>
 
   <section>
-    <h2>✏️ Live tools</h2>
+    <h2 data-i18n="liveTools">✏️ Live tools</h2>
     <div class="grid">
       <a class="card" target="_blank" rel="noopener" data-cat="Live tools" data-title="ELC Writing Feedback" href="https://chatgpt.com/g/g-68e58defc8648191b08060290e0b1f6f-elc-writing-feedback/c/6a7a99a5-c6e8-83ec-8e69-828e99070a00"><span class="emoji">✍️</span><h3>ELC Writing Feedback</h3><p>Upload a photo of your handwritten draft, read the feedback, then rewrite.</p></a>
       <a class="card" target="_blank" rel="noopener" data-cat="Live tools" data-title="Grammar Hub" href="https://liaminhawai-cmd.github.io/Grammar-hub/"><span class="emoji">🧩</span><h3>Grammar Hub</h3><p>Practise grammar unit by unit.</p></a>
@@ -80,6 +88,21 @@
 
 <script>
 const VISITS_KEY = "elc_visited", TEACHER_KEY = "elc_teacher";
+const LANG_KEY = "elc_page_language";
+const COPY = {
+  en:{title:"🌟 ELC Hub",intro:"Practice tools, trainers and simulations. No account needed — your activity record stays in this browser.",record:"📄 My learning record →",privacy:"🔒 This hub does not ask for your name or student ID. Activity and goals are stored on this device only.",elcTools:"🧡 ELC tools",compassTitle:"Learning Compass",compassText:"Compare Pathway C levels and save one clear next-step goal.",pronTitle:"Pronunciation Hub",pronText:"Every sound of Australian English — hear it, read its tongue twister, write your own.",feelingTitle:"Feeling Wheel",feelingText:"Spin from a core emotion to precise words in English, Chinese or Vietnamese.",poemsTitle:"Poems",poemsText:"Open the poetry collection, then choose Limericks or The Man from Ironbark.",wallTitle:"Analytical Writing Wall",wallText:"The same idea written at every band — see what actually changes.",rubricTitle:"Rubrics",rubricText:"What each band looks like, colour-coded, with worked examples.",liveTools:"✏️ Live tools"},
+  "zh-Hans":{title:"🌟 ELC 学习中心",intro:"练习工具、训练活动和模拟任务。无需账户——活动记录只保存在此浏览器中。",record:"📄 我的学习记录 →",privacy:"🔒 本学习中心不会要求填写姓名或学号。活动和目标只保存在此设备上。",elcTools:"🧡 ELC 学习工具",compassTitle:"学习指南针",compassText:"比较 Pathway C 各等级，并保存一个清晰的下一步目标。",pronTitle:"发音中心",pronText:"学习澳大利亚英语的每个音：听发音、读绕口令，再自己创作。",feelingTitle:"情绪轮",feelingText:"从核心情绪转到更准确的英语、中文或越南语词汇。",poemsTitle:"诗歌",poemsText:"打开诗歌目录，再选择五行打油诗或《来自铁皮桉镇的人》。",wallTitle:"分析写作墙",wallText:"比较同一个观点在不同等级中的写法，看看真正发生了什么变化。",rubricTitle:"评分标准",rubricText:"查看各等级的表现、颜色标注和完整范例。",liveTools:"✏️ 在线工具"},
+  "zh-Hant":{title:"🌟 ELC 學習中心",intro:"練習工具、訓練活動和模擬任務。無需帳戶——活動紀錄只保存在此瀏覽器中。",record:"📄 我的學習紀錄 →",privacy:"🔒 本學習中心不會要求填寫姓名或學號。活動和目標只保存在此裝置上。",elcTools:"🧡 ELC 學習工具",compassTitle:"學習指南針",compassText:"比較 Pathway C 各級別，並儲存一個清楚的下一步目標。",pronTitle:"發音中心",pronText:"學習澳大利亞英語的每個語音：聽發音、讀繞口令，再自己創作。",feelingTitle:"情緒輪",feelingText:"從核心情緒轉到更精確的英語、中文或越南語詞彙。",poemsTitle:"詩歌",poemsText:"開啟詩歌目錄，再選擇五行打油詩或《來自鐵皮桉鎮的人》。",wallTitle:"分析寫作牆",wallText:"比較同一個觀點在不同級別中的寫法，看看真正發生了甚麼變化。",rubricTitle:"評分標準",rubricText:"查看各級別的表現、顏色標示和完整範例。",liveTools:"✏️ 線上工具"}
+};
+function setPageLanguage(lang){
+  const copy=COPY[lang]||COPY.en;
+  document.documentElement.lang=lang;
+  document.querySelectorAll("[data-i18n]").forEach(el=>{el.textContent=copy[el.dataset.i18n]||COPY.en[el.dataset.i18n]||el.textContent});
+  document.getElementById("pageLanguage").value=lang;
+  localStorage.setItem(LANG_KEY,lang);
+}
+document.getElementById("pageLanguage").addEventListener("change",e=>setPageLanguage(e.target.value));
+setPageLanguage(localStorage.getItem(LANG_KEY)||"en");
 
 document.querySelectorAll("a.card").forEach(card => {
   card.addEventListener("click", () => {

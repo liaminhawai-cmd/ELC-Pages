@@ -23,10 +23,13 @@ to paste what you need; don't guess.
    activities; they are never published as-is.
 3. **Nothing vulgar**, nothing that collects personal data. No accounts, no
    tracking, no analytics. `localStorage` only, and the UI says so honestly.
-4. **The teacher-view toggle is cosmetic.** This is a static site — never
+4. **Traditional Chinese is required.** Whenever an ELC page offers translated
+   content, include reviewed Traditional Chinese as a distinct option and data
+   value. Do not treat Simplified Chinese fallback text as Traditional coverage.
+5. **The teacher-view toggle is cosmetic.** This is a static site — never
    present anything here as access control, and never put teacher-only
    content behind it.
-5. **Current publishing mode:** direct pushes to `main` are OK'd by the
+6. **Current publishing mode:** direct pushes to `main` are OK'd by the
    teachers while the site isn't yet shared with students. Still run your own
    privacy/copyright check on every file and say in the commit what you
    checked. This mode ends when the teachers say so.
