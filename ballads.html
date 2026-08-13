@@ -48,6 +48,11 @@ h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.14}h1{font-si
 .stanza-foot{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px;padding-top:9px;border-top:1px solid var(--soft);font-size:.75rem;color:var(--muted)}.stanza-foot a{color:var(--ochre);font-weight:850;text-decoration:none}
 .talk{margin-top:13px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.talk>div{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:10px}.talk b{display:block;color:var(--ochre);font-size:.77rem}.talk p{margin:3px 0 0;font-size:.82rem;color:var(--muted)}
 dialog{border:0;padding:0;background:transparent;color:var(--ink);width:min(620px,calc(100vw - 24px));max-height:88vh}dialog::backdrop{background:rgba(18,14,9,.62);backdrop-filter:blur(2px)}.word-pop{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 60px rgba(0,0,0,.35);overflow:hidden}.pop-head{display:flex;justify-content:space-between;gap:14px;align-items:start;padding:17px 18px 12px;background:linear-gradient(135deg,var(--ochre-soft),var(--card))}.pop-head h2{font-size:1.8rem;margin:0}.close{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:50%;width:35px;height:35px;cursor:pointer;font-weight:900}.pop-body{padding:15px 18px 18px;overflow:auto;max-height:68vh}.definition{font-size:1.02rem;margin:0 0 10px}.context{padding:9px 11px;background:var(--blue-soft);border-left:4px solid var(--blue);border-radius:8px;margin:0 0 12px;font-size:.88rem}.pop-label{font-size:.68rem;text-transform:uppercase;letter-spacing:.09em;font-weight:900;color:var(--muted);margin:12px 0 6px}.morphs{display:flex;gap:6px;flex-wrap:wrap}.morph{display:inline-flex;align-items:baseline;gap:4px;border-radius:999px;padding:6px 10px;font-weight:850}.morph small{font-weight:600;opacity:.8}.morph.prefix{background:var(--prefix-bg);color:var(--prefix)}.morph.root{background:var(--root-bg);color:var(--root)}.morph.suffix{background:var(--suffix-bg);color:var(--suffix)}.whole{color:var(--muted);font-size:.86rem;font-style:italic}.translation{font-weight:800;font-size:1.03rem}.related{display:flex;gap:6px;flex-wrap:wrap}.related span{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:4px 8px;font-size:.78rem}.pop-actions{margin-top:15px;padding-top:12px;border-top:1px solid var(--soft)}
+
+.remix{margin-top:32px}.remix-head{display:flex;justify-content:space-between;gap:14px;align-items:end;flex-wrap:wrap;margin-bottom:12px}.draft-tag{font-size:.72rem;font-weight:900;text-transform:uppercase;letter-spacing:.08em;color:var(--ochre);background:var(--ochre-soft);border:1px solid color-mix(in srgb,var(--ochre) 38%,var(--line));border-radius:999px;padding:5px 9px}.remix-intent{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:10px 0 14px}.remix-intent>div{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:10px}.remix-intent b{display:block;color:var(--ochre);font-size:.78rem}.remix-intent p{margin:3px 0 0;font-size:.84rem}.engine{display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin:12px 0}.engine-step{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:9px 9px 9px 34px;font-size:.76rem;min-height:70px}.engine-step span{position:absolute;left:8px;top:9px;width:19px;height:19px;border-radius:50%;display:grid;place-items:center;background:var(--ochre);color:#fff;font-size:.65rem;font-weight:900}.engine-step b{display:block;color:var(--ochre);margin-bottom:2px}.kew-rule{margin:10px 0 0;border-left:4px solid var(--blue);background:var(--blue-soft);border-radius:9px;padding:9px 11px;font-size:.84rem}.sound-bank{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}.sound-bank span{background:var(--card);border:1px solid color-mix(in srgb,var(--blue) 35%,var(--line));border-radius:999px;padding:3px 8px;font-weight:850;color:var(--blue)}.remix-grid{display:grid;grid-template-columns:minmax(220px,.42fr) minmax(0,1fr);gap:12px;align-items:start}.seed-panel,.draft-panel{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:13px;box-shadow:var(--shadow)}.seed-tabs{display:grid;gap:7px;margin-top:9px}.seed-tab{width:100%;text-align:left;border:1px solid var(--line);border-radius:10px;background:var(--paper);color:var(--ink);padding:9px 10px;cursor:pointer}.seed-tab b{display:block;color:var(--ochre)}.seed-tab small{display:block;color:var(--muted);margin-top:2px}.seed-tab.active{border-color:var(--ochre);box-shadow:inset 4px 0 var(--ochre);background:var(--ochre-soft)}.levels{display:grid;gap:7px;margin-top:11px}.level{border-radius:10px;padding:9px;font-size:.8rem}.level b{display:block}.level.c2{background:var(--blue-soft)}.level.c3{background:var(--green-soft)}.draft-note{margin:0 0 9px;color:var(--muted);font-size:.82rem}.remix-lines{display:grid;gap:7px}.remix-line{display:grid;grid-template-columns:30px minmax(0,1fr) 92px;gap:8px;align-items:start;border:1px solid var(--line);background:var(--paper);border-radius:11px;padding:8px}.remix-letter{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:950}.remix-line[data-rhyme="A"] .remix-letter{background:var(--blue-soft);color:var(--blue)}.remix-line[data-rhyme="B"] .remix-letter{background:var(--plum-soft);color:var(--plum)}.remix-line[data-rhyme="C"] .remix-letter{background:var(--green-soft);color:var(--green)}.remix-text{width:100%;min-height:48px;resize:vertical;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);padding:7px 8px;font:inherit;line-height:1.35}.remix-text:focus{outline:3px solid color-mix(in srgb,var(--ochre) 28%,transparent);border-color:var(--ochre)}.line-job{display:block;font-size:.68rem;color:var(--muted);margin-top:3px}.end-wrap{font-size:.65rem;color:var(--muted);text-align:center}.end-word{display:block;margin-top:3px;border-radius:999px;padding:4px 6px;background:var(--soft);color:var(--ink);font-size:.73rem;font-weight:900;overflow:hidden;text-overflow:ellipsis}.remix-line[data-rhyme="A"] .end-word{background:var(--blue-soft);color:var(--blue)}.remix-line[data-rhyme="B"] .end-word{background:var(--plum-soft);color:var(--plum)}.remix-line[data-rhyme="C"] .end-word{background:var(--green-soft);color:var(--green)}.remix-line.kew-missing{border-color:var(--red)}.remix-line.kew-missing .end-word{background:var(--red-soft);color:var(--red)}.draft-actions{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-top:10px}.save-state{font-size:.75rem;color:var(--muted);margin-left:auto}.review-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:11px}.review-item{border:1px solid var(--line);background:var(--paper);border-radius:9px;padding:8px;font-size:.74rem}.review-item b{display:block;color:var(--ochre)}.copy-status{min-height:1.2em;margin:7px 0 0;color:var(--green);font-size:.77rem;font-weight:800}
+@media(max-width:900px){.engine{grid-template-columns:1fr 1fr}.remix-grid{grid-template-columns:1fr}.seed-tabs{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:680px){.remix-intent,.review-strip{grid-template-columns:1fr}.seed-tabs{grid-template-columns:1fr}.remix-line{grid-template-columns:28px minmax(0,1fr)}.end-wrap{grid-column:2;text-align:left}.end-word{display:inline-block;min-width:70px;margin-left:4px}.engine{grid-template-columns:1fr}}
+
 .copyright{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-size:.75rem;color:var(--muted)}.copyright a{color:var(--ochre)}
 @media(max-width:860px){.intro-grid,.reader-grid{grid-template-columns:1fr}.stanza-nav{position:static;display:flex;overflow:auto;padding-bottom:4px}.stanza-link{min-width:150px}.plot{grid-template-columns:1fr 1fr}.talk{grid-template-columns:1fr}.model-line{grid-template-columns:28px 1fr}.model-note{grid-column:2}.intent{grid-template-columns:1fr}}
 @media(max-width:540px){.shell{padding:10px 10px 42px}.source-tag{display:none}.hero{border-radius:16px}.feature-grid{grid-template-columns:1fr}.plot{grid-template-columns:1fr}.stanza{padding:13px 10px}.poem-line{grid-template-columns:20px minmax(0,1fr)}.rhyme-tag{grid-column:2;justify-self:start}.stanza-foot{align-items:flex-start;flex-direction:column}.controls{align-items:stretch}.lang{max-width:100%}}
@@ -64,16 +69,17 @@ dialog{border:0;padding:0;background:transparent;color:var(--ink);width:min(620p
   <header class="hero">
     <p class="eyebrow">Poetry workshop</p>
     <h1>Ballads &amp; <em>The Man from Ironbark</em></h1>
-    <p>A ballad tells a story aloud. Follow the plot, hear the couplets, notice the strong beat, then read Banjo Paterson’s comic bush ballad with its difficult words unpacked.</p>
+    <p>A ballad tells a story aloud. Follow the plot, hear the couplets and notice the strong beat. Then borrow the poem’s comic story shape to draft a six-line ballad of your own.</p>
     <div class="hero-actions">
       <a class="btn primary" href="#reader">Read the poem</a>
+      <a class="btn ghost" href="#remix">Write a Kew remix</a>
       <a class="btn ghost" href="https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/l/elc/english/f/man-from-ironbark" target="_blank" rel="noopener">Open the stanza word lists ↗</a>
     </div>
   </header>
 
   <div class="intent">
-    <div><b>Learning intention</b><p>We are learning how a ballad uses story, rhyme, rhythm and voice.</p></div>
-    <div><b>Success criteria</b><p>I can retell the events, identify this poem’s AABBCC couplets, hear its strong beat, and explain an old or unfamiliar word in context.</p></div>
+    <div><b>Learning intention</b><p>We are learning how a ballad uses story, rhyme, rhythm and voice, and how a writer can borrow that structure.</p></div>
+    <div><b>Success criteria</b><p>I can retell the events, identify AABBCC couplets, hear the beat, explain an unfamiliar word, and draft a clear six-line comic story.</p></div>
   </div>
 
   <section class="section intro-grid" aria-labelledby="what-heading">
@@ -132,6 +138,62 @@ dialog{border:0;padding:0;background:transparent;color:var(--ink);width:min(620p
     </div>
   </section>
 
+
+  <section class="section remix" id="remix" aria-labelledby="remix-heading">
+    <div class="remix-head">
+      <div><p class="eyebrow" style="color:var(--ochre)">Apply · borrow, then change</p><h2 id="remix-heading">Write a visitor-from-Kew ballad</h2></div>
+      <span class="draft-tag">Draft workshop</span>
+    </div>
+    <div class="card">
+      <p><em>Ironbark</em> matters because it names the visitor’s home and completes the repeated rhyme. Keep that useful trick: start with a visitor from <b>Kew</b>, then build a different joke around them.</p>
+      <div class="remix-intent">
+        <div><b>Writing intention</b><p>We are learning to borrow a story structure, then change its details and language.</p></div>
+        <div><b>Success</b><p>My six lines tell one clear joke, form three rhyming pairs, and end with the visitor from Kew.</p></div>
+      </div>
+      <div class="engine" aria-label="Comic ballad story shape">
+        <div class="engine-step"><span>1</span><b>Visitor</b>Someone from elsewhere wants something ordinary.</div>
+        <div class="engine-step"><span>2</span><b>Claim</b>Another person makes a joke or an exaggerated promise.</div>
+        <div class="engine-step"><span>3</span><b>Belief</b>The visitor takes the words literally.</div>
+        <div class="engine-step"><span>4</span><b>Reaction</b>The result is much bigger than expected.</div>
+        <div class="engine-step"><span>5</span><b>Punchline</b>Dialogue or a final image reveals the joke.</div>
+      </div>
+      <div class="kew-rule"><b>Kew is the C-rhyme anchor.</b> These words rhyme by sound even though their spellings differ.
+        <div class="sound-bank" aria-label="Words that rhyme with Kew"><span>Kew</span><span>you</span><span>do</span><span>shoe</span><span>true</span><span>new</span><span>blue</span><span>glue</span><span>stew</span><span>zoo</span><span>flew</span><span>grew</span></div>
+      </div>
+    </div>
+
+    <div class="remix-grid" style="margin-top:12px">
+      <aside class="seed-panel">
+        <p class="eyebrow" style="color:var(--ochre)">Choose a joke seed</p>
+        <h3>Three comparable misunderstandings</h3>
+        <div class="seed-tabs" id="seedTabs"></div>
+        <div class="levels">
+          <div class="level c2"><b>C2 support</b>Keep the six end words. Change the character, descriptions, actions and dialogue.</div>
+          <div class="level c3"><b>C3 stretch</b>Replace one complete rhyme pair. Rewrite both lines so the new ending words make sense.</div>
+        </div>
+      </aside>
+
+      <div class="draft-panel">
+        <p class="eyebrow" style="color:var(--ochre)">Manipulate the model</p>
+        <h3 id="seedTitle">Flying shoes</h3>
+        <p class="draft-note">Edit any line. At first, keep the coloured end words. Read each pair aloud before changing its rhyme.</p>
+        <div class="remix-lines" id="remixLines"></div>
+        <div class="draft-actions">
+          <button class="btn primary" type="button" id="copyRemix">Copy poem</button>
+          <button class="btn" type="button" id="resetRemix">Restore this model</button>
+          <span class="save-state">Draft stays in this browser.</span>
+        </div>
+        <p class="copy-status" id="copyStatus" role="status"></p>
+        <div class="review-strip" aria-label="Partner review">
+          <div class="review-item"><b>Story</b>Can your partner retell the joke?</div>
+          <div class="review-item"><b>Rhyme</b>Do A, B and C each sound like a pair?</div>
+          <div class="review-item"><b>Voice</b>Does one line sound good when performed?</div>
+          <div class="review-item"><b>Revision</b>Which change made it more your own?</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <p class="copyright">Text: A. B. “Banjo” Paterson, first published in <em>The Bulletin</em> in 1892 and included in <em>The Man from Snowy River and Other Verses</em> (1895). The poem is in the public domain. Text checked against <a href="https://gutenberg.net.au/ebooks/e00073.html" target="_blank" rel="noopener">Project Gutenberg Australia</a>. Spelling and punctuation are lightly modernised for screen reading; elisions that matter to the voice are retained.</p>
 </div>
 
@@ -141,6 +203,65 @@ dialog{border:0;padding:0;background:transparent;color:var(--ink);width:min(620p
     <div class="pop-body" id="popBody"></div>
   </div>
 </dialog>
+
+<!-- TEACHER-EDITABLE DATA: comic remix models and line jobs. -->
+
+<script id="kew-remix-data" type="application/json">
+{
+  "jobs": [
+    "Introduce the visitor and what they want.",
+    "Give the funny claim or promise.",
+    "Show the visitor believing it.",
+    "Show the unexpected result.",
+    "Give the visitor a strong reaction.",
+    "Finish with the visitor from Kew."
+  ],
+  "seeds": [
+    {
+      "id": "shoes",
+      "title": "Flying shoes",
+      "summary": "A sales claim is taken literally.",
+      "rhymes": ["A","A","B","B","C","C"],
+      "lines": [
+        "A visitor from Kew came in to buy a pair of shoes.",
+        "“These ones will make you fly,” they heard. “Just pick the pair you choose.”",
+        "They climbed upon a chair and flapped with all their might.",
+        "Then landed in the boxes, knocking every pair from sight.",
+        "“These flying shoes are useless! Take them back—they’ll never do!”",
+        "And home they marched in stockinged feet, the visitor from Kew."
+      ]
+    },
+    {
+      "id": "stew",
+      "title": "Hair-growing stew",
+      "summary": "An old expression is heard as a fact.",
+      "rhymes": ["A","A","B","B","C","C"],
+      "lines": [
+        "A hungry guest from Kew sat down and ordered the house stew.",
+        "“It puts hair upon your chest,” the smiling waiter said, “for you.”",
+        "They checked beneath their collar and let out a frightened shout.",
+        "Then wrapped their chest in napkins so no hair could wriggle out.",
+        "“I ordered lunch, not fur!” they cried. “This dish will never do!”",
+        "And left before dessert arrived, the diner from Kew."
+      ]
+    },
+    {
+      "id": "glue",
+      "title": "Permanent glue",
+      "summary": "A proud shopkeeper invites the wrong test.",
+      "rhymes": ["A","A","B","B","C","C"],
+      "lines": [
+        "A visitor from Kew walked in to buy a pot of glue.",
+        "“This holds forever,” said the clerk, “whatever you may do.”",
+        "They tested one small drop by pressing one shoe to the ground.",
+        "At closing time they still stood there, completely stuck, they found.",
+        "“It works!” the clerk said proudly. “Every word I said was true!”",
+        "They hopped home in one stocking, that annoyed guest from Kew."
+      ]
+    }
+  ]
+}
+</script>
 
 <!-- TEACHER-EDITABLE DATA: poem lines, key vocabulary, translations and morphology. -->
 <script id="ironbark-data" type="application/json">
@@ -393,6 +514,60 @@ function setToggle(id,cls,onText,offText){const b=document.getElementById(id);b.
 setToggle('vocabToggle','show-vocab','Vocabulary on','Vocabulary off');document.getElementById('reader').classList.add('show-vocab');document.getElementById('vocabToggle').addEventListener('click',()=>document.getElementById('reader').classList.toggle('hide-vocab',document.getElementById('vocabToggle').getAttribute('aria-pressed')!=='true'));
 setToggle('rhymeToggle','show-rhyme','Rhyme labels on','Rhyme labels');setToggle('speechToggle','show-speech','Dialogue on','Show dialogue');
 const savedLang=localStorage.getItem('ironbark.lang');if(savedLang&&langNames[savedLang])document.getElementById('langSelect').value=savedLang;document.getElementById('langSelect').addEventListener('change',e=>localStorage.setItem('ironbark.lang',e.target.value));
+
+const REMIX=JSON.parse(document.getElementById('kew-remix-data').textContent);
+let activeSeed=localStorage.getItem('ironbark.remix.seed')||REMIX.seeds[0].id;
+if(!REMIX.seeds.some(function(seed){return seed.id===activeSeed}))activeSeed=REMIX.seeds[0].id;
+function seedKey(id){return 'ironbark.remix.'+id}
+function savedLines(seed){
+  try{
+    const found=JSON.parse(localStorage.getItem(seedKey(seed.id)));
+    return Array.isArray(found)&&found.length===6?found:seed.lines.slice();
+  }catch(err){return seed.lines.slice()}
+}
+function lastWord(line){
+  const words=String(line||'').trim().replace(/[”"'.!,;:!?—–-]+$/g,'').split(/\s+/);
+  return words[words.length-1]||'—';
+}
+function renderSeeds(){
+  const tabs=document.getElementById('seedTabs');tabs.innerHTML='';
+  REMIX.seeds.forEach(function(seed){
+    const button=document.createElement('button');button.type='button';button.className='seed-tab'+(seed.id===activeSeed?' active':'');
+    button.innerHTML='<b>'+esc(seed.title)+'</b><small>'+esc(seed.summary)+'</small>';
+    button.addEventListener('click',function(){activeSeed=seed.id;localStorage.setItem('ironbark.remix.seed',activeSeed);renderSeeds();renderRemix()});
+    tabs.append(button)
+  })
+}
+function renderRemix(){
+  const seed=REMIX.seeds.find(function(item){return item.id===activeSeed})||REMIX.seeds[0];
+  const lines=savedLines(seed);document.getElementById('seedTitle').textContent=seed.title;
+  const box=document.getElementById('remixLines');box.innerHTML='';
+  lines.forEach(function(text,index){
+    const row=document.createElement('div');row.className='remix-line';row.dataset.rhyme=seed.rhymes[index];
+    const letter=document.createElement('span');letter.className='remix-letter';letter.textContent=seed.rhymes[index];
+    const middle=document.createElement('div');const input=document.createElement('textarea');input.className='remix-text';input.rows=2;input.value=text;input.setAttribute('aria-label','Line '+(index+1)+': '+REMIX.jobs[index]);
+    const job=document.createElement('span');job.className='line-job';job.textContent=(index+1)+'. '+REMIX.jobs[index];middle.append(input,job);
+    const end=document.createElement('div');end.className='end-wrap';end.innerHTML='END WORD <span class="end-word">'+esc(lastWord(text))+'</span>';
+    function update(){
+      const all=Array.from(box.querySelectorAll('.remix-text')).map(function(el){return el.value});
+      localStorage.setItem(seedKey(seed.id),JSON.stringify(all));
+      end.querySelector('.end-word').textContent=lastWord(input.value);
+      row.classList.toggle('kew-missing',index===5&&lastWord(input.value).toLowerCase()!=='kew')
+    }
+    input.addEventListener('input',update);row.append(letter,middle,end);box.append(row);update()
+  });
+  document.getElementById('copyStatus').textContent=''
+}
+document.getElementById('resetRemix').addEventListener('click',function(){
+  localStorage.removeItem(seedKey(activeSeed));renderRemix();document.getElementById('copyStatus').textContent='The model has been restored.'
+});
+document.getElementById('copyRemix').addEventListener('click',async function(){
+  const poem=Array.from(document.querySelectorAll('#remixLines .remix-text')).map(function(el){return el.value.trim()}).join('\n');
+  try{await navigator.clipboard.writeText(poem);document.getElementById('copyStatus').textContent='Poem copied.'}
+  catch(err){document.getElementById('copyStatus').textContent='Select the lines and copy them manually on this device.'}
+});
+renderSeeds();renderRemix();
+
 renderModel();renderReader();
 </script>
 </body>
