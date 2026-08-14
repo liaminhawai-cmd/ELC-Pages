@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="ELC homework — this week's writing prompts, the assigned practice apps, and places to read and listen.">
+<title>Homework — ELC Hub</title>
+<style>
+  :root {
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#0f766e; --soft:#ccfbf1; --radius:14px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 6px 18px rgba(16,24,40,.07);
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#fff; --muted:#c7d0e2; --line:#34405b; --accent:#5eead4; --soft:#123c39; --shadow:0 2px 10px rgba(0,0,0,.4); }
+  }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; }
+  .shell { max-width:940px; margin:auto; padding:24px 18px 60px; }
+  .top { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px; }
+  .back { color:var(--accent); font-weight:800; text-decoration:none; }
+  .back:hover { text-decoration:underline; }
+  .language-select { border:1px solid var(--line); border-radius:999px; padding:7px 11px; background:var(--card); color:var(--ink); font-weight:750; }
+  .hero { padding:28px; border-radius:20px; background:linear-gradient(135deg,#0f766e,#0d9488 55%,#0284c7); color:#fff; box-shadow:var(--shadow); }
+  .eyebrow { margin:0 0 5px; font-size:.74rem; font-weight:900; letter-spacing:.1em; text-transform:uppercase; opacity:.88; }
+  .hero h1 { margin:0; font-size:clamp(1.8rem,5.5vw,2.7rem); letter-spacing:-.5px; }
+  .hero p { max-width:640px; margin:8px 0 0; }
+
+  section { margin-top:34px; }
+  section h2 { font-size:1.25rem; display:flex; align-items:center; gap:9px; }
+  section > .blurb { color:var(--muted); font-size:.92rem; margin-top:4px; }
+  section > h2 + .blurb { margin-top:6px; }
+  .rule { height:2px; background:var(--line); border-radius:2px; margin-top:10px; }
+
+  .grid { display:grid; gap:14px; margin-top:16px; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); }
+  .item { display:flex; flex-direction:column; gap:6px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:15px; text-decoration:none; color:inherit; box-shadow:var(--shadow); }
+  a.item { transition:transform .12s,border-color .12s; }
+  a.item:hover { transform:translateY(-3px); border-color:var(--accent); }
+  .item .emoji { font-size:1.5rem; line-height:1; }
+  .item h3 { font-size:1rem; }
+  .item p { font-size:.87rem; color:var(--muted); }
+  .item .go { margin-top:auto; padding-top:8px; color:var(--accent); font-weight:800; font-size:.83rem; }
+  .item .offline { margin-top:auto; padding-top:8px; color:var(--muted); font-weight:700; font-size:.83rem; }
+  .note { margin-top:14px; padding:11px 13px; border-radius:11px; background:var(--soft); color:var(--ink); font-size:.87rem; }
+
+  .prompt { background:var(--card); border:1px solid var(--line); border-left:5px solid var(--accent); border-radius:var(--radius); padding:16px 18px; box-shadow:var(--shadow); }
+  .prompt + .prompt { margin-top:12px; }
+  .prompt .tag { font-size:.72rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
+  .prompt h3 { margin-top:4px; font-size:1.05rem; }
+  .prompt p { margin-top:6px; font-size:.92rem; color:var(--muted); }
+  .empty-prompt { margin-top:16px; padding:18px; border:2px dashed var(--line); border-radius:var(--radius); color:var(--muted); font-size:.92rem; text-align:center; }
+  .steps { margin-top:14px; padding:14px 16px; border-radius:var(--radius); background:var(--card); border:1px solid var(--line); }
+  .steps h3 { font-size:.95rem; }
+  .steps ol { margin:8px 0 0 18px; font-size:.89rem; color:var(--muted); }
+  .steps li { margin-top:4px; }
+
+  .tips { display:grid; gap:14px; margin-top:16px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); }
+  .tip { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:15px; box-shadow:var(--shadow); }
+  .tip h3 { font-size:.78rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
+  .tip p { margin-top:6px; font-size:.88rem; color:var(--muted); }
+
+  .privacy { margin-top:26px; padding:10px 13px; border-radius:11px; background:var(--card); border:1px solid var(--line); color:var(--muted); font-size:.82rem; text-align:center; }
+  @media (max-width:620px) { .shell { padding:16px 12px 44px; } .hero { padding:22px; } }
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="top">
+    <a class="back" href="index.html" id="backLink">← ELC Hub</a>
+    <select class="language-select" id="pageLanguage" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+    </select>
+  </div>
+
+  <header class="hero">
+    <p class="eyebrow" id="heroEyebrow">Homework</p>
+    <h1 id="heroTitle">📓 Homework</h1>
+    <p id="heroIntro">Use the assigned app for phonics and grammar. For reading and listening, choose material that interests you and is at a useful level.</p>
+  </header>
+
+  <div id="sections"></div>
+
+  <p class="privacy" id="privacyNote">🔒 No account and no name. This page only stores which links you opened, on this device.</p>
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   DATA BLOCK — teachers edit below this line. Nothing here is code.
+   Every visible string has three versions: en · zhHans (中国) · zhHant (台灣).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── 1. THIS WEEK'S WRITING PROMPTS ─────────────────────────────────────
+   Paste this week's prompts here. One { } block per prompt, comma between.
+
+     { tag:{en:"Week 5", zhHans:"第5周", zhHant:"第5週"},
+       title:{en:"...", zhHans:"...", zhHant:"..."},
+       detail:{en:"...", zhHans:"...", zhHant:"..."} },
+
+   `detail` is optional — length, text type, sentence starters, whatever
+   the students need. Leave the list empty ( [] ) and the page honestly
+   says no prompts are set yet.
+   ────────────────────────────────────────────────────────────────────── */
+const WRITING_PROMPTS = [
+  // ← this week's prompts go here
+];
+
+/* ── 2. LINK CATEGORIES ─────────────────────────────────────────────────
+   Each section: emoji, title, blurb, optional note, and its items.
+   An item with no `href` renders as a plain card with no link (use it for
+   things that are not websites, like the school library).
+   ────────────────────────────────────────────────────────────────────── */
+const SECTIONS = [
+  {
+    id: "core",
+    emoji: "🎯",
+    title: { en:"Core ELC apps", zhHans:"ELC 核心应用", zhHant:"ELC 核心應用程式" },
+    blurb: {
+      en:"Set by your teacher. Do these first.",
+      zhHans:"由老师布置。请先完成这些。",
+      zhHant:"由老師指定。請先完成這些。"
+    },
+    items: [
+      { emoji:"🔊", href:"https://liaminhawai-cmd.github.io/Phonics/", external:true,
+        title:{ en:"Phonics Trainer", zhHans:"自然拼读训练", zhHant:"自然發音訓練" },
+        text:{ en:"Complete the assigned 20-minute revision.", zhHans:"完成布置的 20 分钟复习。", zhHant:"完成指定的 20 分鐘複習。" } },
+      { emoji:"🧩", href:"https://liaminhawai-cmd.github.io/Grammar-hub/", external:true,
+        title:{ en:"Grammar Hub", zhHans:"语法中心", zhHant:"文法中心" },
+        text:{ en:"Complete the task set by your teacher.", zhHans:"完成老师布置的任务。", zhHant:"完成老師指定的任務。" } },
+      { emoji:"✍️", href:"https://chatgpt.com/g/g-68e58defc8648191b08060290e0b1f6f-elc-writing-feedback", external:true,
+        title:{ en:"ELC Writing Feedback", zhHans:"ELC 写作反馈", zhHant:"ELC 寫作回饋" },
+        text:{ en:"Upload the first handwritten draft, then rewrite.", zhHans:"上传手写初稿的照片，然后重写。", zhHant:"上傳手寫初稿的照片，然後重寫。" } },
+      { emoji:"🗣️", href:"pronunciation.html",
+        title:{ en:"Pronunciation Hub", zhHans:"发音中心", zhHant:"發音中心" },
+        text:{ en:"Extra sound, stress and speaking practice.", zhHans:"额外的语音、重音和口语练习。", zhHant:"額外的語音、重音和口說練習。" } }
+    ]
+  },
+  {
+    id: "reading",
+    emoji: "📖",
+    title: { en:"Places to read", zhHans:"阅读的地方", zhHant:"閱讀的地方" },
+    blurb: {
+      en:"Choose material that interests you and is at a useful level.",
+      zhHans:"选择你感兴趣、难度合适的材料。",
+      zhHant:"選擇你感興趣、難度合適的材料。"
+    },
+    note: {
+      en:"You do not have to finish every book. Try something else if it is not a good fit.",
+      zhHans:"不必读完每一本书。如果不合适，就换一本。",
+      zhHant:"不必讀完每一本書。如果不合適，就換一本。"
+    },
+    items: [
+      { emoji:"🏫",
+        title:{ en:"School or local library", zhHans:"学校或社区图书馆", zhHant:"學校或社區圖書館" },
+        text:{ en:"Novels, non-fiction, short stories, articles and magazines.", zhHans:"小说、非虚构类读物、短篇故事、文章和杂志。", zhHant:"小說、非虛構類讀物、短篇故事、文章和雜誌。" } },
+      { emoji:"📱", href:"https://www.borrowbox.com/", external:true,
+        title:{ en:"BorrowBox", zhHans:"BorrowBox", zhHant:"BorrowBox" },
+        text:{ en:"Borrow eBooks or audiobooks through a participating library.", zhHans:"通过合作的图书馆借阅电子书或有声书。", zhHant:"透過合作的圖書館借閱電子書或有聲書。" } },
+      { emoji:"📚", href:"https://www.getepic.com/", external:true,
+        title:{ en:"Epic!", zhHans:"Epic!", zhHant:"Epic!" },
+        text:{ en:"Digital books if you have school or family access.", zhHans:"如果学校或家里有账号，可以看电子书。", zhHant:"如果學校或家裡有帳號，可以看電子書。" } }
+    ]
+  },
+  {
+    id: "listening",
+    emoji: "🎧",
+    title: { en:"Listening choices", zhHans:"听力资源", zhHant:"聽力資源" },
+    blurb: {
+      en:"Free unless marked. Australian English, so the accent matches your classes.",
+      zhHans:"除标注外均免费。都是澳大利亚英语，口音和课堂一致。",
+      zhHant:"除標註外皆免費。都是澳洲英語，口音和課堂一致。"
+    },
+    items: [
+      { emoji:"🇦🇺", href:"https://www.sbs.com.au/language/english/en/learn-english", external:true,
+        title:{ en:"SBS Learn English", zhHans:"SBS 学英语", zhHant:"SBS 學英語" },
+        text:{ en:"English and Australian life, made for new arrivals.", zhHans:"为新移民制作的英语和澳大利亚生活内容。", zhHant:"為新移民製作的英語和澳洲生活內容。" } },
+      { emoji:"📰", href:"https://www.sbs.com.au/news/podcast/sbs-news-in-easy-english", external:true,
+        title:{ en:"SBS News in Easy English", zhHans:"SBS 简易英语新闻", zhHant:"SBS 簡易英語新聞" },
+        text:{ en:"A short daily news wrap in slow, clear English.", zhHans:"每天一则简短新闻，语速慢、发音清楚。", zhHant:"每天一則簡短新聞，語速慢、發音清楚。" } },
+      { emoji:"🎙️", href:"https://www.sbs.com.au/audio", external:true,
+        title:{ en:"SBS Audio", zhHans:"SBS 音频", zhHant:"SBS 音訊" },
+        text:{ en:"Podcasts and radio, including your first language.", zhHans:"播客和电台，也有你的第一语言。", zhHant:"播客和電台，也有你的第一語言。" } },
+      { emoji:"📻", href:"https://www.abc.net.au/listen", external:true,
+        title:{ en:"ABC listen", zhHans:"ABC listen", zhHant:"ABC listen" },
+        text:{ en:"Radio, podcasts and audiobooks.", zhHans:"电台、播客和有声书。", zhHant:"電台、播客和有聲書。" } },
+      { emoji:"📺", href:"https://listeninenglish.com", external:true,
+        title:{ en:"Listen in English", zhHans:"Listen in English", zhHant:"Listen in English" },
+        text:{ en:"Levelled clips with exercises. Choose Easy TV, then your level.", zhHans:"分级视频加练习。选择 Easy TV，再选你的等级。", zhHant:"分級影片加練習。選擇 Easy TV，再選你的程度。" } },
+      { emoji:"🎧", href:"https://www.audible.com.au/", external:true,
+        title:{ en:"Audible", zhHans:"Audible", zhHant:"Audible" },
+        text:{ en:"Paid audiobooks — check the library first.", zhHans:"付费有声书——请先查图书馆。", zhHant:"付費有聲書——請先查圖書館。" } }
+    ]
+  },
+  {
+    id: "hub",
+    emoji: "🧡",
+    title: { en:"Also on the hub", zhHans:"学习中心的其他工具", zhHant:"學習中心的其他工具" },
+    blurb: {
+      en:"Open any of these when you want extra practice.",
+      zhHans:"想多练习时，可以打开这些工具。",
+      zhHant:"想多練習時，可以開啟這些工具。"
+    },
+    items: [
+      { emoji:"📝", href:"writing-wall.html",
+        title:{ en:"Analytical Writing Wall", zhHans:"分析写作墙", zhHant:"分析寫作牆" },
+        text:{ en:"The same idea written at every band — see what changes.", zhHans:"同一个观点在各等级的写法——看看有什么变化。", zhHant:"同一個觀點在各級別的寫法——看看有什麼變化。" } },
+      { emoji:"📚", href:"rubrics.html",
+        title:{ en:"Rubrics", zhHans:"评分标准", zhHant:"評分標準" },
+        text:{ en:"What each band looks like, with worked examples.", zhHans:"各等级的表现，附完整范例。", zhHant:"各級別的表現，附完整範例。" } },
+      { emoji:"🧱", href:"https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/words", external:true,
+        title:{ en:"EAL Vocabulary", zhHans:"EAL 词汇", zhHant:"EAL 詞彙" },
+        text:{ en:"Build words from prefixes, roots and suffixes.", zhHans:"用前缀、词根和后缀构词。", zhHant:"用字首、字根和字尾構詞。" } },
+      { emoji:"🧭", href:"learning-compass.html",
+        title:{ en:"Learning Compass", zhHans:"学习指南针", zhHant:"學習指南針" },
+        text:{ en:"Check your level and save one clear next-step goal.", zhHans:"了解自己的等级，并保存一个明确的下一步目标。", zhHant:"了解自己的級別，並儲存一個明確的下一步目標。" } },
+      { emoji:"🎡", href:"feeling-wheel.html",
+        title:{ en:"Feeling Wheel", zhHans:"情绪轮", zhHant:"情緒輪" },
+        text:{ en:"Find a more precise word than “happy” or “sad”.", zhHans:"找到比“开心”“难过”更准确的词。", zhHant:"找到比「開心」「難過」更精確的詞。" } },
+      { emoji:"📜", href:"poems.html",
+        title:{ en:"Poems", zhHans:"诗歌", zhHant:"詩歌" },
+        text:{ en:"Limericks and The Man from Ironbark.", zhHans:"五行打油诗和《来自铁皮桉镇的人》。", zhHant:"五行打油詩和《來自鐵皮桉鎮的人》。" } }
+    ]
+  }
+];
+
+/* ── 3. HOW TO MAKE IT COUNT (no links — advice cards) ────────────────── */
+const TIPS = [
+  { title:{ en:"Spread it out", zhHans:"分散安排", zhHant:"分散安排" },
+    text:{ en:"Plan several shorter sessions instead of one long catch-up.", zhHans:"安排几次短时间的练习，不要最后一次补完。", zhHant:"安排幾次短時間的練習，不要最後一次補完。" } },
+  { title:{ en:"Follow your interests", zhHans:"跟着兴趣走", zhHant:"跟著興趣走" },
+    text:{ en:"Choice matters. Read and listen to topics you genuinely want to know about.", zhHans:"选择很重要。读和听你真正想了解的主题。", zhHant:"選擇很重要。讀和聽你真正想了解的主題。" } },
+  { title:{ en:"Keep the log", zhHans:"记录练习", zhHant:"記錄練習" },
+    text:{ en:"Write the title, source and minutes in your homework book soon after each session, so the total is accurate.", zhHans:"每次练习后尽快在作业本上写下标题、来源和分钟数，这样总时长才准确。", zhHant:"每次練習後盡快在作業本上寫下標題、來源和分鐘數，這樣總時數才準確。" } }
+];
+
+/* ── 4. PAGE TEXT ─────────────────────────────────────────────────────── */
+const UI = {
+  back:        { en:"← ELC Hub", zhHans:"← ELC 学习中心", zhHant:"← ELC 學習中心" },
+  eyebrow:     { en:"Independent practice", zhHans:"自主练习", zhHant:"自主練習" },
+  title:       { en:"📓 Homework", zhHans:"📓 家庭作业", zhHant:"📓 家庭作業" },
+  intro:       { en:"Use the assigned app for phonics and grammar. For reading and listening, choose material that interests you and is at a useful level.",
+                 zhHans:"拼读和语法请使用老师布置的应用。阅读和听力则选择你感兴趣、难度合适的材料。",
+                 zhHant:"發音和文法請使用老師指定的應用程式。閱讀和聽力則選擇你感興趣、難度合適的材料。" },
+  writingTitle:{ en:"This week's writing", zhHans:"本周写作", zhHant:"本週寫作" },
+  writingBlurb:{ en:"Your teacher sets the prompt each week.", zhHans:"老师每周布置写作题目。", zhHant:"老師每週指定寫作題目。" },
+  writingEmpty:{ en:"No writing prompt is set for this week yet. Your teacher will add it here.",
+                 zhHans:"本周还没有布置写作题目。老师会在这里添加。",
+                 zhHant:"本週還沒有指定寫作題目。老師會在這裡新增。" },
+  stepsTitle:  { en:"How to hand it in", zhHans:"如何提交", zhHant:"如何繳交" },
+  step1:       { en:"Write your first draft by hand in your book.", zhHans:"先在本子上手写初稿。", zhHant:"先在本子上手寫初稿。" },
+  step2:       { en:"Photograph it and upload it to ELC Writing Feedback.", zhHans:"拍照并上传到 ELC 写作反馈。", zhHant:"拍照並上傳到 ELC 寫作回饋。" },
+  step3:       { en:"Read the feedback, then rewrite the draft.", zhHans:"阅读反馈，然后重写初稿。", zhHant:"閱讀回饋，然後重寫初稿。" },
+  step4:       { en:"Bring both drafts to class.", zhHans:"把两份初稿都带到课堂。", zhHant:"把兩份草稿都帶到課堂。" },
+  tipsTitle:   { en:"Make it count", zhHans:"让练习更有效", zhHant:"讓練習更有效" },
+  open:        { en:"Open →", zhHans:"打开 →", zhHant:"開啟 →" },
+  openNew:     { en:"Opens in a new tab →", zhHans:"在新标签页打开 →", zhHant:"在新分頁開啟 →" },
+  noLink:      { en:"Ask at the library desk", zhHans:"到图书馆柜台询问", zhHant:"到圖書館櫃檯詢問" },
+  privacy:     { en:"🔒 No account and no name. This page only stores which links you opened, on this device.",
+                 zhHans:"🔒 无需账户，不需要姓名。本页只在此设备上记录你打开过哪些链接。",
+                 zhHant:"🔒 無需帳戶，不需要姓名。本頁只在此裝置上記錄你開啟過哪些連結。" }
+};
+
+/* ═══════════════════ END OF DATA BLOCK — code below ═══════════════════ */
+
+const VISITS_KEY = "elc_visited";
+const LANG_KEY = "elc_page_language";
+const LANG_KEYS = { en:"en", "zh-Hans":"zhHans", "zh-Hant":"zhHant" };
+let langKey = "en";
+
+function t(entry) {
+  if (!entry) return "";
+  return entry[langKey] || entry.en || "";
+}
+
+function element(tag, className, textContent) {
+  const node = document.createElement(tag);
+  if (className) node.className = className;
+  if (textContent) node.textContent = textContent;
+  return node;
+}
+
+function sectionHead(parent, emoji, titleEntry, blurbEntry) {
+  parent.append(element("h2", null, `${emoji} ${t(titleEntry)}`));
+  if (blurbEntry) parent.append(element("p", "blurb", t(blurbEntry)));
+  parent.append(element("div", "rule"));
+}
+
+function renderItem(item, categoryTitle) {
+  const isLink = Boolean(item.href);
+  const node = document.createElement(isLink ? "a" : "div");
+  node.className = "item";
+  if (isLink) {
+    node.href = item.href;
+    node.dataset.cat = categoryTitle;
+    node.dataset.title = item.title.en;
+    if (item.external) { node.target = "_blank"; node.rel = "noopener"; }
+  }
+  node.append(element("span", "emoji", item.emoji));
+  node.querySelector(".emoji").setAttribute("aria-hidden", "true");
+  node.append(element("h3", null, t(item.title)));
+  node.append(element("p", null, t(item.text)));
+  node.append(isLink
+    ? element("span", "go", item.external ? t(UI.openNew) : t(UI.open))
+    : element("span", "offline", t(UI.noLink)));
+  return node;
+}
+
+function renderWritingSection() {
+  const section = element("section");
+  section.id = "writing";
+  sectionHead(section, "🖊️", UI.writingTitle, UI.writingBlurb);
+
+  if (WRITING_PROMPTS.length === 0) {
+    section.append(element("p", "empty-prompt", t(UI.writingEmpty)));
+  } else {
+    const list = element("div");
+    list.style.marginTop = "16px";
+    WRITING_PROMPTS.forEach(prompt => {
+      const card = element("div", "prompt");
+      if (prompt.tag) card.append(element("span", "tag", t(prompt.tag)));
+      card.append(element("h3", null, t(prompt.title)));
+      if (prompt.detail) card.append(element("p", null, t(prompt.detail)));
+      list.append(card);
+    });
+    section.append(list);
+  }
+
+  const steps = element("div", "steps");
+  steps.append(element("h3", null, t(UI.stepsTitle)));
+  const ordered = document.createElement("ol");
+  [UI.step1, UI.step2, UI.step3, UI.step4].forEach(step => ordered.append(element("li", null, t(step))));
+  steps.append(ordered);
+  section.append(steps);
+  return section;
+}
+
+function renderTipsSection() {
+  const section = element("section");
+  sectionHead(section, "✅", UI.tipsTitle);
+  const grid = element("div", "tips");
+  TIPS.forEach(tip => {
+    const card = element("div", "tip");
+    card.append(element("h3", null, t(tip.title)));
+    card.append(element("p", null, t(tip.text)));
+    grid.append(card);
+  });
+  section.append(grid);
+  return section;
+}
+
+function renderPage() {
+  document.getElementById("backLink").textContent = t(UI.back);
+  document.getElementById("heroEyebrow").textContent = t(UI.eyebrow);
+  document.getElementById("heroTitle").textContent = t(UI.title);
+  document.getElementById("heroIntro").textContent = t(UI.intro);
+  document.getElementById("privacyNote").textContent = t(UI.privacy);
+
+  const host = document.getElementById("sections");
+  host.replaceChildren();
+  host.append(renderWritingSection());
+
+  SECTIONS.forEach(group => {
+    const section = element("section");
+    section.id = group.id;
+    sectionHead(section, group.emoji, group.title, group.blurb);
+    const grid = element("div", "grid");
+    group.items.forEach(item => grid.append(renderItem(item, group.title.en)));
+    section.append(grid);
+    if (group.note) section.append(element("p", "note", t(group.note)));
+    host.append(section);
+  });
+
+  host.append(renderTipsSection());
+  wireActivityRecord();
+}
+
+function wireActivityRecord() {
+  document.querySelectorAll("a.item").forEach(card => {
+    card.addEventListener("click", () => {
+      let visits = [];
+      try { visits = JSON.parse(localStorage.getItem(VISITS_KEY) || "[]"); } catch (e) {}
+      if (!Array.isArray(visits)) visits = [];
+      visits = visits.filter(item => item.title !== card.dataset.title);
+      visits.push({ title:card.dataset.title, cat:card.dataset.cat, ts:Date.now() });
+      localStorage.setItem(VISITS_KEY, JSON.stringify(visits));
+    });
+  });
+}
+
+function setPageLanguage(lang) {
+  langKey = LANG_KEYS[lang] || "en";
+  if (!LANG_KEYS[lang]) lang = "en";
+  document.documentElement.lang = lang === "en" ? "en-AU" : lang;
+  document.getElementById("pageLanguage").value = lang;
+  localStorage.setItem(LANG_KEY, lang);
+  renderPage();
+}
+
+document.getElementById("pageLanguage").addEventListener("change", e => setPageLanguage(e.target.value));
+setPageLanguage(localStorage.getItem(LANG_KEY) || "en");
+</script>
+</body>
+</html>
