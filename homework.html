@@ -91,19 +91,79 @@
    Every visible string has three versions: en · zhHans (中国) · zhHant (台灣).
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* ── 1. THIS WEEK'S WRITING PROMPTS ─────────────────────────────────────
-   Paste this week's prompts here. One { } block per prompt, comma between.
+/* ── 1. WRITING PROMPTS ─────────────────────────────────────────────────
+   One { } block per prompt, comma between. These match the homework book,
+   so change them in both places or they will drift apart.
 
      { tag:{en:"Week 5", zhHans:"第5周", zhHant:"第5週"},
        title:{en:"...", zhHans:"...", zhHant:"..."},
        detail:{en:"...", zhHans:"...", zhHant:"..."} },
 
    `detail` is optional — length, text type, sentence starters, whatever
-   the students need. Leave the list empty ( [] ) and the page honestly
-   says no prompts are set yet.
+   the students need. Empty the list ( [] ) and the page honestly says no
+   prompts are set yet.
    ────────────────────────────────────────────────────────────────────── */
 const WRITING_PROMPTS = [
-  // ← this week's prompts go here
+  { tag:{ en:"Term 3 · Week 6", zhHans:"第3学期 · 第6周", zhHant:"第3學期 · 第6週" },
+    title:{ en:"Dream Holiday", zhHans:"梦想中的假期", zhHant:"夢想中的假期" },
+    detail:{ en:"You have $50,000 to go on a dream holiday. Where would you go? What would you do? How long for? Why?",
+             zhHans:"你有 5 万澳元去度一次梦想中的假期。你会去哪里？做什么？去多久？为什么？",
+             zhHant:"你有 5 萬澳幣去度一次夢想中的假期。你會去哪裡？做什麼？去多久？為什麼？" } },
+  { tag:{ en:"Term 3 · Week 7", zhHans:"第3学期 · 第7周", zhHant:"第3學期 · 第7週" },
+    title:{ en:"Small Moment, Big Impact", zhHans:"小事情，大影响", zhHant:"小事情，大影響" },
+    detail:{ en:"Write about a small moment that changed something for you. Where were you? What happened? Who was there? Why do you still remember it?",
+             zhHans:"写一件改变了你某些想法的小事。你在哪里？发生了什么？有谁在场？你为什么至今还记得？",
+             zhHant:"寫一件改變了你某些想法的小事。你在哪裡？發生了什麼？有誰在場？你為什麼至今還記得？" } },
+  { tag:{ en:"Term 3 · Week 8", zhHans:"第3学期 · 第8周", zhHant:"第3學期 · 第8週" },
+    title:{ en:"A Dish from Home", zhHans:"家乡的一道菜", zhHant:"家鄉的一道菜" },
+    detail:{ en:"Teach someone to cook a dish from your home country. What do you need? What are the steps, in order? When do people eat it? What does it taste and smell like?",
+             zhHans:"教别人做一道家乡菜。需要哪些材料？步骤依次是什么？大家什么时候吃？味道和气味怎么样？",
+             zhHant:"教別人做一道家鄉菜。需要哪些材料？步驟依序是什麼？大家什麼時候吃？味道和氣味怎麼樣？" } },
+  { tag:{ en:"Term 3 · Week 9", zhHans:"第3学期 · 第9周", zhHant:"第3學期 · 第9週" },
+    title:{ en:"No More Homework", zhHans:"取消家庭作业", zhHant:"取消家庭作業" },
+    detail:{ en:"Should the ELC stop giving homework? Give your opinion. Give two strong reasons. What would a teacher say against you? Answer them.",
+             zhHans:"ELC 应该取消家庭作业吗？说出你的观点，给出两个有力的理由。老师会怎样反驳你？请回应。",
+             zhHant:"ELC 應該取消家庭作業嗎？說出你的觀點，給出兩個有力的理由。老師會怎樣反駁你？請回應。" } },
+  { tag:{ en:"Term 3 · Week 10", zhHans:"第3学期 · 第10周", zhHant:"第3學期 · 第10週" },
+    title:{ en:"Two Cultures", zhHans:"两种文化", zhHant:"兩種文化" },
+    detail:{ en:"Compare life in your home country with life in Australia. Think about school, food, family and free time. What is the same? What is different? What surprised you most?",
+             zhHans:"比较你家乡和澳大利亚的生活。想想学校、食物、家庭和空闲时间。哪些相同？哪些不同？最让你意外的是什么？",
+             zhHant:"比較你家鄉和澳洲的生活。想想學校、食物、家庭和空閒時間。哪些相同？哪些不同？最讓你意外的是什麼？" } },
+  { tag:{ en:"Term 4 · Week 1", zhHans:"第4学期 · 第1周", zhHant:"第4學期 · 第1週" },
+    title:{ en:"Write a Limerick", zhHans:"写一首五行打油诗", zhHant:"寫一首五行打油詩" },
+    detail:{ en:"Five lines, rhyming AABBA, about a person or an animal doing something silly. Read it out loud and count the beats. Use the Limerick Builder on the hub if you want help with rhyme and rhythm.",
+             zhHans:"五行，押韵格式 AABBA，写一个人或动物做傻事。大声读出来并数节拍。需要押韵和节奏的帮助，可以用学习中心的五行打油诗工具。",
+             zhHant:"五行，押韻格式 AABBA，寫一個人或動物做傻事。大聲讀出來並數節拍。需要押韻和節奏的幫助，可以用學習中心的五行打油詩工具。" } },
+  { tag:{ en:"Term 4 · Week 2", zhHans:"第4学期 · 第2周", zhHant:"第4學期 · 第2週" },
+    title:{ en:"Australia in Space", zhHans:"澳大利亚与太空", zhHant:"澳洲與太空" },
+    detail:{ en:"Should Australia spend money on a space program to go to the Moon? Give your opinion. Give two reasons. What else could that money pay for? Answer that objection.",
+             zhHans:"澳大利亚该不该花钱建登月太空计划？说出你的观点，给出两个理由。这笔钱还能用在什么地方？请回应这个反驳。",
+             zhHant:"澳洲該不該花錢建登月太空計畫？說出你的觀點，給出兩個理由。這筆錢還能用在什麼地方？請回應這個反駁。" } },
+  { tag:{ en:"Term 4 · Week 3", zhHans:"第4学期 · 第3周", zhHant:"第4學期 · 第3週" },
+    title:{ en:"ELC Newspaper", zhHans:"ELC 校报", zhHant:"ELC 校刊" },
+    detail:{ en:"Write a short article for the ELC newspaper about something that happened this term. What happened? Who was involved? Where and when? Why should other students care? Give it a headline.",
+             zhHans:"为 ELC 校报写一篇短文，报道本学期发生的一件事。发生了什么？谁参与了？何时何地？为什么其他同学该关心？再取一个标题。",
+             zhHant:"為 ELC 校刊寫一篇短文，報導本學期發生的一件事。發生了什麼？誰參與了？何時何地？為什麼其他同學該關心？再取一個標題。" } },
+  { tag:{ en:"Term 4 · Week 4", zhHans:"第4学期 · 第4周", zhHant:"第4學期 · 第4週" },
+    title:{ en:"A Secret I Never Told", zhHans:"从未说出口的秘密", zhHant:"從未說出口的祕密" },
+    detail:{ en:"Write about something you have never told anyone. You choose how much to share, and you may change the names and details. What happened? Why did you keep it quiet? How do you feel about it now?",
+             zhHans:"写一件你从未告诉过别人的事。你可以决定写多少，也可以更改姓名和细节。发生了什么？你为什么没说？现在你怎么看？",
+             zhHant:"寫一件你從未告訴過別人的事。你可以決定寫多少，也可以更改姓名和細節。發生了什麼？你為什麼沒說？現在你怎麼看？" } },
+  { tag:{ en:"Term 4 · Week 5", zhHans:"第4学期 · 第5周", zhHant:"第4學期 · 第5週" },
+    title:{ en:"Which Is Better", zhHans:"哪里更好", zhHant:"哪裡更好" },
+    detail:{ en:"Your home country or Australia? Choose one and argue for it. Give two reasons with examples. What is one thing the other country does better? Why do you still choose yours?",
+             zhHans:"你的祖国还是澳大利亚？选一个并为它辩护。给出两个理由和例子。另一个国家有哪一点做得更好？你为什么仍然选你的答案？",
+             zhHant:"你的母國還是澳洲？選一個並為它辯護。給出兩個理由和例子。另一個國家有哪一點做得更好？你為什麼仍然選你的答案？" } },
+  { tag:{ en:"Term 4 · Week 6", zhHans:"第4学期 · 第6周", zhHant:"第4學期 · 第6週" },
+    title:{ en:"A Letter to the Principal", zhHans:"写给校长的信", zhHant:"寫給校長的信" },
+    detail:{ en:"Choose one thing you would change at this school. What is the problem now? What is your idea? How would it help students? Write it as a polite formal letter.",
+             zhHans:"选一件你想改变的校内事情。现在的问题是什么？你的建议是什么？对学生有什么帮助？用礼貌的正式书信写。",
+             zhHant:"選一件你想改變的校內事情。現在的問題是什麼？你的建議是什麼？對學生有什麼幫助？用禮貌的正式書信寫。" } },
+  { tag:{ en:"Term 4 · Week 7", zhHans:"第4学期 · 第7周", zhHant:"第4學期 · 第7週" },
+    title:{ en:"This Year in English", zhHans:"今年的英语学习", zhHant:"今年的英語學習" },
+    detail:{ en:"What can you do in English now that you could not do in January? What was the hardest part? Who or what helped you most? What is your goal for next year?",
+             zhHans:"现在你能用英语做哪些一月时还做不到的事？最难的是什么？谁或什么帮助你最大？明年的目标是什么？",
+             zhHant:"現在你能用英語做哪些一月時還做不到的事？最難的是什麼？誰或什麼幫助你最大？明年的目標是什麼？" } }
 ];
 
 /* ── 2. LINK CATEGORIES ─────────────────────────────────────────────────
@@ -242,8 +302,10 @@ const UI = {
   intro:       { en:"Use the assigned app for phonics and grammar. For reading and listening, choose material that interests you and is at a useful level.",
                  zhHans:"拼读和语法请使用老师布置的应用。阅读和听力则选择你感兴趣、难度合适的材料。",
                  zhHant:"發音和文法請使用老師指定的應用程式。閱讀和聽力則選擇你感興趣、難度合適的材料。" },
-  writingTitle:{ en:"This week's writing", zhHans:"本周写作", zhHant:"本週寫作" },
-  writingBlurb:{ en:"Your teacher sets the prompt each week.", zhHans:"老师每周布置写作题目。", zhHant:"老師每週指定寫作題目。" },
+  writingTitle:{ en:"Writing prompts", zhHans:"写作题目", zhHant:"寫作題目" },
+  writingBlurb:{ en:"One cold write each week. Your teacher will tell you which week you are on. The same prompts are in your homework book.",
+                 zhHans:"每周一篇即时写作。老师会告诉你现在是第几周。作业本上是同样的题目。",
+                 zhHant:"每週一篇即時寫作。老師會告訴你現在是第幾週。作業本上是同樣的題目。" },
   writingEmpty:{ en:"No writing prompt is set for this week yet. Your teacher will add it here.",
                  zhHans:"本周还没有布置写作题目。老师会在这里添加。",
                  zhHant:"本週還沒有指定寫作題目。老師會在這裡新增。" },
