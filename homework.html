@@ -16,54 +16,80 @@
   }
   * { box-sizing:border-box; margin:0; }
   body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; }
-  .shell { max-width:940px; margin:auto; padding:24px 18px 60px; }
-  .top { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:18px; }
+  .shell { max-width:1180px; margin:auto; padding:20px 18px 56px; }
+  .top { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:16px; }
   .back { color:var(--accent); font-weight:800; text-decoration:none; }
   .back:hover { text-decoration:underline; }
   .language-select { border:1px solid var(--line); border-radius:999px; padding:7px 11px; background:var(--card); color:var(--ink); font-weight:750; }
-  .hero { padding:28px; border-radius:20px; background:linear-gradient(135deg,#0f766e,#0d9488 55%,#0284c7); color:#fff; box-shadow:var(--shadow); }
-  .eyebrow { margin:0 0 5px; font-size:.74rem; font-weight:900; letter-spacing:.1em; text-transform:uppercase; opacity:.88; }
-  .hero h1 { margin:0; font-size:clamp(1.8rem,5.5vw,2.7rem); letter-spacing:-.5px; }
-  .hero p { max-width:640px; margin:8px 0 0; }
+  .hero { padding:20px 24px; border-radius:18px; background:linear-gradient(135deg,#0f766e,#0d9488 55%,#0284c7); color:#fff; box-shadow:var(--shadow); }
+  .eyebrow { margin:0 0 3px; font-size:.72rem; font-weight:900; letter-spacing:.1em; text-transform:uppercase; opacity:.88; }
+  .hero h1 { margin:0; font-size:clamp(1.5rem,4vw,2rem); letter-spacing:-.5px; }
+  .hero p { max-width:640px; margin:6px 0 0; font-size:.92rem; opacity:.96; }
 
-  section { margin-top:34px; }
-  section h2 { font-size:1.25rem; display:flex; align-items:center; gap:9px; }
-  section > .blurb { color:var(--muted); font-size:.92rem; margin-top:4px; }
-  section > h2 + .blurb { margin-top:6px; }
-  .rule { height:2px; background:var(--line); border-radius:2px; margin-top:10px; }
+  /* ── layout: two lanes on wide screens, stacked on narrow ─────────── */
+  .layout { display:grid; grid-template-columns:1fr; gap:20px; margin-top:20px; }
+  @media (min-width:920px) { .layout { grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); align-items:start; } }
 
-  .grid { display:grid; gap:14px; margin-top:16px; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); }
-  .item { display:flex; flex-direction:column; gap:6px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:15px; text-decoration:none; color:inherit; box-shadow:var(--shadow); }
-  a.item { transition:transform .12s,border-color .12s; }
-  a.item:hover { transform:translateY(-3px); border-color:var(--accent); }
-  .item .emoji { font-size:1.5rem; line-height:1; }
-  .item h3 { font-size:1rem; }
-  .item p { font-size:.87rem; color:var(--muted); }
-  .item .go { margin-top:auto; padding-top:8px; color:var(--accent); font-weight:800; font-size:.83rem; }
-  .item .offline { margin-top:auto; padding-top:8px; color:var(--muted); font-weight:700; font-size:.83rem; }
-  .note { margin-top:14px; padding:11px 13px; border-radius:11px; background:var(--soft); color:var(--ink); font-size:.87rem; }
+  .card-block { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:16px 18px; }
+  .card-block + .card-block { margin-top:16px; }
+  .card-block h2 { font-size:1.05rem; display:flex; align-items:center; gap:8px; }
+  .card-block > .blurb { color:var(--muted); font-size:.86rem; margin-top:3px; }
 
-  .prompt { background:var(--card); border:1px solid var(--line); border-left:5px solid var(--accent); border-radius:var(--radius); padding:16px 18px; box-shadow:var(--shadow); }
-  .prompt + .prompt { margin-top:12px; }
-  .prompt .tag { font-size:.72rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
-  .prompt h3 { margin-top:4px; font-size:1.05rem; }
-  .prompt p { margin-top:6px; font-size:.92rem; color:var(--muted); }
-  .empty-prompt { margin-top:16px; padding:18px; border:2px dashed var(--line); border-radius:var(--radius); color:var(--muted); font-size:.92rem; text-align:center; }
-  .steps { margin-top:14px; padding:14px 16px; border-radius:var(--radius); background:var(--card); border:1px solid var(--line); }
-  .steps h3 { font-size:.95rem; }
-  .steps ol { margin:8px 0 0 18px; font-size:.89rem; color:var(--muted); }
-  .steps li { margin-top:4px; }
-
-  .tips { display:grid; gap:14px; margin-top:16px; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); }
-  .tip { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:15px; box-shadow:var(--shadow); }
-  .tip h3 { font-size:.78rem; font-weight:900; letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
-  .tip p { margin-top:6px; font-size:.88rem; color:var(--muted); }
-
-  .privacy { margin-top:26px; padding:10px 13px; border-radius:11px; background:var(--card); border:1px solid var(--line); color:var(--muted); font-size:.82rem; text-align:center; }
-  @media (max-width:620px) { .shell { padding:16px 12px 44px; } .hero { padding:22px; } }
-  .sheet-button { display:inline-block; margin-top:14px; padding:13px 20px; border-radius:12px;
-    background:var(--accent); color:#fff; font-weight:700; text-decoration:none; }
+  .sheet-button { display:inline-block; margin-top:12px; padding:11px 18px; border-radius:11px;
+    background:var(--accent); color:#fff; font-weight:700; text-decoration:none; font-size:.92rem; }
   .sheet-button:hover { filter:brightness(1.08); }
+
+  /* writing prompts */
+  .prompt-now { margin-top:12px; background:linear-gradient(160deg,var(--soft),transparent 130%); border:1.5px solid var(--accent); border-radius:12px; padding:13px 15px; }
+  .prompt-now .tag { display:inline-block; font-size:.68rem; font-weight:900; letter-spacing:.07em; text-transform:uppercase; color:var(--accent); background:var(--card); padding:2px 9px; border-radius:999px; }
+  .prompt-now h3 { margin-top:6px; font-size:1.05rem; }
+  .prompt-now p { margin-top:5px; font-size:.9rem; color:var(--muted); }
+  .prompt-hint { margin-top:10px; font-size:.84rem; color:var(--muted); }
+
+  .prompt-list { margin-top:12px; border-top:1px solid var(--line); }
+  .prompt-list details { border-bottom:1px solid var(--line); }
+  .prompt-list summary { list-style:none; cursor:pointer; padding:9px 2px; display:flex; align-items:baseline; gap:9px; font-size:.88rem; }
+  .prompt-list summary::-webkit-details-marker { display:none; }
+  .prompt-list summary::before { content:"▸"; color:var(--muted); font-size:.75rem; transition:transform .12s; flex:none; }
+  .prompt-list details[open] summary::before { transform:rotate(90deg); }
+  .prompt-list summary .tag { flex:none; font-size:.72rem; font-weight:800; color:var(--accent); min-width:6.5em; }
+  .prompt-list summary .ttl { font-weight:650; }
+  .prompt-list .detail { padding:0 2px 12px 24px; font-size:.87rem; color:var(--muted); }
+  .prompt-list details.current summary .ttl::after { content:" — this week"; font-weight:700; color:var(--accent); }
+
+  .steps { margin-top:14px; padding:12px 14px; border-radius:11px; background:var(--bg); border:1px solid var(--line); }
+  .steps h3 { font-size:.85rem; }
+  .steps ol { margin:7px 0 0 18px; font-size:.85rem; color:var(--muted); }
+  .steps li { margin-top:3px; }
+
+  /* ── tabs (matches the Pronunciation Hub pattern) ──────────────────── */
+  .tabs { display:flex; flex-wrap:wrap; gap:6px; }
+  .tabs button { font-size:.82rem; padding:7px 13px; border-radius:999px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); cursor:pointer; }
+  .tabs button[aria-selected="true"] { background:var(--accent); color:#fff; border-color:transparent; font-weight:700; }
+  .panel { display:none; }
+  .panel.on { display:block; }
+  .panel > .blurb { color:var(--muted); font-size:.86rem; margin:10px 0 0; }
+  .panel > .note { margin-top:12px; padding:10px 12px; border-radius:10px; background:var(--soft); color:var(--ink); font-size:.85rem; }
+
+  .grid { display:grid; gap:12px; margin-top:14px; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); }
+  .item { display:flex; flex-direction:column; gap:5px; background:var(--bg); border:1px solid var(--line); border-radius:12px; padding:13px; text-decoration:none; color:inherit; }
+  a.item { transition:transform .12s,border-color .12s; }
+  a.item:hover { transform:translateY(-2px); border-color:var(--accent); }
+  .item .emoji { font-size:1.35rem; line-height:1; }
+  .item h3 { font-size:.92rem; }
+  .item p { font-size:.81rem; color:var(--muted); }
+  .item .go { margin-top:auto; padding-top:6px; color:var(--accent); font-weight:800; font-size:.78rem; }
+  .item .offline { margin-top:auto; padding-top:6px; color:var(--muted); font-weight:700; font-size:.78rem; }
+
+  /* tips: compact strip, always visible */
+  .tips-strip { display:grid; gap:10px; margin-top:10px; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); }
+  .tip { background:var(--bg); border:1px solid var(--line); border-radius:11px; padding:11px 13px; }
+  .tip h3 { font-size:.72rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); }
+  .tip p { margin-top:4px; font-size:.83rem; color:var(--muted); }
+
+  .privacy { margin-top:20px; padding:9px 13px; border-radius:11px; background:var(--card); border:1px solid var(--line); color:var(--muted); font-size:.8rem; text-align:center; }
+  @media (max-width:620px) { .shell { padding:14px 12px 40px; } .hero { padding:18px; } .card-block { padding:14px 15px; } }
 </style>
 </head>
 <body>
@@ -83,7 +109,10 @@
     <p id="heroIntro">Use the assigned app for phonics and grammar. For reading and listening, choose material that interests you and is at a useful level.</p>
   </header>
 
-  <div id="sections"></div>
+  <div class="layout">
+    <div id="laneLeft"></div>
+    <div id="laneRight"></div>
+  </div>
 
   <p class="privacy" id="privacyNote">🔒 No account and no name. This page only stores which links you opened, on this device.</p>
 </main>
@@ -118,10 +147,12 @@ const HOMEWORK_SHEET = "";
        title:{en:"...", zhHans:"...", zhHant:"..."},
        detail:{en:"...", zhHans:"...", zhHant:"..."} },
 
-   `detail` is optional — length, text type, sentence starters, whatever
-   the students need. Empty the list ( [] ) and the page honestly says no
-   prompts are set yet.
+   Set CURRENT_WEEK to a tag's `en` text (e.g. "Term 4 · Week 2") to feature
+   that prompt at the top, expanded. Leave it "" and the page just lists
+   every week, collapsed, for a student to open the one they need.
    ────────────────────────────────────────────────────────────────────── */
+const CURRENT_WEEK = "";
+
 const WRITING_PROMPTS = [
   { tag:{ en:"Term 3 · Week 6", zhHans:"第3学期 · 第6周", zhHant:"第3學期 · 第6週" },
     title:{ en:"Dream Holiday", zhHans:"梦想中的假期", zhHant:"夢想中的假期" },
@@ -186,9 +217,8 @@ const WRITING_PROMPTS = [
 ];
 
 /* ── 2. LINK CATEGORIES ─────────────────────────────────────────────────
-   Each section: emoji, title, blurb, optional note, and its items.
-   An item with no `href` renders as a plain card with no link (use it for
-   things that are not websites, like the school library).
+   Each becomes one tab. Each item: emoji, title, blurb, optional note, and
+   its cards. A card with no `href` renders with no link (e.g. the library).
    ────────────────────────────────────────────────────────────────────── */
 const SECTIONS = [
   {
@@ -238,50 +268,28 @@ const SECTIONS = [
         text:{ en:"Borrow eBooks or audiobooks through a participating library.", zhHans:"通过合作的图书馆借阅电子书或有声书。", zhHant:"透過合作的圖書館借閱電子書或有聲書。" } },
       { emoji:"📚", href:"https://www.getepic.com/", external:true,
         title:{ en:"Epic!", zhHans:"Epic!", zhHant:"Epic!" },
-        text:{ en:"Digital books if you have school or family access.", zhHans:"如果学校或家里有账号，可以看电子书。", zhHant:"如果學校或家裡有帳號，可以看電子書。" } }
-    ]
-  },
-  {
-    id: "books",
-    emoji: "📚",
-    title: { en:"Free books and audiobooks", zhHans:"免费图书和有声书", zhHant:"免費圖書和有聲書" },
-    blurb: {
-      en:"All free and legal. No account needed unless the card says so.",
-      zhHans:"全部免费、合法。除非卡片上写明，都不需要注册。",
-      zhHant:"全部免費、合法。除非卡片上寫明，都不需要註冊。"
-    },
-    items: [
+        text:{ en:"Digital books if you have school or family access.", zhHans:"如果学校或家里有账号，可以看电子书。", zhHant:"如果學校或家裡有帳號，可以看電子書。" } },
       { emoji:"📖", href:"https://www.gutenberg.org", external:true,
         title:{ en:"Project Gutenberg", zhHans:"古腾堡计划", zhHant:"古騰堡計劃" },
-        text:{ en:"Over 70,000 older books whose copyright has run out. Free and legal.",
-               zhHans:"七万多本版权已过期的旧书，免费合法。",
-               zhHant:"七萬多本版權已過期的舊書，免費合法。" } },
+        text:{ en:"70,000+ older books whose copyright has run out.", zhHans:"七万多本版权已过期的旧书。", zhHant:"七萬多本版權已過期的舊書。" } },
       { emoji:"✨", href:"https://standardebooks.org", external:true,
         title:{ en:"Standard Ebooks", zhHans:"Standard Ebooks", zhHant:"Standard Ebooks" },
-        text:{ en:"The same free classics, carefully typeset so they are easy to read on a phone.",
-               zhHans:"同样的免费经典，排版精心处理，手机上更好读。",
-               zhHant:"同樣的免費經典，排版精心處理，手機上更好讀。" } },
+        text:{ en:"The same free classics, typeset to be easy to read on a phone.", zhHans:"同样的免费经典，排版精心处理，手机上更好读。", zhHant:"同樣的免費經典，排版精心處理，手機上更好讀。" } },
       { emoji:"🏛️", href:"https://openlibrary.org", external:true,
         title:{ en:"Open Library", zhHans:"开放图书馆", zhHant:"開放圖書館" },
-        text:{ en:"Borrow newer ebooks free, one at a time, like a library. Free account needed.",
-               zhHans:"像图书馆一样免费借阅较新的电子书，一次一本。需要免费账号。",
-               zhHant:"像圖書館一樣免費借閱較新的電子書，一次一本。需要免費帳號。" } },
+        text:{ en:"Borrow newer ebooks free, one at a time. Free account needed.", zhHans:"像图书馆一样免费借阅较新的电子书。需要免费账号。", zhHant:"像圖書館一樣免費借閱較新的電子書。需要免費帳號。" } },
       { emoji:"🌏", href:"https://storyweaver.org.in", external:true,
         title:{ en:"StoryWeaver", zhHans:"StoryWeaver", zhHant:"StoryWeaver" },
-        text:{ en:"Illustrated stories in many languages. Read the same story in English and in your first language.",
-               zhHans:"多语种绘本故事。同一个故事，可以用英语和你的第一语言各读一遍。",
-               zhHant:"多語種繪本故事。同一個故事，可以用英語和你的第一語言各讀一遍。" } },
+        text:{ en:"Illustrated stories in many languages — English and your first language.", zhHans:"多语种绘本故事，可用英语和第一语言各读一遍。", zhHant:"多語種繪本故事，可用英語和第一語言各讀一遍。" } },
       { emoji:"🎧", href:"https://librivox.org", external:true,
         title:{ en:"LibriVox", zhHans:"LibriVox 有声书", zhHant:"LibriVox 有聲書" },
-        text:{ en:"Free audiobooks of those same classics, read aloud by volunteers.",
-               zhHans:"这些经典旧书的免费有声版，由志愿者朗读。",
-               zhHant:"這些經典舊書的免費有聲版，由志工朗讀。" } }
+        text:{ en:"Free audiobooks of those same classics, read by volunteers.", zhHans:"这些经典旧书的免费有声版，由志愿者朗读。", zhHant:"這些經典舊書的免費有聲版，由志工朗讀。" } }
     ]
   },
   {
     id: "news",
     emoji: "📰",
-    title: { en:"News and articles at your level", zhHans:"分级新闻和文章", zhHant:"分級新聞和文章" },
+    title: { en:"News at your level", zhHans:"分级新闻", zhHant:"分級新聞" },
     blurb: {
       en:"The same news written at different levels. Start where you can read without stopping at every line.",
       zhHans:"同样的新闻写成不同难度。选一个不用每行都停下来的等级开始。",
@@ -290,35 +298,25 @@ const SECTIONS = [
     items: [
       { emoji:"🇦🇺", href:"https://www.abc.net.au/btn", external:true,
         title:{ en:"Behind the News (BTN)", zhHans:"BTN 新闻背后", zhHant:"BTN 新聞背後" },
-        text:{ en:"Australian news made for school students. Every story has a video and a written transcript.",
-               zhHans:"为中小学生制作的澳大利亚新闻。每条新闻都有视频和文字稿。",
-               zhHant:"為中小學生製作的澳洲新聞。每則新聞都有影片和文字稿。" } },
+        text:{ en:"Australian news for school students — video and transcript.", zhHans:"为中小学生制作的澳大利亚新闻，有视频和文字稿。", zhHant:"為中小學生製作的澳洲新聞，有影片和文字稿。" } },
       { emoji:"📶", href:"https://breakingnewsenglish.com", external:true,
         title:{ en:"Breaking News English", zhHans:"Breaking News English", zhHant:"Breaking News English" },
-        text:{ en:"The same story rewritten at seven levels. Read the easy one first, then the harder one.",
-               zhHans:"同一则新闻写成七个难度。先读简单的，再读难的。",
-               zhHant:"同一則新聞寫成七個難度。先讀簡單的，再讀難的。" } },
+        text:{ en:"The same story rewritten at seven levels.", zhHans:"同一则新闻写成七个难度。", zhHant:"同一則新聞寫成七個難度。" } },
       { emoji:"3️⃣", href:"https://www.newsinlevels.com", external:true,
         title:{ en:"News in Levels", zhHans:"News in Levels", zhHant:"News in Levels" },
-        text:{ en:"Short world news at three levels. Level 1 uses the simplest words.",
-               zhHans:"简短的国际新闻，分三个等级。第一级用词最简单。",
-               zhHant:"簡短的國際新聞，分三個等級。第一級用詞最簡單。" } },
-      { emoji:"🧑\u200d🎓", href:"https://learnenglishteens.britishcouncil.org/skills/reading", external:true,
-        title:{ en:"British Council LearnEnglish Teens", zhHans:"英国文化协会 青少年英语", zhHant:"英國文化協會 青少年英語" },
-        text:{ en:"Reading written for teenagers, sorted by level, each with exercises.",
-               zhHans:"专为青少年编写的阅读材料，按等级分类，附练习。",
-               zhHant:"專為青少年編寫的閱讀材料，按程度分類，附練習。" } },
+        text:{ en:"Short world news at three levels.", zhHans:"简短的国际新闻，分三个等级。", zhHant:"簡短的國際新聞，分三個等級。" } },
+      { emoji:"🧑‍🎓", href:"https://learnenglishteens.britishcouncil.org/skills/reading", external:true,
+        title:{ en:"British Council Teens", zhHans:"英国文化协会 青少年英语", zhHant:"英國文化協會 青少年英語" },
+        text:{ en:"Reading for teenagers, sorted by level, with exercises.", zhHans:"专为青少年编写的阅读材料，附练习。", zhHant:"專為青少年編寫的閱讀材料，附練習。" } },
       { emoji:"🔎", href:"https://simple.wikipedia.org", external:true,
         title:{ en:"Simple English Wikipedia", zhHans:"简易英语维基百科", zhHant:"簡易英語維基百科" },
-        text:{ en:"Wikipedia written with easier words and shorter sentences.",
-               zhHans:"用更简单的词和更短的句子写的维基百科。",
-               zhHant:"用更簡單的詞和更短的句子寫的維基百科。" } }
+        text:{ en:"Wikipedia with easier words and shorter sentences.", zhHans:"用更简单的词写的维基百科。", zhHant:"用更簡單的詞寫的維基百科。" } }
     ]
   },
   {
     id: "listening",
     emoji: "🎧",
-    title: { en:"Listening choices", zhHans:"听力资源", zhHant:"聽力資源" },
+    title: { en:"Listening", zhHans:"听力资源", zhHant:"聽力資源" },
     blurb: {
       en:"Free unless marked. Australian English, so the accent matches your classes.",
       zhHans:"除标注外均免费。都是澳大利亚英语，口音和课堂一致。",
@@ -330,7 +328,7 @@ const SECTIONS = [
         text:{ en:"English and Australian life, made for new arrivals.", zhHans:"为新移民制作的英语和澳大利亚生活内容。", zhHant:"為新移民製作的英語和澳洲生活內容。" } },
       { emoji:"📰", href:"https://www.sbs.com.au/news/podcast/sbs-news-in-easy-english", external:true,
         title:{ en:"SBS News in Easy English", zhHans:"SBS 简易英语新闻", zhHant:"SBS 簡易英語新聞" },
-        text:{ en:"A short daily news wrap in slow, clear English.", zhHans:"每天一则简短新闻，语速慢、发音清楚。", zhHant:"每天一則簡短新聞，語速慢、發音清楚。" } },
+        text:{ en:"A short daily news wrap, slow and clear.", zhHans:"每天一则简短新闻，语速慢、发音清楚。", zhHant:"每天一則簡短新聞，語速慢、發音清楚。" } },
       { emoji:"🎙️", href:"https://www.sbs.com.au/audio", external:true,
         title:{ en:"SBS Audio", zhHans:"SBS 音频", zhHant:"SBS 音訊" },
         text:{ en:"Podcasts and radio, including your first language.", zhHans:"播客和电台，也有你的第一语言。", zhHant:"播客和電台，也有你的第一語言。" } },
@@ -339,17 +337,13 @@ const SECTIONS = [
         text:{ en:"Radio, podcasts and audiobooks.", zhHans:"电台、播客和有声书。", zhHant:"電台、播客和有聲書。" } },
       { emoji:"📺", href:"https://listeninenglish.com", external:true,
         title:{ en:"Listen in English", zhHans:"Listen in English", zhHant:"Listen in English" },
-        text:{ en:"Levelled clips with exercises. Choose Easy TV, then your level.", zhHans:"分级视频加练习。选择 Easy TV，再选你的等级。", zhHant:"分級影片加練習。選擇 Easy TV，再選你的程度。" } },
+        text:{ en:"Levelled clips with exercises — choose Easy TV, then your level.", zhHans:"分级视频加练习。选择 Easy TV，再选你的等级。", zhHant:"分級影片加練習。選擇 Easy TV，再選你的程度。" } },
       { emoji:"6️⃣", href:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english", external:true,
         title:{ en:"6 Minute English", zhHans:"六分钟英语", zhHant:"六分鐘英語" },
-        text:{ en:"Six minutes, two speakers, one topic — with the words written out.",
-               zhHans:"六分钟，两个人，一个话题，配文字稿。",
-               zhHant:"六分鐘，兩個人，一個話題，配文字稿。" } },
+        text:{ en:"Six minutes, two speakers, one topic — words written out.", zhHans:"六分钟，两个人，一个话题，配文字稿。", zhHant:"六分鐘，兩個人，一個話題，配文字稿。" } },
       { emoji:"🐌", href:"https://learningenglish.voanews.com", external:true,
         title:{ en:"VOA Learning English", zhHans:"VOA 慢速英语", zhHant:"VOA 慢速英語" },
-        text:{ en:"News read slowly and clearly, with the words on screen as you listen.",
-               zhHans:"语速慢、发音清楚的新闻，屏幕上有文字。",
-               zhHant:"語速慢、發音清楚的新聞，螢幕上有文字。" } },
+        text:{ en:"News read slowly and clearly, words on screen.", zhHans:"语速慢、发音清楚的新闻，屏幕上有文字。", zhHant:"語速慢、發音清楚的新聞，螢幕上有文字。" } },
       { emoji:"🎧", href:"https://www.audible.com.au/", external:true,
         title:{ en:"Audible", zhHans:"Audible", zhHant:"Audible" },
         text:{ en:"Paid audiobooks — check the library first.", zhHans:"付费有声书——请先查图书馆。", zhHant:"付費有聲書——請先查圖書館。" } }
@@ -358,7 +352,7 @@ const SECTIONS = [
   {
     id: "hub",
     emoji: "🧡",
-    title: { en:"Also on the hub", zhHans:"学习中心的其他工具", zhHant:"學習中心的其他工具" },
+    title: { en:"More on the hub", zhHans:"学习中心的其他工具", zhHant:"學習中心的其他工具" },
     blurb: {
       en:"Open any of these when you want extra practice.",
       zhHans:"想多练习时，可以打开这些工具。",
@@ -409,16 +403,16 @@ const UI = {
   writingBlurb:{ en:"One cold write each week. Your teacher will tell you which week you are on. The same prompts are in your homework book.",
                  zhHans:"每周一篇即时写作。老师会告诉你现在是第几周。作业本上是同样的题目。",
                  zhHant:"每週一篇即時寫作。老師會告訴你現在是第幾週。作業本上是同樣的題目。" },
-  writingEmpty:{ en:"No writing prompt is set for this week yet. Your teacher will add it here.",
-                 zhHans:"本周还没有布置写作题目。老师会在这里添加。",
-                 zhHant:"本週還沒有指定寫作題目。老師會在這裡新增。" },
+  pickWeek:    { en:"Your teacher will tell you which week you're on — open it below.",
+                 zhHans:"老师会告诉你现在是第几周——在下面打开它。",
+                 zhHant:"老師會告訴你現在是第幾週——在下面開啟它。" },
   stepsTitle:  { en:"How to hand it in", zhHans:"如何提交", zhHant:"如何繳交" },
   step1:       { en:"Write your first draft by hand in your book.", zhHans:"先在本子上手写初稿。", zhHant:"先在本子上手寫初稿。" },
   step2:       { en:"Photograph it and upload it to ELC Writing Feedback.", zhHans:"拍照并上传到 ELC 写作反馈。", zhHant:"拍照並上傳到 ELC 寫作回饋。" },
   step3:       { en:"Read the feedback, then rewrite the draft.", zhHans:"阅读反馈，然后重写初稿。", zhHant:"閱讀回饋，然後重寫初稿。" },
   step4:       { en:"Bring both drafts to class.", zhHans:"把两份初稿都带到课堂。", zhHant:"把兩份草稿都帶到課堂。" },
-  tipsTitle:   { en:"Make it count", zhHans:"让练习更有效", zhHant:"讓練習更有效" },
-  sheetTitle:  { en:"This term's tasks", zhHans:"本学期的任务", zhHant:"本學期的任務" },
+  tipsTitle:   { en:"✅ Make it count", zhHans:"✅ 让练习更有效", zhHant:"✅ 讓練習更有效" },
+  sheetTitle:  { en:"🗂️ This term's tasks", zhHans:"🗂️ 本学期的任务", zhHant:"🗂️ 本學期的任務" },
   sheetBlurb:  { en:"Every task for the term, with a link to each one. Sign in with your school account.",
                  zhHans:"本学期的所有任务，每项都有链接。请用学校账号登录。",
                  zhHant:"本學期的所有任務，每項都有連結。請用學校帳號登入。" },
@@ -437,6 +431,7 @@ const VISITS_KEY = "elc_visited";
 const LANG_KEY = "elc_page_language";
 const LANG_KEYS = { en:"en", "zh-Hans":"zhHans", "zh-Hant":"zhHant" };
 let langKey = "en";
+let activeTab = SECTIONS[0].id;
 
 function t(entry) {
   if (!entry) return "";
@@ -448,12 +443,6 @@ function element(tag, className, textContent) {
   if (className) node.className = className;
   if (textContent) node.textContent = textContent;
   return node;
-}
-
-function sectionHead(parent, emoji, titleEntry, blurbEntry) {
-  parent.append(element("h2", null, `${emoji} ${t(titleEntry)}`));
-  if (blurbEntry) parent.append(element("p", "blurb", t(blurbEntry)));
-  parent.append(element("div", "rule"));
 }
 
 function renderItem(item, categoryTitle) {
@@ -476,38 +465,54 @@ function renderItem(item, categoryTitle) {
   return node;
 }
 
-function renderSheetSection() {
-  const section = element("section");
-  section.id = "sheet";
-  sectionHead(section, "🗂️", UI.sheetTitle, UI.sheetBlurb);
-  const a = element("a", "sheet-button", t(UI.sheetButton));
-  a.href = HOMEWORK_SHEET;
-  a.target = "_blank";
-  a.rel = "noopener";
-  a.dataset.cat = "Homework";
-  a.dataset.title = "Homework sheet";
-  section.append(a);
-  return section;
-}
+/* ── left lane: sheet button + writing prompts (always visible, no tab) ── */
+function renderLeftLane() {
+  const lane = document.getElementById("laneLeft");
+  lane.replaceChildren();
 
-function renderWritingSection() {
-  const section = element("section");
-  section.id = "writing";
-  sectionHead(section, "🖊️", UI.writingTitle, UI.writingBlurb);
+  if (HOMEWORK_SHEET) {
+    const block = element("div", "card-block");
+    block.append(element("h2", null, t(UI.sheetTitle)));
+    block.append(element("p", "blurb", t(UI.sheetBlurb)));
+    const a = element("a", "sheet-button", t(UI.sheetButton));
+    a.href = HOMEWORK_SHEET;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.dataset.cat = "Homework";
+    a.dataset.title = "Homework sheet";
+    block.append(a);
+    lane.append(block);
+  }
 
-  if (WRITING_PROMPTS.length === 0) {
-    section.append(element("p", "empty-prompt", t(UI.writingEmpty)));
-  } else {
-    const list = element("div");
-    list.style.marginTop = "16px";
+  const block = element("div", "card-block");
+  block.append(element("h2", null, "🖊️ " + t(UI.writingTitle)));
+  block.append(element("p", "blurb", t(UI.writingBlurb)));
+
+  const current = WRITING_PROMPTS.find(p => p.tag.en === CURRENT_WEEK);
+  if (current) {
+    const card = element("div", "prompt-now");
+    card.append(element("span", "tag", t(current.tag)));
+    card.append(element("h3", null, t(current.title)));
+    card.append(element("p", null, t(current.detail)));
+    block.append(card);
+  } else if (WRITING_PROMPTS.length) {
+    block.append(element("p", "prompt-hint", t(UI.pickWeek)));
+  }
+
+  if (WRITING_PROMPTS.length) {
+    const list = element("div", "prompt-list");
     WRITING_PROMPTS.forEach(prompt => {
-      const card = element("div", "prompt");
-      if (prompt.tag) card.append(element("span", "tag", t(prompt.tag)));
-      card.append(element("h3", null, t(prompt.title)));
-      if (prompt.detail) card.append(element("p", null, t(prompt.detail)));
-      list.append(card);
+      const isCurrent = prompt.tag.en === CURRENT_WEEK;
+      const d = document.createElement("details");
+      if (isCurrent) d.className = "current";
+      const s = document.createElement("summary");
+      s.append(element("span", "tag", t(prompt.tag)));
+      s.append(element("span", "ttl", t(prompt.title)));
+      d.append(s);
+      if (prompt.detail) d.append(element("p", "detail", t(prompt.detail)));
+      list.append(d);
     });
-    section.append(list);
+    block.append(list);
   }
 
   const steps = element("div", "steps");
@@ -515,22 +520,55 @@ function renderWritingSection() {
   const ordered = document.createElement("ol");
   [UI.step1, UI.step2, UI.step3, UI.step4].forEach(step => ordered.append(element("li", null, t(step))));
   steps.append(ordered);
-  section.append(steps);
-  return section;
+  block.append(steps);
+
+  lane.append(block);
 }
 
-function renderTipsSection() {
-  const section = element("section");
-  sectionHead(section, "✅", UI.tipsTitle);
-  const grid = element("div", "tips");
+/* ── right lane: tabs across the browsing categories, then tips ─────── */
+function renderRightLane() {
+  const lane = document.getElementById("laneRight");
+  lane.replaceChildren();
+
+  const block = element("div", "card-block");
+
+  const tabs = element("div", "tabs");
+  tabs.setAttribute("role", "tablist");
+  SECTIONS.forEach(group => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.setAttribute("role", "tab");
+    btn.dataset.tab = group.id;
+    btn.setAttribute("aria-selected", String(group.id === activeTab));
+    btn.textContent = `${group.emoji} ${t(group.title)}`;
+    tabs.append(btn);
+  });
+  block.append(tabs);
+
+  SECTIONS.forEach(group => {
+    const panel = element("div", "panel" + (group.id === activeTab ? " on" : ""));
+    panel.id = "tab-" + group.id;
+    if (group.blurb) panel.append(element("p", "blurb", t(group.blurb)));
+    const grid = element("div", "grid");
+    group.items.forEach(item => grid.append(renderItem(item, group.title.en)));
+    panel.append(grid);
+    if (group.note) panel.append(element("p", "note", t(group.note)));
+    block.append(panel);
+  });
+
+  lane.append(block);
+
+  const tipsBlock = element("div", "card-block");
+  tipsBlock.append(element("h2", null, t(UI.tipsTitle)));
+  const tipsGrid = element("div", "tips-strip");
   TIPS.forEach(tip => {
     const card = element("div", "tip");
     card.append(element("h3", null, t(tip.title)));
     card.append(element("p", null, t(tip.text)));
-    grid.append(card);
+    tipsGrid.append(card);
   });
-  section.append(grid);
-  return section;
+  tipsBlock.append(tipsGrid);
+  lane.append(tipsBlock);
 }
 
 function renderPage() {
@@ -540,28 +578,13 @@ function renderPage() {
   document.getElementById("heroIntro").textContent = t(UI.intro);
   document.getElementById("privacyNote").textContent = t(UI.privacy);
 
-  const host = document.getElementById("sections");
-  host.replaceChildren();
-  if (HOMEWORK_SHEET) host.append(renderSheetSection());
-  host.append(renderWritingSection());
-
-  SECTIONS.forEach(group => {
-    const section = element("section");
-    section.id = group.id;
-    sectionHead(section, group.emoji, group.title, group.blurb);
-    const grid = element("div", "grid");
-    group.items.forEach(item => grid.append(renderItem(item, group.title.en)));
-    section.append(grid);
-    if (group.note) section.append(element("p", "note", t(group.note)));
-    host.append(section);
-  });
-
-  host.append(renderTipsSection());
+  renderLeftLane();
+  renderRightLane();
   wireActivityRecord();
 }
 
 function wireActivityRecord() {
-  document.querySelectorAll("a.item").forEach(card => {
+  document.querySelectorAll("a.item, a.sheet-button").forEach(card => {
     card.addEventListener("click", () => {
       let visits = [];
       try { visits = JSON.parse(localStorage.getItem(VISITS_KEY) || "[]"); } catch (e) {}
@@ -572,6 +595,14 @@ function wireActivityRecord() {
     });
   });
 }
+
+document.addEventListener("click", e => {
+  const tab = e.target.closest("[data-tab]");
+  if (!tab) return;
+  activeTab = tab.dataset.tab;
+  document.querySelectorAll("[data-tab]").forEach(b => b.setAttribute("aria-selected", String(b === tab)));
+  document.querySelectorAll(".panel").forEach(p => p.classList.toggle("on", p.id === "tab-" + tab.dataset.tab));
+});
 
 function setPageLanguage(lang) {
   langKey = LANG_KEYS[lang] || "en";
