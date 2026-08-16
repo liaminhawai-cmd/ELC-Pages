@@ -61,6 +61,9 @@
 
   .privacy { margin-top:26px; padding:10px 13px; border-radius:11px; background:var(--card); border:1px solid var(--line); color:var(--muted); font-size:.82rem; text-align:center; }
   @media (max-width:620px) { .shell { padding:16px 12px 44px; } .hero { padding:22px; } }
+  .sheet-button { display:inline-block; margin-top:14px; padding:13px 20px; border-radius:12px;
+    background:var(--accent); color:#fff; font-weight:700; text-decoration:none; }
+  .sheet-button:hover { filter:brightness(1.08); }
 </style>
 </head>
 <body>
@@ -90,6 +93,22 @@
    DATA BLOCK — teachers edit below this line. Nothing here is code.
    Every visible string has three versions: en · zhHans (中国) · zhHant (台灣).
    ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── 0. CLASS HOMEWORK SHEET ────────────────────────────────────────────
+   Link to a Google Sheet listing the week-by-week tasks, so students can
+   click straight through to each one.
+
+   Leave this as "" and no button appears.
+
+   Before filling it in, the sheet you point at must:
+     • contain NO student names, emails, scores or Yes/No completion columns
+       — a link to a Google Sheet opens the WHOLE file, and any viewer can
+       click to any other tab, so a hidden tab is not protection;
+     • be shared "Anyone at <the school> with the link", not "Anyone on the
+       internet" — this page is public, so a public sheet is public to all.
+   A tracking sheet with student rows belongs in a separate, private file.
+   ────────────────────────────────────────────────────────────────────── */
+const HOMEWORK_SHEET = "";
 
 /* ── 1. WRITING PROMPTS ─────────────────────────────────────────────────
    One { } block per prompt, comma between. These match the homework book,
@@ -223,6 +242,80 @@ const SECTIONS = [
     ]
   },
   {
+    id: "books",
+    emoji: "📚",
+    title: { en:"Free books and audiobooks", zhHans:"免费图书和有声书", zhHant:"免費圖書和有聲書" },
+    blurb: {
+      en:"All free and legal. No account needed unless the card says so.",
+      zhHans:"全部免费、合法。除非卡片上写明，都不需要注册。",
+      zhHant:"全部免費、合法。除非卡片上寫明，都不需要註冊。"
+    },
+    items: [
+      { emoji:"📖", href:"https://www.gutenberg.org", external:true,
+        title:{ en:"Project Gutenberg", zhHans:"古腾堡计划", zhHant:"古騰堡計劃" },
+        text:{ en:"Over 70,000 older books whose copyright has run out. Free and legal.",
+               zhHans:"七万多本版权已过期的旧书，免费合法。",
+               zhHant:"七萬多本版權已過期的舊書，免費合法。" } },
+      { emoji:"✨", href:"https://standardebooks.org", external:true,
+        title:{ en:"Standard Ebooks", zhHans:"Standard Ebooks", zhHant:"Standard Ebooks" },
+        text:{ en:"The same free classics, carefully typeset so they are easy to read on a phone.",
+               zhHans:"同样的免费经典，排版精心处理，手机上更好读。",
+               zhHant:"同樣的免費經典，排版精心處理，手機上更好讀。" } },
+      { emoji:"🏛️", href:"https://openlibrary.org", external:true,
+        title:{ en:"Open Library", zhHans:"开放图书馆", zhHant:"開放圖書館" },
+        text:{ en:"Borrow newer ebooks free, one at a time, like a library. Free account needed.",
+               zhHans:"像图书馆一样免费借阅较新的电子书，一次一本。需要免费账号。",
+               zhHant:"像圖書館一樣免費借閱較新的電子書，一次一本。需要免費帳號。" } },
+      { emoji:"🌏", href:"https://storyweaver.org.in", external:true,
+        title:{ en:"StoryWeaver", zhHans:"StoryWeaver", zhHant:"StoryWeaver" },
+        text:{ en:"Illustrated stories in many languages. Read the same story in English and in your first language.",
+               zhHans:"多语种绘本故事。同一个故事，可以用英语和你的第一语言各读一遍。",
+               zhHant:"多語種繪本故事。同一個故事，可以用英語和你的第一語言各讀一遍。" } },
+      { emoji:"🎧", href:"https://librivox.org", external:true,
+        title:{ en:"LibriVox", zhHans:"LibriVox 有声书", zhHant:"LibriVox 有聲書" },
+        text:{ en:"Free audiobooks of those same classics, read aloud by volunteers.",
+               zhHans:"这些经典旧书的免费有声版，由志愿者朗读。",
+               zhHant:"這些經典舊書的免費有聲版，由志工朗讀。" } }
+    ]
+  },
+  {
+    id: "news",
+    emoji: "📰",
+    title: { en:"News and articles at your level", zhHans:"分级新闻和文章", zhHant:"分級新聞和文章" },
+    blurb: {
+      en:"The same news written at different levels. Start where you can read without stopping at every line.",
+      zhHans:"同样的新闻写成不同难度。选一个不用每行都停下来的等级开始。",
+      zhHant:"同樣的新聞寫成不同難度。選一個不用每行都停下來的程度開始。"
+    },
+    items: [
+      { emoji:"🇦🇺", href:"https://www.abc.net.au/btn", external:true,
+        title:{ en:"Behind the News (BTN)", zhHans:"BTN 新闻背后", zhHant:"BTN 新聞背後" },
+        text:{ en:"Australian news made for school students. Every story has a video and a written transcript.",
+               zhHans:"为中小学生制作的澳大利亚新闻。每条新闻都有视频和文字稿。",
+               zhHant:"為中小學生製作的澳洲新聞。每則新聞都有影片和文字稿。" } },
+      { emoji:"📶", href:"https://breakingnewsenglish.com", external:true,
+        title:{ en:"Breaking News English", zhHans:"Breaking News English", zhHant:"Breaking News English" },
+        text:{ en:"The same story rewritten at seven levels. Read the easy one first, then the harder one.",
+               zhHans:"同一则新闻写成七个难度。先读简单的，再读难的。",
+               zhHant:"同一則新聞寫成七個難度。先讀簡單的，再讀難的。" } },
+      { emoji:"3️⃣", href:"https://www.newsinlevels.com", external:true,
+        title:{ en:"News in Levels", zhHans:"News in Levels", zhHant:"News in Levels" },
+        text:{ en:"Short world news at three levels. Level 1 uses the simplest words.",
+               zhHans:"简短的国际新闻，分三个等级。第一级用词最简单。",
+               zhHant:"簡短的國際新聞，分三個等級。第一級用詞最簡單。" } },
+      { emoji:"🧑\u200d🎓", href:"https://learnenglishteens.britishcouncil.org/skills/reading", external:true,
+        title:{ en:"British Council LearnEnglish Teens", zhHans:"英国文化协会 青少年英语", zhHant:"英國文化協會 青少年英語" },
+        text:{ en:"Reading written for teenagers, sorted by level, each with exercises.",
+               zhHans:"专为青少年编写的阅读材料，按等级分类，附练习。",
+               zhHant:"專為青少年編寫的閱讀材料，按程度分類，附練習。" } },
+      { emoji:"🔎", href:"https://simple.wikipedia.org", external:true,
+        title:{ en:"Simple English Wikipedia", zhHans:"简易英语维基百科", zhHant:"簡易英語維基百科" },
+        text:{ en:"Wikipedia written with easier words and shorter sentences.",
+               zhHans:"用更简单的词和更短的句子写的维基百科。",
+               zhHant:"用更簡單的詞和更短的句子寫的維基百科。" } }
+    ]
+  },
+  {
     id: "listening",
     emoji: "🎧",
     title: { en:"Listening choices", zhHans:"听力资源", zhHant:"聽力資源" },
@@ -247,6 +340,16 @@ const SECTIONS = [
       { emoji:"📺", href:"https://listeninenglish.com", external:true,
         title:{ en:"Listen in English", zhHans:"Listen in English", zhHant:"Listen in English" },
         text:{ en:"Levelled clips with exercises. Choose Easy TV, then your level.", zhHans:"分级视频加练习。选择 Easy TV，再选你的等级。", zhHant:"分級影片加練習。選擇 Easy TV，再選你的程度。" } },
+      { emoji:"6️⃣", href:"https://www.bbc.co.uk/learningenglish/english/features/6-minute-english", external:true,
+        title:{ en:"6 Minute English", zhHans:"六分钟英语", zhHant:"六分鐘英語" },
+        text:{ en:"Six minutes, two speakers, one topic — with the words written out.",
+               zhHans:"六分钟，两个人，一个话题，配文字稿。",
+               zhHant:"六分鐘，兩個人，一個話題，配文字稿。" } },
+      { emoji:"🐌", href:"https://learningenglish.voanews.com", external:true,
+        title:{ en:"VOA Learning English", zhHans:"VOA 慢速英语", zhHant:"VOA 慢速英語" },
+        text:{ en:"News read slowly and clearly, with the words on screen as you listen.",
+               zhHans:"语速慢、发音清楚的新闻，屏幕上有文字。",
+               zhHant:"語速慢、發音清楚的新聞，螢幕上有文字。" } },
       { emoji:"🎧", href:"https://www.audible.com.au/", external:true,
         title:{ en:"Audible", zhHans:"Audible", zhHant:"Audible" },
         text:{ en:"Paid audiobooks — check the library first.", zhHans:"付费有声书——请先查图书馆。", zhHant:"付費有聲書——請先查圖書館。" } }
@@ -315,6 +418,11 @@ const UI = {
   step3:       { en:"Read the feedback, then rewrite the draft.", zhHans:"阅读反馈，然后重写初稿。", zhHant:"閱讀回饋，然後重寫初稿。" },
   step4:       { en:"Bring both drafts to class.", zhHans:"把两份初稿都带到课堂。", zhHant:"把兩份草稿都帶到課堂。" },
   tipsTitle:   { en:"Make it count", zhHans:"让练习更有效", zhHant:"讓練習更有效" },
+  sheetTitle:  { en:"This term's tasks", zhHans:"本学期的任务", zhHant:"本學期的任務" },
+  sheetBlurb:  { en:"Every task for the term, with a link to each one. Sign in with your school account.",
+                 zhHans:"本学期的所有任务，每项都有链接。请用学校账号登录。",
+                 zhHant:"本學期的所有任務，每項都有連結。請用學校帳號登入。" },
+  sheetButton: { en:"Open the homework sheet →", zhHans:"打开作业表 →", zhHant:"開啟作業表 →" },
   open:        { en:"Open →", zhHans:"打开 →", zhHant:"開啟 →" },
   openNew:     { en:"Opens in a new tab →", zhHans:"在新标签页打开 →", zhHant:"在新分頁開啟 →" },
   noLink:      { en:"Ask at the library desk", zhHans:"到图书馆柜台询问", zhHant:"到圖書館櫃檯詢問" },
@@ -366,6 +474,20 @@ function renderItem(item, categoryTitle) {
     ? element("span", "go", item.external ? t(UI.openNew) : t(UI.open))
     : element("span", "offline", t(UI.noLink)));
   return node;
+}
+
+function renderSheetSection() {
+  const section = element("section");
+  section.id = "sheet";
+  sectionHead(section, "🗂️", UI.sheetTitle, UI.sheetBlurb);
+  const a = element("a", "sheet-button", t(UI.sheetButton));
+  a.href = HOMEWORK_SHEET;
+  a.target = "_blank";
+  a.rel = "noopener";
+  a.dataset.cat = "Homework";
+  a.dataset.title = "Homework sheet";
+  section.append(a);
+  return section;
 }
 
 function renderWritingSection() {
@@ -420,6 +542,7 @@ function renderPage() {
 
   const host = document.getElementById("sections");
   host.replaceChildren();
+  if (HOMEWORK_SHEET) host.append(renderSheetSection());
   host.append(renderWritingSection());
 
   SECTIONS.forEach(group => {
