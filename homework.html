@@ -485,6 +485,7 @@ function renderLeftLane() {
   }
 
   const block = element("div", "card-block");
+  block.id = "writing";
   block.append(element("h2", null, "🖊️ " + t(UI.writingTitle)));
   block.append(element("p", "blurb", t(UI.writingBlurb)));
 
@@ -604,17 +605,39 @@ document.addEventListener("click", e => {
   document.querySelectorAll(".panel").forEach(p => p.classList.toggle("on", p.id === "tab-" + tab.dataset.tab));
 });
 
+// A link from outside this page (a printed sheet, a tracker spreadsheet) can
+// point at one part of it — #tab-reading, #tab-listening, #writing — and land
+// there directly instead of at the top. If the hash names a real tab, that
+// tab is what renders as active; either way, once the DOM exists, scroll the
+// target into view.
+function applyHash() {
+  const id = location.hash.slice(1);
+  if (!id) return;
+  if (id.startsWith("tab-") && SECTIONS.some(g => "tab-" + g.id === id)) {
+    activeTab = id.slice(4);
+  }
+}
+function scrollToHash() {
+  const id = location.hash.slice(1);
+  if (!id) return;
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
 function setPageLanguage(lang) {
   langKey = LANG_KEYS[lang] || "en";
   if (!LANG_KEYS[lang]) lang = "en";
   document.documentElement.lang = lang === "en" ? "en-AU" : lang;
   document.getElementById("pageLanguage").value = lang;
   localStorage.setItem(LANG_KEY, lang);
+  applyHash();
   renderPage();
 }
 
 document.getElementById("pageLanguage").addEventListener("change", e => setPageLanguage(e.target.value));
+window.addEventListener("hashchange", () => { applyHash(); renderPage(); scrollToHash(); });
 setPageLanguage(localStorage.getItem(LANG_KEY) || "en");
+scrollToHash();
 </script>
 </body>
 </html>
