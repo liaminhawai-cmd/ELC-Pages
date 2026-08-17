@@ -38,12 +38,14 @@ h1,h2,h3{font-family:Georgia,"Times New Roman",serif;line-height:1.14}h1{font-si
 .feature-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.feature{border:1px solid var(--line);border-radius:12px;padding:11px;background:var(--paper)}.feature b{display:block;color:var(--ochre);margin-bottom:3px}.feature p{margin:0;color:var(--muted);font-size:.84rem}
 .rule-note{margin-top:11px;padding:10px 12px;border-radius:10px;background:var(--blue-soft);border-left:4px solid var(--blue);font-size:.86rem}.rule-note b{color:var(--blue)}
 .model-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}.model-tab{border:1px solid var(--line);border-radius:999px;padding:6px 11px;background:var(--paper);color:var(--ink);font-weight:850;cursor:pointer}.model-tab.active{background:var(--ochre);border-color:var(--ochre);color:#fff}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 0}.tabs button{font-size:.92rem;padding:9px 16px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-weight:800;cursor:pointer}.tabs button[aria-selected="true"]{background:var(--ochre);color:#fff;border-color:transparent}.panel{display:none}.panel.on{display:block}
 .model-lines{display:grid;gap:5px}.model-line{display:grid;grid-template-columns:30px minmax(0,1fr) 185px;gap:9px;align-items:start;padding:7px 8px;border-radius:10px}.model-line:nth-child(odd){background:color-mix(in srgb,var(--paper) 75%,var(--ochre-soft))}.model-n{width:26px;height:26px;border-radius:50%;background:var(--ochre-soft);color:var(--ochre);display:grid;place-items:center;font-weight:900;font-size:.75rem}.model-text{font-family:Georgia,"Times New Roman",serif;font-size:1rem}.model-note{font-size:.76rem;color:var(--muted);font-weight:750}.model-explain{margin-top:9px;min-height:48px;padding:10px 12px;background:var(--ochre-soft);border-radius:10px;font-size:.86rem}
 .plot{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:10px}.plot-step{border-top:4px solid var(--ochre);background:var(--paper);border-radius:8px;padding:8px;font-size:.76rem}.plot-step b{display:block;color:var(--ochre)}
 .reader-head{display:flex;justify-content:space-between;align-items:end;gap:14px;flex-wrap:wrap;margin-bottom:11px}.reader-head p{margin:3px 0 0;color:var(--muted)}
 .controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.seg{border:1px solid var(--line);border-radius:999px;padding:6px 10px;background:var(--card);color:var(--ink);font-size:.79rem;font-weight:800;cursor:pointer}.seg[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}.lang{border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--ink);padding:7px 9px;font-weight:700}
 .reader-grid{display:grid;grid-template-columns:210px minmax(0,1fr);gap:14px;align-items:start}.stanza-nav{position:sticky;top:10px;display:grid;gap:6px}.stanza-link{text-align:left;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);padding:8px 9px;cursor:pointer}.stanza-link b{display:block;color:var(--ochre);font-size:.75rem}.stanza-link span{font-size:.78rem;color:var(--muted)}.stanza-link.active{border-color:var(--ochre);box-shadow:inset 4px 0 var(--ochre)}
-.poem{display:grid;gap:12px}.stanza{scroll-margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px;box-shadow:var(--shadow)}.stanza-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:9px}.stanza-top h3{font-size:1.08rem}.stanza-top a{font-size:.74rem;color:var(--ochre);font-weight:850;text-decoration:none}.poem-line{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:8px;align-items:baseline;padding:4px 2px;border-radius:7px}.line-no{font-size:.66rem;color:var(--muted);text-align:right}.line-text{font-family:Georgia,"Times New Roman",serif;font-size:clamp(.93rem,1.5vw,1.08rem);line-height:1.62}.rhyme-tag{display:none;font-size:.69rem;font-weight:900;border-radius:999px;padding:2px 7px;white-space:nowrap}.show-rhyme .rhyme-tag{display:inline-block}.rhyme-A{background:var(--blue-soft);color:var(--blue)}.rhyme-B{background:var(--plum-soft);color:var(--plum)}.rhyme-C{background:var(--green-soft);color:var(--green)}.show-speech .poem-line.speech{background:var(--ochre-soft);box-shadow:inset 3px 0 var(--ochre)}
+.stanza-pager{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px}.stanza-pager .pager-label{font-size:.83rem;font-weight:850;color:var(--muted)}.stanza-pager button{border:1px solid var(--line);border-radius:999px;padding:8px 15px;background:var(--card);color:var(--ink);font-weight:800;cursor:pointer}.stanza-pager button:disabled{opacity:.4;cursor:default}
+.poem{display:grid;gap:12px}.stanza{scroll-margin-top:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:15px 16px;box-shadow:var(--shadow);display:none}.stanza.on{display:block}.stanza-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:9px}.stanza-top h3{font-size:1.08rem}.stanza-top a{font-size:.74rem;color:var(--ochre);font-weight:850;text-decoration:none}.poem-line{display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:8px;align-items:baseline;padding:4px 2px;border-radius:7px}.line-no{font-size:.66rem;color:var(--muted);text-align:right}.line-text{font-family:Georgia,"Times New Roman",serif;font-size:clamp(.93rem,1.5vw,1.08rem);line-height:1.62}.rhyme-tag{display:none;font-size:.69rem;font-weight:900;border-radius:999px;padding:2px 7px;white-space:nowrap}.show-rhyme .rhyme-tag{display:inline-block}.rhyme-A{background:var(--blue-soft);color:var(--blue)}.rhyme-B{background:var(--plum-soft);color:var(--plum)}.rhyme-C{background:var(--green-soft);color:var(--green)}.show-speech .poem-line.speech{background:var(--ochre-soft);box-shadow:inset 3px 0 var(--ochre)}
 .vocab{display:inline;padding:0 2px;border:0;border-bottom:2px dotted var(--ochre);background:transparent;color:inherit;font:inherit;font-weight:800;cursor:pointer;border-radius:3px}.vocab:hover,.vocab:focus-visible{background:var(--ochre-soft);outline:2px solid transparent}.hide-vocab .vocab{border-bottom-color:transparent;font-weight:inherit;pointer-events:none}
 .stanza-foot{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:10px;padding-top:9px;border-top:1px solid var(--soft);font-size:.75rem;color:var(--muted)}.stanza-foot a{color:var(--ochre);font-weight:850;text-decoration:none}
 .talk{margin-top:13px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.talk>div{background:var(--paper);border:1px solid var(--line);border-radius:11px;padding:10px}.talk b{display:block;color:var(--ochre);font-size:.77rem}.talk p{margin:3px 0 0;font-size:.82rem;color:var(--muted)}
@@ -56,7 +58,7 @@ dialog{border:0;padding:0;background:transparent;color:var(--ink);width:min(620p
 .copyright{margin-top:26px;padding-top:14px;border-top:1px solid var(--line);font-size:.75rem;color:var(--muted)}.copyright a{color:var(--ochre)}
 @media(max-width:860px){.intro-grid,.reader-grid{grid-template-columns:1fr}.stanza-nav{position:static;display:flex;overflow:auto;padding-bottom:4px}.stanza-link{min-width:150px}.plot{grid-template-columns:1fr 1fr}.talk{grid-template-columns:1fr}.model-line{grid-template-columns:28px 1fr}.model-note{grid-column:2}.intent{grid-template-columns:1fr}}
 @media(max-width:540px){.shell{padding:10px 10px 42px}.source-tag{display:none}.hero{border-radius:16px}.feature-grid{grid-template-columns:1fr}.plot{grid-template-columns:1fr}.stanza{padding:13px 10px}.poem-line{grid-template-columns:20px minmax(0,1fr)}.rhyme-tag{grid-column:2;justify-self:start}.stanza-foot{align-items:flex-start;flex-direction:column}.controls{align-items:stretch}.lang{max-width:100%}}
-@media print{body{background:#fff}.shell{max-width:none;padding:0}.topbar,.hero-actions,.controls,.stanza-nav,.stanza-foot,.talk,dialog{display:none!important}.hero{background:#fff;color:#000;box-shadow:none;border:1px solid #999;padding:16px}.hero:after{display:none}.reader-grid{display:block}.stanza{break-inside:avoid;box-shadow:none}.vocab{border-bottom:1px dotted #555}.section{margin-top:18px}}
+@media print{body{background:#fff}.shell{max-width:none;padding:0}.topbar,.hero-actions,.controls,.stanza-nav,.stanza-foot,.talk,dialog,.tabs,.stanza-pager{display:none!important}.hero{background:#fff;color:#000;box-shadow:none;border:1px solid #999;padding:16px}.hero:after{display:none}.reader-grid{display:block}.panel{display:block!important}.stanza{break-inside:avoid;box-shadow:none;display:block!important}.vocab{border-bottom:1px dotted #555}.section{margin-top:18px}}
 </style>
 </head>
 <body>
@@ -82,7 +84,13 @@ dialog{border:0;padding:0;background:transparent;color:var(--ink);width:min(620p
     <div><b>Success criteria</b><p>I can retell the events, identify AABBCC couplets, hear the beat, explain an unfamiliar word, and reshape a stanza while keeping its rhyme and line length.</p></div>
   </div>
 
-  <section class="section intro-grid" aria-labelledby="what-heading">
+  <div class="tabs" role="tablist" aria-label="Ballad workshop sections">
+    <button type="button" role="tab" data-tab="learn" aria-selected="true">About ballads</button>
+    <button type="button" role="tab" data-tab="reader" aria-selected="false">Read the poem</button>
+    <button type="button" role="tab" data-tab="remix" aria-selected="false">Turn Ironbark into Kew</button>
+  </div>
+
+  <section class="section intro-grid panel on" id="learn" aria-labelledby="what-heading">
     <div class="card">
       <p class="eyebrow" style="color:var(--ochre)">Before we read</p>
       <h2 id="what-heading">What is a ballad?</h2>
@@ -115,7 +123,7 @@ dialog{border:0;padding:0;background:transparent;color:var(--ink);width:min(620p
     </div>
   </section>
 
-  <section class="section" id="reader" aria-labelledby="reader-heading">
+  <section class="section panel" id="reader" aria-labelledby="reader-heading">
     <div class="reader-head">
       <div><p class="eyebrow" style="color:var(--ochre)">Develop &amp; discover</p><h2 id="reader-heading">Read <em>The Man from Ironbark</em></h2><p>Tap an underlined word or phrase. Its meaning, word parts and translation will open beside the poem.</p></div>
       <div class="controls" aria-label="Reader controls">
@@ -126,6 +134,11 @@ dialog{border:0;padding:0;background:transparent;color:var(--ink);width:min(620p
           <option value="zh-Hans">简体中文（中国）</option><option value="zh-Hant">繁體中文（台灣）</option><option value="ja">日本語</option><option value="fa">فارسی</option><option value="vi">Tiếng Việt</option>
         </select>
       </div>
+    </div>
+    <div class="stanza-pager" aria-label="Stanza navigation">
+      <button class="btn" id="prevStanza" type="button">‹ Previous</button>
+      <span class="pager-label" id="stanzaPagerLabel">Stanza 1 of 8</span>
+      <button class="btn" id="nextStanza" type="button">Next ›</button>
     </div>
     <div class="reader-grid">
       <nav class="stanza-nav" id="stanzaNav" aria-label="Jump to a stanza"></nav>
@@ -139,7 +152,7 @@ dialog{border:0;padding:0;background:transparent;color:var(--ink);width:min(620p
   </section>
 
 
-  <section class="section remix" id="remix" aria-labelledby="remix-heading">
+  <section class="section remix panel" id="remix" aria-labelledby="remix-heading">
     <div class="remix-head">
       <div><p class="eyebrow" style="color:var(--ochre)">Apply · class construction → independent change</p><h2 id="remix-heading">Turn Ironbark into Kew</h2></div>
       <span class="draft-tag">Editable workshop</span>
@@ -480,16 +493,28 @@ function parseLine(text,stanzaNo){
   while((m=re.exec(text))){if(m.index>at)frag.append(document.createTextNode(text.slice(at,m.index)));const key=m[1];const btn=document.createElement('button');btn.type='button';btn.className='vocab';btn.dataset.key=key;btn.textContent=m[2];btn.addEventListener('click',()=>openWord(key,stanzaNo));frag.append(btn);at=re.lastIndex}
   if(at<text.length)frag.append(document.createTextNode(text.slice(at)));return frag;
 }
+let currentStanza=0;
+function showStanza(i,scroll){
+  currentStanza=Math.max(0,Math.min(DATA.stanzas.length-1,i));
+  document.querySelectorAll('.stanza').forEach((s,n)=>s.classList.toggle('on',n===currentStanza));
+  document.querySelectorAll('.stanza-link').forEach((b,n)=>b.classList.toggle('active',n===currentStanza));
+  document.getElementById('stanzaPagerLabel').textContent=`Stanza ${currentStanza+1} of ${DATA.stanzas.length}`;
+  document.getElementById('prevStanza').disabled=currentStanza===0;
+  document.getElementById('nextStanza').disabled=currentStanza===DATA.stanzas.length-1;
+  if(scroll)document.getElementById('poem').scrollIntoView({behavior:'smooth',block:'start'});
+}
 function renderReader(){
   const nav=document.getElementById('stanzaNav'),poem=document.getElementById('poem');nav.innerHTML='';poem.innerHTML='';
   DATA.stanzas.forEach((stanza,si)=>{
-    const jump=document.createElement('button');jump.className='stanza-link';jump.innerHTML=`<b>Stanza ${si+1}</b><span>${stanza.title}</span>`;jump.addEventListener('click',()=>document.getElementById(`stanza-${si+1}`).scrollIntoView({behavior:'smooth'}));nav.append(jump);
+    const jump=document.createElement('button');jump.className='stanza-link';jump.innerHTML=`<b>Stanza ${si+1}</b><span>${stanza.title}</span>`;jump.addEventListener('click',()=>showStanza(si,true));nav.append(jump);
     const section=document.createElement('section');section.className='stanza';section.id=`stanza-${si+1}`;
     const top=document.createElement('div');top.className='stanza-top';top.innerHTML=`<h3>Stanza ${si+1} · ${stanza.title}</h3><a href="${WORD_BUILDER}${si+1}" target="_blank" rel="noopener">Practise this stanza’s words ↗</a>`;section.append(top);
     stanza.lines.forEach((line,li)=>{const row=document.createElement('div');row.className='poem-line'+(line.speech?' speech':'');row.innerHTML=`<span class="line-no">${li+1}</span><span class="line-text"></span><span class="rhyme-tag rhyme-${line.rhyme}">${line.rhyme} · ${line.end}</span>`;row.querySelector('.line-text').append(parseLine(line.text,si+1));section.append(row)});
     const foot=document.createElement('div');foot.className='stanza-foot';foot.innerHTML=`<span>${new Set(stanza.lines.flatMap(l=>[...l.text.matchAll(/\[\[([^|]+)\|/g)].map(m=>m[1]))).size} highlighted words or phrases</span><a href="${WORD_BUILDER}${si+1}" target="_blank" rel="noopener">Build, match and revise →</a>`;section.append(foot);poem.append(section)
   });
-  const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){const i=Number(e.target.id.split('-')[1])-1;document.querySelectorAll('.stanza-link').forEach((b,n)=>b.classList.toggle('active',n===i))}}),{rootMargin:'-20% 0px -65% 0px'});document.querySelectorAll('.stanza').forEach(s=>observer.observe(s));
+  document.getElementById('prevStanza').addEventListener('click',()=>showStanza(currentStanza-1,true));
+  document.getElementById('nextStanza').addEventListener('click',()=>showStanza(currentStanza+1,true));
+  showStanza(0,false);
 }
 function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function openWord(key,stanzaNo){
@@ -650,9 +675,23 @@ document.getElementById('copyClassLink').addEventListener('click',async function
   const output=document.getElementById('shareOutput');output.hidden=okay;output.value=link;if(!okay)output.select()
 });
 renderBank();renderLines();
-if(sharedWorkshop){document.getElementById('copyStatus').textContent='Class version loaded. Your edits now save on this device.';setTimeout(function(){document.getElementById('remix').scrollIntoView()},0)}
+
+const TABS=['learn','reader','remix'];
+function showTab(id){
+  if(!TABS.includes(id))return;
+  document.querySelectorAll('[data-tab]').forEach(function(b){b.setAttribute('aria-selected',String(b.dataset.tab===id))});
+  document.querySelectorAll('.panel').forEach(function(p){p.classList.toggle('on',p.id===id)});
+}
+document.addEventListener('click',function(e){
+  const tab=e.target.closest('[data-tab]');if(!tab)return;showTab(tab.dataset.tab);
+});
+function applyHash(){const id=location.hash.slice(1);if(TABS.includes(id))showTab(id)}
+window.addEventListener('hashchange',applyHash);
+
+if(sharedWorkshop){document.getElementById('copyStatus').textContent='Class version loaded. Your edits now save on this device.';showTab('remix');setTimeout(function(){document.getElementById('remix').scrollIntoView()},0)}
 
 renderModel();renderReader();
+applyHash();
 </script>
 </body>
 </html>
