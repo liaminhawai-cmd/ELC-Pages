@@ -28,6 +28,16 @@
   header p{max-width:600px;margin:6px auto 0;opacity:.94;font-size:.9rem}
   main{max-width:1180px;margin:0 auto;padding:18px 14px 60px}
 
+  /* two-column layout: charts left, detail panel sticky+scrolling right.
+     Below the breakpoint everything just stacks (original behaviour). */
+  .hub-grid{display:block}
+  @media (min-width:1000px){
+    .hub-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,360px);gap:18px;align-items:start}
+    .hub-right{position:sticky;top:var(--topbar-h,60px);max-height:calc(100vh - var(--topbar-h,60px));overflow-y:auto}
+    #detail:empty::before{content:"Tap a sound to see it here.";display:block;padding:36px 14px;text-align:center;
+      color:var(--muted);font-size:.85rem;border:1px dashed var(--line);border-radius:var(--radius)}
+  }
+
   /* progress + tabs */
   .topbar{position:sticky;top:0;z-index:20;background:var(--bg);padding:10px 14px;margin:0 -14px 14px;
           box-shadow:0 4px 10px -8px rgba(0,0,0,.3);display:flex;flex-wrap:wrap;gap:9px;align-items:center}
@@ -45,16 +55,16 @@
 
   /* phoneme grids */
   .ipa-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow)}
-  table.ipa{border-collapse:collapse;width:100%;min-width:760px}
-  table.ipa th,table.ipa td{border:1px solid var(--line);padding:6px;vertical-align:top;text-align:center}
+  table.ipa{border-collapse:collapse;width:100%;min-width:560px}
+  table.ipa th,table.ipa td{border:1px solid var(--line);padding:clamp(3px,.8vw,6px);vertical-align:top;text-align:center}
   table.ipa th{font-size:.68rem;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);background:var(--bg);font-weight:700}
   table.ipa th.rowh{text-align:left;white-space:nowrap;font-size:.7rem}
-  .ph{display:inline-flex;flex-direction:column;align-items:center;gap:1px;min-width:62px;margin:2px;
-      padding:6px 7px;border:1px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;
+  .ph{display:inline-flex;flex-direction:column;align-items:center;gap:1px;min-width:clamp(42px,10vw,62px);margin:2px;
+      padding:clamp(4px,1vw,6px) clamp(4px,1.4vw,7px);border:1px solid var(--line);border-radius:9px;background:var(--card);cursor:pointer;
       font:inherit;color:inherit;position:relative;transition:transform .1s,border-color .1s}
   .ph:hover{transform:translateY(-2px);border-color:var(--accent)}
-  .ph .sym{font-size:1.02rem;font-weight:800;letter-spacing:.5px;white-space:nowrap}
-  .ph .eg{font-size:.68rem;color:var(--muted)}
+  .ph .sym{font-size:clamp(.8rem,.68rem + .8vw,1.02rem);font-weight:800;letter-spacing:.5px;white-space:nowrap}
+  .ph .eg{font-size:clamp(.58rem,.52rem + .3vw,.68rem);color:var(--muted)}
   .ph .pos{font-size:.6rem;color:var(--muted);letter-spacing:2px;line-height:1}
   .ph.voiced{border-left:4px solid var(--voiced)}
   .ph.unvoiced{border-left:4px solid var(--unvoiced)}
@@ -80,9 +90,10 @@
   /* vowel chart */
   .vowel-wrap{position:relative;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
               box-shadow:var(--shadow);padding:14px;overflow-x:auto}
-  .vowel-inner{position:relative;width:100%;max-width:620px;margin:0 auto;min-width:520px;aspect-ratio:1.35/1}
+  .vowel-inner{position:relative;width:100%;max-width:620px;margin:0 auto;min-width:280px;aspect-ratio:1.35/1}
   .vowel-inner svg{position:absolute;inset:0;width:100%;height:100%}
-  .vowel-inner .ph{position:absolute;transform:translate(-50%,-50%);min-width:56px;margin:0;white-space:nowrap;padding:5px 8px}
+  .vowel-inner .ph{position:absolute;transform:translate(-50%,-50%);min-width:clamp(38px,9vw,56px);margin:0;white-space:nowrap;
+      padding:clamp(3px,.8vw,5px) clamp(4px,1.2vw,8px)}
   .vowel-inner .ph:hover{transform:translate(-50%,-50%) scale(1.06)}
   .axis{font-size:.68rem;fill:var(--muted)}
   .trap{fill:none;stroke:#a5836f;opacity:.55;stroke-width:2;vector-effect:non-scaling-stroke}
@@ -129,6 +140,7 @@
   .btn.on-done{background:var(--done-soft);border-color:var(--done);color:var(--done)}
   .dbody{padding:14px 16px}
   .steps{display:grid;gap:11px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+  @media (max-width:999px){ .steps{grid-template-columns:1fr} }
   .step{border:1px solid var(--line);border-radius:10px;padding:12px 13px;background:var(--bg)}
   .step .n{display:inline-block;width:19px;height:19px;line-height:19px;text-align:center;border-radius:50%;
            background:var(--accent);color:#fff;font-size:.72rem;font-weight:800;margin-right:6px}
@@ -175,6 +187,9 @@
     <div class="prog"><span id="progText">0 achieved</span><span class="bar"><i id="progBar"></i></span></div>
   </div>
 
+  <div class="hub-grid">
+  <div class="hub-left">
+
   <div id="focusArea"></div>
 
   <section class="panel on" id="tab-cons">
@@ -213,7 +228,12 @@
     <div class="cards" id="stressCards"></div>
   </section>
 
+  </div>
+
+  <div class="hub-right">
   <div id="detail"></div>
+  </div>
+  </div>
 </main>
 
 <footer>Sounds and example words from our own Australian English phoneme map. Vowel sounds are synthesised in your browser until a teacher recording exists for them. Progress and writing are saved on this device only. <a href="?assign" style="color:var(--muted)">Teacher: assign focus sounds</a></footer>
@@ -842,7 +862,16 @@ function showDetail(sym){
         </div>
       </div>
     </div>`;
-  document.getElementById("detail").scrollIntoView({behavior:"smooth",block:"nearest"});
+  /* two-column layout (>=1000px, see .hub-grid) shows the detail panel
+     sticky beside the chart — no page scroll needed there. Below that it
+     stacks, so scroll to it, but only if it isn't already mostly on-screen
+     (avoids re-snapping on every tap once it's already visible). */
+  if(!window.matchMedia("(min-width:1000px)").matches){
+    const dEl=document.getElementById("detail");
+    const r=dEl.getBoundingClientRect();
+    const visH=Math.max(0,Math.min(r.bottom,window.innerHeight)-Math.max(r.top,0));
+    if(r.height===0||visH<r.height*.4) dEl.scrollIntoView({behavior:"smooth",block:"nearest"});
+  }
 }
 
 /* accent toggle */
@@ -1124,7 +1153,17 @@ let dragVoice=null, suppressClick=false;
 function drawAll(){ drawCons(); drawVowels(); drawDips();
   Object.values(faceCtls).forEach(f=>{ if(f) f.idle(); });
 }
-drawAll(); drawStress(); drawPatterns(); drawFocusArea(); drawAccbar(); refreshProgress();
+
+/* measures the real .topbar height so the sticky detail column (.hub-right,
+   >=1000px) starts right below it instead of a guessed pixel value —
+   matters because school laptops often run at 125% Windows scaling. */
+function syncTopbarH(){
+  const tb=document.querySelector(".topbar");
+  if(tb) document.documentElement.style.setProperty("--topbar-h",tb.offsetHeight+"px");
+}
+window.addEventListener("resize",syncTopbarH);
+
+drawAll(); drawStress(); drawPatterns(); drawFocusArea(); drawAccbar(); refreshProgress(); syncTopbarH();
 </script>
 </body>
 </html>
