@@ -491,8 +491,7 @@ fetch(AUDIO_BASE+"sounds/manifest.json")
       const f=m[folder].files&&m[folder].files[0];
       if(f) SOUND_FILES[sym]=AUDIO_BASE+"sounds/"+encodeURIComponent(folder)+"/"+encodeURIComponent(f);
     }
-    const open=document.querySelector(".detail .big");
-    if(open) showDetail(open.textContent);
+    if(window.lastDetailSym) showDetail(window.lastDetailSym);
   }).catch(()=>{});
 
 /* grammar-hub-style assignment links: ?focus=θ,s sets those sounds red on
@@ -847,6 +846,9 @@ function drawDips(){
 /* detail panel */
 function showDetail(sym){
   const o=find(sym); if(!o) return;
+  /* the anatomy enhancer loads after this script and needs to re-render
+     whatever is already on screen — and so does the recordings manifest */
+  window.lastDetailSym=sym;
   const st=state[sym]?.st||"";
   const tw=o.tw?TWISTERS[o.tw]:null;
   const isDip=DIPHTHONGS.includes(o);

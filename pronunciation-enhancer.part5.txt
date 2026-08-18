@@ -34,6 +34,9 @@
 
     if(typeof window.drawVowels === "function") window.drawVowels();
     if(typeof window.drawDips === "function") window.drawDips();
+    /* a ?sound= deep link opens a detail panel before this enhancement has
+       loaded, so that panel still holds the plain diagram — redraw it */
+    if(window.lastDetailSym && typeof window.showDetail === "function") window.showDetail(window.lastDetailSym);
     addChartNotes();
   }catch(err){
     console.error("Pronunciation anatomy enhancement failed",err);
