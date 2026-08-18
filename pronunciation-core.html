@@ -257,26 +257,26 @@ const MANNERS = ["Plosive / Stop","Fricative","Affricate","Nasal","Approximant"]
 const PLACES  = ["Bilabial","Labio-dental","Dental","Alveolar","Post-alveolar","Velar","Glottal"];
 
 const CONSONANTS = [
-  {s:"/p/", eg:"pen",    m:"Plosive / Stop", p:"Bilabial",      v:0, pos:"IMF"},
-  {s:"/b/", eg:"bed",    m:"Plosive / Stop", p:"Bilabial",      v:1, pos:"IMF"},
-  {s:"/t/", eg:"two",    m:"Plosive / Stop", p:"Alveolar",      v:0, pos:"IMF"},
-  {s:"/d/", eg:"do",     m:"Plosive / Stop", p:"Alveolar",      v:1, pos:"IMF"},
-  {s:"/k/", eg:"kite",   m:"Plosive / Stop", p:"Velar",         v:0, pos:"IMF"},
-  {s:"/g/", eg:"go",     m:"Plosive / Stop", p:"Velar",         v:1, pos:"IMF"},
-  {s:"/f/", eg:"fish",   m:"Fricative",      p:"Labio-dental",  v:0, pos:"IMF"},
+  {s:"/p/", eg:"pen",    m:"Plosive / Stop", p:"Bilabial",      v:0, pos:"IMF", tw:"p-b"},
+  {s:"/b/", eg:"bed",    m:"Plosive / Stop", p:"Bilabial",      v:1, pos:"IMF", tw:"p-b"},
+  {s:"/t/", eg:"two",    m:"Plosive / Stop", p:"Alveolar",      v:0, pos:"IMF", tw:"t-d"},
+  {s:"/d/", eg:"do",     m:"Plosive / Stop", p:"Alveolar",      v:1, pos:"IMF", tw:"t-d"},
+  {s:"/k/", eg:"kite",   m:"Plosive / Stop", p:"Velar",         v:0, pos:"IMF", tw:"k-g"},
+  {s:"/g/", eg:"go",     m:"Plosive / Stop", p:"Velar",         v:1, pos:"IMF", tw:"k-g"},
+  {s:"/f/", eg:"fish",   m:"Fricative",      p:"Labio-dental",  v:0, pos:"IMF", tw:"f"},
   {s:"/v/", eg:"very",   m:"Fricative",      p:"Labio-dental",  v:1, pos:"IMF", tw:"w-v"},
   {s:"/θ/", eg:"thin",   m:"Fricative",      p:"Dental",        v:0, pos:"IMF", tw:"th-sh"},
   {s:"/ð/", eg:"this",   m:"Fricative",      p:"Dental",        v:1, pos:"IMF", tw:"th-sh"},
   {s:"/s/", eg:"see",    m:"Fricative",      p:"Alveolar",      v:0, pos:"IMF", tw:"s-sh"},
-  {s:"/z/", eg:"zoo",    m:"Fricative",      p:"Alveolar",      v:1, pos:"IMF"},
+  {s:"/z/", eg:"zoo",    m:"Fricative",      p:"Alveolar",      v:1, pos:"IMF", tw:"z"},
   {s:"/ʃ/", eg:"she",    m:"Fricative",      p:"Post-alveolar", v:0, pos:"IMF", tw:"s-sh"},
-  {s:"/ʒ/", eg:"vision", m:"Fricative",      p:"Post-alveolar", v:1, pos:"IMF"},
-  {s:"/h/", eg:"hat",    m:"Fricative",      p:"Glottal",       v:0, pos:"IM"},
+  {s:"/ʒ/", eg:"vision", m:"Fricative",      p:"Post-alveolar", v:1, pos:"IMF", tw:"zh"},
+  {s:"/h/", eg:"hat",    m:"Fricative",      p:"Glottal",       v:0, pos:"IM", tw:"h"},
   {s:"/tʃ/",eg:"chair",  m:"Affricate",      p:"Post-alveolar", v:0, pos:"IMF", tw:"ch-j"},
   {s:"/dʒ/",eg:"jam",    m:"Affricate",      p:"Post-alveolar", v:1, pos:"IMF", tw:"ch-j"},
-  {s:"/m/", eg:"me",     m:"Nasal",          p:"Bilabial",      v:1, pos:"IMF"},
-  {s:"/n/", eg:"no",     m:"Nasal",          p:"Alveolar",      v:1, pos:"IMF"},
-  {s:"/ŋ/", eg:"sing",   m:"Nasal",          p:"Velar",         v:1, pos:"MF"},
+  {s:"/m/", eg:"me",     m:"Nasal",          p:"Bilabial",      v:1, pos:"IMF", tw:"m-n-ng"},
+  {s:"/n/", eg:"no",     m:"Nasal",          p:"Alveolar",      v:1, pos:"IMF", tw:"m-n-ng"},
+  {s:"/ŋ/", eg:"sing",   m:"Nasal",          p:"Velar",         v:1, pos:"MF", tw:"m-n-ng"},
   {s:"/w/", eg:"we",     m:"Approximant",    p:"Bilabial",      v:1, pos:"IM", tw:"w-v"},
   {s:"/l/", eg:"look",   m:"Approximant",    p:"Alveolar",      v:1, pos:"IM", tw:"l-r"},
   {s:"/r/", eg:"red",    m:"Approximant",    p:"Post-alveolar", v:1, pos:"IM", tw:"l-r"}
@@ -286,24 +286,24 @@ const CONSONANTS = [
 const VOWELS = [
   {s:"/iː/", eg:"see",   x:6,  y:6,  pos:"IMF", tw:"i-ii"},
   {s:"/ɪ/",  eg:"sit",   x:20, y:18, pos:"IM",  tw:"i-ii"},
-  {s:"/e/",  eg:"bed",   x:16, y:42, pos:"IM"},
-  {s:"/æ/",  eg:"cat",   x:20, y:82, pos:"IM"},
-  {s:"/ɜː/", eg:"her",   x:50, y:44, pos:"IMF"},
-  {s:"/ə/",  eg:"about", x:52, y:52, pos:"MF"},
-  {s:"/ɐ/",  eg:"cut",   x:54, y:72, pos:"IM"},
+  {s:"/e/",  eg:"bed",   x:16, y:42, pos:"IM", tw:"e-a"},
+  {s:"/æ/",  eg:"cat",   x:20, y:82, pos:"IM", tw:"e-a"},
+  {s:"/ɜː/", eg:"her",   x:50, y:44, pos:"IMF", tw:"er-uh"},
+  {s:"/ə/",  eg:"about", x:52, y:52, pos:"MF", tw:"er-uh"},
+  {s:"/ɐ/",  eg:"cut",   x:54, y:72, pos:"IM", tw:"cut-spa"},
   {s:"/ʉː/", eg:"food",  x:72, y:8,  pos:"IMF", tw:"u-uu"},
   {s:"/ʊ/",  eg:"put",   x:78, y:22, pos:"M",  tw:"u-uu"},
-  {s:"/ɔ/",  eg:"hot",   x:88, y:70, pos:"IM"},
-  {s:"/ɔː/", eg:"door",  x:92, y:48, pos:"IMF"},
-  {s:"/aː/", eg:"spa",   x:80, y:90, pos:"IMF"}
+  {s:"/ɔ/",  eg:"hot",   x:88, y:70, pos:"IM", tw:"hot-door"},
+  {s:"/ɔː/", eg:"door",  x:92, y:48, pos:"IMF", tw:"hot-door"},
+  {s:"/aː/", eg:"spa",   x:80, y:90, pos:"IMF", tw:"cut-spa"}
 ];
 
 const DIPHTHONGS = [
-  {s:"/eɪ/", eg:"day, make, play", from:[16,42], to:[20,18]},
-  {s:"/aɪ/", eg:"my, time, ride",  from:[60,90], to:[20,18]},
-  {s:"/ɔɪ/", eg:"boy, choice",     from:[90,58], to:[20,18]},
-  {s:"/əʉ/", eg:"go, snow, home",  from:[52,52], to:[72,8], note:"the GOAT vowel"},
-  {s:"/aʊ/", eg:"now, about",      from:[45,88], to:[78,22]}
+  {s:"/eɪ/", eg:"day, make, play", from:[16,42], to:[20,18], tw:"ay"},
+  {s:"/aɪ/", eg:"my, time, ride",  from:[60,90], to:[20,18], tw:"eye"},
+  {s:"/ɔɪ/", eg:"boy, choice",     from:[90,58], to:[20,18], tw:"oy"},
+  {s:"/əʉ/", eg:"go, snow, home",  from:[52,52], to:[72,8], note:"the GOAT vowel", tw:"goat"},
+  {s:"/aʊ/", eg:"now, about",      from:[45,88], to:[78,22], tw:"ow"}
 ];
 
 /* Accent variants — classroom-model positions, not gospel. Base chart is
@@ -362,7 +362,58 @@ const TWISTERS = {
     text:"Luke looked at Lulu in the blue schoolroom,\n“Could you cook good soup this afternoon?”\nLulu shook her wooden spoon and stood,\n“I could, if you put in the food you should.”\nThey pushed and pulled a crooked stool,\nTo scoop some noodles — not too cool.\nThe cookbook stood where the sunlight shone,\n“The soup's too smooth!” said Luke with a groan.\nLulu laughed, “You should choose to chew!”\nLuke blew on his spoon — “It's too hot to do!”" },
   "i-ii":{ title:"/ɪ/ and /iː/", sounds:"short and long ee",
     quick:"Milly sits still on the hill and sees three green sheep.",
-    text:"Milly sits still on the hill and sees three green sheep.\nEach sheep is eating sweet peas near the creek.\n“Keep still!” Milly whispers, “They'll leap if you creep.”\nThe breeze slips through the trees and tickles her cheek.\nShe grins, feeling silly but free in the spring heat." }
+    text:"Milly sits still on the hill and sees three green sheep.\nEach sheep is eating sweet peas near the creek.\n“Keep still!” Milly whispers, “They'll leap if you creep.”\nThe breeze slips through the trees and tickles her cheek.\nShe grins, feeling silly but free in the spring heat." },
+  "p-b":{ title:"P / B", sounds:"/p/ and /b/",
+    quick:"Big Ben picked a bunch of purple plums.",
+    text:"Big Ben picked a bunch of purple plums.\nPat packed a big blue backpack and put it by the bus.\nBen's brother bought a pie, a plum and a purple pepper.\nPop the bubbles, Bella — but please be patient.\nBobby popped the paper cups back in the big box.\nA bad pup pulled Bill's blue cap past the pool." },
+  "t-d":{ title:"T / D", sounds:"/t/ and /d/",
+    quick:"Ted told Dad to take ten dented tins.",
+    text:"Ted told Dad to take ten dented tins.\nTed's dad had a dented tin toolbox by the tap.\nTrina tried to tidy the dusty desk today.\nDan dropped a dozen dates outside the dented tent door.\nTwo tired tourists ate dry toast at ten to two.\nDid the doctor decide to donate the old radio?" },
+  "k-g":{ title:"K / G", sounds:"/k/ and /g/",
+    quick:"Greg's big dog got a green cricket cake.",
+    text:"Greg's big dog got a green cricket cake.\nKate kicked a green cricket across the school car park.\nGreg grabbed the big grey bag and gave it a quick tug.\nThe cook cracked a coconut and gave Greg a cup.\nA gang of goats got going and quickly gobbled Greg's garden greens.\nKick the can, catch the cat, then go and get the gate." },
+  "f":{ title:"F", sounds:"/f/ — spelt f, ff, ph or gh",
+    quick:"Five funny friends found forty fresh fish.",
+    text:"Five funny friends found forty fresh fish.\nFifty-four fresh fish flipped off the fisherman's raft.\nFran's phone fell off the shelf before breakfast.\nThe tough farmer laughed at half the funny photos.\nFeel free to find a fluffy scarf for Friday.\nFirst he filled four flasks, then he fried fifty-five chips." },
+  "z":{ title:"Z", sounds:"/z/ — often spelt with an s",
+    quick:"Zoe's busy bees buzz easily in the zoo.",
+    text:"Zoe's busy bees buzz easily in the zoo.\nZoe's lazy cousins choose noisy music on Tuesdays.\nThe bees buzz, the keys freeze, and those zips please Liz.\nHis eyes were closed as the crazy breeze rose.\nLiz says the dozen roses in the vase are hers.\nZebras and lizards doze in the zoo's zigzag zone." },
+  "zh":{ title:"Zh", sounds:"/ʒ/ — the sound in the middle of vision",
+    quick:"The usual television treasure gives me pleasure.",
+    text:"The usual television treasure gives me pleasure.\nIt's a pleasure to measure the treasure on television.\nHer decision about the revision caused confusion in Asia.\nUsually a casual measure of leisure is pure pleasure.\nNo confusion — the division of the treasure was my decision.\nMeasure the pleasure, treasure the vision, then make your decision." },
+  "h":{ title:"H", sounds:"/h/ — a puff of air, never dropped",
+    quick:"Harry held his hat as he hurried up the hill.",
+    text:"Harry held his hat as he hurried up the hill.\nHow hot is the huge heater in Hannah's hallway?\nHe hopes his happy horse will hurry home behind Hugh.\nWho has the heavy handbag hidden in the hall?\nHold on! Have you heard how Helen helped Hugo?" },
+  "m-n-ng":{ title:"M / N / Ng", sounds:"/m/, /n/ and /ŋ/",
+    quick:"My mum sang and hummed among the running men.",
+    text:"My mum sang and hummed among the running men.\nMy mum is running, my nan is singing, and Sam is swimming.\nRing the bell, bang the tin drum, and hum one long morning song.\nAmanda's mum was humming and Ben's nan was banging a gong.\nSun, sung, some — ban, bang, bam — thin, thing, Tim." },
+  "e-a":{ title:"/e/ and /æ/", sounds:"bed and cat",
+    quick:"Ten black cats sat on Ben's red mat.",
+    text:"Ten black cats sat on Ben's red mat.\nSam's dad said the best bags are back at the end.\nFred's friend Jack packed ten sandwiches and seven eggs.\nGet the red pen, Ben — then grab that black cap and hat.\nBad Ben bet ten cents that Anne's cat sat on his desk." },
+  "er-uh":{ title:"/ɜː/ and /ə/", sounds:"her and about — no r sound",
+    quick:"Her sister's teacher heard a murmur about the earth.",
+    text:"Her sister's teacher heard a murmur about the earth.\nThe nurse in the purple shirt works early on Thursdays.\nThe teacher's banana was under a purple umbrella.\nThirty birds circled the church on Thursday, then turned early.\nFirst, her worst word was “worthless” — then she learned better." },
+  "cut-spa":{ title:"/ɐ/ and /aː/", sounds:"short cut and long spa",
+    quick:"Cut the lunch and run to the dark car park.",
+    text:"Cut the lunch and run to the dark car park.\nA hundred hungry cousins jumped up to munch some lunch.\nThe smart guard parked his large car in the dark garden yard.\nSharp stars are far above the farm; my mum's bus runs under them.\nCart or cut? Heart or hut? Barn or bun? Say each pair slowly." },
+  "hot-door":{ title:"/ɔ/ and /ɔː/", sounds:"short hot and long door",
+    quick:"Four short dogs got lost on the shop floor.",
+    text:"Four short dogs got lost on the shop floor.\nTom stopped the clock, dropped his socks and got a hot job.\nAll morning we talked and walked before we bought more sauce.\nYour daughter thought the small dog was lost on the sports oval.\nCot or caught? Shot or short? Cod or cord? Listen for the long one." },
+  "ay":{ title:"/eɪ/", sounds:"the day sound",
+    quick:"They stayed and played all day on the eighth of May.",
+    text:"They stayed and played all day on the eighth of May.\nWait — Jake made a great grey cake for today's bake sale.\nThe train was late, so we waited by the gate in the rain.\nTake the same plane to the lake and stay eight days.\nAmy's mate Grace says she'll play the game today." },
+  "eye":{ title:"/aɪ/", sounds:"the my sound",
+    quick:"I like riding my white bike nine times a night.",
+    text:"I like riding my white bike nine times a night.\nMike tried to fly a bright kite high in the wide sky.\nWhy did five shy spiders hide behind my right eye?\nTonight I'll find the right time to buy nine white lights.\nQuite a nice night — my mind is quiet and my life is fine." },
+  "oy":{ title:"/ɔɪ/", sounds:"the boy sound",
+    quick:"The noisy boys enjoyed the royal toys.",
+    text:"The noisy boys enjoyed the royal toys.\nRoy's voice annoyed the loyal boy with no choice.\nJoin Troy and boil the oil — but avoid spoiling the soil.\nA moist coin, a noisy toy, and a boy full of joy.\nPoint at the oyster, enjoy the noise, and don't destroy Roy's toys." },
+  "goat":{ title:"/əʉ/", sounds:"the go sound — the GOAT vowel",
+    quick:"Go slow on the old road home, Joe.",
+    text:"Go slow on the old road home, Joe.\nMost of the goats know the snow is cold.\nJoan sold her old yellow coat and boat by the ocean.\nI hope Rose won't throw the whole bowl of toast on the floor.\nDon't open the window — it's so cold and the snow won't stop." },
+  "ow":{ title:"/aʊ/", sounds:"the now sound",
+    quick:"The loud brown owl found a mouse downtown.",
+    text:"The loud brown owl found a mouse downtown.\nHow about a shower of flowers around our house?\nA thousand loud sounds came from the crowded ground downtown.\nNow the proud scout counts the clouds above the brown ground.\nLook out! The mouse ran south around the tower and down." }
 };
 
 /* How to make each consonant — spoken instructions built from the grid */
@@ -1164,6 +1215,16 @@ function syncTopbarH(){
 window.addEventListener("resize",syncTopbarH);
 
 drawAll(); drawStress(); drawPatterns(); drawFocusArea(); drawAccbar(); refreshProgress(); syncTopbarH();
+
+/* deep link from the Phonics trainer: ?sound=aɪ opens that sound's tab and detail */
+(function openLinkedSound(){
+  const raw=QS.get("sound"); if(!raw) return;
+  const sym="/"+raw.trim().replace(/\//g,"")+"/";
+  const o=find(sym); if(!o) return;
+  const tab=CONSONANTS.includes(o)?"cons":VOWELS.includes(o)?"vow":"dip";
+  const btn=document.querySelector(`[data-tab="${tab}"]`); if(btn) btn.click();
+  showDetail(sym);
+})();
 </script>
 </body>
 </html>
