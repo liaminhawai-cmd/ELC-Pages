@@ -58,6 +58,16 @@
   .rubric td.empty { background:var(--bg); }
   tr.evid td { background:var(--evid-fill); } tr.purp td { background:var(--purp-fill); } tr.idea td { background:var(--idea-fill); }
   tr.evid td, tr.purp td, tr.idea td { color:#1c2333; }
+  .exbtn { display:inline-block; margin-left:6px; border:1px solid var(--line); background:var(--card);
+           color:var(--accent); border-radius:999px; font-size:.68rem; font-weight:700;
+           padding:1px 8px; cursor:pointer; vertical-align:1px; }
+  .exbtn.on, .exbtn:hover { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .cellex { margin-top:7px; background:var(--card); border:1px solid var(--line);
+            border-left:3px solid var(--accent); border-radius:8px; padding:7px 10px; font-size:.8rem; }
+  .cellex b { font-size:.68rem; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); }
+  .cellex p { margin:5px 0 0; font-style:italic; }
+  tr.evid .cellex, tr.purp .cellex, tr.idea .cellex { background:rgba(255,255,255,.75); }
+  @media (prefers-color-scheme:dark){ tr.evid .cellex, tr.purp .cellex, tr.idea .cellex { color:#1c2333; } }
 
   /* ---- extensions: related rubrics that reuse a base rubric's shape ---- */
   details.ext { border:1px solid var(--line); border-radius:12px; background:var(--card);
@@ -512,6 +522,291 @@ const RUBRICS = [
 
 ];
 </script>
+<script>
+/* Worked examples per rubric cell — "click any cell, see what that band
+   actually looks like in student work". Keyed by rubric id, then the exact
+   skill name, then band order. Two short examples per cell; lower bands
+   keep natural learner grammar on purpose. Add or edit examples here —
+   no code to touch. */
+/* =====================================================================
+   CELL_EXAMPLES — two worked examples for every cell of the four core
+   rubrics in rubrics.html.
+
+   Shape:  CELL_EXAMPLES[rubricId][exact skill name][bandIndex] = [ex, ex]
+   Band index and order match that rubric's own `bands` array:
+     analytical  C2 · C3 · C4 · VCE 1              (4)
+     reading     C2 · C3 · C4 · VCE 1 · VCE 2      (5)
+     speaking    C2 · C3 · C4                      (3)
+     writing     C2 · C3 · C4                      (3)
+
+   House rule (writing-wall.html): SHOW the band, never describe it.
+   Each example is a piece of student work — or, for reading and speaking,
+   one observable classroom moment — AT that band. Wherever possible the
+   two examples in a column are the SAME two topics carried up the whole
+   ladder, so a teacher reading down a column sees one thing grow.
+
+   Ladder texts, reused from the program: The Giving Tree (teea-paragraph.html),
+   Rabbit-Proof Fence and The Bone Sparrow. Quotes are short and embedded in
+   original commentary.
+
+   Lower bands deliberately carry natural learner grammar. That is not an
+   error to fix — it is what C2 and C3 actually look like on the page.
+   No real student names are used.
+   ===================================================================== */
+
+const CELL_EXAMPLES = {
+
+/* ==================================================================== */
+/*  ANALYTICAL WRITING — 4 bands: C2, C3, C4, VCE 1                     */
+/*  Ladder 1: The Giving Tree.  Ladder 2: Rabbit-Proof Fence /          */
+/*  The Bone Sparrow (Evidence row).                                    */
+/* ==================================================================== */
+"analytical": {
+
+  "Ideas & Themes": [
+    /* C2 — Describe: says what happens */
+    [ "The tree gives the boy apples, then her branches, then her trunk. At the end she is only a stump.",
+      "In Rabbit-Proof Fence the three girls run away from the camp and walk home along the fence." ],
+    /* C3 — Explain: basic feelings, first link to a simple theme */
+    [ "The tree is feel happy when the boy take her branches, but she is sad when he go away. The story is about love in a family.",
+      "The girls are scared but they keep walking and walking. It show the theme of courage." ],
+    /* C4 — Analyse: technique linked to theme, what the creator might be saying */
+    [ "Silverstein repeats “And the tree was happy” after every time the boy takes something, which links her giving to the theme of sacrifice. He may be saying that love can damage the person who gives it.",
+      "Noyce uses long shots of the empty desert to connect the girls’ walk to the idea of freedom, suggesting the land belongs to them and not to the government." ],
+    /* VCE 1 — Interpret: choices express messages, values, perspectives */
+    [ "By ending with a stump instead of a reunion, Silverstein presents unconditional love as both a virtue and a cost, inviting readers to question the cultural expectation that a mother should give until there is nothing left.",
+      "Noyce keeps the fence running through almost every wide shot, so a government line drawn across country becomes the film’s image of control and positions viewers to judge removal as ownership rather than protection." ]
+  ],
+
+  "Evidence & Metalanguage": [
+    /* C2 — a quote or description, on its own */
+    [ "The book says, “And the tree was happy.”",
+      "In The Bone Sparrow the writer describe the fence and the big lights at night." ],
+    /* C3 — names a feature, begins linking it to meaning */
+    [ "The author uses repetition of “And the tree was happy” because he want us to know she is always happy to give.",
+      "The writer uses a metaphor when Subhi talks about the Night Sea. It show he is dreaming about being free." ],
+    /* C4 — accurate terminology, short embedded evidence */
+    [ "Silverstein’s repetition of the line “And the tree was happy” after each loss highlights how one-sided the relationship has become.",
+      "Fraillon’s recurring motif of the Night Sea places Subhi’s imagination inside the detention centre, contrasting freedom with the fence." ],
+    /* VCE 1 — evidence and metalanguage fused into interpretation */
+    [ "The refrain “And the tree was happy,” granted to every scene of taking, works to normalise sacrifice, so that by the final “but not really” the reader has been trained to distrust the phrase.",
+      "Fraillon’s first-person present tense lets the Night Sea arrive in the same breath as the roll call, fusing imagined freedom and real confinement so tightly that the reader cannot separate them." ]
+  ],
+
+  "Language & Structure": [
+    /* C2 — short simple sentences, literal verbs */
+    [ "The author uses repetition. It shows the tree is happy. The boy takes the apples.",
+      "The film uses a long shot. It shows the girls walking alone." ],
+    /* C3 — connectives (because, so, to) and basic evaluative words */
+    [ "The author uses repetition because he wants to show the tree is very generous, so the reader feels sad for her.",
+      "The long shot makes the audience see how far the girls must travel, so we know they are brave." ],
+    /* C4 — complex sentences, analytical verbs */
+    [ "Silverstein’s repetition of “And the tree was happy” highlights the one-sided relationship, suggesting themes of sacrifice and imbalance.",
+      "Noyce uses a long shot to highlight the girls’ isolation in the vast desert, symbolising both their determination and their loss of freedom." ],
+    /* VCE 1 — fluent, cohesive, varied structures showing cause, effect, interpretation */
+    [ "Because the refrain returns unchanged after every loss, the reader begins to hear it as denial rather than contentment; by the final page Silverstein has turned a children’s rhythm into a warning.",
+      "Where the early wide shots dwarf the girls, the closing framing holds them still against the same horizon, so that the landscape which once measured the distance ahead comes to measure what the journey has cost." ]
+  ],
+
+  "Purpose & Interpretation": [
+    /* C2 — the basic meaning or message */
+    [ "The story is about giving. The tree give everything to the boy.",
+      "The message of the film is the girls want to go home to their mother." ],
+    /* C3 — the effect on the reader or viewer */
+    [ "The ending makes the reader feel sad, because the tree have nothing left and the boy is old now.",
+      "The long shots make the audience feel tired and worried for the girls, so we want them to reach home." ],
+    /* C4 — inference about the creator's intent or perspective */
+    [ "Silverstein probably wants readers to question whether the tree’s giving is really love, because he never lets the boy say thank you.",
+      "Noyce has the officials speak calmly about paperwork and settlements, which suggests he wants us to see the cruelty as ordinary and official, not personal." ],
+    /* VCE 1 — deeper social, moral, ethical ideas linked to broader context */
+    [ "Silverstein leaves the stump silent so the moral question stays with the reader: in a culture that praises endless generosity, at what point does self-sacrifice become self-erasure?",
+      "By filming the removal from the children’s height, Noyce puts viewers inside a history usually told through policy documents, asking an Australian audience to weigh the state’s claimed good intentions against the lived cost of the Stolen Generations." ]
+  ]
+},
+
+/* ==================================================================== */
+/*  READING — 5 bands: C2, C3, C4, VCE 1, VCE 2                         */
+/*  Reading and listening are behaviour, so an example is one observable */
+/*  moment, written as a teacher would jot it down.                      */
+/* ==================================================================== */
+"reading": {
+
+  /* NOTE: the rubric itself leaves "Reading aloud" blank at VCE 1 and
+     VCE 2 — the criterion stops at C4. Those two slots are intentionally
+     empty arrays so the UI shows nothing for a cell that has nothing. */
+  "Reading aloud": [
+    /* C2 — some rhythm, emphasis, tone variation */
+    [ "Reads her ballad verse aloud, stopping at each full stop and lifting her voice on “Are you the ghost?”",
+      "Reads his paragraph steadily, then slows down and says “the tree was happy” louder than the rest of the line." ],
+    /* C3 — rhythm and emphasis match the text's purpose */
+    [ "Reads the limerick with a bouncing beat and a quick last line, then says “because it is a joke poem”.",
+      "Reads the news report flat and even, then reads Subhi’s part more slowly and quietly, saying the diary is “more personal”." ],
+    /* C4 — precise and subtle rhythm, tone, emphasis */
+    [ "Reads the boy’s “Can you give me…?” three times, making each request a little flatter, so the class hears him take the tree for granted.",
+      "Pauses one beat before “but not really”, drops her volume, and the class goes quiet." ],
+    [],
+    []
+  ],
+
+  "Summary": [
+    /* C2 — extracts main ideas */
+    [ "A boy take fruit from a tree. He grow up and the tree give him everything.",
+      "The chapter is about Subhi. He live in the detention centre with his mum and his sister." ],
+    /* C3 — explains main ideas and plot developments */
+    [ "The boy comes back to the tree many times. Every time he is older and he want something bigger — apples, then a house, then a boat. In the end there is only a stump.",
+      "Subhi meets Jimmie, a girl from outside the fence. She brings a book but she cannot read it, so Subhi reads it to her and they become friends." ],
+    /* C4 — identifies and infers ideas, themes, plot detail, in appropriate language */
+    [ "The story follows the boy from childhood to old age, and each visit takes more from the tree. Silverstein uses this pattern to explore sacrifice, and suggests that the boy never learns to give anything back.",
+      "Fraillon builds Subhi and Jimmie’s friendship across the fence to explore belonging, implying that the border matters far less to the children than to the adults who built it." ],
+    /* VCE 1 — precise language, interconnected ideas and values, character and setting */
+    [ "Silverstein binds character to setting: the tree cannot follow the boy, so the single clearing becomes the measure of his growing absence, and her stillness makes his restlessness look like something the culture rewards.",
+      "Fraillon sets Subhi’s imagined Night Sea against the fixed geometry of the compound, so setting carries the novel’s central conflict of values — a child’s interior freedom against a system built to contain it." ],
+    /* VCE 2 — nuanced language, fluent and critical */
+    [ "The clearing never changes while the boy does, and that asymmetry is the book’s argument as much as its plot; Silverstein’s economy of language leaves the moral judgment unmade, which is why the ending unsettles adult readers more than children.",
+      "Giving Subhi the present tense and Jimmie the past quietly ranks their two kinds of loss, and the novel’s optimism survives only because it is voiced by a narrator too young to name what the reader can already see." ]
+  ],
+
+  "Evidence": [
+    /* C2 — a quote linked to an idea */
+    [ "The tree is kind. The book says, “And the tree was happy.”",
+      "The girls are far from home. The film shows a long shot of them walking in the desert." ],
+    /* C3 — metalanguage plus quotes to support ideas */
+    [ "The author uses repetition of “And the tree was happy” to show she like giving things to the boy.",
+      "Noyce uses a long shot when the girls walk, so we can see how big the desert is and how small they are." ],
+    /* C4 — embedded evidence, accurate metalanguage, clear links to themes */
+    [ "Silverstein’s refrain, “And the tree was happy,” returns after every loss, linking her happiness directly to the theme of sacrifice.",
+      "Noyce’s wide landscape shots keep the fence running through the frame, connecting the girls’ journey to the theme of control." ],
+    /* VCE 1 — evidence explaining how the author conveys ideas, tied to the topic */
+    [ "Silverstein conveys the cost of unconditional love through structure as much as image: the refrain is granted to every scene of taking, so that by the final “but not really” the reader has learned to read her happiness as compliance.",
+      "Noyce conveys the reach of state control by making the fence a rule of composition rather than an object of plot — it divides almost every wide shot — so the path home is also the film’s argument about who drew the lines." ],
+    /* VCE 2 — precise, controlled integration; critical examination */
+    [ "That the refrain survives the tree’s dismemberment unchanged is the book’s sharpest device: repetition, usually a comfort in picture books, is repurposed as evidence of a relationship nobody is examining, which complicates any reading of the ending as simply tender.",
+      "Noyce’s refusal to soften the officials’ bureaucratic register, while giving the girls Mardu language without subtitles, is itself an argument about whose meaning the audience is expected to work for." ]
+  ],
+
+  "Text purpose": [
+    /* C2 — identifies common text types and features */
+    [ "This is a recipe. It has a list of the things you need and then numbers for the steps.",
+      "This one is a news report. It has a headline and a photo with small words under it." ],
+    /* C3 — main purpose plus description of features */
+    [ "The purpose of the recipe is to tell you how to make the food. It use numbers and short sentences that start with a verb, like “Cut” and “Add”.",
+      "The news report want to give information about the fire. It has a headline, a photo, and a quote from a firefighter." ],
+    /* C4 — features related to purpose, inference about intent */
+    [ "The recipe uses numbered steps and imperative verbs so a cook can follow it while their hands are busy; the writer assumes you will read one line at a time, not the whole page.",
+      "The report puts the number of homes lost in the headline and saves the firefighter’s quote for the end, which suggests the writer wants readers to feel the scale first and the human cost afterwards." ],
+    /* VCE 1 — structures, language features and vocabulary against purpose; nuanced ideas */
+    [ "The article shifts from passive constructions in the policy section to active verbs in the interviews, separating decisions from the people they land on, and quietly suggesting that responsibility is easier to describe than to locate.",
+      "Fraillon’s chapter breaks at each crossing of the fence slow the novel exactly where the two children meet, so the structure itself argues that their lives run parallel rather than joining." ],
+    /* VCE 2 — critical examination; author's ideas, concerns and values */
+    [ "By reserving statistics for the opening and testimony for the close, the writer positions data as fact and experience as feeling — a hierarchy the piece never acknowledges, and one that reveals more about the paper’s values than about the policy it examines.",
+      "Ending inside Subhi’s imagination rather than outside the fence protects Fraillon’s young readers, but it also declines the political ending the novel has been building toward, which is worth weighing against her stated concern for the children still detained." ]
+  ]
+},
+
+/* ==================================================================== */
+/*  SPEAKING & LISTENING — 3 bands: C2, C3, C4                          */
+/*  Every example is one observable moment or one thing actually said.  */
+/* ==================================================================== */
+"speaking": {
+
+  "Speech sounds, intonation and stress": [
+    /* C2 */
+    [ "Reads her three sentences to the group in a clear voice, eyes mostly on the page, and says “th-ree” carefully after the teacher models it.",
+      "Says “My favourite food is pho” loudly enough for the back row, though the question after it stays flat." ],
+    /* C3 */
+    [ "Presents his slide with his voice rising at each question, stresses “never” when he repeats it, and looks up at the class between sentences.",
+      "Retells the weekend with pauses in the right places and stresses “ACtually” to signal he is changing direction." ],
+    /* C4 */
+    [ "In the debate, says “I didn’t say she took it” twice, moving the stress from “say” to “she”, then asks the class what changed.",
+      "Delivers her speech with a deliberate pause before the last word, then drops her pitch so the ending sounds final rather than unsure." ]
+  ],
+
+  "Interaction": [
+    /* C2 */
+    [ "In the round-robin, waits for her turn, says her sentence from the starter card, and passes the ball on.",
+      "Answers “I agree” and gives one reason when the teacher calls on him in the circle." ],
+    /* C3 */
+    [ "In a group of four, asks “What do you mean by fair?” before disagreeing, then builds on what the last speaker said.",
+      "At the office window, explains he needs a late pass, answers the follow-up question about which class, and thanks the assistant." ],
+    /* C4 */
+    [ "Keeps a ten-minute discussion on phone bans going, brings a quiet classmate in with “you had an example”, and shortens her own point when she sees the group losing focus.",
+      "Takes three unplanned questions after his presentation and rephrases his answer in simpler words when the Year 8 audience looks confused." ]
+  ],
+
+  "Listening": [
+    /* C2 */
+    [ "After a two-minute audio about the canteen, writes “canteen — new hours” and tells the group the talk was about opening times.",
+      "Listens to the instructions and says, “We do question one and two, not three.”" ],
+    /* C3 */
+    [ "Listens to the excursion announcement once and fills in the time (8:40), the meeting place (front gate) and what to bring (hat, water).",
+      "Replays the podcast once, then writes down the three reasons the speaker gives, in the order she gave them." ],
+    /* C4 */
+    [ "After the interview clip, says the speaker “doesn’t really believe it” because she pauses before “great idea” and says it slowly.",
+      "Notices the news reader’s tone drop on the last sentence and says it is “bad news they are trying to say gently”." ]
+  ],
+
+  "Connectives": [
+    /* C2 */
+    [ "“I like Melbourne because the food is good, but the weather is cold.”",
+      "“First I came to Australia, and then I started at the ELC.”" ],
+    /* C3 */
+    [ "“I arrived in March, and after two weeks I started school, so I missed the beginning of the term.”",
+      "“Before I came, I didn’t speak much English. Now I can order food by myself, although I still get nervous on the phone.”" ],
+    /* C4 */
+    [ "“Even though the bus was late, I still got here on time, which was lucky because we had a test first period.”",
+      "“If schools banned phones completely, students who catch two trains home would have no way to tell their parents where they are — and that is the part nobody mentions.”" ]
+  ],
+
+  "Grammar": [
+    /* C2 — common patterns, one tense, complex structures only with support */
+    [ "“I go to school by train. I live with my aunty. My favourite subject is maths.”",
+      "Using the frame on the board: “If I have time, I will play soccer after school.”" ],
+    /* C3 — consistent in one tense, accurate modals, some complex features */
+    [ "“Last weekend I went to the market with my brother. We bought fish and we cooked it at home.”",
+      "“You should bring a jacket, because it might rain later.”" ],
+    /* C4 — modals, passive voice, varied tenses, accurately */
+    [ "“The rubbish is collected on Tuesdays, so if you had put the bin out last night, it would have been emptied by now.”",
+      "“I’ve been studying here since March, and by the end of the year I’ll have finished C4.”" ]
+  ]
+},
+
+/* ==================================================================== */
+/*  WRITING — 3 bands: C2, C3, C4                                       */
+/*  Both ladders carry ONE topic up the bands, writing-wall style:      */
+/*  Grammar = first day at the ELC.  Vocabulary = a day out / home food.*/
+/* ==================================================================== */
+"writing": {
+
+  "Grammar": [
+    /* C2 — mostly one tense and perspective, mostly simple sentences */
+    [ "I came to Australia in March. I was scared. The school is very big. I did not know anybody.",
+      "My first day was hard. I sat at the back. A girl gave me a pencil. I said thank you." ],
+    /* C3 — a range of tenses with some control, compound and some complex sentences */
+    [ "I came to Australia in March and I was very scared, because I did not know anybody. Now I have three friends and next year I will go to the mainstream classes.",
+      "My first day was hard, but a girl gave me a pencil and she showed me the canteen, so I felt better." ],
+    /* C4 — varied structures used accurately, confident tense and perspective shifts */
+    [ "When I arrived in March, everything frightened me: the size of the school, the speed of the English, the fact that nobody knew my name. Looking back now, I can see how much has changed.",
+      "Although my first day was hard, it is the pencil I remember — a girl I had never met handed it to me without a word, and I have kept it." ]
+  ],
+
+  "Vocabulary and word choice": [
+    /* C2 — some adjectives, conjunctions and adverbs; general vocabulary */
+    [ "The park was nice and the weather was good. We ate lunch and we played soccer. It was very fun.",
+      "My country is beautiful. The food is nice but it is spicy. I miss it a lot." ],
+    /* C3 — wider range, first specific choices, connectives linking ideas */
+    [ "The park was crowded because it was a public holiday, so we found a quiet corner near the river and shared the food we had brought.",
+      "My country is beautiful, especially in the mountains, but the food is spicier than here, so my friends cannot eat it." ],
+    /* C4 — precise vocabulary, subject-specific words where they fit */
+    [ "By midday the reserve was crowded, so we retreated to a shaded bank beside the river and unpacked the containers my mother had filled that morning.",
+      "The dish is fermented, not simply pickled, which is why the flavour is sour rather than salty — a distinction my friends here still find hard to believe." ]
+  ]
+}
+
+};
+
+/* Node / browser both */
+</script>
+
 <!-- ===================== END CONTENT BLOCK ======================= -->
 
 <script>
@@ -537,9 +832,12 @@ document.getElementById("sections").innerHTML = RUBRICS.map(r => {
   const body = "<tbody>" + r.rows.map(row => {
     const cells = r.bands.map((_,i) => {
       const ph = row.cells[i] || [];
-      return ph.length
-        ? `<td>${ph.map(phraseHTML).join(" ")}</td>`
-        : `<td class="empty"></td>`;
+      if(!ph.length) return `<td class="empty"></td>`;
+      const exs = ((CELL_EXAMPLES[r.id]||{})[row.skill]||[])[i] || [];
+      const exBtn = exs.length
+        ? `<button class="exbtn" data-ex="${esc(r.id)}|${esc(row.skill)}|${i}">e.g.</button>`
+        : "";
+      return `<td>${ph.map(phraseHTML).join(" ")}${exBtn}</td>`;
     }).join("");
     return `<tr class="${row.cls}"><td class="skill">${phraseHTML(P(row.skill,row.vi,row.zh))}</td>${cells}</tr>`;
   }).join("") + "</tbody>";
@@ -578,6 +876,24 @@ function extHTML(x){
       <div class="extbody"><div class="scroll">${table}</div></div>
     </details>`;
 }
+
+/* Tap "e.g." on a cell -> two snippets of what that band looks like in
+   real student work, right under the descriptors. Tap again to hide. */
+document.addEventListener("click", e=>{
+  const b = e.target.closest(".exbtn");
+  if(!b) return;
+  const td = b.closest("td");
+  const existing = td.querySelector(":scope > .cellex");
+  if(existing){ existing.remove(); b.classList.remove("on"); return; }
+  const [rid, skill, band] = b.dataset.ex.split("|");
+  const exs = ((CELL_EXAMPLES[rid]||{})[skill]||[])[+band] || [];
+  const div = document.createElement("div");
+  div.className = "cellex";
+  div.innerHTML = `<b>What this can look like:</b>` +
+    exs.map(x=>`<p>${esc(x)}</p>`).join("");
+  td.appendChild(div);
+  b.classList.add("on");
+});
 
 /* Tap a phrase -> its Vietnamese and Chinese. One phrase at a time,
    independent of every other. */
