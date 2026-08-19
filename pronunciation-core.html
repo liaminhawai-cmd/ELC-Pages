@@ -166,6 +166,18 @@
   footer{border-top:1px solid var(--line);margin-top:30px;padding:16px;text-align:center;color:var(--muted);font-size:.8rem}
   .legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.75rem;color:var(--muted);margin:8px 0 2px}
   .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:4px;vertical-align:-1px}
+  /* "tricky for my language" bar */
+  .l1bar{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+    padding:11px 13px;margin-bottom:13px;box-shadow:var(--shadow);font-size:.9rem}
+  .l1bar select{margin-left:8px;padding:5px 8px;border-radius:8px;border:1px solid var(--line);
+    background:var(--card);color:inherit;font-size:.85rem;max-width:100%}
+  .l1tw{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:5px 11px;
+    font-size:.8rem;cursor:pointer;color:inherit}
+  .l1tw.on,.l1tw:hover{border-color:var(--accent);color:var(--accent)}
+  .l1twcard{margin-top:9px;border:1px solid var(--line);border-left:3px solid var(--accent);
+    border-radius:10px;padding:9px 12px;font-size:.88rem}
+  .ph.l1hi{box-shadow:0 0 0 2px var(--accent) inset}
+  .flag.l1flag{color:var(--accent)}
 </style>
 </head>
 <body>
@@ -191,6 +203,7 @@
   <div class="hub-left">
 
   <div id="focusArea"></div>
+  <div id="l1Area"></div>
 
   <section class="panel on" id="tab-cons">
     <h2 class="sec">Consonants</h2>
@@ -415,6 +428,130 @@ const TWISTERS = {
     quick:"The loud brown owl found a mouse downtown.",
     text:"The loud brown owl found a mouse downtown.\nHow about a shower of flowers around our house?\nA thousand loud sounds came from the crowded ground downtown.\nNow the proud scout counts the clouds above the brown ground.\nLook out! The mouse ran south around the tower and down." }
 };
+
+/* L1-targeted twister sets + per-language profiles — from
+   teaching/english/grammar-phonics/l1-sound-issues.md. New sets carry a
+   `langs` tag; L1_PROFILES drives the "tricky for my language" bar. */
+/* New tongue-twister sets for the ELC Pronunciation Hub.
+   Targets drawn from teaching/english/grammar-phonics/l1-sound-issues.md
+   Format matches the existing TWISTERS block in pronunciation-core.html:
+   { title, sounds, langs, quick, text }  — quick = one showcase line,
+   text = 4-8 lines separated by \n. */
+
+const NEW_TWISTERS = {
+
+  "finals":{ title:"Final sounds", sounds:"the endings — /s z t d l/ at the ends of words",
+    langs:["vi","zh","yue","ja","kar","so","ru"],
+    quick:"Ben finds five old cold gold coins.",
+    text:"Ben finds five old cold gold coins.\nCar, card, cart. Play, plays, played. School, schools, schooled.\nThe girl needs a bus; the girls need six buses.\nTed holds a cold plate; Ted's cold plates hold the toast.\nSam sells eggs, his friend sold eggs, and all the eggs sold fast.\nWord, world, words — I heard the words of the world.\nAnn's friends stand and wait; Ann's friend stands and waits.\nDrop the end and the sentence ends up wrong — so sound the end!" },
+
+  "ed-endings":{ title:"-ed endings", sounds:"past tense — /t/ walked, /d/ played, /ɪd/ wanted",
+    langs:["vi","zh","yue","ja","kar","so","ru"],
+    quick:"Walked and talked, played and stayed, wanted and waited.",
+    text:"Walked and talked, played and stayed, wanted and waited.\nYesterday I jumped, I laughed, I washed the dishes twice.\nYesterday she called, she cleaned, she closed the blue door.\nYesterday we needed, we wanted, we waited for the end.\nKicked, kissed, missed — that ending sounds like /t/.\nFilled, spilled, spelled — that ending sounds like /d/.\nLanded, painted, started — that ending adds a whole new beat.\nHe watched the match, he watered the plants, and then he rested." },
+
+  "clusters":{ title:"Clusters", sounds:"two or three consonants together — street, asked, worlds",
+    langs:["vi","zh","yue","ja","kar","pa","so","fa"],
+    quick:"The strong stranger sprang straight across the street.",
+    text:"The strong stranger sprang straight across the street.\nSpring, string, splash, scratch, screen, squeeze, stretch.\nShe asked, he asks, they ask — and the asked question stands.\nTexts, worlds, months, twelfths — six sixths of the sixth text.\nStop the truck, drop the box, and print the last script.\nFrank thanks the friends who filmed the strange black storm.\nDon't drop the last sound — a cluster must last to the end." },
+
+  "th-s":{ title:"Th / S", sounds:"/θ/, /ð/ and /s/, /z/",
+    langs:["zh","ja","fa","ru"],
+    quick:"Six thin sisters think this song is something.",
+    text:"Six thin sisters think this song is something.\nThink, sink. Thing, sing. Thick, sick. Mouth, mouse.\nSeth said the seventh path was thick with soft moss.\nThis is Sue's; those are Seth's — say the S, then the TH.\nSomething smells sweet — is it the sauce or the south wind?\nSing us a song, then think a thought, and hear the difference.\nSeth's sister sits and thinks, and her thoughts are worth thousands." },
+
+  "th-t":{ title:"Th / T", sounds:"/θ/, /ð/ and /t/, /d/",
+    langs:["vi","pa","so"],
+    quick:"Three trees, thirty tins, and a thin tent.",
+    text:"Three trees, thirty tins, and a thin tent.\nThin tin, thank tank, thought taught, three tree.\nTom thought the tent was thick, but the truth was thinner.\nTongue between your teeth for TH — then take it back for T.\nThey took the third turn; then Ted told the whole truth.\nBoth boats, that day, this Tuesday — and Dad's teeth are white.\nTed counts the days: tenth, twelfth, thirtieth, thirty-third." },
+
+  "th-f":{ title:"Th / F", sounds:"/θ/ and /f/",
+    langs:["yue"],
+    quick:"Three free fish with thin fins.",
+    text:"Three free fish with thin fins.\nFree, three. Fin, thin. Fought, thought. First, thirst.\nFifty-four thin friends found thirty-three fresh things.\nRuth's roof is thick, and her fifth thumb-print is on it.\nI thought I fought a fever, but first I felt a thirst.\nBoth my feet and both my thumbs — feel the difference, Faith.\nThe truth is, half of the thirteen photos are fine." },
+
+  "n-l":{ title:"N / L", sounds:"/n/ and /l/",
+    langs:["yue","zh"],
+    quick:"Nine long lines of light in the night.",
+    text:"Nine long lines of light in the night.\nNight, light. Nine, line. No, low. Knee, Lee. Need, lead.\nLena's neat little lunch is on the long low bench.\nNobody knows how Nell lost the lemon and the lolly.\nFor L the air slips past the sides of your tongue — for N it goes up your nose.\nNot now, Nan — let Len look at the new yellow lantern.\nLonely Lily leans on nine long nails in the moonlight." },
+
+  "v-b":{ title:"V / B", sounds:"/v/ and /b/",
+    langs:["ja","so","es"],
+    quick:"Seven very big vans and a bright blue boat.",
+    text:"Seven very big vans and a bright blue boat.\nVery berry, vote boat, vest best, van ban.\nBev bought a violin, a big bag, and a bottle of vinegar.\nBite your bottom lip for V; press both lips together for B.\nBen's brave brother drives a very brown van above the bay.\nEleven big buses have never been by the river.\nVinnie's blue vest is better, braver and brighter than Bob's." },
+
+  "f-h":{ title:"F / H", sounds:"/f/ and /h/",
+    langs:["ja"],
+    quick:"Hold the hot food and fold the fluffy hood.",
+    text:"Hold the hot food and fold the fluffy hood.\nFood, hood. Fat, hat. Feel, heel. Fair, hair. Fill, hill.\nHannah found her hat, her fan and half a fresh fig.\nBlow air past your lip and teeth for F; just breathe out for H.\nFive hungry friends hurried home for hot chips.\nWho found the phone behind the heavy front door?\nHarry's fifth football flew high over the farmhouse." },
+
+  "bad-bed-bud":{ title:"Bad / bed / bud", sounds:"/æ/, /e/ and /ɐ/ — three short vowels",
+    langs:["vi","zh","so"],
+    quick:"A bad bed, a red rug and a black bug.",
+    text:"A bad bed, a red rug and a black bug.\nBad, bed, bud. Ban, Ben, bun. Ran, wren, run. Hat, head, hut.\nTen fat cats sat under Sam's red truck.\nDad said the lunch was bad, but Ben's fresh bread was lovely.\nJack's jumper is red, his jeans are black, his mug is up the back.\nAnne packed ten red apples and ran up the bumpy track.\nWide for bad, half as wide for bed, relaxed for bud — say all three." }
+
+};
+
+/* Per-language profiles for the “tricky for my language” filter.
+   p1 / more hold twister-set KEYS — from NEW_TWISTERS above plus the
+   existing sets (l-r, w-v, s-sh, i-ii, th-sh, p-b, u-uu, ch-j, t-d, e-a,
+   m-n-ng, h …). */
+
+const L1_PROFILES = {
+
+  vi:{ label:"Tiếng Việt (Vietnamese)",
+    tricky:["final /s z/","final /t d/","final clusters","final /l/","/θ ð/","/p/ initial","/æ e ɐ/","stress & schwa"],
+    p1:["finals","ed-endings","clusters","th-t"],
+    more:["th-sh","p-b","s-sh","i-ii","bad-bed-bud","ch-j","l-r"] },
+
+  zh:{ label:"普通话 (Mandarin)",
+    tricky:["final consonants (+ added vowel)","-s / -ed endings","/θ ð/ → /s z/","/v/ → /w/","initial clusters","/ɪ iː/","/ʊ ʉː/","/æ e/","/n/ vs /l/","flat intonation"],
+    p1:["finals","ed-endings","th-s","w-v"],
+    more:["clusters","i-ii","u-uu","bad-bed-bud","n-l","l-r"] },
+
+  yue:{ label:"廣東話 (Cantonese)",
+    tricky:["initial /n/ → /l/","/θ/ → /f/","final consonants","-s / -ed endings","/v/ → /w/","initial clusters","/r/ → /w l/","/ɪ iː/"],
+    p1:["n-l","th-f","finals","ed-endings"],
+    more:["clusters","w-v","l-r","i-ii","u-uu"] },
+
+  ja:{ label:"日本語 (Japanese)",
+    tricky:["/l/ vs /r/","/f/ vs /h/","/v/ → /b/","/θ ð/ → /s z/","/s/ → /ʃ/ before ee","finals get a vowel","clusters get a vowel","mora timing → stress"],
+    p1:["l-r","finals","f-h","v-b"],
+    more:["th-s","s-sh","clusters","ed-endings","i-ii"] },
+
+  kar:{ label:"ကညီကျိာ် (S'gaw Karen)",
+    tricky:["final consonants","all clusters","-s / -ed endings","/l/ vs /r/","stress & intonation"],
+    p1:["finals","clusters","ed-endings"],
+    more:["l-r","th-sh"] },
+
+  pa:{ label:"ਪੰਜਾਬੀ (Punjabi)",
+    tricky:["/v/ and /w/ are one sound","/θ ð/ → /t d/","initial s-clusters (school → iskool)","retroflex /t d/"],
+    p1:["w-v","th-t","clusters"],
+    more:["t-d","finals"] },
+
+  so:{ label:"Af-Soomaali (Somali)",
+    tricky:["no /p/ — pen → ben","no /v/ — seven → seben","/θ/ → /t/","final clusters reduced","/æ/"],
+    p1:["p-b","v-b","clusters"],
+    more:["th-t","finals","ed-endings","e-a","bad-bed-bud"] },
+
+  fa:{ label:"فارسی (Farsi)",
+    tricky:["/θ ð/ → /s z/ or /t d/","/w/ → /v/","initial s-clusters (stop → estop)","/ɪ/ vs /iː/","final /ŋ/ → -ng-g"],
+    p1:["th-s","w-v","clusters"],
+    more:["th-t","i-ii","m-n-ng"] },
+
+  ru:{ label:"Русский / Українська (Russian & Ukrainian)",
+    tricky:["final devoicing — dog → dok","/θ ð/ → /s z/","/w/ → /v/","/h/ → /x/"],
+    p1:["finals","th-s","w-v"],
+    more:["ed-endings","h","clusters"] },
+
+  es:{ label:"Español (Spanish)",
+    tricky:["/v/ → /b/","initial s-clusters (school → eschool)","/ɪ/ vs /iː/","final consonants"],
+    p1:["v-b","clusters"],
+    more:["finals","ed-endings","i-ii"] }
+
+};
+
+Object.assign(TWISTERS, NEW_TWISTERS);
 
 /* How to make each consonant — spoken instructions built from the grid */
 const PLACE_HOW = {
@@ -747,8 +884,10 @@ function chipHTML(o,cls){
   const stAttr=v.focus?"focus":v.st;
   const flag=v.focus?"🎯":v.st==="done"?"✅":v.st==="target"?"⭐":"";
   const n=stepCount(v);
-  return `<button class="ph ${cls}" data-s="${esc(o.s)}" ${stAttr?`data-state="${stAttr}"`:""}>
-    ${flag?`<span class="flag">${flag}</span>`:""}
+  const p=l1Profile();
+  const l1hi=p&&o.tw&&(p.p1.includes(o.tw)||p.more.includes(o.tw));
+  return `<button class="ph ${cls}${l1hi?" l1hi":""}" data-s="${esc(o.s)}" ${stAttr?`data-state="${stAttr}"`:""}>
+    ${flag?`<span class="flag">${flag}</span>`:""}${l1hi&&!flag?`<span class="flag l1flag">⚑</span>`:""}
     <span class="sym">${esc(o.showSym||o.s)}</span>
     <span class="eg">${esc(o.eg.split(",")[0])}</span>
     ${v.focus?`<span class="pips">${"●".repeat(n)}${"○".repeat(4-n)}</span>`:o.pos?`<span class="pos">${posMark(o.pos)}</span>`:""}
@@ -933,6 +1072,42 @@ function drawAccbar(){
     el.innerHTML=Object.keys(ACCENTS).map(k=>
       `<button data-accent="${k}" class="${k===accent?"on":""}">${ACCENTS[k].label}</button>`).join("");
   });
+}
+
+/* ---- "tricky for my language" ---------------------------------------- */
+let l1=localStorage.getItem("elc_pron_l1")||"";
+const l1Profile=()=>L1_PROFILES[l1]||null;
+let l1Open=null;   // twister key currently expanded in the bar
+function twisterCardHTML(key){
+  const t=TWISTERS[key]; if(!t) return "";
+  return `<div class="l1twcard">
+    <b>${esc(t.title)}</b> <span style="color:var(--muted)">· ${esc(t.sounds)}</span>
+    <p style="margin:6px 0 2px;white-space:pre-line">${esc(t.text)}</p>
+    <p style="font-size:.76rem;color:var(--muted)">Read it three times, faster each time. Make the target sounds win.</p>
+  </div>`;
+}
+function drawL1Area(){
+  const el=document.getElementById("l1Area"); if(!el) return;
+  const opts=`<option value="">— choose —</option>`+Object.keys(L1_PROFILES).map(k=>
+    `<option value="${k}" ${k===l1?"selected":""}>${esc(L1_PROFILES[k].label)}</option>`).join("");
+  const p=l1Profile();
+  const chip=(k,star)=>`<button class="l1tw ${l1Open===k?"on":""}" data-l1tw="${k}">${star?"⭐ ":""}${esc((TWISTERS[k]||{}).title||k)}</button>`;
+  el.innerHTML=`<div class="l1bar">
+    <label><b>Tricky for my language</b>
+      <select id="l1Sel">${opts}</select></label>
+    ${p?`<div style="margin-top:6px;font-size:.8rem;color:var(--muted)">${p.tricky.map(esc).join(" · ")}</div>
+    <div style="margin-top:7px;display:flex;gap:5px;flex-wrap:wrap">${
+      p.p1.map(k=>chip(k,true)).join("")}${p.more.map(k=>chip(k,false)).join("")}</div>
+    <p style="font-size:.74rem;color:var(--muted);margin-top:5px">⭐ = start here. Sounds marked ⚑ on the charts are the ones your language usually finds hard. These are tendencies, not rules — your ears outrank this list.</p>
+    ${l1Open?twisterCardHTML(l1Open):""}`
+    :`<span style="font-size:.8rem;color:var(--muted)">Pick your first language to see which sounds and twisters to start with.</span>`}
+  </div>`;
+  const sel=document.getElementById("l1Sel");
+  if(sel) sel.onchange=()=>{ l1=sel.value; l1Open=null;
+    try{ localStorage.setItem("elc_pron_l1",l1); }catch(_){}
+    drawAll(); drawL1Area(); };
+  el.querySelectorAll("[data-l1tw]").forEach(b=>b.onclick=()=>{
+    l1Open=(l1Open===b.dataset.l1tw)?null:b.dataset.l1tw; drawL1Area(); });
 }
 
 /* focus banner (student) / assignment builder (teacher) */
@@ -1216,7 +1391,7 @@ function syncTopbarH(){
 }
 window.addEventListener("resize",syncTopbarH);
 
-drawAll(); drawStress(); drawPatterns(); drawFocusArea(); drawAccbar(); refreshProgress(); syncTopbarH();
+drawAll(); drawStress(); drawPatterns(); drawFocusArea(); drawL1Area(); drawAccbar(); refreshProgress(); syncTopbarH();
 
 /* deep link from the Phonics trainer: ?sound=aɪ opens that sound's tab and detail */
 (function openLinkedSound(){
