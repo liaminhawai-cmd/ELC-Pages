@@ -693,6 +693,10 @@
     return S.review.done;
   }
   function firstOpen(){
+    /* prefer where the student actually was: mid-Apply progress beats an
+       earlier phase they jumped over with "open anyway" */
+    var applyStarted = S.apply && (S.apply.cur > 0 || tasksDone() > 0);
+    if (applyStarted && !phaseDone(2)) return 2;
     for (var i = 0; i < 4; i++) { if (!phaseDone(i)) return i; }
     return 3;
   }
@@ -1013,9 +1017,13 @@
     }
     return h + "</div></div>";
   }
+  var navCoolUntil = 0;   /* swallow the second click of a fast double-tap after a re-render */
   function wireNav(card){
     card.querySelectorAll("[data-nav]").forEach(function(b){
       b.addEventListener("click", function(){
+        var now = Date.now();
+        if (now < navCoolUntil) return;
+        navCoolUntil = now + 350;
         var a = b.getAttribute("data-nav");
         if (a === "prev" && S.apply.cur > 0) S.apply.cur--;
         else if (a === "next" && S.apply.cur < TASKS.length - 1) S.apply.cur++;

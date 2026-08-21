@@ -165,6 +165,14 @@
       else if (coef === "-") m = -1;
       else m = num(coef);
       s = s.slice(xm[0].length);
+      /* accept the x-over-denominator form: y = x/2 + 3 */
+      var dm = s.match(/^\/(\d+(?:\.\d+)?)/);
+      if (dm){
+        var den = parseFloat(dm[1]);
+        if (!den) return null;
+        m = m / den;
+        s = s.slice(dm[0].length);
+      }
       if (s){
         if (!/^[+-]/.test(s)) return null;
         c = num(s);
@@ -334,7 +342,7 @@
       q += "<table><tr><th>x</th>";
       xs.forEach(function(x){ q += "<td>"+x+"</td>"; });
       q += "</tr><tr><th>y</th>";
-      xs.forEach(function(x,i){ q += "<td><input inputmode='numeric' data-k='y"+i+"' aria-label='y when x is "+x+"'></td>"; });
+      xs.forEach(function(x,i){ q += "<td><input data-k='y"+i+"' aria-label='y when x is "+x+"'></td>"; });
       q += "</tr></table>";
       var worked = "<b>Working (x = "+xs[1]+"):</b> y = "+fmt(m)+" × ("+xs[1]+") "+(c>=0?"+ "+c:"− "+Math.abs(c))+
         " = "+fmt(m*xs[1])+" "+(c>=0?"+ "+c:"− "+Math.abs(c))+" = <b>"+fmt(m*xs[1]+c)+"</b>. Same steps for every column: "+
@@ -365,8 +373,8 @@
       var c = y1 - m*x1;
       var svg = gridSvg(lineSvg(m,c) + dot(x1,y1) + dot(x2,y2));
       var q = "<p>The line passes through the two marked points. Find the <span data-v='gradient'>gradient</span>.</p>"+svg+
-        "<p>rise = <input inputmode='numeric' data-k='rise'> &nbsp; run = <input inputmode='numeric' data-k='run'> &nbsp; "+
-        "gradient m = <input data-k='m'></p>";
+        "<p>rise = <input data-k='rise'> &nbsp; run = <input data-k='run'> &nbsp; "+
+        "gradient m = <input data-k='m'> <span class='pilot'>(a fraction like 1/3, or 2 decimal places)</span></p>";
       var worked = "<b>Working:</b> from ("+x1+", "+fmt(y1)+") to ("+x2+", "+fmt(y2)+"): rise = "+fmt(y2)+" − "+fmt(y1)+" = <b>"+fmt(rise)+"</b>, "+
         "run = "+x2+" − "+x1+" = <b>"+run+"</b>. m = rise ÷ run = "+fmt(rise)+"/"+run+" = <b>"+fmt(m)+"</b>.";
       return {
@@ -395,8 +403,9 @@
         "<p>a) <span data-v='gradient'>gradient</span> m = <input data-k='m'><br>"+
         "b) <span data-v='y-intercept'>y-intercept</span> c = <input data-k='c'><br>"+
         "c) <span data-v='equation'>equation</span>: <input class='wide' data-k='eq' placeholder='y = ...'></p>";
-      var worked = "<b>Working:</b> m = ("+fmt(y2)+" − "+fmt(y1)+") ÷ ("+x2+" − "+x1+") = "+fmt(y2-y1)+" ÷ "+fmt(x2-x1)+" = <b>"+fmt(m)+"</b>. "+
-        "Substitute ("+x2+", "+fmt(y2)+") into y = mx + c: "+fmt(y2)+" = "+fmt(m)+" × "+x2+" + c, so c = "+fmt(y2)+" − "+fmt(m*x2)+" = <b>"+fmt(c)+"</b>. "+
+      var pf = function(n){ return n < 0 ? "(−" + fmt(Math.abs(n)) + ")" : fmt(n); };
+      var worked = "<b>Working:</b> m = ("+fmt(y2)+" − "+pf(y1)+") ÷ ("+x2+" − "+pf(x1)+") = "+fmt(y2-y1)+" ÷ "+fmt(x2-x1)+" = <b>"+fmt(m)+"</b>. "+
+        "Substitute ("+x2+", "+fmt(y2)+") into y = mx + c: "+fmt(y2)+" = "+fmt(m)+" × "+x2+" + c, so c = "+fmt(y2)+" − "+pf(m*x2)+" = <b>"+fmt(c)+"</b>. "+
         "Equation: <b>"+eqStr(m,c)+"</b>.";
       return {
         qHtml:q, worked:worked,
@@ -449,7 +458,7 @@
         "<span data-v='coordinate'>coordinate</span>.</p>"+svg+
         "<p>Point: <input class='wide' data-k='pt' placeholder='(x, y)'></p>";
       var worked = "<b>Working:</b> the lines cross where BOTH rules are true at once — on the graph that is the single crossing point: <b>("+px+", "+py+")</b>. "+
-        "Check by substitution: line 1 gives y = "+fmt(m1)+"×"+px+(c1>=0?" + "+fmt(c1):" − "+fmt(Math.abs(c1)))+" = "+fmt(m1*px+c1)+" ✓.";
+        "Check by substitution: line 1 gives y = "+fmt(m1)+" × ("+px+")"+(c1>=0?" + "+fmt(c1):" − "+fmt(Math.abs(c1)))+" = "+fmt(m1*px+c1)+" ✓.";
       return {
         qHtml:q, worked:worked,
         hint:"Find where the teal line and the orange line touch. Read across for x, up for y. Write it as (x, y).",

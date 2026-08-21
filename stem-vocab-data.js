@@ -11108,7 +11108,7 @@ window.STEM_VOCAB_DATA = {
         "160",
         "80"
        ],
-       "explain": "9 days = 3 doublings: 40 → 80 → 160 → 320. Adding 40 each time would give 120, but that is linear, not exponential."
+       "explain": "Doubling every 3 days: 40 → 80 (day 3) → 160 (day 6) → <b>320</b> (day 9). <b>Adding</b> 40 each time (linear thinking) would give only 160 by day 9 — exponential growth races ahead of it."
       },
       {
        "id": "pan_exp_scn3",

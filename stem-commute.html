@@ -296,7 +296,7 @@
     if (saved && typeof saved === "object"){
       state.cur = Math.min(4, Math.max(1, saved.cur||1));
       state.max = Math.min(4, Math.max(1, saved.max||1));
-      state.done = saved.done || {};
+      state.done = (saved.done && typeof saved.done === "object" && !Array.isArray(saved.done)) ? saved.done : {};
       state.teacher = !!saved.teacher;
     }
   } catch(e){}
@@ -541,7 +541,9 @@
       var order = movers.slice().sort(function(a,b){ return a.j.arrive - b.j.arrive; });
       var medals = ["🥇","🥈","🥉","4️⃣"];
       var parts = order.map(function(m, i){
-        var tie = i > 0 && Math.abs(m.j.arrive - order[i-1].j.arrive) < 0.005;
+        var tieWithPrev = i > 0 && Math.abs(m.j.arrive - order[i-1].j.arrive) < 0.005;
+        var tieWithNext = i < order.length-1 && Math.abs(m.j.arrive - order[i+1].j.arrive) < 0.005;
+        var tie = tieWithPrev || tieWithNext;   /* both sides of a tie get 🤝 — nobody gets gold in a draw */
         return (tie ? "🤝" : medals[i]) + " " + m.emoji + " " + esc(m.label) +
           " — " + esc(fmtT(m.j.arrive)) + (tie ? " (tie!)" : "");
       });
@@ -729,6 +731,10 @@
         fb.className = "fb no";
         fb.textContent = "The tram DOES win with " + n + " stops (" + fmtT(tramT) + " vs " +
           fmtT(bikeT) + ") — but could it squeeze in even more stops and still win? Try more.";
+      } else if (Math.abs(tramT - bikeT) < 1e-9){
+        fb.className = "fb no";
+        fb.textContent = "With " + n + " stops it is a dead heat — both take " + fmtT(bikeT) +
+          ". A tie is not a win, so the tram has NOT beaten the bike. Try one fewer stop.";
       } else {
         fb.className = "fb no";
         fb.textContent = "With " + n + " stops the tram takes " + fmtT(tramT) +
@@ -776,7 +782,8 @@
          "<button class='hintbtn' data-h='h3'>hint?</button>" +
          "<div class='worked' id='h3' hidden>💡 On the graph this is a " +
          "<span data-v='intersection'>point of intersection</span> — where the car's line crosses " +
-         "the bike's line. Watch where the two lines meet.</div>")
+         "the bike's line. Watch where the two lines meet. Careful: the traffic lights pause the car " +
+         "on the way, so it catches the bike later than a no-stops calculation says.</div>")
         :
         ("Predict the car's total time, door to door:<br>" +
          "<input type='text' inputmode='decimal' data-k='p3' aria-label='Predicted car time in minutes'> minutes " +
@@ -910,7 +917,7 @@
       /* the sim as the checker: run THEIR dwell time */
       var wrap = panel.querySelector("#sim3wrap");
       wrap.hidden = false;
-      var dwellTry = Math.min(300, Math.max(0, v4));
+      var dwellTry = Math.min(120, Math.max(0, v4));   /* cap keeps the checker race short; the true answer is well under this */
       if (!sim){
         sim = makeSim(panel.querySelector("#sim3"),
           { onFinish: function(){ if (currentVerdict) currentVerdict(); } });
