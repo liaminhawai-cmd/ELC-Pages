@@ -6,7 +6,7 @@
 <title>Lab &amp; Matter — ELC STEM</title>
 <!-- ================================================================
      UNIT PAGE (STEM hub v2) — a sibling of stem-kinematics.html, which
-     is the master copy. Structure, rails, spine, fold-outs, PROVE arc
+     is the master copy. Structure, jump bar, spine, fold-outs, PROVE arc
      and i18n shape are that file's; only the four things a unit owns
      are different here:
        1. <title>, the masthead (h1 + .sub) and the intro paragraph,
@@ -40,7 +40,7 @@
   * { box-sizing:border-box; }
   body { margin:0; background:var(--paper); color:var(--ink);
          font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-  .wrap { max-width:960px; margin:0 auto; padding:34px 22px 70px; }
+  .wrap { max-width:1120px; margin:0 auto; padding:34px 22px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
            display:inline-flex; align-items:center; min-height:44px; }
@@ -66,32 +66,25 @@
     font-size:.85rem; display:inline-block; }
   .preview[hidden] { display:none; }
 
-  /* ---- layout: contents rail + main pane ---- */
-  .layout { margin-top:20px; }
-  .rail { display:flex; gap:26px; overflow-x:auto; -webkit-overflow-scrolling:touch;
-    margin:0 -22px 6px; padding:2px 22px 12px; border-bottom:1px solid var(--hair); }
-  .rail-sec { flex:0 0 auto; min-width:172px; }
-  .rail-h { display:flex; align-items:center; min-height:44px; font-size:.68rem; font-weight:700;
-    letter-spacing:.09em; text-transform:uppercase;
-    color:var(--muted); text-decoration:none; padding:6px 0 3px; border-top:1px solid var(--ink); }
-  .rail-h:hover { color:var(--accent); }
-  .ritem { display:flex; justify-content:space-between; align-items:center; gap:10px;
-    min-height:44px; padding:5px 0; text-decoration:none; color:inherit; font-size:.82rem; }
-  .ritem:hover .rname { color:var(--accent); }
-  .rname { min-width:0; }
-  .rname .lock { color:var(--faint); }
-  .rcount { color:var(--muted); font-size:.75rem; white-space:nowrap; }
-  .rcount .ok { color:var(--accent); font-weight:600; }
-  .rcount .soon { color:var(--alert); font-weight:600; }
-  .rcount .dimW { color:var(--faint); }
-  @media (min-width:760px) {
-    .layout { display:grid; grid-template-columns:196px minmax(0,1fr); gap:38px; align-items:start; }
-    .rail { display:block; overflow:visible; margin:0; padding:0; border-bottom:0;
-      position:sticky; top:16px; max-height:calc(100vh - 32px); overflow-y:auto; }
-    .rail-sec { min-width:0; }
-    .rail-sec + .rail-sec .rail-h { margin-top:16px; }
-    .ritem { min-height:44px; padding:4px 0; }
-  }
+  /* ---- jump bar: four anchors, one row tall ----
+     This was a 196px sticky contents column. Its WORDS and SKILLS lists were
+     the project map written out vertically — two summaries of one thing, and
+     the map paid for the second one in width. What only the rail carried,
+     the way down to DO and PROVE, is here as chips that jump the page. */
+  .jump { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 0; }
+  .jump a { display:inline-flex; align-items:center; min-height:40px; padding:0 15px;
+    border:1px solid var(--hair); border-radius:8px; background:var(--paper);
+    color:var(--muted); text-decoration:none;
+    font-size:.68rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+  .jump a:hover { color:var(--accent); border-color:var(--accent); }
+  .jump a[hidden] { display:none; }
+  /* a phone should still get one row of chips, so they lose a little padding
+     rather than a whole line of height */
+  @media (max-width:430px) { .jump { gap:6px; } .jump a { padding:0 11px; } }
+  /* no rule under the bar: the first section opens with its own ink rule, and
+     a second hairline just above that would read as an accident */
+  .main { margin-top:30px; }
+  section, #groups { scroll-margin-top:16px; }
 
   /* ---- main sections: a 1px ink rule opens each ---- */
   section { border-top:1px solid var(--ink); margin-top:30px; padding-top:12px; }
@@ -180,7 +173,41 @@
   .cp .cwhen b { color:var(--alert); }
   .cp .cdesc { grid-column:2 / 4; font-size:.78rem; color:var(--muted); max-width:56ch; }
 
-  .note { margin-top:26px; font-size:.72rem; color:var(--faint); }
+  /* ---- the width the rail used to take ----
+     One column of content now, so the measure is held by the text itself
+     (ch), not by the page: prose stays short while the list rows, the spine
+     and the map use the whole width. */
+  .bands { max-width:74ch; }
+  @media (min-width:900px) {
+    /* a task reads as a list row at this width: what it is on the left, the
+       way in on the right, instead of a link stranded under two short lines */
+    .task { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,auto); column-gap:34px; }
+    .task .t { grid-column:1; grid-row:1; }
+    .task .w { grid-column:1; grid-row:2; }
+    .task > a { grid-column:2; grid-row:1 / span 2; justify-self:end; align-self:center; }
+    .task .msg { grid-column:1; grid-row:3; }
+  }
+
+  /* ---- the map's WORDS row: one box per word set ----
+     Painted by the page (see paintWords below), styled here. The selectors
+     carry the section so they beat stem-map.js's own .pm-cell rules, which
+     land in the document after this block. */
+  .mapsec .pm-cell.wset { display:grid; grid-template-columns:minmax(0,1fr) auto;
+    gap:1px 8px; align-content:center; min-height:44px; }
+  .mapsec .pm-cell.wset .wt { grid-column:1; min-width:0; }
+  .mapsec .pm-cell.wset .wn { grid-column:2; text-align:right; color:var(--muted);
+    font-weight:700; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .mapsec .pm-cell.wset.met .wn { color:var(--accent); }
+  /* this page's own .bar (the spine's) is capped at 180px and carries a
+     bottom margin; a bar drawn inside the map is its cell's full width and
+     closes the cell, so the map's bars opt out of both */
+  .mapsec .pm-cell .bar { max-width:none; margin:5px 0 0; }
+  .mapsec .pm-cell.wset .bar { grid-column:1 / -1; margin-top:4px; }
+  #projectmap { margin-top:12px; }
+
+  /* the only line on the page with no measure of its own: at the old width it
+     ran to one 114-character line, which is too long to scan */
+  .note { margin-top:26px; font-size:.72rem; color:var(--faint); max-width:60ch; }
   footer { margin-top:8px; color:var(--faint); font-size:.75rem; }
 </style>
 <link rel="stylesheet" href="stem-theme.css?v=v3">
@@ -222,71 +249,55 @@
     done in the laboratory, with your teacher watching — never alone, never at home.</p>
   <p class="preview" id="preview" hidden></p>
 
-  <div class="layout">
+  <!-- ===== jump bar: the four places this page goes ===== -->
+  <nav class="jump" aria-label="On this page">
+    <a id="jumpWords" href="#map" data-i18n="navWordsH">Words</a>
+    <a href="#groups" data-i18n="navSkillsH">Skills</a>
+    <a href="#do" data-i18n="navDoH">Do</a>
+    <a id="jumpProve" href="#prove" data-i18n="navProveH">Prove</a>
+  </nav>
 
-    <!-- ===== contents rail (sticky ≥760px; horizontal scroller below) ===== -->
-    <nav class="rail" id="rail" aria-label="Unit contents">
-      <div class="rail-sec">
-        <a class="rail-h" href="stem-vocab-hub.html" data-i18n="railWordsH">Words</a>
-        <div id="railWords"></div>
+  <main class="main">
+
+    <!-- visible-learning spine -->
+    <section class="spine" aria-label="Visible learning">
+      <div class="spine-cols">
+        <div class="sp"><h3 data-i18n="goingH">Where am I going?</h3><div id="spGoing"></div></div>
+        <div class="sp"><h3 data-i18n="howH">How am I going?</h3><div id="spHow"></div></div>
+        <div class="sp"><h3 data-i18n="nextH">Where to next?</h3><div id="spNext"></div></div>
       </div>
-      <div class="rail-sec">
-        <a class="rail-h" id="railSkillsH" href="stem-skills.html" data-i18n="railSkillsH">Skills</a>
-        <div id="railSkills"></div>
-      </div>
-      <div class="rail-sec">
-        <a class="rail-h" href="#do" data-i18n="railDoH">Do</a>
-        <div id="railDo"></div>
-      </div>
-      <div class="rail-sec" id="railProveSec">
-        <a class="rail-h" href="#prove" data-i18n="railProveH">Prove</a>
-        <div id="railProve"></div>
-      </div>
-    </nav>
+      <p class="quiet" data-i18n="skillsNote">The bands below describe the journey — nothing on this
+        page is self-rated. ✓ comes only from a full practise run (3 of 3) on the skills engine.</p>
+    </section>
 
-    <!-- ===== main pane ===== -->
-    <main class="main">
+    <!-- the road to the projects -->
+    <section class="mapsec" id="map">
+      <h2 data-i18n="mapH2">The road to the projects</h2>
+      <p class="lead" data-i18n="mapLead">Read it left to right: every word and skill here builds towards the tall columns — the tasks you will actually do. The top row is this unit's word sets. Tap a box to open that set.</p>
+      <div id="projectmap"></div>
+      <p class="maplink"><a href="stem-map.html#unit=lab" data-i18n="mapOpen">Open the big map — the whole unit on one page →</a></p>
+    </section>
 
-      <!-- visible-learning spine -->
-      <section class="spine" aria-label="Visible learning">
-        <div class="spine-cols">
-          <div class="sp"><h3 data-i18n="goingH">Where am I going?</h3><div id="spGoing"></div></div>
-          <div class="sp"><h3 data-i18n="howH">How am I going?</h3><div id="spHow"></div></div>
-          <div class="sp"><h3 data-i18n="nextH">Where to next?</h3><div id="spNext"></div></div>
-        </div>
-        <p class="quiet" data-i18n="skillsNote">The bands below describe the journey — nothing on this
-          page is self-rated. ✓ comes only from a full practise run (3 of 3) on the skills engine.</p>
-      </section>
+    <!-- one section per skill group (painted from STEM2) -->
+    <div id="groups"></div>
 
-      <!-- the road to the projects -->
-      <section class="mapsec">
-        <h2 data-i18n="mapH2">The road to the projects</h2>
-        <p class="lead" data-i18n="mapLead">Every skill and word below builds towards the tall columns — the tasks you will actually do.</p>
-        <div id="projectmap"></div>
-        <p class="maplink"><a href="stem-map.html#unit=lab" data-i18n="mapOpen">Open the big map — the whole unit on one page →</a></p>
-      </section>
+    <!-- do -->
+    <section id="do">
+      <h2 data-i18n="doH2">Do</h2>
+      <p class="lead" data-i18n="doLead">Do these in the order they are listed. 🔒 means school login —
+        open Compass or the class OneNote. Every practical here is done with a teacher in the room.</p>
+      <div id="tasks"></div>
+    </section>
 
-      <!-- one section per skill group (painted from STEM2) -->
-      <div id="groups"></div>
+    <!-- prove: this unit's checkpoints only -->
+    <section id="prove">
+      <h2 data-i18n="proveH2">Prove</h2>
+      <p class="lead" data-i18n="proveLead">Each unit keeps its own checkpoints. This is the whole
+        Lab &amp; Matter arc.</p>
+      <div id="cps"></div>
+    </section>
 
-      <!-- do -->
-      <section id="do">
-        <h2 data-i18n="doH2">Do</h2>
-        <p class="lead" data-i18n="doLead">Do these in the order they are listed. 🔒 means school login —
-          open Compass or the class OneNote. Every practical here is done with a teacher in the room.</p>
-        <div id="tasks"></div>
-      </section>
-
-      <!-- prove: this unit's checkpoints only -->
-      <section id="prove">
-        <h2 data-i18n="proveH2">Prove</h2>
-        <p class="lead" data-i18n="proveLead">Each unit keeps its own checkpoints. This is the whole
-          Lab &amp; Matter arc.</p>
-        <div id="cps"></div>
-      </section>
-
-    </main>
-  </div>
+  </main>
 
   <p class="note" data-i18n="privacy">Anonymous · progress stays in this browser only · worksheets live on Compass and the class OneNote (school login).</p>
   <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
@@ -323,8 +334,8 @@
                    of from here.
      SET_NAMES     a readable name for a word set the Vocab Hub has not
                    published yet. The hub's own title always wins — this
-                   is only what the rail shows until the set lands.
-     WORD_LESSONS  extra WORDS-rail rows that are lessons, not word sets.
+                   is only what the map's WORDS row shows until the
+                   set lands.
      Nothing below the "end CONTENT" line needs editing.
      =================================================================== */
   var UNIT_ID = "lab";
@@ -340,37 +351,37 @@
   };
 
   var DO_TASKS = [
-    { id:"poster", title:"Safety walk and safety poster", short:"Safety walk & poster",
+    { id:"poster", title:"Safety walk and safety poster",
       what:"Walk the laboratory with your class: the exits, the eyewash, the fire blanket, the bin the broken glass goes in. Then make a mini poster for one rule — the hazard symbol, the rule in your own words, and what to do instead.",
       linkLabel:"Open the safety sheet on Compass", school:"poster" },
-    { id:"equipment", title:"Equipment stations", short:"Equipment stations",
+    { id:"equipment", title:"Equipment stations",
       what:"Move around the stations and name every piece: “This is a ___. It is used to ___.” Write the sentence at each station, then close the book and say five of them out loud.",
       linkLabel:"OneNote → the equipment station sheet", school:"equipment" },
-    { id:"bunsen", title:"Bunsen burner — supervised lighting", short:"Bunsen lighting",
+    { id:"bunsen", title:"Bunsen burner — supervised lighting",
       what:"The lighting steps in order, with your teacher beside you and the checklist ticked as you go: heatproof mat, hose checked, air hole closed, match lit first, then the gas. Safety flame before heating flame, every time.",
       linkLabel:"Open the safety checklist on Compass", school:"bunsen" },
-    { id:"heating", title:"Heating water — the results table", short:"Heating water",
+    { id:"heating", title:"Heating water — the results table",
       what:"Heat the water and read the thermometer every 30 seconds for 5 minutes. Every reading goes into the table with its unit (°C), and the time column carries its unit too.",
       linkLabel:"Open the results table on Compass", school:"heating" },
-    { id:"graph", title:"The TAILS graph", short:"TAILS graph",
+    { id:"graph", title:"The TAILS graph",
       what:"Turn your heating table into a line graph, then check it against TAILS: Title, Axes, Intervals, Labels, Scale. Time is the variable you changed, so time goes on the horizontal axis.",
       linkLabel:"OneNote → the graph sheet", school:"graph" },
-    { id:"atoms", title:"Atom model kits", short:"Atom model kits",
+    { id:"atoms", title:"Atom model kits",
       what:"Build the models with the kits: protons and neutrons in the nucleus, electrons around the outside. Count the particles in each model you build, and say the charge of each one.",
       linkLabel:"Check yourself on the atom skill →", href:"stem-skills.html#skill=sc_atom&mode=teach" },
-    { id:"solubility", title:"Solubility test — salt, sugar, sand, oil", short:"Solubility test",
+    { id:"solubility", title:"Solubility test — salt, sugar, sand, oil",
       what:"Four substances, four beakers of water, one stir each. Which dissolve? Which sink? Which one turns the water cloudy instead of dissolving? Record the solute, the solvent and what you saw.",
       linkLabel:"Open the results sheet on Compass", school:"solubility" },
-    { id:"fishtank", title:"The Fish Tank", short:"The Fish Tank",
+    { id:"fishtank", title:"The Fish Tank",
       what:"The rehearsal for the acids and bases practical. Move the number and watch the indicator colour follow, then work out the dose: how many drops, how much lime, how many tablets. Ten steps, each handing more of the work to you.",
       linkLabel:"Open the tank →", href:"stem-sim-ph.html" },
-    { id:"indicator", title:"Indicator test — acids and bases", short:"Indicator test",
+    { id:"indicator", title:"Indicator test — acids and bases",
       what:"Add the indicator to each substance, write down the colour, then read the colour against the chart to place each one on the pH scale: acidic, neutral or basic. Safety glasses on, teacher in the room.",
       linkLabel:"Open the practical sheet on Compass", school:"indicator" }
   ];
 
-  /* Until the Vocab Hub publishes lab1–lab4 these are the names the rail
-     shows. STEM2.setCounts(id).title always wins once the sets exist. */
+  /* Until the Vocab Hub publishes lab1–lab4 these are the names the map's
+     WORDS row shows. STEM2.setCounts(id).title always wins once they exist. */
   var SET_NAMES = {
     lab1: "In the laboratory",
     lab2: "Measuring & graphs",
@@ -378,7 +389,6 @@
     lab4: "Mixtures & pH"
   };
 
-  var WORD_LESSONS = [];
   /* ===== end CONTENT =============================================== */
 
   /* "a" · "a and b" · "a, b and c" — one group here feeds three tasks */
@@ -419,10 +429,10 @@
       sub:"第三学期 · 安全、测量、物质",
       supervise:"这里的一切都只是课前准备，不等于许可。实验必须在实验室里做，而且老师要在旁边看着——绝不能一个人做，也绝不能在家里做。",
       goingH:"我要去哪里？", howH:"我走得怎样？", nextH:"接下来做什么？",
-      railWordsH:"单词", railSkillsH:"技能", railDoH:"任务", railProveH:"证明",
+      navWordsH:"单词", navSkillsH:"技能", navDoH:"任务", navProveH:"证明",
       skillsNote:"下面的等级只是描述路径——这个页面没有自评。✓ 只来自技能引擎上一次完整的练习（3 题全对）。",
       mapH2:"通往项目的路",
-      mapLead:"下面的每一项技能、每一个单词，都通向那几根高高的竖栏——也就是你真正要做的任务。",
+      mapLead:"从左往右看：这里的每一个单词、每一项技能，都通向那几根高高的竖栏——也就是你真正要做的任务。最上面一行是本单元的单词表。点一格就能打开那份单词表。",
       doH2:"任务",
       doLead:"按列出的顺序完成这些任务。🔒 表示需要学校账号——请打开 Compass 或班级 OneNote。这里的每一个实验，都是在老师在场的情况下做的。",
       proveH2:"证明", proveLead:"每个单元只保留自己的检查点。这是《实验室与物质》单元的完整安排。",
@@ -455,10 +465,10 @@
       sub:"第三學期 · 安全、測量、物質",
       supervise:"這裡的一切都只是課前準備，不代表你可以自己動手。實驗一定要在實驗室裡做，而且老師要在旁邊看著——絕對不可以一個人做，也絕對不可以在家裡做。",
       goingH:"我要去哪裡？", howH:"我走得如何？", nextH:"接下來做什麼？",
-      railWordsH:"單字", railSkillsH:"技能", railDoH:"任務", railProveH:"證明",
+      navWordsH:"單字", navSkillsH:"技能", navDoH:"任務", navProveH:"證明",
       skillsNote:"下面的等級只是描述路徑——這個頁面沒有自評。✓ 只來自技能引擎上一次完整的練習（3 題全對）。",
       mapH2:"通往專案的路",
-      mapLead:"下面的每一項技能、每一個單字，都通向那幾根高高的直欄——也就是你真正要做的任務。",
+      mapLead:"從左往右看：這裡的每一個單字、每一項技能，都通向那幾根高高的直欄——也就是你真正要做的任務。最上面一列是本單元的單字表。點一格就能打開那份單字表。",
       doH2:"任務",
       doLead:"依照列出的順序完成這些任務。🔒 表示需要學校帳號——請打開 Compass 或班級 OneNote。這裡的每一個實驗，都是在老師在場的情況下做的。",
       proveH2:"證明", proveLead:"每個單元只保留自己的檢查點。這是「實驗室與物質」單元的完整安排。",
@@ -491,10 +501,10 @@
       sub:"Học kỳ 3 · an toàn, đo lường, vật chất",
       supervise:"Mọi thứ ở đây là phần chuẩn bị, không phải là sự cho phép. Bài thực hành phải làm trong phòng thí nghiệm, có thầy cô đứng bên cạnh — không bao giờ làm một mình, không bao giờ làm ở nhà.",
       goingH:"Mình đang đi tới đâu?", howH:"Mình đang đi thế nào?", nextH:"Bước tiếp theo là gì?",
-      railWordsH:"Từ vựng", railSkillsH:"Kỹ năng", railDoH:"Việc cần làm", railProveH:"Thể hiện",
+      navWordsH:"Từ vựng", navSkillsH:"Kỹ năng", navDoH:"Việc cần làm", navProveH:"Thể hiện",
       skillsNote:"Các mức bên dưới chỉ mô tả chặng đường — trang này không có phần tự chấm điểm. Dấu ✓ chỉ hiện lên sau một lượt luyện tập trọn vẹn (đúng 3/3) trên phần kỹ năng.",
       mapH2:"Con đường tới các dự án",
-      mapLead:"Mọi kỹ năng và từ vựng bên dưới đều dẫn tới những cột cao — chính là các bài em sẽ thực sự làm.",
+      mapLead:"Đọc từ trái sang phải: mọi từ vựng và kỹ năng ở đây đều dẫn tới những cột cao — chính là các bài em sẽ thực sự làm. Hàng trên cùng là các bộ từ vựng của chuyên đề này. Chạm vào một ô để mở bộ từ đó.",
       doH2:"Việc cần làm",
       doLead:"Hãy làm theo đúng thứ tự được liệt kê. 🔒 nghĩa là cần tài khoản nhà trường — hãy mở Compass hoặc OneNote của lớp. Mọi bài thực hành ở đây đều được làm khi có thầy cô trong phòng.",
       proveH2:"Thể hiện", proveLead:"Mỗi chuyên đề giữ các mốc kiểm tra riêng. Đây là toàn bộ lộ trình của chuyên đề Phòng thí nghiệm & Vật chất.",
@@ -557,7 +567,6 @@
   /* a task with an i18n prefix keeps its words in COPY (all four languages);
      the rest read the English written in DO_TASKS */
   function taskTitle(t){ return t.i18n ? T(t.i18n + "Title") : t.title; }
-  function taskShort(t){ return t.i18n ? T(t.i18n + "Title") : (t.short || t.title); }
   function taskWhat(t){ return t.i18n ? T(t.i18n + "What") : t.what; }
   function taskLink(t){ return t.i18n ? T(t.i18n + "Link") : t.linkLabel; }
   /* a skill the practice engine has no generator for yet. Reports a real
@@ -597,62 +606,66 @@
     return best;
   }
 
-  /* ---------------- rail ---------------- */
-  function paintRail(){
-    document.getElementById("railSkillsH").href = "stem-skills.html#unit=" + UNIT_ID;
+  /* ---------------- jump bar ----------------
+     WORDS and SKILLS used to be painted here as two lists down the side of
+     the page. The map above is that summary now — its WORDS row is the word
+     sets, its MATHS and SCIENCE rows the skill groups — so the bar is four
+     anchors and the only thing to paint is whether this unit has words and
+     checkpoints of its own. */
+  function paintJump(){
+    var w = document.getElementById("jumpWords");
+    if (w) w.hidden = !UNIT.vocabSets.length;
+    var p = document.getElementById("jumpProve");
+    if (p) p.hidden = !UNIT.checkpoints.length;
+  }
 
-    var h = "";
-    UNIT.vocabSets.forEach(function(id){
-      var c = STEM2.setCounts(id);
-      /* a set the hub has not published yet counts nothing and says so with
-         a dash — never a fake 0/0 target and never a "coming soon" */
-      var count = c.total
-        ? "<span class='rcount'>" + (c.built ? "<span class='ok'>" + c.built + "</span>" : "0") + "/" + c.total + "</span>"
-        : "<span class='rcount'><span class='dimW'>—</span></span>";
-      h += "<a class='ritem' href='stem-vocab-hub.html#set=" + encodeURIComponent(id) + "'>" +
-        "<span class='rname'>" + esc(c.title || SET_NAMES[id] || id) + "</span>" + count + "</a>";
-    });
-    /* lessons that walk through a set rather than being one */
-    WORD_LESSONS.forEach(function(w){
-      h += "<a class='ritem' href='" + esc(w.href) + "'>" +
-        "<span class='rname'>" + esc(T(w.i18n + "Title")) + "</span></a>";
-    });
-    document.getElementById("railWords").innerHTML = h;
+  /* ---------------- the map's WORDS row is the vocab summary ----------------
+     stem-map.js draws the road; the page fills its WORDS row in, because only
+     the page knows how this unit's word sets should read: one box per set,
+     carrying the set's own title, the words built out of its total, and a
+     link into that set in the Vocab Hub. The map lays its bands out column by
+     column and strand by strand, so the words band of column i sits at
+     i * strands + the words row. If the map ever changes shape those numbers
+     stop matching and the row is left exactly as stem-map.js drew it. */
+  var mapEl = document.getElementById("projectmap");
 
-    h = "";
-    UNIT.skillGroups.forEach(function(g){
-      var done = groupDone(g);
-      h += "<a class='ritem' href='stem-skills.html#unit=" + UNIT_ID + "'>" +
-        "<span class='rname'>" + esc(g.name) + "</span>" +
-        "<span class='rcount'>" + (done ? "<span class='ok'>" + done + "</span>" : "0") +
-        "/" + g.skills.length + " ✓</span></a>";
-    });
-    document.getElementById("railSkills").innerHTML = h;
+  function wordBox(id){
+    var c = STEM2.setCounts(id);
+    var title = c.title || SET_NAMES[id] || id;
+    var pct = c.total ? Math.round(100 * c.built / c.total) : 0;
+    var met = c.total > 0 && c.built === c.total;
+    /* a set the Vocab Hub has not published yet counts nothing and says so
+       with a dash — never a fake 0/0 */
+    var count = c.total ? c.built + "/" + c.total : "—";
+    return "<a class='pm-cell wset" + (met ? " met" : "") +
+      "' href='stem-vocab-hub.html#set=" + encodeURIComponent(id) + "'>" +
+      "<span class='wt'>" + esc(title) + "</span>" +
+      "<span class='wn'>" + esc(count) + "</span>" +
+      "<span class='bar'><i style='width:" + pct + "%'></i></span></a>";
+  }
 
-    h = "";
-    DO_TASKS.forEach(function(t){
-      var locked = taskLocked(t);
-      var href = locked ? "#" : taskHref(t);
-      h += "<a class='ritem" + (locked ? " locked" : "") + "' data-task='" + t.id + "' href='" + href + "'" +
-        (t.ext && !locked ? " target='_blank' rel='noopener'" : "") + ">" +
-        "<span class='rname'>" + (t.school ? "<span class='lock'>🔒</span> " : "") +
-        esc(taskShort(t)) + "</span></a>";
+  function paintWords(){
+    var map = mapEl ? STEM2.MAPS[UNIT_ID] : null;
+    if (!map || !map.strands) return;
+    var strands = map.strands, wi = -1;
+    strands.forEach(function(s, i){ if (s.id === "words") wi = i; });
+    if (wi < 0) return;
+    var cols = [];
+    map.stages.forEach(function(st){ (st.cols || []).forEach(function(c){ cols.push(c); }); });
+    var bands = mapEl.querySelectorAll(".pm > .pm-band");
+    if (bands.length !== cols.length * strands.length) return;
+    cols.forEach(function(col, i){
+      var cell = col ? col.words : null;
+      if (!cell || !cell.sets || !cell.sets.length) return;
+      var band = bands[i * strands.length + wi];
+      if (band) band.innerHTML = cell.sets.map(wordBox).join("");
     });
-    document.getElementById("railDo").innerHTML = h;
+  }
 
-    h = "";
-    var nextSeen = false;
-    UNIT.checkpoints.forEach(function(c){
-      var right;
-      if (cpDone(c)) right = "<span class='ok'>✓</span>";
-      else if (!nextSeen) { nextSeen = true; right = "<span class='soon'>" + esc(T("nowW")) + "</span>"; }
-      else right = "<span class='dimW'>" + esc(T("laterW")) + "</span>";
-      h += "<a class='ritem' href='#cp-" + c.id + "'>" +
-        "<span class='rname'>" + esc(c.short) + "</span>" +
-        "<span class='rcount'>" + right + "</span></a>";
-    });
-    document.getElementById("railProve").innerHTML = h;
-    document.getElementById("railProveSec").style.display = UNIT.checkpoints.length ? "" : "none";
+  /* the map redraws itself when the reader changes the page language, so the
+     WORDS row is filled in again every time the map replaces its contents */
+  if (mapEl && window.MutationObserver) {
+    new MutationObserver(paintWords).observe(mapEl, { childList:true });
   }
 
   /* ---------------- visible-learning spine ---------------- */
@@ -823,7 +836,7 @@
     else p.hidden = true;
   }
 
-  function paintAll(){ paintRail(); paintSpine(); paintGroups(); paintDo(); paintProve(); paintPreview(); }
+  function paintAll(){ paintJump(); paintSpine(); paintGroups(); paintDo(); paintProve(); paintPreview(); paintWords(); }
 
   /* fold-outs */
   document.getElementById("groups").addEventListener("click", function(e){

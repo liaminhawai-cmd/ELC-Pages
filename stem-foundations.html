@@ -12,18 +12,21 @@
        2. the CONTENT block at the top of the page script
           (UNIT_ID · SCHOOL_LINKS · DO_TASKS),
        3. the "sub" and "proveLead" lines in the zh translations.
-     Everything else paints itself from STEM2 using UNIT_ID:
-     rail (WORDS / SKILLS / DO / PROVE), the visible-learning spine,
-     the skill-group sections, and the checkpoint arc.
+     Everything else paints itself from STEM2 using UNIT_ID: the
+     visible-learning spine, the skill-group sections, and the
+     checkpoint arc. The jump bar under the intro is three plain
+     anchors: SKILLS · DO · PROVE.
 
      Foundations is the one unit with no checkpoints and no vocab
      sets in stem-shared.js, so this copy differs from the master in
      two extra places, both marked "Foundations" in the script:
        · PROVE is a standing statement, not a dated arc — the entry
          task at the start of every lesson is the checkpoint;
-       · the WORDS rail hides itself when a unit has no vocab sets.
+       · there is no WORDS chip and no project map, because the unit
+         has neither word sets nor a task of its own to build to.
      Both are written so that adding checkpoints or vocab sets to
-     Foundations later would simply switch the normal view back on.
+     Foundations later would simply switch the normal view back on:
+     the master copy's map section and WORDS chip drop straight in.
      ================================================================ -->
 <style>
   :root {
@@ -40,7 +43,7 @@
   * { box-sizing:border-box; }
   body { margin:0; background:var(--paper); color:var(--ink);
          font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-  .wrap { max-width:960px; margin:0 auto; padding:34px 22px 70px; }
+  .wrap { max-width:1120px; margin:0 auto; padding:34px 22px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
            display:inline-flex; align-items:center; min-height:44px; }
@@ -63,32 +66,25 @@
     font-size:.85rem; display:inline-block; }
   .preview[hidden] { display:none; }
 
-  /* ---- layout: contents rail + main pane ---- */
-  .layout { margin-top:20px; }
-  .rail { display:flex; gap:26px; overflow-x:auto; -webkit-overflow-scrolling:touch;
-    margin:0 -22px 6px; padding:2px 22px 12px; border-bottom:1px solid var(--hair); }
-  .rail-sec { flex:0 0 auto; min-width:172px; }
-  .rail-h { display:flex; align-items:center; min-height:44px; font-size:.68rem; font-weight:700;
-    letter-spacing:.09em; text-transform:uppercase;
-    color:var(--muted); text-decoration:none; padding:6px 0 3px; border-top:1px solid var(--ink); }
-  .rail-h:hover { color:var(--accent); }
-  .ritem { display:flex; justify-content:space-between; align-items:center; gap:10px;
-    min-height:44px; padding:5px 0; text-decoration:none; color:inherit; font-size:.82rem; }
-  .ritem:hover .rname { color:var(--accent); }
-  .rname { min-width:0; }
-  .rname .lock { color:var(--faint); }
-  .rcount { color:var(--muted); font-size:.75rem; white-space:nowrap; }
-  .rcount .ok { color:var(--accent); font-weight:600; }
-  .rcount .soon { color:var(--alert); font-weight:600; }
-  .rcount .dimW { color:var(--faint); }
-  @media (min-width:760px) {
-    .layout { display:grid; grid-template-columns:196px minmax(0,1fr); gap:38px; align-items:start; }
-    .rail { display:block; overflow:visible; margin:0; padding:0; border-bottom:0;
-      position:sticky; top:16px; max-height:calc(100vh - 32px); overflow-y:auto; }
-    .rail-sec { min-width:0; }
-    .rail-sec + .rail-sec .rail-h { margin-top:16px; }
-    .ritem { min-height:44px; padding:4px 0; }
-  }
+  /* ---- jump bar: three anchors, one row tall ----
+     This was a 196px sticky contents column. Its SKILLS list was the skill
+     groups below written out twice, and on the units that have a map it was
+     the map written out vertically as well. What only the rail carried, the
+     way down to DO and PROVE, is here as chips that jump the page. */
+  .jump { display:flex; flex-wrap:wrap; gap:8px; margin:18px 0 0; }
+  .jump a { display:inline-flex; align-items:center; min-height:40px; padding:0 15px;
+    border:1px solid var(--hair); border-radius:8px; background:var(--paper);
+    color:var(--muted); text-decoration:none;
+    font-size:.68rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; }
+  .jump a:hover { color:var(--accent); border-color:var(--accent); }
+  .jump a[hidden] { display:none; }
+  /* a phone should still get one row of chips, so they lose a little padding
+     rather than a whole line of height */
+  @media (max-width:430px) { .jump { gap:6px; } .jump a { padding:0 11px; } }
+  /* no rule under the bar: the first section opens with its own ink rule, and
+     a second hairline just above that would read as an accident */
+  .main { margin-top:30px; }
+  section, #groups { scroll-margin-top:16px; }
 
   /* ---- main sections: a 1px ink rule opens each ---- */
   section { border-top:1px solid var(--ink); margin-top:30px; padding-top:12px; }
@@ -180,7 +176,24 @@
     text-decoration:none; font-weight:600; font-size:.82rem; padding:0 20px 0 0; }
   .always a:hover { text-decoration:underline; }
 
-  .note { margin-top:26px; font-size:.72rem; color:var(--faint); }
+  /* ---- the width the rail used to take ----
+     One column of content now, so the measure is held by the text itself
+     (ch), not by the page: prose stays short while the list rows, the spine
+     and the map use the whole width. */
+  .bands { max-width:74ch; }
+  @media (min-width:900px) {
+    /* a task reads as a list row at this width: what it is on the left, the
+       way in on the right, instead of a link stranded under two short lines */
+    .task { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,auto); column-gap:34px; }
+    .task .t { grid-column:1; grid-row:1; }
+    .task .w { grid-column:1; grid-row:2; }
+    .task > a { grid-column:2; grid-row:1 / span 2; justify-self:end; align-self:center; }
+    .task .msg { grid-column:1; grid-row:3; }
+  }
+
+  /* the only line on the page with no measure of its own: at the old width it
+     ran to one 114-character line, which is too long to scan */
+  .note { margin-top:26px; font-size:.72rem; color:var(--faint); max-width:60ch; }
   footer { margin-top:8px; color:var(--faint); font-size:.75rem; }
 </style>
 </head>
@@ -214,63 +227,47 @@
     new. All of it gets faster with practice, and every other unit runs on it.</p>
   <p class="preview" id="preview" hidden></p>
 
-  <div class="layout">
+  <!-- ===== jump bar: the three places this page goes. Foundations has no
+       word sets and no map of its own, so it has no WORDS chip. ===== -->
+  <nav class="jump" aria-label="On this page">
+    <a href="#groups" data-i18n="navSkillsH">Skills</a>
+    <a href="#do" data-i18n="navDoH">Do</a>
+    <a href="#prove" data-i18n="navProveH">Prove</a>
+  </nav>
 
-    <!-- ===== contents rail (sticky ≥760px; horizontal scroller below) ===== -->
-    <nav class="rail" id="rail" aria-label="Unit contents">
-      <div class="rail-sec" id="railWordsSec">
-        <a class="rail-h" href="stem-vocab-hub.html" data-i18n="railWordsH">Words</a>
-        <div id="railWords"></div>
+  <main class="main">
+
+    <!-- visible-learning spine -->
+    <section class="spine" aria-label="Visible learning">
+      <div class="spine-cols">
+        <div class="sp"><h3 data-i18n="goingH">Where am I going?</h3><div id="spGoing"></div></div>
+        <div class="sp"><h3 data-i18n="howH">How am I going?</h3><div id="spHow"></div></div>
+        <div class="sp"><h3 data-i18n="nextH">Where to next?</h3><div id="spNext"></div></div>
       </div>
-      <div class="rail-sec">
-        <a class="rail-h" id="railSkillsH" href="stem-skills.html" data-i18n="railSkillsH">Skills</a>
-        <div id="railSkills"></div>
-      </div>
-      <div class="rail-sec">
-        <a class="rail-h" href="#do" data-i18n="railDoH">Do</a>
-        <div id="railDo"></div>
-      </div>
-      <div class="rail-sec" id="railProveSec">
-        <a class="rail-h" href="#prove" data-i18n="railProveH">Prove</a>
-        <div id="railProve"></div>
-      </div>
-    </nav>
+      <p class="quiet" data-i18n="skillsNote">The bands below describe the journey — nothing on this
+        page is self-rated. ✓ comes only from a full practise run (3 of 3) on the skills engine.</p>
+    </section>
 
-    <!-- ===== main pane ===== -->
-    <main class="main">
+    <!-- one section per skill group (painted from STEM2) -->
+    <div id="groups"></div>
 
-      <!-- visible-learning spine -->
-      <section class="spine" aria-label="Visible learning">
-        <div class="spine-cols">
-          <div class="sp"><h3 data-i18n="goingH">Where am I going?</h3><div id="spGoing"></div></div>
-          <div class="sp"><h3 data-i18n="howH">How am I going?</h3><div id="spHow"></div></div>
-          <div class="sp"><h3 data-i18n="nextH">Where to next?</h3><div id="spNext"></div></div>
-        </div>
-        <p class="quiet" data-i18n="skillsNote">The bands below describe the journey — nothing on this
-          page is self-rated. ✓ comes only from a full practise run (3 of 3) on the skills engine.</p>
-      </section>
+    <!-- do -->
+    <section id="do">
+      <h2 data-i18n="doH2">Do</h2>
+      <p class="lead" data-i18n="doLead">These are the practice grounds — come back to them all year.
+        🔒 means school login: open Compass or the class OneNote.</p>
+      <div id="tasks"></div>
+    </section>
 
-      <!-- one section per skill group (painted from STEM2) -->
-      <div id="groups"></div>
+    <!-- prove: this unit's checkpoints only -->
+    <section id="prove">
+      <h2 data-i18n="proveH2">Prove</h2>
+      <p class="lead" data-i18n="proveLead">Foundations has no test date — it is open all year. The
+        entry task at the start of every lesson is the checkpoint.</p>
+      <div id="cps"></div>
+    </section>
 
-      <!-- do -->
-      <section id="do">
-        <h2 data-i18n="doH2">Do</h2>
-        <p class="lead" data-i18n="doLead">These are the practice grounds — come back to them all year.
-          🔒 means school login: open Compass or the class OneNote.</p>
-        <div id="tasks"></div>
-      </section>
-
-      <!-- prove: this unit's checkpoints only -->
-      <section id="prove">
-        <h2 data-i18n="proveH2">Prove</h2>
-        <p class="lead" data-i18n="proveLead">Foundations has no test date — it is open all year. The
-          entry task at the start of every lesson is the checkpoint.</p>
-        <div id="cps"></div>
-      </section>
-
-    </main>
-  </div>
+  </main>
 
   <p class="note" data-i18n="privacy">Anonymous · progress stays in this browser only · worksheets live on Compass and the class OneNote (school login).</p>
   <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
@@ -308,14 +305,14 @@
   };
 
   var DO_TASKS = [
-    { id:"tables", title:"Entry task — ×-tables, timed", short:"×-tables, timed",
+    { id:"tables", title:"Entry task — ×-tables, timed",
       what:"The first two minutes of every lesson. Accuracy first, then speed — every table up to 12. Do the same set often enough and you stop counting.",
       linkLabel:"Start the timed practice", ext:true, href:ENTRY_HREF },
-    { id:"convert", title:"Unit conversion practice", short:"Unit conversions",
+    { id:"convert", title:"Unit conversion practice",
       what:"Ten questions at a time on mm, cm, m and km. Write each conversion as a step with its arrow — that is what stops you dividing when you should multiply.",
       linkLabel:"Transum · Units, Level 1", ext:true,
       href:"https://www.transum.org/maths/activity/units/Default.asp?Level=1" },
-    { id:"langbook", title:"Language of maths booklet", short:"Language booklet",
+    { id:"langbook", title:"Language of maths booklet",
       what:"The symbol pages: ≤, ≥, ≠, ≈, ±, √, ² and π. Read the symbol, say the whole sentence out loud, then write it in your own words. Do the pages your teacher sets.",
       linkLabel:"Open the booklet pages on Compass", school:"langbook" }
   ];
@@ -354,7 +351,7 @@
     "zh-Hans": {
       back:"← STEM 主页", mapLink:"地图 →", sub:"全年开放 · 数字流畅度、单位、符号",
       goingH:"我要去哪里？", howH:"我走得怎样？", nextH:"接下来做什么？",
-      railWordsH:"单词", railSkillsH:"技能", railDoH:"任务", railProveH:"证明",
+      navWordsH:"单词", navSkillsH:"技能", navDoH:"任务", navProveH:"证明",
       skillsNote:"下面的等级只是描述路径——这个页面没有自评。✓ 只来自技能引擎上一次完整的练习（3 题全对）。",
       doH2:"任务", doLead:"这些是练习的地方，全年都可以回来做。🔒 表示需要学校账号：请打开 Compass 或班级 OneNote。",
       proveH2:"证明", proveLead:"基础单元没有考试日期，全年开放。每节课开始的入门任务就是检查点。",
@@ -389,7 +386,7 @@
     "zh-Hant": {
       back:"← STEM 主頁", mapLink:"地圖 →", sub:"全年開放 · 數字流暢度、單位、符號",
       goingH:"我要去哪裡？", howH:"我走得如何？", nextH:"接下來做什麼？",
-      railWordsH:"單字", railSkillsH:"技能", railDoH:"任務", railProveH:"證明",
+      navWordsH:"單字", navSkillsH:"技能", navDoH:"任務", navProveH:"證明",
       skillsNote:"下面的等級只是描述路徑——這個頁面沒有自評。✓ 只來自技能引擎上一次完整的練習（3 題全對）。",
       doH2:"任務", doLead:"這些是練習的地方，整年都可以回來做。🔒 表示需要學校帳號：請打開 Compass 或班級 OneNote。",
       proveH2:"證明", proveLead:"基礎單元沒有考試日期，全年開放。每節課開始的入門任務就是檢查點。",
@@ -424,7 +421,7 @@
     vi: {
       back:"← Trang STEM", mapLink:"Bản đồ →", sub:"Mở cả năm · thành thạo tính toán, đơn vị, ký hiệu",
       goingH:"Mình đang đi tới đâu?", howH:"Mình đang đi thế nào?", nextH:"Bước tiếp theo là gì?",
-      railWordsH:"Từ vựng", railSkillsH:"Kỹ năng", railDoH:"Việc cần làm", railProveH:"Thể hiện",
+      navWordsH:"Từ vựng", navSkillsH:"Kỹ năng", navDoH:"Việc cần làm", navProveH:"Thể hiện",
       skillsNote:"Các mức bên dưới chỉ mô tả chặng đường — trang này không có phần tự chấm điểm. Dấu ✓ chỉ hiện lên sau một lượt luyện tập trọn vẹn (đúng 3/3) trên phần kỹ năng.",
       doH2:"Việc cần làm", doLead:"Đây là những chỗ để luyện tập — em có thể quay lại suốt cả năm. 🔒 nghĩa là cần tài khoản nhà trường: hãy mở Compass hoặc OneNote của lớp.",
       proveH2:"Thể hiện", proveLead:"Chuyên đề Nền tảng không có ngày kiểm tra — nó mở suốt cả năm. Bài khởi động đầu mỗi tiết học chính là mốc kiểm tra.",
@@ -520,62 +517,11 @@
     return best;
   }
 
-  /* ---------------- rail ---------------- */
-  function paintRail(){
-    document.getElementById("railSkillsH").href = "stem-skills.html#unit=" + UNIT_ID;
-
-    var h = "";
-    UNIT.vocabSets.forEach(function(id){
-      var c = STEM2.setCounts(id);
-      h += "<a class='ritem' href='stem-vocab-hub.html#set=" + encodeURIComponent(id) + "'>" +
-        "<span class='rname'>" + esc(c.title || id) + "</span>" +
-        "<span class='rcount'>" + (c.built ? "<span class='ok'>" + c.built + "</span>" : "0") +
-        "/" + c.total + "</span></a>";
-    });
-    document.getElementById("railWords").innerHTML = h;
-    /* a unit with no vocab sets (Foundations) simply has no Words rail */
-    document.getElementById("railWordsSec").style.display = UNIT.vocabSets.length ? "" : "none";
-
-    h = "";
-    UNIT.skillGroups.forEach(function(g){
-      var done = groupDone(g);
-      h += "<a class='ritem' href='stem-skills.html#unit=" + UNIT_ID + "'>" +
-        "<span class='rname'>" + esc(g.name) + "</span>" +
-        "<span class='rcount'>" + (done ? "<span class='ok'>" + done + "</span>" : "0") +
-        "/" + g.skills.length + " ✓</span></a>";
-    });
-    document.getElementById("railSkills").innerHTML = h;
-
-    h = "";
-    DO_TASKS.forEach(function(t){
-      var locked = taskLocked(t);
-      var href = locked ? "#" : taskHref(t);
-      h += "<a class='ritem" + (locked ? " locked" : "") + "' data-task='" + t.id + "' href='" + href + "'" +
-        (t.ext && !locked ? " target='_blank' rel='noopener'" : "") + ">" +
-        "<span class='rname'>" + (t.school ? "<span class='lock'>🔒</span> " : "") +
-        esc(t.short || t.title) + "</span></a>";
-    });
-    document.getElementById("railDo").innerHTML = h;
-
-    h = "";
-    var nextSeen = false;
-    UNIT.checkpoints.forEach(function(c){
-      var right;
-      if (cpDone(c)) right = "<span class='ok'>✓</span>";
-      else if (!nextSeen) { nextSeen = true; right = "<span class='soon'>" + esc(T("nowW")) + "</span>"; }
-      else right = "<span class='dimW'>" + esc(T("laterW")) + "</span>";
-      h += "<a class='ritem' href='#cp-" + c.id + "'>" +
-        "<span class='rname'>" + esc(c.short) + "</span>" +
-        "<span class='rcount'>" + right + "</span></a>";
-    });
-    /* Foundations: one standing line where the dated checkpoints would be */
-    if (!UNIT.checkpoints.length) {
-      h = "<a class='ritem' href='#prove'><span class='rname'>" + esc(T("alwaysName")) + "</span>" +
-        "<span class='rcount'>" + esc(T("alwaysWhen")) + "</span></a>";
-    }
-    document.getElementById("railProve").innerHTML = h;
-    document.getElementById("railProveSec").style.display = "";
-  }
+  /* ---------------- jump bar ----------------
+     SKILLS used to be painted here as a list down the side of the page; the
+     skill groups below are that list, so nothing paints the bar any more.
+     Foundations has no word sets, and its PROVE is the standing entry-task
+     statement rather than an arc of checkpoints, so both chips are fixed. */
 
   /* ---------------- visible-learning spine ---------------- */
   function paintSpine(){
@@ -761,7 +707,7 @@
     else p.hidden = true;
   }
 
-  function paintAll(){ paintRail(); paintSpine(); paintGroups(); paintDo(); paintProve(); paintPreview(); }
+  function paintAll(){ paintSpine(); paintGroups(); paintDo(); paintProve(); paintPreview(); }
 
   /* fold-outs */
   document.getElementById("groups").addEventListener("click", function(e){

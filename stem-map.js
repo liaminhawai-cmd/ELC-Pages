@@ -102,7 +102,10 @@
     ".pm-cell .t{color:var(--muted,#767b7f)}" +
     ".pm-cell .n{font-weight:700;white-space:nowrap}" +
     ".pm-cell .n .tick{color:var(--accent,#0d7a70)}" +
-    ".pm-cell .bar{display:block;height:3px;background:var(--hair,#e6e7e3);border-radius:2px;margin-top:5px}" +
+    /* max-width/margin pinned here so a host page's own .bar rule (the spine
+       caps bars at 180px) can never squeeze the map's */
+    ".pm-cell .bar{display:block;height:3px;background:var(--hair,#e6e7e3);border-radius:2px;" +
+      "margin:5px 0 0;max-width:none}" +
     ".pm-cell .bar i{display:block;height:3px;background:var(--accent,#0d7a70);border-radius:2px}" +
     ".pm-cell.met{border-color:var(--accent,#0d7a70);background:var(--accent-soft,#f4f9f8)}" +
     ".pm-cell.soon{border-style:dashed;color:var(--faint,#9aa0a5)}" +
@@ -343,7 +346,8 @@
     });
 
     html += "</div></div>";
-    if (large) html += "<p class='pm-scroll' hidden>" + esc(T("scroll")) + "</p>";
+    /* every size gets the drag hint; fitHint() hides it when the road fits */
+    html += "<p class='pm-scroll' hidden>" + esc(T("scroll")) + "</p>";
     if (opts.legend !== false) html += "<div class='pm-legend'>" + esc(T("legend")) + "</div>";
     el.innerHTML = html;
     fitHint(el);
