@@ -176,7 +176,15 @@
     h += "<p>" + esc(entry.meaning || "") + "</p>";
     if (entry.example) h += "<p class='sv-muted'>“" + esc(entry.example) + "”</p>";
 
-    h += "<div class='sv-tr'>In your language " + langSelect(entry) + "<div class='sv-trword'></div></div>";
+    /* the whole-word translation is BUILT-gated, exactly like tap-to-translate:
+       assembling the word is what unlocks it. The morpheme translations above
+       stay visible — they are the tools for the build, not the reward. */
+    if (st.built) {
+      h += "<div class='sv-tr'>In your language " + langSelect(entry) + "<div class='sv-trword'></div></div>";
+    } else {
+      h += "<div class='sv-tr sv-locked'>In your language " + langSelect(entry) +
+           "<div class='sv-trword sv-muted'>🔒 build the word to unlock its translation</div></div>";
+    }
     if (entry.note) h += "<div class='sv-note'>" + entry.note + "</div>";
     else if (entry.origin) h += "<div class='sv-note'>" + esc(entry.origin) + "</div>";
 
@@ -200,6 +208,7 @@
     var sel = panelBody.querySelector(".sv-langsel");
     var trword = panelBody.querySelector(".sv-trword");
     function paintTr() {
+      if (!st.built) { if (sel) sel.value = homeLang(); return; }
       var lg = homeLang();
       trword.textContent = (lg && entry.tr && entry.tr[lg]) ? entry.tr[lg] : "";
       if (sel) sel.value = lg;
@@ -215,6 +224,9 @@
         if (act === "remember") { Store.markVocab(entry.w, "built"); refreshCount(); openWord(name); }
       });
     });
+    /* an unbuilt word does not wait to be asked: the panel opens with the
+       build already laid out. Backing out is still one tap on ×. */
+    if (!st.built && entry.parts && entry.parts.length > 1) renderBuild(entry);
     openPanel();
   }
 
@@ -246,6 +258,9 @@
             if (placed.length === target.length) {
               Store.markVocab(entry.w, "built"); refreshCount();
               area.querySelector(".sv-feedback").innerHTML = "<span class='sv-done'>✓ " + esc(entry.w) + " is in your notebook!</span>";
+              /* repaint so the ✓, the unlocked translation and the check
+                 arrive now, not on the next visit */
+              setTimeout(function () { openWord(entry.w); }, 1200);
             }
           } else {
             var fb = area.querySelector(".sv-feedback");

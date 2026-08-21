@@ -270,6 +270,10 @@
              re-run over markup that is partly new and partly untouched. */
           if (p.classList && (p.classList.contains("no-tap") || p.classList.contains("tw-bar") ||
               p.classList.contains("tw-pop") || p.classList.contains("tw-hit") ||
+              /* the notebook manages its own words: decorating its build
+                 tiles turned the "ion" TILE into a tap on the word "ion",
+                 which repainted the panel mid-build */
+              p.classList.contains("sv-panel") || p.classList.contains("sv-book") ||
               p.classList.contains("sv-word"))) return NodeFilter.FILTER_REJECT;
           if (p.hasAttribute && p.hasAttribute("data-v")) return NodeFilter.FILTER_REJECT;
           p = p.parentNode;
