@@ -166,7 +166,7 @@
 <script src="stem-vocab-data.js?v=20260821-2"></script>
 <script src="stem-shared.js?v=20260821-2"></script>
 <script src="stem-gloss.js?v=20260821-3"></script>
-<script src="stem-translate.js?v=20260821-3"></script>
+<script src="stem-translate.js?v=20260821-5"></script>
 <script>
 (function(){
   "use strict";
@@ -225,6 +225,7 @@
       emptyWords:"這裡還是空的——拼出單字，它們就會來到這裡。",
       emptyPieces:"還沒有詞素——拼出第一個含有它的單字，它就會出現。",
       emptyGo:"打開單字組 →",
+      startAtF: function(u,n){ return "從 " + u + " · 單字表 " + n + " 開始 →"; },
       noMatchF: function(q){ return "沒有符合「" + q + "」的內容。"; },
       mBuilt:"✓ 已拼成", mUsed:"✓ 已使用", revision:"複習",
       typeL: { prefix:"前綴", root:"字根", suffix:"字尾" },
@@ -244,6 +245,7 @@
       emptyWords:"Ở đây chưa có gì — từ sẽ đến khi em ghép được chúng.",
       emptyPieces:"Chưa có thành phần nào — mỗi thành phần xuất hiện khi em ghép được từ đầu tiên chứa nó.",
       emptyGo:"Mở các nhóm từ →",
+      startAtF: function(u,n){ return "Bắt đầu từ " + u + " · danh sách từ " + n + " →"; },
       noMatchF: function(q){ return "Không có gì khớp với “" + q + "”."; },
       mBuilt:"✓ đã ghép", mUsed:"✓ đã dùng", revision:"ôn tập",
       typeL: { prefix:"tiền tố", root:"gốc từ", suffix:"hậu tố" },
@@ -293,6 +295,38 @@
     var set = SET_BY_ID[sid]; if (!set) return;
     set.words.forEach(function(w){ if (!HOME[key(w.w)]) HOME[key(w.w)] = sid; });
   }); });
+
+  /* the empty state names a place to start: the first set, in unit order,
+     that still has a word not built. When the notebook is empty that is
+     always the very first set overall — the search stays general so it
+     keeps naming the right place if a student has built a few words but
+     none of them count as "owned" yet for some other reason. */
+  function firstUnbuiltSet(){
+    var v = Store.vocab();
+    for (var i = 0; i < UNITS.length; i++) {
+      var u = UNITS[i];
+      for (var j = 0; j < u.vocabSets.length; j++) {
+        var sid = u.vocabSets[j];
+        var set = SET_BY_ID[sid]; if (!set || !set.words.length) continue;
+        var hasUnbuilt = set.words.some(function(w){
+          var st = v[key(w.w)]; return !st || !st.built;
+        });
+        if (hasUnbuilt) {
+          var loc = S2.setLocation(sid);
+          if (loc) return { set: set, loc: loc };
+        }
+      }
+    }
+    return null;
+  }
+  /* the empty-state link: names the first unbuilt set and goes straight to
+     it, or falls back to the plain "open the word sets" link. */
+  function emptyStartHTML(){
+    var first = firstUnbuiltSet();
+    var href = "stem-vocab-hub.html" + (first ? "#set=" + encodeURIComponent(first.set.id) : "");
+    var label = first ? T("startAtF")(first.loc.unitName, first.loc.index) : T("emptyGo");
+    return "<a class='plain' href='" + href + "'>" + esc(label) + "</a>";
+  }
 
   /* ---------------- state ---------------- */
   var tab = "words", query = "";
@@ -420,7 +454,7 @@
   function paintWords(owned, hl){
     if (!owned.length) {
       elWords.innerHTML = "<div class='empty'><p>" + esc(T("emptyWords")) + "</p>" +
-        "<p class='small'><a class='plain' href='stem-vocab-hub.html'>" + esc(T("emptyGo")) + "</a></p></div>";
+        "<p class='small'>" + emptyStartHTML() + "</p></div>";
       return 0;
     }
     var shown = 0, h = "";
@@ -486,7 +520,7 @@
   function paintMorph(pieces, hl){
     if (!pieces.length) {
       elMorph.innerHTML = "<div class='empty'><p>" + esc(T("emptyPieces")) + "</p>" +
-        "<p class='small'><a class='plain' href='stem-vocab-hub.html'>" + esc(T("emptyGo")) + "</a></p></div>";
+        "<p class='small'>" + emptyStartHTML() + "</p></div>";
       return 0;
     }
     var shown = 0, h = "", lastType = null;

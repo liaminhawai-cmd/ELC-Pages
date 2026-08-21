@@ -67,7 +67,9 @@
         { id: "kg_motion", name: "Motion & graphs",
           skills: ["s_vectors", "s_ptgraph", "s_story"] },
         { id: "kg_data",   name: "Data & trendlines",
-          skills: ["s_variables", "s_lobf", "s_corr", "s_excel"] }
+          skills: ["s_variables", "s_lobf", "s_corr", "s_excel"] },
+        { id: "kg_quad",   name: "Curves & quadratics",
+          skills: ["k_parabola", "k_quadeq", "k_project"] }
       ] },
     { id: "gen", name: "Genetics", page: "stem-genetics.html", term: "Term 4",
       open: false,
@@ -189,6 +191,26 @@
               "I can set the equations equal and solve to find where lines meet.",
               "I can solve any pair, fraction answers included, and verify by substitution."],
       vocab: ["point of intersection", "simultaneous", "solution"] },
+
+    /* Kinematics · curves & quadratics — the Keg Toss road */
+    k_parabola: { name: "Read a parabola from its graph", unit: "kin", group: "kg_quad",
+      cont: "Maths · Algebra L9-10", needs: "cp_test",
+      bands: ["I can say whether a parabola opens up or down, and find its y-intercept.",
+              "I can read off the turning point and both x-intercepts.",
+              "I can find the axis of symmetry and use it to find a missing point."],
+      vocab: ["parabola", "turning point", "axis of symmetry", "intercept"] },
+    k_quadeq: { name: "Build the rule y = a(x − h)² + k from the picture", unit: "kin", group: "kg_quad",
+      cont: "Maths · Algebra L10", needs: "cp_test",
+      bands: ["I can write the rule when the turning point is given and a = 1.",
+              "I can find a from one extra point on the curve.",
+              "I can go both ways — rule to picture and picture to rule."],
+      vocab: ["quadratic", "coefficient", "substitute"] },
+    k_project: { name: "Model a thrown object with a parabola", unit: "kin", group: "kg_quad",
+      cont: "Maths · Algebra L10 · Science · Motion", needs: "cp_keg",
+      bands: ["I can say which part of the flight the turning point is.",
+              "I can find the greatest height and where the object lands.",
+              "I can choose the launch that clears a target, and justify it with the rule."],
+      vocab: ["projectile", "trajectory", "maximum", "model"] },
 
     /* Kinematics · motion & graphs */
     s_vectors: { name: "Distance vs displacement · speed vs velocity", unit: "kin", group: "kg_motion",
@@ -351,9 +373,9 @@
             { words: null, maths: { label: "two lines meeting", skills: ["k_simult"] }, science: null }
           ], project: "cp_test" },
         { cols: [
-            { words: { soon: "quadratic words" },
-              maths: { label: "curvy lines", soon: "quadratics — sketching parabolas" },
-              science: { soon: "projectile motion" } }
+            { words: { sets: ["kin4"] },
+              maths: { label: "curvy lines", skills: ["k_parabola", "k_quadeq"] },
+              science: { skills: ["k_project"] } }
           ], project: "cp_keg" }
       ] },
     gen: {

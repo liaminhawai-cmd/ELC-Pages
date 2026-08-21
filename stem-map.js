@@ -82,8 +82,10 @@
     /* ---- shared bones ---- */
     ".pm-wrap{overflow-x:auto;overflow-y:hidden;max-width:100%;padding-bottom:6px}" +
     ".pm{display:grid;gap:6px;align-items:stretch;min-width:560px}" +
+    /* the strand name stays put while the road scrolls under it */
     ".pm .pm-strand{font-size:.68rem;letter-spacing:.06em;color:var(--faint,#9aa0a5);" +
-      "display:flex;align-items:center;padding-right:8px;white-space:nowrap}" +
+      "display:flex;align-items:center;padding-right:8px;white-space:nowrap;" +
+      "position:sticky;left:0;z-index:2;background:var(--paper,#fcfcfa)}" +
     ".pm-band{display:grid;grid-auto-rows:1fr;gap:5px;min-width:0}" +
     ".pm-cell{border:1px solid var(--hair,#e6e7e3);border-radius:8px;padding:7px 9px;min-width:0;" +
       "font-size:.72rem;line-height:1.35;color:var(--ink,#212427);text-decoration:none;display:block;" +
@@ -317,10 +319,19 @@
     });
 
     html += "</div></div>";
-    if (large) html += "<p class='pm-scroll'>" + esc(T("scroll")) + "</p>";
+    if (large) html += "<p class='pm-scroll' hidden>" + esc(T("scroll")) + "</p>";
     if (opts.legend !== false) html += "<div class='pm-legend'>" + esc(T("legend")) + "</div>";
     el.innerHTML = html;
+    fitHint(el);
     remember(el, unitId, opts);
+  }
+
+  /* the "drag it sideways" line only earns its place when there is
+     something off the right edge — a narrow map should not nag */
+  function fitHint(el) {
+    var hint = el.querySelector(".pm-scroll"), wrap = el.querySelector(".pm-wrap");
+    if (!hint || !wrap) return;
+    hint.hidden = wrap.scrollWidth <= wrap.clientWidth + 2;
   }
 
   /* ---------- repaint when the reader changes the page language ----------
@@ -344,6 +355,13 @@
   });
   window.addEventListener("storage", function (e) {
     if (e.key === "elc_page_language") redrawAll();
+  });
+  var fitT = null;
+  window.addEventListener("resize", function () {
+    clearTimeout(fitT);
+    fitT = setTimeout(function () {
+      drawn.forEach(function (d) { if (d.el && d.el.isConnected) fitHint(d.el); });
+    }, 120);
   });
 
   window.STEMMAP = { render: render, redraw: redrawAll };

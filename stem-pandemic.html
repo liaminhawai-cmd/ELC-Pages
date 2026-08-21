@@ -39,6 +39,13 @@
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
   .top a:hover { text-decoration:underline; }
+  .top { flex-wrap:wrap; }
+  .topnav { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
+  .topnav a { display:inline-flex; align-items:center; min-height:44px; }
+  .maplink { margin:11px 0 0; }
+  .maplink a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.86rem;
+    display:inline-flex; align-items:center; min-height:44px; }
+  .maplink a:hover { text-decoration:underline; }
   select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
     background:var(--paper); color:var(--ink); padding:5px 8px; min-height:44px; }
   .serif { font-family:Georgia,"Times New Roman",serif; }
@@ -163,7 +170,10 @@
 <body>
 <div class="wrap">
   <div class="top">
-    <a href="stem.html" data-i18n="back">← STEM</a>
+    <span class="topnav">
+      <a href="stem.html" data-i18n="back">← STEM</a>
+      <a href="stem-map.html#unit=pan" data-i18n="mapLink">The map →</a>
+    </span>
     <span id="tw-slot"></span>
     <select class="language-select" aria-label="Page language">
       <option value="en">English</option>
@@ -232,6 +242,7 @@
         <h2 data-i18n="mapH2">The road to the projects</h2>
         <p class="lead" data-i18n="mapLead">Every skill and word below builds towards the tall columns — the tasks you will actually do.</p>
         <div id="projectmap"></div>
+        <p class="maplink"><a href="stem-map.html#unit=pan" data-i18n="mapOpen">Open the big map — the whole unit on one page →</a></p>
       </section>
 
       <!-- one section per skill group (painted from STEM2) -->
@@ -264,8 +275,8 @@
 <script src="stem-shared.js?v=20260821-2"></script>
 <script src="stem-vocab.js?v=20260821-2"></script>
 <script src="stem-gloss.js?v=20260821-3"></script>
-<script src="stem-translate.js?v=20260821-3"></script>
-<script src="stem-map.js?v=20260821-3"></script>
+<script src="stem-translate.js?v=20260821-5"></script>
+<script src="stem-map.js?v=20260821-4"></script>
 <script>
 (function(){
   "use strict";
@@ -324,7 +335,7 @@
       groupFeedsAlways:"These have no checkpoint of their own — every task in every unit leans on them."
     },
     "zh-Hans": {
-      back:"← STEM 主页", sub:"第四学期 · 读懂新闻里的数学",
+      back:"← STEM 主页", mapLink:"地图 →", mapOpen:"打开大地图——整个单元，一页看完 →", sub:"第四学期 · 读懂新闻里的数学",
       goingH:"我要去哪里？", howH:"我走得怎样？", nextH:"接下来做什么？",
       railWordsH:"单词", railSkillsH:"技能", railDoH:"任务", railProveH:"证明",
       skillsNote:"下面的等级只是描述路径——这个页面没有自评。✓ 只来自技能引擎上一次完整的练习（3 题全对）。",
@@ -356,7 +367,7 @@
       groupFeedsAlways:"这些技能没有自己的检查点——每个单元的每个任务都靠它们。"
     },
     "zh-Hant": {
-      back:"← STEM 主頁", sub:"第四學期 · 讀懂新聞裡的數學",
+      back:"← STEM 主頁", mapLink:"地圖 →", mapOpen:"打開大地圖——整個單元，一頁看完 →", sub:"第四學期 · 讀懂新聞裡的數學",
       goingH:"我要去哪裡？", howH:"我走得如何？", nextH:"接下來做什麼？",
       railWordsH:"單字", railSkillsH:"技能", railDoH:"任務", railProveH:"證明",
       skillsNote:"下面的等級只是描述路徑——這個頁面沒有自評。✓ 只來自技能引擎上一次完整的練習（3 題全對）。",
@@ -388,7 +399,7 @@
       groupFeedsAlways:"這些技能沒有自己的檢查點——每個單元的每個任務都靠它們。"
     },
     vi: {
-      back:"← Trang STEM", sub:"Học kỳ 4 · đọc phần toán ẩn trong tin tức",
+      back:"← Trang STEM", mapLink:"Bản đồ →", mapOpen:"Mở bản đồ lớn — cả chuyên đề trên một trang →", sub:"Học kỳ 4 · đọc phần toán ẩn trong tin tức",
       goingH:"Mình đang đi tới đâu?", howH:"Mình đang đi thế nào?", nextH:"Bước tiếp theo là gì?",
       railWordsH:"Từ vựng", railSkillsH:"Kỹ năng", railDoH:"Việc cần làm", railProveH:"Thể hiện",
       skillsNote:"Các mức bên dưới chỉ mô tả chặng đường — trang này không có phần tự chấm điểm. Dấu ✓ chỉ hiện lên sau một lượt luyện tập trọn vẹn (đúng 3/3) trên phần kỹ năng.",

@@ -49,7 +49,7 @@
   .due { font-size:.8rem; text-align:right; color:var(--muted); }
   .due b { color:var(--alert); }
   /* pocket cards */
-  .pocket { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:30px; }
+  .pocket { display:grid; grid-template-columns:repeat(auto-fit,minmax(226px,1fr)); gap:18px; margin-top:30px; }
   .pcard { border:1px solid var(--hair); border-radius:10px; padding:15px 17px; text-decoration:none; color:inherit; }
   .pcard:hover { border-color:var(--accent); }
   .pcard .h { display:flex; justify-content:space-between; align-items:baseline; }
@@ -101,6 +101,10 @@
       <div class="h"><span data-i18n="rpTitle">My report</span><span data-i18n="open2">Open →</span></div>
       <p data-i18n="rpText">Where you're going, how you're going, what's next — built only from work you've actually done.</p>
     </a>
+    <a class="pcard" href="stem-map.html" data-cat="STEM" data-title="The STEM map">
+      <div class="h"><span data-i18n="mpTitle">The map</span><span data-i18n="open3">Open →</span></div>
+      <p data-i18n="mpText">The whole unit on one page — the strands side by side, and the tall columns everything feeds.</p>
+    </a>
   </div>
 
   <p class="note" data-i18n="privacy">Anonymous · progress stays in this browser only · worksheets live on Compass and the class OneNote (school login).</p>
@@ -110,7 +114,7 @@
 <script src="stem-vocab-data.js?v=20260821-2"></script>
 <script src="stem-shared.js?v=20260821-2"></script>
 <script src="stem-gloss.js?v=20260821-3"></script>
-<script src="stem-translate.js?v=20260821-3"></script>
+<script src="stem-translate.js?v=20260821-5"></script>
 <script>
 (function(){
   "use strict";
@@ -120,6 +124,7 @@
           preview:"open for a look" },
     "zh-Hans": { back:"← ELC 主页", sub:"ELC · 科学与数学一起学",
       entryTag:"今日入门任务", entryText:"乘法表计时——先求准确，再求速度", entryGo:"开始 →",
+      mpTitle:"地图", mpText:"整个单元，一页看完——三条线并排，还有它们共同通向的那几根高柱。", open3:"打开 →",
       nbTitle:"我的笔记本", nbText:"你的单词表和词素词典——你掌握过的每个单词，来自每个单元。",
       rpTitle:"我的报告", rpText:"要去哪里、走得怎样、接下来做什么——只由你真正完成的学习生成。",
       open:"打开 →", open2:"打开 →",
@@ -129,6 +134,7 @@
       preview:"可先浏览" },
     "zh-Hant": { back:"← ELC 主頁", sub:"ELC · 科學與數學一起學",
       entryTag:"今日入門任務", entryText:"乘法表計時——先求準確，再求速度", entryGo:"開始 →",
+      mpTitle:"地圖", mpText:"整個單元，一頁看完——三條線並排，還有它們共同通向的那幾根高柱。", open3:"打開 →",
       nbTitle:"我的筆記本", nbText:"你的單字表和詞素詞典——你精熟過的每個單字，來自每個單元。",
       rpTitle:"我的報告", rpText:"要去哪裡、走得如何、接下來做什麼——只由你真正完成的學習產生。",
       open:"打開 →", open2:"打開 →",
@@ -138,6 +144,7 @@
       preview:"可先瀏覽" },
     "vi": { back:"← Trang ELC", sub:"ELC · Khoa học và Toán học cùng nhau",
       entryTag:"NHIỆM VỤ ĐẦU GIỜ", entryText:"Bảng cửu chương, tính giờ — chính xác trước, rồi mới nhanh", entryGo:"Bắt đầu →",
+      mpTitle:"Bản đồ", mpText:"Cả chuyên đề trên một trang — ba mạch đặt cạnh nhau, và những cột cao mà tất cả đều dẫn tới.", open3:"Mở →",
       nbTitle:"Sổ tay của tôi", nbText:"Danh sách từ và từ điển hình vị của bạn — mọi từ bạn đã thành thạo, từ mọi bài học.",
       rpTitle:"Báo cáo của tôi", rpText:"Bạn đang đi đâu, đi thế nào, tiếp theo làm gì — chỉ dựa trên việc bạn thực sự đã làm.",
       open:"Mở →", open2:"Mở →",
