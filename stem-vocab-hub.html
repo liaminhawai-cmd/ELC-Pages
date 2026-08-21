@@ -81,6 +81,7 @@
   .sethead { border-top:1px solid var(--ink); padding-top:12px; }
   .sethead h2 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:1.5rem; font-weight:500; }
   .sethead p { margin:3px 0 0; font-size:.84rem; color:var(--muted); max-width:60ch; }
+  .sethead p.forproj { margin:7px 0 0; font-size:.76rem; color:var(--faint); }
   .steps { display:flex; gap:22px; margin:16px 0 4px; border-bottom:1px solid var(--hair);
     overflow-x:auto; -webkit-overflow-scrolling:touch; }
   .steps a { flex:0 0 auto; text-decoration:none; color:var(--muted); font-size:.85rem;
@@ -241,6 +242,7 @@
     <div class="sethead">
       <h2 id="setName"></h2>
       <p id="setFocus"></p>
+      <p class="forproj" id="setFor" hidden></p>
     </div>
     <nav class="steps" id="steps" aria-label="Steps"></nav>
     <div id="paneWords"></div>
@@ -267,7 +269,13 @@
   /* ---------------- i18n (chrome only; the words stay English) ---------------- */
   var COPY = {
     en: {
+      backAll:"← all word sets",
       revision:"revision",
+      /* the one quiet line under a set title: the task these words are for */
+      wordsForF: function(name,when){ return "These words are the language of the "+name+" — "+when; },
+      wordsDoneF: function(name){ return "These words were the language of the "+name+" — later tasks still use them."; },
+      wordsNextF: function(name,when){ return "You need these words for this unit's tasks — the next one is the "+name+", "+when+"."; },
+      wordsAlways:"These words come up in every task in this unit.",
       countsF: function(b,t,c){ return (b>0 ? "<span class='ok'>"+b+"</span>" : b) + " of "+t+" built · "+c+" used"; },
       stepW:"Words", stepB:"Build", stepU:"Use",
       leadWords:"Every word in this set. The coloured pieces show where the word comes from.",
@@ -304,6 +312,10 @@
       privacy:"匿名 · 你的单词只保存在这个浏览器 · 不会发送到任何地方。",
       backAll:"← 所有单词组",
       revision:"复习",
+      wordsForF: function(name,when){ return "这些词就是"+name+"要用的语言 · "+when; },
+      wordsDoneF: function(name){ return "这些词是"+name+"用过的语言——后面的任务还会用到。"; },
+      wordsNextF: function(name,when){ return "本单元的任务都要用到这些词——下一个任务是"+name+" · "+when+"。"; },
+      wordsAlways:"这些词在本单元的每个任务里都会用到。",
       countsF: function(b,t,c){ return "已拼成 " + (b>0 ? "<span class='ok'>"+b+"</span>" : b) + " / "+t+" · 已使用 "+c; },
       stepW:"认识", stepB:"拼词", stepU:"使用",
       leadWords:"这一组的全部单词。彩色词素显示单词的来源。",
@@ -340,6 +352,10 @@
       privacy:"匿名 · 你的單字只儲存在這個瀏覽器 · 不會傳送到任何地方。",
       backAll:"← 所有單字組",
       revision:"複習",
+      wordsForF: function(name,when){ return "這些字就是"+name+"要用的語言 · "+when; },
+      wordsDoneF: function(name){ return "這些字是"+name+"用過的語言——後面的任務還會用到。"; },
+      wordsNextF: function(name,when){ return "本單元的任務都會用到這些字——下一個任務是"+name+" · "+when+"。"; },
+      wordsAlways:"這些字在本單元的每個任務裡都會用到。",
       countsF: function(b,t,c){ return "已拼成 " + (b>0 ? "<span class='ok'>"+b+"</span>" : b) + " / "+t+" · 已使用 "+c; },
       stepW:"認識", stepB:"拼字", stepU:"使用",
       leadWords:"這一組的全部單字。彩色詞素顯示單字的來源。",
@@ -368,6 +384,46 @@
       failMsg:"不到 70%，所以沒有記錄。再讀一次單字，然後回來——題目會換新的。",
       lookAgain:"再看看這些字：", tryAgain:"再試一次 →",
       emptySet:"這一組還沒有單字。"
+    },
+    vi: {
+      back:"← Trang STEM", title:"Từ vựng", sub:"ELC STEM · làm quen với từ, ghép từ, dùng từ",
+      homeLead:"Chọn một chuyên đề, rồi chọn một nhóm từ. Nhóm nào cũng đi qua ba bước như nhau: làm quen với từ, ghép từ lại từ các thành phần, rồi dùng chúng trong những câu hỏi thật.",
+      nbLink:"📓 Sổ tay của em — mọi từ em đã nắm được →",
+      privacy:"Ẩn danh · từ vựng của em chỉ lưu trong trình duyệt này · không gửi đi đâu cả.",
+      backAll:"← tất cả các nhóm từ",
+      revision:"ôn tập",
+      wordsForF: function(name,when){ return "Đây là những từ em sẽ cần cho bài "+name+" — "+when; },
+      wordsDoneF: function(name){ return "Đây là những từ bài "+name+" đã dùng — các bài sau vẫn cần đến."; },
+      wordsNextF: function(name,when){ return "Các bài của chuyên đề này đều cần những từ này — bài kế tiếp là "+name+", "+when+"."; },
+      wordsAlways:"Những từ này xuất hiện trong mọi bài của chuyên đề.",
+      countsF: function(b,t,c){ return "đã ghép " + (b>0 ? "<span class='ok'>"+b+"</span>" : b) + "/"+t+" · đã dùng "+c; },
+      stepW:"Làm quen", stepB:"Ghép từ", stepU:"Dùng từ",
+      leadWords:"Tất cả các từ trong nhóm này. Những thành phần có màu cho biết từ này bắt nguồn từ đâu.",
+      leadBuild:"Chọn một từ, rồi bấm các thành phần của nó theo đúng thứ tự. Danh sách sẽ vơi dần.",
+      leadUse:"Mỗi từ một câu hỏi. Em chỉ có một lượt trả lời — chính xác trước đã.",
+      homeLangL:"Tiếng mẹ đẻ", homeLangNone:"— không hiện —",
+      trOn:"Hiện bản dịch", trOff:"Ẩn bản dịch",
+      mBuilt:"✓ đã ghép", mUsed:"✓ đã dùng", mNone:"chưa bắt đầu",
+      downToGoF: function(n,m){ return "đã xong " + (n>0 ? "<b>"+n+"</b>" : n) + ", còn "+m+" từ nữa"; },
+      bankH:"Các thành phần", listH:"Các từ",
+      chooseWord:"Chọn một từ trong danh sách, rồi bấm các thành phần theo đúng thứ tự.",
+      tapWordFirst:"Em hãy chọn một từ trong danh sách trước đã.",
+      notPiece:"Không phải thành phần này — đọc lại nghĩa một lần nữa nhé.",
+      builtF: function(w){ return "✓ " + w + " — ghép xong."; },
+      nextWordL:"từ tiếp theo →", clearL:"← chọn từ khác",
+      piecesF: function(n){ return n + " thành phần"; },
+      rememberIt:"ghi nhớ từ này ✓", remembered:"✓ đã nhớ", doneMark:"✓ đã ghép",
+      allBuilt:"Em đã ghép xong mọi từ trong nhóm này.",
+      goBuild:"2 Ghép từ →", goUse:"3 Dùng từ →", goWords:"1 Làm quen →",
+      qOfF: function(i,n){ return "Câu " + i + " / " + n; },
+      rightW:"✓ Đúng rồi.", wrongW:"Lần này chưa đúng.",
+      answerWasF: function(a){ return "Đáp án là " + a + "."; },
+      nextQ:"Câu tiếp theo →", finishQ:"Xem kết quả →",
+      scoreF: function(ok,n,p){ return "Đúng " + ok + "/" + n + " (" + p + "%)"; },
+      passMsg:"Ngay lượt đầu đã đạt từ 70% trở lên — mọi từ trong nhóm này được ghi là “đã dùng”.",
+      failMsg:"Chưa được 70% nên chưa ghi lại gì cả. Em đọc lại các từ rồi quay lại nhé — câu hỏi sẽ đổi.",
+      lookAgain:"Xem lại những từ này:", tryAgain:"làm lại →",
+      emptySet:"Nhóm này chưa có từ nào."
     }
   };
   var sel = document.querySelector(".language-select");
@@ -405,6 +461,7 @@
     home: document.getElementById("home"), setview: document.getElementById("setview"),
     units: document.getElementById("units"), sets: document.getElementById("sets"),
     setName: document.getElementById("setName"), setFocus: document.getElementById("setFocus"),
+    setFor: document.getElementById("setFor"),
     crumbUnit: document.getElementById("crumbUnit"), steps: document.getElementById("steps"),
     pw: document.getElementById("paneWords"), pb: document.getElementById("paneBuild"),
     pu: document.getElementById("paneUse")
@@ -488,6 +545,7 @@
     el.home.hidden = true; el.setview.hidden = false;
     el.setName.textContent = setTitle(set) + (isRev(set) ? " · " + T("revision") : "");
     el.setFocus.textContent = set.focus;
+    paintSetFor(id);
     el.crumbUnit.textContent = UNIT_OF_SET[id] ? UNIT_OF_SET[id].name : "";
     paintSteps();
     el.pw.hidden = cur.step !== "words";
@@ -498,6 +556,37 @@
     else renderUse();
     if (!hlWord) window.scrollTo(0, 0);
   }
+  /* ---------- one quiet line: the task these words are needed for ----------
+     The unit map (STEM2.MAPS) says which project a set of words feeds; if the
+     set is not on the map yet, fall back to the unit's next checkpoint. */
+  function projectOfSet(setId){
+    var u = UNIT_OF_SET[setId];
+    if (!u) return null;
+    var map = S2.MAPS ? S2.MAPS[u.id] : null, cpId = null;
+    if (map) map.stages.forEach(function(st){
+      if (cpId) return;
+      (st.cols || []).forEach(function(col){
+        var cell = col ? col.words : null;
+        if (cell && cell.sets && cell.sets.indexOf(setId) >= 0) cpId = st.project;
+      });
+    });
+    var cp = null;
+    if (cpId) u.checkpoints.forEach(function(c){ if (c.id === cpId) cp = c; });
+    /* mapped: the map names this task · next: only the unit's next checkpoint */
+    if (cp) return { cp: cp, mapped: true };
+    cp = S2.nextCheckpoint(u);
+    return cp ? { cp: cp, mapped: false } : null;
+  }
+  function paintSetFor(setId){
+    var p = projectOfSet(setId), txt;
+    if (!p) txt = T("wordsAlways");
+    else if (p.cp.status === "done" || S2.daysUntil(p.cp.date) < 0) txt = T("wordsDoneF")(p.cp.short);
+    else if (p.mapped) txt = T("wordsForF")(p.cp.short, S2.fmtDate(p.cp.date));
+    else txt = T("wordsNextF")(p.cp.short, S2.fmtDate(p.cp.date));
+    el.setFor.textContent = txt || "";
+    el.setFor.hidden = !txt;
+  }
+
   function stepHref(step){ return "#set=" + encodeURIComponent(cur.set.id) + "&amp;step=" + step; }
   function paintSteps(){
     var steps = [["words", T("stepW")], ["build", T("stepB")], ["use", T("stepU")]];

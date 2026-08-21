@@ -69,17 +69,43 @@
 
   var bar, pop, active = [], enabled = false;
 
+  /* the few strings this component shows, in the page languages */
+  var UI = {
+    en:        { btn: "tap to translate", my: "My language", pick: "choose…", hint: "tap up to two words",
+                 first: "Choose your language in the bar below first.",
+                 learn: "This is one of your words to learn — <b>build it</b> and its translation is yours.",
+                 build: "Build it now →", none: "No translation stored for this word yet." },
+    "zh-Hans": { btn: "点词翻译", my: "我的语言", pick: "选择…", hint: "最多点两个词",
+                 first: "请先在下面选择你的语言。",
+                 learn: "这是你要学的单词——<b>拼出它</b>，翻译就归你了。",
+                 build: "现在去拼 →", none: "这个词还没有翻译。" },
+    "zh-Hant": { btn: "點字翻譯", my: "我的語言", pick: "選擇…", hint: "最多點兩個字",
+                 first: "請先在下面選擇你的語言。",
+                 learn: "這是你要學的單字——<b>拼出它</b>，翻譯就是你的了。",
+                 build: "現在去拼 →", none: "這個字還沒有翻譯。" },
+    vi:        { btn: "chạm để dịch", my: "Tiếng của tôi", pick: "chọn…", hint: "chạm tối đa hai từ",
+                 first: "Hãy chọn tiếng của bạn ở thanh bên dưới trước.",
+                 learn: "Đây là một từ bạn cần học — <b>hãy ghép nó</b> thì bản dịch là của bạn.",
+                 build: "Ghép ngay →", none: "Từ này chưa có bản dịch." }
+  };
+  function pageLang() {
+    var l = "en";
+    try { l = localStorage.getItem("elc_page_language") || "en"; } catch (e) {}
+    return UI[l] ? l : "en";
+  }
+  function U(k) { return UI[pageLang()][k] || UI.en[k]; }
+
   function ensureChrome() {
     var s = document.createElement("style"); s.textContent = CSS; document.head.appendChild(s);
 
     bar = document.createElement("div");
     bar.className = "tw-bar";
-    var opts = "<option value=''>choose…</option>";
+    var opts = "<option value=''>" + esc(U("pick")) + "</option>";
     ((DATA && DATA.langs) || []).forEach(function (l) {
       opts += "<option value='" + esc(l.id) + "'>" + esc(l.name) + "</option>";
     });
-    bar.innerHTML = "<span>My language</span><select aria-label='My first language'>" + opts + "</select>" +
-      "<span class='tw-hint' style='color:var(--muted,#767b7f)'>tap up to two words</span>" +
+    bar.innerHTML = "<span>" + esc(U("my")) + "</span><select aria-label='My first language'>" + opts + "</select>" +
+      "<span class='tw-hint' style='color:var(--muted,#767b7f)'>" + esc(U("hint")) + "</span>" +
       "<button class='tw-x' aria-label='Close'>×</button>";
     document.body.appendChild(bar);
     var sel = bar.querySelector("select");
@@ -122,7 +148,7 @@
 
   function onTap(el, word) {
     if (!homeLang()) {
-      showPop(el, "<div class='n'>Choose your language in the bar below first.</div>");
+      showPop(el, "<div class='n'>" + esc(U("first")) + "</div>");
       return;
     }
     if (active.indexOf(el) === -1) {
@@ -139,14 +165,14 @@
           "<div class='n'>" + esc((t.w.meaning || "").slice(0, 90)) + "</div>");
       } else {
         showPop(el, "<div class='w'>" + esc(t.w.w) + "</div>" +
-          "<div class='n'>This is one of your words to learn — <b>build it</b> and its translation is yours.</div>" +
-          "<div style='margin-top:6px'><a href='stem-vocab-hub.html#word=" + encodeURIComponent(t.w.w) + "'>Build it now →</a></div>");
+          "<div class='n'>" + U("learn") + "</div>" +
+          "<div style='margin-top:6px'><a href='stem-vocab-hub.html#word=" + encodeURIComponent(t.w.w) + "'>" + esc(U("build")) + "</a></div>");
       }
       return;
     }
     var g = glossFor(word);
     if (g) showPop(el, "<div class='w'>" + esc(word) + "</div><div class='g'>" + esc(g) + "</div>");
-    else showPop(el, "<div class='w'>" + esc(word) + "</div><div class='n'>No translation stored for this word yet.</div>");
+    else showPop(el, "<div class='w'>" + esc(word) + "</div><div class='n'>" + esc(U("none")) + "</div>");
   }
 
   /* wrap eligible words in tappable spans (skips inputs, links, code, marked-up vocab) */
@@ -212,7 +238,7 @@
     var btn = document.createElement("button");
     btn.className = "tw-toggle";
     btn.type = "button";
-    btn.textContent = "文 tap to translate";
+    btn.textContent = "文 " + U("btn");
     btn.title = "Tap a word to see it in your language";
     btn.addEventListener("click", function () { setEnabled(!enabled); });
     (slot || document.body).appendChild(btn);

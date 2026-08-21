@@ -237,6 +237,10 @@
       revSameF: function(a,b){ return "Same pace as the run before · accuracy " + a + "% → " + b + "%"; },
       nextLead:"The skills your next checkpoint needs:",
       neededByF: function(name,when){ return "needed by " + name + " · " + when; },
+      /* project framing — every suggested action names the task it feeds */
+      buildsFor: function(name,when){ return "builds your " + name + " toolkit · " + when; },
+      builtFor: function(name){ return "the " + name + " used this — keep it sharp"; },
+      buildsAll:"keeps your number work sharp for every task",
       actExample:"example →", actContinue:"continue →",
       allMastered:"Everything in this unit is mastered — revise the whole unit →",
       proofMasteredF: function(n){ return "✓ " + n + "/" + n; },
@@ -284,6 +288,9 @@
       revSameF: function(a,b){ return "和上一次速度相同 · 正确率 " + a + "% → " + b + "%"; },
       nextLead:"下一个检查点需要的技能：",
       neededByF: function(name,when){ return name + " 会用到 · " + when; },
+      buildsFor: function(name,when){ return "为“" + name + "”做准备 · " + when; },
+      builtFor: function(name){ return "“" + name + "”用过这一项——保持手感"; },
+      buildsAll:"让计算又快又稳，每个任务都用得上",
       actExample:"看例题 →", actContinue:"继续 →",
       allMastered:"本单元全部掌握——复习整个单元 →",
       proofMasteredF: function(n){ return "✓ " + n + "/" + n; },
@@ -331,6 +338,9 @@
       revSameF: function(a,b){ return "和上一次速度相同 · 正確率 " + a + "% → " + b + "%"; },
       nextLead:"下一個檢查點需要的技能：",
       neededByF: function(name,when){ return name + " 會用到 · " + when; },
+      buildsFor: function(name,when){ return "為「" + name + "」做準備 · " + when; },
+      builtFor: function(name){ return "「" + name + "」用過這一項——保持手感"; },
+      buildsAll:"讓計算又快又穩，每項任務都用得上",
       actExample:"看例題 →", actContinue:"繼續 →",
       allMastered:"本單元全部精熟——複習整個單元 →",
       proofMasteredF: function(n){ return "✓ " + n + "/" + n; },
@@ -345,6 +355,56 @@
       confirmClear:"清除這個瀏覽器裡的全部 STEM 紀錄——精熟、單字和證據？此操作無法復原。",
       clearedMsg:"已清除。這個瀏覽器裡現在沒有 STEM 紀錄。",
       noUnit:"現在沒有開放的單元。"
+    },
+    "vi": {
+      back:"← Trang STEM", title:"Báo cáo của tôi",
+      lead:"Báo cáo này được tạo từ những gì bạn thực sự đã làm — các lượt luyện tập, các bài tập và những từ bạn đã ghép được. Trang này không có phần tự đánh giá, và cũng không thể tự đánh dấu.",
+      printBtn:"In báo cáo này", clearBtn:"Xóa hồ sơ STEM của tôi",
+      goingH:"Tôi đang đi đâu?", howH:"Tôi đang đi thế nào?", nextH:"Tiếp theo làm gì?",
+      wordsH2:"Từ vựng", wordsLead:"Một từ được tính là “đã ghép” khi bạn ghép đúng các phần của nó trong bộ từ, và “đã dùng” khi bạn trả lời đúng câu hỏi của nó ngay lần đầu.",
+      foundH2:"Nền tảng", foundLead:"“Nền tảng” mở suốt năm và không có mốc kiểm tra — đó là phần cơ bản nằm dưới mọi thứ khác.",
+      honest:"Ẩn danh · báo cáo này được tạo ngay trong trình duyệt này từ bài luyện của chính bạn, nên mở bằng máy khác hay trình duyệt khác sẽ thấy trống · đây không phải học bạ chính thức của trường và không có gì được gửi đi đâu cả.",
+      days: function(n){ return n===0 ? "hôm nay" : "còn "+n+" ngày"; },
+      subF: function(u,t){ return t ? u + " · " + t : u; },
+      termL: { "Term 3":"Học kỳ 3", "Term 4":"Học kỳ 4" },
+      ownCps:"Mỗi bài học giữ mốc kiểm tra riêng. Báo cáo này chỉ hiện bài học hiện tại.",
+      noCp:"Bài học này không còn mốc kiểm tra nào.",
+      restH:"sau đó",
+      skillsMasteredF: function(a,b){ return "Đã thành thạo "+a+" / "+b+" kỹ năng"; },
+      wordsBuiltF: function(a,b){ return "Đã ghép được "+a+" / "+b+" từ"; },
+      wordsUsedF: function(a){ return "Đã dùng "+a+" từ trong câu hỏi"; },
+      proofH:"Bằng chứng gần nhất",
+      noProof:"Chưa có ghi nhận nào — làm một lượt luyện tập hoặc ghép một từ là danh sách này bắt đầu.",
+      proofRunF: function(name,ok,of){ return name + " · " + ok + " / " + of; },
+      proofRevF: function(name,ok,of){ return "Ôn tập · " + name + " · " + ok + " / " + of; },
+      proofWordF: function(w){ return "Đã ghép được từ “" + w + "”"; },
+      proofUsedF: function(w){ return "Đã dùng “" + w + "” trong một câu hỏi"; },
+      paceH:"Tốc độ ôn tập",
+      noRev:"Chưa có lượt ôn tập nào.",
+      revGo:"ôn tập bài học này →",
+      revLastF: function(pct,n,s){ return "Đúng " + pct + "% trong " + n + " câu · ⏱ " + s + " giây mỗi câu"; },
+      revFasterF: function(s,a,b){ return "Nhanh hơn lượt trước " + s + " giây mỗi câu · độ chính xác " + a + "% → " + b + "%"; },
+      revSlowerF: function(s,a,b){ return "Chậm hơn lượt trước " + s + " giây mỗi câu · độ chính xác " + a + "% → " + b + "%"; },
+      revSameF: function(a,b){ return "Tốc độ như lượt trước · độ chính xác " + a + "% → " + b + "%"; },
+      nextLead:"Những kỹ năng mà mốc kiểm tra sắp tới cần đến:",
+      neededByF: function(name,when){ return "bài " + name + " cần đến · " + when; },
+      buildsFor: function(name,when){ return "chuẩn bị cho bài " + name + " · " + when; },
+      builtFor: function(name){ return "bài " + name + " đã dùng đến — giữ cho quen tay"; },
+      buildsAll:"giữ cho việc tính toán luôn nhanh và chắc, dùng cho mọi bài",
+      actExample:"xem ví dụ →", actContinue:"làm tiếp →",
+      allMastered:"Bài học này bạn đã thành thạo hết — ôn lại cả bài →",
+      proofMasteredF: function(n){ return "✓ " + n + "/" + n; },
+      proofLastF: function(ok,of){ return "lượt trước " + ok + " / " + of; },
+      proofRevisingF: function(ok,of){ return "ôn tập " + ok + " / " + of; },
+      proofNone:"—",
+      masteredCountF: function(a,b){ return a+"/"+b+" ✓"; },
+      cpDone:"đã xong",
+      ledgerLead:"Dấu ✓ chỉ đến từ một lượt luyện tập trọn vẹn — ba câu, đúng cả ba. Ở đây không có gì là tự đánh giá.",
+      wordsCountF: function(b,t,c){ return "Đã ghép "+b+" / "+t+" · đã dùng "+c; },
+      setCountF: function(b,t,c){ return "Đã ghép <b>"+b+"</b> / "+t+" · đã dùng "+c; },
+      confirmClear:"Xóa toàn bộ hồ sơ STEM trong trình duyệt này — phần thành thạo, từ vựng và bằng chứng? Thao tác này không thể hoàn tác.",
+      clearedMsg:"Đã xóa. Trình duyệt này hiện không còn hồ sơ STEM nào.",
+      noUnit:"Hiện không có bài học nào đang mở."
     }
   };
   var sel = document.querySelector(".language-select");
@@ -573,6 +633,15 @@
     list.sort(function(a, b){ return a.key - b.key; });
     return list.slice(0, n);
   }
+  /* one quiet line under each action: the project that practice is for */
+  function framingFor(id){
+    var sk = S2.SKILLS[id]; if (!sk) return "";
+    if (!sk.needs) return T("buildsAll");
+    var c = CP[sk.needs]; if (!c) return "";
+    var d = dU(c.date);
+    if (c.status === "done" || d < 0) return T("builtFor")(c.short);
+    return T("buildsFor")(c.short, T("days")(d));
+  }
   function paintNext(){
     var acts = nextActions(3), h = "";
     if (!acts.length) {
@@ -588,10 +657,8 @@
       var label = st.status === "started" ? T("actContinue") : T("actExample");
       h += "<a class='act' href='" + skillHref(a.id, mode) + "'>" +
         esc(a.sk.name) + " · " + esc(label) + "</a>";
-      if (a.sk.needs && CP[a.sk.needs] && CP[a.sk.needs].status !== "done") {
-        var c = CP[a.sk.needs], d = dU(c.date);
-        if (d >= 0) h += "<div class='dim'>" + esc(T("neededByF")(c.short, T("days")(d))) + "</div>";
-      }
+      var frame = framingFor(a.id);
+      if (frame) h += "<div class='dim'>" + esc(frame) + "</div>";
     });
     document.getElementById("spNext").innerHTML = h;
   }

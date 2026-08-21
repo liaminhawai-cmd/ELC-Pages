@@ -115,6 +115,8 @@
   .skact { font-size:.82rem; color:var(--accent); font-weight:600; text-decoration:none; white-space:nowrap;
     padding:8px 0; }
   .skact:hover { text-decoration:underline; }
+  /* the project this skill feeds — one quiet line under the action link */
+  .builds { flex:1 1 100%; font-size:.75rem; color:var(--faint); max-width:60ch; }
   .fold { border:0; background:none; color:var(--muted); font:inherit; font-size:.85rem; cursor:pointer;
     min-width:44px; min-height:44px; margin:-5px -10px -5px -6px; padding:0; }
   .fold:hover { color:var(--accent); }
@@ -312,7 +314,12 @@
       doneW:"done", noCp:"No checkpoints left this term.",
       opensWord:"unit opens", lookAround:"You can look around now.",
       opensNote: function(d){ return "Opens "+d+" — you can look around now."; },
-      startWords:"start with the words →"
+      startWords:"start with the words →",
+      buildsF: function(name,when){ return "This builds your "+name+" toolkit — "+when; },
+      buildsDoneF: function(name){ return "This built your "+name+" toolkit — later tasks still use it."; },
+      buildsAlways:"This keeps your number work sharp for every task.",
+      groupFeedsF: function(names){ return "This group is the toolkit for the "+names.join(" and ")+"."; },
+      groupFeedsAlways:"These have no checkpoint of their own — every task in every unit leans on them."
     },
     "zh-Hans": {
       back:"← STEM 主页", sub:"第四学期 · 读懂新闻里的数学",
@@ -337,7 +344,12 @@
       doneW:"已完成", noCp:"本学期检查点已全部完成。",
       opensWord:"单元开放", lookAround:"现在可以先浏览。",
       opensNote: function(d){ return d+" 开放——现在可以先浏览。"; },
-      startWords:"先从单词开始 →"
+      startWords:"先从单词开始 →",
+      buildsF: function(name,when){ return "这是在为 "+name+" 做准备 · "+when; },
+      buildsDoneF: function(name){ return "这曾为 "+name+" 做准备——后面的任务还会用到。"; },
+      buildsAlways:"这让你的数字运算保持熟练，每个任务都用得上。",
+      groupFeedsF: function(names){ return "这一组是 "+names.join(" 和 ")+" 的准备。"; },
+      groupFeedsAlways:"这些技能没有自己的检查点——每个单元的每个任务都靠它们。"
     },
     "zh-Hant": {
       back:"← STEM 主頁", sub:"第四學期 · 讀懂新聞裡的數學",
@@ -362,7 +374,44 @@
       doneW:"已完成", noCp:"本學期檢查點已全部完成。",
       opensWord:"單元開放", lookAround:"現在可以先瀏覽。",
       opensNote: function(d){ return d+" 開放——現在可以先瀏覽。"; },
-      startWords:"先從單字開始 →"
+      startWords:"先從單字開始 →",
+      buildsF: function(name,when){ return "這是在為 "+name+" 做準備 · "+when; },
+      buildsDoneF: function(name){ return "這曾為 "+name+" 做準備——後面的任務還會用到。"; },
+      buildsAlways:"這讓你的數字運算保持熟練，每個任務都用得上。",
+      groupFeedsF: function(names){ return "這一組是 "+names.join(" 和 ")+" 的準備。"; },
+      groupFeedsAlways:"這些技能沒有自己的檢查點——每個單元的每個任務都靠它們。"
+    },
+    vi: {
+      back:"← Trang STEM", sub:"Học kỳ 4 · đọc phần toán ẩn trong tin tức",
+      goingH:"Mình đang đi tới đâu?", howH:"Mình đang đi thế nào?", nextH:"Bước tiếp theo là gì?",
+      railWordsH:"Từ vựng", railSkillsH:"Kỹ năng", railDoH:"Việc cần làm", railProveH:"Thể hiện",
+      skillsNote:"Các mức bên dưới chỉ mô tả chặng đường — trang này không có phần tự chấm điểm. Dấu ✓ chỉ hiện lên sau một lượt luyện tập trọn vẹn (đúng 3/3) trên phần kỹ năng.",
+      mapH2:"Con đường tới các dự án",
+      mapLead:"Mọi kỹ năng và từ vựng bên dưới đều dẫn tới những cột cao — chính là các bài em sẽ thực sự làm.",
+      doH2:"Việc cần làm", doLead:"Hãy làm xong những việc này trước mốc kiểm tra của chúng. 🔒 nghĩa là cần tài khoản nhà trường — hãy mở Compass hoặc OneNote của lớp.",
+      proveH2:"Thể hiện", proveLead:"Mỗi chuyên đề giữ các mốc kiểm tra riêng. Đây là toàn bộ lộ trình của chuyên đề Đại dịch.",
+      privacy:"Ẩn danh · tiến độ chỉ lưu trong trình duyệt này · phiếu bài tập nằm trên Compass và OneNote của lớp (cần tài khoản nhà trường).",
+      days: function(n){ return n===0 ? "hôm nay" : "còn "+n+" ngày"; },
+      masteredW:"đã thành thạo", notStarted:"chưa bắt đầu",
+      lastRunF: function(a,b){ return "lượt trước "+a+"/"+b+" câu"; },
+      actExample:"xem ví dụ →", actContinue:"làm tiếp →", actAgain:"luyện lại →",
+      egLabel:"ví dụ →",
+      bandL:["Đang tiến tới","Đạt chuẩn","Vượt chuẩn"],
+      skillsMasteredF: function(a,b){ return "đã thành thạo "+a+"/"+b+" kỹ năng"; },
+      wordsBuiltF: function(a,b){ return "đã ghép được "+a+"/"+b+" từ"; },
+      neededByF: function(name,when){ return name+" sẽ cần đến · "+when; },
+      allMastered:"Đã thành thạo tất cả — ôn lại cả chuyên đề →",
+      arcLink:"toàn bộ lộ trình ↓", reportLink:"báo cáo đầy đủ →",
+      schoolMsg:"Thầy cô đang thêm đường dẫn này. Bây giờ em hãy mở Compass (hoặc OneNote của lớp) và tìm theo tên tệp.",
+      doneW:"đã xong", noCp:"Học kỳ này không còn mốc kiểm tra nào.",
+      opensWord:"chuyên đề mở", lookAround:"Bây giờ em có thể xem trước.",
+      opensNote: function(d){ return "Mở ngày "+d+" — bây giờ em có thể xem trước."; },
+      startWords:"bắt đầu từ từ vựng →",
+      buildsF: function(name,when){ return "Đây là phần chuẩn bị cho bài "+name+" — "+when; },
+      buildsDoneF: function(name){ return "Phần này đã chuẩn bị cho bài "+name+" — các bài sau vẫn dùng đến."; },
+      buildsAlways:"Phần này giữ cho kỹ năng tính toán của em luôn nhạy, bài nào cũng cần.",
+      groupFeedsF: function(names){ return "Nhóm này là phần chuẩn bị cho bài "+names.join(" và ")+"."; },
+      groupFeedsAlways:"Những kỹ năng này không có mốc kiểm tra riêng — bài nào ở chuyên đề nào cũng dựa vào chúng."
     }
   };
   var sel = document.querySelector(".language-select");
@@ -537,6 +586,24 @@
   }
 
   /* ---------------- skill-group sections ---------------- */
+  /* Practice is never a skill for its own sake: every row names the task it
+     feeds (SKILLS[id].needs → this unit's checkpoint). needs:null means the
+     skill is fluency that every task leans on. */
+  function buildsLine(sk){
+    var c = sk.needs ? CP[sk.needs] : null;
+    if (!c) return T("buildsAlways");
+    return c.status === "done" ? T("buildsDoneF")(c.short) : T("buildsF")(c.short, fD(c.date));
+  }
+  /* every task this whole group is the toolkit for, in checkpoint order */
+  function groupFeeds(g){
+    var seen = {}, names = [];
+    g.skills.forEach(function(id){
+      var n = STEM2.SKILLS[id].needs;
+      if (!n || !CP[n] || seen[n]) return;
+      seen[n] = 1; names.push(CP[n].short);
+    });
+    return names.length ? T("groupFeedsF")(names) : T("groupFeedsAlways");
+  }
   function paintGroups(){
     var h = "";
     UNIT.skillGroups.forEach(function(g){
@@ -573,12 +640,14 @@
             stateHTML +
             "<a class='skact' href='" + skillHref(id, mode) + "'>" + esc(act) + "</a>" +
             "<button class='fold' type='button' aria-expanded='false' aria-controls='b-" + id + "'>▾</button>" +
+            "<span class='builds'>" + esc(buildsLine(sk)) + "</span>" +
           "</div>" +
           "<div class='bands' id='b-" + id + "'>" + bands + "</div></div>";
       });
       h += "<section class='group' id='g-" + g.id + "'>" +
         "<div class='ghead'><h2>" + esc(g.name) + "</h2>" +
-        "<span class='gcount'>" + done + "/" + g.skills.length + " ✓</span></div>" + rows + "</section>";
+        "<span class='gcount'>" + done + "/" + g.skills.length + " ✓</span></div>" +
+        "<p class='lead'>" + esc(groupFeeds(g)) + "</p>" + rows + "</section>";
     });
     document.getElementById("groups").innerHTML = h;
   }

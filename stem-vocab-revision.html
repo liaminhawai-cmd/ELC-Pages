@@ -39,6 +39,7 @@
   .masthead h1 { margin:0 0 6px; font-family:Georgia,"Times New Roman",serif; font-size:1.9rem;
     font-weight:500; letter-spacing:-.01em; }
   .masthead .sub { margin:0; color:var(--muted); font-size:.88rem; max-width:64ch; }
+  .masthead .projline { margin-top:8px; }
   h2 { font-size:1.12rem; margin:26px 0 10px; }
   h3 { font-size:1rem; margin:0 0 6px; }
   .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
@@ -215,6 +216,7 @@
     <h1 data-i18n="title">Linear Graphs — the quiz words</h1>
     <p class="sub" data-i18n="heroText">A short lesson in four steps. By the end you will know what every word in the
       Linear Equations Progress Quiz is asking you to do.</p>
+    <p class="sub projline" id="projectLine"></p>
   </div>
 
   <div class="resume" id="resume" hidden>
@@ -344,6 +346,10 @@
   /* ===================== CONTENT — teachers edit here ===================== */
 
   var SET_ID    = "rev";                 /* which vocab set this lesson revises */
+  var SKILL_GROUP = "kg_lines";          /* the skill group these words belong to; the
+                                            line under the title names the next task
+                                            those skills are needed for (dates and task
+                                            names come from stem-shared.js)            */
   var STATE_KEY = "elc_stem_revseq";     /* where this lesson saves your place  */
   var DECOYS    = 2;                     /* extra wrong tiles in a build task   */
   var HINT_AFTER= 2;                     /* wrong taps before the hint shows    */
@@ -522,7 +528,9 @@
       mgRoot:"Roots — the main meaning",
       mgSuffix:"Suffixes — the part at the end",
       ptypeNames:{ prefix:"prefix", root:"root", suffix:"suffix" },
-      noParts:function(list){ return "No Latin parts to cut: " + list + ". Learn these two as whole words."; }
+      noParts:function(list){ return "No Latin parts to cut: " + list + ". Learn these two as whole words."; },
+      buildsF:function(name,when){ return "These words build your " + name + " toolkit — " + when; },
+      buildsAlways:"These words come back in every task in this unit."
     },
     "zh-Hans": {
       back:"← 运动学", eyebrow:"复习 · 上一个单元", title:"直线图像——测验词汇",
@@ -578,7 +586,9 @@
       mgRoot:"词根——主要的意思",
       mgSuffix:"后缀——放在最后面的部件",
       ptypeNames:{ prefix:"前缀", root:"词根", suffix:"后缀" },
-      noParts:function(list){ return "没有拉丁部件可以拆：" + list + "。这两个词要整个记下来。"; }
+      noParts:function(list){ return "没有拉丁部件可以拆：" + list + "。这两个词要整个记下来。"; },
+      buildsF:function(name,when){ return "这些词是在为 " + name + " 做准备 · " + when; },
+      buildsAlways:"这些词在本单元的每个任务里都会再出现。"
     },
     "zh-Hant": {
       back:"← 運動學", eyebrow:"複習 · 上一個單元", title:"直線圖形——小考詞彙",
@@ -634,7 +644,69 @@
       mgRoot:"字根——主要的意思",
       mgSuffix:"字尾——放在最後面的部件",
       ptypeNames:{ prefix:"字首", root:"字根", suffix:"字尾" },
-      noParts:function(list){ return "沒有拉丁部件可以拆：" + list + "。這兩個字要整個記下來。"; }
+      noParts:function(list){ return "沒有拉丁部件可以拆：" + list + "。這兩個字要整個記下來。"; },
+      buildsF:function(name,when){ return "這些字是在為 " + name + " 做準備 · " + when; },
+      buildsAlways:"這些字在本單元的每個任務裡都會再出現。"
+    },
+    vi: {
+      back:"← Động học", eyebrow:"Ôn tập · chuyên đề trước",
+      title:"Đồ thị đường thẳng — những từ trong bài kiểm tra",
+      heroText:"Một bài học ngắn gồm bốn bước. Học xong, em sẽ hiểu mỗi từ trong bài kiểm tra tiến độ Phương trình đường thẳng đang yêu cầu em làm gì.",
+      liTag:"Mục tiêu bài học",
+      liText:"Chúng ta học cách dùng ngôn ngữ của đồ thị đường thẳng để đọc đề kiểm tra là hiểu ngay.",
+      scTag:"Tiêu chí thành công",
+      engageHead:"1 · Khởi động — em đã biết những từ nào?",
+      engageHelp:"Những từ nào em đã biết? Bộ phận nào trông quen mắt? Hãy chạm vào ít nhất ba từ rồi mới đi tiếp.",
+      engageBtn:"Em đã xem các từ rồi →",
+      developHead:"2 · Phát triển và Khám phá — các bộ phận của từ",
+      developHelp:"Hãy đọc các bộ phận của từ ở dưới. Những từ có chung một bộ phận thì cùng một họ từ. Sau đó trả lời ba câu hỏi bên dưới.",
+      langLabel:"Tiếng mẹ đẻ của em:", mqHead:"Kiểm tra nhanh — ba câu hỏi",
+      applyHead:"3 · Vận dụng — dùng các từ",
+      applyHelp:"Mười nhiệm vụ ngắn: ghép các bộ phận thành từ, nối từ với nghĩa, và tìm các từ toán học trong đề kiểm tra thật.",
+      reviewHead:"4 · Ôn lại và Suy ngẫm",
+      reviewHelp:"Đánh dấu những việc bây giờ em làm được. Hãy thành thật — bảng này là để cho chính em.",
+      readyHead:"Sẵn sàng kiểm tra lại chưa?",
+      privacy:"🔒 Ẩn danh. Vị trí của em trong bài học này và sổ tay từ vựng chỉ được lưu trong trình duyệt này — không có tài khoản, không theo dõi.",
+      sc:["Em nối được mỗi từ với nghĩa của nó.",
+          "Em dùng được từ đó trong khi làm toán.",
+          "Em tìm được những từ này trong một đề kiểm tra thật."],
+      phaseNames:["Khởi động","Phát triển và Khám phá","Vận dụng","Ôn lại và Suy ngẫm"],
+      lockMsg:function(n){ return "Hãy hoàn thành “" + n + "” trước — hoặc vẫn mở bước này."; },
+      openAnyway:"Vẫn mở bước này",
+      resumeMsg:function(n){ return "Chào em quay lại. Lần trước em dừng ở “" + n + "”."; },
+      resumeBtn:"Làm tiếp →",
+      taskOf:function(a,b){ return "Nhiệm vụ " + a + " / " + b; },
+      found:function(a,b){ return "Số từ đã tìm được: " + a + " / " + b; },
+      foundAll:"Đã tìm đủ các từ toán học. Bây giờ đến phần toán:",
+      leadBuild:"Chạm vào các bộ phận theo đúng thứ tự để ghép thành từ.",
+      leadMatch:"Chạm vào một từ, rồi chạm vào nghĩa của nó.",
+      leadFind:"Chạm vào mọi từ toán học trong câu hỏi kiểm tra này.",
+      buildHint:function(g){ return "Gợi ý: bộ phận tiếp theo có nghĩa là “" + g + "”."; },
+      buildDone:function(w){ return "✓ " + w + " đã có trong sổ tay của em."; },
+      notThatPiece:"Chưa phải mảnh này — hãy nghĩ lại thứ tự.",
+      notTarget:"Đây không phải từ ôn tập của chúng ta. Hãy thử từ khác.",
+      pickWordFirst:"Chạm vào một từ trước, rồi mới chạm vào nghĩa.",
+      matchWrong:"Không phải nghĩa này. Hãy đọc lại nghĩa.",
+      correct:"Đúng rồi.",
+      tryAgain:"Chưa đúng — thử lại nhé.",
+      nextTask:"Nhiệm vụ tiếp theo →", skipTask:"Tạm bỏ qua →", prevTask:"← Quay lại",
+      allTasksDone:"🎉 Xong cả mười nhiệm vụ. Em làm tốt lắm!",
+      goReview:"Sang phần Ôn lại và Suy ngẫm →",
+      wordsLine:function(a,b){ return "Sổ tay của em đã có " + a + " / " + b + " từ ôn tập."; },
+      tasksLine:function(a,b){ return "Đã hoàn thành " + a + " / " + b + " nhiệm vụ."; },
+      practiseHead:"Một từ để luyện tối nay",
+      practiseOpen:"Mở từ này trong sổ tay",
+      chooseWord:"chọn một từ…",
+      restart:"Học lại bài này từ đầu",
+      confirmRestart:"Bắt đầu lại bài học này từ bước 1? Sổ tay từ vựng của em vẫn được giữ nguyên.",
+      inYourLang:"chọn…",
+      mgPrefix:"Tiền tố — bộ phận đứng đầu",
+      mgRoot:"Gốc từ — nghĩa chính",
+      mgSuffix:"Hậu tố — bộ phận đứng cuối",
+      ptypeNames:{ prefix:"tiền tố", root:"gốc từ", suffix:"hậu tố" },
+      noParts:function(list){ return "Không tách được thành bộ phận La-tinh: " + list + ". Những từ này em hãy học nguyên cả từ."; },
+      buildsF:function(name,when){ return "Những từ này chuẩn bị cho bài " + name + " — " + when; },
+      buildsAlways:"Những từ này sẽ quay lại trong mọi bài của chuyên đề này."
     }
   };
 
@@ -661,6 +733,36 @@
     try { localStorage.setItem("elc_page_language", lang); } catch(e){}
     setStatic(); paintAll(); renderTask();
   });
+
+  /* ---------- the task these words are for (read from STEM2, never typed here) ----------
+     These are the words of the SKILL_GROUP skills. Each skill says which
+     checkpoint it is needed by (SKILLS[id].needs) and the unit that owns the
+     skill owns the date, so the soonest checkpoint still ahead is the task this
+     revision is preparing for. Change a date in stem-shared.js and this follows. */
+  function projectCp(){
+    var S2 = window.STEM2;
+    if (!S2 || !S2.SKILLS) return null;
+    var best = null;
+    S2.UNITS.forEach(function(unit){
+      (unit.skillGroups || []).forEach(function(g){
+        if (g.id !== SKILL_GROUP) return;
+        g.skills.forEach(function(id){
+          var sk = S2.SKILLS[id];
+          if (!sk || !sk.needs) return;
+          unit.checkpoints.forEach(function(c){
+            if (c.id !== sk.needs || c.status === "done" || S2.daysUntil(c.date) < 0) return;
+            if (!best || c.date < best.date) best = c;
+          });
+        });
+      });
+    });
+    return best;
+  }
+  function paintProjectLine(){
+    var cp = projectCp();
+    byId("projectLine").textContent =
+      cp ? tf("buildsF")(cp.short, window.STEM2.fmtDate(cp.date)) : tr("buildsAlways");
+  }
 
   /* ---------- lesson state (this browser only) ---------- */
   var S = { v:1, engage:{taps:{}, done:false}, develop:{q:{}, done:false},
@@ -1322,6 +1424,7 @@
 
   /* ---------- paint everything ---------- */
   function paintAll(){
+    paintProjectLine();
     paintStepper(); paintLocks(); paintResume(); paintSC();
     paintLane(); paintLangPicker(); paintMorphTable(); paintMorphQs();
     paintRail(); paintReviewStats(); paintReviewControls();

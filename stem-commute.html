@@ -328,7 +328,9 @@
       locked:"Finish the level before this one to unlock it.",
       play:"▶ Play", pause:"⏸ Pause", reset:"↺ Reset", speed:"speed",
       run:"▶ Run the race",
-      confirmT:"Unlock all four levels? (Meant for teachers.)"
+      confirmT:"Unlock all four levels? (Meant for teachers.)",
+      buildsF: function(name,when){ return "This builds your "+name+" toolkit — "+when; },
+      buildsAlways:"This keeps your number work sharp for every task."
     },
     "zh-Hans": {
       back:"← 运动学 · 任务", title:"上学竞速",
@@ -340,7 +342,9 @@
       locked:"先完成上一关才能解锁。",
       play:"▶ 播放", pause:"⏸ 暂停", reset:"↺ 重新开始", speed:"速度",
       run:"▶ 开始比赛",
-      confirmT:"解锁全部四个关卡？（供教师使用。）"
+      confirmT:"解锁全部四个关卡？（供教师使用。）",
+      buildsF: function(name,when){ return "这是在为 "+name+" 做准备 · "+when; },
+      buildsAlways:"这让你的数字运算保持熟练，每个任务都用得上。"
     },
     "zh-Hant": {
       back:"← 運動學 · 任務", title:"上學競速",
@@ -352,7 +356,23 @@
       locked:"先完成前一關才能解鎖。",
       play:"▶ 播放", pause:"⏸ 暫停", reset:"↺ 重新開始", speed:"速度",
       run:"▶ 開始比賽",
-      confirmT:"要解鎖全部四關嗎？（供老師使用。）"
+      confirmT:"要解鎖全部四關嗎？（供老師使用。）",
+      buildsF: function(name,when){ return "這是在為 "+name+" 做準備 · "+when; },
+      buildsAlways:"這讓你的數字運算保持熟練，每個任務都用得上。"
+    },
+    vi: {
+      back:"← Động học · Việc cần làm", title:"Đua tới trường",
+      sub:"Ba cách đi học, cùng một tuyến đường thẳng. Hãy xem cuộc đua, dự đoán kết quả, rồi làm phép toán quyết định ai thắng. Bốn cấp độ — mỗi cấp giao thêm phần việc cho em.",
+      teacherU:"Giáo viên: mở khoá tất cả các cấp độ",
+      privacy:"🔒 Ẩn danh. Tiến độ của em ở trang này chỉ được lưu trong trình duyệt này — không có tài khoản, không theo dõi.",
+      tabs:["1 · Xem và suy nghĩ","2 · Dự đoán rồi kiểm chứng","3 · Em tự tính","4 · Thử thách CAT"],
+      tabSub:["Thầy cô làm mẫu","Chúng ta cùng làm","Em làm — mô phỏng sẽ kiểm chứng","Em tự làm một mình"],
+      locked:"Hãy hoàn thành cấp độ trước để mở khoá cấp này.",
+      play:"▶ Phát", pause:"⏸ Tạm dừng", reset:"↺ Bắt đầu lại", speed:"tốc độ",
+      run:"▶ Bắt đầu cuộc đua",
+      confirmT:"Mở khoá cả bốn cấp độ? (Dành cho giáo viên.)",
+      buildsF: function(name,when){ return "Đây là phần chuẩn bị cho bài "+name+" — "+when; },
+      buildsAlways:"Phần này giữ cho kỹ năng tính toán của em luôn nhạy, bài nào cũng cần."
     }
   };
   var sel = document.querySelector(".language-select");
@@ -361,6 +381,7 @@
   if (!COPY[lang]) lang = "en";
   sel.value = lang;
   function tr(k){ var v = COPY[lang][k]; return v !== undefined ? v : COPY.en[k]; }
+  function tf(k){ var v = COPY[lang][k]; return typeof v === "function" ? v : COPY.en[k]; }
   function setStatic(){
     var dict = COPY[lang];
     document.querySelectorAll("[data-i18n]").forEach(function(el){
@@ -373,8 +394,34 @@
   sel.addEventListener("change", function(){
     lang = sel.value;
     try { localStorage.setItem("elc_page_language", lang); } catch(e){}
-    setStatic(); renderTabs(); openLevel(state.cur);
+    setStatic(); renderIntro(); renderTabs(); openLevel(state.cur);
   });
+
+  /* ---------- the task this practice feeds (read from STEM2, never typed here) ----------
+     The four levels log these skills. SKILLS[id].needs names the checkpoint each
+     skill is needed by, and the unit that owns the skill owns the date. The
+     soonest checkpoint still ahead is the one this page is preparing for.      */
+  var PRACTICE_SKILLS = ["s_ptgraph","s_story","s_vectors","k_grad_graph","k_eq"];
+  function projectCp(){
+    var S2 = window.STEM2;
+    if (!S2) return null;
+    var best = null;
+    PRACTICE_SKILLS.forEach(function(id){
+      var sk = S2.SKILLS[id];
+      if (!sk || !sk.needs) return;
+      var unit = S2.UNIT_BY_ID[sk.unit];
+      if (!unit) return;
+      unit.checkpoints.forEach(function(c){
+        if (c.id !== sk.needs || c.status === "done" || S2.daysUntil(c.date) < 0) return;
+        if (!best || c.date < best.date) best = c;
+      });
+    });
+    return best;
+  }
+  function projectLine(){
+    var cp = projectCp();
+    return cp ? tf("buildsF")(cp.short, fmtDate(cp.date)) : tr("buildsAlways");
+  }
 
   /* ---------- mover builders for the sim ---------- */
   function tramMover(nStops, dwellS){
@@ -628,7 +675,6 @@
   /* ---------- intro card (numbers all read from SCENARIO) ---------- */
   function renderIntro(){
     var s = SCENARIO;
-    var catCp = STEM.CP_BY_ID && STEM.CP_BY_ID.cp_cat;
     document.getElementById("intro").innerHTML =
       "<p>Every morning, Mai has three ways to travel the same <b>" + fmt(D) + " km</b> to school. " +
       "Same <span data-v>distance</span> — three very different journeys. " +
@@ -645,8 +691,7 @@
       "<span data-v>position</span> against <span data-v>time</span>, so every journey becomes a line. " +
       "The <span data-v>gradient</span> of a line is that vehicle's speed — steep means fast, " +
       "flat means at <span data-v>rest</span>.</p>" +
-      (catCp ? "<p class='muted'>🎯 This page is practice for the <b>" + esc(catCp.name) +
-        "</b> (" + fmtDate(catCp.date) + ").</p>" : "");
+      "<p class='muted'>" + esc(projectLine()) + "</p>";
     if (window.STEMVOCAB) STEMVOCAB.decorate(document.getElementById("intro"));
   }
 
@@ -1010,7 +1055,7 @@
   }
 
   function renderL4(panel){
-    var catCp = STEM.CP_BY_ID && STEM.CP_BY_ID.cp_cat;
+    var cp = projectCp();
     var P = buildL4();
 
     function paint(){
@@ -1018,8 +1063,8 @@
         "<div class='card'>" +
         "<h2 style='margin-top:0'>🏁 Level 4 · CAT-style challenge</h2>" +
         "<p class='muted'>No sim. No hints. Just you, the words and the maths — like the real thing. " +
-        (catCp ? "The real <b>" + esc(catCp.name) + "</b> (" + fmtDate(catCp.date) +
-          ") is a train problem with different numbers — this practice uses walking and a scooter on purpose." : "") +
+        (cp ? "The real <b>" + esc(cp.short) + "</b> (" + fmtDate(cp.date) +
+          ") uses trains and different numbers — this practice uses walking and a scooter on purpose." : "") +
         "</p>" +
         "<p><b>The problem.</b> " + esc(P.walker) + " walks to the " + esc(P.place) + ", <b>" +
         fmt(P.D) + " km</b> away, at a <span data-v='uniform'>steady</span> <b>" + fmt(P.w) +
@@ -1085,7 +1130,8 @@
         if (all){
           fb.className = "party";
           fb.textContent = "🎉 All five correct" + (firstTry ? " — first submission!" : "!") +
-            " That is exactly the maths the CAT wants. ✦ Logged on your progress report.";
+            " That is exactly the maths the " + (cp ? cp.short : "task") +
+            " wants. ✦ Logged on your progress report.";
           award(4, ["s_vectors","k_eq"],
             "CAT-style challenge: all 5 answers correct (" + P.walker + " vs " + P.rider + ")");
         } else {

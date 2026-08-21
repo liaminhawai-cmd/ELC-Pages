@@ -224,6 +224,25 @@
       typeL: { prefix:"前綴", root:"字根", suffix:"字尾" },
       dataMissing:"單字資料沒有載入成功，請重新整理頁面。",
       buildMore:"繼續拼更多單字 →"
+    },
+    vi: {
+      back:"← Trang STEM", title:"Sổ tay của em", sub:"ELC STEM · những từ em đã nắm được",
+      lead:"Mọi từ em đã ghép được, và mọi thành phần tạo nên những từ đó. Một từ chỉ đến đây khi em ghép được nó trong các nhóm từ — ở trang này không đánh dấu được gì cả.",
+      privacy:"Ẩn danh · từ vựng của em chỉ lưu trong trình duyệt này · không gửi đi đâu cả.",
+      tabWords:"Từ của em", tabPieces:"Thành phần của em",
+      homeLangL:"Tiếng mẹ đẻ", homeLangNone:"— không hiện —",
+      searchL:"Tìm", searchPh:"từ, nghĩa hoặc thành phần",
+      countF: function(w,p){ return "<b>" + w + "</b> từ · <b>" + p + "</b> thành phần"; },
+      matchWF: function(n,t){ return "có " + n + "/" + t + " từ khớp"; },
+      matchPF: function(n,t){ return "có " + n + "/" + t + " thành phần khớp"; },
+      emptyWords:"Ở đây chưa có gì — từ sẽ đến khi em ghép được chúng.",
+      emptyPieces:"Chưa có thành phần nào — mỗi thành phần xuất hiện khi em ghép được từ đầu tiên chứa nó.",
+      emptyGo:"Mở các nhóm từ →",
+      noMatchF: function(q){ return "Không có gì khớp với “" + q + "”."; },
+      mBuilt:"✓ đã ghép", mUsed:"✓ đã dùng", revision:"ôn tập",
+      typeL: { prefix:"tiền tố", root:"gốc từ", suffix:"hậu tố" },
+      dataMissing:"Danh sách từ chưa tải được. Em hãy tải lại trang.",
+      buildMore:"Ghép thêm từ nữa →"
     }
   };
   var sel = document.querySelector(".language-select");

@@ -58,6 +58,8 @@
   .skmeta { display:flex; flex-wrap:wrap; gap:2px 18px; align-items:center; margin-top:4px;
     font-size:.8rem; color:var(--muted); }
   .skmeta .done { color:var(--accent); font-weight:600; }
+  /* one quiet line naming the project this skill is preparation for */
+  .frame { margin:10px 0 0; font-size:.82rem; color:var(--muted); max-width:62ch; }
   .rub-btn { background:none; border:none; padding:10px 0; margin:0; color:var(--accent);
     font:inherit; font-size:.8rem; font-weight:600; cursor:pointer; min-height:44px; }
   .rub-btn:hover { text-decoration:underline; }
@@ -215,6 +217,10 @@
       stNone: "not started",
       open: "open →",
       neededBy: function(n,d){ return "needed by "+n+" · "+d; },
+      /* project framing — practice is always preparation for a task */
+      buildsFor: function(n,w){ return "This builds your toolkit for the "+n+" — "+w; },
+      builtFor: function(n){ return "The "+n+" used this — keep it sharp."; },
+      buildsAll: "This keeps your number work sharp for every task.",
       rubric: "Rubric ▾",
       rubricClose: "Rubric ▴",
       bandLabels: ["working towards","at level","above level"],
@@ -258,7 +264,9 @@
       firstRev: "first revision — nothing to compare yet",
       vsLine: function(p,s){ return p+"% · "+s+" s/question"; },
       rAgain: "Revise again →",
-      whereNext: "Where to next — reread:"
+      whereNext: "Where to next — reread:",
+      feeds: "These skills prepare you for:",
+      feedsAll: "every task"
     },
     "zh-Hans": {
       title: "技能", sub: "每项 STEM 技能——学习、练习、复习",
@@ -271,6 +279,9 @@
       stNone: "未开始",
       open: "打开 →",
       neededBy: function(n,d){ return "“"+n+"”需要它 · "+d; },
+      buildsFor: function(n,w){ return "练这一项，是在为“"+n+"”做准备——"+w; },
+      builtFor: function(n){ return "“"+n+"”已经用过这一项——继续保持手感。"; },
+      buildsAll: "这一项让你的计算又快又稳，每个任务都用得上。",
       rubric: "评分标准 ▾",
       rubricClose: "评分标准 ▴",
       bandLabels: ["接近目标","达到目标","超越目标"],
@@ -314,7 +325,9 @@
       firstRev: "第一次复习——还没有可比较的记录",
       vsLine: function(p,s){ return p+"% · 每题 "+s+" 秒"; },
       rAgain: "再复习一轮 →",
-      whereNext: "接下来——再读一读："
+      whereNext: "接下来——再读一读：",
+      feeds: "这些技能是在为以下任务做准备：",
+      feedsAll: "每一个任务"
     },
     "zh-Hant": {
       title: "技能", sub: "每項 STEM 技能——學習、練習、複習",
@@ -327,6 +340,9 @@
       stNone: "尚未開始",
       open: "打開 →",
       neededBy: function(n,d){ return "「"+n+"」會用到 · "+d; },
+      buildsFor: function(n,w){ return "練這一項，是在為「"+n+"」做準備——"+w; },
+      builtFor: function(n){ return "「"+n+"」已經用過這一項——繼續保持手感。"; },
+      buildsAll: "這一項讓你的計算又快又穩，每項任務都用得上。",
       rubric: "評量規準 ▾",
       rubricClose: "評量規準 ▴",
       bandLabels: ["接近目標","達到目標","超越目標"],
@@ -370,7 +386,70 @@
       firstRev: "第一次複習——還沒有可比較的紀錄",
       vsLine: function(p,s){ return p+"% · 每題 "+s+" 秒"; },
       rAgain: "再複習一輪 →",
-      whereNext: "接下來——再讀一遍："
+      whereNext: "接下來——再讀一遍：",
+      feeds: "這些技能是在為以下任務做準備：",
+      feedsAll: "每一項任務"
+    },
+    "vi": {
+      title: "Kỹ năng", sub: "Mọi kỹ năng STEM — học, luyện tập, ôn tập",
+      privacy: "Ẩn danh · tiến độ chỉ lưu trong trình duyệt này · phiếu bài tập nằm trên Compass và OneNote của lớp (cần tài khoản trường).",
+      previewNote: function(d){ return "mở ngày "+d+" — từ giờ đến đó bạn vẫn xem trước được"; },
+      masteredCount: function(a,b){ return "đã thành thạo "+a+"/"+b; },
+      stMastered: function(d){ return "✓ đã thành thạo · "+d; },
+      stNof: function(n,of){ return n+" / "+of+" câu"; },
+      stStarted: "đã bắt đầu",
+      stNone: "chưa bắt đầu",
+      open: "Mở →",
+      neededBy: function(n,d){ return "cần cho bài "+n+" · "+d; },
+      buildsFor: function(n,w){ return "Luyện phần này để chuẩn bị cho bài "+n+" — "+w; },
+      builtFor: function(n){ return "Bài "+n+" đã dùng đến kỹ năng này — giữ cho thật quen tay."; },
+      buildsAll: "Phần này giúp bạn tính toán luôn nhanh và chắc, dùng cho mọi bài.",
+      rubric: "Tiêu chí đánh giá ▾",
+      rubricClose: "Tiêu chí đánh giá ▴",
+      bandLabels: ["đang tiến tới","đạt chuẩn","vượt chuẩn"],
+      eg: "xem ví dụ →",
+      mTeach: "Học", mPractise: "Luyện tập", mRevise: "Ôn tập",
+      noGen: "Câu hỏi của kỹ năng này chưa được tải lên — sẽ có khi bài học mở.",
+      howTitle: "Cách làm",
+      exTitle: "Ví dụ mẫu",
+      anotherEx: "Xem ví dụ khác →",
+      guidedTitle: "Đến lượt bạn — có hướng dẫn",
+      hintLabel: "Gợi ý —",
+      guidedNote: "Đây là phần tập có gợi ý, không ghi lại điều gì cả. Phần được tính là “Luyện tập”.",
+      check: "Kiểm tra",
+      showWork: "Xem cách giải ▾",
+      tryAnother: "Làm câu khác →",
+      correct: "✓ đúng rồi",
+      pIntro: "Ba câu hỏi, có tính giờ. Đúng 3/3 là thành thạo. Sai một câu là hết lượt — chính xác trước đã.",
+      pStart: "Bắt đầu — 3 câu →",
+      qOf: function(i,n){ return "Câu "+i+" / "+n; },
+      timer: function(s){ return "⏱ "+s+" giây"; },
+      wrongLine: "✗ Lần này chưa đúng — hãy đọc cách giải:",
+      runEnded: "Lượt này dừng ở đây. Đọc kỹ cách giải, rồi làm lại từ đầu.",
+      fresh: "Làm lại từ đầu →",
+      mastered: function(d){ return "✓ Đã thành thạo — "+d; },
+      masteredNote: "Đã lưu trong trình duyệt này · từ giờ nó được tính vào báo cáo của bạn.",
+      alreadyM: function(d){ return "3/3 — bạn đã thành thạo từ trước ("+d+")."; },
+      allSkills: function(n){ return "Tất cả kỹ năng của "+n+" →"; },
+      rIntro: "Câu hỏi trộn từ nhiều kỹ năng. Chính xác trước, rồi mới nhanh.",
+      scopeUnit: function(n){ return "bài học này — "+n; },
+      scopeMastered: "chỉ những kỹ năng tôi đã thành thạo",
+      scopePick: "tự chọn kỹ năng",
+      nQs: function(n){ return n+" câu hỏi"; },
+      rStart: "Bắt đầu →",
+      rEmpty: "Phạm vi này chưa có kỹ năng nào ra được câu hỏi.",
+      rPickNone: "Hãy chọn ít nhất một kỹ năng.",
+      next: "Câu tiếp →",
+      sumAcc: "Độ chính xác",
+      sumPace: "Tốc độ",
+      perQ: function(s){ return s+" giây/câu"; },
+      sumVs: "Lần trước",
+      firstRev: "lần ôn đầu tiên — chưa có gì để so sánh",
+      vsLine: function(p,s){ return p+"% · "+s+" giây/câu"; },
+      rAgain: "Ôn thêm một lượt →",
+      whereNext: "Tiếp theo — đọc lại:",
+      feeds: "Những kỹ năng này chuẩn bị cho:",
+      feedsAll: "mọi bài"
     }
   };
 
@@ -494,15 +573,26 @@
 
   /* ---------------- skill view ---------------- */
   function metaHtml(id){
-    var sk = STEM2.SKILLS[id], u = STEM2.UNIT_BY_ID[sk.unit];
     var st = stateLabel(id);
-    var h = "<span class='" + st.cls + "'>" + esc(st.txt) + "</span>";
-    if (sk.needs) {
-      var cp = null;
-      u.checkpoints.forEach(function(c){ if (c.id === sk.needs) cp = c; });
-      if (cp) h += "<span>" + esc(T("neededBy")(cp.short, STEM2.fmtDate(cp.date))) + "</span>";
-    }
-    return h;
+    return "<span class='" + st.cls + "'>" + esc(st.txt) + "</span>";
+  }
+
+  /* the checkpoint a skill is preparation for (null = fluency, every task) */
+  function projectOf(id){
+    var sk = STEM2.SKILLS[id];
+    if (!sk || !sk.needs) return null;
+    var u = STEM2.UNIT_BY_ID[sk.unit], cp = null;
+    if (u) u.checkpoints.forEach(function(c){ if (c.id === sk.needs) cp = c; });
+    return cp;
+  }
+  /* one quiet line: what project this practice is for */
+  function framingLine(id){
+    var sk = STEM2.SKILLS[id];
+    if (!sk) return "";
+    var cp = projectOf(id);
+    if (!cp) return sk.needs ? "" : T("buildsAll");
+    if (cp.status === "done" || STEM2.daysUntil(cp.date) < 0) return T("builtFor")(cp.short);
+    return T("buildsFor")(cp.short, STEM2.fmtDate(cp.date));
   }
 
   function renderSkill(id, mode){
@@ -525,7 +615,10 @@
     });
     h += "<div class='cont'>" + esc(sk.cont) + " · <a class='alink' id='egLink' href='#skill=" + id +
          "&mode=teach'>" + esc(T("eg")) + "</a></div>";
-    h += "</div></div>";
+    h += "</div>";
+    var frame = framingLine(id);
+    if (frame) h += "<p class='frame'>" + esc(frame) + "</p>";
+    h += "</div>";
 
     h += "<nav class='modes'>";
     [["teach","mTeach"], ["practise","mPractise"], ["revise","mRevise"]].forEach(function(m){
@@ -941,6 +1034,23 @@
                    esc(T("vsLine")(prev.okPct, (prev.msAvg / 1000).toFixed(1))) + "</div>"
                  : "<div class='small' style='margin-top:8px'>" + esc(T("firstRev")) + "</div>") +
            "</div></div>";
+      /* which projects the skills in this run feed — the point of revising */
+      var seen = {}, projects = [], anyFluency = false;
+      Object.keys(agg).forEach(function(sid){
+        var sk2 = STEM2.SKILLS[sid], cp = projectOf(sid);
+        if (!cp) { if (sk2 && !sk2.needs) anyFluency = true; return; }
+        if (cp.status === "done" || STEM2.daysUntil(cp.date) < 0) return;
+        if (seen[cp.id]) return;
+        seen[cp.id] = 1;
+        projects.push(cp);
+      });
+      projects.sort(function(a, b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+      var feedList = projects.map(function(c){ return c.short + " — " + STEM2.fmtDate(c.date); });
+      if (anyFluency) feedList.push(T("feedsAll"));
+      if (feedList.length) {
+        h += "<p class='frame'>" + esc(T("feeds")) + " " + esc(feedList.join(" · ")) + "</p>";
+      }
+
       var wrongIds = [];
       Object.keys(agg).forEach(function(sid){ if (agg[sid].ok < agg[sid].of) wrongIds.push(sid); });
       if (wrongIds.length) {
