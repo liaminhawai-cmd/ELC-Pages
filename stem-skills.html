@@ -16,7 +16,7 @@
   * { box-sizing:border-box; }
   body { margin:0; background:var(--paper); color:var(--ink);
          font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-  .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
+  .wrap { max-width:1080px; margin:0 auto; padding:34px 22px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
            display:inline-flex; align-items:center; min-height:44px; }
@@ -70,6 +70,14 @@
   .skmeta { display:flex; flex-wrap:wrap; gap:2px 18px; align-items:center; margin-top:4px;
     font-size:.8rem; color:var(--muted); }
   .skmeta .done { color:var(--accent); font-weight:600; }
+  /* where a skill sits on the road: what it builds on, what it leads to */
+  .skflow { display:flex; flex-wrap:wrap; gap:6px 10px; align-items:center; margin:10px 0 0; font-size:.78rem; }
+  .skflow .fl-lbl { color:var(--faint); letter-spacing:.06em; text-transform:uppercase; font-size:.66rem; font-weight:700; }
+  .skflow a { display:inline-flex; align-items:center; min-height:34px; padding:2px 11px;
+    border:1px solid var(--hair); border-radius:999px; color:var(--ink); text-decoration:none; }
+  .skflow a:hover { border-color:var(--accent); color:var(--accent); }
+  .skflow a .fl-unit { color:var(--faint); margin-left:.45em; font-size:.68rem; }
+  .skflow .fl-sep { color:var(--hair); }
   /* one quiet line naming the project this skill is preparation for */
   .frame { margin:10px 0 0; font-size:.82rem; color:var(--muted); max-width:62ch; }
   .rub-btn { background:none; border:none; padding:10px 0; margin:0; color:var(--accent);
@@ -87,10 +95,17 @@
     font-size:.92rem; color:var(--muted); text-decoration:none; border-bottom:2px solid transparent; margin-bottom:-1px; }
   .modes a.on { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
   .modes a:hover { color:var(--accent); }
-  .engine { max-width:640px; padding-top:20px; }
+  .engine { padding-top:20px; }
+  /* teach mode fills the width it has: concept and method on the left,
+     worked example on the right, your-turn below. One column on a phone. */
+  .tgrid { display:grid; gap:8px 44px; }
+  @media (min-width:960px) { .tgrid { grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:start; } }
+  .tcol > h3.et:first-child { margin-top:14px; }
+  /* answer cards keep a readable measure even in a wide pane */
+  .qcard { max-width:640px; }
   .modeintro { margin:0 0 6px; font-size:.9rem; color:var(--muted); }
   .what { font-size:.95rem; }
-  h3.et { font-family:Georgia,"Times New Roman",serif; font-size:1.05rem; font-weight:600; margin:28px 0 8px;
+  h3.et { font-family:Georgia,"Times New Roman",serif; font-size:1.05rem; font-weight:600; margin:20px 0 8px;
     border-top:1px solid var(--hair); padding-top:16px; }
   ol.how { margin:6px 0 0; padding-left:22px; font-size:.92rem; }
   ol.how li { margin:5px 0; }
@@ -243,6 +258,7 @@
       buildsAll: "This keeps your number work sharp for every task.",
       rubric: "Rubric ▾",
       rubricClose: "Rubric ▴",
+      flowFrom: "builds on", flowTo: "leads to",
       bandLabels: ["working towards","at level","above level"],
       eg: "e.g. →",
       mTeach: "Learn", mPractise: "Practise", mRevise: "Revise",
@@ -307,6 +323,7 @@
       buildsAll: "这一项让你的计算又快又稳，每个任务都用得上。",
       rubric: "评分标准 ▾",
       rubricClose: "评分标准 ▴",
+      flowFrom: "在此之前", flowTo: "通向",
       bandLabels: ["接近目标","达到目标","超越目标"],
       eg: "看例题 →",
       mTeach: "学习", mPractise: "练习", mRevise: "复习",
@@ -371,6 +388,7 @@
       buildsAll: "這一項讓你的計算又快又穩，每項任務都用得上。",
       rubric: "評量規準 ▾",
       rubricClose: "評量規準 ▴",
+      flowFrom: "在此之前", flowTo: "通向",
       bandLabels: ["接近目標","達到目標","超越目標"],
       eg: "看例題 →",
       mTeach: "學習", mPractise: "練習", mRevise: "複習",
@@ -435,6 +453,7 @@
       buildsAll: "Phần này giúp bạn tính toán luôn nhanh và chắc, dùng cho mọi bài.",
       rubric: "Tiêu chí đánh giá ▾",
       rubricClose: "Tiêu chí đánh giá ▴",
+      flowFrom: "xây trên", flowTo: "dẫn tới",
       bandLabels: ["đang tiến tới","đạt chuẩn","vượt chuẩn"],
       eg: "xem ví dụ →",
       mTeach: "Học", mPractise: "Luyện tập", mRevise: "Ôn tập",
@@ -683,6 +702,26 @@
     return cp;
   }
   /* one quiet line: what project this practice is for */
+  /* "where's the turning point from?" — the skill graph, rendered.
+     A chip names the skill; a cross-unit edge also names its unit. */
+  function flowChips(ids, hereUnit){
+    return ids.map(function(sid){
+      var sk = STEM2.SKILLS[sid]; if (!sk) return "";
+      var other = sk.unit !== hereUnit.id ? STEM2.UNIT_BY_ID[sk.unit] : null;
+      return "<a href='#skill=" + sid + "&mode=teach'>" + esc(sk.name) +
+        (other ? "<span class='fl-unit'>" + esc(other.name) + "</span>" : "") + "</a>";
+    }).join("");
+  }
+  function flowLine(id, u){
+    var from = STEM2.buildsOn(id), to = STEM2.leadsTo(id);
+    if (!from.length && !to.length) return "";
+    var h = "<p class='skflow'>";
+    if (from.length) h += "<span class='fl-lbl'>" + esc(T("flowFrom")) + "</span>" + flowChips(from, u);
+    if (from.length && to.length) h += "<span class='fl-sep'>·</span>";
+    if (to.length) h += "<span class='fl-lbl'>" + esc(T("flowTo")) + "</span>" + flowChips(to, u);
+    return h + "</p>";
+  }
+
   function framingLine(id){
     var sk = STEM2.SKILLS[id];
     if (!sk) return "";
@@ -718,6 +757,7 @@
     h += "</div>";
     var frame = framingLine(id);
     if (frame) h += "<p class='frame'>" + esc(frame) + "</p>";
+    h += flowLine(id, u);
     h += "</div>";
 
     h += "<nav class='modes'>";
@@ -914,12 +954,15 @@
 
   function renderTeach(id, host){
     var t = QBANK.teach(id);
-    var h = "<div class='what'>" + t.what + "</div>";
+    var h = "<div class='tgrid'><div class='tcol'>";
+    h += "<div class='what'>" + t.what + "</div>";
     h += "<h3 class='et'>" + esc(T("howTitle")) + "</h3><ol class='how'>";
     t.how.forEach(function(s){ h += "<li>" + s + "</li>"; });
     h += "</ol>";
+    h += "</div><div class='tcol'>";
     h += "<h3 class='et'>" + esc(T("exTitle")) + "</h3><div id='exBox'></div>" +
          "<p style='margin:14px 0 0'><button class='btn quiet' id='exBtn'>" + esc(T("anotherEx")) + "</button></p>";
+    h += "</div></div>";
     h += "<h3 class='et'>" + esc(T("guidedTitle")) + "</h3>" +
          "<p class='hint'><b>" + esc(T("hintLabel")) + "</b> " + esc(QBANK.hint(id)) + "</p>" +
          "<div id='tryBox'></div>" +

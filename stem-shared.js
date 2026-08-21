@@ -698,6 +698,7 @@
                  gg_code: "science", gg_inherit: "science", gg_prob: "maths",
                  pg_claims: "science",
                  lg_safe: "science", lg_data: "maths", lg_matter: "science" };
+  function strandOfGroup(groupId) { return STRAND[groupId] || "maths"; }
   function strandOf(skillId) {
     var sk = SKILLS[skillId];
     return sk ? (STRAND[sk.group] || "maths") : "maths";
@@ -718,7 +719,7 @@
     UNITS: UNITS, UNIT_BY_ID: UNIT_BY_ID, SKILLS: SKILLS, MAPS: MAPS,
     currentUnit: currentUnit, currentUnits: currentUnits,
     nextCheckpoint: nextCheckpoint, cellState: cellState,
-    setLocation: setLocation, strandOf: strandOf, unitOpen: unitOpen,
+    setLocation: setLocation, strandOf: strandOf, strandOfGroup: strandOfGroup, unitOpen: unitOpen,
     buildsOn: buildsOn, leadsTo: leadsTo,
     Mastery: Mastery, Store: Store, setCounts: setCounts,
     cpDone: cpDone, cpNow: cpNow, cpWhen: cpWhen, esc: esc
