@@ -312,7 +312,7 @@
 
     /* Lab & Matter · measuring & recording */
     sc_measure: { name: "Read a scale and record with units", unit: "lab", group: "lg_data",
-      cont: "Science · Measurement · Maths · Number", from: ["sc_equipment"], needs: "cp_heat",
+      cont: "Science · Measurement · Maths · Number", from: ["sc_equipment", "f_symbols"], needs: "cp_heat",
       bands: ["I can read a scale to the nearest marked line.",
               "I can read between the lines and always write the unit.",
               "I can say how precise my reading is and why."],
