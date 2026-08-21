@@ -6,8 +6,8 @@
 <title>Race to School — Linear Motion</title>
 <style>
   :root {
-    --paper:#fcfcfa; --ink:#212427; --muted:#767b7f; --faint:#9aa0a5;
-    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f;
+    --paper:#fcfcfa; --ink:#212427; --muted:#5c6166; --faint:#6b7075;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f; --on-accent:#ffffff;
     /* aliases so the rest of this page's CSS (unchanged) and the shared
        notebook panel (stem-vocab.js) keep reading the same v2 colours */
     --bg:#fcfcfa; --card:#fcfcfa; --line:#e6e7e3; --radius:14px; --shadow:none;
@@ -16,8 +16,8 @@
     --tram:#0369a1; --bike:#b45309; --car:#7e22ce;
   }
   @media (prefers-color-scheme:dark) {
-    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#767b7f;
-            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a;
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#878d92;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517;
             --bg:#121517; --card:#121517; --line:#2c3134;
             --good:#93cf9b; --good-soft:#1d3323; --warn:#fbbf24; --warn-soft:#3a2f12;
             --bad:#e8836f; --bad-soft:#3b201a;
@@ -28,10 +28,10 @@
          font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
   .wrap { max-width:900px; margin:0 auto; padding:16px 16px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
-  .top a { color:var(--accent); text-decoration:none; font-weight:600; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
   .top a:hover { text-decoration:underline; }
-  select.language-select { font:inherit; border-radius:10px; border:1px solid var(--line);
-    background:var(--card); color:var(--ink); padding:6px 10px; }
+  select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
+    background:var(--paper); color:var(--ink); padding:5px 8px; min-height:44px; }
   .serif { font-family:Georgia,"Times New Roman",serif; }
   .masthead { margin:4px 0 22px; }
   .masthead h1 { margin:0 0 6px; font-family:Georgia,"Times New Roman",serif; font-size:1.9rem;
@@ -42,7 +42,7 @@
     padding:16px; box-shadow:var(--shadow); margin-bottom:14px; }
   .muted { color:var(--muted); font-size:.88rem; }
   /* level picker */
-  .levels { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 4px; }
+  .levels { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 18px; }
   .ltab { border-radius:12px; border:1px solid var(--line); background:var(--card); color:var(--ink);
     padding:9px 14px; font:inherit; cursor:pointer; text-align:left; min-height:44px; box-shadow:var(--shadow); }
   .ltab b { display:block; font-size:.9rem; }
@@ -51,8 +51,10 @@
   .ltab.on b { color:var(--accent); }
   .ltab.lock { opacity:.55; cursor:not-allowed; }
   .ltab .tick { color:var(--good); }
-  .teacherline { font-size:.75rem; color:var(--muted); margin:2px 0 14px; }
-  .teacherline a { color:var(--muted); }
+  /* teacher affordance lives in the page foot, quietly, out of the student's path */
+  .teacherline { font-size:.72rem; color:var(--faint); margin:14px 0 0; }
+  .teacherline a { color:var(--faint); }
+  .teacherline a:hover { color:var(--accent); }
   /* sim */
   .simbox canvas { display:block; width:100%; border:1px solid var(--line); border-radius:10px;
     background:var(--card); margin-bottom:8px; }
@@ -62,17 +64,17 @@
   .mchip .dot { width:12px; height:12px; border-radius:50%; display:inline-block; }
   .ctrl { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
   button.go { font:inherit; font-weight:600; border-radius:999px; padding:9px 18px; cursor:pointer;
-    border:1px solid var(--accent); background:var(--accent); color:#fff; }
+    min-height:44px; border:1px solid var(--accent); background:var(--accent); color:var(--on-accent); }
   button.go.ghost { background:none; color:var(--accent); }
   button.go:disabled { opacity:.5; cursor:default; }
   .speedp { border-radius:999px; border:1px solid var(--line); background:none; color:var(--muted);
-    padding:8px 13px; font:inherit; font-weight:600; cursor:pointer; font-size:.85rem; }
-  .speedp.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+    padding:8px 13px; min-height:44px; font:inherit; font-weight:600; cursor:pointer; font-size:.85rem; }
+  .speedp.on { background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
   .timer { margin-left:auto; color:var(--muted); font-size:.9rem; font-variant-numeric:tabular-nums; }
   .podium { margin-top:10px; font-weight:600; font-size:.95rem; }
   /* questions */
   .qrow { margin:12px 0; }
-  .lvl input[type=text] { font:inherit; width:96px; padding:8px 10px; border-radius:8px;
+  .lvl input[type=text] { font:inherit; width:96px; padding:8px 10px; min-height:44px; border-radius:8px;
     border:1px solid var(--line); background:var(--bg); color:var(--ink); text-align:center; }
   .lvl input.wide { width:150px; }
   .lvl input.right { border-color:var(--good); background:var(--good-soft);
@@ -89,7 +91,7 @@
   .hintbtn { border:none; background:none; color:var(--accent); font:inherit; font-size:.85rem;
     cursor:pointer; padding:6px 8px; text-decoration:underline; }
   /* chunky slider */
-  input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:34px;
+  input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:44px;
     background:none; margin:4px 0; }
   input[type=range]::-webkit-slider-runnable-track { height:8px; border-radius:999px; background:var(--line); }
   input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:26px; height:26px;
@@ -123,13 +125,13 @@
   <div class="card" id="intro"></div>
 
   <div class="levels" id="levelTabs"></div>
-  <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: unlock all levels</a></p>
 
   <div id="levelPanel" class="lvl"></div>
 
   <p class="note" data-i18n="privacy">🔒 Anonymous. Your progress on this page is stored in this
     browser only — no accounts, no tracking.</p>
   <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+  <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: unlock all levels</a></p>
 </div>
 
 <script src="stem-vocab-data.js?v=20260821-1"></script>
@@ -175,15 +177,20 @@
   function fmt(n){ return String(Math.round(n*100)/100); }
   function fmtT(n){ return fmt(Math.round(n*10)/10) + " min"; }
   function fmtKm(n){ return fmt(n) + " km"; }
-  /* parse a number, allowing fractions like "3/10" */
+  /* parse a number, allowing fractions like "3/10".
+     Strict, and deliberately the same rule as stem-questions.js: the WHOLE
+     string must be a plain number or a simple fraction, so "20 minutes",
+     "3abc", "1e99", "0x10" and "Infinity" are all rejected rather than
+     silently read as 20, 3, 1e99, 0 and Infinity. */
   function num(str){
     if (str==null) return NaN;
-    str = String(str).replace(/−/g,"-").replace(/\s+/g,"");
+    str = String(str).replace(/−/g,"-").replace(/\s+/g,"")
+      .replace(/^\+-/,"-").replace(/^-\+/,"-").replace(/^\+/,"");
     if (!str) return NaN;
     var m = str.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
     if (m) return parseFloat(m[1])/parseFloat(m[2]);
-    var v = parseFloat(str);
-    return isNaN(v) ? NaN : v;
+    if (!/^-?\d+(?:\.\d+)?$/.test(str)) return NaN;
+    return parseFloat(str);
   }
   function near(a,b,tol){ return !isNaN(a) && Math.abs(a-b) <= tol; }
   function markInput(inp, ok){ inp.classList.remove("right","wrong"); inp.classList.add(ok?"right":"wrong"); }

@@ -20,14 +20,14 @@
      ================================================================ -->
 <style>
   :root {
-    --paper:#fcfcfa; --ink:#212427; --muted:#767b7f; --faint:#9aa0a5;
-    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f;
+    --paper:#fcfcfa; --ink:#212427; --muted:#5c6166; --faint:#6b7075;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f; --on-accent:#ffffff;
     /* aliases so the shared notebook panel (stem-vocab.js) stays readable */
     --card:#fcfcfa; --line:#e6e7e3;
   }
   @media (prefers-color-scheme:dark) {
-    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#767b7f;
-            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a;
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#878d92;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517;
             --card:#121517; --line:#2c3134; }
   }
   * { box-sizing:border-box; }
@@ -38,7 +38,7 @@
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
   .top a:hover { text-decoration:underline; }
   select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
-    background:var(--paper); color:var(--ink); padding:5px 8px; }
+    background:var(--paper); color:var(--ink); padding:5px 8px; min-height:44px; }
   .serif { font-family:Georgia,"Times New Roman",serif; }
   .masthead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
   h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:2rem; font-weight:500; letter-spacing:-.01em; }
@@ -53,8 +53,9 @@
   .rail { display:flex; gap:26px; overflow-x:auto; -webkit-overflow-scrolling:touch;
     margin:0 -22px 6px; padding:2px 22px 12px; border-bottom:1px solid var(--hair); }
   .rail-sec { flex:0 0 auto; min-width:172px; }
-  .rail-h { display:block; font-size:.68rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
-    color:var(--muted); text-decoration:none; padding:9px 0 3px; border-top:1px solid var(--ink); }
+  .rail-h { display:flex; align-items:center; min-height:44px; font-size:.68rem; font-weight:700;
+    letter-spacing:.09em; text-transform:uppercase;
+    color:var(--muted); text-decoration:none; padding:6px 0 3px; border-top:1px solid var(--ink); }
   .rail-h:hover { color:var(--accent); }
   .ritem { display:flex; justify-content:space-between; align-items:center; gap:10px;
     min-height:44px; padding:5px 0; text-decoration:none; color:inherit; font-size:.82rem; }
@@ -109,8 +110,9 @@
   .skname { flex:1 1 220px; font-size:.9rem; min-width:0; }
   .skstate { font-size:.78rem; color:var(--muted); white-space:nowrap; }
   .skstate.m { color:var(--accent); font-weight:600; }
+  /* 44px tall for a finger, pulled back into the row so the row keeps its height */
   .skact { font-size:.82rem; color:var(--accent); font-weight:600; text-decoration:none; white-space:nowrap;
-    padding:8px 0; }
+    display:inline-flex; align-items:center; min-height:44px; padding:0; margin:-7px 0; }
   .skact:hover { text-decoration:underline; }
   /* the project this skill feeds — one quiet line under the action link */
   .builds { flex:1 1 100%; font-size:.75rem; color:var(--faint); max-width:60ch; }
@@ -134,8 +136,8 @@
   .task:last-child { border-bottom:0; }
   .task .t { font-size:.92rem; font-weight:600; }
   .task .w { margin:3px 0 4px; font-size:.8rem; color:var(--muted); max-width:60ch; }
-  .task a { display:inline-block; color:var(--accent); text-decoration:none; font-weight:600;
-    font-size:.82rem; padding:5px 0; }
+  .task a { display:inline-flex; align-items:center; min-height:44px; color:var(--accent);
+    text-decoration:none; font-weight:600; font-size:.82rem; padding:5px 0; }
   .task a:hover { text-decoration:underline; }
   .task .msg { display:none; font-size:.78rem; color:var(--alert); margin-top:3px; max-width:56ch; }
   .task.show .msg { display:block; }
@@ -270,7 +272,10 @@
                    quotes and the task link starts working. Anything
                    still "#" shows the "teacher is adding this" note.
      DO_TASKS      the task list. school: key into SCHOOL_LINKS;
-                   href: a normal link; ext: opens in a new tab.
+                   href: a normal link; ext: opens in a new tab;
+                   i18n: read title/what/link from COPY instead of from
+                   here, so the row speaks all four languages.
+     WORD_LESSONS  extra WORDS-rail rows that are lessons, not word sets.
      Nothing below the "end CONTENT" line needs editing.
      =================================================================== */
   var UNIT_ID = "kin";
@@ -289,6 +294,7 @@
     { id:"race", title:"Race to School", short:"Race to School",
       what:"Tram, bike and car on the same 6 km — three lines on one position-time graph. Watch it, predict it, then do the maths yourself.",
       linkLabel:"Start the race →", href:"stem-commute.html" },
+    { id:"revseq", i18n:"revSeq", href:"stem-vocab-revision.html" },
     { id:"booklet", title:"Worded questions booklet", short:"Worded questions booklet",
       what:"Worded motion questions. For every question: write the units, write the formula, then the answer. Bring it to class marked.",
       linkLabel:"Open the booklet on Compass", school:"booklet" },
@@ -298,6 +304,10 @@
     { id:"ballreport", title:"Ball-drop report template", short:"Ball-drop template",
       what:"Drop the ball, time the fall, put the data in Excel. Plot distance against t² to straighten the curve — then g = 2 × the gradient. Write it up in the template.",
       linkLabel:"Open the template on Compass", school:"ballreport" }
+  ];
+
+  var WORD_LESSONS = [
+    { i18n:"revSeq", href:"stem-vocab-revision.html" }
   ];
   /* ===== end CONTENT =============================================== */
 
@@ -324,13 +334,18 @@
       buildsDoneF: function(name){ return "This built your "+name+" toolkit — later tasks still use it."; },
       buildsAlways:"This keeps your number work sharp for every task.",
       groupFeedsF: function(names){ return "This group is the toolkit for the "+names.join(" and ")+"."; },
-      groupFeedsAlways:"These have no checkpoint of their own — every task in every unit leans on them."
+      groupFeedsAlways:"These have no checkpoint of their own — every task in every unit leans on them.",
+      revSeqTitle:"Linear graphs — the quiz words (revision)",
+      revSeqWhat:"A short lesson in four steps on the words the Linear Equations quiz asks you about. Match each word to its meaning, build it from its parts, then find it inside a real quiz question.",
+      revSeqLink:"Start the revision lesson →"
     },
     "zh-Hans": {
       back:"← STEM 主页", sub:"第三学期 · 运动、线性图象、数据",
       goingH:"我要去哪里？", howH:"我走得怎样？", nextH:"接下来做什么？",
       railWordsH:"单词", railSkillsH:"技能", railDoH:"任务", railProveH:"证明",
       skillsNote:"下面的等级只是描述路径——这个页面没有自评。✓ 只来自技能引擎上一次完整的练习（3 题全对）。",
+      mapH2:"通往项目的路",
+      mapLead:"下面的每一项技能、每一个单词，都通向那几根高高的竖栏——也就是你真正要做的任务。",
       doH2:"任务", doLead:"在检查点之前完成这些任务。🔒 表示需要学校账号——请打开 Compass 或班级 OneNote。",
       proveH2:"证明", proveLead:"每个单元只保留自己的检查点。这是运动学的完整安排。",
       privacy:"匿名 · 进度只保存在这个浏览器 · 工作纸在 Compass 和班级 OneNote（需学校账号）。",
@@ -354,13 +369,18 @@
       buildsDoneF: function(name){ return "这曾为 "+name+" 做准备——后面的任务还会用到。"; },
       buildsAlways:"这让你的数字运算保持熟练，每个任务都用得上。",
       groupFeedsF: function(names){ return "这一组是 "+names.join(" 和 ")+" 的准备。"; },
-      groupFeedsAlways:"这些技能没有自己的检查点——每个单元的每个任务都靠它们。"
+      groupFeedsAlways:"这些技能没有自己的检查点——每个单元的每个任务都靠它们。",
+      revSeqTitle:"直线图像——测验词汇（复习）",
+      revSeqWhat:"一节四个步骤的短课，讲线性方程测验里会问到的词。先把词和意思配对，再按词的组成部分拼出来，最后在真实的测验题里把它们找出来。",
+      revSeqLink:"开始这节复习课 →"
     },
     "zh-Hant": {
       back:"← STEM 主頁", sub:"第三學期 · 運動、線性圖形、數據",
       goingH:"我要去哪裡？", howH:"我走得如何？", nextH:"接下來做什麼？",
       railWordsH:"單字", railSkillsH:"技能", railDoH:"任務", railProveH:"證明",
       skillsNote:"下面的等級只是描述路徑——這個頁面沒有自評。✓ 只來自技能引擎上一次完整的練習（3 題全對）。",
+      mapH2:"通往專案的路",
+      mapLead:"下面的每一項技能、每一個單字，都通向那幾根高高的直欄——也就是你真正要做的任務。",
       doH2:"任務", doLead:"在檢查點之前完成這些任務。🔒 表示需要學校帳號——請打開 Compass 或班級 OneNote。",
       proveH2:"證明", proveLead:"每個單元只保留自己的檢查點。這是運動學的完整安排。",
       privacy:"匿名 · 進度只儲存在這個瀏覽器 · 學習單在 Compass 和班級 OneNote（需學校帳號）。",
@@ -384,7 +404,10 @@
       buildsDoneF: function(name){ return "這曾為 "+name+" 做準備——後面的任務還會用到。"; },
       buildsAlways:"這讓你的數字運算保持熟練，每個任務都用得上。",
       groupFeedsF: function(names){ return "這一組是 "+names.join(" 和 ")+" 的準備。"; },
-      groupFeedsAlways:"這些技能沒有自己的檢查點——每個單元的每個任務都靠它們。"
+      groupFeedsAlways:"這些技能沒有自己的檢查點——每個單元的每個任務都靠它們。",
+      revSeqTitle:"直線圖形——小考詞彙（複習）",
+      revSeqWhat:"一節四個步驟的短課，講一次方程小考裡會問到的詞。先把詞和意思配對，再依詞的組成部分拼出來，最後在真實的小考題裡把它們找出來。",
+      revSeqLink:"開始這節複習課 →"
     },
     vi: {
       back:"← Trang STEM", sub:"Học kỳ 3 · chuyển động, đồ thị đường thẳng, dữ liệu",
@@ -416,7 +439,10 @@
       buildsDoneF: function(name){ return "Phần này đã chuẩn bị cho bài "+name+" — các bài sau vẫn dùng đến."; },
       buildsAlways:"Phần này giữ cho kỹ năng tính toán của em luôn nhạy, bài nào cũng cần.",
       groupFeedsF: function(names){ return "Nhóm này là phần chuẩn bị cho bài "+names.join(" và ")+"."; },
-      groupFeedsAlways:"Những kỹ năng này không có mốc kiểm tra riêng — bài nào ở chuyên đề nào cũng dựa vào chúng."
+      groupFeedsAlways:"Những kỹ năng này không có mốc kiểm tra riêng — bài nào ở chuyên đề nào cũng dựa vào chúng.",
+      revSeqTitle:"Đồ thị đường thẳng — những từ trong bài kiểm tra (ôn tập)",
+      revSeqWhat:"Một bài học ngắn gồm bốn bước về những từ mà bài kiểm tra Phương trình đường thẳng sẽ hỏi. Ghép mỗi từ với nghĩa của nó, ghép các phần lại để tạo ra từ, rồi tìm chúng trong một câu hỏi kiểm tra thật.",
+      revSeqLink:"Bắt đầu bài ôn tập →"
     }
   };
   var sel = document.querySelector(".language-select");
@@ -449,6 +475,12 @@
   function skillHref(id, mode){ return "stem-skills.html#skill=" + encodeURIComponent(id) + "&mode=" + mode; }
   function taskHref(t){ return t.school ? SCHOOL_LINKS[t.school] : t.href; }
   function taskLocked(t){ var h = taskHref(t); return !!t.school && (!h || h === "#"); }
+  /* a task with an i18n prefix keeps its words in COPY (all four languages);
+     the rest read the English written in DO_TASKS */
+  function taskTitle(t){ return t.i18n ? T(t.i18n + "Title") : t.title; }
+  function taskShort(t){ return t.i18n ? T(t.i18n + "Title") : (t.short || t.title); }
+  function taskWhat(t){ return t.i18n ? T(t.i18n + "What") : t.what; }
+  function taskLink(t){ return t.i18n ? T(t.i18n + "Link") : t.linkLabel; }
 
   function vocabTotals(){
     var built = 0, total = 0;
@@ -492,6 +524,11 @@
         "<span class='rcount'>" + (c.built ? "<span class='ok'>" + c.built + "</span>" : "0") +
         "/" + c.total + "</span></a>";
     });
+    /* lessons that walk through a set rather than being one */
+    WORD_LESSONS.forEach(function(w){
+      h += "<a class='ritem' href='" + esc(w.href) + "'>" +
+        "<span class='rname'>" + esc(T(w.i18n + "Title")) + "</span></a>";
+    });
     document.getElementById("railWords").innerHTML = h;
 
     h = "";
@@ -511,7 +548,7 @@
       h += "<a class='ritem" + (locked ? " locked" : "") + "' data-task='" + t.id + "' href='" + href + "'" +
         (t.ext && !locked ? " target='_blank' rel='noopener'" : "") + ">" +
         "<span class='rname'>" + (t.school ? "<span class='lock'>🔒</span> " : "") +
-        esc(t.short || t.title) + "</span></a>";
+        esc(taskShort(t)) + "</span></a>";
     });
     document.getElementById("railDo").innerHTML = h;
 
@@ -661,14 +698,14 @@
       var lockIcon = t.school ? "🔒 " : "";
       var link;
       if (locked) {
-        link = "<a class='locked' data-task='" + t.id + "' href='#'>" + lockIcon + esc(t.linkLabel) + "</a>";
+        link = "<a class='locked' data-task='" + t.id + "' href='#'>" + lockIcon + esc(taskLink(t)) + "</a>";
       } else {
         link = "<a href='" + esc(taskHref(t)) + "'" + (t.ext ? " target='_blank' rel='noopener'" : "") + ">" +
-          lockIcon + esc(t.linkLabel) + (t.ext ? " ↗" : "") + "</a>";
+          lockIcon + esc(taskLink(t)) + (t.ext ? " ↗" : "") + "</a>";
       }
       h += "<div class='task' id='task-" + t.id + "'>" +
-        "<div class='t'>" + esc(t.title) + "</div>" +
-        "<div class='w'>" + esc(t.what) + "</div>" + link +
+        "<div class='t'>" + esc(taskTitle(t)) + "</div>" +
+        "<div class='w'>" + esc(taskWhat(t)) + "</div>" + link +
         "<div class='msg'>" + esc(T("schoolMsg")) + "</div></div>";
     });
     document.getElementById("tasks").innerHTML = h;

@@ -18,16 +18,16 @@
      ================================================================ -->
 <style>
   :root {
-    --paper:#fcfcfa; --ink:#212427; --muted:#767b7f; --faint:#9aa0a5;
-    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f;
+    --paper:#fcfcfa; --ink:#212427; --muted:#5c6166; --faint:#6b7075;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f; --on-accent:#ffffff;
     /* morpheme types */
     --pre:#2c5f8a; --pre-soft:#eef4fa;
     --root:#8a5a1e; --root-soft:#f9f1e5;
     --suf:#3f7a4a; --suf-soft:#edf5ef;
   }
   @media (prefers-color-scheme:dark) {
-    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#767b7f;
-            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a;
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#878d92;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517;
             --pre:#9cc4e2; --pre-soft:#1a2732; --root:#dcab6d; --root-soft:#2b2318;
             --suf:#93cf9b; --suf-soft:#1c2a20; }
   }
@@ -40,7 +40,7 @@
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
   .top a:hover { text-decoration:underline; }
   select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
-    background:var(--paper); color:var(--ink); padding:5px 8px; }
+    background:var(--paper); color:var(--ink); padding:5px 8px; min-height:44px; }
   .serif { font-family:Georgia,"Times New Roman",serif; }
   .masthead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
   h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:2rem; font-weight:500; letter-spacing:-.01em; }
@@ -300,7 +300,8 @@
       answerWasF: function(a){ return "The answer is " + a + "."; },
       nextQ:"Next →", finishQ:"See the score →",
       scoreF: function(ok,n,p){ return ok + " of " + n + " right (" + p + "%)"; },
-      passMsg:"70% or better on the first try — every word in this set is now ticked as used.",
+      passMsgF: function(ok,n){ return "70% or better on the first try — " + ok + " of " + n +
+        " words are now ticked as used. Only the words you answered right first try count."; },
       failMsg:"Under 70%, so nothing was ticked. Read the words again, then come back — the questions change.",
       lookAgain:"Look again at:", tryAgain:"try again →",
       emptySet:"There are no words in this set yet."
@@ -340,7 +341,8 @@
       answerWasF: function(a){ return "答案是 " + a + "。"; },
       nextQ:"下一题 →", finishQ:"看结果 →",
       scoreF: function(ok,n,p){ return "答对 " + ok + " / " + n + "（" + p + "%）"; },
-      passMsg:"第一次就达到 70% 以上——这一组的每个单词都记为“已使用”。",
+      passMsgF: function(ok,n){ return "第一次就达到 70% 以上——这一组 " + n + " 个单词中有 " + ok +
+        " 个记为“已使用”。只有第一次就答对的单词才算。"; },
       failMsg:"不到 70%，所以没有记录。再读一遍单词，然后回来——题目会换新的。",
       lookAgain:"再看看这些词：", tryAgain:"再试一次 →",
       emptySet:"这一组还没有单词。"
@@ -380,7 +382,8 @@
       answerWasF: function(a){ return "答案是 " + a + "。"; },
       nextQ:"下一題 →", finishQ:"看結果 →",
       scoreF: function(ok,n,p){ return "答對 " + ok + " / " + n + "（" + p + "%）"; },
-      passMsg:"第一次就達到 70% 以上——這一組的每個單字都記為「已使用」。",
+      passMsgF: function(ok,n){ return "第一次就達到 70% 以上——這一組 " + n + " 個單字中有 " + ok +
+        " 個記為「已使用」。只有第一次就答對的單字才算。"; },
       failMsg:"不到 70%，所以沒有記錄。再讀一次單字，然後回來——題目會換新的。",
       lookAgain:"再看看這些字：", tryAgain:"再試一次 →",
       emptySet:"這一組還沒有單字。"
@@ -420,7 +423,8 @@
       answerWasF: function(a){ return "Đáp án là " + a + "."; },
       nextQ:"Câu tiếp theo →", finishQ:"Xem kết quả →",
       scoreF: function(ok,n,p){ return "Đúng " + ok + "/" + n + " (" + p + "%)"; },
-      passMsg:"Ngay lượt đầu đã đạt từ 70% trở lên — mọi từ trong nhóm này được ghi là “đã dùng”.",
+      passMsgF: function(ok,n){ return "Ngay lượt đầu đã đạt từ 70% trở lên — " + ok + "/" + n +
+        " từ được ghi là “đã dùng”. Chỉ những từ em trả lời đúng ngay lượt đầu mới được tính."; },
       failMsg:"Chưa được 70% nên chưa ghi lại gì cả. Em đọc lại các từ rồi quay lại nhé — câu hỏi sẽ đổi.",
       lookAgain:"Xem lại những từ này:", tryAgain:"làm lại →",
       emptySet:"Nhóm này chưa có từ nào."
@@ -920,11 +924,16 @@
   function finishQ(){
     /* the 70% gate uses the exact ratio; the percentage shown is just rounded for reading */
     var n = quiz.items.length, pct = Math.round(100 * quiz.ok / n), pass = (quiz.ok / n) >= 0.7;
-    if (pass) quiz.items.forEach(function(it){ Store.markVocab(it.w.w, "checked"); });
+    /* The set-level 70% gate decides whether this run counts at all; the tick is
+       then per word, and only for words answered right first try. A word the
+       student got wrong is never recorded as used. */
+    if (pass) quiz.items.forEach(function(it){
+      if (it.chosen === it.q.a) Store.markVocab(it.w.w, "checked");
+    });
     var missed = quiz.items.filter(function(it){ return it.chosen !== it.q.a; });
     var h = "<div class='summary'><p class='score'>" + esc(T("scoreF")(quiz.ok, n, pct)) + "</p>" +
       "<span class='bar wide'><i style='width:" + pct + "%'></i></span>" +
-      "<p class='smsg'>" + esc(pass ? T("passMsg") : T("failMsg")) + "</p>";
+      "<p class='smsg'>" + esc(pass ? T("passMsgF")(quiz.ok, n) : T("failMsg")) + "</p>";
     if (missed.length) {
       h += "<p class='miss'>" + esc(T("lookAgain")) + " " + missed.map(function(it){
         return "<a href='#word=" + encodeURIComponent(it.w.w) + "'>" + esc(it.w.w) + "</a>"; }).join(", ") + "</p>";

@@ -15,7 +15,16 @@
      elc_stem_vocab    words built/checked (shared with the
                        vocab hub + notebook panel)
      elc_stem_evidence proof lines written by interactives
+   Page-local state, same browser, same student:
+     elc_stem_commute   Race to School — levels unlocked/finished
+     elc_stem_revseq    linear-graphs revision lesson — place kept
+     elc_stem_quizprep  quiz-prep streaks
+     elc_stem_vocabhub  vocab hub — set state
+     elc_stem_tap       tap-to-translate on/off
+     elc_stem_home_lang the home language chosen for translations
    The old elc_stem_skills (self-assessment) is ignored.
+   Store.clearAll() removes every elc_stem_* key above. It keeps
+   elc_page_language — that is a page preference, not a record.
    ============================================================ */
 (function () {
   "use strict";
@@ -438,9 +447,21 @@
     /* legacy no-ops kept so old pages don't crash; subjective data is dead */
     skills: function () { return {}; },
     setSkill: function () {},
+    /* Every elc_stem_* key the hub writes is a record of this student's work,
+       so all of them go — the named list below plus anything else carrying the
+       prefix, so a page that starts storing state cannot be missed. Kept:
+       elc_page_language, which is a page preference, not a record. */
     clearAll: function () {
-      try { localStorage.removeItem(K_VOCAB); localStorage.removeItem(K_EVID);
-            localStorage.removeItem("elc_stem_skills"); } catch (e) {}
+      var keys = [K_VOCAB, K_EVID, K_M2, "elc_stem_skills",
+                  "elc_stem_commute", "elc_stem_revseq", "elc_stem_quizprep",
+                  "elc_stem_vocabhub", "elc_stem_tap", "elc_stem_home_lang"];
+      try {
+        for (var i = localStorage.length - 1; i >= 0; i--) {
+          var k = localStorage.key(i);
+          if (k && k.indexOf("elc_stem_") === 0 && keys.indexOf(k) < 0) keys.push(k);
+        }
+      } catch (e) {}
+      keys.forEach(function (k) { try { localStorage.removeItem(k); } catch (e) {} });
       Mastery.clearAll();
     }
   };

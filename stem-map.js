@@ -14,12 +14,56 @@
   "use strict";
   if (!window.STEM2) return;
 
-  var SET_SHORT = {
-    kin1: "motion words", kin2: "graph words", kin3: "data words",
-    kin4: "trig words", rev: "quiz words",
-    bio1: "cells & DNA", bio2: "inheritance", bio3: "probability words",
-    pan: "pandemic words"
+  /* ---------- the few strings this component shows, in the page languages ----------
+     Same pattern as the pages: read elc_page_language, fall back to English.
+     Set names are NOT here — they are derived from the vocab data (below), so a
+     new set never needs a code change. */
+  var COPY = {
+    en:        { skills: function (n) { return n + (n === 1 ? " skill" : " skills"); },
+                 soon: "soon",
+                 legend: "Every cell feeds the tall column to its right — the project is the point. ✓ = goal met." },
+    "zh-Hans": { skills: function (n) { return n + " 项技能"; },
+                 soon: "即将开始",
+                 legend: "每一格都在为右边那根高柱做准备——项目才是重点。✓ = 已达成目标。" },
+    "zh-Hant": { skills: function (n) { return n + " 項技能"; },
+                 soon: "即將開始",
+                 legend: "每一格都在為右邊那根高柱做準備——專案才是重點。✓ = 已達成目標。" },
+    vi:        { skills: function (n) { return n + " kỹ năng"; },
+                 soon: "sắp tới",
+                 legend: "Mỗi ô đều chuẩn bị cho cột cao bên phải — dự án mới là đích. ✓ = đã đạt mục tiêu." }
   };
+  function pageLang() {
+    var l = "en";
+    try { l = localStorage.getItem("elc_page_language") || "en"; } catch (e) {}
+    return COPY[l] ? l : "en";
+  }
+  function T(k) { var v = COPY[pageLang()][k]; return v !== undefined ? v : COPY.en[k]; }
+
+  /* ---------- short set labels, derived from the vocab set titles ----------
+     "Motion & its language" → "Motion";  "Pandemic — data literacy" → "Pandemic".
+     Cut at a dash, then at " & ", then at a comma, then to whole words, so the
+     label fits a 112px cell. Falls back to the set id if the data is absent. */
+  var MAXLEN = 16;
+  function shorten(title) {
+    var s = String(title || "").replace(/\s*\(revision\)\s*$/i, "").trim();
+    s = s.split(/\s+[—–-]\s+/)[0].trim();
+    if (s.length > MAXLEN) s = s.split(" & ")[0].trim();
+    if (s.length > MAXLEN) s = s.split(",")[0].trim();
+    if (s.length > MAXLEN) {
+      var out = [];
+      s.split(/\s+/).forEach(function (w) {
+        if (out.join(" ").length + w.length + (out.length ? 1 : 0) <= MAXLEN) out.push(w);
+      });
+      if (out.length) s = out.join(" ");
+    }
+    return s.replace(/\s+(?:for|of|in|on|to|with|and|the|a|an|&)$/i, "").trim();
+  }
+  var SET_SHORT = {};
+  (function () {
+    var data = window.STEM_VOCAB_DATA;
+    if (!data || !data.sets) return;
+    data.sets.forEach(function (set) { SET_SHORT[set.id] = shorten(set.title); });
+  })();
 
   var CSS = "" +
     ".pm-wrap{overflow-x:auto;padding-bottom:6px}" +
@@ -63,7 +107,7 @@
   }
   function cellLabel(cell) {
     if (cell.sets) return cell.sets.map(function (s) { return SET_SHORT[s] || s; }).join(" + ");
-    if (cell.skills) return cell.skills.length + (cell.skills.length === 1 ? " skill" : " skills");
+    if (cell.skills) return T("skills")(cell.skills.length);
     return "";
   }
   function cellHref(cell, unitId) {
@@ -111,7 +155,7 @@
           var pos = "style='grid-column:" + col + ";grid-row:" + (r + 1) + "'";
           if (!cell) { html += "<div class='pm-cell empty' " + pos + "></div>"; return; }
           if (cell.soon) {
-            html += "<div class='pm-cell soon' " + pos + "><span class='t'>" + STEM2.esc(cell.soon) + "</span> <span class='n' style='font-weight:400'>· soon</span></div>";
+            html += "<div class='pm-cell soon' " + pos + "><span class='t'>" + STEM2.esc(cell.soon) + "</span> <span class='n' style='font-weight:400'>· " + STEM2.esc(T("soon")) + "</span></div>";
             return;
           }
           var stt = STEM2.cellState(cell);
@@ -145,10 +189,34 @@
 
     html += "</div></div>";
     if (opts.legend !== false) {
-      html += "<div class='pm-legend'>Every cell feeds the tall column to its right — the project is the point. ✓ = goal met.</div>";
+      html += "<div class='pm-legend'>" + STEM2.esc(T("legend")) + "</div>";
     }
     el.innerHTML = html;
+    remember(el, unitId, opts);
   }
+
+  /* ---------- repaint when the reader changes the page language ----------
+     The pages write elc_page_language and repaint themselves; the map is drawn
+     by one call at load, so it listens for the same change and redraws. */
+  var drawn = [];
+  function remember(el, unitId, opts) {
+    for (var i = 0; i < drawn.length; i++) {
+      if (drawn[i].el === el) { drawn[i].unitId = unitId; drawn[i].opts = opts; return; }
+    }
+    drawn.push({ el: el, unitId: unitId, opts: opts });
+  }
+  function redrawAll() {
+    drawn.slice().forEach(function (d) {
+      if (d.el && d.el.isConnected) render(d.el, d.unitId, d.opts);
+    });
+  }
+  document.addEventListener("change", function (e) {
+    var t = e.target;
+    if (t && t.classList && t.classList.contains("language-select")) setTimeout(redrawAll, 0);
+  });
+  window.addEventListener("storage", function (e) {
+    if (e.key === "elc_page_language") redrawAll();
+  });
 
   window.STEMMAP = { render: render };
 })();

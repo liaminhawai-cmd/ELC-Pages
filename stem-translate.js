@@ -46,13 +46,20 @@
   })();
 
   var CSS = "" +
-    ".tw-bar{position:fixed;left:0;right:0;bottom:0;z-index:8500;display:flex;gap:10px;align-items:center;" +
+    /* wraps rather than overflowing: the 44px close button has to stay on
+       screen at 360px, next to an 18-language select. */
+    ".tw-bar{position:fixed;left:0;right:0;bottom:0;z-index:8500;display:flex;flex-wrap:wrap;gap:10px;align-items:center;" +
       "padding:9px 14px;background:var(--paper,#fcfcfa);border-top:1px solid var(--hair,#e6e7e3);" +
       "font-size:.8rem;transform:translateY(102%);transition:transform .18s ease}" +
     ".tw-bar.on{transform:none}" +
     ".tw-bar select{font:inherit;font-size:.78rem;border:1px solid var(--hair,#e6e7e3);border-radius:8px;" +
-      "background:var(--paper,#fcfcfa);color:var(--ink,#212427);padding:4px 7px}" +
-    ".tw-bar .tw-x{margin-left:auto;border:0;background:none;color:var(--muted,#767b7f);font-size:1.1rem;cursor:pointer;padding:2px 8px}" +
+      "background:var(--paper,#fcfcfa);color:var(--ink,#212427);padding:4px 7px;min-height:44px;" +
+      "flex:1 1 160px;min-width:0;max-width:246px}" +
+    ".tw-bar .tw-x{margin-left:auto;border:0;background:none;color:var(--muted,#767b7f);font-size:1.1rem;cursor:pointer;" +
+      "min-width:44px;min-height:44px;line-height:1;display:flex;align-items:center;justify-content:center}" +
+    /* the bar is fixed to the bottom, so the page reserves the same height
+       underneath it — otherwise it sits on top of the last lines of the page. */
+    "body.tw-active{padding-bottom:var(--tw-bar-h,56px)}" +
     ".tw-hit{cursor:help;border-bottom:1px dotted var(--faint,#9aa0a5)}" +
     ".tw-hit.tw-lock{border-bottom-style:dashed}" +
     ".tw-hit.tw-on{background:var(--accent-soft,#f4f9f8);border-bottom-color:var(--accent,#0d7a70)}" +
@@ -64,7 +71,7 @@
     ".tw-pop .n{color:var(--muted,#767b7f);font-size:.75rem;margin-top:4px}" +
     ".tw-pop a{color:var(--accent,#0d7a70);font-weight:600;text-decoration:none}" +
     ".tw-toggle{border:1px solid var(--hair,#e6e7e3);border-radius:999px;background:var(--paper,#fcfcfa);" +
-      "color:var(--muted,#767b7f);font:inherit;font-size:.72rem;padding:4px 11px;cursor:pointer}" +
+      "color:var(--muted,#767b7f);font:inherit;font-size:.72rem;padding:4px 13px;cursor:pointer;min-height:44px}" +
     ".tw-toggle.on{border-color:var(--accent,#0d7a70);color:var(--accent,#0d7a70)}";
 
   var bar, pop, active = [], enabled = false;
@@ -177,6 +184,20 @@
     else showPop(el, "<div class='w'>" + esc(word) + "</div><div class='n'>" + esc(U("none")) + "</div>");
   }
 
+  /* ---------- the word splitter ----------
+     A few target words are hyphenated ("y-intercept", "x-intercept"). A plain
+     run of letters either splits them or swallows a neighbouring hyphen, so the
+     known hyphenated terms are matched first, as whole terms, and only then the
+     ordinary word run. The lookahead stops "y-intercept" matching inside
+     "y-intercepts", which is not the term we hold a translation for. */
+  function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+  var HYPHENATED = Object.keys(TARGET).concat(Object.keys(GLOSS))
+    .filter(function (k) { return k.indexOf("-") > -1; })
+    .sort(function (a, b) { return b.length - a.length; });
+  var SPLIT_RE = new RegExp("(" +
+    (HYPHENATED.length ? "(?:" + HYPHENATED.map(escRe).join("|") + ")(?![A-Za-z])|" : "") +
+    "[A-Za-z][A-Za-z'-]{1,})", "i");
+
   /* wrap eligible words in tappable spans (skips inputs, links, code, marked-up vocab) */
   var SKIP = { SCRIPT: 1, STYLE: 1, INPUT: 1, TEXTAREA: 1, SELECT: 1, BUTTON: 1, A: 1, CODE: 1, SVG: 1, OPTION: 1 };
   function decorate(root) {
@@ -186,8 +207,11 @@
         var p = n.parentNode;
         while (p && p !== document.body) {
           if (SKIP[p.nodeName]) return NodeFilter.FILTER_REJECT;
+          /* tw-hit: already decorated — skipping it makes decorate() safe to
+             re-run over markup that is partly new and partly untouched. */
           if (p.classList && (p.classList.contains("no-tap") || p.classList.contains("tw-bar") ||
-              p.classList.contains("tw-pop") || p.classList.contains("sv-word"))) return NodeFilter.FILTER_REJECT;
+              p.classList.contains("tw-pop") || p.classList.contains("tw-hit") ||
+              p.classList.contains("sv-word"))) return NodeFilter.FILTER_REJECT;
           if (p.hasAttribute && p.hasAttribute("data-v")) return NodeFilter.FILTER_REJECT;
           p = p.parentNode;
         }
@@ -197,7 +221,7 @@
     var nodes = [], n;
     while ((n = walker.nextNode())) nodes.push(n);
     nodes.forEach(function (node) {
-      var parts = node.nodeValue.split(/([A-Za-z][A-Za-z'-]{1,})/);
+      var parts = node.nodeValue.split(SPLIT_RE);
       var any = false;
       var frag = document.createDocumentFragment();
       parts.forEach(function (p, i) {
@@ -217,12 +241,62 @@
     });
   }
 
-  var decorated = false;
+  /* ---------- keeping the decoration alive ----------
+     stem-skills.html and stem-vocab-hub.html rewrite their whole view on every
+     hashchange, so a word that arrived after the toggle went on used to stay
+     untappable. decorate() skips anything already wrapped, so it is safe to run
+     again over markup that is partly new; the observer is detached while it
+     runs so our own replacements cannot feed it back. */
+  var observer = null, pending = null;
+  function ours(node) {
+    var p = node;
+    while (p && p !== document.body) {
+      if (p.classList && (p.classList.contains("tw-bar") || p.classList.contains("tw-pop") ||
+          p.classList.contains("tw-hit"))) return true;
+      p = p.parentNode;
+    }
+    return false;
+  }
+  function redecorate() {
+    if (!enabled) return;
+    if (observer) observer.disconnect();
+    try { decorate(document.body); }
+    finally { if (observer) observer.observe(document.body, { childList: true, subtree: true }); }
+  }
+  function scheduleDecorate() {
+    if (pending) return;
+    pending = setTimeout(function () { pending = null; redecorate(); }, 60);
+  }
+  function startWatching() {
+    if (observer || typeof MutationObserver !== "function") return;
+    observer = new MutationObserver(function (recs) {
+      for (var i = 0; i < recs.length; i++) {
+        var r = recs[i];
+        if (r.addedNodes && r.addedNodes.length && !ours(r.target)) { scheduleDecorate(); return; }
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  }
+  function stopWatching() {
+    if (observer) { observer.disconnect(); observer = null; }
+    if (pending) { clearTimeout(pending); pending = null; }
+  }
+
+  /* the bar is fixed to the bottom of the viewport, so reserve its height under
+     the page while it is open — otherwise it covers the last lines. */
+  function syncBarSpace() {
+    if (!bar || !enabled) return;
+    var h = bar.offsetHeight || 56;
+    document.documentElement.style.setProperty("--tw-bar-h", h + "px");
+  }
+  window.addEventListener("resize", function () { syncBarSpace(); });
+
   function setEnabled(on) {
     enabled = on;
-    if (on && !decorated) { decorate(document.body); decorated = true; }
+    if (on) { decorate(document.body); startWatching(); } else { stopWatching(); }
     bar.classList.toggle("on", on);
     document.body.classList.toggle("tw-active", on);
+    syncBarSpace();
     document.querySelectorAll(".tw-hit").forEach(function (el) {
       el.style.borderBottomStyle = on ? "" : "none";
       el.style.cursor = on ? "" : "inherit";

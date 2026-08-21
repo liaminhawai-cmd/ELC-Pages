@@ -23,12 +23,12 @@
      ================================================================ -->
 <style>
   :root {
-    --paper:#fcfcfa; --ink:#212427; --muted:#767b7f; --faint:#9aa0a5;
-    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f;
+    --paper:#fcfcfa; --ink:#212427; --muted:#5c6166; --faint:#6b7075;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f; --on-accent:#ffffff;
   }
   @media (prefers-color-scheme:dark) {
-    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#767b7f;
-            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; }
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#878d92;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517; }
   }
   * { box-sizing:border-box; }
   [hidden] { display:none !important; }
@@ -39,7 +39,7 @@
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
   .top a:hover { text-decoration:underline; }
   select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
-    background:var(--paper); color:var(--ink); padding:5px 8px; }
+    background:var(--paper); color:var(--ink); padding:5px 8px; min-height:44px; }
   .masthead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
   h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:2rem; font-weight:500; letter-spacing:-.01em; }
   .sub { color:var(--muted); font-size:.8rem; }
@@ -80,7 +80,7 @@
   .sp .ok { color:var(--accent); font-weight:600; }
   .sp a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.82rem; }
   .sp a:hover { text-decoration:underline; }
-  .sp a.act { display:block; font-size:.9rem; padding:5px 0; }
+  .sp a.act { display:flex; align-items:center; min-height:44px; font-size:.9rem; padding:0; }
   .sp .rest { margin:8px 0 0; }
   .sp .rest div { font-size:.78rem; color:var(--muted); padding:2px 0; }
   .bar { display:block; max-width:190px; height:4px; background:var(--hair); border-radius:2px;
@@ -115,10 +115,11 @@
 
   /* ---- words ---- */
   .vrow { display:flex; flex-wrap:wrap; align-items:center; gap:4px 14px;
-    padding:10px 0; border-bottom:1px solid var(--hair); }
+    padding:2px 0; border-bottom:1px solid var(--hair); }
   .vrow:last-child { border-bottom:0; }
   .vname { flex:1 1 200px; font-family:Georgia,"Times New Roman",serif; font-size:1.02rem;
-    color:inherit; text-decoration:none; min-width:0; }
+    color:inherit; text-decoration:none; min-width:0;
+    display:flex; align-items:center; min-height:44px; }
   .vname:hover { color:var(--accent); }
   .vbar { flex:0 0 120px; height:4px; background:var(--hair); border-radius:2px; }
   .vbar i { display:block; height:4px; background:var(--accent); border-radius:2px; }
@@ -128,7 +129,7 @@
   /* ---- print ---- */
   @media print {
     :root { --paper:#fff; --ink:#000; --muted:#444; --faint:#666;
-            --hair:#c8c8c8; --accent:#00534c; --accent-soft:#fff; --alert:#8a3d16; }
+            --hair:#c8c8c8; --accent:#00534c; --accent-soft:#fff; --alert:#8a3d16; --on-accent:#ffffff; }
     .top, .actions, .noprint { display:none !important; }
     .wrap { max-width:none; padding:0; }
     body { font-size:12px; }
@@ -252,8 +253,8 @@
       ledgerLead:"✓ comes only from a full practise run — three questions, three right. Nothing here is self-rated.",
       wordsCountF: function(b,t,c){ return b+" of "+t+" built · "+c+" used"; },
       setCountF: function(b,t,c){ return "<b>"+b+"</b> of "+t+" built · "+c+" used"; },
-      confirmClear:"Clear every STEM record in this browser — mastery, words and proof? This cannot be undone.",
-      clearedMsg:"Cleared. This browser now holds no STEM record.",
+      confirmClear:"Clear every STEM record in this browser? Mastery, words and proof, your place in Race to School and in the revision lesson, and the home language you chose for tap-to-translate. The page language stays. This cannot be undone.",
+      clearedMsg:"Cleared. No mastery, no words, no proof and no saved place in any STEM activity is left in this browser. Only the page language is kept.",
       noUnit:"No unit is open right now."
     },
     "zh-Hans": {
@@ -302,8 +303,8 @@
       ledgerLead:"✓ 只来自一次完整的练习——三题全对。这里没有任何自评。",
       wordsCountF: function(b,t,c){ return "已拼成 "+b+" / "+t+" · 已使用 "+c; },
       setCountF: function(b,t,c){ return "已拼成 <b>"+b+"</b> / "+t+" · 已使用 "+c; },
-      confirmClear:"清除这个浏览器里的全部 STEM 记录——掌握、单词和证据？此操作无法撤销。",
-      clearedMsg:"已清除。这个浏览器里现在没有 STEM 记录。",
+      confirmClear:"清除这个浏览器里的全部 STEM 记录？包括掌握、单词和证据，你在“上学竞速”和复习课里的进度，以及你为点词翻译选的母语。页面语言会保留。此操作无法撤销。",
+      clearedMsg:"已清除。这个浏览器里不再有掌握记录、单词和证据，也没有任何 STEM 活动的存档进度。只保留了页面语言。",
       noUnit:"现在没有开放的单元。"
     },
     "zh-Hant": {
@@ -352,8 +353,8 @@
       ledgerLead:"✓ 只來自一次完整的練習——三題全對。這裡沒有任何自評。",
       wordsCountF: function(b,t,c){ return "已拼成 "+b+" / "+t+" · 已使用 "+c; },
       setCountF: function(b,t,c){ return "已拼成 <b>"+b+"</b> / "+t+" · 已使用 "+c; },
-      confirmClear:"清除這個瀏覽器裡的全部 STEM 紀錄——精熟、單字和證據？此操作無法復原。",
-      clearedMsg:"已清除。這個瀏覽器裡現在沒有 STEM 紀錄。",
+      confirmClear:"清除這個瀏覽器裡的全部 STEM 紀錄？包括精熟、單字和證據，你在「上學競速」和複習課裡的進度，以及你為點字翻譯選的母語。頁面語言會保留。此操作無法復原。",
+      clearedMsg:"已清除。這個瀏覽器裡不再有精熟紀錄、單字和證據，也沒有任何 STEM 活動的存檔進度。只保留了頁面語言。",
       noUnit:"現在沒有開放的單元。"
     },
     "vi": {
@@ -402,8 +403,8 @@
       ledgerLead:"Dấu ✓ chỉ đến từ một lượt luyện tập trọn vẹn — ba câu, đúng cả ba. Ở đây không có gì là tự đánh giá.",
       wordsCountF: function(b,t,c){ return "Đã ghép "+b+" / "+t+" · đã dùng "+c; },
       setCountF: function(b,t,c){ return "Đã ghép <b>"+b+"</b> / "+t+" · đã dùng "+c; },
-      confirmClear:"Xóa toàn bộ hồ sơ STEM trong trình duyệt này — phần thành thạo, từ vựng và bằng chứng? Thao tác này không thể hoàn tác.",
-      clearedMsg:"Đã xóa. Trình duyệt này hiện không còn hồ sơ STEM nào.",
+      confirmClear:"Xóa toàn bộ hồ sơ STEM trong trình duyệt này? Gồm phần thành thạo, từ vựng và bằng chứng, chỗ em đang dừng trong “Đua tới trường” và trong bài ôn tập, cùng ngôn ngữ mẹ đẻ em đã chọn cho chức năng chạm để dịch. Ngôn ngữ trang vẫn được giữ. Thao tác này không thể hoàn tác.",
+      clearedMsg:"Đã xóa. Trình duyệt này không còn phần thành thạo, từ vựng, bằng chứng, cũng không còn chỗ đã lưu trong bất kỳ hoạt động STEM nào. Chỉ ngôn ngữ trang được giữ lại.",
       noUnit:"Hiện không có bài học nào đang mở."
     }
   };

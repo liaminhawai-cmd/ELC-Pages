@@ -6,74 +6,90 @@
 <title>Quiz Prep — Linear Equations</title>
 <style>
   :root {
-    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
-    --accent:#0d9488; --accent-soft:#ccfbf1; --radius:14px;
-    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
-    --good:#2f6a3e; --good-soft:#e5f3e8; --warn:#b45309; --bad:#a8432f; --bad-soft:#fde8e4;
+    --paper:#fcfcfa; --ink:#212427; --muted:#5c6166; --faint:#6b7075;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f; --on-accent:#ffffff;
   }
   @media (prefers-color-scheme:dark) {
-    :root { --bg:#0f1420; --card:#171e2e; --ink:#fff; --muted:#c7d0e2; --line:#34405b;
-            --accent:#2dd4bf; --accent-soft:#134e4a; --shadow:0 1px 2px rgba(0,0,0,.4);
-            --good:#93cf9b; --good-soft:#1d3323; --warn:#fbbf24; --bad:#e8836f; --bad-soft:#3b201a; }
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#878d92;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517; }
   }
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink);
-         font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-  .wrap { max-width:900px; margin:0 auto; padding:16px 16px 70px; }
-  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
-  .top a { color:var(--accent); text-decoration:none; font-weight:600; }
-  .pilot { font-size:.75rem; color:var(--muted); }
-  .hero { border-radius:18px; padding:20px 22px; color:#fff;
-    background:linear-gradient(135deg,#047857,#0d9488 55%,#2563eb); box-shadow:var(--shadow); }
-  .hero h1 { margin:0 0 .2em; font-family:Georgia,"Times New Roman",serif; font-size:1.55rem; }
-  .hero p { margin:0; font-size:.95rem; max-width:62ch; }
-  h2 { font-size:1.12rem; margin:26px 0 10px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:16px; box-shadow:var(--shadow); margin-bottom:14px; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  .top a:hover { text-decoration:underline; }
+  .pilot { font-size:.75rem; color:var(--faint); }
+  .masthead h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:2rem;
+    font-weight:500; letter-spacing:-.01em; }
+  .masthead .sub { margin:6px 0 0; color:var(--muted); font-size:.88rem; max-width:62ch; }
+  .masthead .sub a { color:var(--accent); font-weight:600; text-decoration:none; }
+  .masthead .sub a:hover { text-decoration:underline; }
+  h2 { margin:32px 0 12px; font-family:Georgia,"Times New Roman",serif; font-size:1.15rem;
+    font-weight:500; border-top:1px solid var(--ink); padding-top:12px; }
+  .card { border:1px solid var(--hair); border-radius:10px; padding:16px 18px; margin-bottom:14px; }
   /* word lane */
   .wordlane { display:flex; flex-wrap:wrap; gap:8px; }
-  .wchip { border-radius:999px; border:1px solid var(--line); padding:7px 14px; font-weight:600;
-    background:var(--card); cursor:pointer; font-size:.92rem; }
-  .wchip.done { border-color:var(--good); color:var(--good); }
+  .wchip { border-radius:999px; border:1px solid var(--hair); padding:8px 14px; font:inherit;
+    font-size:.88rem; font-weight:600; background:var(--paper); color:var(--ink);
+    min-height:44px; cursor:pointer; }
+  .wchip:hover { border-color:var(--accent); }
+  .wchip.done { border-color:var(--accent); color:var(--accent); }
   .wchip.done::after { content:" ✓"; }
-  .lanebar { height:10px; border-radius:999px; background:var(--bg); border:1px solid var(--line);
-    overflow:hidden; margin:12px 0 4px; }
+  .lanebar { height:4px; border-radius:2px; background:var(--hair); overflow:hidden; margin:16px 0 6px; }
   .lanebar i { display:block; height:100%; background:var(--accent); transition:width .3s; }
   /* generators */
   .gen { margin-bottom:18px; }
-  .gen h3 { margin:0 0 4px; font-size:1rem; }
-  .gen .skill { font-size:.78rem; color:var(--muted); margin-bottom:10px; }
-  .modes { display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap; }
-  .mode { border-radius:999px; border:1px solid var(--line); background:none; color:var(--muted);
-    padding:6px 14px; font:inherit; font-weight:600; cursor:pointer; font-size:.85rem; }
-  .mode.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .gen h3 { margin:0 0 4px; font-family:Georgia,"Times New Roman",serif; font-size:1.05rem; font-weight:600; }
+  .gen .skill { font-size:.78rem; color:var(--muted); margin-bottom:12px; }
+  .modes { display:flex; gap:2px; border-bottom:1px solid var(--hair); margin-bottom:14px;
+    overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .mode { display:flex; align-items:center; min-height:44px; padding:8px 18px; white-space:nowrap;
+    font:inherit; font-size:.92rem; color:var(--muted); background:none; border:0;
+    border-bottom:2px solid transparent; margin-bottom:-1px; cursor:pointer; }
+  .mode:hover { color:var(--accent); }
+  .mode.on { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
   .qarea { font-size:.95rem; }
-  .qarea table { border-collapse:collapse; margin:10px 0; }
-  .qarea th, .qarea td { border:1px solid var(--line); padding:6px 12px; text-align:center; }
-  .qarea input { font:inherit; width:76px; padding:6px 8px; border-radius:8px;
-    border:1px solid var(--line); background:var(--bg); color:var(--ink); text-align:center; }
-  .qarea input.wide { width:150px; }
-  .qarea input.right { border-color:var(--good); background:var(--good-soft); }
-  .qarea input.wrong { border-color:var(--bad); background:var(--bad-soft); }
-  .btnrow { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; align-items:center; }
-  button.go { font:inherit; font-weight:600; border-radius:999px; padding:8px 18px; cursor:pointer;
-    border:1px solid var(--accent); background:var(--accent); color:#fff; }
-  button.go.ghost { background:none; color:var(--accent); }
-  .streak { font-size:.85rem; color:var(--muted); margin-left:auto; }
-  .streak b { color:var(--good); }
-  .worked { border-left:4px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0;
-    padding:10px 14px; margin-top:10px; font-size:.9rem; }
+  /* wide content scrolls inside its own box — never the page */
+  .tscroll { max-width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; margin:12px 0 4px; }
+  .qarea table { border-collapse:collapse; font-size:.9rem; }
+  .qarea th, .qarea td { border:1px solid var(--hair); padding:6px 10px; text-align:center; min-width:44px; }
+  .qarea th { color:var(--muted); font-weight:600; background:var(--accent-soft); }
+  .qarea input { font:inherit; font-size:.92rem; width:4.6em; max-width:100%; padding:7px 8px;
+    border-radius:8px; border:1px solid var(--hair); background:var(--paper); color:var(--ink);
+    text-align:center; min-height:44px; }
+  .qarea input:focus { outline:none; border-color:var(--accent); }
+  .qarea input.wide { width:9em; text-align:left; }
+  .qarea input.right { border-color:var(--accent); }
+  .qarea input.wrong { border-color:var(--alert); }
+  .btnrow { display:flex; flex-wrap:wrap; gap:10px; margin-top:14px; align-items:center; }
+  button.go { font:inherit; font-size:.9rem; font-weight:600; border:1px solid var(--accent);
+    color:var(--accent); background:none; border-radius:8px; padding:9px 18px;
+    min-height:44px; cursor:pointer; }
+  button.go:hover { background:var(--accent-soft); }
+  button.go.ghost { border-color:var(--hair); color:var(--muted); font-weight:500; }
+  button.go.ghost:hover { border-color:var(--accent); color:var(--accent); background:none; }
+  .streak { font-size:.8rem; color:var(--muted); margin-left:auto; }
+  .streak b { color:var(--accent); }
+  .worked { margin-top:14px; border-left:2px solid var(--accent); background:var(--accent-soft);
+    border-radius:0 8px 8px 0; padding:10px 14px; font-size:.9rem; overflow-x:auto; }
   .worked.hidden { display:none; }
-  .fb { font-weight:700; margin-top:8px; }
-  .fb.ok { color:var(--good); } .fb.no { color:var(--bad); }
-  svg.graph { width:100%; max-width:340px; height:auto; background:var(--card); border:1px solid var(--line);
-    border-radius:10px; display:block; margin:8px 0; }
-  .minis { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin:10px 0; }
-  .minis button { border:2px solid var(--line); border-radius:10px; background:var(--card); cursor:pointer; padding:4px; }
-  .minis button.right { border-color:var(--good); } .minis button.wrong { border-color:var(--bad); }
-  .evnote { color:var(--good); font-weight:600; font-size:.85rem; }
-  .note { margin-top:22px; color:var(--muted); font-size:.85rem; }
-  footer { margin-top:24px; color:var(--muted); font-size:.85rem; }
+  .fb { font-weight:600; font-size:.92rem; margin-top:12px; }
+  .fb.ok { color:var(--accent); } .fb.no { color:var(--alert); }
+  svg.graph { width:100%; max-width:300px; height:auto; display:block; margin:12px 0 4px; }
+  .minis { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:12px 0 4px; }
+  .minis button { border:1px solid var(--hair); border-radius:10px; background:none;
+    color:var(--ink); cursor:pointer; padding:4px; }
+  .minis button:hover { border-color:var(--accent); }
+  .minis button.right { border-color:var(--accent); }
+  .minis button.wrong { border-color:var(--alert); }
+  .minis svg.graph { max-width:100%; margin:0; }
+  .evnote { color:var(--accent); font-weight:600; }
+  .note { margin-top:26px; color:var(--faint); font-size:.75rem; }
+  .note a { color:var(--accent); font-weight:600; text-decoration:none; }
+  .note a:hover { text-decoration:underline; }
+  footer { margin-top:8px; color:var(--faint); font-size:.75rem; }
 </style>
 </head>
 <body>
@@ -83,14 +99,14 @@
     <span class="pilot">pilot page — not linked from the hub yet</span>
   </div>
 
-  <div class="hero">
-    <h1>🎯 Quiz Prep — Linear Equations</h1>
-    <p>Everything the Progress Quiz tests, in one place: first the <b>words</b>, then the
+  <div class="masthead">
+    <h1>Quiz Prep — Linear Equations</h1>
+    <p class="sub">Everything the Progress Quiz tests, in one place: first the <b>words</b>, then the
     <b>skills</b> — with an example, a guided go, and then you on your own. Five solo answers
-    right in a row proves a skill and it lands on your <a style="color:#ccfbf1" href="stem-progress.html">progress report</a>.</p>
+    right in a row proves a skill and it lands on your <a href="stem-progress.html">progress report</a>.</p>
   </div>
 
-  <h2>1 · The words you need 📓</h2>
+  <h2>1 · The words you need</h2>
   <div class="card">
     <p>Tap a word. The notebook opens — read it, <b>build it</b>, <b>check it</b>. Words you own show a ✓.</p>
     <div class="wordlane" id="wordlane"></div>
@@ -98,10 +114,10 @@
     <div class="pilot" id="lanecount"></div>
   </div>
 
-  <h2>2 · The skills the quiz tests ✍️</h2>
+  <h2>2 · The skills the quiz tests</h2>
   <div id="gens"></div>
 
-  <p class="note">🔒 Anonymous — everything stays in this browser. This page is practice;
+  <p class="note">Anonymous — everything stays in this browser. This page is practice;
   in the real quiz, show your working on paper. More word practice:
   <a href="stem-vocab-revision.html">Linear graphs revision sequence</a> ·
   <a href="stem-vocab-hub.html#set=rev">Vocab Hub</a>.</p>
@@ -194,8 +210,8 @@
     var size = PAD*2 + 2*R*STEP;
     var g = "<svg class='graph' viewBox='0 0 "+size+" "+size+"' role='img'>";
     for (var i=-R;i<=R;i++){
-      g += "<line x1='"+X(i)+"' y1='"+Y(-R)+"' x2='"+X(i)+"' y2='"+Y(R)+"' stroke='var(--line)' stroke-width='1'/>";
-      g += "<line x1='"+X(-R)+"' y1='"+Y(i)+"' x2='"+X(R)+"' y2='"+Y(i)+"' stroke='var(--line)' stroke-width='1'/>";
+      g += "<line x1='"+X(i)+"' y1='"+Y(-R)+"' x2='"+X(i)+"' y2='"+Y(R)+"' stroke='var(--hair)' stroke-width='1'/>";
+      g += "<line x1='"+X(-R)+"' y1='"+Y(i)+"' x2='"+X(R)+"' y2='"+Y(i)+"' stroke='var(--hair)' stroke-width='1'/>";
     }
     g += "<line x1='"+X(-R)+"' y1='"+Y(0)+"' x2='"+X(R)+"' y2='"+Y(0)+"' stroke='var(--muted)' stroke-width='2'/>";
     g += "<line x1='"+X(0)+"' y1='"+Y(-R)+"' x2='"+X(0)+"' y2='"+Y(R)+"' stroke='var(--muted)' stroke-width='2'/>";
@@ -268,7 +284,7 @@
       cur = def.make();
       var h = "<h3>"+esc(def.title)+"</h3><div class='skill'>trains: "+esc(def.skill)+"</div>";
       h += "<div class='modes'>";
-      [["example","👀 Example"],["guided","🤝 Guided"],["solo","💪 Solo"]].forEach(function(m){
+      [["example","Example"],["guided","Guided"],["solo","Solo"]].forEach(function(m){
         h += "<button class='mode"+(mode===m[0]?" on":"")+"' data-m='"+m[0]+"'>"+m[1]+"</button>";
       });
       h += "</div><div class='qarea'>"+cur.qHtml+"</div>";
@@ -276,7 +292,7 @@
         h += "<div class='worked'>"+cur.worked+"</div>";
         h += "<div class='btnrow'><button class='go ghost' data-a='new'>Another example</button></div>";
       } else {
-        if (mode==="guided" && cur.hint) h += "<div class='worked'>💡 "+cur.hint+"</div>";
+        if (mode==="guided" && cur.hint) h += "<div class='worked'>"+cur.hint+"</div>";
         h += "<div class='btnrow'><button class='go' data-a='check'>Check</button>"+
              "<button class='go ghost' data-a='new'>New question</button>"+
              "<span class='streak'>solo streak: <b>"+(streaks[def.id]||0)+"</b>/"+STREAK_TARGET+
@@ -339,11 +355,11 @@
       var m = pick([-3,-2,-1,2,3,4]), c = ri(-5,5);
       var xs = [-2,-1,0,1,2];
       var q = "<p>Complete the table for <b>"+eqStr(m,c)+"</b>. <span data-v='substitution'>Substitution</span>: put each x into the rule.</p>";
-      q += "<table><tr><th>x</th>";
+      q += "<div class='tscroll'><table><tr><th>x</th>";
       xs.forEach(function(x){ q += "<td>"+x+"</td>"; });
       q += "</tr><tr><th>y</th>";
       xs.forEach(function(x,i){ q += "<td><input data-k='y"+i+"' aria-label='y when x is "+x+"'></td>"; });
-      q += "</tr></table>";
+      q += "</tr></table></div>";
       var worked = "<b>Working (x = "+xs[1]+"):</b> y = "+fmt(m)+" × ("+xs[1]+") "+(c>=0?"+ "+c:"− "+Math.abs(c))+
         " = "+fmt(m*xs[1])+" "+(c>=0?"+ "+c:"− "+Math.abs(c))+" = <b>"+fmt(m*xs[1]+c)+"</b>. Same steps for every column: "+
         xs.map(function(x){ return "x="+x+" → y="+fmt(m*x+c); }).join(", ")+".";
@@ -425,7 +441,7 @@
     skill:"read m and c straight off the line", skillIds:["k_eq","k_yint"],
     make: function(){
       var m = pick([-3,-2,-1,1,2,3]), c = ri(-4,4);
-      var svg = gridSvg(lineSvg(m,c) + dot(0,c,"var(--warn)"));
+      var svg = gridSvg(lineSvg(m,c) + dot(0,c,"var(--alert)"));
       var q = "<p>Find the equation of this line. The orange dot marks where it crosses the y-axis.</p>"+svg+
         "<p>m = <input data-k='m'> &nbsp; c = <input data-k='c'> &nbsp; equation: <input class='wide' data-k='eq' placeholder='y = ...'></p>";
       var worked = "<b>Working:</b> the line crosses the y-axis at (0, "+fmt(c)+") so c = <b>"+fmt(c)+"</b> (read it — the physics way). "+
@@ -453,7 +469,7 @@
       var m1 = pick([-2,-1,1,2]), m2 = pick([-3,-2,-1,1,2,3]);
       while (m2 === m1) m2 = pick([-3,-2,-1,1,2,3]);
       var c1 = py - m1*px, c2 = py - m2*px;
-      var svg = gridSvg(lineSvg(m1,c1) + lineSvg(m2,c2,"var(--warn)"));
+      var svg = gridSvg(lineSvg(m1,c1) + lineSvg(m2,c2,"var(--alert)"));
       var q = "<p>The two lines cross once. State the <span data-v='point of intersection'>point of intersection</span> as a "+
         "<span data-v='coordinate'>coordinate</span>.</p>"+svg+
         "<p>Point: <input class='wide' data-k='pt' placeholder='(x, y)'></p>";
@@ -482,7 +498,7 @@
       var q = "<p><span data-v='sketch'>Sketch</span> check: which graph shows <b>"+eqStr(m,c)+"</b>?</p><div class='minis'>";
       opts.forEach(function(o,i){
         q += "<button data-k='opt"+i+"' data-ok='"+(o.ok?1:0)+"' aria-label='graph option "+(i+1)+"'>"+
-             gridSvg(lineSvg(o.m,o.c) + dot(0,o.c,"var(--warn)"))+"</button>";
+             gridSvg(lineSvg(o.m,o.c) + dot(0,o.c,"var(--alert)"))+"</button>";
       });
       q += "</div>";
       var worked = "<b>Working:</b> c = "+fmt(c)+" so the line must catch the y-axis at (0, "+fmt(c)+") — "+
