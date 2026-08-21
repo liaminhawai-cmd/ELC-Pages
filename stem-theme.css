@@ -195,8 +195,7 @@ body[data-room="vocab"] h2,
 body[data-room="vocab"] .hw,
 body[data-room="vocab"] .sname,
 body[data-room="vocab"] .score,
-body[data-room="vocab"] .tword,          /* build board, if present */
-body[data-room="vocab"] .brow .bw {      /* build board, if present */
+body[data-room="vocab"] .bbuilt {        /* the word a build board row just made */
   font-family:var(--room-serif);
 }
 

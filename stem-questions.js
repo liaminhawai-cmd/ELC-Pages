@@ -157,6 +157,128 @@
     return g + "</svg>";
   }
 
+  /* ---------------- SVG helpers · parabolas ----------------
+     The same picture as grid(): 324 × 324, PAD 18, square STEP cells, every
+     colour read from the same custom properties so dark mode follows. The one
+     change a curve forces is that the y-window SLIDES — a parabola can have
+     its turning point at y = −9 while its y-intercept sits at +8, and a fixed
+     −6…6 window would cut one of them off. QSPAN stays 12 so the cells stay
+     square and the picture stays the same size as every other graph here. */
+  var QSPAN = 12;
+  function QY(y, yLo) { return PAD + (yLo + QSPAN - y) * STEP; }
+  function rd1(n) { return Math.round(n * 10) / 10; }
+  function bracket(n) { return n < 0 ? "(−" + fmt(-n) + ")" : fmt(n); }
+
+  /* The lowest EVEN window edge that leaves every listed y-value at least one
+     unit inside the picture; ties go to the window that centres them. Returns
+     null when 12 units cannot hold them all — note that a 10-unit spread only
+     fits if the parity works out (0…10 needs a bottom edge of −1, which would
+     put the labels on odd numbers), so callers must filter their candidate
+     turning points with quadFits() rather than trusting the spread alone. */
+  function quadWindow(vals) {
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+    var best = null, bestOff = Infinity;
+    for (var yLo = -24; yLo <= 24; yLo += 2) {
+      if (yLo > lo - 1 || yLo + QSPAN < hi + 1) continue;
+      var off = Math.abs((yLo + QSPAN / 2) - (lo + hi) / 2);
+      if (off < bestOff) { bestOff = off; best = yLo; }
+    }
+    return best;
+  }
+  function quadFits(vals) { return quadWindow(vals) !== null; }
+
+  function quadGrid(yLo, inner) {
+    var size = PAD * 2 + 2 * R * STEP, yHi = yLo + QSPAN;
+    var g = "<svg class='qb-graph' viewBox='0 0 " + size + " " + size + "' role='img'>";
+    for (var i = -R; i <= R; i++)
+      g += "<line x1='" + X(i) + "' y1='" + QY(yHi, yLo) + "' x2='" + X(i) + "' y2='" + QY(yLo, yLo) + "' stroke='var(--hair,#e6e7e3)' stroke-width='1'/>";
+    for (var j = yLo; j <= yHi; j++)
+      g += "<line x1='" + X(-R) + "' y1='" + QY(j, yLo) + "' x2='" + X(R) + "' y2='" + QY(j, yLo) + "' stroke='var(--hair,#e6e7e3)' stroke-width='1'/>";
+    g += "<line x1='" + X(-R) + "' y1='" + QY(0, yLo) + "' x2='" + X(R) + "' y2='" + QY(0, yLo) + "' stroke='var(--muted,#767b7f)' stroke-width='1.6'/>";
+    g += "<line x1='" + X(0) + "' y1='" + QY(yHi, yLo) + "' x2='" + X(0) + "' y2='" + QY(yLo, yLo) + "' stroke='var(--muted,#767b7f)' stroke-width='1.6'/>";
+    for (var t = -R; t <= R; t += 2) if (t !== 0)
+      g += "<text x='" + X(t) + "' y='" + (QY(0, yLo) + 13) + "' font-size='9' fill='var(--muted,#767b7f)' text-anchor='middle'>" + t + "</text>";
+    for (var u = yLo; u <= yHi; u += 2) if (u !== 0)
+      g += "<text x='" + (X(0) - 5) + "' y='" + (QY(u, yLo) + 3) + "' font-size='9' fill='var(--muted,#767b7f)' text-anchor='end'>" + u + "</text>";
+    return g + inner + "</svg>";
+  }
+
+  /* y = a(x − h)² + k across the window, cut wherever it leaves the top or the
+     bottom — the curved version of the clip lineSeg does for straight lines */
+  function quadPath(a, h, k, yLo, color) {
+    var runs = [], cur = [], i, x, y;
+    for (i = 0; i <= 240; i++) {
+      x = -R + i * 0.05;
+      y = a * (x - h) * (x - h) + k;
+      if (y >= yLo && y <= yLo + QSPAN) cur.push(rd1(X(x)) + "," + rd1(QY(y, yLo)));
+      else if (cur.length) { runs.push(cur); cur = []; }
+    }
+    if (cur.length) runs.push(cur);
+    var out = "";
+    for (i = 0; i < runs.length; i++) {
+      if (runs[i].length < 2) continue;
+      out += "<polyline points='" + runs[i].join(" ") + "' fill='none' stroke='" +
+        (color || "var(--accent,#0d7a70)") + "' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/>";
+    }
+    return out;
+  }
+  function qdot(x, y, yLo, color) {
+    return "<circle cx='" + X(x) + "' cy='" + QY(y, yLo) + "' r='4.5' fill='" + (color || "var(--accent,#0d7a70)") + "'/>";
+  }
+
+  /* trajectory sketch for projectile questions: motionChart's frame (320 × 220,
+     same padding, same colours) with a curved path h = A·x·(range − x). The axes
+     carry UNITS but no scale numbers — the flight numbers must come from the
+     rule, not from measuring a 300-pixel picture. Whatever the question GIVES
+     (an obstacle at a stated distance and height) is drawn and labelled. */
+  function arcChart(A, range, top, launch, obst) {
+    var W = 320, H = 220, P = 34;
+    var xMax = range * 1.15, yMax = top * 1.35;
+    function mx(x) { return rd1(P + (W - P - 16) * x / xMax); }
+    function my(y) { return rd1(H - P - (H - P - 18) * y / yMax); }
+    var g = "<svg class='qb-graph' viewBox='0 0 " + W + " " + H + "' role='img'>";
+    g += "<line x1='" + mx(0) + "' y1='" + my(0) + "' x2='" + mx(xMax) + "' y2='" + my(0) + "' stroke='var(--muted,#767b7f)' stroke-width='1.6'/>";
+    g += "<line x1='" + mx(0) + "' y1='" + my(0) + "' x2='" + mx(0) + "' y2='" + my(yMax) + "' stroke='var(--muted,#767b7f)' stroke-width='1.6'/>";
+    var pts = [];
+    for (var i = 0; i <= 120; i++) { var x = range * i / 120; pts.push(mx(x) + "," + my(A * x * (range - x))); }
+    g += "<polyline points='" + pts.join(" ") + "' fill='none' stroke='var(--accent,#0d7a70)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/>";
+    g += "<circle cx='" + mx(0) + "' cy='" + my(0) + "' r='4' fill='var(--accent,#0d7a70)'/>";
+    g += "<text x='" + (mx(0) + 6) + "' y='" + (my(0) + 13) + "' font-size='9' fill='var(--muted,#767b7f)'>" + launch + "</text>";
+    if (obst) {
+      var right = mx(obst.d) > W * 0.62;
+      g += "<line x1='" + mx(obst.d) + "' y1='" + my(0) + "' x2='" + mx(obst.d) + "' y2='" + my(obst.f) + "' stroke='var(--alert,#b0592f)' stroke-width='3'/>";
+      g += "<text x='" + (mx(obst.d) + (right ? -5 : 5)) + "' y='" + (my(obst.f) - 5) + "' font-size='9' fill='var(--alert,#b0592f)' text-anchor='" + (right ? "end" : "start") + "'>" + obst.label + "</text>";
+    }
+    g += "<text x='" + (W - 8) + "' y='" + (my(0) + 13) + "' font-size='9' fill='var(--muted,#767b7f)' text-anchor='end'>distance x (m)</text>";
+    g += "<text x='" + (mx(0) + 4) + "' y='12' font-size='9' fill='var(--muted,#767b7f)'>height h (m)</text>";
+    return g + "</svg>";
+  }
+
+  /* ---------------- turning-point form ----------------
+     y = a(x − h)² + k, written and read back. h = 0 loses the bracket
+     (y = 2x² + 5) and a = ±1 loses its 1, exactly as a student would write it. */
+  function vertexStr(a, h, k) {
+    var s = "y = ";
+    if (a === -1) s += "−"; else if (a !== 1) s += (a < 0 ? "−" + fmt(-a) : fmt(a));
+    s += (h === 0) ? "x²" : "(x " + (h > 0 ? "− " + fmt(h) : "+ " + fmt(-h)) + ")²";
+    if (k > 0) s += " + " + fmt(k); else if (k < 0) s += " − " + fmt(-k);
+    return s;
+  }
+  /* accepts y = 2(x-3)^2+4, -(x+1)²-5, 0.5(x − 2)² + 3, 1/2x^2, (x-3)^2 … */
+  function parseVertex(str) {
+    if (!str) return null;
+    var s = String(str).toLowerCase().replace(/−/g, "-").replace(/²/g, "^2")
+      .replace(/\*/g, "").replace(/\s+/g, "");
+    var ym = s.match(/^y=(.*)$/); if (ym) s = ym[1];
+    var m = s.match(/^([+-]?(?:\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?)?)(?:\(x([+-]\d+(?:\.\d+)?)?\)|x)\^2([+-]\d+(?:\.\d+)?)?$/);
+    if (!m) return null;
+    var a = (m[1] === "" || m[1] === "+") ? 1 : (m[1] === "-" ? -1 : num(m[1]));
+    var h = m[2] ? -num(m[2]) : 0;
+    var k = m[3] ? num(m[3]) : 0;
+    if (isNaN(a) || isNaN(h) || isNaN(k) || a === 0) return null;
+    return { a: a, h: h, k: k };
+  }
+
   function numInput(k, label, answer, tol) {
     return { k: k, label: label, answer: fmt(answer),
              check: function (v) { return near(num(v), answer, tol === undefined ? 0.02 : tol); } };
@@ -203,8 +325,10 @@
 
   window.QBANK = { register: register, gen: gen, teach: teach, hint: hint, list: list, audit: audit,
                    util: { fmt: fmt, eqStr: eqStr, near: near, num: num, parseEq: parseEq,
-                           parseCoord: parseCoord, grid: grid, lineSeg: lineSeg, dot: dot,
-                           motionChart: motionChart, numInput: numInput, makeRng: makeRng } };
+                           parseCoord: parseCoord, parseVertex: parseVertex, vertexStr: vertexStr,
+                           grid: grid, lineSeg: lineSeg, dot: dot, motionChart: motionChart,
+                           quadWindow: quadWindow, quadFits: quadFits, quadGrid: quadGrid, quadPath: quadPath, qdot: qdot,
+                           arcChart: arcChart, numInput: numInput, makeRng: makeRng } };
 
   /* ============================================================
      FOUNDATIONS
@@ -500,6 +624,274 @@
         inputs: [numInput("x", "x =", px, 0.01), numInput("y", "y =", py, 0.01)],
         workedHTML: "Set equal: " + fmt(m1) + "x " + (c1 >= 0 ? "+ " + fmt(c1) : "− " + fmt(Math.abs(c1))) + " = " + fmt(m2) + "x " + (c2 >= 0 ? "+ " + fmt(c2) : "− " + fmt(Math.abs(c2))) + " → " + fmt(m1 - m2) + "x = " + fmt(c2 - c1) + " → x = <b>" + fmt(px) + "</b>. Then y = " + fmt(m1) + " × " + pf(px) + " " + (c1 >= 0 ? "+ " + fmt(c1) : "− " + fmt(Math.abs(c1))) + " = <b>" + fmt(py) + "</b>." };
       function pf(n) { return n < 0 ? "(−" + fmt(Math.abs(n)) + ")" : fmt(n); }
+    }
+  });
+
+  /* ============================================================
+     KINEMATICS · CURVES & QUADRATICS
+     Every parabola in this section is built from WHOLE-NUMBER intercepts:
+     y = a(x − h)² + k with k = −a·m², which cuts the x-axis at exactly
+     h − m and h + m. Nothing a student has to read off a grid, and nothing
+     a worked solution has to state, is ever irrational.
+     ============================================================ */
+  register({
+    id: "k_parabola",
+    teach: { what: "A parabola is the curve a squared rule draws. It is symmetrical: the <b>turning point</b> is the bottom of a smile or the top of a frown, and the <b>axis of symmetry</b> is the vertical line straight through it. Every height on the curve happens twice — once each side of that line.",
+      how: ["Which way does it open? Smile = opens up (a is positive). Frown = opens down (a is negative).",
+            "y-intercept: the y-value where the curve crosses the y-axis (x = 0).",
+            "x-intercepts: the x-values where the curve crosses the x-axis (y = 0). There can be two, one, or none.",
+            "Turning point: the lowest or highest point. The axis of symmetry is x = that point's x-value, halfway between the two x-intercepts."] },
+    hint: "Find the turning point first — the axis of symmetry is x = its x-value, and the curve mirrors across it.",
+    gen: function (rng) {
+      /* a is paired with m (half the gap between the roots) so that
+         k = −a·m² is a whole number; h is then filtered so both roots land on
+         the grid and the y-intercept a(h² − m²) stays a readable whole number.
+         Building from the ROOTS is what keeps every answer rational. */
+      var shape = rng.pick([
+        { a: 1, m: 1 }, { a: 1, m: 2 }, { a: 1, m: 3 },
+        { a: -1, m: 1 }, { a: -1, m: 2 }, { a: -1, m: 3 },
+        { a: 2, m: 1 }, { a: 2, m: 2 }, { a: -2, m: 1 }, { a: -2, m: 2 },
+        { a: 0.5, m: 2 }, { a: 0.5, m: 4 }, { a: -0.5, m: 2 }, { a: -0.5, m: 4 }
+      ]);
+      var a = shape.a, m = shape.m, k = -a * m * m, hs = [];
+      for (var t = -4; t <= 4; t++) {
+        var cc = a * (t * t - m * m);
+        if (Math.abs(t) + m > R) continue;                       /* both roots on the grid */
+        if (!Number.isInteger(cc) || Math.abs(cc) > 9) continue; /* readable y-intercept */
+        if (!quadFits([0, k, cc])) continue;                     /* turning point AND intercept on the picture */
+        hs.push(t);
+      }
+      var h = rng.pick(hs), c = a * (h * h - m * m), p = h - m, q = h + m;
+      var yLo = quadWindow([0, k, c]);
+      var curve = quadPath(a, h, k, yLo);
+      var ask = rng.pick(["dir", "tp", "roots", "axis", "mirror"]);
+
+      if (ask === "dir") {
+        /* the wrong y-intercept is the classic slip — reading the turning
+           point's height instead of the height above the origin */
+        var wrongC = (k !== c) ? k : c + 2;
+        var right = "opens " + (a > 0 ? "up" : "down") + ", y-intercept (0, " + fmt(c) + ")";
+        return { qHTML: "Which statement describes this parabola?",
+          svg: quadGrid(yLo, curve),
+          opts: { list: [right,
+              "opens " + (a > 0 ? "down" : "up") + ", y-intercept (0, " + fmt(c) + ")",
+              "opens " + (a > 0 ? "up" : "down") + ", y-intercept (0, " + fmt(wrongC) + ")",
+              "opens " + (a > 0 ? "down" : "up") + ", y-intercept (0, " + fmt(wrongC) + ")"], a: right },
+          workedHTML: "The arms point " + (a > 0 ? "UP" : "DOWN") + ", so the parabola opens " + (a > 0 ? "up" : "down") +
+            ". Follow the y-axis to the curve: it crosses at (0, " + fmt(c) + "). So: <b>" + right + "</b>." };
+      }
+      if (ask === "tp") {
+        return { qHTML: "Write the coordinate of the <b>turning point</b> of this parabola.",
+          svg: quadGrid(yLo, curve),
+          inputs: [{ k: "tp", label: "turning point:", place: "(x, y)", answer: "(" + h + ", " + fmt(k) + ")",
+            check: function (v) { var pt = parseCoord(v); return !!pt && near(pt.x, h, .01) && near(pt.y, k, .01); } }],
+          workedHTML: "The curve stops " + (a > 0 ? "falling and starts rising" : "rising and starts falling") +
+            " at <b>(" + h + ", " + fmt(k) + ")</b> — across " + h + ", up " + fmt(k) + ". It is the " +
+            (a > 0 ? "lowest" : "highest") + " point of the curve." };
+      }
+      if (ask === "roots") {
+        return { qHTML: "Write the two <b>x-intercepts</b> of this parabola.",
+          svg: quadGrid(yLo, curve),
+          inputs: [numInput("p", "smaller x-intercept: x =", p, 0.01),
+                   numInput("q", "larger x-intercept: x =", q, 0.01)],
+          workedHTML: "The curve cuts the x-axis at x = <b>" + p + "</b> and x = <b>" + q + "</b>. Check the symmetry: both are " +
+            m + " away from the turning point at x = " + h + "." };
+      }
+      if (ask === "mirror") {
+        /* only offsets whose marked point ALSO fits the picture may be used —
+           the window is recomputed to include it, so most shapes keep one */
+        var offs = [];
+        for (var o = 1; o <= 3; o++) {
+          var yy = a * o * o + k;
+          if (!Number.isInteger(yy)) continue;
+          if (Math.abs(h + o) > R || Math.abs(h - o) > R) continue;
+          if (!quadFits([0, k, c, yy])) continue;
+          offs.push(o);
+        }
+        if (offs.length) {
+          var off = rng.pick(offs), side = rng.raw() < 0.5 ? 1 : -1;
+          var x1 = h + side * off, y1 = a * off * off + k, x2 = h - side * off;
+          var mLo = quadWindow([0, k, c, y1]);
+          return { qHTML: "The marked point is on this parabola. One other point on the curve has the <b>same y-value</b>. Write its coordinate.",
+            svg: quadGrid(mLo, quadPath(a, h, k, mLo) + qdot(x1, y1, mLo, "var(--alert,#b0592f)")),
+            inputs: [{ k: "pt", label: "the matching point:", place: "(x, y)", answer: "(" + x2 + ", " + fmt(y1) + ")",
+              check: function (v) { var pt = parseCoord(v); return !!pt && near(pt.x, x2, .01) && near(pt.y, y1, .01); } }],
+            workedHTML: "The axis of symmetry is x = " + h + ". The marked point (" + x1 + ", " + fmt(y1) + ") is " + off +
+              " to the " + (side > 0 ? "right" : "left") + " of it, so its mirror image is " + off + " to the " +
+              (side > 0 ? "left" : "right") + ", at the same height: <b>(" + x2 + ", " + fmt(y1) + ")</b>." };
+        }
+        /* nothing fits inside the picture — ask for the axis instead */
+      }
+      return { qHTML: "Write the equation of the <b>axis of symmetry</b> of this parabola.",
+        svg: quadGrid(yLo, curve),
+        inputs: [{ k: "ax", label: "axis of symmetry: x =", answer: fmt(h),
+          check: function (v) { return near(num(String(v).replace(/\s+/g, "").replace(/^x=/i, "")), h, 0.01); } }],
+        workedHTML: "The axis of symmetry runs vertically through the turning point (" + h + ", " + fmt(k) +
+          "), so its equation is <b>x = " + fmt(h) + "</b>. It also sits halfway between the x-intercepts: (" +
+          p + " + " + q + ") ÷ 2 = " + fmt(h) + "." };
+    }
+  });
+
+  register({
+    id: "k_quadeq",
+    teach: { what: "Turning-point form is <b>y = a(x − h)² + k</b>. The turning point sits at (h, k) — watch the sign, because (x − 3)² means h = 3 and (x + 2)² means h = −2. <b>a</b> decides which way the curve opens and how narrow it is.",
+      how: ["Read the turning point (h, k) and write y = a(x − h)² + k with those two numbers in place.",
+            "Flip the sign inside the bracket: turning point at x = −2 gives (x + 2)².",
+            "Substitute the other point's x and y into your rule.",
+            "Solve for a, then write the finished rule. Check it by substituting the point back in."] },
+    hint: "Put (h, k) in first — the sign of h flips inside the bracket — then substitute the extra point to find a.",
+    gen: function (rng) {
+      /* a is paired with the offset of the extra point so y₁ = k + a·o² is a
+         whole number: half-sized a's only ever get offset 2, a = ±3 only ever
+         gets offset 1. Nothing to read or write is ever a fraction. */
+      var shape = rng.pick([
+        { a: 0.5, o: 2 }, { a: -0.5, o: 2 },
+        { a: 1, o: 1 }, { a: 1, o: 2 }, { a: -1, o: 1 }, { a: -1, o: 2 },
+        { a: 2, o: 1 }, { a: 2, o: 2 }, { a: -2, o: 1 }, { a: -2, o: 2 },
+        { a: 3, o: 1 }, { a: -3, o: 1 }
+      ]);
+      var a = shape.a, o = shape.o, dy = a * o * o;
+      var pic = rng.raw() < 0.55, h, k, kk, i;
+      if (pic) {
+        var hs = [], ks = [];
+        for (i = -4; i <= 4; i++) if (Math.abs(i + o) <= R && Math.abs(i - o) <= R) hs.push(i);
+        for (kk = -6; kk <= 6; kk++)          /* turning point AND extra point must fit the window */
+          if (quadFits([0, kk, kk + dy])) ks.push(kk);
+        h = rng.pick(hs); k = rng.pick(ks);
+      } else {                                 /* no picture, so the numbers can spread out */
+        h = rng.ri(-6, 6); k = rng.ri(-8, 8);
+      }
+      var side = rng.raw() < 0.5 ? 1 : -1;
+      var x1 = h + side * o, y1 = k + dy;
+      var rule = vertexStr(a, h, k);
+      var tpTxt = "(" + h + ", " + fmt(k) + ")", ptTxt = "(" + x1 + ", " + fmt(y1) + ")";
+      var known = "y = a" + (h === 0 ? "x²" : "(x " + (h > 0 ? "− " + fmt(h) : "+ " + fmt(-h)) + ")²") +
+        (k > 0 ? " + " + fmt(k) : k < 0 ? " − " + fmt(-k) : "");
+      var subs = "Substitute " + ptTxt + ": " + fmt(y1) + " = a × (" + bracket(x1) + " − " + bracket(h) + ")² " +
+        (k > 0 ? "+ " + fmt(k) : k < 0 ? "− " + fmt(-k) : "+ 0") + " → " + fmt(y1 - k) + " = a × " + (o * o) +
+        " → a = <b>" + fmt(a) + "</b>.";
+      function ruleCheck(v) { var r = parseVertex(v); return !!r && near(r.a, a, .01) && near(r.h, h, .01) && near(r.k, k, .01); }
+
+      if (pic) {
+        var yLo = quadWindow([0, k, y1]);
+        var svg = quadGrid(yLo, quadPath(a, h, k, yLo) + qdot(h, k, yLo) + qdot(x1, y1, yLo, "var(--alert,#b0592f)"));
+        var stem = "The turning point of this parabola is marked, and so is one other point on the curve.";
+        if (rng.raw() < 0.5) {
+          return { qHTML: stem + " Find <b>a</b>, <b>h</b> and <b>k</b> for y = a(x − h)² + k.", svg: svg,
+            inputs: [numInput("h", "h =", h, 0.01), numInput("k", "k =", k, 0.01), numInput("a", "a =", a, 0.01)],
+            workedHTML: "The turning point is " + tpTxt + ", so h = <b>" + fmt(h) + "</b> and k = <b>" + fmt(k) +
+              "</b>, giving " + known + ". The other marked point is " + ptTxt + ". " + subs +
+              " The rule is " + rule + "." };
+        }
+        return { qHTML: stem + " Write its rule in the form y = a(x − h)² + k.", svg: svg,
+          inputs: [{ k: "rule", label: "rule:", place: "y = a(x − h)² + k", answer: rule, check: ruleCheck }],
+          workedHTML: "Turning point " + tpTxt + " → h = " + fmt(h) + ", k = " + fmt(k) + ", so " + known + ". " +
+            subs + " The rule is <b>" + rule + "</b>." };
+      }
+      if (rng.raw() < 0.5) {
+        return { qHTML: "A parabola has its turning point at <b>" + tpTxt + "</b>, so its rule is <b>" + known +
+            "</b>. The curve also passes through <b>" + ptTxt + "</b>. Find <b>a</b>.",
+          inputs: [numInput("a", "a =", a, 0.01)],
+          workedHTML: subs + " (Check: " + fmt(a) + " × " + (o * o) + " " +
+            (k >= 0 ? "+ " + fmt(k) : "− " + fmt(-k)) + " = " + fmt(y1) + " ✓)" };
+      }
+      return { qHTML: "A parabola has its turning point at <b>" + tpTxt + "</b> and passes through <b>" + ptTxt +
+          "</b>. Write its rule in the form y = a(x − h)² + k.",
+        inputs: [numInput("a", "a =", a, 0.01),
+                 { k: "rule", label: "rule:", place: "y = a(x − h)² + k", answer: rule, check: ruleCheck }],
+        workedHTML: "h = " + fmt(h) + " and k = " + fmt(k) + " come straight from the turning point, so " + known +
+          ". " + subs + " The rule is <b>" + rule + "</b>." };
+    }
+  });
+
+  register({
+    id: "k_project",
+    teach: { what: "A thrown object traces a parabola. The <b>turning point</b> is the top of the flight — the greatest height, and half way along. Where the curve meets the ground (h = 0) is where the object lands. The rule is a <b>model</b>: it ignores wind and spin, so it is close, not perfect.",
+      how: ["Greatest height: find the turning point. In h = a(x − p)² + q it is (p, q); from the factorised form it is halfway between the two ground points.",
+            "Landing distance: solve h = 0. The factorised form hands you both answers — x = 0 is the throw itself, the other one is the landing.",
+            "Clearing an obstacle: substitute its distance for x, then compare the height you get with the height of the obstacle.",
+            "Always write the unit. These are metres, not just numbers."] },
+    hint: "Top of the flight = turning point. It lands where h = 0. To test an obstacle, substitute its distance.",
+    gen: function (rng) {
+      /* Each flight is a hand-checked (A, range, greatest height) triple:
+         A·range²/4 = height exactly, √(height/A) = range/2 exactly, and A has
+         at most two decimal places — so the top, the landing point and every
+         substitution come out tidy. The pairs are also physically sensible:
+         a chipped golf ball is low and long, a lobbed netball is high and short. */
+      var f = rng.pick([
+        { stem: "A keg is tossed from ground level.", noun: "the keg", pp: "tossed", launch: "toss", obst: "rope", A: 0.25, R: 8, H: 4 },
+        { stem: "A netball is lobbed from ground level.", noun: "the ball", pp: "lobbed", launch: "lob", obst: "defender's hands", A: 0.2, R: 10, H: 5 },
+        { stem: "A ball is thrown from ground level.", noun: "the ball", pp: "thrown", launch: "throw", obst: "fence", A: 0.05, R: 20, H: 5 },
+        { stem: "A cricket ball is hit from ground level.", noun: "the ball", pp: "hit", launch: "hit", obst: "safety net", A: 0.1, R: 20, H: 10 },
+        { stem: "A football is kicked from ground level.", noun: "the ball", pp: "kicked", launch: "kick", obst: "tree", A: 0.04, R: 30, H: 9 },
+        { stem: "A ball is punted from ground level.", noun: "the ball", pp: "punted", launch: "punt", obst: "tall tree", A: 0.02, R: 40, H: 8 },
+        { stem: "A golf ball is chipped from ground level.", noun: "the ball", pp: "chipped", launch: "chip", obst: "hedge", A: 0.01, R: 40, H: 4 }
+      ]);
+      var half = f.R / 2;
+      var fact = "h = " + fmt(f.A) + "x(" + f.R + " − x)";
+      var vert = "h = −" + fmt(f.A) + "(x − " + half + ")² + " + f.H;
+      var lead = f.stem + " Its height <b>h</b> metres, after travelling <b>x</b> metres forward, is modelled by ";
+      var ask = rng.pick(["whatis", "maxh", "land", "clear"]);
+
+      if (ask === "clear") {
+        /* obstacle distances that give a one-decimal height, well clear of the
+           peak (or the question answers itself by looking at the picture) */
+        var ds = [];
+        for (var d = 1; d < f.R; d++) {
+          var hd = f.A * d * (f.R - d);
+          if (Math.abs(hd * 10 - Math.round(hd * 10)) > 1e-9) continue;
+          if (hd < 1 || Math.abs(hd - f.H) < 0.5) continue;
+          ds.push(d);
+        }
+        if (ds.length) {
+          var D = rng.pick(ds), hD = Math.round(f.A * D * (f.R - D) * 10) / 10;
+          var gap = rng.pick([0.5, 1, 1.5, 2]);
+          var clears = (hD - gap > 0.4) ? rng.raw() < 0.5 : false;  /* the obstacle has to stand above the ground */
+          var F = Math.round((clears ? hD - gap : hD + gap) * 10) / 10;
+          return { qHTML: lead + "<b>" + fact + "</b>. A " + f.obst + " <b>" + fmt(F) + " m</b> high stands <b>" + D +
+              " m</b> from the start. Does " + f.noun + " clear it?",
+            svg: arcChart(f.A, f.R, f.H, f.launch, { d: D, f: F, label: fmt(F) + " m" }),
+            inputs: [numInput("h", "height at x = " + D + " m, in metres =", hD, 0.02),
+              { k: "clr", label: "clears the " + f.obst + "? (yes / no)", place: "yes or no",
+                answer: clears ? "yes" : "no",
+                check: function (v) {
+                  var s = String(v == null ? "" : v).trim().toLowerCase();
+                  if (/^y(es)?$/.test(s)) return clears;
+                  if (/^n(o)?$/.test(s)) return !clears;
+                  return false;
+                } }],
+            workedHTML: "Substitute x = " + D + ": h = " + fmt(f.A) + " × " + D + " × (" + f.R + " − " + D + ") = " +
+              fmt(f.A) + " × " + D + " × " + (f.R - D) + " = <b>" + fmt(hD) + " m</b>. The " + f.obst + " is " + fmt(F) +
+              " m high, and " + fmt(hD) + " m is " + (clears ? "above" : "below") + " that, so it does" + (clears ? "" : " NOT") +
+              " clear it: <b>" + (clears ? "yes" : "no") + "</b>." };
+        }
+        ask = "maxh";   /* no sensible obstacle for this flight — ask the height instead */
+      }
+      if (ask === "whatis") {
+        var right = "the greatest height " + f.noun + " reaches";
+        return { qHTML: lead + "<b>" + fact + "</b>. In this model, what does the <b>turning point</b> tell you?",
+          svg: arcChart(f.A, f.R, f.H, f.launch, null),
+          opts: { list: [right, "how far away " + f.noun + " lands", "how fast " + f.noun + " was " + f.pp,
+                         "the height " + f.noun + " was " + f.pp + " from"], a: right },
+          workedHTML: "The turning point is the top of the flight — the moment the object stops climbing and starts falling. So it tells you <b>" +
+            right + "</b>, and the x-value there tells you how far it had travelled at that moment." };
+      }
+      if (ask === "land") {
+        return { qHTML: lead + "<b>" + vert + "</b>. How far from the start does " + f.noun + " <b>land</b>?",
+          svg: arcChart(f.A, f.R, f.H, f.launch, null),
+          inputs: [numInput("x", "landing distance (m) =", f.R, 0.02)],
+          workedHTML: "It lands where the height is zero. Put h = 0: " + fmt(f.A) + "(x − " + half + ")² = " + f.H +
+            " → (x − " + half + ")² = " + f.H + " ÷ " + fmt(f.A) + " = " + (half * half) + " → x − " + half + " = ±" + half +
+            ". That gives x = 0 (the start) and x = <b>" + f.R + "</b>. So it lands <b>" + f.R + " m</b> away." };
+      }
+      return { qHTML: lead + "<b>" + fact + "</b>. Find the <b>greatest height</b>, and how far " + f.noun +
+          " has travelled when it reaches it.",
+        svg: arcChart(f.A, f.R, f.H, f.launch, null),
+        inputs: [numInput("x", "x at the greatest height (m) =", half, 0.02),
+                 numInput("h", "greatest height (m) =", f.H, 0.02)],
+        workedHTML: "h = 0 at x = 0 and at x = " + f.R + " (the two ground points). The turning point sits halfway between them: x = " +
+          f.R + " ÷ 2 = <b>" + half + "</b>. Substitute: h = " + fmt(f.A) + " × " + half + " × (" + f.R + " − " + half +
+          ") = <b>" + fmt(f.H) + " m</b>." };
     }
   });
 

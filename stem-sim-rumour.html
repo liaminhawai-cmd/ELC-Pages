@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Rumour — rehearsal for the Pandemic data task</title>
+<!-- ================================================================
+     The Rumour — the rehearsal for the Pandemic data task.
+     Same mathematics as the real task, a different story on purpose:
+     a rumour going round a school instead of a disease going round a
+     country, so students can practise the sceptical reading without
+     the weight of the real topic.
+
+     TWO SETS, five steps each, scaffolding only ever coming off:
+       SET A  HOW FAST IS FAST? — linear against exponential. Three
+              people start it, each tells ONE more every EIGHT hours,
+              so the number doubles every eight hours and multiplies
+              by 8 every day: 3 → 24 → 192 → the whole school. The
+              numbers are chosen so every count is a whole number and
+              the goal has exactly one setting of the three sliders.
+       SET B  CHECK THE CLAIM — percentages, base rates and headlines.
+              Year 9 has 40 believers out of 100 and Year 10 has 60
+              out of 240: the bigger count is the smaller share, which
+              is the trick almost every misleading claim uses.
+     Set B stays locked until Set A is finished.
+
+     All the numbers live in SCHOOL, SET_B and the data tables below.
+     Change one there and the animation, the graph, the questions and
+     the worked solutions all follow — nothing is written twice.
+     Every asserted figure is re-derived by scratchpad/rumourmath.js,
+     which also brute-forces both slider grids to prove each `play`
+     goal has exactly one solution.
+
+     The step shell, sliders, graphs, animation, marking and timing
+     all come from stem-sim.js. This file is only the story and the
+     numbers. The newsletter, The Corridor, is invented; every name
+     comes from the class's fixed list of made-up first names.
+     ================================================================ -->
+<style>
+  :root {
+    --paper:#fcfcfa; --ink:#212427; --muted:#5c6166; --faint:#6b7075;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f; --on-accent:#ffffff;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#878d92;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px;
+         flex-wrap:wrap; margin-bottom:26px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  .top a:hover { text-decoration:underline; }
+  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:34px;
+    border-radius:8px; border:1px solid var(--hair); background:var(--paper); color:var(--ink); }
+  .masthead { margin:4px 0 20px; }
+  .masthead h1 { margin:0 0 6px; font-family:Georgia,"Times New Roman",serif; font-size:1.9rem;
+    font-weight:500; letter-spacing:-.01em; }
+  .masthead .sub { margin:0; color:var(--muted); font-size:.88rem; max-width:64ch; }
+  .frame { border-top:1px solid var(--ink); padding-top:12px; margin:0 0 20px;
+           font-size:.86rem; color:var(--muted); }
+  .frame b { color:var(--ink); }
+  .frame .eng { display:block; margin-top:.4rem; color:var(--faint); font-size:.82rem; }
+  .note { font-size:.8rem; color:var(--faint); margin:26px 0 0; }
+  footer { margin-top:34px; border-top:1px solid var(--hair); padding-top:14px;
+           font-size:.78rem; color:var(--faint); }
+  .teacherline { margin:10px 0 0; font-size:.76rem; }
+  .teacherline a { color:var(--faint); }
+  [data-v] { border-bottom:1px dotted var(--accent); cursor:help; }
+  .sim-live { font-variant-numeric:tabular-nums; font-size:.82rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="stem-pandemic.html" data-i18n="back">← Pandemic · Do</a>
+    <span id="tw-slot"></span>
+    <select class="language-select" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+      <option value="vi">Tiếng Việt</option>
+    </select>
+  </div>
+
+  <div class="masthead">
+    <h1 data-i18n="title">The Rumour</h1>
+    <p class="sub" data-i18n="sub">One rumour, one school, four confident claims. Play with it, read it,
+      predict it, then do the maths on your own. Two sets of five steps — each step hands more of
+      the work to you.</p>
+  </div>
+
+  <p class="frame" id="frameLine"></p>
+
+  <div id="sim"></div>
+
+  <p class="note" data-i18n="privacy">Anonymous. What you do on this page is stored in this browser
+    only — no accounts, no tracking.</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+  <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: open every step</a></p>
+</div>
+
+<script src="stem-vocab-data.js?v=20260821-4"></script>
+<script src="stem-shared.js?v=20260821-4"></script>
+<script src="stem-vocab.js?v=20260821-4"></script>
+<script src="stem-gloss.js?v=20260821-4"></script>
+<script src="stem-translate.js?v=20260821-5"></script>
+<script src="stem-sim.js?v=20260821-4"></script>
+<script>
+(function () {
+  "use strict";
+  var S2 = window.STEM2, SIM = window.STEMSIM;
+
+  /* ================================================================
+     PAGE CHROME, in the four page languages.
+     The WORDED PROBLEMS in steps 4 and 5 stay in English on purpose:
+     reading the English of a claim IS the skill the real task tests.
+     Every hard word inside them is tappable instead.
+     ================================================================ */
+  var COPY = {
+    en: {
+      back:"← Pandemic · Do", title:"The Rumour",
+      sub:"One rumour, one school, four confident claims. Play with it, read it, predict it, then do the maths on your own. Two sets of five steps — each step hands more of the work to you.",
+      privacy:"Anonymous. What you do on this page is stored in this browser only — no accounts, no tracking.",
+      teacherU:"Teacher: open every step",
+      engNote:"Steps 4 and 5 stay in English — reading the English is part of the task. Tap any word you do not know.",
+      buildsF:function(n){ return "This rehearses "+n+"."; },
+      buildsAlways:"This keeps your reading of numbers in the news sharp.",
+      dayF:function(d){ return "day "+d; },
+      knowF:function(n,r){ return n+" of "+r+" students know"; },
+      paper:"The Corridor"
+    },
+    "zh-Hans": {
+      back:"← 大流行 · 任务", title:"一则谣言",
+      sub:"一则谣言，一所学校，四个说得很有把握的说法。先玩，再读，再预测，最后自己算。两组，每组五步——每一步都把更多的工作交给你。",
+      privacy:"匿名。你在本页的记录只保存在这个浏览器里——没有账号，不做追踪。",
+      teacherU:"教师：开放全部步骤",
+      engNote:"第 4、5 步保持英文——读懂英文本身就是任务的一部分。不认识的词点一下即可。",
+      buildsF:function(n){ return "这是在为"+n+"做演练。"; },
+      buildsAlways:"这让你读新闻里的数字时保持清醒。",
+      dayF:function(d){ return "第 "+d+" 天"; },
+      knowF:function(n,r){ return "全校 "+r+" 人中有 "+n+" 人知道"; },
+      paper:"校刊《走廊》"
+    },
+    "zh-Hant": {
+      back:"← 大流行 · 任務", title:"一則謠言",
+      sub:"一則謠言，一所學校，四個說得很有把握的說法。先玩，再讀，再預測，最後自己算。兩組，每組五步——每一步都把更多的工作交給你。",
+      privacy:"匿名。你在本頁的紀錄只儲存在這個瀏覽器裡——沒有帳號，不做追蹤。",
+      teacherU:"教師：開放全部步驟",
+      engNote:"第 4、5 步保持英文——讀懂英文本身就是任務的一部分。不認識的字點一下即可。",
+      buildsF:function(n){ return "這是在為"+n+"做演練。"; },
+      buildsAlways:"這讓你讀新聞裡的數字時保持清醒。",
+      dayF:function(d){ return "第 "+d+" 天"; },
+      knowF:function(n,r){ return "全校 "+r+" 人中有 "+n+" 人知道"; },
+      paper:"校刊《走廊》"
+    },
+    vi: {
+      back:"← Đại dịch · Việc cần làm", title:"Tin đồn",
+      sub:"Một tin đồn, một ngôi trường, bốn lời khẳng định đầy tự tin. Chơi thử, đọc số liệu, dự đoán, rồi tự tính. Hai nhóm, mỗi nhóm năm bước — mỗi bước giao thêm việc cho em.",
+      privacy:"Ẩn danh. Những gì em làm ở trang này chỉ lưu trong trình duyệt này — không tài khoản, không theo dõi.",
+      teacherU:"Giáo viên: mở tất cả các bước",
+      engNote:"Bước 4 và 5 giữ nguyên tiếng Anh — đọc được tiếng Anh chính là một phần của bài. Từ nào chưa biết thì chạm vào.",
+      buildsF:function(n){ return "Đây là buổi tập dượt cho bài "+n+"."; },
+      buildsAlways:"Phần này giữ cho em tỉnh táo khi đọc các con số trên báo.",
+      dayF:function(d){ return "ngày "+d; },
+      knowF:function(n,r){ return n+" trong "+r+" học sinh đã biết"; },
+      paper:"bản tin trường The Corridor"
+    }
+  };
+  function lang(){ try { return localStorage.getItem("elc_page_language") || "en"; } catch(e){ return "en"; } }
+  function T(k){ var d = COPY[lang()] || COPY.en; return d[k] !== undefined ? d[k] : COPY.en[k]; }
+  var esc = SIM.esc, num = SIM.num;
+
+  /* ================================================================
+     THE SCHOOL — Set A's numbers. Everything downstream is derived.
+
+     A rumour that spreads by telling: everybody who knows it tells
+     `tells` new people every `hours` hours. That multiplies the
+     number who know by (1 + tells) each round, so after d days
+         N = start × (1 + tells) ^ (24d / hours)
+     The answer to the A1 goal is 3 people, 1 each, every 8 hours:
+     three rounds a day, ×2 each round, so ×8 a day — 3, 24, 192,
+     and the whole school before the end of day 3.
+     ================================================================ */
+  var SCHOOL = {
+    roll:   900,        /* students on the roll                        */
+    start:  3,          /* people who start it        (the A1 answer)  */
+    tells:  1,          /* people each person tells   (the A1 answer)  */
+    hours:  8,          /* hours before they pass it on (the A1 answer)*/
+    goalD1: 24,         /* the count the goal asks for at day 1        */
+    goalD2: 192,        /* ... and at day 2                            */
+    poster: 60          /* the flat comparison: a poster read by 60 new
+                           students a day, starting at 60             */
+  };
+  /* the four positions of the "how long before they tell them" slider */
+  var HOURS = [24, 12, 8, 6];
+
+  function perDay(tells, hours){ return Math.pow(1 + tells, 24 / hours); }
+  /* how many know after d DAYS — never more than the school roll */
+  function knowDay(start, tells, hours, d){
+    return Math.min(start * Math.pow(perDay(tells, hours), d), SCHOOL.roll);
+  }
+  /* how many know after t HOURS (used by the zoomed-in Step 2 graph) */
+  function knowHour(start, tells, hours, t){
+    return Math.min(start * Math.pow(1 + tells, t / hours), SCHOOL.roll);
+  }
+  /* the day the last student hears it */
+  function fullDay(start, tells, hours){
+    return Math.log(SCHOOL.roll / start) / Math.log(perDay(tells, hours));
+  }
+  function posterAt(d){ return SCHOOL.poster + SCHOOL.poster * d; }
+
+  /* ---------- the people, never a real student ---------- */
+  var WHO = {
+    rumour: { name:{en:"the rumour", "zh-Hans":"谣言", "zh-Hant":"謠言", vi:"tin đồn"}, ck:"b" },
+    poster: { name:{en:"the poster", "zh-Hans":"海报", "zh-Hant":"海報", vi:"tấm áp phích"}, ck:"c" },
+    y9:     { name:{en:"Year 9", "zh-Hans":"九年级", "zh-Hant":"九年級", vi:"khối lớp 9"}, ck:"a" },
+    y10:    { name:{en:"Year 10", "zh-Hans":"十年级", "zh-Hant":"十年級", vi:"khối lớp 10"}, ck:"c" }
+  };
+  function C(k){ return SIM.colors()[k]; }
+
+  /* the colour key under a figure — a real node, because it gets appended */
+  function keyRow(items){
+    var p = document.createElement("p");
+    p.className = "sim-key";
+    p.innerHTML = items.map(function(i){
+      return "<span><i style='background:" + i.c + "'></i>" + esc(SIM.L(i.n)) + "</span>";
+    }).join("");
+    return p;
+  }
+
+  /* ================================================================
+     BARS — the picture at the heart of Set B. One row per group: the
+     bar is the whole group, the filled part is the number it happened
+     to. In "count" mode the bars are scaled against the biggest group,
+     so a bigger year draws a longer bar and a longer filled piece; in
+     "share" mode every bar is the same length, so only the fraction
+     shows. Same data, two pictures — which is the whole lesson.
+     bars(host, { rows:[{name,size,hit,color}], scale:"count"|"share" })
+     ================================================================ */
+  function bars(host, o){
+    var W = Math.max(300, Math.min(720, Math.round(host.clientWidth ||
+      (host.parentNode && host.parentNode.clientWidth) || 640)));
+    var rows = o.rows || [], share = o.scale === "share";
+    var pad = 2, rowH = 52, full = W - pad * 2, top = 6;
+    var maxSize = 1;
+    rows.forEach(function(r){ if (r.size > maxSize) maxSize = r.size; });
+    var hair = SIM.cvar("--hair", "#e6e7e3"), muted = SIM.cvar("--muted", "#5c6166");
+    var ink = SIM.cvar("--ink", "#212427");
+    var H = top + rows.length * rowH, g = [];
+    rows.forEach(function(r, i){
+      var y = top + i * rowH;
+      var bw = full * (share ? 1 : r.size / maxSize);
+      var frac = r.size ? Math.min(1, r.hit / r.size) : 0;
+      var pct = r.size ? 100 * r.hit / r.size : 0;
+      g.push("<text x='" + pad + "' y='" + (y + 12) + "' fill='" + muted +
+        "' font-size='11.5'>" + esc(SIM.L(r.name)) + "</text>");
+      g.push("<text x='" + (W - pad) + "' y='" + (y + 12) + "' fill='" + ink +
+        "' font-size='11.5' font-weight='600' text-anchor='end'>" +
+        esc(r.hit + " / " + r.size + " = " + num(pct, 1) + "%") + "</text>");
+      g.push("<rect x='" + pad + "' y='" + (y + 20) + "' width='" + num(bw, 1) +
+        "' height='16' rx='3' fill='" + hair + "'/>");
+      g.push("<rect x='" + pad + "' y='" + (y + 20) + "' width='" + num(bw * frac, 1) +
+        "' height='16' rx='3' fill='" + (r.color || ink) + "'/>");
+    });
+    host.classList.add("sim-fig");
+    host.innerHTML = "<svg viewBox='0 0 " + W + " " + H + "' role='img' aria-label='" +
+      esc(SIM.L(o.alt) || "bars") + "'>" + g.join("") + "</svg>";
+  }
+</script>
+</body>
+</html>

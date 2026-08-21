@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Coconut Drop — rehearsal for the Ball Drop report</title>
+<!-- ================================================================
+     The Coconut Drop — the rehearsal for the Ball Drop report.
+     Same mathematics as the real task, a different story on purpose:
+     a coconut off a palm instead of a ball off a landing.
+
+     TWO SETS, five steps each, scaffolding only ever coming off:
+       SET A  COLLECT AND PLOT — run the drop, time it three times,
+              average, tabulate, plot. h = ½gt², so with g = 9.8 the
+              4.9 m drop takes exactly 1.00 s, and 19.6 m — four
+              times as high — takes exactly 2.00 s.
+       SET B  LINEARISE AND FIND g — the part students lose marks on.
+              h against t is a CURVE. h against t² is a STRAIGHT LINE
+              of gradient ½g = 4.9, so g = 2 × gradient.
+     Set B stays locked until Set A is finished: you cannot straighten
+     a graph you have not drawn yet.
+
+     Every number lives in DROP, RAW, A4_DATA, A5_DATA and B5_DATA
+     below and is derived from h = ½gt² — nothing is written twice.
+     scratchpad/dropmath.js re-derives all of them from scratch and
+     brute-forces both play steps to prove each has exactly one
+     solution inside its slider ranges (4.9 m + 0.20 s; power 2 +
+     gradient 4.9).
+
+     The step shell, sliders, graphs, animation, marking and timing
+     all come from stem-sim.js. This file is only the story, the
+     numbers and the one figure the engine does not have: a fall is
+     vertical, and every widget in the engine is horizontal.
+     ================================================================ -->
+<style>
+  :root {
+    --paper:#fcfcfa; --ink:#212427; --muted:#5c6166; --faint:#6b7075;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f; --on-accent:#ffffff;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#878d92;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px;
+         flex-wrap:wrap; margin-bottom:26px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  .top a:hover { text-decoration:underline; }
+  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:34px;
+    border-radius:8px; border:1px solid var(--hair); background:var(--paper); color:var(--ink); }
+  .masthead { margin:4px 0 20px; }
+  .masthead h1 { margin:0 0 6px; font-family:Georgia,"Times New Roman",serif; font-size:1.9rem;
+    font-weight:500; letter-spacing:-.01em; }
+  .masthead .sub { margin:0; color:var(--muted); font-size:.88rem; max-width:64ch; }
+  .frame { border-top:1px solid var(--ink); padding-top:12px; margin:0 0 20px;
+           font-size:.86rem; color:var(--muted); }
+  .frame b { color:var(--ink); }
+  .frame .eng { display:block; margin-top:.4rem; color:var(--faint); font-size:.82rem; }
+  .note { font-size:.8rem; color:var(--faint); margin:26px 0 0; }
+  footer { margin-top:34px; border-top:1px solid var(--hair); padding-top:14px;
+           font-size:.78rem; color:var(--faint); }
+  .teacherline { margin:10px 0 0; font-size:.76rem; }
+  .teacherline a { color:var(--faint); }
+  [data-v] { border-bottom:1px dotted var(--accent); cursor:help; }
+  .sim-live { font-variant-numeric:tabular-nums; font-size:.82rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="stem-kinematics.html" data-i18n="back">← Kinematics · Do</a>
+    <span id="tw-slot"></span>
+    <select class="language-select" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+      <option value="vi">Tiếng Việt</option>
+    </select>
+  </div>
+
+  <div class="masthead">
+    <h1 data-i18n="title">The Coconut Drop</h1>
+    <p class="sub" data-i18n="sub">Drop it, time it, plot it — then straighten the curve and read gravity
+      off the gradient. Two sets of five steps: play with it, read it, predict it, then do the maths on
+      your own.</p>
+  </div>
+
+  <p class="frame" id="frameLine"></p>
+
+  <div id="sim"></div>
+
+  <p class="note" data-i18n="privacy">Anonymous. What you do on this page is stored in this browser
+    only — no accounts, no tracking.</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+  <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: open every step</a></p>
+</div>
+
+<script src="stem-vocab-data.js?v=20260821-4"></script>
+<script src="stem-shared.js?v=20260821-4"></script>
+<script src="stem-vocab.js?v=20260821-4"></script>
+<script src="stem-gloss.js?v=20260821-4"></script>
+<script src="stem-translate.js?v=20260821-5"></script>
+<script src="stem-sim.js?v=20260821-4"></script>
+<script>
+(function () {
+  "use strict";
+  var S2 = window.STEM2, SIM = window.STEMSIM;
+
+  /* ================================================================
+     PAGE CHROME, in the four page languages.
+     The WORDED PROBLEMS in steps 4 and 5 stay in English on purpose:
+     reading the English of a practical report IS the skill the task
+     tests. Every hard word inside them is tappable instead.
+     ================================================================ */
+  var COPY = {
+    en: {
+      back:"← Kinematics · Do", title:"The Coconut Drop",
+      sub:"Drop it, time it, plot it — then straighten the curve and read gravity off the gradient. Two sets of five steps: play with it, read it, predict it, then do the maths on your own.",
+      privacy:"Anonymous. What you do on this page is stored in this browser only — no accounts, no tracking.",
+      teacherU:"Teacher: open every step",
+      engNote:"Steps 4 and 5 stay in English — reading the English is part of the task. Tap any word you do not know.",
+      buildsF:function(n){ return "This rehearses "+n+"."; },
+      buildsAlways:"This keeps your data-and-trendline maths sharp for every task."
+    },
+    "zh-Hans": {
+      back:"← 运动学 · 任务", title:"椰子下落实验",
+      sub:"让它落下、计时、作图——然后把曲线拉直，从斜率读出重力加速度。两组，每组五步：先玩，再读，再预测，最后自己算。",
+      privacy:"匿名。你在本页的记录只保存在这个浏览器里——没有账号，不做追踪。",
+      teacherU:"教师：开放全部步骤",
+      engNote:"第 4、5 步保持英文——读懂英文本身就是任务的一部分。不认识的词点一下即可。",
+      buildsF:function(n){ return "这是在为"+n+"做演练。"; },
+      buildsAlways:"这让你处理数据和趋势线的能力保持熟练，每个任务都用得上。"
+    },
+    "zh-Hant": {
+      back:"← 運動學 · 任務", title:"椰子下落實驗",
+      sub:"讓它落下、計時、作圖——然後把曲線拉直，從斜率讀出重力加速度。兩組，每組五步：先玩，再讀，再預測，最後自己算。",
+      privacy:"匿名。你在本頁的紀錄只儲存在這個瀏覽器裡——沒有帳號，不做追蹤。",
+      teacherU:"教師：開放全部步驟",
+      engNote:"第 4、5 步保持英文——讀懂英文本身就是任務的一部分。不認識的字點一下即可。",
+      buildsF:function(n){ return "這是在為"+n+"做演練。"; },
+      buildsAlways:"這讓你處理資料和趨勢線的能力保持熟練，每個任務都用得上。"
+    },
+    vi: {
+      back:"← Động học · Việc cần làm", title:"Thí nghiệm thả quả dừa",
+      sub:"Thả xuống, bấm giờ, vẽ đồ thị — rồi làm cho đường cong thẳng lại và đọc gia tốc trọng trường từ độ dốc. Hai nhóm, mỗi nhóm năm bước: chơi thử, đọc số liệu, dự đoán, rồi tự tính.",
+      privacy:"Ẩn danh. Những gì em làm ở trang này chỉ lưu trong trình duyệt này — không tài khoản, không theo dõi.",
+      teacherU:"Giáo viên: mở tất cả các bước",
+      engNote:"Bước 4 và 5 giữ nguyên tiếng Anh — đọc được tiếng Anh chính là một phần của bài. Từ nào chưa biết thì chạm vào.",
+      buildsF:function(n){ return "Đây là buổi tập dượt cho bài "+n+"."; },
+      buildsAlways:"Phần này giữ cho kỹ năng xử lý dữ liệu và đường xu hướng của em luôn nhạy."
+    }
+  };
+  function lang(){ try { return localStorage.getItem("elc_page_language") || "en"; } catch(e){ return "en"; } }
+  function T(k){ var d = COPY[lang()] || COPY.en; return d[k] !== undefined ? d[k] : COPY.en[k]; }
+  var esc = SIM.esc, num = SIM.num, L = SIM.L;
+  /* SIM.num strips trailing zeros, which is right for a distance and wrong for
+     a stopwatch: this page's clocks always read two decimal places. */
+  function fix2(v){ return (Math.round(v * 100) / 100).toFixed(2); }
+
+  /* ================================================================
+     THE PHYSICS — everything downstream is derived from these
+     ================================================================ */
+  var DROP = {
+    g: 9.8,            /* m/s² on Earth, the value the report compares against */
+    gMoon: 1.6,        /* m/s² on the Moon                                     */
+    hMax: 20,          /* how far up the marked pole goes, in metres           */
+    anchorH: 4.9,      /* the drop that takes exactly 1.00 s                   */
+    anchorT: 1.0
+  };
+  function tFall(h, g){ return Math.sqrt(2 * h / (g || DROP.g)); }
+  function hFall(t, g){ return 0.5 * (g || DROP.g) * t * t; }
+  function halfG(g){ return (g || DROP.g) / 2; }          /* the gradient of h against t² */
+
+  /* THE RUN Mai and Kiet actually did: five marked heights on the pole,
+     three timed trials at each, the mean rounded to a hundredth. The means
+     sit within 7 mm of h = 4.9t², so the trendline is 4.9 and the maths
+     below never has to lie about the data. */
+  var RAW = [
+    { h: 2,  t: [0.61, 0.66, 0.65], mean: 0.64 },
+    { h: 4,  t: [0.88, 0.92, 0.90], mean: 0.90 },
+    { h: 6,  t: [1.08, 1.13, 1.09], mean: 1.10 },
+    { h: 8,  t: [1.31, 1.25, 1.28], mean: 1.28 },
+    { h: 10, t: [1.46, 1.41, 1.42], mean: 1.43 }
+  ];
+  function pointsHT(){ return RAW.map(function(r){ return [r.mean, r.h]; }); }
+  function pointsHT2(p){ return RAW.map(function(r){ return [Math.pow(r.mean, p == null ? 2 : p), r.h]; }); }
+
+  function C(k){ return SIM.colors()[k]; }
+  /* b is the warm colour: the coconut and every measured point wear it on
+     every step, so a data point is the same thing it was one step ago. */
+  var COCO = "b", LINE = "a", MOON = "c";
+
+  /* ---------- little builders (all content below is authored here, never typed in) ---------- */
+  function keyRow(items){
+    var p = document.createElement("p");
+    p.className = "sim-key";
+    p.innerHTML = items.map(function(i){
+      return "<span><i style='background:" + i.c + "'></i>" + esc(L(i.n)) + "</span>";
+    }).join("");
+    return p;
+  }
+  function tableEl(head, rows){
+    var wrap = document.createElement("div");
+    wrap.className = "sim-wrapx";
+    var h = "<table class='sim-table'><thead><tr>";
+    head.forEach(function(c){ h += "<th>" + L(c) + "</th>"; });
+    h += "</tr></thead><tbody>";
+    rows.forEach(function(r){
+      h += "<tr>" + r.map(function(c){ return "<td>" + c + "</td>"; }).join("") + "</tr>";
+    });
+    wrap.innerHTML = h + "</tbody></table>";
+    return wrap;
+  }
+  function niceStep(range){
+    var raw = range / 5, mag = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10));
+    var n = raw / mag;
+    return (n >= 5 ? 5 : n >= 2 ? 2 : 1) * mag;
+  }
+
+  /* ================================================================
+     THE FALL — the one figure the engine does not have. Every widget
+     in stem-sim.js runs left to right; a drop runs top to bottom.
+     Drawn from the page's own CSS tokens, so it re-tints in dark mode
+     with everything else and never hard-codes a colour.
+       fallFig(host, { top, release, y, height })
+     ================================================================ */
+  function fallFig(host, o){
+    var W = SIM.clamp(Math.round(host.clientWidth ||
+      (host.parentNode && host.parentNode.clientWidth) || 640), 300, 720);
+    var H = o.height || 250;
+    var P = { l: 32, r: 12, t: 16, b: 22 };
+    var ph = H - P.t - P.b;
+    var top = Math.max(1, o.top);
+    function Y(m){ return P.t + ph - SIM.clamp(m / top, 0, 1) * ph; }
+
+    var ink = SIM.cvar("--ink", "#212427"), muted = SIM.cvar("--muted", "#5c6166");
+    var hair = SIM.cvar("--hair", "#e6e7e3"), faint = SIM.cvar("--faint", "#6b7075");
+    var paper = SIM.cvar("--paper", "#fff"), coco = C(COCO);
+    var trunkX = P.l + 42, ballX = trunkX + 30;
+    var g = [], v;
+
+    /* the metre scale, so the number on the slider is a number on the pole */
+    var step = niceStep(top);
+    for (v = 0; v <= top + 1e-9; v += step) {
+      g.push("<line x1='" + (P.l - 4) + "' y1='" + Y(v) + "' x2='" + P.l + "' y2='" + Y(v) +
+        "' stroke='" + faint + "' stroke-width='1'/>");
+      g.push("<text x='" + (P.l - 7) + "' y='" + (Y(v) + 4) + "' fill='" + faint +
+        "' font-size='11' text-anchor='end'>" + esc(num(v)) + "</text>");
+    }
+    g.push("<line x1='" + P.l + "' y1='" + P.t + "' x2='" + P.l + "' y2='" + Y(0) +
+      "' stroke='" + muted + "' stroke-width='1.4'/>");
+    g.push("<text transform='translate(11," + (P.t + ph / 2) + ") rotate(-90)' fill='" + muted +
+      "' font-size='11' text-anchor='middle'>m</text>");
+
+    /* the palm: a trunk and three fronds, drawn as a diagram, not a picture */
+    var crown = Y(top * 0.97);
+    g.push("<line x1='" + trunkX + "' y1='" + Y(0) + "' x2='" + trunkX + "' y2='" + crown +
+      "' stroke='" + hair + "' stroke-width='7' stroke-linecap='round'/>");
+    [[-26, -12], [0, -20], [26, -12]].forEach(function(d){
+      g.push("<line x1='" + trunkX + "' y1='" + crown + "' x2='" + (trunkX + d[0]) + "' y2='" + (crown + d[1]) +
+        "' stroke='" + hair + "' stroke-width='3' stroke-linecap='round'/>");
+    });
+
+    /* the sand */
+    g.push("<line x1='" + P.l + "' y1='" + Y(0) + "' x2='" + (W - P.r) + "' y2='" + Y(0) +
+      "' stroke='" + muted + "' stroke-width='1.6'/>");
+
+    /* where it was let go */
+    if (o.release > 0) {
+      g.push("<line x1='" + P.l + "' y1='" + Y(o.release) + "' x2='" + (W - P.r) + "' y2='" + Y(o.release) +
+        "' stroke='" + faint + "' stroke-width='1' stroke-dasharray='3 3'/>");
+      g.push("<text x='" + (W - P.r) + "' y='" + (Y(o.release) - 5) + "' fill='" + faint +
+        "' font-size='11' text-anchor='end'>" + esc(L(o.releaseLabel) || "") + " " + esc(num(o.release, 1)) + " m</text>");
+      /* the road already fallen */
+      g.push("<line x1='" + ballX + "' y1='" + Y(o.release) + "' x2='" + ballX + "' y2='" + Y(o.y) +
+        "' stroke='" + coco + "' stroke-width='3' opacity='.30' stroke-linecap='round'/>");
+    }
+
+    g.push("<circle cx='" + ballX + "' cy='" + Y(o.y) + "' r='8' fill='" + coco +
+      "' stroke='" + paper + "' stroke-width='2.5'/>");
+    g.push("<text x='" + (ballX + 14) + "' y='" + (Y(o.y) + 4) + "' fill='" + ink +
+      "' font-size='11.5' font-weight='600'>" + esc(num(o.y, 1)) + " m</text>");
+
+    host.classList.add("sim-fig");
+    host.innerHTML = "<svg viewBox='0 0 " + W + " " + H + "' role='img' aria-label='" +
+      esc(L(o.alt) || "a coconut falling from a marked pole beside a palm") + "'>" + g.join("") + "</svg>";
+  }
+
+  /* ================================================================
+     SET A — COLLECT AND PLOT
+     ================================================================ */
+
+  /* --- A1 PLAY: two sliders, two goals, one answer: 4.9 m and a 0.20 s thumb --- */
+  var A1G1 = {en:"The true fall time reads exactly 1.00 s.",
+    "zh-Hans":"真实下落时间正好是 1.00 秒。", "zh-Hant":"真實下落時間正好是 1.00 秒。",
+    vi:"Thời gian rơi thật đúng bằng 1,00 giây."};
+  var A1G2 = {en:"The fastest and slowest stopwatch differ by exactly 0.40 s.",
+    "zh-Hans":"最快和最慢的秒表相差正好 0.40 秒。", "zh-Hant":"最快和最慢的碼錶相差正好 0.40 秒。",
+    vi:"Đồng hồ nhanh nhất và chậm nhất chênh nhau đúng 0,40 giây."};
+  var A1WIN = {en:"4.9 m, because h = ½ × 9.8 × 1² = 4.9. And look at the three stopwatches: not one of them read 1.00 s, but their average was much closer than the worst of them. That is why the report asks for three trials at every height.",
+    "zh-Hans":"4.9 米，因为 h = ½ × 9.8 × 1² = 4.9。再看那三块秒表：没有一块读到 1.00 秒，但它们的平均值比其中最差的一次接近得多。这就是报告要求每个高度做三次的原因。",
+    "zh-Hant":"4.9 公尺，因為 h = ½ × 9.8 × 1² = 4.9。再看那三個碼錶：沒有一個讀到 1.00 秒，但它們的平均值比其中最差的一次接近得多。這就是報告要求每個高度做三次的原因。",
+    vi:"4,9 m, vì h = ½ × 9,8 × 1² = 4,9. Và nhìn ba chiếc đồng hồ: không cái nào đọc đúng 1,00 s, nhưng trung bình của chúng gần hơn hẳn so với lần đo tệ nhất. Đó là lý do bài báo cáo yêu cầu ba lần đo ở mỗi độ cao."};
+  var LBL = {
+    h:{en:"Drop height", "zh-Hans":"下落高度", "zh-Hant":"下落高度", vi:"Độ cao thả"},
+    e:{en:"How late your thumb is on the stopwatch", "zh-Hans":"你按秒表时手指慢了多少",
+       "zh-Hant":"你按碼錶時手指慢了多少", vi:"Ngón tay bấm đồng hồ chậm bao nhiêu"},
+    sec:{en:"s", "zh-Hans":"秒", "zh-Hant":"秒", vi:"giây"},
+    trial:{en:"Trial", "zh-Hans":"第几次", "zh-Hant":"第幾次", vi:"Lần đo"},
+    reading:{en:"Stopwatch reads (s)", "zh-Hans":"秒表读数（秒）", "zh-Hant":"碼錶讀數（秒）", vi:"Đồng hồ đọc (giây)"},
+    mean:{en:"Mean of the three", "zh-Hans":"三次平均", "zh-Hant":"三次平均", vi:"Trung bình ba lần"},
+    spread:{en:"Fastest to slowest", "zh-Hans":"最快到最慢", "zh-Hant":"最快到最慢", vi:"Nhanh nhất đến chậm nhất"},
+    trueT:{en:"True fall time", "zh-Hans":"真实下落时间", "zh-Hant":"真實下落時間", vi:"Thời gian rơi thật"},
+    release:{en:"let go at", "zh-Hans":"松手于", "zh-Hant":"鬆手於", vi:"thả ở"},
+    tAxis:{en:"fall time t (s)", "zh-Hans":"下落时间 t（秒）", "zh-Hant":"下落時間 t（秒）", vi:"thời gian rơi t (giây)"},
+    hAxis:{en:"drop height h (m)", "zh-Hans":"下落高度 h（米）", "zh-Hant":"下落高度 h（公尺）", vi:"độ cao thả h (m)"},
+    t2Axis:{en:"t² (s²)", "zh-Hans":"t²（秒²）", "zh-Hant":"t²（秒²）", vi:"t² (giây²)"},
+    measured:{en:"what they measured", "zh-Hans":"他们测到的", "zh-Hant":"他們測到的", vi:"số liệu đo được"},
+    curve:{en:"the curve the points make", "zh-Hans":"这些点构成的曲线", "zh-Hant":"這些點構成的曲線", vi:"đường cong các điểm tạo ra"},
+    trendline:{en:"trendline", "zh-Hans":"趋势线", "zh-Hant":"趨勢線", vi:"đường xu hướng"},
+    earth:{en:"Earth", "zh-Hans":"地球", "zh-Hant":"地球", vi:"Trái Đất"},
+    moon:{en:"the Moon", "zh-Hans":"月球", "zh-Hant":"月球", vi:"Mặt Trăng"},
+    yourLine:{en:"your line", "zh-Hans":"你的直线", "zh-Hant":"你的直線", vi:"đường của em"}
+  };
+
+  function a1(ctx){
+    var host = ctx.host;
+    var state = { h: 12, e: 0.05 };
+    var fig = ctx.el("div"), readout = ctx.el("div"), goalBox = ctx.el("p", "sim-goal");
+
+    SIM.sliders(host, [
+      { k:"h", min:0.5, max:DROP.hMax, step:0.1, value:12, unit:"m", label:LBL.h },
+      { k:"e", min:0, max:0.30, step:0.05, value:0.05, unit:LBL.sec, label:LBL.e,
+        fmt:function(v){ return "± " + fix2(v); } }
+    ], function(v){
+      state.h = v.h; state.e = v.e;
+      clock.setDur(tFall(state.h));
+      redraw();
+    });
+
+    host.appendChild(fig);
+    var clock = SIM.anim(host, {
+      dur: tFall(state.h), speed: 0.5,
+      labelFor: function(t){ return fix2(t) + " s"; },
+      onFrame: function(t){ draw(t); }
+    });
+    host.appendChild(readout);
+    host.appendChild(goalBox);
+
+    function draw(t){
+      var y = Math.max(0, state.h - hFall(t));
+      fallFig(fig, { top: Math.max(2, state.h * 1.15), release: state.h, y: y,
+                     releaseLabel: LBL.release, height: 250 });
+    }
+    /* three trials, one late thumb, one early, one half-late: the mean lands
+       closer than any single reading but never exactly on the truth. */
+    function trials(tf, e){ return [tf + e, tf - e, tf + e / 2]; }
+
+    var won = false;
+    function redraw(){
+      draw(clock.time());
+      var tf = tFall(state.h), tr = trials(tf, state.e);
+      var mean = (tr[0] + tr[1] + tr[2]) / 3, spread = Math.max.apply(null, tr) - Math.min.apply(null, tr);
+      readout.innerHTML = "";
+      readout.appendChild(tableEl(
+        [LBL.trial, LBL.reading],
+        tr.map(function(v, i){ return [String(i + 1), fix2(v)]; })
+          .concat([["<b>" + L(LBL.mean) + "</b>", "<b>" + fix2(mean) + "</b>"],
+                   [L(LBL.spread), fix2(spread)],
+                   [L(LBL.trueT), "<b>" + fix2(tf) + "</b>"]])
+      ));
+      var g1 = Math.abs(tf - DROP.anchorT) <= 0.005;
+      var g2 = Math.abs(spread - 0.4) <= 0.005;
+      goalBox.innerHTML =
+        "<span>" + (g1 ? "✓" : "○") + " " + esc(L(A1G1)) + "</span><br>" +
+        "<span>" + (g2 ? "✓" : "○") + " " + esc(L(A1G2)) + "</span>";
+      if (g1 && g2 && !won) {
+        won = true;
+        ctx.done({});
+        goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(A1WIN));
+      }
+    }
+    redraw();
+  }
+
+  /* --- A2 READ: the slider is still live, but now read the table and the graph --- */
+  function a2(ctx){
+    var host = ctx.host;
+    var state = { h: 6 };
+    var fig = ctx.el("div"), figG = ctx.el("div");
+
+    SIM.sliders(host, [
+      { k:"h", min:0.5, max:DROP.hMax, step:0.1, value:6, unit:"m", label:LBL.h }
+    ], function(v){ state.h = v.h; clock.setDur(tFall(state.h)); redraw(); });
+
+    host.appendChild(fig);
+    var clock = SIM.anim(host, {
+      dur: tFall(state.h), speed: 0.5,
+      labelFor: function(t){ return fix2(t) + " s"; },
+      onFrame: function(t){ draw(t); }
+    });
+
+    host.appendChild(ctx.el("p", "sim-note", esc(L({
+      en:"Mai marked the pole, Kiet let the coconut go, and they timed each height three times.",
+      "zh-Hans":"小梅在杆子上做记号，阿杰松手放下椰子，每个高度他们都计时三次。",
+      "zh-Hant":"小梅在桿子上做記號，阿杰鬆手放下椰子，每個高度他們都計時三次。",
+      vi:"Mai đánh dấu trên cây sào, Kiet thả quả dừa, và mỗi độ cao họ bấm giờ ba lần."}))));
+    host.appendChild(tableEl(
+      [LBL.hAxis, {en:"trial 1", "zh-Hans":"第 1 次", "zh-Hant":"第 1 次", vi:"lần 1"},
+       {en:"trial 2", "zh-Hans":"第 2 次", "zh-Hant":"第 2 次", vi:"lần 2"},
+       {en:"trial 3", "zh-Hans":"第 3 次", "zh-Hant":"第 3 次", vi:"lần 3"},
+       {en:"mean t (s)", "zh-Hans":"平均 t（秒）", "zh-Hant":"平均 t（秒）", vi:"t trung bình (giây)"}],
+      RAW.map(function(r){
+        return [num(r.h), fix2(r.t[0]), fix2(r.t[1]), fix2(r.t[2]), "<b>" + fix2(r.mean) + "</b>"];
+      })
+    ));
+    host.appendChild(figG);
+    host.appendChild(keyRow([{c:C(COCO), n:LBL.measured}, {c:C(LINE), n:LBL.curve}]));
+
+    function draw(t){
+      var y = Math.max(0, state.h - hFall(t));
+      fallFig(fig, { top: Math.max(2, state.h * 1.15), release: state.h, y: y,
+                     releaseLabel: LBL.release, height: 210 });
+    }
+    function redraw(){
+      draw(clock.time());
+      SIM.plot(figG, {
+        xMax: 1.6, yMax: 12, xStep: 0.2, yStep: 2, height: 300,
+        xLabel: LBL.tAxis, yLabel: LBL.hAxis,
+        series: [
+          { fn: function(t){ return hFall(t); }, color: C(LINE), width: 1.6 },
+          { points: pointsHT(), color: C(COCO), dots: true }
+        ],
+        marks: state.h <= 12 ? [{ x: tFall(state.h), y: state.h, color: C(COCO) }] : []
+      });
+    }
+    redraw();
+
+    host.appendChild(ctx.el("p", "sim-note", esc(L({
+      en:"The slider is yours — drag it to check any answer you are not sure about.",
+      "zh-Hans":"滑块归你用——不确定的答案就拖一下来验证。",
+      "zh-Hant":"滑桿歸你用——不確定的答案就拖一下來驗證。",
+      vi:"Thanh trượt là của em — câu nào chưa chắc thì kéo thử để kiểm tra."}))));
+
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var got = 0, need = 5, times = [];
+    function tick(ok, info){
+      if (!ok) return;
+      got++; times.push(info.ms);
+      if (got === need) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+    }
+    SIM.ask(qs, {
+      prompt:{en:"Which quantity did Mai and Kiet <b>choose</b>? That one is the independent <span data-v>variable</span>.",
+              "zh-Hans":"小梅和阿杰<b>自己选定</b>的是哪个量？那个就是自<span data-v=\"variable\">变量</span>。",
+              "zh-Hant":"小梅和阿杰<b>自己選定</b>的是哪個量？那個就是自<span data-v=\"variable\">變數</span>。",
+              vi:"Đại lượng nào do Mai và Kiet <b>tự chọn</b>? Đó là <span data-v=\"variable\">biến</span> độc lập."},
+      opts:{ list:[
+        {en:"the drop height", "zh-Hans":"下落高度", "zh-Hant":"下落高度", vi:"độ cao thả"},
+        {en:"the fall time", "zh-Hans":"下落时间", "zh-Hant":"下落時間", vi:"thời gian rơi"},
+        {en:"the mass of the coconut", "zh-Hans":"椰子的质量", "zh-Hant":"椰子的質量", vi:"khối lượng quả dừa"}], a:0 },
+      hint:{en:"They set it before every drop by moving the coconut up the pole.",
+            "zh-Hans":"每次下落前，他们把椰子沿杆子上下移动来设定它。",
+            "zh-Hant":"每次下落前，他們把椰子沿桿子上下移動來設定它。",
+            vi:"Trước mỗi lần thả, họ đặt nó bằng cách di chuyển quả dừa lên xuống trên sào."},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"Which quantity did they <b>measure</b>? That one is the dependent <span data-v>variable</span>.",
+              "zh-Hans":"他们<b>测量</b>的是哪个量？那个就是因<span data-v=\"variable\">变量</span>。",
+              "zh-Hant":"他們<b>測量</b>的是哪個量？那個就是應<span data-v=\"variable\">變數</span>。",
+              vi:"Đại lượng nào họ <b>đo</b>? Đó là <span data-v=\"variable\">biến</span> phụ thuộc."},
+      opts:{ list:[
+        {en:"the drop height", "zh-Hans":"下落高度", "zh-Hant":"下落高度", vi:"độ cao thả"},
+        {en:"the fall time", "zh-Hans":"下落时间", "zh-Hant":"下落時間", vi:"thời gian rơi"},
+        {en:"the height of the palm", "zh-Hans":"椰子树的高度", "zh-Hant":"椰子樹的高度", vi:"chiều cao cây dừa"}], a:1 },
+      hint:{en:"It is the one that came out of the stopwatch, not out of their plan.",
+            "zh-Hans":"是从秒表里得出的那个，不是他们事先定好的那个。",
+            "zh-Hant":"是從碼錶裡得出的那個，不是他們事先定好的那個。",
+            vi:"Là đại lượng ra từ đồng hồ bấm giờ, không phải từ kế hoạch của họ."},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"They used the same coconut and the same patch of sand every time. What is that called?",
+              "zh-Hans":"他们每次都用同一个椰子、同一片沙地。这叫什么？",
+              "zh-Hant":"他們每次都用同一顆椰子、同一片沙地。這叫什麼？",
+              vi:"Mỗi lần họ đều dùng cùng một quả dừa và cùng một khoảng cát. Điều đó gọi là gì?"},
+      opts:{ list:[
+        {en:"a controlled variable — kept the same on purpose",
+         "zh-Hans":"控制变量——故意保持不变", "zh-Hant":"控制變因——故意保持不變",
+         vi:"biến kiểm soát — cố ý giữ nguyên"},
+        {en:"a second independent variable", "zh-Hans":"第二个自变量", "zh-Hant":"第二個自變數",
+         vi:"biến độc lập thứ hai"},
+        {en:"a mistake in the method", "zh-Hans":"方法上的错误", "zh-Hant":"方法上的錯誤",
+         vi:"một lỗi trong phương pháp"}], a:0 },
+      worked:{en:"<p>A controlled variable is one you deliberately keep the same, so that the only thing changing is the height. Change the coconut halfway through and you can no longer say the height caused the change in time.</p>",
+              "zh-Hans":"<p>控制变量就是你刻意保持不变的量，这样唯一在变的就只有高度。中途换椰子，你就不能再说时间的变化是高度造成的了。</p>",
+              "zh-Hant":"<p>控制變因就是你刻意保持不變的量，這樣唯一在變的就只有高度。中途換椰子，你就不能再說時間的變化是高度造成的了。</p>",
+              vi:"<p>Biến kiểm soát là đại lượng em cố ý giữ nguyên, để thứ duy nhất thay đổi là độ cao. Đổi quả dừa giữa chừng thì em không còn nói được rằng độ cao gây ra thay đổi về thời gian nữa.</p>"},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"From the <b>table</b>: what is the mean fall time for the 6 m drop?",
+              "zh-Hans":"看<b>表格</b>：6 米那次下落的平均时间是多少？",
+              "zh-Hant":"看<b>表格</b>：6 公尺那次下落的平均時間是多少？",
+              vi:"Từ <b>bảng</b>: thời gian rơi trung bình của lần thả 6 m là bao nhiêu?"},
+      inputs:[{ k:"t", answer:1.10, tol:0.005, unit:LBL.sec,
+                label:{en:"mean time", "zh-Hans":"平均时间", "zh-Hant":"平均時間", vi:"thời gian trung bình"} }],
+      hint:{en:"Add the three trials and divide by three: 1.08 + 1.13 + 1.09 = 3.30.",
+            "zh-Hans":"把三次相加再除以三：1.08 + 1.13 + 1.09 = 3.30。",
+            "zh-Hant":"把三次相加再除以三：1.08 + 1.13 + 1.09 = 3.30。",
+            vi:"Cộng ba lần rồi chia cho ba: 1,08 + 1,13 + 1,09 = 3,30."},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"From the <b>graph</b>: about what drop height gives a fall time of 1.00 s? Drag the slider afterwards to check.",
+              "zh-Hans":"看<b>图</b>：大约多高的下落会用 1.00 秒？答完可以拖滑块验证。",
+              "zh-Hant":"看<b>圖</b>：大約多高的下落會用 1.00 秒？答完可以拖滑桿驗證。",
+              vi:"Từ <b>đồ thị</b>: độ cao thả khoảng bao nhiêu thì thời gian rơi là 1,00 giây? Trả lời xong hãy kéo thanh trượt để kiểm tra."},
+      inputs:[{ k:"h", answer:4.9, tol:0.6, unit:"m",
+                label:{en:"drop height", "zh-Hans":"下落高度", "zh-Hant":"下落高度", vi:"độ cao thả"} }],
+      hint:{en:"Go up from 1.0 on the bottom axis until you hit the curve, then across to the side axis.",
+            "zh-Hans":"从横轴的 1.0 往上，碰到曲线后再横着读纵轴。",
+            "zh-Hant":"從橫軸的 1.0 往上，碰到曲線後再橫著讀縱軸。",
+            vi:"Từ số 1,0 ở trục ngang đi lên tới đường cong, rồi đi ngang sang trục dọc."},
+      worked:{en:"<p>4.9 m, and the sim agrees: h = ½ × 9.8 × 1² = <b>4.9 m</b>.</p><p>The line through those points is a <b>curve</b>, not a straight line. Set B is about what to do with that.</p>",
+              "zh-Hans":"<p>4.9 米，模拟也是这个结果：h = ½ × 9.8 × 1² = <b>4.9 米</b>。</p><p>穿过这些点的是一条<b>曲线</b>，不是直线。B 组就是讲怎么处理它。</p>",
+              "zh-Hant":"<p>4.9 公尺，模擬也是這個結果：h = ½ × 9.8 × 1² = <b>4.9 公尺</b>。</p><p>穿過這些點的是一條<b>曲線</b>，不是直線。B 組就是講怎麼處理它。</p>",
+              vi:"<p>4,9 m, và mô phỏng cũng cho kết quả đó: h = ½ × 9,8 × 1² = <b>4,9 m</b>.</p><p>Đường đi qua các điểm đó là một <b>đường cong</b>, không phải đường thẳng. Nhóm B nói về việc phải làm gì với nó.</p>"},
+      onDone: tick
+    });
+  }
+
+  /* --- A3 PREDICT: say the time first, then the coconut is dropped --- */
+  function a3(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(L({
+      en:"No sliders here. Say what will happen BEFORE the coconut is let go — the sim drops it once you are right.",
+      "zh-Hans":"这一步没有滑块。在松手之前先说出结果——答对后模拟才会放开它。",
+      "zh-Hant":"這一步沒有滑桿。在鬆手之前先說出結果——答對後模擬才會放開它。",
+      vi:"Bước này không có thanh trượt. Hãy nói trước điều sẽ xảy ra — trả lời đúng thì mô phỏng mới thả."}))));
+
+    var done = 0, times = [];
+    function replay(box, h, g){
+      var fig = ctx.el("div"); box.appendChild(fig);
+      var tf = tFall(h, g);
+      var clock = SIM.anim(box, {
+        dur: tf, speed: 0.5,
+        labelFor: function(t){ return fix2(t) + " s"; },
+        onFrame: function(t){
+          fallFig(fig, { top: Math.max(2, h * 1.15), release: h,
+                         y: Math.max(0, h - hFall(t, g)), releaseLabel: LBL.release, height: 220 });
+        }
+      });
+      void clock;
+    }
+    function tick(box, h){
+      return function(ok, info){
+        if (!ok) return;
+        replay(box, h);
+        done++; times.push(info.ms);
+        if (done === 3) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+      };
+    }
+
+    var q1 = SIM.ask(host, {
+      prompt:{en:"<b>1.</b> The coconut is let go from <b>4.9 m</b>. How long is it in the air?",
+              "zh-Hans":"<b>1.</b> 椰子从 <b>4.9 米</b> 松手。它在空中多久？",
+              "zh-Hant":"<b>1.</b> 椰子從 <b>4.9 公尺</b> 鬆手。它在空中多久？",
+              vi:"<b>1.</b> Quả dừa được thả từ <b>4,9 m</b>. Nó ở trên không bao lâu?"},
+      inputs:[{ k:"t", answer:1.00, tol:0.04, unit:LBL.sec,
+                label:{en:"fall time", "zh-Hans":"下落时间", "zh-Hant":"下落時間", vi:"thời gian rơi"} }],
+      hint:{en:"h = ½ × 9.8 × t². Which t makes ½ × 9.8 × t² equal 4.9?",
+            "zh-Hans":"h = ½ × 9.8 × t²。哪个 t 能让 ½ × 9.8 × t² 等于 4.9？",
+            "zh-Hant":"h = ½ × 9.8 × t²。哪個 t 能讓 ½ × 9.8 × t² 等於 4.9？",
+            vi:"h = ½ × 9,8 × t². Giá trị t nào làm cho ½ × 9,8 × t² bằng 4,9?"},
+      onDone: function(ok, info){ tick(q1.el, 4.9)(ok, info); }
+    });
+    var q2 = SIM.ask(host, {
+      prompt:{en:"<b>2.</b> Now <b>double</b> the height, to <b>9.8 m</b>. Predict the fall time, to two decimal places.",
+              "zh-Hans":"<b>2.</b> 现在把高度<b>加倍</b>，变成 <b>9.8 米</b>。预测下落时间，保留两位小数。",
+              "zh-Hant":"<b>2.</b> 現在把高度<b>加倍</b>，變成 <b>9.8 公尺</b>。預測下落時間，保留兩位小數。",
+              vi:"<b>2.</b> Bây giờ <b>gấp đôi</b> độ cao, lên <b>9,8 m</b>. Dự đoán thời gian rơi, làm tròn hai chữ số thập phân."},
+      inputs:[{ k:"t", answer:1.41, tol:0.02, unit:LBL.sec,
+                label:{en:"fall time", "zh-Hans":"下落时间", "zh-Hant":"下落時間", vi:"thời gian rơi"} }],
+      hint:{en:"It is NOT 2.00 s. Rearrange: t = √(2h ÷ 9.8) = √2.",
+            "zh-Hans":"答案不是 2.00 秒。变形：t = √(2h ÷ 9.8) = √2。",
+            "zh-Hant":"答案不是 2.00 秒。變形：t = √(2h ÷ 9.8) = √2。",
+            vi:"Không phải 2,00 s. Biến đổi: t = √(2h ÷ 9,8) = √2."},
+      worked:{en:"<p>t = √(2 × 9.8 ÷ 9.8) = √2 = <b>1.41 s</b>.</p><p>Doubling the height did <b>not</b> double the time — it multiplied it by √2. Height and time are not proportional; height and <b>t²</b> are.</p>",
+              "zh-Hans":"<p>t = √(2 × 9.8 ÷ 9.8) = √2 = <b>1.41 秒</b>。</p><p>高度加倍并<b>没有</b>让时间加倍——只乘了 √2。高度与时间不成正比，高度与 <b>t²</b> 才成正比。</p>",
+              "zh-Hant":"<p>t = √(2 × 9.8 ÷ 9.8) = √2 = <b>1.41 秒</b>。</p><p>高度加倍並<b>沒有</b>讓時間加倍——只乘了 √2。高度與時間不成正比，高度與 <b>t²</b> 才成正比。</p>",
+              vi:"<p>t = √(2 × 9,8 ÷ 9,8) = √2 = <b>1,41 s</b>.</p><p>Gấp đôi độ cao <b>không</b> làm gấp đôi thời gian — nó chỉ nhân với √2. Độ cao và thời gian không tỉ lệ với nhau; độ cao và <b>t²</b> mới tỉ lệ.</p>"},
+      onDone: function(ok, info){ tick(q2.el, 9.8)(ok, info); }
+    });
+    var q3 = SIM.ask(host, {
+      prompt:{en:"<b>3.</b> So how high must the coconut be to take a full <b>2.00 s</b> to land?",
+              "zh-Hans":"<b>3.</b> 那么椰子要多高，才会整整落 <b>2.00 秒</b>？",
+              "zh-Hant":"<b>3.</b> 那麼椰子要多高，才會整整落 <b>2.00 秒</b>？",
+              vi:"<b>3.</b> Vậy quả dừa phải ở độ cao nào để rơi đúng <b>2,00 giây</b>?"},
+      inputs:[{ k:"h", answer:19.6, tol:0.2, unit:"m",
+                label:{en:"drop height", "zh-Hans":"下落高度", "zh-Hant":"下落高度", vi:"độ cao thả"} }],
+      hint:{en:"Put t = 2 straight into h = ½ × 9.8 × t².",
+            "zh-Hans":"把 t = 2 直接代入 h = ½ × 9.8 × t²。",
+            "zh-Hant":"把 t = 2 直接代入 h = ½ × 9.8 × t²。",
+            vi:"Thay t = 2 thẳng vào h = ½ × 9,8 × t²."},
+      worked:{en:"<p>h = ½ × 9.8 × 2² = <b>19.6 m</b>, which is exactly <b>four</b> times 4.9 m.</p><p>To double the time you need four times the height. Nine times the height would triple it. That is what h ∝ t² means, and it is the whole reason the report asks you to plot h against t².</p>",
+              "zh-Hans":"<p>h = ½ × 9.8 × 2² = <b>19.6 米</b>，正好是 4.9 米的<b>四</b>倍。</p><p>时间加倍要高度变四倍；高度九倍，时间才三倍。这就是 h ∝ t² 的含义，也正是报告要你画 h 对 t² 的原因。</p>",
+              "zh-Hant":"<p>h = ½ × 9.8 × 2² = <b>19.6 公尺</b>，正好是 4.9 公尺的<b>四</b>倍。</p><p>時間加倍要高度變四倍；高度九倍，時間才三倍。這就是 h ∝ t² 的含義，也正是報告要你畫 h 對 t² 的原因。</p>",
+              vi:"<p>h = ½ × 9,8 × 2² = <b>19,6 m</b>, đúng bằng <b>bốn</b> lần 4,9 m.</p><p>Muốn thời gian gấp đôi thì phải gấp bốn độ cao. Gấp chín lần độ cao mới gấp ba thời gian. Đó chính là ý nghĩa của h ∝ t², và là lý do bài báo cáo yêu cầu vẽ h theo t².</p>"},
+      onDone: function(ok, info){ tick(q3.el, 19.6)(ok, info); }
+    });
+  }
+
+  /* --- A4 SOLVE: no sim until the table has been worked through --- */
+  var A4_DATA = [[3.0, 0.78], [6.0, 1.11], [9.0, 1.36], [12.0, 1.56]];
+  function a4(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("noSim")) + " " + esc(T("engNote"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'>Amara and Omar repeated the drop indoors, releasing a beanbag from four landings of a " +
+      "stairwell. Each <span data-v='time'>time</span> below is the mean of three trials, in seconds. " +
+      "<b>h</b> is the drop height in metres.</p>";
+    host.appendChild(story);
+    host.appendChild(tableEl(
+      ["h (m)", "mean t (s)", "t² (s²)"],
+      A4_DATA.map(function(r, i){
+        return [num(r[0], 1), fix2(r[1]), i === 2 ? "<b>?</b>" : fix2(r[1] * r[1])];
+      })
+    ));
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 4, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) {
+        var figs = ctx.el("div", "sim-figs two");
+        var f1 = ctx.el("div"), f2 = ctx.el("div");
+        figs.appendChild(f1); figs.appendChild(f2);
+        host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("showSim"))));
+        host.appendChild(figs);
+        SIM.plot(f1, {
+          xMax: 1.8, yMax: 14, xStep: 0.3, yStep: 2, height: 250,
+          xLabel:"t (s)", yLabel:"h (m)",
+          series:[{ points: A4_DATA.map(function(r){ return [r[1], r[0]]; }), color:C(COCO), dots:true },
+                  { fn: function(t){ return hFall(t); }, color:C(LINE), width:1.4, dash:"5 4" }]
+        });
+        SIM.plot(f2, {
+          xMax: 2.6, yMax: 14, xStep: 0.5, yStep: 2, height: 250,
+          xLabel:"t² (s²)", yLabel:"h (m)",
+          series:[{ points: A4_DATA.map(function(r){ return [r[1] * r[1], r[0]]; }), color:C(COCO), dots:true },
+                  { fn: function(x){ return halfG() * x; }, color:C(LINE), width:1.6 }],
+          marks:[{ x:2.00, y:9.80, label:"(2.00, 9.80)", color:C(LINE) }]
+        });
+        ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+      }
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> Fill the missing cell: what is <b>t²</b> for the 9.0 m row? Give it to two decimal places.",
+      inputs:[{ k:"x", answer:1.85, tol:0.005, unit:"s²", label:"t²" }],
+      hint:"Square the mean time in that row: 1.36 × 1.36.",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> They draw two <span data-v='plot'>plots</span> of the same numbers: h against t, and h against t². Which one comes out as a straight line?",
+      opts:{ list:["h against t", "h against t²", "Neither — both curve"], a:1 },
+      hint:"h = ½gt². If you call t² the letter x, that reads h = ½g·x — the shape of a straight line through the origin.",
+      worked:"<p>h = ½gt² is a <b>quadratic</b> in t, so h against t bends. Replace t² with x and it becomes h = 4.9x — a straight line through the origin.</p><p>That swap is called <b>linearising</b>. It is the whole point of the t² column.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> On the h-against-t² plot their <span data-v='trend'>trendline</span> passes through the origin and through the point (2.00, 9.80). What is its <span data-v>gradient</span>? Give the units too.",
+      inputs:[
+        { k:"m", answer:4.9, tol:0.05, unit:"m/s²", label:"gradient" }],
+      hint:"Rise over run, and start at the origin: 9.80 ÷ 2.00.",
+      worked:"<p>rise = 9.80 − 0 = 9.80 m, run = 2.00 − 0 = 2.00 s², so gradient = 9.80 ÷ 2.00 = <b>4.9</b>.</p>" +
+             "<p>The units come from the axes: metres divided by seconds squared, so <b>m/s²</b>.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> Use that trendline to <span data-v='predict'>predict</span> the drop height that would give a fall time of <b>1.20 s</b>. Give it to two decimal places.",
+      inputs:[{ k:"h", answer:7.06, tol:0.03, unit:"m", label:"h" }],
+      hint:"First square the time to get the x value, then multiply by the gradient.",
+      worked:"<p>x = t² = 1.20² = 1.44 s². h = 4.9 × 1.44 = 7.056, so <b>7.06 m</b> to two decimal places.</p>" +
+             "<p>1.44 sits inside the range they measured (0.61 to 2.43), so this is <b>interpolation</b> — the safe kind of prediction.</p>",
+      onDone: tick
+    });
+  }
+
+  /* --- A5 EXAM: dense, timed, a whole report's reasoning in five parts --- */
+  var A5_DATA = [[3.5, 0.85], [7.0, 1.20], [10.5, 1.46], [14.0, 1.69]];
+  function a5(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("timed")) + " " + esc(SIM.T("noSim"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'><b>The balconies.</b> Sofia and Kiet drop a small sandbag from four balconies of the " +
+      "same block of flats, <b>3.5 m</b> apart. They release it on a count of three, start a stopwatch as " +
+      "it leaves the hand and stop it as it hits the mat. Each height is timed <b>three</b> times with the " +
+      "same sandbag on a still day, and the mean is recorded. They then enter the numbers in a spreadsheet, " +
+      "add a <span data-v='trend'>trendline</span>, and use its <span data-v>gradient</span> to " +
+      "<span data-v='predict'>predict</span> other drops.</p>";
+    host.appendChild(story);
+    host.appendChild(tableEl(
+      ["h (m)", "mean t (s)", "t² (s²)"],
+      A5_DATA.map(function(r, i){
+        return [num(r[0], 1), fix2(r[1]), (i === 1 || i === 3) ? "<b>?</b>" : fix2(r[1] * r[1])];
+      })
+    ));
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> Name the independent <span data-v='variable'>variable</span> and the dependent variable in this experiment. Write one word or short phrase in each box.",
+      inputs:[
+        { k:"iv", label:"independent",
+          text:["drop height","the drop height","drop height h","height","the height","h",
+                "height of the drop","the height of the drop","height of drop","height dropped from",
+                "the height it is dropped from","release height","the release height",
+                "balcony height","the balcony height","height of the balcony","the height of the balcony",
+                "which balcony","the balcony","how high","how high it is dropped from",
+                "the height the sandbag is dropped from","height the sandbag is dropped from",
+                "distance fallen","the distance fallen","drop height in metres"] },
+        { k:"dv", label:"dependent",
+          text:["fall time","the fall time","fall time t","time","the time","t",
+                "time to fall","the time to fall","time of fall","the time of fall",
+                "time taken","the time taken","time taken to fall","the time taken to fall",
+                "falling time","the falling time","time on the stopwatch","the stopwatch time",
+                "stopwatch time","time to hit the mat","the time to hit the mat",
+                "time it takes to fall","the time it takes to fall","fall time in seconds"] }],
+      hint:"The independent variable is the one they chose. The dependent variable is the one they measured.",
+      worked:"<p>Independent: the <b>drop height</b> — they picked which balcony. Dependent: the <b>fall time</b> — the stopwatch decided that one.</p>" +
+             "<p>Say it in that order in a report: \"we changed the drop height and measured the fall time\".</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> Which of these is a <b>controlled</b> variable in their method?",
+      opts:{ list:[
+        "the sandbag they used",
+        "the height of each balcony",
+        "the time on the stopwatch"], a:0 },
+      worked:"<p>The sandbag is kept the same on purpose, so it is <b>controlled</b>. The balcony height is the independent variable — they changed it deliberately. The stopwatch time is the dependent variable — it is the result.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> Complete the two missing cells of the <b>t²</b> column, each to two decimal places.",
+      inputs:[
+        { k:"a", answer:1.44, tol:0.005, unit:"s²", label:"t = 1.20" },
+        { k:"b", answer:2.86, tol:0.005, unit:"s²", label:"t = 1.69" }],
+      worked:"<p>1.20² = <b>1.44</b>. 1.69² = 2.8561, which is <b>2.86</b> to two decimal places.</p>" +
+             "<p>In a spreadsheet this column is one formula, filled down — that is why the report asks for it there and not on paper.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> They plot h on the vertical axis against t² on the horizontal axis. Their trendline passes through the origin and through (2.00, 9.80). State its gradient, in m/s².",
+      inputs:[{ k:"m", answer:4.9, tol:0.05, unit:"m/s²", label:"gradient" }],
+      worked:"<p>gradient = rise ÷ run = 9.80 ÷ 2.00 = <b>4.9 m/s²</b>.</p>" +
+             "<p>A trendline through the origin is the honest choice here: zero height must give zero fall time.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>e.</b> A window cleaner drops a cloth from <b>30.0 m</b> up the same building. Use the trendline to predict how long it falls, to two decimal places.",
+      inputs:[{ k:"t", answer:2.47, tol:0.03, unit:"s", label:"predicted t" }],
+      worked:"<p>h = 4.9t², so t² = 30.0 ÷ 4.9 = 6.12 s², and t = √6.12 = <b>2.47 s</b>.</p>" +
+             "<p>Say in the report that this is <b>extrapolation</b>: 6.12 s² is more than twice the largest t² they measured, so the prediction is far less trustworthy than one inside the data.</p>",
+      onDone: tick
+    });
+  }
+
+  /* ================================================================
+     SET B — LINEARISE AND FIND g
+     ================================================================ */
+
+  /* --- B1 PLAY: find the power that straightens the curve, then the gradient --- */
+  var B1G1 = {en:"h ÷ t^power reads the same for every drop (spread 0.10 or less).",
+    "zh-Hans":"每次下落的 h ÷ t^次方 都读出同一个数（差距不超过 0.10）。",
+    "zh-Hant":"每次下落的 h ÷ t^次方 都讀出同一個數（差距不超過 0.10）。",
+    vi:"h ÷ t^lũy thừa cho cùng một số ở mọi lần thả (chênh nhau 0,10 hoặc ít hơn)."};
+  var B1G2 = {en:"Your straight line lies on every point (worst gap 0.10 m or less).",
+    "zh-Hans":"你的直线穿过每一个点（最大偏离不超过 0.10 米）。",
+    "zh-Hant":"你的直線穿過每一個點（最大偏離不超過 0.10 公尺）。",
+    vi:"Đường thẳng của em đi qua mọi điểm (lệch nhiều nhất 0,10 m)."};
+  var B1WIN = {en:"Power 2, gradient 4.9. Plotting h against t² instead of against t turned the curve into a straight line — that is called linearising, and it is the step the report is really testing. Hold on to that 4.9: Set B step 2 says what it is.",
+    "zh-Hans":"次方 2，斜率 4.9。把 h 对 t² 作图（而不是对 t）把曲线变成了直线——这叫线性化，正是报告真正在考的一步。记住这个 4.9：B 组第 2 步会告诉你它是什么。",
+    "zh-Hant":"次方 2，斜率 4.9。把 h 對 t² 作圖（而不是對 t）把曲線變成了直線——這叫線性化，正是報告真正在考的一步。記住這個 4.9：B 組第 2 步會告訴你它是什麼。",
+    vi:"Lũy thừa 2, độ dốc 4,9. Vẽ h theo t² thay vì theo t đã biến đường cong thành đường thẳng — đó gọi là tuyến tính hóa, và chính là bước bài báo cáo thật sự kiểm tra. Hãy nhớ số 4,9 đó: bước 2 của nhóm B sẽ cho biết nó là gì."};
+
+  function powLabel(p){ return p === 2 ? "t²" : p === 1 ? "t" : "t^" + num(p, 1); }
+  function b1(ctx){
+    var host = ctx.host;
+    var state = { p: 1, m: 3 };
+    var figG = ctx.el("div"), live = ctx.el("p", "sim-live"), goalBox = ctx.el("p", "sim-goal");
+
+    SIM.sliders(host, [
+      { k:"p", min:1, max:3, step:0.1, value:1,
+        label:{en:"Horizontal axis: t to the power of", "zh-Hans":"横轴用：t 的几次方",
+               "zh-Hant":"橫軸用：t 的幾次方", vi:"Trục ngang dùng: t mũ mấy"},
+        fmt:function(v){ return powLabel(Math.round(v * 10) / 10); } },
+      { k:"m", min:1, max:8, step:0.1, value:3,
+        label:{en:"Gradient of your straight line", "zh-Hans":"你那条直线的斜率",
+               "zh-Hant":"你那條直線的斜率", vi:"Độ dốc đường thẳng của em"} }
+    ], function(v){ state.p = Math.round(v.p * 10) / 10; state.m = Math.round(v.m * 10) / 10; redraw(); });
+
+    host.appendChild(figG);
+    host.appendChild(keyRow([{c:C(COCO), n:LBL.measured}, {c:C(LINE), n:LBL.yourLine}]));
+    host.appendChild(live);
+    host.appendChild(goalBox);
+
+    var won = false;
+    function redraw(){
+      var p = state.p, m = state.m;
+      var pts = pointsHT2(p);
+      var xMax = Math.max(1, Math.ceil(Math.pow(1.43, p) * 5) / 5);
+      SIM.plot(figG, {
+        xMax: xMax, yMax: 12, yStep: 2, height: 300,
+        xLabel: powLabel(p) + " (" + (p === 1 ? "s" : p === 2 ? "s²" : "s^" + num(p, 1)) + ")",
+        yLabel: LBL.hAxis,
+        series: [
+          { fn: function(x){ return m * x; }, color: C(LINE), width: 1.8 },
+          { points: pts, color: C(COCO), dots: true }
+        ]
+      });
+      var ratios = RAW.map(function(r){ return r.h / Math.pow(r.mean, p); });
+      var lo = Math.min.apply(null, ratios), hi = Math.max.apply(null, ratios);
+      var gaps = RAW.map(function(r){ return Math.abs(r.h - m * Math.pow(r.mean, p)); });
+      var worst = Math.max.apply(null, gaps);
+      live.innerHTML = "h ÷ " + esc(powLabel(p)) + ": " +
+        ratios.map(function(v){ return num(v, 2); }).join(" · ") +
+        "<br>" + esc(L({en:"spread", "zh-Hans":"差距", "zh-Hant":"差距", vi:"chênh lệch"})) + " " +
+        num(hi - lo, 2) + " · " +
+        esc(L({en:"worst gap from your line", "zh-Hans":"离你直线的最大偏离",
+               "zh-Hant":"離你直線的最大偏離", vi:"lệch nhiều nhất so với đường của em"})) + " " +
+        num(worst, 2) + " m";
+      var g1 = (hi - lo) <= 0.10, g2 = worst <= 0.10;
+      goalBox.innerHTML =
+        "<span>" + (g1 ? "✓" : "○") + " " + esc(L(B1G1)) + "</span><br>" +
+        "<span>" + (g2 ? "✓" : "○") + " " + esc(L(B1G2)) + "</span>";
+      if (g1 && g2 && !won) {
+        won = true;
+        ctx.done({});
+        goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(B1WIN));
+      }
+    }
+    redraw();
+  }
+
+  /* --- B2 READ: the toggle stays live, but now read the gradient off the line --- */
+  function b2(ctx){
+    var host = ctx.host;
+    var state = { p: 2 };
+    var figG = ctx.el("div");
+    SIM.sliders(host, [
+      { k:"p", min:1, max:2, step:1, value:2,
+        label:{en:"Horizontal axis", "zh-Hans":"横轴用", "zh-Hant":"橫軸用", vi:"Trục ngang dùng"},
+        fmt:function(v){ return powLabel(v); } }
+    ], function(v){ state.p = v.p; draw(); });
+    host.appendChild(figG);
+    host.appendChild(keyRow([{c:C(COCO), n:LBL.measured}, {c:C(LINE), n:LBL.trendline}]));
+
+    function draw(){
+      var p = state.p;
+      SIM.plot(figG, {
+        xMax: p === 2 ? 2.4 : 1.6, yMax: 12, xStep: p === 2 ? 0.4 : 0.2, yStep: 2, height: 320,
+        xLabel: p === 2 ? LBL.t2Axis : LBL.tAxis, yLabel: LBL.hAxis,
+        series: [
+          p === 2 ? { fn: function(x){ return halfG() * x; }, color: C(LINE), width: 1.8 }
+                  : { fn: function(t){ return hFall(t); }, color: C(LINE), width: 1.8 },
+          { points: pointsHT2(p), color: C(COCO), dots: true }
+        ],
+        vlines: p === 2 ? [{ x: 2.00 }] : [],
+        hlines: p === 2 ? [{ y: 9.80 }] : []
+      });
+    }
+    draw();
+    host.appendChild(ctx.el("p", "sim-note", esc(L({
+      en:"Flip the toggle back to t² before you answer.",
+      "zh-Hans":"作答前请把开关拨回 t²。",
+      "zh-Hant":"作答前請把開關撥回 t²。",
+      vi:"Hãy gạt công tắc về lại t² trước khi trả lời."}))));
+
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var got = 0, need = 5, times = [];
+    function tick(ok, info){
+      if (!ok) return;
+      got++; times.push(info.ms);
+      if (got === need) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+    }
+    SIM.ask(qs, {
+      prompt:{en:"The dotted guides mark <b>t² = 2.00</b>. Read the height where the trendline crosses them.",
+              "zh-Hans":"虚线标出 <b>t² = 2.00</b>。读出趋势线在那里对应的高度。",
+              "zh-Hant":"虛線標出 <b>t² = 2.00</b>。讀出趨勢線在那裡對應的高度。",
+              vi:"Các đường chấm đánh dấu <b>t² = 2,00</b>. Đọc độ cao nơi đường xu hướng cắt chúng."},
+      inputs:[{ k:"h", answer:9.8, tol:0.3, unit:"m",
+                label:{en:"height", "zh-Hans":"高度", "zh-Hant":"高度", vi:"độ cao"} }],
+      hint:{en:"Go up from 2.00 on the bottom axis to the line, then across to the side axis.",
+            "zh-Hans":"从横轴的 2.00 往上碰到直线，再横着读纵轴。",
+            "zh-Hant":"從橫軸的 2.00 往上碰到直線，再橫著讀縱軸。",
+            vi:"Từ 2,00 ở trục ngang đi lên tới đường thẳng, rồi đi ngang sang trục dọc."},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"The trendline starts at the origin. Using that point and the one you just read, what is its <span data-v>gradient</span>?",
+              "zh-Hans":"趋势线从原点出发。用原点和你刚读出的那个点，求它的<span data-v=\"gradient\">斜率</span>。",
+              "zh-Hant":"趨勢線從原點出發。用原點和你剛讀出的那個點，求它的<span data-v=\"gradient\">斜率</span>。",
+              vi:"Đường xu hướng bắt đầu từ gốc tọa độ. Dùng điểm đó và điểm em vừa đọc, tính <span data-v=\"gradient\">độ dốc</span>."},
+      inputs:[{ k:"m", answer:4.9, tol:0.15,
+                label:{en:"gradient", "zh-Hans":"斜率", "zh-Hant":"斜率", vi:"độ dốc"} }],
+      hint:{en:"Rise over run: 9.80 ÷ 2.00.",
+            "zh-Hans":"纵向变化 ÷ 横向变化：9.80 ÷ 2.00。",
+            "zh-Hant":"縱向變化 ÷ 橫向變化：9.80 ÷ 2.00。",
+            vi:"Lên chia cho ngang: 9,80 ÷ 2,00."},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"What are the <b>units</b> of that gradient? Look at what each axis is measured in.",
+              "zh-Hans":"这个斜率的<b>单位</b>是什么？看看两条轴各用什么单位。",
+              "zh-Hant":"這個斜率的<b>單位</b>是什麼？看看兩條軸各用什麼單位。",
+              vi:"<b>Đơn vị</b> của độ dốc đó là gì? Hãy xem mỗi trục đo bằng gì."},
+      opts:{ list:["m/s", "m/s²", "s²/m"], a:1 },
+      worked:{en:"<p>The side axis is in metres, the bottom axis is in seconds squared. Gradient = metres ÷ seconds², so <b>m/s²</b> — the units of an acceleration.</p>",
+              "zh-Hans":"<p>纵轴单位是米，横轴单位是秒²。斜率 = 米 ÷ 秒²，所以是 <b>m/s²</b>——加速度的单位。</p>",
+              "zh-Hant":"<p>縱軸單位是公尺，橫軸單位是秒²。斜率 = 公尺 ÷ 秒²，所以是 <b>m/s²</b>——加速度的單位。</p>",
+              vi:"<p>Trục dọc đo bằng mét, trục ngang đo bằng giây². Độ dốc = mét ÷ giây², nên là <b>m/s²</b> — đơn vị của gia tốc.</p>"},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"h = ½gt², so on this graph the gradient is <b>½g</b>. What is g?",
+              "zh-Hans":"h = ½gt²，所以这张图的斜率就是 <b>½g</b>。那么 g 是多少？",
+              "zh-Hant":"h = ½gt²，所以這張圖的斜率就是 <b>½g</b>。那麼 g 是多少？",
+              vi:"h = ½gt², nên trên đồ thị này độ dốc chính là <b>½g</b>. Vậy g bằng bao nhiêu?"},
+      inputs:[{ k:"g", answer:9.8, tol:0.3, unit:"m/s²", label:"g" }],
+      hint:{en:"If the gradient is half of g, then g is twice the gradient.",
+            "zh-Hans":"如果斜率是 g 的一半，那 g 就是斜率的两倍。",
+            "zh-Hant":"如果斜率是 g 的一半，那 g 就是斜率的兩倍。",
+            vi:"Nếu độ dốc là một nửa của g thì g gấp đôi độ dốc."},
+      worked:{en:"<p>gradient = ½g = 4.9, so <b>g = 2 × 4.9 = 9.8 m/s²</b>.</p><p>That is the whole report in one line: plot h against t², take the gradient, double it.</p>",
+              "zh-Hans":"<p>斜率 = ½g = 4.9，所以 <b>g = 2 × 4.9 = 9.8 m/s²</b>。</p><p>整份报告就这一句话：画 h 对 t²，取斜率，乘以 2。</p>",
+              "zh-Hant":"<p>斜率 = ½g = 4.9，所以 <b>g = 2 × 4.9 = 9.8 m/s²</b>。</p><p>整份報告就這一句話：畫 h 對 t²，取斜率，乘以 2。</p>",
+              vi:"<p>độ dốc = ½g = 4,9, nên <b>g = 2 × 4,9 = 9,8 m/s²</b>.</p><p>Cả bài báo cáo gói trong một dòng: vẽ h theo t², lấy độ dốc, nhân đôi.</p>"},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"Another pair's spreadsheet printed <b>R² = 0.9604</b> for their straight line. What is r, the <span data-v>correlation</span> coefficient? Take the square root — the line slopes up, so r is <span data-v>positive</span>.",
+              "zh-Hans":"另一组的表格给出他们直线的 <b>R² = 0.9604</b>。<span data-v=\"correlation\">相关</span>系数 r 是多少？开平方——直线向上倾斜，所以 r 是<span data-v=\"positive\">正</span>的。",
+              "zh-Hant":"另一組的試算表給出他們直線的 <b>R² = 0.9604</b>。<span data-v=\"correlation\">相關</span>係數 r 是多少？開平方——直線向上傾斜，所以 r 是<span data-v=\"positive\">正</span>的。",
+              vi:"Bảng tính của một cặp khác in ra <b>R² = 0,9604</b> cho đường thẳng của họ. Hệ số <span data-v=\"correlation\">tương quan</span> r bằng bao nhiêu? Lấy căn bậc hai — đường dốc lên nên r <span data-v=\"positive\">dương</span>."},
+      inputs:[{ k:"r", answer:0.98, tol:0.005, label:"r" }],
+      hint:{en:"√0.9604. Try squaring 0.98.",
+            "zh-Hans":"√0.9604。试着把 0.98 平方看看。",
+            "zh-Hant":"√0.9604。試著把 0.98 平方看看。",
+            vi:"√0,9604. Thử bình phương 0,98 xem sao."},
+      worked:{en:"<p>r = √0.9604 = <b>0.98</b>, and it is positive because higher drops took longer.</p><p>R² tells you how well the line fits; r tells you the strength <b>and</b> the direction.</p>",
+              "zh-Hans":"<p>r = √0.9604 = <b>0.98</b>，是正的，因为落得越高用时越长。</p><p>R² 说明直线拟合得多好；r 同时说明强度<b>和</b>方向。</p>",
+              "zh-Hant":"<p>r = √0.9604 = <b>0.98</b>，是正的，因為落得越高用時越長。</p><p>R² 說明直線擬合得多好；r 同時說明強度<b>和</b>方向。</p>",
+              vi:"<p>r = √0,9604 = <b>0,98</b>, và nó dương vì thả càng cao thì rơi càng lâu.</p><p>R² cho biết đường thẳng khớp tốt đến đâu; r cho biết cả độ mạnh <b>và</b> chiều.</p>"},
+      onDone: tick
+    });
+  }
+
+  /* --- B3 PREDICT: the Moon, and a heavier coconut --- */
+  function b3(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(L({
+      en:"Answer first. The graph appears once you are right.",
+      "zh-Hans":"先作答。答对后才会出现图。",
+      "zh-Hant":"先作答。答對後才會出現圖。",
+      vi:"Trả lời trước. Đồ thị sẽ hiện ra khi em trả lời đúng."}))));
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var got = 0, need = 3, times = [];
+    function tick(ok, info){
+      if (!ok) return;
+      got++; times.push(info.ms);
+      if (got === need) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+    }
+    function twoLines(box, marks){
+      var fig = ctx.el("div"); box.appendChild(fig);
+      SIM.plot(fig, {
+        xMax: 4.5, yMax: 22, xStep: 1, yStep: 4, height: 240,
+        xLabel: LBL.t2Axis, yLabel: LBL.hAxis,
+        series:[
+          { fn: function(x){ return halfG(DROP.g) * x; }, color: C(LINE), width: 1.8 },
+          { fn: function(x){ return halfG(DROP.gMoon) * x; }, color: C(MOON), width: 1.8 }
+        ],
+        marks: marks || []
+      });
+      box.appendChild(keyRow([{c:C(LINE), n:LBL.earth}, {c:C(MOON), n:LBL.moon}]));
+    }
+
+    var q1 = SIM.ask(qs, {
+      prompt:{en:"<b>1.</b> Amara repeats the whole experiment on the <b>Moon</b>, where g = <b>1.6 m/s²</b>. She plots h against t² and draws a trendline through the origin. What is its gradient?",
+              "zh-Hans":"<b>1.</b> 阿玛拉在<b>月球</b>上重做整个实验，那里 g = <b>1.6 m/s²</b>。她画 h 对 t²，并过原点画趋势线。斜率是多少？",
+              "zh-Hant":"<b>1.</b> 阿瑪拉在<b>月球</b>上重做整個實驗，那裡 g = <b>1.6 m/s²</b>。她畫 h 對 t²，並過原點畫趨勢線。斜率是多少？",
+              vi:"<b>1.</b> Amara làm lại toàn bộ thí nghiệm trên <b>Mặt Trăng</b>, nơi g = <b>1,6 m/s²</b>. Cô ấy vẽ h theo t² và kẻ đường xu hướng qua gốc tọa độ. Độ dốc bằng bao nhiêu?"},
+      inputs:[{ k:"m", answer:0.8, tol:0.02, unit:"m/s²",
+                label:{en:"gradient", "zh-Hans":"斜率", "zh-Hant":"斜率", vi:"độ dốc"} }],
+      hint:{en:"The gradient is always ½g. Halve 1.6.",
+            "zh-Hans":"斜率永远是 ½g。把 1.6 减半。",
+            "zh-Hant":"斜率永遠是 ½g。把 1.6 減半。",
+            vi:"Độ dốc luôn là ½g. Chia đôi 1,6."},
+      worked:{en:"<p>gradient = ½ × 1.6 = <b>0.8 m/s²</b>. The Moon's line is much flatter: for the same t², things do not fall nearly as far.</p>",
+              "zh-Hans":"<p>斜率 = ½ × 1.6 = <b>0.8 m/s²</b>。月球那条线平得多：同样的 t²，落下的距离小得多。</p>",
+              "zh-Hant":"<p>斜率 = ½ × 1.6 = <b>0.8 m/s²</b>。月球那條線平得多：同樣的 t²，落下的距離小得多。</p>",
+              vi:"<p>độ dốc = ½ × 1,6 = <b>0,8 m/s²</b>. Đường của Mặt Trăng thoải hơn nhiều: cùng một t², vật rơi được ít hơn hẳn.</p>"},
+      onDone: function(ok, info){ if (ok) twoLines(q1.el); tick(ok, info); }
+    });
+    var q2 = SIM.ask(qs, {
+      prompt:{en:"<b>2.</b> Back on Earth, Tom repeats the drops with a coconut <b>twice as heavy</b>. What happens to the gradient of his h-against-t² line?",
+              "zh-Hans":"<b>2.</b> 回到地球，阿汤换一个<b>重一倍</b>的椰子重做。他那条 h 对 t² 的直线斜率会怎样？",
+              "zh-Hant":"<b>2.</b> 回到地球，阿湯換一顆<b>重一倍</b>的椰子重做。他那條 h 對 t² 的直線斜率會怎樣？",
+              vi:"<b>2.</b> Trở lại Trái Đất, Tom thả lại bằng quả dừa <b>nặng gấp đôi</b>. Độ dốc đường h theo t² của cậu ấy sẽ ra sao?"},
+      opts:{ list:[
+        {en:"It doubles, to 9.8", "zh-Hans":"加倍，变成 9.8", "zh-Hant":"加倍，變成 9.8", vi:"Gấp đôi, thành 9,8"},
+        {en:"It halves, to 2.45", "zh-Hans":"减半，变成 2.45", "zh-Hant":"減半，變成 2.45", vi:"Giảm một nửa, còn 2,45"},
+        {en:"It does not change — still 4.9", "zh-Hans":"不变——仍是 4.9", "zh-Hant":"不變——仍是 4.9",
+         vi:"Không đổi — vẫn là 4,9"}], a:2 },
+      hint:{en:"Look at h = ½gt² again. Is there a letter in it for mass?",
+            "zh-Hans":"再看一遍 h = ½gt²。里面有表示质量的字母吗？",
+            "zh-Hant":"再看一遍 h = ½gt²。裡面有表示質量的字母嗎？",
+            vi:"Hãy nhìn lại h = ½gt². Trong đó có chữ nào chỉ khối lượng không?"},
+      worked:{en:"<p><b>No change.</b> There is no mass in h = ½gt², so there is no mass in the gradient either. A heavy coconut and a light one drop side by side.</p><p>Only two things move that gradient: the strength of gravity where you are, and a mistake in the timing.</p>",
+              "zh-Hans":"<p><b>不变。</b>h = ½gt² 里没有质量，所以斜率里也没有质量。重椰子和轻椰子并排一起落下。</p><p>只有两件事能改变这个斜率：所在地的重力强弱，以及计时上的错误。</p>",
+              "zh-Hant":"<p><b>不變。</b>h = ½gt² 裡沒有質量，所以斜率裡也沒有質量。重椰子和輕椰子並排一起落下。</p><p>只有兩件事能改變這個斜率：所在地的重力強弱，以及計時上的錯誤。</p>",
+              vi:"<p><b>Không đổi.</b> Trong h = ½gt² không có khối lượng, nên trong độ dốc cũng không có. Quả dừa nặng và quả nhẹ rơi song song cùng nhau.</p><p>Chỉ hai thứ làm đổi độ dốc đó: độ mạnh của trọng lực nơi em đứng, và sai sót khi bấm giờ.</p>"},
+      onDone: function(ok, info){ if (ok) twoLines(q2.el); tick(ok, info); }
+    });
+    var q3 = SIM.ask(qs, {
+      prompt:{en:"<b>3.</b> On the Moon, Amara times a drop at exactly <b>2.00 s</b>. Use her gradient to find how high it was let go.",
+              "zh-Hans":"<b>3.</b> 在月球上，阿玛拉测到一次下落正好 <b>2.00 秒</b>。用她的斜率求出松手时的高度。",
+              "zh-Hant":"<b>3.</b> 在月球上，阿瑪拉測到一次下落正好 <b>2.00 秒</b>。用她的斜率求出鬆手時的高度。",
+              vi:"<b>3.</b> Trên Mặt Trăng, Amara bấm được một lần rơi đúng <b>2,00 giây</b>. Dùng độ dốc của cô ấy để tìm độ cao lúc thả."},
+      inputs:[{ k:"h", answer:3.2, tol:0.05, unit:"m",
+                label:{en:"drop height", "zh-Hans":"下落高度", "zh-Hant":"下落高度", vi:"độ cao thả"} }],
+      hint:{en:"h = gradient × t². Square the time first.",
+            "zh-Hans":"h = 斜率 × t²。先把时间平方。",
+            "zh-Hant":"h = 斜率 × t²。先把時間平方。",
+            vi:"h = độ dốc × t². Bình phương thời gian trước."},
+      worked:{en:"<p>t² = 2.00² = 4.00 s², so h = 0.8 × 4.00 = <b>3.2 m</b>.</p><p>On Earth that same 3.2 m would be over in 0.81 s. Same coconut, same height — a different planet under it.</p>",
+              "zh-Hans":"<p>t² = 2.00² = 4.00 秒²，所以 h = 0.8 × 4.00 = <b>3.2 米</b>。</p><p>在地球上，同样的 3.2 米只需 0.81 秒。同一个椰子、同一个高度——脚下的星球不同而已。</p>",
+              "zh-Hant":"<p>t² = 2.00² = 4.00 秒²，所以 h = 0.8 × 4.00 = <b>3.2 公尺</b>。</p><p>在地球上，同樣的 3.2 公尺只需 0.81 秒。同一顆椰子、同一個高度——腳下的星球不同而已。</p>",
+              vi:"<p>t² = 2,00² = 4,00 giây², nên h = 0,8 × 4,00 = <b>3,2 m</b>.</p><p>Trên Trái Đất, cũng 3,2 m đó chỉ mất 0,81 giây. Cùng quả dừa, cùng độ cao — chỉ khác hành tinh bên dưới.</p>"},
+      onDone: function(ok, info){
+        if (ok) twoLines(q3.el, [{ x:4.00, y:3.20, label:"(4.00, 3.20)", color:C(MOON) }]);
+        tick(ok, info);
+      }
+    });
+  }
+
+  /* --- B4 SOLVE: from a spreadsheet's trendline equation to g, and to the error --- */
+  function b4(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("noSim")) + " " + esc(T("engNote"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'>Hiro's group put their drop <span data-v='data'>data</span> in a spreadsheet with " +
+      "<b>t²</b> in column A and the drop height <b>h</b> in column B. They inserted a scatterplot, added a " +
+      "<span data-v='linear'>linear</span> <span data-v='trend'>trendline</span>, and ticked the boxes that " +
+      "display its <span data-v='equation'>equation</span> and its R² value. The chart now shows:</p>" +
+      "<p class='qp' style='font-variant-numeric:tabular-nums'><b>y = 4.41x + 0.02</b> &nbsp;·&nbsp; " +
+      "<b>R² = 0.9801</b></p>" +
+      "<p class='qp'>Here y is the drop height in metres and x is t² in seconds squared. The accepted value " +
+      "of g is <b>9.8 m/s²</b>.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> Write down the <span data-v>gradient</span> of their trendline, and its units.",
+      inputs:[{ k:"m", answer:4.41, tol:0.005, unit:"m/s²", label:"gradient" }],
+      hint:"In y = mx + c the gradient is the number multiplying x.",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> Their gradient is ½g. Calculate their experimental value of <b>g</b>.",
+      inputs:[{ k:"g", answer:8.82, tol:0.01, unit:"m/s²", label:"g" }],
+      hint:"g = 2 × gradient.",
+      worked:"<p>g = 2 × 4.41 = <b>8.82 m/s²</b>.</p><p>Never quote the gradient itself as g. Half the marks lost on this task are that one missing ×2.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> Calculate the percentage error of their g against the accepted 9.8 m/s².",
+      inputs:[{ k:"p", answer:10, tol:0.05, unit:"%", label:"percentage error" }],
+      hint:"(difference ÷ accepted value) × 100. The difference is 9.8 − 8.82.",
+      worked:"<p>difference = 9.8 − 8.82 = 0.98. 0.98 ÷ 9.8 = 0.10, and 0.10 × 100 = <b>10%</b>.</p>" +
+             "<p>Always divide by the <b>accepted</b> value, not by your own — otherwise a bad result flatters itself.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> Their g came out <b>smaller</b> than 9.8. Which of these would do that?",
+      opts:{ list:[
+        "Stopping the stopwatch a moment after the beanbag has already landed",
+        "Starting the stopwatch a moment after the beanbag has been released",
+        "Measuring every drop height 5 cm too short"], a:0 },
+      hint:"Work out what each mistake does to t, then what a larger or smaller t does to h ÷ t².",
+      worked:"<p>Stopping late makes every t too <b>big</b>. h ÷ t² then comes out too <b>small</b>, so the gradient is too small and g is too small.</p>" +
+             "<p>Starting late makes t too small, which pushes g the other way. Measuring the heights short lowers every h and would also lower g — but 5 cm on a 10 m drop is 0.5%, nothing like 10%.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>e.</b> Their spreadsheet shows R² = 0.9801. Calculate <b>r</b>, the <span data-v>correlation</span> coefficient, to two decimal places.",
+      inputs:[{ k:"r", answer:0.99, tol:0.005, label:"r" }],
+      hint:"r = √R², and the line slopes up, so r is positive.",
+      worked:"<p>r = √0.9801 = <b>0.99</b>, positive.</p>" +
+             "<p>Notice what that means: their points sit almost perfectly on a straight line, and their g is still 10% out. A high R² proves the <b>relationship</b> is linear. It says nothing about whether the timing was honest.</p>",
+      onDone: tick
+    });
+  }
+
+  /* --- B5 EXAM: the real thing — five parts, timed, one of them written --- */
+  var B5_DATA = [[2.5, 0.75], [5.0, 1.03], [7.5, 1.28], [10.0, 1.45], [12.5, 1.65]];
+  function b5(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("timed")) + " " + esc(SIM.T("noSim"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'><b>The climbing wall.</b> Nadia and Tom drop a chalk bag from five marked holds on a " +
+      "climbing wall, <b>2.5 m</b> apart. One of them shouts \"go\", the other starts a hand-held stopwatch " +
+      "and stops it when the bag hits the crash mat. They record the mean of three trials at each height, " +
+      "square it in a spreadsheet, plot h against t², and add a linear trendline through the " +
+      "<span data-v='data'>data</span>. The spreadsheet prints:</p>" +
+      "<p class='qp' style='font-variant-numeric:tabular-nums'><b>y = 4.655x − 0.029</b> &nbsp;·&nbsp; " +
+      "<b>R² = 0.9983</b></p>" +
+      "<p class='qp'>y is the drop height in metres, x is t² in seconds squared, and the accepted value of " +
+      "g is <b>9.8 m/s²</b>.</p>";
+    host.appendChild(story);
+    host.appendChild(tableEl(
+      ["h (m)", "mean t (s)", "t² (s²)"],
+      B5_DATA.map(function(r, i){
+        return [num(r[0], 1), fix2(r[1]), (i === 2 || i === 4) ? "<b>?</b>" : fix2(r[1] * r[1])];
+      })
+    ));
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> Complete the two missing cells of the t² column, each to two decimal places.",
+      inputs:[
+        { k:"a", answer:1.64, tol:0.005, unit:"s²", label:"t = 1.28" },
+        { k:"b", answer:2.72, tol:0.005, unit:"s²", label:"t = 1.65" }],
+      worked:"<p>1.28² = 1.6384 → <b>1.64</b>. 1.65² = 2.7225 → <b>2.72</b>.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> State the gradient of the trendline, then use it to calculate their experimental value of g.",
+      inputs:[
+        { k:"m", answer:4.655, tol:0.003, unit:"m/s²", label:"gradient" },
+        { k:"g", answer:9.31, tol:0.01, unit:"m/s²", label:"g" }],
+      worked:"<p>The gradient is the number in front of x: <b>4.655 m/s²</b>. The gradient is ½g, so g = 2 × 4.655 = <b>9.31 m/s²</b>.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> Calculate the percentage error in their value of g.",
+      inputs:[{ k:"p", answer:5, tol:0.05, unit:"%", label:"percentage error" }],
+      worked:"<p>9.8 − 9.31 = 0.49. 0.49 ÷ 9.8 = 0.05, so the percentage error is <b>5%</b>, and their value is 5% <b>below</b> the accepted one.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> The spreadsheet reports R² = 0.9983. Which statement about their graph is correct?",
+      opts:{ list:[
+        "The points lie very close to the straight line, so h and t² really are in a linear relationship — but this says nothing about whether g is right.",
+        "R² = 0.9983 means their value of g is 99.83% accurate.",
+        "R² is that high only because they used five points instead of three."], a:0 },
+      worked:"<p>R² measures how tightly the points hug the <b>line you drew</b>. Here it is 0.9983 — an excellent straight-line fit — and yet g is still 5% out, because a reaction delay adds nearly the same amount to every reading. A systematic error tilts the line without scattering the points.</p>" +
+             "<p>Take the square root and you get r = 0.999, a very strong positive correlation.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>e.</b> Their g is 5% too small. Name <b>one</b> change to the method that would improve it, and say <b>why</b> it would help. Write your change in the first box (two or three words) and your reason in the second.",
+      inputs:[
+        { k:"ch", label:"the change",
+          text:["light gate","light gates","use light gates","use a light gate","use light gates instead",
+                "light gates instead of a stopwatch","electronic timing","use electronic timing",
+                "electronic timer","use an electronic timer","an electronic timer","time it electronically",
+                "photogate","photogates","use photogates","use a photogate",
+                "video","use video","use a video","video it","film it","video the drop","film the drop",
+                "slow motion video","use slow motion video","slow motion","use slow motion",
+                "high speed camera","use a high speed camera","a high speed camera","count video frames",
+                "motion sensor","use a motion sensor","a motion sensor",
+                "data logger","use a data logger","a data logger","use a sensor","sensor","sensors",
+                "drop from greater heights","use greater heights","greater heights","greater height",
+                "drop from higher","drop it from higher","use taller drops","taller drops",
+                "bigger drop heights","use bigger heights","longer falls","use longer falls",
+                "drop from a greater height","use a greater height"] },
+        { k:"wy", label:"why it helps",
+          text:["removes reaction time","it removes reaction time","removes human reaction time",
+                "it removes human reaction time","removes the reaction time","no reaction time",
+                "there is no reaction time","it removes the reaction delay","removes the reaction delay",
+                "removes reaction delay","reaction time","human reaction time","reaction delay",
+                "reaction time adds to every time","reaction time adds to every reading",
+                "reaction time makes t too big","reaction time makes every t too big",
+                "our reaction time makes t too big","the timer reacts too slowly",
+                "removes human error","it removes human error","removes the human error",
+                "removes timing error","removes the timing error","it removes timing error",
+                "removes systematic error","it removes systematic error","removes the systematic error",
+                "the error is systematic","it is a systematic error",
+                "no thumb on the stopwatch","takes the human out of the timing",
+                "the reaction delay is a smaller share of a longer fall",
+                "reaction time matters less on a longer fall","reaction time matters less",
+                "the delay is a smaller fraction of a longer fall",
+                "the delay is a smaller part of a longer time","the same delay matters less",
+                "it makes the timing more accurate","the timing is more accurate",
+                "more accurate timing","the times are more accurate"] }],
+      hint:"Their line fits beautifully (R² = 0.9983), so this is not random scatter — something is adding the same small amount to every single time.",
+      worked:"<p><b>A model answer.</b> Replace the hand-held stopwatch with light gates, so the timer starts and stops electronically. Their g was 5% low even though R² was 0.9983, which tells us the error is <b>systematic</b>, not random: the person's reaction delay adds roughly the same fraction of a second to every reading, making every t too big and every value of h ÷ t² too small. Light gates remove the human from the timing altogether, so t is measured from the moment the bag leaves the gate.</p>" +
+             "<p>Two other answers that would earn the marks, each with the same shape — <i>change, then why</i>:</p>" +
+             "<p>· Drop from greater heights. A fixed 0.05 s delay is a much smaller share of a 2 s fall than of a 0.75 s fall, so the same reaction time distorts the result far less.</p>" +
+             "<p>· Film the drop and count frames in slow motion. The camera's frame rate is fixed and known, so the start and the finish are read from the video rather than from a thumb.</p>" +
+             "<p>What does <b>not</b> earn the marks: \"do more trials\". More trials shrink random scatter, and their scatter was already tiny. Averaging a systematic error more times just gives you the same wrong answer more precisely.</p>",
+      onDone: tick
+    });
+  }
+
+  /* ================================================================
+     WIRE IT UP
+     ================================================================ */
+  var TAB = {
+    play:{en:"Play", "zh-Hans":"先玩", "zh-Hant":"先玩", vi:"Chơi thử"},
+    read:{en:"Read", "zh-Hans":"读图", "zh-Hant":"讀圖", vi:"Đọc"},
+    predict:{en:"Predict", "zh-Hans":"预测", "zh-Hant":"預測", vi:"Dự đoán"},
+    solve:{en:"Solve", "zh-Hans":"自己算", "zh-Hant":"自己算", vi:"Tự tính"},
+    exam:{en:"The real thing", "zh-Hans":"正式演练", "zh-Hant":"正式演練", vi:"Làm thật"}
+  };
+  var GOAL = {
+    four:{en:"Answer all four.", "zh-Hans":"四题全部答对。", "zh-Hant":"四題全部答對。", vi:"Trả lời cả bốn câu."},
+    five:{en:"Answer all five.", "zh-Hans":"五题全部答对。", "zh-Hant":"五題全部答對。", vi:"Trả lời cả năm câu."},
+    three:{en:"Get all three predictions right.", "zh-Hans":"三个预测全部答对。",
+           "zh-Hant":"三個預測全部答對。", vi:"Dự đoán đúng cả ba."},
+    fourP:{en:"All four parts correct. The sim then plots your answer.",
+           "zh-Hans":"四小题全对，模拟会画出你的答案。", "zh-Hant":"四小題全對，模擬會畫出你的答案。",
+           vi:"Đúng cả bốn phần. Sau đó mô phỏng sẽ vẽ đáp án của em."},
+    fiveP:{en:"Five parts, all correct.", "zh-Hans":"五小题全对。", "zh-Hant":"五小題全對。",
+           vi:"Năm phần, đúng hết."}
+  };
+
+  var STAGES_A = [
+    { id:"a1", kind:"play", tab:TAB.play,
+      title:{en:"Drop it and time it", "zh-Hans":"让它落下，给它计时",
+             "zh-Hant":"讓它落下，給它計時", vi:"Thả xuống và bấm giờ"},
+      aim:{en:"Drop something and the <span data-v>time</span> it takes depends on one thing only: how far it has to fall. A stopwatch in a hand is never exact, which is why every height is timed more than once.",
+           "zh-Hans":"东西落下所用的<span data-v=\"time\">时间</span>只取决于一件事：要落多远。手按的秒表从来不准，所以每个高度都要计时不止一次。",
+           "zh-Hant":"東西落下所用的<span data-v=\"time\">時間</span>只取決於一件事：要落多遠。手按的碼錶從來不準，所以每個高度都要計時不只一次。",
+           vi:"Thời <span data-v=\"time\">gian</span> một vật rơi chỉ phụ thuộc vào một điều: nó phải rơi bao xa. Đồng hồ bấm bằng tay không bao giờ chính xác, nên mỗi độ cao đều phải bấm nhiều lần."},
+      goal:{en:"Drag the two sliders until both ticks below turn green.",
+            "zh-Hans":"拖动两个滑块，直到下面两个勾都变绿。",
+            "zh-Hant":"拖動兩個滑桿，直到下面兩個勾都變綠。",
+            vi:"Kéo hai thanh trượt cho đến khi cả hai dấu tích bên dưới chuyển xanh."},
+      build:a1 },
+    { id:"a2", kind:"read", tab:TAB.read,
+      title:{en:"Read the table and the scatterplot", "zh-Hans":"读表格和散点图",
+             "zh-Hant":"讀表格和散佈圖", vi:"Đọc bảng và biểu đồ phân tán"},
+      aim:{en:"Every experiment has one <span data-v>variable</span> you choose, one you measure, and several you keep the same. Name them properly and the graph almost draws itself.",
+           "zh-Hans":"每个实验都有一个你选定的<span data-v=\"variable\">变量</span>、一个你测量的变量，还有几个保持不变的变量。把它们叫对名字，图几乎就自己画好了。",
+           "zh-Hant":"每個實驗都有一個你選定的<span data-v=\"variable\">變數</span>、一個你測量的變數，還有幾個保持不變的變數。把它們叫對名字，圖幾乎就自己畫好了。",
+           vi:"Mỗi thí nghiệm có một <span data-v=\"variable\">biến</span> em chọn, một biến em đo, và vài biến em giữ nguyên. Gọi đúng tên chúng thì đồ thị gần như tự vẽ ra."},
+      goal:GOAL.five, build:a2 },
+    { id:"a3", kind:"predict", tab:TAB.predict,
+      title:{en:"Say the time before the coconut is let go", "zh-Hans":"在松手之前说出时间",
+             "zh-Hant":"在鬆手之前說出時間", vi:"Nói thời gian trước khi thả"},
+      aim:{en:"h = ½gt². Double the height and the time does <b>not</b> double — you need <b>four</b> times the height to double the time. That is the fact the whole report is built on.",
+           "zh-Hans":"h = ½gt²。高度加倍，时间并<b>不会</b>加倍——要让时间加倍，高度得变成<b>四</b>倍。整份报告都建立在这个事实上。",
+           "zh-Hant":"h = ½gt²。高度加倍，時間並<b>不會</b>加倍——要讓時間加倍，高度得變成<b>四</b>倍。整份報告都建立在這個事實上。",
+           vi:"h = ½gt². Gấp đôi độ cao thì thời gian <b>không</b> gấp đôi — muốn thời gian gấp đôi phải gấp <b>bốn</b> lần độ cao. Cả bài báo cáo dựng trên sự thật đó."},
+      goal:GOAL.three, build:a3 },
+    { id:"a4", kind:"solve", tab:TAB.solve,
+      title:{en:"Build the t² column and read the gradient", "zh-Hans":"算出 t² 那一列，再读斜率",
+             "zh-Hant":"算出 t² 那一欄，再讀斜率", vi:"Lập cột t² rồi đọc độ dốc"},
+      aim:{en:"A <span data-v>plot</span> of h against t bends. A plot of h against t² does not. One extra column in the spreadsheet is the whole trick.",
+           "zh-Hans":"h 对 t 的<span data-v=\"plot\">图</span>是弯的；h 对 t² 的图不弯。表格里多算一列，诀窍就全在这里。",
+           "zh-Hant":"h 對 t 的<span data-v=\"plot\">圖</span>是彎的；h 對 t² 的圖不彎。試算表裡多算一欄，訣竅就全在這裡。",
+           vi:"Đồ <span data-v=\"plot\">thị</span> h theo t thì cong. Đồ thị h theo t² thì không. Thêm một cột trong bảng tính là toàn bộ mẹo."},
+      goal:GOAL.fourP, skills:["s_lobf","s_excel"], build:a4 },
+    { id:"a5", kind:"exam", tab:TAB.exam,
+      title:{en:"A whole report, on your own, timed", "zh-Hans":"完整一份报告，独立完成，计时",
+             "zh-Hant":"完整一份報告，獨立完成，計時", vi:"Một bài báo cáo trọn vẹn, tự làm, tính giờ"},
+      aim:{en:"Same mathematics as the Ball Drop report, different words. Variables, a t² column, a trendline, a prediction — and no sim to check yourself against.",
+           "zh-Hans":"和落球报告同样的数学，不同的文字。变量、t² 那一列、趋势线、一个预测——而且没有模拟可以对答案。",
+           "zh-Hant":"和落球報告同樣的數學，不同的文字。變數、t² 那一欄、趨勢線、一個預測——而且沒有模擬可以對答案。",
+           vi:"Cùng toán như bài báo cáo Ball Drop, khác lời văn. Biến số, cột t², đường xu hướng, một dự đoán — và không có mô phỏng để tự kiểm tra."},
+      goal:GOAL.fiveP, skills:["s_variables","s_lobf","s_excel"], build:a5 }
+  ];
+
+  var STAGES_B = [
+    { id:"b1", kind:"play", tab:TAB.play,
+      title:{en:"Straighten the curve yourself", "zh-Hans":"自己把曲线拉直",
+             "zh-Hant":"自己把曲線拉直", vi:"Tự làm cho đường cong thẳng lại"},
+      aim:{en:"A curve is hard to read a number off. A straight line is easy — its <span data-v>gradient</span> is one number that describes the whole relationship. So change what goes on the bottom axis until the curve gives in.",
+           "zh-Hans":"曲线上很难读出一个数；直线就容易——它的<span data-v=\"gradient\">斜率</span>一个数就描述了整个关系。所以就改横轴上放什么，直到曲线让步。",
+           "zh-Hant":"曲線上很難讀出一個數；直線就容易——它的<span data-v=\"gradient\">斜率</span>一個數就描述了整個關係。所以就改橫軸上放什麼，直到曲線讓步。",
+           vi:"Rất khó đọc một con số từ đường cong. Đường thẳng thì dễ — <span data-v=\"gradient\">độ dốc</span> của nó là một con số mô tả cả mối quan hệ. Vậy hãy đổi thứ đặt trên trục ngang cho tới khi đường cong chịu thua."},
+      goal:{en:"Find the power that flattens the ratios, then lay your line on the points.",
+            "zh-Hans":"找到能让那几个比值一致的次方，再把你的直线放到点上。",
+            "zh-Hant":"找到能讓那幾個比值一致的次方，再把你的直線放到點上。",
+            vi:"Tìm lũy thừa làm các tỉ số bằng nhau, rồi đặt đường thẳng của em lên các điểm."},
+      build:b1 },
+    { id:"b2", kind:"read", tab:TAB.read,
+      title:{en:"Read g off the gradient", "zh-Hans":"从斜率读出 g",
+             "zh-Hant":"從斜率讀出 g", vi:"Đọc g từ độ dốc"},
+      aim:{en:"On a plot of h against t², the gradient is <b>½g</b>. Read the gradient, double it, and you have measured gravity. The units of the gradient tell you the same story: m/s².",
+           "zh-Hans":"在 h 对 t² 的图上，斜率就是 <b>½g</b>。读出斜率，乘以 2，你就把重力测出来了。斜率的单位说的是同一件事：m/s²。",
+           "zh-Hant":"在 h 對 t² 的圖上，斜率就是 <b>½g</b>。讀出斜率，乘以 2，你就把重力測出來了。斜率的單位說的是同一件事：m/s²。",
+           vi:"Trên đồ thị h theo t², độ dốc chính là <b>½g</b>. Đọc độ dốc, nhân đôi, thế là em đã đo được trọng lực. Đơn vị của độ dốc nói cùng một điều: m/s²."},
+      goal:GOAL.five, build:b2 },
+    { id:"b3", kind:"predict", tab:TAB.predict,
+      title:{en:"The Moon, and a heavier coconut", "zh-Hans":"月球，和一个更重的椰子",
+             "zh-Hant":"月球，和一顆更重的椰子", vi:"Mặt Trăng, và một quả dừa nặng hơn"},
+      aim:{en:"The gradient is ½g and nothing else. Move to the Moon and it changes. Double the mass and it does not — there is no mass anywhere in h = ½gt².",
+           "zh-Hans":"斜率就是 ½g，别无其他。换到月球，它会变；把质量加倍，它不变——h = ½gt² 里根本没有质量。",
+           "zh-Hant":"斜率就是 ½g，別無其他。換到月球，它會變；把質量加倍，它不變——h = ½gt² 裡根本沒有質量。",
+           vi:"Độ dốc là ½g, không gì khác. Sang Mặt Trăng thì nó đổi. Gấp đôi khối lượng thì không — trong h = ½gt² chẳng có khối lượng ở đâu cả."},
+      goal:GOAL.three, build:b3 },
+    { id:"b4", kind:"solve", tab:TAB.solve,
+      title:{en:"From a spreadsheet equation to g, and to the error",
+             "zh-Hans":"从表格里的方程到 g，再到误差",
+             "zh-Hant":"從試算表裡的方程到 g，再到誤差",
+             vi:"Từ phương trình trong bảng tính đến g, rồi đến sai số"},
+      aim:{en:"y = mx + c is what the spreadsheet hands you. m is the gradient, g is 2m, and the percentage error says how far your g sits from the accepted 9.8.",
+           "zh-Hans":"表格交给你的就是 y = mx + c。m 是斜率，g 是 2m，百分误差说明你的 g 离公认的 9.8 有多远。",
+           "zh-Hant":"試算表交給你的就是 y = mx + c。m 是斜率，g 是 2m，百分誤差說明你的 g 離公認的 9.8 有多遠。",
+           vi:"Bảng tính đưa cho em y = mx + c. m là độ dốc, g là 2m, và phần trăm sai số cho biết g của em cách 9,8 được công nhận bao xa."},
+      goal:GOAL.five, skills:["s_lobf","s_excel","s_corr"], build:b4 },
+    { id:"b5", kind:"exam", tab:TAB.exam,
+      title:{en:"The real thing — five parts, one of them written",
+             "zh-Hans":"正式演练——五小题，其中一题要写句子",
+             "zh-Hant":"正式演練——五小題，其中一題要寫句子",
+             vi:"Làm thật — năm phần, một phần phải viết"},
+      aim:{en:"This is as close to the Ball Drop report as practice gets: a table to finish, a spreadsheet equation to read, a percentage error, an R² to interpret, and an improvement to justify in your own words.",
+           "zh-Hans":"这已经是最接近落球报告的练习：一张要补完的表、一个要读的表格方程、一个百分误差、一个要解释的 R²，还有一条要用自己的话说清理由的改进建议。",
+           "zh-Hant":"這已經是最接近落球報告的練習：一張要補完的表、一個要讀的試算表方程、一個百分誤差、一個要解釋的 R²，還有一條要用自己的話說清理由的改進建議。",
+           vi:"Đây là bài luyện gần bài báo cáo Ball Drop nhất: một bảng phải hoàn thành, một phương trình bảng tính phải đọc, một phần trăm sai số, một R² phải giải thích, và một cải tiến phải tự lập luận."},
+      goal:GOAL.fiveP, skills:["s_variables","s_lobf","s_corr","s_excel"], build:b5 }
+  ];
+
+  function boot(){
+    document.documentElement.lang = lang() === "en" ? "en" : lang();
+    document.querySelectorAll("[data-i18n]").forEach(function(n){
+      var v = T(n.getAttribute("data-i18n"));
+      if (typeof v === "string") n.innerHTML = v;
+    });
+    var sel = document.querySelector(".language-select");
+    sel.value = lang();
+    sel.addEventListener("change", function(){
+      try { localStorage.setItem("elc_page_language", sel.value); } catch(e){}
+      location.reload();
+    });
+
+    /* the framing line: which task this rehearses */
+    var cp = null;
+    if (S2) S2.UNITS.forEach(function(u){ u.checkpoints.forEach(function(c){ if (c.id === "cp_report") cp = c; }); });
+    document.getElementById("frameLine").innerHTML =
+      "<b>" + esc(cp ? T("buildsF")(cp.name) : T("buildsAlways")) + "</b>" +
+      "<span class='eng'>" + esc(T("engNote")) + "</span>";
+
+    SIM.mount(document.getElementById("sim"), {
+      id:"drop", cp:"cp_report", room:"science",
+      evidenceSrc:"The Drop",
+      skills:["s_variables","s_lobf","s_corr","s_excel"],
+      openAll: (function(){ try { return localStorage.getItem("elc_stem_sim_open") === "1"; } catch(e){ return false; } })(),
+      sets:[
+        { id:"a", name:{en:"A · collect and plot", "zh-Hans":"A · 收集与作图",
+                        "zh-Hant":"A · 收集與作圖", vi:"A · thu thập và vẽ"}, stages:STAGES_A },
+        { id:"b", name:{en:"B · linearise and find g", "zh-Hans":"B · 线性化并求 g",
+                        "zh-Hant":"B · 線性化並求 g", vi:"B · tuyến tính hóa và tìm g"}, stages:STAGES_B }
+      ]
+    });
+
+    if (window.STEMVOCAB) window.STEMVOCAB.init();
+
+    document.getElementById("teacherUnlock").addEventListener("click", function(e){
+      e.preventDefault();
+      try { localStorage.setItem("elc_stem_sim_open", "1"); } catch(err){}
+      location.reload();
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
+</body>
+</html>

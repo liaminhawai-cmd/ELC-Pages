@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Shoe Print — rehearsal for the Mystery Bones project</title>
+<!-- ================================================================
+     The Shoe Print — the rehearsal for the Mystery Bones project.
+     Same mathematics as the real task, a different story on purpose:
+     the real task measures bones and predicts a height, this one
+     measures a shoe print and predicts a height. Bivariate data, a
+     line of best fit, correlation, prediction — the same maths.
+
+     Nobody is hurt in this story. There is a muddy footprint in a
+     school garden bed and a missing tub of chalk, and that is all.
+
+     TWO SETS, five steps each, scaffolding only ever coming off:
+       SET A  THE LINE THROUGH THE CLOUD — eight people were measured
+              (shoe length, height). The data is built as h = 4s + 70
+              plus a residual pattern with Σr = 0 AND Σ(s−s̄)r = 0, so
+              the least-squares line is EXACTLY h = 4s + 70 and the
+              total squared gap bottoms out at exactly 52. That is
+              what makes the play goal ("get under 55") land on one
+              slider cell and one only — proved in scratchpad/printmath.js.
+       SET B  HOW MUCH DO YOU TRUST IT? — a ninth person, Sofia, wore
+              borrowed boots, so her print is 31 cm. Her height is a
+              slider, and a second slider scales everyone else's
+              scatter. Because Σr = 0 and Σs·r = 0, the scatter slider
+              moves R² but NEVER moves the gradient; only the one odd
+              point swings the line. That is the whole lesson of the set.
+     Set B stays locked until Set A is finished.
+
+     All the numbers live in SQUAD / TRUE_M / TRUE_C and the CASE
+     objects below. Change one and the graph, the questions and the
+     worked solutions all follow — nothing is written twice.
+
+     The step shell, sliders, graphs, marking and timing all come from
+     stem-sim.js. This file is only the story and the numbers.
+     ================================================================ -->
+<style>
+  :root {
+    --paper:#fcfcfa; --ink:#212427; --muted:#5c6166; --faint:#6b7075;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f; --on-accent:#ffffff;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#878d92;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px;
+         flex-wrap:wrap; margin-bottom:26px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  .top a:hover { text-decoration:underline; }
+  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:34px;
+    border-radius:8px; border:1px solid var(--hair); background:var(--paper); color:var(--ink); }
+  .masthead { margin:4px 0 20px; }
+  .masthead h1 { margin:0 0 6px; font-family:Georgia,"Times New Roman",serif; font-size:1.9rem;
+    font-weight:500; letter-spacing:-.01em; }
+  .masthead .sub { margin:0; color:var(--muted); font-size:.88rem; max-width:64ch; }
+  .frame { border-top:1px solid var(--ink); padding-top:12px; margin:0 0 20px;
+           font-size:.86rem; color:var(--muted); }
+  .frame b { color:var(--ink); }
+  .frame .eng { display:block; margin-top:.4rem; color:var(--faint); font-size:.82rem; }
+  .note { font-size:.8rem; color:var(--faint); margin:26px 0 0; }
+  footer { margin-top:34px; border-top:1px solid var(--hair); padding-top:14px;
+           font-size:.78rem; color:var(--faint); }
+  .teacherline { margin:10px 0 0; font-size:.76rem; }
+  .teacherline a { color:var(--faint); }
+  [data-v] { border-bottom:1px dotted var(--accent); cursor:help; }
+  .sim-live { font-variant-numeric:tabular-nums; font-size:.82rem; color:var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="stem-genetics.html" data-i18n="back">← Genetics · Do</a>
+    <span id="tw-slot"></span>
+    <select class="language-select" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+      <option value="vi">Tiếng Việt</option>
+    </select>
+  </div>
+
+  <div class="masthead">
+    <h1 data-i18n="title">The Shoe Print</h1>
+    <p class="sub" data-i18n="sub">One muddy print in the garden bed, one missing tub of chalk, and
+      eight people who let us measure their shoes. Play with the line, read it, predict from it, then
+      do the maths on your own. Two sets of five steps — each step hands more of the work to you.</p>
+  </div>
+
+  <p class="frame" id="frameLine"></p>
+
+  <div id="sim"></div>
+
+  <p class="note" data-i18n="privacy">Anonymous. What you do on this page is stored in this browser
+    only — no accounts, no tracking.</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+  <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: open every step</a></p>
+</div>
+
+<script src="stem-vocab-data.js?v=20260821-4"></script>
+<script src="stem-shared.js?v=20260821-4"></script>
+<script src="stem-vocab.js?v=20260821-4"></script>
+<script src="stem-gloss.js?v=20260821-4"></script>
+<script src="stem-translate.js?v=20260821-5"></script>
+<script src="stem-sim.js?v=20260821-4"></script>
+<script>
+(function () {
+  "use strict";
+  var S2 = window.STEM2, SIM = window.STEMSIM;
+
+  /* ================================================================
+     PAGE CHROME, in the four page languages.
+     The WORDED PROBLEMS in steps 4 and 5 stay in English on purpose:
+     reading the English of a data problem IS the skill the task
+     tests. Every hard word inside them is tappable instead.
+     ================================================================ */
+  var COPY = {
+    en: {
+      back:"← Genetics · Do", title:"The Shoe Print",
+      sub:"One muddy print in the garden bed, one missing tub of chalk, and eight people who let us measure their shoes. Play with the line, read it, predict from it, then do the maths on your own. Two sets of five steps — each step hands more of the work to you.",
+      privacy:"Anonymous. What you do on this page is stored in this browser only — no accounts, no tracking.",
+      teacherU:"Teacher: open every step",
+      engNote:"Steps 4 and 5 stay in English — reading the English is part of the task. Tap any word you do not know.",
+      buildsF:function(n){ return "This rehearses the "+n+"."; },
+      buildsAlways:"This keeps your data and trendline maths sharp for every task."
+    },
+    "zh-Hans": {
+      back:"← 遗传学 · 任务", title:"鞋印",
+      sub:"花坛里一个泥泞的鞋印，一盒不见了的粉笔，还有八位愿意让我们量鞋子的人。先玩这条直线，再读它，再用它预测，最后自己算。两组，每组五步——每一步都把更多的工作交给你。",
+      privacy:"匿名。你在本页的记录只保存在这个浏览器里——没有账号，不做追踪。",
+      teacherU:"教师：开放全部步骤",
+      engNote:"第 4、5 步保持英文——读懂英文本身就是任务的一部分。不认识的词点一下即可。",
+      buildsF:function(n){ return "这是在为"+n+"做演练。"; },
+      buildsAlways:"这让你的数据与趋势线计算保持熟练，每个任务都用得上。"
+    },
+    "zh-Hant": {
+      back:"← 遺傳學 · 任務", title:"鞋印",
+      sub:"花壇裡一個泥濘的鞋印、一盒不見了的粉筆，還有八位願意讓我們量鞋子的人。先玩這條直線，再讀它，再用它預測，最後自己算。兩組，每組五步——每一步都把更多的工作交給你。",
+      privacy:"匿名。你在本頁的紀錄只儲存在這個瀏覽器裡——沒有帳號，不做追蹤。",
+      teacherU:"教師：開放全部步驟",
+      engNote:"第 4、5 步保持英文——讀懂英文本身就是任務的一部分。不認識的字點一下即可。",
+      buildsF:function(n){ return "這是在為"+n+"做演練。"; },
+      buildsAlways:"這讓你的資料與趨勢線計算保持熟練，每個任務都用得上。"
+    },
+    vi: {
+      back:"← Di truyền học · Việc cần làm", title:"Dấu giày",
+      sub:"Một dấu giày lấm bùn trên luống hoa, một hộp phấn biến mất, và tám bạn cho chúng ta đo giày. Chơi với đường thẳng, đọc nó, dùng nó để dự đoán, rồi tự tính. Hai nhóm, mỗi nhóm năm bước — mỗi bước giao thêm việc cho em.",
+      privacy:"Ẩn danh. Những gì em làm ở trang này chỉ lưu trong trình duyệt này — không tài khoản, không theo dõi.",
+      teacherU:"Giáo viên: mở tất cả các bước",
+      engNote:"Bước 4 và 5 giữ nguyên tiếng Anh — đọc được tiếng Anh chính là một phần của bài. Từ nào chưa biết thì chạm vào.",
+      buildsF:function(n){ return "Đây là buổi tập dượt cho bài "+n+"."; },
+      buildsAlways:"Phần này giữ cho kỹ năng xử lý dữ liệu và đường xu hướng của em luôn nhạy."
+    }
+  };
+  function lang(){ try { return localStorage.getItem("elc_page_language") || "en"; } catch(e){ return "en"; } }
+  function T(k){ var d = COPY[lang()] || COPY.en; return d[k] !== undefined ? d[k] : COPY.en[k]; }
+  var esc = SIM.esc, num = SIM.num, L = SIM.L;
+  function fx(v, dp){ return Number(v).toFixed(dp); }   /* always shows the decimals */
+
+  /* ================================================================
+     THE SQUAD — everything downstream is derived from these numbers.
+
+     Eight volunteers had their shoe length and their height measured,
+     both in centimetres. The heights are h = 4s + 70 plus a residual
+     pattern chosen so that Σr = 0 and Σ(s − s̄)r = 0. Those two sums
+     are what force the least-squares line to be EXACTLY h = 4s + 70,
+     the total squared gap to bottom out at exactly 52, and — in Set B
+     — the scatter slider to leave the gradient untouched.
+     Proved in scratchpad/printmath.js before this file was written.
+     ================================================================ */
+  var TRUE_M = 4, TRUE_C = 70;
+  var SHOE = [22, 23, 24, 25, 26, 27, 28, 29];
+  var RES  = [ 2, -2,  3, -3, -3,  3, -2,  2];
+  var WHO  = ["Mai", "Anh", "Hiro", "Amara", "Tom", "Layla", "Nadia", "Omar"];
+  var PRINT = 26.5;              /* the print in the garden bed, in cm */
+  var SOFIA = { s: 31, name: "Sofia" };   /* the ninth person, in borrowed boots */
+
+  /* the squad, with everyone's scatter multiplied by k (k = 1 is the real data) */
+  function squad(k){
+    var f = (k == null) ? 1 : k;
+    return SHOE.map(function(s, i){ return [s, TRUE_M * s + TRUE_C + f * RES[i]]; });
+  }
+  function trueLine(s){ return TRUE_M * s + TRUE_C; }
+
+  /* least squares, written out so the page and the proof script agree */
+  function fit(pts){
+    var n = pts.length, xb = 0, yb = 0, sxy = 0, sxx = 0, syy = 0, i;
+    for (i = 0; i < n; i++) { xb += pts[i][0]; yb += pts[i][1]; }
+    xb /= n; yb /= n;
+    for (i = 0; i < n; i++) {
+      sxy += (pts[i][0] - xb) * (pts[i][1] - yb);
+      sxx += (pts[i][0] - xb) * (pts[i][0] - xb);
+      syy += (pts[i][1] - yb) * (pts[i][1] - yb);
+    }
+    var m = sxy / sxx;
+    return { m: m, c: yb - m * xb, r2: (sxy * sxy) / (sxx * syy) };
+  }
+  /* the total squared gap: add up (real height − line's height)² for everyone */
+  function totalGap(pts, m, c){
+    return pts.reduce(function(a, p){ var d = p[1] - (m * p[0] + c); return a + d * d; }, 0);
+  }
+
+  function C(k){ return SIM.colors()[k]; }
+  /* the colour key under a graph — a real node, because it gets appended */
+  function keyRow(items){
+    var p = document.createElement("p");
+    p.className = "sim-key";
+    p.innerHTML = items.map(function(i){
+      return "<span><i style='background:" + i.c + "'></i>" + esc(L(i.n)) + "</span>";
+    }).join("");
+    return p;
+  }
+  var AX = {
+    x: {en:"shoe length (cm)", "zh-Hans":"鞋长（厘米）", "zh-Hant":"鞋長（公分）", vi:"chiều dài giày (cm)"},
+    y: {en:"height (cm)", "zh-Hans":"身高（厘米）", "zh-Hant":"身高（公分）", vi:"chiều cao (cm)"}
+  };
+  var KEY = {
+    people: {en:"the eight measured", "zh-Hans":"量过的八个人", "zh-Hant":"量過的八個人", vi:"tám bạn đã đo"},
+    yourLine: {en:"your line", "zh-Hans":"你的直线", "zh-Hant":"你的直線", vi:"đường của em"},
+    bestLine: {en:"the best line", "zh-Hans":"最佳直线", "zh-Hant":"最適直線", vi:"đường tốt nhất"},
+    gaps: {en:"the gaps", "zh-Hans":"差距", "zh-Hant":"差距", vi:"các khoảng cách"},
+    sofia: {en:"Sofia (borrowed boots)", "zh-Hans":"Sofia（借来的靴子）", "zh-Hant":"Sofia（借來的靴子）", vi:"Sofia (giày mượn)"},
+    withS: {en:"line with Sofia in", "zh-Hans":"含 Sofia 的直线", "zh-Hant":"含 Sofia 的直線", vi:"đường khi có Sofia"},
+    without: {en:"line without her", "zh-Hans":"去掉她之后的直线", "zh-Hant":"去掉她之後的直線", vi:"đường khi bỏ bạn ấy ra"}
+  };
+  /* one scatter series, drawn from an array of [shoe, height] pairs */
+  function dots(pts, col){ return { points: pts, color: col, dots: true, line: false, r: 3.6 }; }
+
+  /* ================================================================
+     SET A — THE LINE THROUGH THE CLOUD
+     ================================================================ */
+
+  /* --- A1 PLAY: two sliders, one answer: gradient 4, intercept 70 ---
+     The goal is "total squared gap under 55". The floor is 52, at
+     (4, 70); the nearest other slider cell is 60. Exactly one cell
+     wins, and printmath.js proves it by brute force. */
+  var A1_GOAL = 55;
+  function a1(ctx){
+    var host = ctx.host;
+    var state = { m: 3, c: 82 };
+    var A1LIVE = {en:"your line:", "zh-Hans":"你的直线：", "zh-Hant":"你的直線：", vi:"đường của em:"};
+    var A1GAP  = {en:"total squared gap", "zh-Hans":"差距平方和", "zh-Hant":"差距平方和", vi:"tổng bình phương khoảng cách"};
+    var A1UP   = {en:"your line is above this graph", "zh-Hans":"你的直线在图的上方",
+                  "zh-Hant":"你的直線在圖的上方", vi:"đường của em nằm trên đồ thị"};
+    var A1DOWN = {en:"your line is below this graph", "zh-Hans":"你的直线在图的下方",
+                  "zh-Hant":"你的直線在圖的下方", vi:"đường của em nằm dưới đồ thị"};
+    var A1G = {en:"Get the total squared gap below 55 cm².",
+               "zh-Hans":"把差距平方和降到 55 cm² 以下。",
+               "zh-Hant":"把差距平方和降到 55 cm² 以下。",
+               vi:"Đưa tổng bình phương khoảng cách xuống dưới 55 cm²."};
+    var A1NOTE = {en:"Each dashed stick is one person's gap from your line. The gaps are squared before they are added, so one big gap costs far more than two small ones.",
+                  "zh-Hans":"每根虚线就是一个人与你这条线的差距。差距要先平方再相加，所以一个大差距的代价远大于两个小差距。",
+                  "zh-Hant":"每根虛線就是一個人與你這條線的差距。差距要先平方再相加，所以一個大差距的代價遠大於兩個小差距。",
+                  vi:"Mỗi nét đứt là khoảng cách của một bạn tới đường của em. Các khoảng cách được bình phương rồi mới cộng, nên một khoảng cách lớn tốn kém hơn nhiều so với hai khoảng cách nhỏ."};
+    var A1WIN = {en:"Gradient 4, intercept 70. No other pair of slider values gets under 55 — that one line is the line of best fit, and 52 is as low as the total can go.",
+                 "zh-Hans":"斜率 4，截距 70。没有别的滑块组合能降到 55 以下——这条线就是最佳拟合直线，52 已经是总和的最低值。",
+                 "zh-Hant":"斜率 4，截距 70。沒有別的滑桿組合能降到 55 以下——這條線就是最適直線，52 已經是總和的最低值。",
+                 vi:"Độ dốc 4, tung độ gốc 70. Không cặp giá trị nào khác xuống được dưới 55 — đúng đường đó là đường thẳng phù hợp nhất, và 52 là mức thấp nhất mà tổng có thể đạt."};
+    var pts = squad(1);
+    var fig = ctx.el("div"), live = ctx.el("p", "sim-live"), goalBox = ctx.el("p", "sim-goal");
+
+    SIM.sliders(host, [
+      { k:"m", min:2, max:6, step:0.5, value:3,
+        label:{en:"Gradient — extra height for each extra cm of shoe",
+               "zh-Hans":"斜率——鞋子每长 1 厘米，身高多几厘米",
+               "zh-Hant":"斜率——鞋子每長 1 公分，身高多幾公分",
+               vi:"Độ dốc — giày dài thêm 1 cm thì cao thêm mấy cm"} },
+      { k:"c", min:55, max:85, step:1, value:82, unit:"cm",
+        label:{en:"Intercept — where the line starts",
+               "zh-Hans":"截距——这条线从哪里起步",
+               "zh-Hant":"截距——這條線從哪裡起步",
+               vi:"Tung độ gốc — đường thẳng bắt đầu từ đâu"} }
+    ], function(v){ state.m = v.m; state.c = v.c; redraw(); });
+
+    host.appendChild(fig);
+    host.appendChild(keyRow([{c:C("a"),n:KEY.people},{c:C("b"),n:KEY.yourLine},{c:C("d"),n:KEY.gaps}]));
+    host.appendChild(live);
+    host.appendChild(goalBox);
+    host.appendChild(ctx.el("p", "sim-note", esc(L(A1NOTE))));
+
+    var won = false;
+    function redraw(){
+      /* one dashed stick per person: the gap between them and your line */
+      var sticks = pts.map(function(p){
+        return { points: [[p[0], p[1]], [p[0], state.m * p[0] + state.c]],
+                 color: C("d"), dash:"3 3", width:1.2 };
+      });
+      SIM.plot(fig, {
+        xMin:20, xMax:30, yMin:140, yMax:200, xStep:2, yStep:10, height:320,
+        xLabel:AX.x, yLabel:AX.y,
+        series: sticks.concat([
+          { fn: function(s){ return state.m * s + state.c; }, color:C("b") },
+          dots(pts, C("a"))
+        ])
+      });
+      var gap = totalGap(pts, state.m, state.c);
+      var mid = state.m * 25 + state.c;
+      live.innerHTML = esc(L(A1LIVE)) + " <b>h = " + num(state.m) + " × s + " + num(state.c) + "</b> · " +
+        esc(L(A1GAP)) + " <b>" + num(Math.round(gap)) + " cm²</b>" +
+        (mid > 200 ? " · " + esc(L(A1UP)) : mid < 140 ? " · " + esc(L(A1DOWN)) : "");
+      var hit = gap < A1_GOAL;
+      goalBox.innerHTML = "<span>" + (hit ? "✓" : "○") + " " + esc(L(A1G)) + "</span>";
+      if (hit && !won) {
+        won = true;
+        ctx.done({});
+        goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(A1WIN));
+      }
+    }
+    redraw();
+  }
+
+  /* --- A2 READ: sliders still live, but now read the line --- */
+  function a2(ctx){
+    var host = ctx.host;
+    var state = { m: TRUE_M, c: TRUE_C };
+    var A2LIVE = {en:"your line:", "zh-Hans":"你的直线：", "zh-Hant":"你的直線：", vi:"đường của em:"};
+    var A2GAP = {en:"total squared gap", "zh-Hans":"差距平方和", "zh-Hant":"差距平方和", vi:"tổng bình phương khoảng cách"};
+    var A2NOTE = {en:"The sliders start on the best line you found in step 1. If you move them, use the total squared gap to bring them back — the best line is the one with the smallest total.",
+                  "zh-Hans":"滑块一开始就停在你第 1 步找到的最佳直线上。如果动了，就用差距平方和把它调回来——最佳直线就是总和最小的那条。",
+                  "zh-Hant":"滑桿一開始就停在你第 1 步找到的最適直線上。如果動了，就用差距平方和把它調回來——最適直線就是總和最小的那條。",
+                  vi:"Thanh trượt bắt đầu ở đúng đường tốt nhất em tìm được ở bước 1. Nếu em kéo đi, hãy dùng tổng bình phương khoảng cách để đưa nó về — đường tốt nhất là đường có tổng nhỏ nhất."};
+    var pts = squad(1);
+    var fig = ctx.el("div"), live = ctx.el("p", "sim-live");
+
+    SIM.sliders(host, [
+      { k:"m", min:2, max:6, step:0.5, value:TRUE_M,
+        label:{en:"Gradient", "zh-Hans":"斜率", "zh-Hant":"斜率", vi:"Độ dốc"} },
+      { k:"c", min:55, max:85, step:1, value:TRUE_C, unit:"cm",
+        label:{en:"Intercept", "zh-Hans":"截距", "zh-Hant":"截距", vi:"Tung độ gốc"} }
+    ], function(v){ state.m = v.m; state.c = v.c; draw(); });
+
+    host.appendChild(fig);
+    host.appendChild(keyRow([{c:C("a"),n:KEY.people},{c:C("b"),n:KEY.bestLine}]));
+    host.appendChild(live);
+    host.appendChild(ctx.el("p", "sim-note", esc(L(A2NOTE))));
+
+    function draw(){
+      SIM.plot(fig, {
+        xMin:20, xMax:30, yMin:140, yMax:200, xStep:2, yStep:10, height:320,
+        xLabel:AX.x, yLabel:AX.y,
+        vlines:[{ x:PRINT, label:{en:"the print", "zh-Hans":"鞋印", "zh-Hant":"鞋印", vi:"dấu giày"}, color:C("c") }],
+        hlines:[{ y:184, label:"184 cm", color:C("c") }],
+        series:[
+          { fn: function(s){ return state.m * s + state.c; }, color:C("b") },
+          dots(pts, C("a"))
+        ]
+      });
+      live.innerHTML = esc(L(A2LIVE)) + " <b>h = " + num(state.m) + " × s + " + num(state.c) + "</b> · " +
+        esc(L(A2GAP)) + " <b>" + num(Math.round(totalGap(pts, state.m, state.c))) + " cm²</b>";
+    }
+    draw();
+
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var got = 0, need = 4, times = [];
+    function tick(ok, info){
+      if (!ok) return;
+      got++; times.push(info.ms);
+      if (got === need) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+    }
+    SIM.ask(qs, {
+      prompt:{en:"Read your line. What is its <span data-v>gradient</span> — how many cm of height for each extra cm of shoe?",
+              "zh-Hans":"读你的直线。它的<span data-v=\"gradient\">斜率</span>是多少——鞋子每长 1 厘米，身高多几厘米？",
+              "zh-Hant":"讀你的直線。它的<span data-v=\"gradient\">斜率</span>是多少——鞋子每長 1 公分，身高多幾公分？",
+              vi:"Đọc đường của em. <span data-v=\"gradient\">Độ dốc</span> của nó là bao nhiêu — giày dài thêm 1 cm thì chiều cao thêm mấy cm?"},
+      inputs:[{ k:"m", answer:TRUE_M, tol:0.05,
+                unit:{en:"cm per cm", "zh-Hans":"厘米/厘米", "zh-Hant":"公分/公分", vi:"cm mỗi cm"},
+                label:{en:"gradient", "zh-Hans":"斜率", "zh-Hant":"斜率", vi:"độ dốc"} }],
+      hint:{en:"In h = 4 × s + 70, the gradient is the number the shoe length is multiplied by.",
+            "zh-Hans":"在 h = 4 × s + 70 里，斜率就是鞋长要乘的那个数。",
+            "zh-Hant":"在 h = 4 × s + 70 裡，斜率就是鞋長要乘的那個數。",
+            vi:"Trong h = 4 × s + 70, độ dốc là số nhân với chiều dài giày."},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"What is the <span data-v>intercept</span> of your line?",
+              "zh-Hans":"你这条线的<span data-v=\"intercept\">截距</span>是多少？",
+              "zh-Hant":"你這條線的<span data-v=\"intercept\">截距</span>是多少？",
+              vi:"<span data-v=\"intercept\">Tung độ gốc</span> của đường này là bao nhiêu?"},
+      inputs:[{ k:"c", answer:TRUE_C, tol:0.5, unit:"cm",
+                label:{en:"intercept", "zh-Hans":"截距", "zh-Hant":"截距", vi:"tung độ gốc"} }],
+      hint:{en:"It is the number that is added, not multiplied.",
+            "zh-Hans":"是被加上去的那个数，不是被乘的。",
+            "zh-Hant":"是被加上去的那個數，不是被乘的。",
+            vi:"Là số được cộng vào, không phải số nhân."},
+      worked:{en:"<p>The line is <b>h = 4s + 70</b>. The intercept is <b>70 cm</b>: it is where the line would cross if the shoe were 0 cm long — far off the left of this graph, and not a real person. It is part of the rule, not a prediction.</p>",
+              "zh-Hans":"<p>这条线是 <b>h = 4s + 70</b>。截距是 <b>70 厘米</b>：如果鞋长为 0，线就会经过那里——那在图的左边很远的地方，也不是真实的人。它是规则的一部分，不是预测。</p>",
+              "zh-Hant":"<p>這條線是 <b>h = 4s + 70</b>。截距是 <b>70 公分</b>：如果鞋長為 0，線就會經過那裡——那在圖的左邊很遠的地方，也不是真實的人。它是規則的一部分，不是預測。</p>",
+              vi:"<p>Đường thẳng là <b>h = 4s + 70</b>. Tung độ gốc là <b>70 cm</b>: đó là chỗ đường cắt trục khi giày dài 0 cm — nằm rất xa bên trái đồ thị này, và không phải một người thật. Nó là một phần của quy tắc, không phải một dự đoán.</p>"},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"The print in the garden bed is <b>26.5 cm</b> long (the dotted line up the graph). Read off the height your line <span data-v>predict</span>s.",
+              "zh-Hans":"花坛里的鞋印长 <b>26.5 厘米</b>（图上那条竖虚线）。读出你的线<span data-v=\"predict\">预测</span>的身高。",
+              "zh-Hant":"花壇裡的鞋印長 <b>26.5 公分</b>（圖上那條豎虛線）。讀出你的線<span data-v=\"predict\">預測</span>的身高。",
+              vi:"Dấu giày trên luống hoa dài <b>26,5 cm</b> (đường nét đứt dựng đứng trên đồ thị). Đọc chiều cao mà đường của em <span data-v=\"predict\">dự đoán</span>."},
+      inputs:[{ k:"h", answer:176, tol:1, unit:"cm",
+                label:{en:"height", "zh-Hans":"身高", "zh-Hant":"身高", vi:"chiều cao"} }],
+      hint:{en:"Go up the dotted line until you meet your line, then read straight across to the side axis.",
+            "zh-Hans":"沿竖虚线往上，碰到你的线后再横着读纵轴。",
+            "zh-Hant":"沿豎虛線往上，碰到你的線後再橫著讀縱軸。",
+            vi:"Đi lên theo đường nét đứt tới khi gặp đường của em, rồi đọc ngang sang trục dọc."},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"Now the other way. Someone is <b>184 cm</b> tall (the dotted line across). How long would your line expect their shoe to be?",
+              "zh-Hans":"现在反过来。有个人身高 <b>184 厘米</b>（那条横虚线）。按你的线，他的鞋应该多长？",
+              "zh-Hant":"現在反過來。有個人身高 <b>184 公分</b>（那條橫虛線）。按你的線，他的鞋應該多長？",
+              vi:"Bây giờ làm ngược lại. Một người cao <b>184 cm</b> (đường nét đứt nằm ngang). Theo đường của em, giày của người đó dài bao nhiêu?"},
+      inputs:[{ k:"s", answer:28.5, tol:0.3, unit:"cm",
+                label:{en:"shoe length", "zh-Hans":"鞋长", "zh-Hant":"鞋長", vi:"chiều dài giày"} }],
+      hint:{en:"Start at 184 on the side axis, go across to your line, then straight down.",
+            "zh-Hans":"从纵轴的 184 横着走到你的线，再直着往下读。",
+            "zh-Hant":"從縱軸的 184 橫著走到你的線，再直著往下讀。",
+            vi:"Bắt đầu ở 184 trên trục dọc, đi ngang tới đường của em, rồi đi thẳng xuống."},
+      worked:{en:"<p>Reading across from 184 gives about <b>28.5 cm</b>. Checking it with the rule: 4 × 28.5 + 70 = 114 + 70 = 184. ✓</p><p>A trendline works in both directions, but it was built to predict height <i>from</i> shoe length — that is the direction it is best at.</p>",
+              "zh-Hans":"<p>从 184 横着读，大约是 <b>28.5 厘米</b>。用规则检验：4 × 28.5 + 70 = 114 + 70 = 184。✓</p><p>趋势线两个方向都能用，但它是为了<i>由</i>鞋长预测身高而建的——那是它最擅长的方向。</p>",
+              "zh-Hant":"<p>從 184 橫著讀，大約是 <b>28.5 公分</b>。用規則檢驗：4 × 28.5 + 70 = 114 + 70 = 184。✓</p><p>趨勢線兩個方向都能用，但它是為了<i>由</i>鞋長預測身高而建的——那是它最擅長的方向。</p>",
+              vi:"<p>Đọc ngang từ 184 được khoảng <b>28,5 cm</b>. Kiểm lại bằng quy tắc: 4 × 28,5 + 70 = 114 + 70 = 184. ✓</p><p>Đường xu hướng dùng được cả hai chiều, nhưng nó được dựng để dự đoán chiều cao <i>từ</i> chiều dài giày — đó là chiều nó làm tốt nhất.</p>"},
+      onDone: tick
+    });
+  }
+
+  /* --- A3 PREDICT: say the number first, then the graph appears --- */
+  var A3_CASES = [
+    { s:23.5, h:164, back:false },
+    { s:25.5, h:172, back:false },
+    { s:24,   h:166, back:true  }
+  ];
+  function a3(ctx){
+    var host = ctx.host;
+    var A3NOTE = {en:"No graph this time. Work the number out first — the graph appears once you are right.",
+                  "zh-Hans":"这一步没有图。先把数算出来——答对了图才会出现。",
+                  "zh-Hant":"這一步沒有圖。先把數算出來——答對了圖才會出現。",
+                  vi:"Lần này không có đồ thị. Hãy tính ra số trước — trả lời đúng thì đồ thị mới hiện ra."};
+    host.appendChild(ctx.el("p", "sim-note", esc(L(A3NOTE))));
+    var done = 0, times = [];
+    A3_CASES.forEach(function(c, i){
+      var fig = ctx.el("div");
+      var q = SIM.ask(host, {
+        prompt:"<b>" + (i + 1) + ".</b> " + (c.back
+          ? L({en:"Someone is <b>" + c.h + " cm</b> tall. Using <b>h = 4s + 70</b>, how long is their shoe?",
+               "zh-Hans":"有个人身高 <b>" + c.h + " 厘米</b>。用 <b>h = 4s + 70</b>，他的鞋长多少？",
+               "zh-Hant":"有個人身高 <b>" + c.h + " 公分</b>。用 <b>h = 4s + 70</b>，他的鞋長多少？",
+               vi:"Một người cao <b>" + c.h + " cm</b>. Dùng <b>h = 4s + 70</b>, giày của người đó dài bao nhiêu?"})
+          : L({en:"A print <b>" + c.s + " cm</b> long. Using <b>h = 4s + 70</b>, what height does the line predict?",
+               "zh-Hans":"一个长 <b>" + c.s + " 厘米</b> 的鞋印。用 <b>h = 4s + 70</b>，这条线预测的身高是多少？",
+               "zh-Hant":"一個長 <b>" + c.s + " 公分</b> 的鞋印。用 <b>h = 4s + 70</b>，這條線預測的身高是多少？",
+               vi:"Một dấu giày dài <b>" + c.s + " cm</b>. Dùng <b>h = 4s + 70</b>, đường thẳng dự đoán chiều cao bao nhiêu?"})),
+        inputs:[ c.back
+          ? { k:"s", answer:c.s, tol:0.1, unit:"cm",
+              label:{en:"shoe length", "zh-Hans":"鞋长", "zh-Hant":"鞋長", vi:"chiều dài giày"} }
+          : { k:"h", answer:c.h, tol:0.5, unit:"cm",
+              label:{en:"height", "zh-Hans":"身高", "zh-Hant":"身高", vi:"chiều cao"} } ],
+        hint: c.back
+          ? {en:"Undo the rule: take 70 off the height first, then divide by 4.",
+             "zh-Hans":"把规则倒过来：先用身高减 70，再除以 4。",
+             "zh-Hant":"把規則倒過來：先用身高減 70，再除以 4。",
+             vi:"Làm ngược quy tắc: lấy chiều cao trừ 70 trước, rồi chia cho 4."}
+          : {en:"Multiply the shoe length by 4, then add 70.",
+             "zh-Hans":"鞋长乘 4，再加 70。",
+             "zh-Hant":"鞋長乘 4，再加 70。",
+             vi:"Nhân chiều dài giày với 4, rồi cộng 70."},
+        onDone: function(ok, info){
+          if (!ok) return;
+          q.el.appendChild(fig);
+          SIM.plot(fig, {
+            xMin:20, xMax:30, yMin:140, yMax:200, xStep:2, yStep:10, height:240,
+            xLabel:AX.x, yLabel:AX.y,
+            series:[{ fn: trueLine, color:C("b") }, dots(squad(1), C("a"))],
+            marks:[{ x:c.s, y:c.h, label: num(c.s) + " cm → " + num(c.h) + " cm", color:C("c") }]
+          });
+          done++; times.push(info.ms);
+          if (done === A3_CASES.length) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+        }
+      });
+    });
+  }
+
+  /* --- A4 SOLVE: no sim until the algebra is done --- */
+  var A4 = { p:[22, 158], q:[28, 179], m:3.5, c:81, lo:21, hi:29, at:26, atH:172, far:34, farH:200 };
+  function a4(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("noSim")) + " " + esc(T("engNote"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'><b>A second squad.</b> A class at another school ran the same investigation: they " +
+      "measured the shoe length and the height of eight people, in centimetres, and drew a line of best " +
+      "fit through their <span data-v>data</span>. Their eight shoe lengths ran from <b>21 cm</b> to " +
+      "<b>29 cm</b>. Two points sit exactly on the line they drew: <b>(22, 158)</b> and <b>(28, 179)</b>. " +
+      "Let <b>s</b> be the shoe length in centimetres and <b>h</b> the height in centimetres.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 4, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) {
+        var fig = ctx.el("div"); host.appendChild(fig);
+        host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("showSim"))));
+        SIM.plot(fig, {
+          xMin:20, xMax:36, yMin:140, yMax:220, xStep:2, yStep:10, height:280,
+          xLabel:AX.x, yLabel:AX.y,
+          series:[{ fn: function(s){ return A4.m * s + A4.c; }, color:C("b") }],
+          vlines:[{ x:A4.lo, color:C("d") }, { x:A4.hi, color:C("d") }],
+          marks:[
+            { x:A4.at,  y:A4.atH,  label:"26 cm → 172 cm", color:C("c") },
+            { x:A4.far, y:A4.farH, label:"34 cm → 200 cm?", color:C("b") }
+          ]
+        });
+        host.appendChild(ctx.el("p", "sim-note",
+          "Between the two grey lines the model has been tested. Outside them, nobody was ever measured."));
+        ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+      }
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> Find the <span data-v>gradient</span> of their line from the two points. Give it in cm of height per cm of shoe.",
+      inputs:[{ k:"m", answer:A4.m, tol:0.02, unit:"cm per cm", label:"m" }],
+      hint:"Rise over run: the change in height divided by the change in shoe length.",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> Write their line in the form <b>h = ms + c</b>. Give m and the <span data-v>intercept</span> c.",
+      inputs:[
+        { k:"m", answer:A4.m, tol:0.02, label:"m" },
+        { k:"c", answer:A4.c, tol:0.2, unit:"cm", label:"c" }],
+      hint:"You have m. Put one of the two points into h = ms + c and the only unknown left is c.",
+      worked:"<p>m = (179 − 158) ÷ (28 − 22) = 21 ÷ 6 = <b>3.5</b>.</p>" +
+             "<p>Now use (22, 158): 158 = 3.5 × 22 + c → 158 = 77 + c → c = <b>81</b>.</p>" +
+             "<p>So <b>h = 3.5s + 81</b>. Check it on the other point: 3.5 × 28 + 81 = 98 + 81 = 179 ✓</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> A print <b>26 cm</b> long is found. What height does their line predict?",
+      inputs:[{ k:"h", answer:A4.atH, tol:0.5, unit:"cm", label:"h" }],
+      hint:"Put s = 26 into your rule from part b.",
+      worked:"<p>h = 3.5 × 26 + 81 = 91 + 81 = <b>172 cm</b>.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> Their eight shoe lengths ran from 21 cm to 29 cm. Predicting a height for a <b>34 cm</b> print would be:",
+      opts:{ list:[
+        "interpolation — reading inside the data they collected",
+        "extrapolation — reading outside the data they collected",
+        "neither, because the line goes on for ever"], a:1 },
+      hint:"Is 34 cm inside 21–29, or outside it?",
+      worked:"<p>34 cm is outside the 21–29 cm they measured, so it is <b>extrapolation</b>. The rule still gives an answer — 3.5 × 34 + 81 = 200 cm — but nobody with a 34 cm shoe was ever measured, so nothing tested the line out there. A line does go on for ever; people do not.</p>",
+      onDone: tick
+    });
+  }
+
+  /* --- A5 EXAM: dense, timed, nothing but words --- */
+  function a5(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("timed")) + " " + esc(SIM.T("noSim"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'><b>The sandpit.</b> A jar of tadpoles has gone missing from the science room, and " +
+      "there is one clear shoe print in the wet sand outside the window. Kiet's squad asked <b>ten</b> " +
+      "volunteers to step in the same sand. For each volunteer they measured the length of the print, in " +
+      "centimetres, and the volunteer's height, in centimetres, and they <span data-v>plot</span>ted the " +
+      "ten pairs on a scatterplot. The ten prints ran from <b>20 cm</b> to <b>30 cm</b>. The line of best " +
+      "fit they drew passes exactly through <b>(20, 140)</b> and <b>(30, 190)</b>. Take <b>s</b> as the " +
+      "print length in centimetres and <b>h</b> as the height in centimetres.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> Which <span data-v>variable</span> belongs on the horizontal axis of their scatterplot?",
+      opts:{ list:[
+        "Print length, because it is the one we already have and are predicting from",
+        "Height, because it is the more important number",
+        "Either — a scatterplot works the same both ways"], a:0 },
+      worked:"<p>The variable you predict <i>from</i> goes across the bottom; the variable you predict goes up the side. Here the squad has a print and wants a height, so <b>print length is the horizontal variable</b> and height is the vertical one.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> Find the gradient of their line of best fit.",
+      inputs:[{ k:"m", answer:5, tol:0.02, unit:"cm per cm", label:"m" }],
+      worked:"<p>m = (190 − 140) ÷ (30 − 20) = 50 ÷ 10 = <b>5</b> cm of height for every extra cm of print.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> Write the line in the form <b>h = ms + c</b>. Give m and c.",
+      inputs:[
+        { k:"m", answer:5, tol:0.02, label:"m" },
+        { k:"c", answer:40, tol:0.2, unit:"cm", label:"c" }],
+      worked:"<p>Using (20, 140): 140 = 5 × 20 + c → 140 = 100 + c → c = <b>40</b>, so <b>h = 5s + 40</b>. Check on (30, 190): 5 × 30 + 40 = 190 ✓</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> The print in the sand is <b>27 cm</b> long. What height does the model predict?",
+      inputs:[{ k:"h", answer:175, tol:0.5, unit:"cm", label:"h" }],
+      worked:"<p>h = 5 × 27 + 40 = 135 + 40 = <b>175 cm</b>. 27 cm sits inside the 20–30 cm they measured, so this is an interpolation — the safest kind of prediction this model can make.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>e.</b> A second print, <b>36 cm</b> long, is found by the bins. Give the height the model predicts for it, and say in one word whether that prediction is interpolation or extrapolation.",
+      inputs:[
+        { k:"h", answer:220, tol:0.5, unit:"cm", label:"predicted height" },
+        { k:"kind", text:["extrapolation","extrapolating","extrapolate","extrapolated"], label:"which kind" }],
+      worked:"<p>h = 5 × 36 + 40 = 180 + 40 = <b>220 cm</b>, and because 36 cm is outside the 20–30 cm range they measured, this is <b>extrapolation</b>.</p>" +
+             "<p>220 cm would be one of the tallest people alive. That is the warning: the arithmetic is fine, the model is not. Report it as \"outside the range we tested\", not as a height.</p>",
+      onDone: tick });
+  }
+
+  /* ================================================================
+     SET B — HOW MUCH DO YOU TRUST IT?
+     The ninth point is Sofia, whose print is 31 cm because the boots
+     were her brother's. Slider 1 is her height; slider 2 scales
+     everyone else's scatter. Because Σr = 0 and Σs·r = 0, slider 2
+     moves R² but leaves the gradient at exactly 4 — only Sofia can
+     swing the line. Goals and readouts are judged on the DISPLAYED
+     2-decimal value, so a student never sees "0.40" beside "get
+     under 0.40".
+     ================================================================ */
+  var B_R2GOAL = 0.40, B_MGOAL = 2.5;
+  function nine(H, k){ return squad(k).concat([[SOFIA.s, H]]); }
+
+  function b1(ctx){
+    var host = ctx.host;
+    var state = { h: 194, k: 1 };
+    var B1LINE = {en:"best line:", "zh-Hans":"最佳直线：", "zh-Hant":"最適直線：", vi:"đường tốt nhất:"};
+    var B1G1 = {en:"Push R² below 0.40.", "zh-Hans":"把 R² 压到 0.40 以下。",
+                "zh-Hant":"把 R² 壓到 0.40 以下。", vi:"Đẩy R² xuống dưới 0,40."};
+    var B1G2 = {en:"Swing the best line's gradient below 2.50.",
+                "zh-Hans":"把最佳直线的斜率甩到 2.50 以下。",
+                "zh-Hant":"把最適直線的斜率甩到 2.50 以下。",
+                vi:"Kéo độ dốc của đường tốt nhất xuống dưới 2,50."};
+    var B1NOTE = {en:"This time the sliders move the people, not the line — the line redraws itself as the best line for whatever data it is given. Watch which slider moves the gradient and which one only spoils R².",
+                  "zh-Hans":"这一次滑块动的是人，不是线——不管给它什么数据，这条线都会自动重画成最佳直线。注意哪个滑块会改变斜率，哪个只是把 R² 弄糟。",
+                  "zh-Hant":"這一次滑桿動的是人，不是線——不管給它什麼資料，這條線都會自動重畫成最適直線。注意哪個滑桿會改變斜率，哪個只是把 R² 弄糟。",
+                  vi:"Lần này thanh trượt di chuyển con người, không phải đường thẳng — đường thẳng tự vẽ lại thành đường tốt nhất cho bất kỳ dữ liệu nào. Hãy để ý thanh nào làm đổi độ dốc, thanh nào chỉ làm hỏng R²."};
+    var B1WIN = {en:"Notice what did it. Sloppy measuring drops R² but leaves the gradient at 4.00 — the line still points the same way, you are just less sure of it. One person in borrowed boots does both: R² collapses AND the line swings flat. One wrong point is worth more damage than eight sloppy ones.",
+                 "zh-Hans":"注意是什么造成的。测量马虎只会拉低 R²，斜率仍然是 4.00——线的方向没变，只是你对它没那么有把握了。而一个穿借来靴子的人两样都干得出来：R² 崩掉，线也被甩平。一个错点造成的破坏，比八个马虎的点还大。",
+                 "zh-Hant":"注意是什麼造成的。測量馬虎只會拉低 R²，斜率仍然是 4.00——線的方向沒變，只是你對它沒那麼有把握了。而一個穿借來靴子的人兩樣都幹得出來：R² 崩掉，線也被甩平。一個錯點造成的破壞，比八個馬虎的點還大。",
+                 vi:"Hãy để ý cái gì gây ra chuyện đó. Đo cẩu thả làm R² tụt nhưng độ dốc vẫn là 4,00 — đường thẳng vẫn chỉ về cùng một hướng, chỉ là em bớt chắc chắn hơn. Còn một bạn đi giày mượn thì làm cả hai: R² sụp đổ VÀ đường thẳng bị kéo phẳng. Một điểm sai gây hại nhiều hơn tám điểm cẩu thả."};
+    var fig = ctx.el("div"), live = ctx.el("p", "sim-live"), goalBox = ctx.el("p", "sim-goal");
+
+    SIM.sliders(host, [
+      { k:"h", min:140, max:200, step:2, value:194, unit:"cm",
+        label:{en:"Sofia's real height", "zh-Hans":"Sofia 的真实身高",
+               "zh-Hant":"Sofia 的真實身高", vi:"Chiều cao thật của Sofia"} },
+      { k:"k", min:0, max:5, step:0.5, value:1,
+        fmt: function(v){ return "×" + num(v); },
+        label:{en:"Sloppy measuring — how far the other eight scatter",
+               "zh-Hans":"测量马虎程度——另外八个人散得多开",
+               "zh-Hant":"測量馬虎程度——另外八個人散得多開",
+               vi:"Đo cẩu thả — tám bạn kia phân tán tới đâu"} }
+    ], function(v){ state.h = v.h; state.k = v.k; redraw(); });
+
+    host.appendChild(fig);
+    host.appendChild(keyRow([{c:C("a"),n:KEY.people},{c:C("c"),n:KEY.sofia},{c:C("b"),n:KEY.bestLine}]));
+    host.appendChild(live);
+    host.appendChild(goalBox);
+    host.appendChild(ctx.el("p", "sim-note", esc(L(B1NOTE))));
+
+    var won = false;
+    function redraw(){
+      var pts = nine(state.h, state.k), f = fit(pts);
+      SIM.plot(fig, {
+        xMin:20, xMax:32, yMin:130, yMax:210, xStep:2, yStep:10, height:320,
+        xLabel:AX.x, yLabel:AX.y,
+        series:[
+          { fn: function(s){ return f.m * s + f.c; }, color:C("b") },
+          dots(squad(state.k), C("a")),
+          dots([[SOFIA.s, state.h]], C("c"))
+        ]
+      });
+      /* the tick is judged on these two readouts, never on hidden decimals */
+      var mShown = Number(fx(f.m, 2)), r2Shown = Number(fx(f.r2, 2));
+      live.innerHTML = esc(L(B1LINE)) + " <b>h = " + fx(f.m, 2) + " × s + " + fx(f.c, 1) + "</b> · " +
+        "<b>R² = " + fx(f.r2, 2) + "</b>";
+      var g1 = r2Shown < B_R2GOAL, g2 = mShown < B_MGOAL;
+      goalBox.innerHTML =
+        "<span>" + (g1 ? "✓" : "○") + " " + esc(L(B1G1)) + "</span><br>" +
+        "<span>" + (g2 ? "✓" : "○") + " " + esc(L(B1G2)) + "</span>";
+      if (g1 && g2 && !won) {
+        won = true;
+        ctx.done({});
+        goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(B1WIN));
+      }
+    }
+    redraw();
+  }
+
+  /* --- B2 READ: read R², then say it in words --- */
+  function b2(ctx){
+    var host = ctx.host;
+    var state = { h: 194, k: 1 };
+    var B2LINE = {en:"best line:", "zh-Hans":"最佳直线：", "zh-Hant":"最適直線：", vi:"đường tốt nhất:"};
+    var B2NOTE = {en:"For questions 1 to 3, put Sofia back at 194 cm and the measuring at ×1. Question 4 tells you where to move her.",
+                  "zh-Hans":"第 1–3 题请把 Sofia 调回 194 厘米、测量调回 ×1。第 4 题会告诉你把她移到哪里。",
+                  "zh-Hant":"第 1–3 題請把 Sofia 調回 194 公分、測量調回 ×1。第 4 題會告訴你把她移到哪裡。",
+                  vi:"Với câu 1 đến 3, hãy đưa Sofia về 194 cm và mức đo về ×1. Câu 4 sẽ bảo em kéo bạn ấy tới đâu."};
+    var fig = ctx.el("div"), live = ctx.el("p", "sim-live");
+    SIM.sliders(host, [
+      { k:"h", min:140, max:200, step:2, value:194, unit:"cm",
+        label:{en:"Sofia's real height", "zh-Hans":"Sofia 的真实身高",
+               "zh-Hant":"Sofia 的真實身高", vi:"Chiều cao thật của Sofia"} },
+      { k:"k", min:0, max:5, step:0.5, value:1,
+        fmt: function(v){ return "×" + num(v); },
+        label:{en:"Sloppy measuring", "zh-Hans":"测量马虎程度",
+               "zh-Hant":"測量馬虎程度", vi:"Đo cẩu thả"} }
+    ], function(v){ state.h = v.h; state.k = v.k; draw(); });
+    host.appendChild(fig);
+    host.appendChild(keyRow([{c:C("a"),n:KEY.people},{c:C("c"),n:KEY.sofia},{c:C("b"),n:KEY.bestLine}]));
+    host.appendChild(live);
+    host.appendChild(ctx.el("p", "sim-note", esc(L(B2NOTE))));
+    function draw(){
+      var pts = nine(state.h, state.k), f = fit(pts);
+      SIM.plot(fig, {
+        xMin:20, xMax:32, yMin:130, yMax:210, xStep:2, yStep:10, height:300,
+        xLabel:AX.x, yLabel:AX.y,
+        series:[
+          { fn: function(s){ return f.m * s + f.c; }, color:C("b") },
+          dots(squad(state.k), C("a")),
+          dots([[SOFIA.s, state.h]], C("c"))
+        ]
+      });
+      live.innerHTML = esc(L(B2LINE)) + " <b>h = " + fx(f.m, 2) + " × s + " + fx(f.c, 1) + "</b> · " +
+        "<b>R² = " + fx(f.r2, 2) + "</b>";
+    }
+    draw();
+
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var got = 0, need = 5, times = [];
+    function tick(ok, info){
+      if (!ok) return;
+      got++; times.push(info.ms);
+      if (got === need) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+    }
+    SIM.ask(qs, {
+      prompt:{en:"With Sofia at 194 cm and the measuring at ×1, read <b>R²</b> off the line under the graph.",
+              "zh-Hans":"当 Sofia 为 194 厘米、测量为 ×1 时，从图下那行读出 <b>R²</b>。",
+              "zh-Hant":"當 Sofia 為 194 公分、測量為 ×1 時，從圖下那行讀出 <b>R²</b>。",
+              vi:"Khi Sofia ở 194 cm và mức đo ở ×1, hãy đọc <b>R²</b> ở dòng dưới đồ thị."},
+      inputs:[{ k:"r2", answer:0.95, tol:0.01, label:"R²" }],
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"<b>r</b> is the square root of R². Work out r for that data, to two decimal places.",
+              "zh-Hans":"<b>r</b> 是 R² 的平方根。算出这组数据的 r，保留两位小数。",
+              "zh-Hant":"<b>r</b> 是 R² 的平方根。算出這組資料的 r，保留兩位小數。",
+              vi:"<b>r</b> là căn bậc hai của R². Hãy tính r cho dữ liệu đó, làm tròn hai chữ số thập phân."},
+      inputs:[{ k:"r", answer:0.98, tol:0.02, label:"r" }],
+      hint:{en:"√0.95. Then check the cloud: it climbs to the right, so r is positive.",
+            "zh-Hans":"√0.95。再看散点：它往右上走，所以 r 是正的。",
+            "zh-Hant":"√0.95。再看散點：它往右上走，所以 r 是正的。",
+            vi:"√0,95. Rồi nhìn đám điểm: nó đi lên về bên phải, nên r dương."},
+      worked:{en:"<p>√0.95 = <b>0.98</b> (2 dp). R² is always positive, so it cannot tell you the direction on its own — you get the sign from the graph. This cloud climbs to the right, so r = +0.98, not −0.98.</p>",
+              "zh-Hans":"<p>√0.95 = <b>0.98</b>（两位小数）。R² 永远是正的，所以它本身说明不了方向——方向要看图。这团点是往右上走的，所以 r = +0.98，不是 −0.98。</p>",
+              "zh-Hant":"<p>√0.95 = <b>0.98</b>（兩位小數）。R² 永遠是正的，所以它本身說明不了方向——方向要看圖。這團點是往右上走的，所以 r = +0.98，不是 −0.98。</p>",
+              vi:"<p>√0,95 = <b>0,98</b> (2 chữ số thập phân). R² luôn dương, nên tự nó không cho biết chiều — dấu lấy từ đồ thị. Đám điểm này đi lên về bên phải, nên r = +0,98, không phải −0,98.</p>"},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"Describe that relationship in words.",
+              "zh-Hans":"用文字描述这个关系。",
+              "zh-Hant":"用文字描述這個關係。",
+              vi:"Hãy mô tả mối quan hệ đó bằng lời."},
+      opts:{ list:[
+        {en:"A strong positive relationship — longer shoes go with taller people",
+         "zh-Hans":"强正相关——鞋越长的人越高",
+         "zh-Hant":"強正相關——鞋越長的人越高",
+         vi:"Tương quan thuận, mạnh — giày dài hơn thì người cao hơn"},
+        {en:"A strong negative relationship — longer shoes go with shorter people",
+         "zh-Hans":"强负相关——鞋越长的人越矮",
+         "zh-Hant":"強負相關——鞋越長的人越矮",
+         vi:"Tương quan nghịch, mạnh — giày dài hơn thì người thấp hơn"},
+        {en:"No relationship — the points are scattered everywhere",
+         "zh-Hans":"没有关系——点到处都是",
+         "zh-Hant":"沒有關係——點到處都是",
+         vi:"Không có quan hệ — các điểm nằm rải rác khắp nơi"}], a:0 },
+      hint:{en:"Two things to say: how tight the points are (strength), and which way they go (direction).",
+            "zh-Hans":"要说两件事：点有多集中（强度），以及往哪个方向走（方向）。",
+            "zh-Hant":"要說兩件事：點有多集中（強度），以及往哪個方向走（方向）。",
+            vi:"Phải nói hai điều: các điểm chụm tới đâu (độ mạnh), và đi theo chiều nào (chiều)."},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"Now drag Sofia's height down to <b>160 cm</b>, leaving the measuring at ×1. Read the new <b>R²</b>.",
+              "zh-Hans":"现在把 Sofia 的身高拖到 <b>160 厘米</b>，测量仍为 ×1。读出新的 <b>R²</b>。",
+              "zh-Hant":"現在把 Sofia 的身高拖到 <b>160 公分</b>，測量仍為 ×1。讀出新的 <b>R²</b>。",
+              vi:"Bây giờ kéo chiều cao của Sofia xuống <b>160 cm</b>, giữ mức đo ở ×1. Đọc <b>R²</b> mới."},
+      inputs:[{ k:"r2", answer:0.20, tol:0.02, label:"R²" }],
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"Leave her at 160 cm. What has that one point done to the best line?",
+              "zh-Hans":"让她停在 160 厘米。这一个点把最佳直线怎么了？",
+              "zh-Hant":"讓她停在 160 公分。這一個點把最適直線怎麼了？",
+              vi:"Giữ bạn ấy ở 160 cm. Một điểm đó đã làm gì với đường tốt nhất?"},
+      opts:{ list:[
+        {en:"It has pulled the right-hand end down, so the line is much flatter",
+         "zh-Hans":"它把右端往下拽，所以线平得多了",
+         "zh-Hant":"它把右端往下拽，所以線平得多了",
+         vi:"Nó kéo đầu bên phải xuống, nên đường thẳng phẳng hơn nhiều"},
+        {en:"It has made the line steeper", "zh-Hans":"它让线更陡了", "zh-Hant":"它讓線更陡了",
+         vi:"Nó làm đường thẳng dốc hơn"},
+        {en:"Nothing — one point out of nine cannot matter",
+         "zh-Hans":"没什么——九个点里的一个不可能有影响",
+         "zh-Hant":"沒什麼——九個點裡的一個不可能有影響",
+         vi:"Không gì cả — một điểm trong chín điểm thì không thể quan trọng"}], a:0 },
+      worked:{en:"<p>The gradient falls from 4.00 to about 1.59 and R² falls from 0.95 to 0.20. Sofia sits further along the bottom axis than anybody else, so she has the most pull on that end of the line — a point far out to one side moves the line most. She is an <b>outlier</b>: a point that does not follow the pattern the others make.</p>",
+              "zh-Hans":"<p>斜率从 4.00 掉到大约 1.59，R² 从 0.95 掉到 0.20。Sofia 在横轴上比谁都靠右，所以她对线的那一端拉力最大——越靠边的点，对线的影响越大。她是一个<b>离群点</b>：不跟着其他人形成的规律走的点。</p>",
+              "zh-Hant":"<p>斜率從 4.00 掉到大約 1.59，R² 從 0.95 掉到 0.20。Sofia 在橫軸上比誰都靠右，所以她對線的那一端拉力最大——越靠邊的點，對線的影響越大。她是一個<b>離群值</b>：不跟著其他人形成的規律走的點。</p>",
+              vi:"<p>Độ dốc tụt từ 4,00 xuống khoảng 1,59 và R² tụt từ 0,95 xuống 0,20. Sofia nằm xa nhất về bên phải trục ngang, nên bạn ấy kéo mạnh nhất ở đầu đó của đường thẳng — điểm càng nằm lệch ra rìa thì càng làm đường thẳng dịch chuyển nhiều. Bạn ấy là một <b>điểm lạc</b>: một điểm không đi theo quy luật của những điểm còn lại.</p>"},
+      onDone: tick });
+  }
+
+  /* --- B3 PREDICT: what does taking the outlier out do? --- */
+  function b3(ctx){
+    var host = ctx.host;
+    var B3NOTE = {en:"Sliders are gone. Say what will happen before you see it.",
+                  "zh-Hans":"滑块没有了。在看到之前先说出会发生什么。",
+                  "zh-Hant":"滑桿沒有了。在看到之前先說出會發生什麼。",
+                  vi:"Không còn thanh trượt. Hãy nói trước điều sẽ xảy ra, rồi mới xem."};
+    var B3STORY = {en:"Sofia checks her shoes and finds the boots are her brother's, two sizes too big. Her own shoe is 24 cm, not 31 cm — so her measurement was never a measurement of <i>her</i>. The squad takes her row out of the spreadsheet and fits the line again.",
+                   "zh-Hans":"Sofia 检查了鞋子，发现那双靴子是她哥哥的，大了两号。她自己的鞋是 24 厘米，不是 31 厘米——所以那条数据量的根本不是<i>她</i>。小组把她那一行从表格里删掉，重新拟合直线。",
+                   "zh-Hant":"Sofia 檢查了鞋子，發現那雙靴子是她哥哥的，大了兩號。她自己的鞋是 24 公分，不是 31 公分——所以那筆資料量的根本不是<i>她</i>。小組把她那一列從試算表裡刪掉，重新配一次直線。",
+                   vi:"Sofia kiểm tra lại giày và phát hiện đôi bốt là của anh trai, rộng hơn hai cỡ. Giày của chính bạn ấy dài 24 cm chứ không phải 31 cm — nên số đo đó chưa bao giờ là số đo của <i>bạn ấy</i>. Cả nhóm xóa dòng của bạn ấy khỏi bảng tính và khớp lại đường thẳng."};
+    var B3AFTER = {en:"With Sofia in, the same print predicted about 171 cm. Cleaning one wrong row moved the answer by five centimetres.",
+                   "zh-Hans":"有 Sofia 在时，同一个鞋印预测约 171 厘米。清掉一行错数据，答案就差了五厘米。",
+                   "zh-Hant":"有 Sofia 在時，同一個鞋印預測約 171 公分。清掉一列錯資料，答案就差了五公分。",
+                   vi:"Khi còn Sofia, chính dấu giày đó dự đoán khoảng 171 cm. Xóa một dòng sai đã làm đáp án lệch năm xăng-ti-mét."};
+    host.appendChild(ctx.el("p", "sim-note", esc(L(B3NOTE))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML = "<p class='qp'>" + L(B3STORY) + "</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var withS = fit(nine(160, 1));
+    var got = 0, need = 3, times = [];
+    function tick(ok, info){
+      if (!ok) return;
+      got++; times.push(info.ms);
+      if (got === need) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+    }
+    var q1 = SIM.ask(qs, {
+      prompt:{en:"Take Sofia out and leave the eight. What is the gradient of the best line through those eight?",
+              "zh-Hans":"把 Sofia 去掉，只留八个人。这八个点的最佳直线斜率是多少？",
+              "zh-Hant":"把 Sofia 去掉，只留八個人。這八個點的最適直線斜率是多少？",
+              vi:"Bỏ Sofia ra, chỉ giữ tám bạn. Độ dốc của đường tốt nhất qua tám điểm đó là bao nhiêu?"},
+      inputs:[{ k:"m", answer:TRUE_M, tol:0.05, label:{en:"gradient", "zh-Hans":"斜率", "zh-Hant":"斜率", vi:"độ dốc"} }],
+      hint:{en:"You have met those eight before — this is the line from Set A.",
+            "zh-Hans":"这八个人你见过——就是 A 组那条线。",
+            "zh-Hant":"這八個人你見過——就是 A 組那條線。",
+            vi:"Em đã gặp tám bạn này rồi — chính là đường ở nhóm A."},
+      onDone: function(ok, info){
+        if (ok) {
+          var fig = ctx.el("div"); q1.el.appendChild(fig);
+          SIM.plot(fig, {
+            xMin:20, xMax:32, yMin:130, yMax:210, xStep:2, yStep:10, height:250,
+            xLabel:AX.x, yLabel:AX.y,
+            series:[
+              { fn: function(s){ return withS.m * s + withS.c; }, color:C("d"), dash:"5 4" },
+              { fn: trueLine, color:C("b") },
+              dots(squad(1), C("a")),
+              dots([[SOFIA.s, 160]], C("c"))
+            ]
+          });
+          q1.el.appendChild(keyRow([{c:C("d"),n:KEY.withS},{c:C("b"),n:KEY.without}]));
+        }
+        tick(ok, info);
+      } });
+    SIM.ask(qs, {
+      prompt:{en:"And what happens to R² when she goes?",
+              "zh-Hans":"她被去掉后，R² 会怎样？",
+              "zh-Hant":"她被去掉後，R² 會怎樣？",
+              vi:"Và R² sẽ thế nào khi bỏ bạn ấy ra?"},
+      opts:{ list:[
+        {en:"It jumps back up to about 0.93", "zh-Hans":"它跳回到大约 0.93",
+         "zh-Hant":"它跳回到大約 0.93", vi:"Nó vọt lại lên khoảng 0,93"},
+        {en:"It falls further, to about 0.05", "zh-Hans":"它继续下跌，到大约 0.05",
+         "zh-Hant":"它繼續下跌，到大約 0.05", vi:"Nó tụt tiếp, xuống khoảng 0,05"},
+        {en:"It stays at 0.20 — removing a point cannot change R²",
+         "zh-Hans":"它停在 0.20——去掉一个点不会改变 R²",
+         "zh-Hant":"它停在 0.20——去掉一個點不會改變 R²",
+         vi:"Nó vẫn ở 0,20 — bỏ một điểm không làm R² thay đổi"}], a:0 },
+      hint:{en:"Without her the eight sit close to one straight line again.",
+            "zh-Hans":"没有她，这八个点又紧紧贴在一条直线上了。",
+            "zh-Hant":"沒有她，這八個點又緊緊貼在一條直線上了。",
+            vi:"Không có bạn ấy, tám điểm lại nằm sát một đường thẳng."},
+      worked:{en:"<p>R² goes from 0.20 back up to <b>0.93</b> and the gradient from 1.59 back to <b>4</b>. Both numbers were being held down by one person in the wrong boots.</p><p>That is why you look at the scatterplot before you trust the line: a spreadsheet will happily fit a line to anything.</p>",
+              "zh-Hans":"<p>R² 从 0.20 回到 <b>0.93</b>，斜率从 1.59 回到 <b>4</b>。这两个数本来都被一个穿错靴子的人压着。</p><p>所以在相信这条线之前，要先看散点图：表格软件给什么数据都能画出一条线。</p>",
+              "zh-Hant":"<p>R² 從 0.20 回到 <b>0.93</b>，斜率從 1.59 回到 <b>4</b>。這兩個數本來都被一個穿錯靴子的人壓著。</p><p>所以在相信這條線之前，要先看散布圖：試算表給什麼資料都能畫出一條線。</p>",
+              vi:"<p>R² đi từ 0,20 trở lại <b>0,93</b> và độ dốc từ 1,59 trở lại <b>4</b>. Cả hai con số đều đang bị một bạn đi nhầm giày kéo xuống.</p><p>Vì thế phải nhìn biểu đồ phân tán trước khi tin đường thẳng: bảng tính sẵn sàng khớp một đường thẳng vào bất cứ thứ gì.</p>"},
+      onDone: tick });
+    var q3 = SIM.ask(qs, {
+      prompt:{en:"Using the cleaned line — the eight without Sofia — what height does the <b>26.5 cm</b> print in the garden bed predict?",
+              "zh-Hans":"用清理后的线——去掉 Sofia 的那八个人——花坛里 <b>26.5 厘米</b> 的鞋印预测的身高是多少？",
+              "zh-Hant":"用清理後的線——去掉 Sofia 的那八個人——花壇裡 <b>26.5 公分</b> 的鞋印預測的身高是多少？",
+              vi:"Dùng đường đã làm sạch — tám bạn không có Sofia — dấu giày <b>26,5 cm</b> trên luống hoa dự đoán chiều cao bao nhiêu?"},
+      inputs:[{ k:"h", answer:176, tol:0.5, unit:"cm",
+                label:{en:"height", "zh-Hans":"身高", "zh-Hant":"身高", vi:"chiều cao"} }],
+      hint:{en:"h = 4 × 26.5 + 70.", "zh-Hans":"h = 4 × 26.5 + 70。", "zh-Hant":"h = 4 × 26.5 + 70。",
+            vi:"h = 4 × 26,5 + 70."},
+      onDone: function(ok, info){
+        if (ok) {
+          var fig = ctx.el("div"); q3.el.appendChild(fig);
+          SIM.plot(fig, {
+            xMin:20, xMax:32, yMin:130, yMax:210, xStep:2, yStep:10, height:250,
+            xLabel:AX.x, yLabel:AX.y,
+            vlines:[{ x:PRINT, color:C("c") }],
+            series:[
+              { fn: function(s){ return withS.m * s + withS.c; }, color:C("d"), dash:"5 4" },
+              { fn: trueLine, color:C("b") },
+              dots(squad(1), C("a"))
+            ],
+            marks:[
+              { x:PRINT, y:176, label:"176 cm", color:C("b") },
+              { x:PRINT, y:Math.round(withS.m * PRINT + withS.c),
+                label: num(Math.round(withS.m * PRINT + withS.c)) + " cm", color:C("d") }
+            ]
+          });
+          q3.el.appendChild(ctx.el("p", "sim-note", esc(L(B3AFTER))));
+        }
+        tick(ok, info);
+      } });
+  }
+
+  /* --- B4 SOLVE: is this prediction safe? --- */
+  function b4(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("noSim")) + " " + esc(T("engNote"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'><b>The far flowerbed.</b> The eight cleaned measurements give the line " +
+      "<b>h = 4s + 70</b>, with <b>R² = 0.93</b>, where s is the shoe length in centimetres and h is the " +
+      "height in centimetres. The eight shoe lengths ran from <b>22 cm</b> to <b>29 cm</b>. A second " +
+      "print is then found in a flowerbed on the far side of the school. It is <b>34 cm</b> long. " +
+      "A teacher asks the squad to put a height in their report.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 4, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> What height does <b>h = 4s + 70</b> give for a 34 cm print?",
+      inputs:[{ k:"h", answer:206, tol:0.5, unit:"cm", label:"h" }],
+      hint:"4 × 34 = 136.",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> The eight measured prints ran from 22 cm to 29 cm. In one word, is a prediction at 34 cm interpolation or extrapolation?",
+      inputs:[{ k:"kind", text:["extrapolation","extrapolating","extrapolate","extrapolated"], label:"which kind" }],
+      hint:"Inside the measured range or outside it?",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> R² = 0.93 for those eight. Work out <b>r</b>, to two decimal places.",
+      inputs:[{ k:"r", answer:0.96, tol:0.02, label:"r" }],
+      hint:"r = √R², and the sign comes from the direction of the scatterplot.",
+      worked:"<p>√0.93 = <b>0.96</b> to two decimal places. The cloud climbs to the right, so r = <b>+0.96</b>: a strong <span data-v>positive</span> <span data-v>correlation</span>.</p>" +
+             "<p>R² = 0.93 also has a plain meaning: 93% of the differences in height in this group line up with differences in shoe length. The other 7% is everything else about a person.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> Should the squad report \"206 cm\" as the height of the person who left the 34 cm print? Choose the best answer.",
+      opts:{ list:[
+        "Yes — R² is 0.93, so the model is 93% accurate for any print",
+        "No — 34 cm is outside the 22–29 cm they measured, so the line has never been tested there; report it as outside the tested range",
+        "No — the line is only ever right for the exact shoe lengths they measured, so no prediction is allowed at all"], a:1 },
+      hint:"A high R² says the line fits the data you have. It says nothing about ground you never walked on.",
+      worked:"<p><b>No.</b> The arithmetic is fine — 4 × 34 + 70 really is 206 — but 34 cm is well outside the 22–29 cm range the eight covered, so this is extrapolation and the line has no <span data-v>evidence</span> behind it out there. 206 cm would be one of the tallest people in the country.</p>" +
+             "<p>The third answer goes too far the other way: predicting <i>between</i> the measured values is exactly what a line of best fit is for. A model is trustworthy inside the range it was tested on, and only there.</p>",
+      onDone: tick });
+  }
+
+  /* --- B5 EXAM: the real thing, timed, with a written answer --- */
+  function b5(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("timed")) + " " + esc(SIM.T("noSim"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'><b>The chalk cupboard.</b> A tub of coloured chalk has gone missing from the science " +
+      "store, and there is one clear shoe print in the wet soil of the garden bed under the window. The " +
+      "print is <b>30 cm</b> long. Nadia's squad asked <b>ten</b> volunteers to step in the same soil. For " +
+      "each volunteer they recorded two <span data-v>variable</span>s: the length of the print, in " +
+      "centimetres, and the volunteer's height, in centimetres. The ten prints ran from <b>24 cm</b> to " +
+      "<b>31 cm</b>. They put the two columns into a spreadsheet, drew a scatterplot and added a " +
+      "<span data-v>trend</span>line, and the spreadsheet printed:</p>" +
+      "<p class='qp' style='padding-left:1rem'><b>height against print length:  h = 3.6s + 82,  R² = 0.88</b><br>" +
+      "<b>height against hand span:  h = 4.2w + 96,  R² = 0.41</b></p>" +
+      "<p class='qp'>The second line came from measuring the same ten volunteers' hand spans, w, in centimetres.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> Use the print-length model to predict the height of the person who left the 30 cm print.",
+      inputs:[{ k:"h", answer:190, tol:0.5, unit:"cm", label:"h" }],
+      worked:"<p>h = 3.6 × 30 + 82 = 108 + 82 = <b>190 cm</b>. 30 cm sits inside the 24–31 cm the squad measured, so this is an interpolation.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> For the print-length model, R² = 0.88. Work out <b>r</b>, to two decimal places.",
+      inputs:[{ k:"r", answer:0.94, tol:0.02, label:"r" }],
+      worked:"<p>r = √0.88 = 0.938… = <b>0.94</b> to two decimal places, and it is positive because longer prints go with taller people.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> Describe the <span data-v>correlation</span> between print length and height in <b>two words</b>: its strength, then its direction.",
+      inputs:[{ k:"d", wide:true, label:"two words",
+        text:["strong positive","strongly positive","strong and positive","positive strong",
+              "a strong positive","strong positive correlation","strong positive relationship",
+              "strong positive association","strong positive linear","positive and strong",
+              "positive strong correlation","high positive","strong upward","strong increasing"] }],
+      hint:"Strength is how tightly the points hug the line. Direction is which way the line goes.",
+      worked:"<p><b>Strong positive.</b> Written out in full, the way a report would say it:</p>" +
+             "<p><i>\"There is a strong, positive correlation between shoe print length and height: as the " +
+             "print gets longer, the person tends to be taller. R² = 0.88, so r = √0.88 = 0.94, which is " +
+             "close to 1 — the ten points sit close to the trendline. The relationship held for prints " +
+             "from 24 cm to 31 cm, which is the only range we tested.\"</i></p>" +
+             "<p>Strength and direction are two separate things, and a full answer gives both, then quotes " +
+             "the number it is based on.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> The squad has two spreadsheet models for the same ten people. Which one should they use to predict a height, and why?",
+      opts:{ list:[
+        "The hand span model, because its gradient (4.2) is bigger than 3.6",
+        "The print length model, because its R² (0.88) is closer to 1, so its points sit closer to its trendline",
+        "Either — R² does not tell you anything about how good a prediction will be"], a:1 },
+      worked:"<p>Compare the two R² values, not the two gradients. A bigger gradient only means a steeper line; <b>R² closer to 1</b> means the real points sit closer to the line, so the prediction is tighter. 0.88 beats 0.41, so the <b>print length model</b> is the better predictor — which is lucky, because a print is what they have.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>e.</b> Which sentence can the squad safely write in their report?",
+      opts:{ list:[
+        "Having long feet makes a person grow taller.",
+        "Among the ten people we measured, longer prints went with greater height; our model predicts about 190 cm for this print, but it cannot say whose shoe made it.",
+        "The person who took the chalk is exactly 190 cm tall."], a:1 },
+      worked:"<p>The first sentence claims a cause. Shoe length and height rise together because both are part of how a body grows — one does not cause the other. A strong correlation is never on its own proof of a cause.</p>" +
+             "<p>The third claims a certainty. 190 cm is the middle of a range of likely heights, not a fact about one person, and a shoe print identifies a shoe, not a person.</p>" +
+             "<p>The second says what the data supports, names the group it came from, and stops there. That is what a report is for.</p>",
+      onDone: tick });
+  }
+
+  /* ================================================================
+     WIRE IT UP
+     ================================================================ */
+  var STAGES_A = [
+    { id:"a1", kind:"play", tab:{en:"Play","zh-Hans":"先玩","zh-Hant":"先玩",vi:"Chơi thử"},
+      title:{en:"Find the line that fits the dots", "zh-Hans":"找到最贴合这些点的直线",
+             "zh-Hant":"找到最貼合這些點的直線", vi:"Tìm đường thẳng khớp với các điểm"},
+      aim:{en:"Eight people, two measurements each. The <span data-v>gradient</span> tips the line and the <span data-v>intercept</span> slides it up and down. The line of best fit is the one that leaves the smallest total gap between itself and the real people.",
+           "zh-Hans":"八个人，每人两个测量值。<span data-v=\"gradient\">斜率</span>让线倾斜，<span data-v=\"intercept\">截距</span>让线上下平移。最佳拟合直线就是它与真人之间总差距最小的那条。",
+           "zh-Hant":"八個人，每人兩個測量值。<span data-v=\"gradient\">斜率</span>讓線傾斜，<span data-v=\"intercept\">截距</span>讓線上下平移。最適直線就是它與真人之間總差距最小的那條。",
+           vi:"Tám bạn, mỗi bạn hai số đo. <span data-v=\"gradient\">Độ dốc</span> làm nghiêng đường thẳng, còn <span data-v=\"intercept\">tung độ gốc</span> đẩy nó lên xuống. Đường thẳng phù hợp nhất là đường để lại tổng khoảng cách nhỏ nhất giữa nó và những người thật."},
+      goal:{en:"Drag both sliders until the tick below turns green.",
+            "zh-Hans":"拖动两个滑块，直到下面的勾变绿。",
+            "zh-Hant":"拖動兩個滑桿，直到下面的勾變綠。",
+            vi:"Kéo cả hai thanh trượt cho đến khi dấu tích bên dưới chuyển xanh."},
+      build:a1 },
+    { id:"a2", kind:"read", tab:{en:"Read","zh-Hans":"读图","zh-Hant":"讀圖",vi:"Đọc"},
+      title:{en:"Read the line, then read a prediction off it", "zh-Hans":"读这条线，再从它读出一个预测",
+             "zh-Hant":"讀這條線，再從它讀出一個預測", vi:"Đọc đường thẳng, rồi đọc một dự đoán từ nó"},
+      aim:{en:"A line of best fit is a rule you can read two ways: as <b>h = ms + c</b>, and as a picture you can go up and across on. Both give the same <span data-v>predict</span>ion.",
+           "zh-Hans":"最佳拟合直线是一条可以用两种方式读的规则：写成 <b>h = ms + c</b>，或者当成一张可以上下横读的图。两种读法给出同样的<span data-v=\"predict\">预测</span>。",
+           "zh-Hant":"最適直線是一條可以用兩種方式讀的規則：寫成 <b>h = ms + c</b>，或者當成一張可以上下橫讀的圖。兩種讀法給出同樣的<span data-v=\"predict\">預測</span>。",
+           vi:"Đường thẳng phù hợp nhất là một quy tắc đọc được theo hai cách: viết thành <b>h = ms + c</b>, hoặc xem như một hình để đi lên rồi đi ngang. Cả hai cho cùng một <span data-v=\"predict\">dự đoán</span>."},
+      goal:{en:"Answer all four.", "zh-Hans":"四题全部答对。", "zh-Hant":"四題全部答對。", vi:"Trả lời cả bốn câu."},
+      build:a2 },
+    { id:"a3", kind:"predict", tab:{en:"Predict","zh-Hans":"预测","zh-Hant":"預測",vi:"Dự đoán"},
+      title:{en:"Say the height before the graph shows it", "zh-Hans":"在图显示之前先说出身高",
+             "zh-Hant":"在圖顯示之前先說出身高", vi:"Nói chiều cao trước khi đồ thị hiện ra"},
+      aim:{en:"Once you have the rule you do not need the graph. Multiply, add — and to go backwards, undo both steps in the other order.",
+           "zh-Hans":"有了规则就不需要图了。先乘再加——要反过来算，就按相反顺序把两步倒过来。",
+           "zh-Hant":"有了規則就不需要圖了。先乘再加——要反過來算，就按相反順序把兩步倒過來。",
+           vi:"Có quy tắc rồi thì không cần đồ thị nữa. Nhân rồi cộng — muốn làm ngược lại thì đảo hai bước đó theo thứ tự ngược."},
+      goal:{en:"Get all three right.", "zh-Hans":"三题全部答对。", "zh-Hant":"三題全部答對。", vi:"Đúng cả ba câu."},
+      build:a3 },
+    { id:"a4", kind:"solve", tab:{en:"Solve","zh-Hans":"自己算","zh-Hant":"自己算",vi:"Tự tính"},
+      title:{en:"Get the equation from two points, with no sliders",
+             "zh-Hans":"用两个点求出方程，没有滑块",
+             "zh-Hant":"用兩個點求出方程式，沒有滑桿", vi:"Tìm phương trình từ hai điểm, không có thanh trượt"},
+      aim:{en:"Rise over run gives m; one point on the line then gives c. That is how you turn a line somebody drew into a rule you can calculate with — and it is the core question of the project.",
+           "zh-Hans":"纵向变化 ÷ 横向变化得到 m；再用线上任一点求出 c。这就是把别人画的线变成可以计算的规则的方法——也是这个项目的核心题型。",
+           "zh-Hant":"縱向變化 ÷ 橫向變化得到 m；再用線上任一點求出 c。這就是把別人畫的線變成可以計算的規則的方法——也是這個專題的核心題型。",
+           vi:"Lên chia cho ngang cho ra m; rồi một điểm trên đường thẳng cho ra c. Đó là cách biến một đường ai đó vẽ thành một quy tắc tính được — và cũng là câu hỏi cốt lõi của dự án."},
+      goal:{en:"All four parts correct. The sim then draws your line.",
+            "zh-Hans":"四小题全对，模拟会画出你的线。",
+            "zh-Hant":"四小題全對，模擬會畫出你的線。",
+            vi:"Đúng cả bốn phần. Sau đó mô phỏng sẽ vẽ đường của em."},
+      skills:["s_lobf"], build:a4 },
+    { id:"a5", kind:"exam", tab:{en:"The real thing","zh-Hans":"正式演练","zh-Hant":"正式演練",vi:"Làm thật"},
+      title:{en:"A whole data task, on your own, timed", "zh-Hans":"完整一道数据题，独立完成，计时",
+             "zh-Hant":"完整一道資料題，獨立完成，計時", vi:"Một bài dữ liệu trọn vẹn, tự làm, tính giờ"},
+      aim:{en:"Same mathematics as the Mystery Bones project, different words. No sim, no sliders, no hints.",
+           "zh-Hans":"和神秘骨头项目同样的数学，不同的文字。没有模拟、没有滑块、没有提示。",
+           "zh-Hant":"和神祕骨頭專題同樣的數學，不同的文字。沒有模擬、沒有滑桿、沒有提示。",
+           vi:"Cùng toán như dự án Mystery Bones, khác lời văn. Không mô phỏng, không thanh trượt, không gợi ý."},
+      goal:{en:"Five parts, all correct.", "zh-Hans":"五小题全对。", "zh-Hant":"五小題全對。", vi:"Năm phần, đúng hết."},
+      skills:["s_lobf","s_variables"], build:a5 }
+  ];
+  var STAGES_B = [
+    { id:"b1", kind:"play", tab:{en:"Play","zh-Hans":"先玩","zh-Hant":"先玩",vi:"Chơi thử"},
+      title:{en:"Wreck the line and watch R² fall", "zh-Hans":"把这条线弄坏，看 R² 掉下去",
+             "zh-Hant":"把這條線弄壞，看 R² 掉下去", vi:"Phá đường thẳng và xem R² tụt xuống"},
+      aim:{en:"R² says how tightly the real points hug the line: 1 is perfect, 0 is a shapeless cloud. Scatter and one odd point do very different damage.",
+           "zh-Hans":"R² 说明真实的点贴这条线贴得有多紧：1 是完美，0 是一团没有形状的散点。散得开和有一个怪点，造成的破坏很不一样。",
+           "zh-Hant":"R² 說明真實的點貼這條線貼得有多緊：1 是完美，0 是一團沒有形狀的散點。散得開和有一個怪點，造成的破壞很不一樣。",
+           vi:"R² cho biết các điểm thật bám sát đường thẳng tới đâu: 1 là hoàn hảo, 0 là một đám điểm không có hình dạng. Phân tán rộng và một điểm lạ gây ra những thiệt hại rất khác nhau."},
+      goal:{en:"Turn both ticks green — and notice which slider did which.",
+            "zh-Hans":"让两个勾都变绿——并注意哪个滑块起了哪个作用。",
+            "zh-Hant":"讓兩個勾都變綠——並注意哪個滑桿起了哪個作用。",
+            vi:"Làm cả hai dấu tích chuyển xanh — và để ý thanh nào gây ra điều gì."},
+      build:b1 },
+    { id:"b2", kind:"read", tab:{en:"Read","zh-Hans":"读图","zh-Hant":"讀圖",vi:"Đọc"},
+      title:{en:"Read R², then say it in words", "zh-Hans":"读出 R²，再用文字说出来",
+             "zh-Hant":"讀出 R²，再用文字說出來", vi:"Đọc R², rồi diễn đạt bằng lời"},
+      aim:{en:"Every <span data-v>correlation</span> needs two words: how strong, and which direction. R² gives you the strength; the picture gives you the direction, because R² is never <span data-v>negative</span>.",
+           "zh-Hans":"描述<span data-v=\"correlation\">相关</span>要用两个词：多强，以及往哪个方向。R² 给你强度；方向要看图，因为 R² 永远不会是<span data-v=\"negative\">负</span>的。",
+           "zh-Hant":"描述<span data-v=\"correlation\">相關</span>要用兩個詞：多強，以及往哪個方向。R² 給你強度；方向要看圖，因為 R² 永遠不會是<span data-v=\"negative\">負</span>的。",
+           vi:"Mọi <span data-v=\"correlation\">tương quan</span> đều cần hai từ: mạnh tới đâu, và theo chiều nào. R² cho em độ mạnh; hình vẽ cho em chiều, vì R² không bao giờ <span data-v=\"negative\">âm</span>."},
+      goal:{en:"Answer all five.", "zh-Hans":"五题全部答对。", "zh-Hant":"五題全部答對。", vi:"Trả lời cả năm câu."},
+      build:b2 },
+    { id:"b3", kind:"predict", tab:{en:"Predict","zh-Hans":"预测","zh-Hant":"預測",vi:"Dự đoán"},
+      title:{en:"Predict what taking the odd point out will do",
+             "zh-Hans":"预测去掉那个怪点会发生什么",
+             "zh-Hant":"預測去掉那個怪點會發生什麼", vi:"Dự đoán việc bỏ điểm lạ ra sẽ gây ra điều gì"},
+      aim:{en:"A point that does not belong in the data should not be in the line either — but you take it out because you found the reason, not because you dislike where it sits.",
+           "zh-Hans":"不属于这组数据的点，也不该出现在这条线里——但你把它去掉，是因为你找到了原因，而不是因为你不喜欢它待的地方。",
+           "zh-Hant":"不屬於這組資料的點，也不該出現在這條線裡——但你把它去掉，是因為你找到了原因，而不是因為你不喜歡它待的地方。",
+           vi:"Một điểm không thuộc về bộ dữ liệu thì cũng không nên nằm trong đường thẳng — nhưng em bỏ nó ra vì đã tìm được lý do, chứ không phải vì em không thích chỗ nó nằm."},
+      goal:{en:"Three correct predictions.", "zh-Hans":"三个预测全对。", "zh-Hant":"三個預測全對。", vi:"Ba dự đoán đúng."},
+      build:b3 },
+    { id:"b4", kind:"solve", tab:{en:"Solve","zh-Hans":"自己算","zh-Hant":"自己算",vi:"Tự tính"},
+      title:{en:"Decide whether a far-off prediction is safe",
+             "zh-Hans":"判断一个远处的预测是否可靠",
+             "zh-Hant":"判斷一個遠處的預測是否可靠", vi:"Quyết định xem một dự đoán xa có an toàn không"},
+      aim:{en:"A model is trustworthy inside the range it was tested on, and only there. R² tells you how good the fit is — it does not stretch the line's licence any further.",
+           "zh-Hans":"一个模型只在它被检验过的范围内可信，出了这个范围就不可信。R² 只说明拟合得有多好——它并不能把这条线的适用范围拉得更远。",
+           "zh-Hant":"一個模型只在它被檢驗過的範圍內可信，出了這個範圍就不可信。R² 只說明配適得有多好——它並不能把這條線的適用範圍拉得更遠。",
+           vi:"Một mô hình chỉ đáng tin trong khoảng nó đã được kiểm chứng, và chỉ trong khoảng đó. R² cho biết mức khớp tốt tới đâu — nó không nới rộng phạm vi sử dụng của đường thẳng."},
+      goal:{en:"All four parts correct.", "zh-Hans":"四小题全对。", "zh-Hant":"四小題全對。", vi:"Đúng cả bốn phần."},
+      skills:["s_corr"], build:b4 },
+    { id:"b5", kind:"exam", tab:{en:"The real thing","zh-Hans":"正式演练","zh-Hant":"正式演練",vi:"Làm thật"},
+      title:{en:"Two spreadsheet models, one report — timed",
+             "zh-Hans":"两个表格模型，一份报告——计时",
+             "zh-Hant":"兩個試算表模型，一份報告——計時", vi:"Hai mô hình bảng tính, một báo cáo — tính giờ"},
+      aim:{en:"This is as close to the Mystery Bones write-up as practice gets: predict from a trendline, quote R², describe the correlation in words, and say only what the data supports.",
+           "zh-Hans":"这已经是最接近神秘骨头报告的练习：用趋势线预测、引用 R²、用文字描述相关性，并且只说数据支持得住的话。",
+           "zh-Hant":"這已經是最接近神祕骨頭報告的練習：用趨勢線預測、引用 R²、用文字描述相關性，並且只說資料支持得住的話。",
+           vi:"Đây là bài luyện gần nhất với phần viết báo cáo Mystery Bones: dự đoán từ đường xu hướng, trích R², mô tả tương quan bằng lời, và chỉ nói những gì dữ liệu chống đỡ được."},
+      goal:{en:"Five parts, all correct — one of them written in words.",
+            "zh-Hans":"五小题全对——其中一题要用文字作答。",
+            "zh-Hant":"五小題全對——其中一題要用文字作答。",
+            vi:"Năm phần, đúng hết — trong đó có một phần trả lời bằng lời."},
+      skills:["s_corr","s_excel"], build:b5 }
+  ];
+
+  function boot(){
+    document.documentElement.lang = lang() === "en" ? "en" : lang();
+    document.querySelectorAll("[data-i18n]").forEach(function(n){
+      var v = T(n.getAttribute("data-i18n"));
+      if (typeof v === "string") n.innerHTML = v;
+    });
+    var sel = document.querySelector(".language-select");
+    sel.value = lang();
+    sel.addEventListener("change", function(){
+      try { localStorage.setItem("elc_page_language", sel.value); } catch(e){}
+      location.reload();
+    });
+
+    /* the framing line: which task this rehearses */
+    var cp = null;
+    if (S2) S2.UNITS.forEach(function(u){ u.checkpoints.forEach(function(c){ if (c.id === "cp_bones") cp = c; }); });
+    document.getElementById("frameLine").innerHTML =
+      "<b>" + esc(cp ? T("buildsF")(cp.name) : T("buildsAlways")) + "</b>" +
+      "<span class='eng'>" + esc(T("engNote")) + "</span>";
+
+    SIM.mount(document.getElementById("sim"), {
+      id:"print", cp:"cp_bones", room:"science",
+      evidenceSrc:"The Shoe Print",
+      skills:["s_variables","s_lobf","s_corr","s_excel"],
+      openAll: (function(){ try { return localStorage.getItem("elc_stem_sim_open") === "1"; } catch(e){ return false; } })(),
+      sets:[
+        { id:"a", name:{en:"A · the line through the dots","zh-Hans":"A · 穿过散点的直线",
+                        "zh-Hant":"A · 穿過散點的直線",vi:"A · đường thẳng xuyên qua đám điểm"}, stages:STAGES_A },
+        { id:"b", name:{en:"B · how much do you trust it?","zh-Hans":"B · 你有多信它？",
+                        "zh-Hant":"B · 你有多信它？",vi:"B · em tin nó tới đâu?"}, stages:STAGES_B }
+      ]
+    });
+
+    if (window.STEMVOCAB) window.STEMVOCAB.init();
+
+    document.getElementById("teacherUnlock").addEventListener("click", function(e){
+      e.preventDefault();
+      try { localStorage.setItem("elc_stem_sim_open", "1"); } catch(err){}
+      location.reload();
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
+</body>
+</html>

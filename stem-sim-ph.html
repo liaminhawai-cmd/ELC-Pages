@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Fish Tank — rehearsal for the acids &amp; bases practical</title>
+<!-- ================================================================
+     The Fish Tank — the rehearsal for the Acids & bases practical
+     (checkpoint cp_ph, Lab & Matter).
+
+     SET A  THE BEAKER — the pH scale itself. Add drops of acid and
+            drops of base and watch the number and the indicator
+            colour move together. The arithmetic is deliberately the
+            same linear equation the Kinematics unit is teaching:
+              6 + 0.5b − 0.25a = 7
+            so a student meets one idea in two rooms.
+     SET B  THE POND AFTER RAIN — the same algebra with a story
+            attached. Rain lowers the pond 0.2 each day; lime raises
+            it 0.1 per gram; how much lime brings it back?
+
+     NO LOGARITHMS anywhere: the lesson plan says so explicitly, and
+     pH here is a number on a scale, nothing more.
+
+     Universal-indicator colours ARE hard-coded, unlike every other
+     colour in the hub — they are data, not decoration. Every label
+     sits BESIDE its swatch, never on it, so nothing depends on the
+     contrast of a fixed colour against the page's theme.
+
+     Everything else — the step ladder, sliders, plots, marking and
+     timing — comes from stem-sim.js.
+     ================================================================ -->
+<style>
+  :root {
+    --paper:#fcfcfa; --ink:#212427; --muted:#5c6166; --faint:#6b7075;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f; --on-accent:#ffffff;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#878d92;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px;
+         flex-wrap:wrap; margin-bottom:26px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  .top a:hover { text-decoration:underline; }
+  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:34px;
+    border-radius:8px; border:1px solid var(--hair); background:var(--paper); color:var(--ink); }
+  .masthead { margin:4px 0 20px; }
+  .masthead h1 { margin:0 0 6px; font-family:Georgia,"Times New Roman",serif; font-size:1.9rem;
+    font-weight:500; letter-spacing:-.01em; }
+  .masthead .sub { margin:0; color:var(--muted); font-size:.88rem; max-width:64ch; }
+  .frame { border-top:1px solid var(--ink); padding-top:12px; margin:0 0 20px;
+           font-size:.86rem; color:var(--muted); }
+  .frame b { color:var(--ink); }
+  .frame .eng { display:block; margin-top:.4rem; color:var(--faint); font-size:.82rem; }
+  .safety { border-left:2px solid var(--alert); padding:2px 0 2px 12px; margin:0 0 20px;
+            font-size:.85rem; color:var(--muted); }
+  .note { font-size:.8rem; color:var(--faint); margin:26px 0 0; }
+  footer { margin-top:34px; border-top:1px solid var(--hair); padding-top:14px;
+           font-size:.78rem; color:var(--faint); }
+  .teacherline { margin:10px 0 0; font-size:.76rem; }
+  .teacherline a { color:var(--faint); }
+  [data-v] { border-bottom:1px dotted var(--accent); cursor:help; }
+  /* the readout beside the beaker */
+  .phread { display:flex; align-items:baseline; gap:.6rem; flex-wrap:wrap; margin:.5rem 0 0; }
+  .phread b { font-size:1.6rem; font-variant-numeric:tabular-nums; font-weight:600; }
+  .phread span { font-size:.88rem; color:var(--muted); }
+  .sim-live { font-variant-numeric:tabular-nums; font-size:.82rem; color:var(--muted); }
+</style>
+<link rel="stylesheet" href="stem-theme.css?v=20260821-4">
+</head>
+<body data-room="science">
+<div class="wrap">
+  <div class="top">
+    <a href="stem-lab.html" data-i18n="back">← Lab &amp; Matter · Do</a>
+    <span id="tw-slot"></span>
+    <select class="language-select" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+      <option value="vi">Tiếng Việt</option>
+    </select>
+  </div>
+
+  <div class="masthead">
+    <h1 data-i18n="title">The Fish Tank</h1>
+    <p class="sub" data-i18n="sub">Acids, bases and the pH scale — on a screen first, so the real
+      practical is not the first time you meet the numbers. Two sets of five steps.</p>
+  </div>
+
+  <p class="frame" id="frameLine"></p>
+  <p class="safety" data-i18n="safety">This is a simulation. It is practice for the thinking, not a
+    substitute for the practical. Never mix, heat or taste anything in a real laboratory except when
+    your teacher is supervising you and has told you to.</p>
+
+  <div id="sim"></div>
+
+  <p class="note" data-i18n="privacy">Anonymous. What you do on this page is stored in this browser
+    only — no accounts, no tracking.</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+  <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: open every step</a></p>
+</div>
+
+<script src="stem-vocab-data.js?v=20260821-4"></script>
+<script src="stem-shared.js?v=20260821-4"></script>
+<script src="stem-vocab.js?v=20260821-4"></script>
+<script src="stem-gloss.js?v=20260821-4"></script>
+<script src="stem-translate.js?v=20260821-4"></script>
+<script src="stem-sim.js?v=20260821-4"></script>
+<script>
+(function () {
+  "use strict";
+  var S2 = window.STEM2, SIM = window.STEMSIM;
+  var esc = SIM.esc, num = SIM.num, L = SIM.L;
+
+  /* ---------------- page chrome, four languages ---------------- */
+  var COPY = {
+    en: {
+      back:"← Lab & Matter · Do", title:"The Fish Tank",
+      sub:"Acids, bases and the pH scale — on a screen first, so the real practical is not the first time you meet the numbers. Two sets of five steps.",
+      safety:"This is a simulation. It is practice for the thinking, not a substitute for the practical. Never mix, heat or taste anything in a real laboratory except when your teacher is supervising you and has told you to.",
+      privacy:"Anonymous. What you do on this page is stored in this browser only — no accounts, no tracking.",
+      teacherU:"Teacher: open every step",
+      engNote:"Steps 4 and 5 stay in English — reading the English is part of the task. Tap any word you do not know.",
+      buildsF:function(n){ return "This rehearses the "+n+"."; },
+      buildsAlways:"This keeps your chemistry language sharp."
+    },
+    "zh-Hans": {
+      back:"← 实验室与物质 · 任务", title:"鱼缸",
+      sub:"酸、碱与 pH 值——先在屏幕上练，正式实验时就不是第一次见到这些数字。两组，每组五步。",
+      safety:"这是模拟。它练的是思路，不能代替真正的实验。在真实实验室里，除非老师在场并且明确要求，否则绝不混合、加热或品尝任何东西。",
+      privacy:"匿名。你在本页的记录只保存在这个浏览器里——没有账号，不做追踪。",
+      teacherU:"教师：开放全部步骤",
+      engNote:"第 4、5 步保持英文——读懂英文本身就是任务的一部分。不认识的词点一下即可。",
+      buildsF:function(n){ return "这是在为"+n+"做演练。"; },
+      buildsAlways:"这让你的化学语言保持熟练。"
+    },
+    "zh-Hant": {
+      back:"← 實驗室與物質 · 任務", title:"魚缸",
+      sub:"酸、鹼與 pH 值——先在螢幕上練，正式實驗時就不是第一次見到這些數字。兩組，每組五步。",
+      safety:"這是模擬。它練的是思路，不能代替真正的實驗。在真實實驗室裡，除非老師在場並且明確要求，否則絕不混合、加熱或品嚐任何東西。",
+      privacy:"匿名。你在本頁的紀錄只儲存在這個瀏覽器裡——沒有帳號，不做追蹤。",
+      teacherU:"教師：開放全部步驟",
+      engNote:"第 4、5 步保持英文——讀懂英文本身就是任務的一部分。不認識的字點一下即可。",
+      buildsF:function(n){ return "這是在為"+n+"做演練。"; },
+      buildsAlways:"這讓你的化學語言保持熟練。"
+    },
+    vi: {
+      back:"← Phòng thí nghiệm & Vật chất · Việc cần làm", title:"Bể cá",
+      sub:"Axit, bazơ và thang pH — luyện trên màn hình trước, để buổi thực hành thật không phải là lần đầu em gặp những con số này. Hai nhóm, mỗi nhóm năm bước.",
+      safety:"Đây là mô phỏng. Nó luyện cách nghĩ, không thay thế được buổi thực hành. Trong phòng thí nghiệm thật, tuyệt đối không trộn, đun hay nếm bất cứ thứ gì trừ khi có giáo viên giám sát và đã yêu cầu em làm.",
+      privacy:"Ẩn danh. Những gì em làm ở trang này chỉ lưu trong trình duyệt này — không tài khoản, không theo dõi.",
+      teacherU:"Giáo viên: mở tất cả các bước",
+      engNote:"Bước 4 và 5 giữ nguyên tiếng Anh — đọc được tiếng Anh chính là một phần của bài. Từ nào chưa biết thì chạm vào.",
+      buildsF:function(n){ return "Đây là buổi tập dượt cho bài "+n+"."; },
+      buildsAlways:"Phần này giữ cho vốn từ hóa học của em luôn nhạy."
+    }
+  };
+  function lang(){ try { return localStorage.getItem("elc_page_language") || "en"; } catch(e){ return "en"; } }
+  function T(k){ var d = COPY[lang()] || COPY.en; return d[k] !== undefined ? d[k] : COPY.en[k]; }
+
+  /* ================================================================
+     THE CHEMISTRY — every number the page uses lives here
+     ================================================================ */
+  var CHEM = {
+    start: 6,          /* the beaker's starting pH                  */
+    perBase: 0.5,      /* one drop of base raises pH by this        */
+    perAcid: 0.25,     /* one drop of acid lowers pH by this        */
+    pondStart: 7.0,    /* the pond before it rains                  */
+    perRainDay: 0.2,   /* each day of rain lowers pH by this        */
+    perLime: 0.1,      /* each gram of lime raises pH by this       */
+    safeLo: 6.5, safeHi: 7.5
+  };
+  function beakerPH(a, b){ return CHEM.start + CHEM.perBase * b - CHEM.perAcid * a; }
+  function pondPH(r, lime){ return CHEM.pondStart - CHEM.perRainDay * r + CHEM.perLime * lime; }
+  function clampPH(p){ return Math.max(0, Math.min(14, p)); }
+
+  /* Universal indicator, as the bottle's own chart gives it. These hex
+     values are DATA — the colour is the reading — which is why they are
+     the only fixed colours on the page. Labels never sit on top of them. */
+  var CHART = [
+    { lo:0,  hi:2,  c:"#c62828", n:{en:"strong acid","zh-Hans":"强酸","zh-Hant":"強酸",vi:"axit mạnh"} },
+    { lo:2,  hi:4,  c:"#ef6c00", n:{en:"acid","zh-Hans":"酸","zh-Hant":"酸",vi:"axit"} },
+    { lo:4,  hi:6,  c:"#f9a825", n:{en:"weak acid","zh-Hans":"弱酸","zh-Hant":"弱酸",vi:"axit yếu"} },
+    { lo:6,  hi:8,  c:"#2e7d32", n:{en:"neutral","zh-Hans":"中性","zh-Hant":"中性",vi:"trung tính"} },
+    { lo:8,  hi:10, c:"#00838f", n:{en:"weak base","zh-Hans":"弱碱","zh-Hant":"弱鹼",vi:"bazơ yếu"} },
+    { lo:10, hi:12, c:"#1565c0", n:{en:"base","zh-Hans":"碱","zh-Hant":"鹼",vi:"bazơ"} },
+    { lo:12, hi:14, c:"#6a1b9a", n:{en:"strong base","zh-Hans":"强碱","zh-Hant":"強鹼",vi:"bazơ mạnh"} }
+  ];
+  function bandFor(p){
+    for (var i = 0; i < CHART.length; i++) if (p < CHART[i].hi || i === CHART.length - 1) return CHART[i];
+    return CHART[0];
+  }
+  function classOf(p){
+    return p < 7 ? {en:"acidic","zh-Hans":"酸性","zh-Hant":"酸性",vi:"có tính axit"}
+         : p > 7 ? {en:"basic","zh-Hans":"碱性","zh-Hant":"鹼性",vi:"có tính bazơ"}
+                 : {en:"neutral","zh-Hans":"中性","zh-Hant":"中性",vi:"trung tính"};
+  }
+
+  /* ---------------- the pH scale strip, drawn as SVG ---------------- */
+  function scaleStrip(host, p, opts){
+    opts = opts || {};
+    var W = Math.max(300, Math.min(720, host.clientWidth || 640)), H = 92;
+    var P = { l:16, r:16, t:14, b:26 }, pw = W - P.l - P.r;
+    function X(v){ return P.l + v / 14 * pw; }
+    var muted = SIM.cvar("--muted","#5c6166"), faint = SIM.cvar("--faint","#6b7075");
+    var paper = SIM.cvar("--paper","#fff"), ink = SIM.cvar("--ink","#212427");
+    var g = [];
+    CHART.forEach(function(b){
+      g.push("<rect x='" + X(b.lo) + "' y='" + P.t + "' width='" + (X(b.hi) - X(b.lo)) +
+        "' height='26' fill='" + b.c + "'/>");
+    });
+    for (var v = 0; v <= 14; v += 2) {
+      g.push("<line x1='" + X(v) + "' y1='" + (P.t + 26) + "' x2='" + X(v) + "' y2='" + (P.t + 32) +
+        "' stroke='" + muted + "' stroke-width='1'/>");
+      g.push("<text x='" + X(v) + "' y='" + (P.t + 46) + "' fill='" + faint +
+        "' font-size='11' text-anchor='middle'>" + v + "</text>");
+    }
+    if (opts.safe) {
+      g.push("<rect x='" + X(CHEM.safeLo) + "' y='" + (P.t - 5) + "' width='" +
+        (X(CHEM.safeHi) - X(CHEM.safeLo)) + "' height='36' fill='none' stroke='" + ink +
+        "' stroke-width='2' stroke-dasharray='4 3'/>");
+    }
+    if (typeof p === "number") {
+      var x = X(clampPH(p));
+      g.push("<polygon points='" + x + "," + (P.t - 3) + " " + (x - 6) + "," + (P.t - 13) + " " +
+        (x + 6) + "," + (P.t - 13) + "' fill='" + ink + "' stroke='" + paper + "' stroke-width='1'/>");
+      g.push("<text x='" + x + "' y='" + (H - 6) + "' fill='" + ink +
+        "' font-size='12' font-weight='600' text-anchor='middle'>pH " + num(clampPH(p), 2) + "</text>");
+    }
+    host.classList.add("sim-fig");
+    host.innerHTML = "<svg viewBox='0 0 " + W + " " + H + "' role='img' aria-label='" +
+      esc(L({en:"the pH scale from 0 to 14","zh-Hans":"从 0 到 14 的 pH 标尺",
+             "zh-Hant":"從 0 到 14 的 pH 標尺",vi:"thang pH từ 0 đến 14"})) + "'>" + g.join("") + "</svg>";
+  }
+  function readout(host, p){
+    var b = bandFor(p);
+    host.className = "phread";
+    host.innerHTML = "<b>pH " + num(clampPH(p), 2) + "</b>" +
+      "<span><i style='display:inline-block;width:.85em;height:.85em;border-radius:2px;vertical-align:-1px;" +
+      "margin-right:.35em;background:" + b.c + "'></i>" + esc(L(b.n)) + " · " + esc(L(classOf(p))) + "</span>";
+  }
+
+  /* ================================================================
+     SET A — THE BEAKER
+     ================================================================ */
+  function a1(ctx){
+    var host = ctx.host, st = { a:0, b:0 };
+    var strip = ctx.el("div"), read = ctx.el("div"), goal = ctx.el("p", "sim-goal");
+    SIM.sliders(host, [
+      { k:"a", min:0, max:12, step:1, value:0,
+        label:{en:"Drops of acid","zh-Hans":"酸的滴数","zh-Hant":"酸的滴數",vi:"Số giọt axit"},
+        unit:{en:"drops","zh-Hans":"滴","zh-Hant":"滴",vi:"giọt"} },
+      { k:"b", min:0, max:12, step:1, value:0,
+        label:{en:"Drops of base","zh-Hans":"碱的滴数","zh-Hant":"鹼的滴數",vi:"Số giọt bazơ"},
+        unit:{en:"drops","zh-Hans":"滴","zh-Hant":"滴",vi:"giọt"} }
+    ], function(v){ st.a = v.a; st.b = v.b; draw(); });
+    host.appendChild(strip); host.appendChild(read); host.appendChild(goal);
+
+    var won = false;
+    var G1 = {en:"The beaker reads exactly pH 7.","zh-Hans":"烧杯正好读到 pH 7。",
+              "zh-Hant":"燒杯正好讀到 pH 7。",vi:"Cốc đọc đúng pH 7."};
+    var G2 = {en:"You used exactly 8 drops altogether.","zh-Hans":"总共正好用了 8 滴。",
+              "zh-Hant":"總共正好用了 8 滴。",vi:"Tổng cộng dùng đúng 8 giọt."};
+    var WIN = {en:"Four drops of acid and four of base. One drop of base is worth two drops of acid here, so the counts had to be equal for the totals to work out — that is the equation 6 + 0.5b − 0.25a = 7 with a + b = 8.",
+      "zh-Hans":"四滴酸、四滴碱。这里一滴碱抵两滴酸，所以要凑够总数，两边的滴数必须相等——就是方程 6 + 0.5b − 0.25a = 7 配上 a + b = 8。",
+      "zh-Hant":"四滴酸、四滴鹼。這裡一滴鹼抵兩滴酸，所以要湊夠總數，兩邊的滴數必須相等——就是方程式 6 + 0.5b − 0.25a = 7 配上 a + b = 8。",
+      vi:"Bốn giọt axit và bốn giọt bazơ. Ở đây một giọt bazơ bằng hai giọt axit, nên để tổng khớp thì hai số phải bằng nhau — chính là phương trình 6 + 0,5b − 0,25a = 7 với a + b = 8."};
+    function draw(){
+      var p = beakerPH(st.a, st.b);
+      scaleStrip(strip, p); readout(read, p);
+      var g1 = Math.abs(p - 7) < 1e-9, g2 = (st.a + st.b) === 8;
+      goal.innerHTML = "<span>" + (g1 ? "✓" : "○") + " " + esc(L(G1)) + "</span><br>" +
+                       "<span>" + (g2 ? "✓" : "○") + " " + esc(L(G2)) + "</span>";
+      if (g1 && g2 && !won) { won = true; ctx.done({});
+        goal.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(WIN)); }
+    }
+    draw();
+  }
+
+  var A2_SAMPLES = [
+    { n:"lemon juice", p:2 }, { n:"rain water", p:6 }, { n:"pure water", p:7 },
+    { n:"baking soda", p:9 }, { n:"oven cleaner", p:13 }
+  ];
+  function a2(ctx){
+    var host = ctx.host;
+    var strip = ctx.el("div"); host.appendChild(strip);
+    scaleStrip(strip, null);
+    var key = ctx.el("p", "sim-key");
+    key.innerHTML = CHART.map(function(b){
+      return "<span><i style='background:" + b.c + "'></i>" + esc(L(b.n)) + " (" + b.lo + "–" + b.hi + ")</span>";
+    }).join("");
+    host.appendChild(key);
+    var tw = ctx.el("div", "sim-wrapx");
+    tw.innerHTML = "<table class='sim-table'><thead><tr><th>" +
+      esc(L({en:"substance","zh-Hans":"物质","zh-Hant":"物質",vi:"chất"})) + "</th><th>pH</th></tr></thead><tbody>" +
+      A2_SAMPLES.map(function(s){ return "<tr><td>" + esc(s.n) + "</td><td>" + s.p + "</td></tr>"; }).join("") +
+      "</tbody></table>";
+    host.appendChild(tw);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, of = 4, times = [];
+    function tick(good, info){ if (good) { ok++; times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(x,y){return x+y;},0) }); } }
+    SIM.ask(qs, {
+      prompt:{en:"Which substance in the table is <b>neutral</b>?","zh-Hans":"表中哪一种是<b>中性</b>的？",
+              "zh-Hant":"表中哪一種是<b>中性</b>的？",vi:"Chất nào trong bảng là <b>trung tính</b>?"},
+      opts:{ list:["lemon juice","rain water","pure water","baking soda"], a:2 },
+      hint:{en:"Neutral is exactly 7 — not 6, not 8.","zh-Hans":"中性正好是 7——不是 6，也不是 8。",
+            "zh-Hant":"中性正好是 7——不是 6，也不是 8。",vi:"Trung tính đúng bằng 7 — không phải 6, không phải 8."},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"How many of the five substances are <b>acidic</b>?","zh-Hans":"五种物质里有几种是<b>酸性</b>的？",
+              "zh-Hant":"五種物質裡有幾種是<b>酸性</b>的？",vi:"Trong năm chất có mấy chất <b>có tính axit</b>?"},
+      inputs:[{ k:"n", answer:2, tol:0.01,
+                label:{en:"how many","zh-Hans":"几种","zh-Hant":"幾種",vi:"bao nhiêu"} }],
+      hint:{en:"Acidic means below 7.","zh-Hans":"酸性就是小于 7。","zh-Hant":"酸性就是小於 7。",
+            vi:"Có tính axit nghĩa là nhỏ hơn 7."},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"What colour would universal indicator turn in the <b>rain water</b>?",
+              "zh-Hans":"通用指示剂在<b>雨水</b>里会变成什么颜色？",
+              "zh-Hant":"通用指示劑在<b>雨水</b>裡會變成什麼顏色？",
+              vi:"Chất chỉ thị vạn năng sẽ chuyển sang màu gì trong <b>nước mưa</b>?"},
+      opts:{ list:[
+        {en:"red","zh-Hans":"红","zh-Hant":"紅",vi:"đỏ"},
+        {en:"green","zh-Hans":"绿","zh-Hant":"綠",vi:"xanh lá"},
+        {en:"blue","zh-Hans":"蓝","zh-Hant":"藍",vi:"xanh dương"}], a:1 },
+      hint:{en:"pH 6 sits in the 6–8 band on the chart above.","zh-Hans":"pH 6 落在上面色卡的 6–8 区间。",
+            "zh-Hant":"pH 6 落在上面色卡的 6–8 區間。",vi:"pH 6 nằm trong dải 6–8 trên bảng màu ở trên."},
+      worked:{en:"<p>pH 6 is in the green band — but it is still <b>acidic</b>, because acidic means below 7. Colour bands are wider than the word.</p>",
+              "zh-Hans":"<p>pH 6 落在绿色区间——但它仍然是<b>酸性</b>的，因为酸性指的是小于 7。颜色区间比这个词的范围宽。</p>",
+              "zh-Hant":"<p>pH 6 落在綠色區間——但它仍然是<b>酸性</b>的，因為酸性指的是小於 7。顏色區間比這個詞的範圍寬。</p>",
+              vi:"<p>pH 6 nằm trong dải xanh lá — nhưng nó vẫn <b>có tính axit</b>, vì có tính axit nghĩa là nhỏ hơn 7. Dải màu rộng hơn cái từ đó.</p>"},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"Which <span data-v=\"ion\">ion</span> is there more of in the lemon juice?",
+              "zh-Hans":"柠檬汁里哪种<span data-v=\"ion\">离子</span>更多？",
+              "zh-Hant":"檸檬汁裡哪種<span data-v=\"ion\">離子</span>更多？",
+              vi:"Trong nước chanh có nhiều <span data-v=\"ion\">ion</span> nào hơn?"},
+      opts:{ list:["H⁺ (hydrogen ions)","OH⁻ (hydroxide ions)",
+        {en:"the same amount of each","zh-Hans":"两种一样多","zh-Hant":"兩種一樣多",vi:"cả hai bằng nhau"}], a:0 },
+      worked:{en:"<p>Acids have more <b>H⁺</b>. Bases have more <b>OH⁻</b>. Neutral means the two are balanced.</p>",
+              "zh-Hans":"<p>酸里 <b>H⁺</b> 更多，碱里 <b>OH⁻</b> 更多，中性就是两者平衡。</p>",
+              "zh-Hant":"<p>酸裡 <b>H⁺</b> 更多，鹼裡 <b>OH⁻</b> 更多，中性就是兩者平衡。</p>",
+              vi:"<p>Axit có nhiều <b>H⁺</b> hơn. Bazơ có nhiều <b>OH⁻</b> hơn. Trung tính là hai bên cân bằng.</p>"},
+      onDone: tick });
+  }
+
+  var A3_CASES = [
+    { a:0,  b:4, p:8   }, { a:8,  b:0, p:4 }, { a:2,  b:3, p:7 }
+  ];
+  function a3(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(L({en:"Every beaker starts at pH 6. Say the reading BEFORE you check.",
+             "zh-Hans":"每个烧杯都从 pH 6 开始。先说出读数，再检查。",
+             "zh-Hant":"每個燒杯都從 pH 6 開始。先說出讀數，再檢查。",
+             vi:"Mỗi cốc đều bắt đầu ở pH 6. Hãy nói số đọc TRƯỚC khi kiểm tra."}))));
+    var done = 0, times = [];
+    A3_CASES.forEach(function(c, i){
+      var strip = ctx.el("div");
+      var q = SIM.ask(host, {
+        prompt:"<b>" + (i + 1) + ".</b> " + esc(L({
+          en:"Add " + c.a + " drops of acid and " + c.b + " drops of base. What does it read?",
+          "zh-Hans":"加入 " + c.a + " 滴酸和 " + c.b + " 滴碱。读数是多少？",
+          "zh-Hant":"加入 " + c.a + " 滴酸和 " + c.b + " 滴鹼。讀數是多少？",
+          vi:"Thêm " + c.a + " giọt axit và " + c.b + " giọt bazơ. Số đọc là bao nhiêu?"})),
+        inputs:[{ k:"p", answer:c.p, tol:0.01, unit:"pH",
+                  label:{en:"reading","zh-Hans":"读数","zh-Hant":"讀數",vi:"số đọc"} }],
+        hint:{en:"6 + 0.5 × " + c.b + " − 0.25 × " + c.a,
+              "zh-Hans":"6 + 0.5 × " + c.b + " − 0.25 × " + c.a,
+              "zh-Hant":"6 + 0.5 × " + c.b + " − 0.25 × " + c.a,
+              vi:"6 + 0,5 × " + c.b + " − 0,25 × " + c.a},
+        onDone: function(ok, info){
+          if (!ok) return;
+          q.el.appendChild(strip);
+          scaleStrip(strip, c.p);
+          done++; times.push(info.ms);
+          if (done === A3_CASES.length) ctx.done({ ms: times.reduce(function(x,y){return x+y;},0) });
+        }
+      });
+    });
+  }
+
+  function a4(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("noSim")) + " " + esc(T("engNote"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML = "<p class='qp'>A beaker of water starts at <b>pH 6</b>. Every drop of " +
+      "<span data-v='base'>base</span> raises the reading by <b>0.5</b>. Every drop of " +
+      "<span data-v='acid'>acid</span> lowers it by <b>0.25</b>. Let <b>b</b> be the drops of base " +
+      "and <b>a</b> the drops of acid.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 4, times = [];
+    function tick(good, info){ if (good) { ok++; if (!info.assisted) clean++; times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(x,y){return x+y;},0), ok: clean, of: of, msList: times }); } }
+    SIM.ask(qs, { prompt:"<b>a.</b> Write the reading after 6 drops of base and no acid.",
+      inputs:[{ k:"p", answer:9, tol:0.01, unit:"pH", label:"reading" }],
+      hint:"6 + 0.5 × 6.", onDone: tick });
+    SIM.ask(qs, { prompt:"<b>b.</b> How many drops of acid, on their own, would take it to pH 4?",
+      inputs:[{ k:"a", answer:8, tol:0.01, unit:"drops", label:"a" }],
+      hint:"You need to fall 2, and each drop is worth 0.25.",
+      worked:"<p>6 − 0.25a = 4 → 0.25a = 2 → <b>a = 8</b> drops.</p>", onDone: tick });
+    SIM.ask(qs, { prompt:"<b>c.</b> A student adds 10 drops of acid, then enough base to get back to exactly pH 7. How many drops of base?",
+      inputs:[{ k:"b", answer:7, tol:0.01, unit:"drops", label:"b" }],
+      hint:"Work out where the acid left it, then how far back up you need to go.",
+      worked:"<p>After the acid: 6 − 0.25 × 10 = 3.5.<br>Then 3.5 + 0.5b = 7 → 0.5b = 3.5 → <b>b = 7</b> drops.</p>",
+      onDone: tick });
+    SIM.ask(qs, { prompt:"<b>d.</b> Explain, in one sentence, why one drop of base cancels exactly two drops of acid here.",
+      inputs:[{ k:"why", wide:true, label:"your sentence", text:[
+        "a drop of base is 0.5 and a drop of acid is 0.25",
+        "0.5 is twice 0.25","because 0.5 is double 0.25",
+        "base moves it twice as far as acid","base is worth twice as much as acid",
+        "one drop of base moves 0.5 and one drop of acid moves 0.25"] }],
+      hint:"Compare the size of the two steps.",
+      worked:"<p>A drop of base moves the reading <b>0.5</b> and a drop of acid moves it <b>0.25</b>, and 0.5 is twice 0.25 — so two acid drops undo one base drop.</p>",
+      onDone: tick });
+  }
+
+  function a5(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("timed")) + " " + esc(SIM.T("noSim"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML = "<p class='qp'><b>The rock pool.</b> Nadia tests a rock pool with universal " +
+      "<span data-v='indicator'>indicator</span>. It turns <b>orange</b>. She measures the reading as " +
+      "<b>pH 3</b>. She then adds a base, one drop at a time; each drop raises the reading by <b>0.4</b>. " +
+      "Her partner Kiet tests a second pool and gets <b>pH 11</b>.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){ if (good) { ok++; if (!info.assisted) clean++; times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(x,y){return x+y;},0), ok: clean, of: of, msList: times }); } }
+    SIM.ask(qs, { prompt:"<b>a.</b> Is Nadia's rock pool acidic, neutral or basic?",
+      inputs:[{ k:"c", wide:true, text:["acidic","acid","an acid"], label:"one word" }], onDone: tick });
+    SIM.ask(qs, { prompt:"<b>b.</b> Which ion is there more of in Nadia's pool — H⁺ or OH⁻?",
+      inputs:[{ k:"i", wide:true, text:["H+","H⁺","hydrogen","hydrogen ions","hydrogen ion"], label:"ion" }],
+      onDone: tick });
+    SIM.ask(qs, { prompt:"<b>c.</b> How many drops of base does Nadia need to bring her pool to exactly pH 7?",
+      inputs:[{ k:"n", answer:10, tol:0.01, unit:"drops", label:"drops" }],
+      worked:"<p>She must rise 7 − 3 = 4, and each drop is worth 0.4, so 4 ÷ 0.4 = <b>10 drops</b>.</p>",
+      onDone: tick });
+    SIM.ask(qs, { prompt:"<b>d.</b> After 6 drops, what is the reading, and what colour is the indicator?",
+      inputs:[
+        { k:"p", answer:5.4, tol:0.02, unit:"pH", label:"reading" },
+        { k:"c", wide:true, text:["yellow","yellow-orange","orange-yellow"], label:"colour" }],
+      worked:"<p>3 + 6 × 0.4 = <b>pH 5.4</b>, which lands in the 4–6 band — <b>yellow</b>. Still acidic, even though it has moved a long way.</p>",
+      onDone: tick });
+    SIM.ask(qs, { prompt:"<b>e.</b> Kiet says his pool at pH 11 is \"four times as basic\" as Nadia's is acidic, because 11 − 7 = 4 and 7 − 3 = 4. Is his reasoning right? Answer yes or no.",
+      inputs:[{ k:"v", wide:true, text:["no","no it is not","incorrect","wrong"], label:"yes or no" }],
+      worked:"<p><b>No.</b> Both are the same distance from 7, so if anything they are equally far from neutral — not four times anything. The number 4 is the <i>gap</i>, not a multiplier, and the pH scale does not work by simple multiplying.</p>",
+      onDone: tick });
+  }
+
+  /* ================================================================
+     SET B — THE POND AFTER RAIN
+     ================================================================ */
+  function b1(ctx){
+    var host = ctx.host, st = { r:0, lime:0 };
+    var plotEl = ctx.el("div"), strip = ctx.el("div"), read = ctx.el("div"), goal = ctx.el("p", "sim-goal");
+    SIM.sliders(host, [
+      { k:"r", min:0, max:10, step:1, value:0,
+        label:{en:"Days of rain","zh-Hans":"下雨天数","zh-Hant":"下雨天數",vi:"Số ngày mưa"},
+        unit:{en:"days","zh-Hans":"天","zh-Hant":"天",vi:"ngày"} },
+      { k:"lime", min:0, max:20, step:1, value:0,
+        label:{en:"Lime added","zh-Hans":"加入的石灰","zh-Hant":"加入的石灰",vi:"Lượng vôi thêm vào"}, unit:"g" }
+    ], function(v){ st.r = v.r; st.lime = v.lime; draw(); });
+    host.appendChild(plotEl); host.appendChild(strip); host.appendChild(read); host.appendChild(goal);
+
+    var won = false;
+    var G1 = {en:"The pond is back to exactly pH 7.0.","zh-Hans":"池水正好回到 pH 7.0。",
+              "zh-Hant":"池水正好回到 pH 7.0。",vi:"Ao trở lại đúng pH 7,0."};
+    var G2 = {en:"It has rained for 6 days.","zh-Hans":"已经下了 6 天雨。",
+              "zh-Hant":"已經下了 6 天雨。",vi:"Trời đã mưa 6 ngày."};
+    var WIN = {en:"Six days of rain, twelve grams of lime. Two grams for every day — because a day of rain costs 0.2 and a gram of lime buys 0.1 back. That ratio is a gradient, the same idea the Kinematics unit uses for speed.",
+      "zh-Hans":"下 6 天雨，加 12 克石灰。每天两克——因为一天雨降 0.2，一克石灰升 0.1。这个比值就是斜率，和运动学单元里的速度是同一个概念。",
+      "zh-Hant":"下 6 天雨，加 12 克石灰。每天兩克——因為一天雨降 0.2，一克石灰升 0.1。這個比值就是斜率，和運動學單元裡的速度是同一個概念。",
+      vi:"Sáu ngày mưa, mười hai gam vôi. Hai gam cho mỗi ngày — vì một ngày mưa mất 0,2 còn một gam vôi lấy lại 0,1. Tỉ số đó chính là độ dốc, đúng ý tưởng mà chuyên đề Động học dùng cho tốc độ."};
+    function draw(){
+      var p = pondPH(st.r, st.lime);
+      SIM.plot(plotEl, {
+        xMax:10, yMin:5, yMax:9, xStep:2, yStep:0.5, height:250,
+        xLabel:{en:"days of rain","zh-Hans":"下雨天数","zh-Hant":"下雨天數",vi:"số ngày mưa"},
+        yLabel:"pH",
+        hlines:[{ y:CHEM.safeLo, label:{en:"safe low","zh-Hans":"安全下限","zh-Hant":"安全下限",vi:"giới hạn dưới"} },
+                { y:CHEM.safeHi, label:{en:"safe high","zh-Hans":"安全上限","zh-Hant":"安全上限",vi:"giới hạn trên"} }],
+        series:[{ fn: function(d){ return pondPH(d, st.lime); }, color: SIM.colors().c }],
+        marks:[{ x:st.r, y:p, label:"pH " + num(p, 2), color: SIM.colors().b }]
+      });
+      scaleStrip(strip, p, { safe:true }); readout(read, p);
+      var g1 = Math.abs(p - 7) < 1e-9, g2 = st.r === 6;
+      goal.innerHTML = "<span>" + (g1 ? "✓" : "○") + " " + esc(L(G1)) + "</span><br>" +
+                       "<span>" + (g2 ? "✓" : "○") + " " + esc(L(G2)) + "</span>";
+      if (g1 && g2 && !won) { won = true; ctx.done({});
+        goal.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(WIN)); }
+    }
+    draw();
+  }
+
+  function b2(ctx){
+    var host = ctx.host;
+    var fig = ctx.el("div"); host.appendChild(fig);
+    SIM.plot(fig, {
+      xMax:10, yMin:5, yMax:8, xStep:1, yStep:0.5, height:300,
+      xLabel:{en:"days of rain","zh-Hans":"下雨天数","zh-Hant":"下雨天數",vi:"số ngày mưa"},
+      yLabel:"pH",
+      hlines:[{ y:CHEM.safeLo, label:{en:"safe low","zh-Hans":"安全下限","zh-Hant":"安全下限",vi:"giới hạn dưới"} }],
+      series:[{ fn: function(d){ return pondPH(d, 0); }, color: SIM.colors().c }]
+    });
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(L({en:"No lime has been added. The pond is safe for fish between pH 6.5 and pH 7.5.",
+             "zh-Hans":"还没有加石灰。池水在 pH 6.5 到 7.5 之间对鱼是安全的。",
+             "zh-Hant":"還沒有加石灰。池水在 pH 6.5 到 7.5 之間對魚是安全的。",
+             vi:"Chưa thêm vôi. Ao an toàn cho cá khi pH từ 6,5 đến 7,5."}))));
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, of = 3, times = [];
+    function tick(good, info){ if (good) { ok++; times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(x,y){return x+y;},0) }); } }
+    SIM.ask(qs, {
+      prompt:{en:"Read the graph. What is the pH after <b>4 days</b> of rain?",
+              "zh-Hans":"读图。下了 <b>4 天</b> 雨之后 pH 是多少？",
+              "zh-Hant":"讀圖。下了 <b>4 天</b> 雨之後 pH 是多少？",
+              vi:"Đọc đồ thị. Sau <b>4 ngày</b> mưa thì pH bằng bao nhiêu?"},
+      inputs:[{ k:"p", answer:6.2, tol:0.06, unit:"pH", label:{en:"pH","zh-Hans":"pH","zh-Hant":"pH",vi:"pH"} }],
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"What is the <span data-v>gradient</span> of this line, in pH per day?",
+              "zh-Hans":"这条线的<span data-v=\"gradient\">斜率</span>是多少（每天多少 pH）？",
+              "zh-Hant":"這條線的<span data-v=\"gradient\">斜率</span>是多少（每天多少 pH）？",
+              vi:"<span data-v=\"gradient\">Độ dốc</span> của đường này là bao nhiêu (pH mỗi ngày)?"},
+      inputs:[{ k:"m", answer:-0.2, tol:0.005, unit:"pH/day",
+                label:{en:"gradient","zh-Hans":"斜率","zh-Hant":"斜率",vi:"độ dốc"} }],
+      hint:{en:"It goes DOWN, so the gradient is negative.","zh-Hans":"它在下降，所以斜率是负的。",
+            "zh-Hant":"它在下降，所以斜率是負的。",vi:"Nó đi XUỐNG, nên độ dốc âm."},
+      worked:{en:"<p>It falls 0.2 every day, so the gradient is <b>−0.2</b> pH per day. Exactly the same reading you do on a distance–time graph, on a different pair of axes.</p>",
+              "zh-Hans":"<p>每天下降 0.2，所以斜率是 <b>−0.2</b> pH/天。和你在距离—时间图上做的读法完全一样，只是换了一对坐标轴。</p>",
+              "zh-Hant":"<p>每天下降 0.2，所以斜率是 <b>−0.2</b> pH/天。和你在距離—時間圖上做的讀法完全一樣，只是換了一對座標軸。</p>",
+              vi:"<p>Mỗi ngày giảm 0,2, nên độ dốc là <b>−0,2</b> pH mỗi ngày. Đúng cách đọc em làm trên đồ thị quãng đường–thời gian, chỉ khác cặp trục.</p>"},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"On which day does the pond first become unsafe for the fish?",
+              "zh-Hans":"第几天池水开始对鱼不安全？",
+              "zh-Hant":"第幾天池水開始對魚不安全？",
+              vi:"Đến ngày thứ mấy thì ao bắt đầu không an toàn cho cá?"},
+      inputs:[{ k:"d", answer:3, tol:0.01, unit:{en:"days","zh-Hans":"天","zh-Hant":"天",vi:"ngày"},
+                label:{en:"day","zh-Hans":"第几天","zh-Hant":"第幾天",vi:"ngày"} }],
+      hint:{en:"Find where the line crosses the safe-low mark, then round UP to a whole day.",
+            "zh-Hans":"先找线穿过安全下限的位置，再向上取整到整天。",
+            "zh-Hant":"先找線穿過安全下限的位置，再向上取整到整天。",
+            vi:"Tìm chỗ đường cắt vạch giới hạn dưới, rồi làm tròn LÊN thành ngày nguyên."},
+      worked:{en:"<p>7 − 0.2d = 6.5 → d = 2.5. Half a day is not a day, so the pond is already unsafe on day <b>3</b>.</p>",
+              "zh-Hans":"<p>7 − 0.2d = 6.5 → d = 2.5。半天不算一天，所以到第 <b>3</b> 天就已经不安全了。</p>",
+              "zh-Hant":"<p>7 − 0.2d = 6.5 → d = 2.5。半天不算一天，所以到第 <b>3</b> 天就已經不安全了。</p>",
+              vi:"<p>7 − 0,2d = 6,5 → d = 2,5. Nửa ngày không phải một ngày, nên đến ngày thứ <b>3</b> ao đã không an toàn.</p>"},
+      onDone: tick });
+  }
+
+  function b3(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(L({en:"Answer first — the graph appears once you are right.",
+             "zh-Hans":"先作答——答对后才会出现图。",
+             "zh-Hant":"先作答——答對後才會出現圖。",
+             vi:"Trả lời trước — đồ thị hiện ra khi em đúng."}))));
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, of = 3, times = [];
+    function tick(good, info){ if (good) { ok++; times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(x,y){return x+y;},0) }); } }
+    SIM.ask(qs, {
+      prompt:{en:"It rains for <b>5 days</b> and nobody adds lime. Predict the pH.",
+              "zh-Hans":"下了 <b>5 天</b> 雨，没有人加石灰。预测 pH。",
+              "zh-Hant":"下了 <b>5 天</b> 雨，沒有人加石灰。預測 pH。",
+              vi:"Trời mưa <b>5 ngày</b> và không ai thêm vôi. Dự đoán pH."},
+      inputs:[{ k:"p", answer:6, tol:0.01, unit:"pH", label:"pH" }],
+      onDone: function(good, info){
+        if (good) { var f = ctx.el("div"); qs.appendChild(f); scaleStrip(f, 6, { safe:true }); }
+        tick(good, info); } });
+    SIM.ask(qs, {
+      prompt:{en:"How much lime brings that pond back to <b>pH 7.0</b>?",
+              "zh-Hans":"要让那个池塘回到 <b>pH 7.0</b>，需要多少石灰？",
+              "zh-Hant":"要讓那個池塘回到 <b>pH 7.0</b>，需要多少石灰？",
+              vi:"Cần bao nhiêu vôi để đưa ao đó về <b>pH 7,0</b>?"},
+      inputs:[{ k:"g", answer:10, tol:0.01, unit:"g", label:{en:"lime","zh-Hans":"石灰","zh-Hant":"石灰",vi:"vôi"} }],
+      hint:{en:"You need to rise 1.0, and each gram is worth 0.1.",
+            "zh-Hans":"需要升高 1.0，每克值 0.1。","zh-Hant":"需要升高 1.0，每克值 0.1。",
+            vi:"Cần tăng 1,0, mỗi gam đáng giá 0,1."},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"The groundskeeper wants a rule: <b>g grams of lime for every day of rain</b>, so the pond never leaves pH 7.0. What is g?",
+              "zh-Hans":"管理员想要一条规则：<b>每下一天雨加 g 克石灰</b>，让池塘始终保持 pH 7.0。g 是多少？",
+              "zh-Hant":"管理員想要一條規則：<b>每下一天雨加 g 克石灰</b>，讓池塘始終保持 pH 7.0。g 是多少？",
+              vi:"Người trông ao muốn một quy tắc: <b>g gam vôi cho mỗi ngày mưa</b>, để ao không bao giờ rời pH 7,0. g bằng bao nhiêu?"},
+      inputs:[{ k:"g", answer:2, tol:0.01, unit:"g/day", label:"g" }],
+      worked:{en:"<p>A day of rain costs 0.2. A gram of lime buys 0.1. 0.2 ÷ 0.1 = <b>2 grams per day</b>.</p>",
+              "zh-Hans":"<p>一天雨降 0.2，一克石灰升 0.1。0.2 ÷ 0.1 = <b>每天 2 克</b>。</p>",
+              "zh-Hant":"<p>一天雨降 0.2，一克石灰升 0.1。0.2 ÷ 0.1 = <b>每天 2 克</b>。</p>",
+              vi:"<p>Một ngày mưa mất 0,2. Một gam vôi bù 0,1. 0,2 ÷ 0,1 = <b>2 gam mỗi ngày</b>.</p>"},
+      onDone: tick });
+  }
+
+  function b4(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("noSim")) + " " + esc(T("engNote"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML = "<p class='qp'>A school pond sits at <b>pH 7.0</b> in dry weather. Each day of rain " +
+      "lowers it by <b>0.2</b>. Each gram of garden lime raises it by <b>0.1</b>. The fish are safe " +
+      "between <b>pH 6.5</b> and <b>pH 7.5</b>. Let <b>r</b> be days of rain and <b>g</b> grams of lime.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 4, times = [];
+    function tick(good, info){ if (good) { ok++; if (!info.assisted) clean++; times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(x,y){return x+y;},0), ok: clean, of: of, msList: times }); } }
+    SIM.ask(qs, { prompt:"<b>a.</b> Write the pond's rule in the form <b>pH = 7 + mr + ng</b>. Give m and n.",
+      inputs:[{ k:"m", answer:-0.2, tol:0.005, label:"m" }, { k:"n", answer:0.1, tol:0.005, label:"n" }],
+      hint:"Rain pulls it down, lime pushes it up.", onDone: tick });
+    SIM.ask(qs, { prompt:"<b>b.</b> After 8 days of rain and no lime, what is the pH?",
+      inputs:[{ k:"p", answer:5.4, tol:0.02, unit:"pH", label:"pH" }],
+      worked:"<p>7 − 0.2 × 8 = <b>5.4</b> — well below the safe band, and firmly acidic.</p>", onDone: tick });
+    SIM.ask(qs, { prompt:"<b>c.</b> How many grams of lime does that pond need to come back into the safe band — that is, to reach at least pH 6.5? Give the smallest whole number of grams.",
+      inputs:[{ k:"g", answer:11, tol:0.5, unit:"g", label:"g" }],
+      hint:"Solve 5.4 + 0.1g ≥ 6.5, then round UP, because a part-gram will not do.",
+      worked:"<p>5.4 + 0.1g ≥ 6.5 → 0.1g ≥ 1.1 → g ≥ 11. Eleven grams lands exactly on 6.5, so <b>11 g</b> is the smallest that works.</p>",
+      onDone: tick });
+    SIM.ask(qs, { prompt:"<b>d.</b> A gardener tips in 30 g of lime on a dry day, when the pond is at pH 7.0. What goes wrong?",
+      inputs:[{ k:"p", answer:10, tol:0.02, unit:"pH", label:"the new pH" },
+              { k:"w", wide:true, label:"one word for it", text:["basic","base","alkaline","too basic","too alkaline"] }],
+      worked:"<p>7 + 0.1 × 30 = <b>pH 10</b> — strongly <b>basic</b>, and just as far outside the safe band as the acid was. The fix can be as dangerous as the problem.</p>",
+      onDone: tick });
+  }
+
+  function b5(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("timed")) + " " + esc(SIM.T("noSim"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML = "<p class='qp'><b>The tank in the science room.</b> A fish tank is tested every " +
+      "morning with universal <span data-v='indicator'>indicator</span>. On Monday it reads " +
+      "<b>pH 7.6</b>. Each day the reading falls by <b>0.3</b>. The fish are safe between " +
+      "<b>pH 6.5</b> and <b>pH 7.5</b>. A <span data-v='neutral'>neutralising</span> tablet raises " +
+      "the reading by <b>0.25</b> each. Let <b>d</b> be days after Monday.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){ if (good) { ok++; if (!info.assisted) clean++; times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(x,y){return x+y;},0), ok: clean, of: of, msList: times }); } }
+    SIM.ask(qs, { prompt:"<b>a.</b> Is Monday's reading inside the safe band? Answer yes or no.",
+      inputs:[{ k:"v", wide:true, text:["no","no it is not","not safe"], label:"yes or no" }],
+      worked:"<p><b>No.</b> 7.6 is above 7.5. It is only just outside — but outside is outside.</p>",
+      onDone: tick });
+    SIM.ask(qs, { prompt:"<b>b.</b> Write the reading as a rule in d.  pH = ___ − ___ d. Give the two numbers.",
+      inputs:[{ k:"c", answer:7.6, tol:0.02, label:"first number" },
+              { k:"m", answer:0.3, tol:0.005, label:"second number" }], onDone: tick });
+    SIM.ask(qs, { prompt:"<b>c.</b> On which day does the tank first enter the safe band?",
+      inputs:[{ k:"d", answer:1, tol:0.01, unit:"days after Monday", label:"d" }],
+      worked:"<p>7.6 − 0.3d ≤ 7.5 → 0.3d ≥ 0.1 → d ≥ 0.33…, so it is safe from day <b>1</b> (Tuesday), when the reading is 7.3.</p>",
+      onDone: tick });
+    SIM.ask(qs, { prompt:"<b>d.</b> On which day does it first leave the safe band at the bottom?",
+      inputs:[{ k:"d", answer:4, tol:0.01, unit:"days after Monday", label:"d" }],
+      worked:"<p>7.6 − 0.3d < 6.5 → 0.3d > 1.1 → d > 3.67, so on day <b>4</b> (Friday) it reads 6.4 and the fish are in trouble.</p>",
+      onDone: tick });
+    SIM.ask(qs, { prompt:"<b>e.</b> How many tablets are needed on that day to bring it back to exactly pH 7.15?",
+      inputs:[{ k:"n", answer:3, tol:0.01, unit:"tablets", label:"tablets" }],
+      worked:"<p>Day 4 reads 6.4. 7.15 − 6.4 = 0.75, and each tablet is worth 0.25, so 0.75 ÷ 0.25 = <b>3 tablets</b>.</p>",
+      onDone: tick });
+  }
+
+  /* ================================================================
+     WIRE IT UP
+     ================================================================ */
+  var A = [
+    { id:"pa1", kind:"play", tab:{en:"Play","zh-Hans":"先玩","zh-Hant":"先玩",vi:"Chơi thử"},
+      title:{en:"Move the number, watch the colour","zh-Hans":"改变数字，看颜色跟着变",
+             "zh-Hant":"改變數字，看顏色跟著變",vi:"Đổi con số, xem màu đổi theo"},
+      aim:{en:"pH is one number on one scale. Acid pulls it down, <span data-v=\"base\">base</span> pushes it up, and the indicator colour just reports where it landed.",
+           "zh-Hans":"pH 就是一条标尺上的一个数。酸把它拉低，<span data-v=\"base\">碱</span>把它推高，指示剂的颜色只是报告它落在哪里。",
+           "zh-Hant":"pH 就是一條標尺上的一個數。酸把它拉低，<span data-v=\"base\">鹼</span>把它推高，指示劑的顏色只是報告它落在哪裡。",
+           vi:"pH chỉ là một con số trên một thang. Axit kéo nó xuống, <span data-v=\"base\">bazơ</span> đẩy nó lên, còn màu chất chỉ thị chỉ báo lại nó rơi vào đâu."},
+      goal:{en:"Drag both sliders until both ticks turn green.","zh-Hans":"拖动两个滑块，直到两个勾都变绿。",
+            "zh-Hant":"拖動兩個滑桿，直到兩個勾都變綠。",vi:"Kéo cả hai thanh trượt cho đến khi cả hai dấu tích xanh."},
+      build:a1 },
+    { id:"pa2", kind:"read", tab:{en:"Read","zh-Hans":"读表","zh-Hant":"讀表",vi:"Đọc"},
+      title:{en:"Read the scale and the colour chart","zh-Hans":"读标尺和色卡",
+             "zh-Hant":"讀標尺和色卡",vi:"Đọc thang và bảng màu"},
+      aim:{en:"Below 7 is acidic, above 7 is basic, exactly 7 is neutral. The colour bands are wider than those words, so the colour alone is not the answer.",
+           "zh-Hans":"小于 7 是酸性，大于 7 是碱性，正好 7 是中性。颜色区间比这些词宽，所以只看颜色不算答案。",
+           "zh-Hant":"小於 7 是酸性，大於 7 是鹼性，正好 7 是中性。顏色區間比這些詞寬，所以只看顏色不算答案。",
+           vi:"Nhỏ hơn 7 là axit, lớn hơn 7 là bazơ, đúng 7 là trung tính. Dải màu rộng hơn những từ đó, nên chỉ nhìn màu thì chưa phải câu trả lời."},
+      goal:{en:"Answer all four.","zh-Hans":"四题全对。","zh-Hant":"四題全對。",vi:"Trả lời đúng cả bốn."},
+      build:a2 },
+    { id:"pa3", kind:"predict", tab:{en:"Predict","zh-Hans":"预测","zh-Hant":"預測",vi:"Dự đoán"},
+      title:{en:"Say the reading before you look","zh-Hans":"先说读数，再看",
+             "zh-Hant":"先說讀數，再看",vi:"Nói số đọc trước khi nhìn"},
+      aim:{en:"Each drop is a fixed step. Adding drops is arithmetic, not magic.",
+           "zh-Hans":"每一滴都是固定的一步。加滴数就是算术，不是魔法。",
+           "zh-Hant":"每一滴都是固定的一步。加滴數就是算術，不是魔法。",
+           vi:"Mỗi giọt là một bước cố định. Thêm giọt là phép tính, không phải phép thuật."},
+      goal:{en:"Three correct predictions.","zh-Hans":"三个预测全对。","zh-Hant":"三個預測全對。",vi:"Ba dự đoán đúng."},
+      build:a3 },
+    { id:"pa4", kind:"solve", tab:{en:"Solve","zh-Hans":"自己算","zh-Hant":"自己算",vi:"Tự tính"},
+      title:{en:"Work backwards to the dose","zh-Hans":"倒着算出用量",
+             "zh-Hant":"倒著算出用量",vi:"Tính ngược ra liều lượng"},
+      aim:{en:"\"How many drops do I need?\" is the same equation, solved the other way round.",
+           "zh-Hans":"“需要几滴？”是同一个方程，只是反过来解。",
+           "zh-Hant":"「需要幾滴？」是同一個方程式，只是反過來解。",
+           vi:"\"Cần bao nhiêu giọt?\" vẫn là phương trình đó, chỉ giải theo chiều ngược lại."},
+      goal:{en:"All four parts correct.","zh-Hans":"四小题全对。","zh-Hant":"四小題全對。",vi:"Đúng cả bốn phần."},
+      skills:["sc_ph","f_convert"], build:a4 },
+    { id:"pa5", kind:"exam", tab:{en:"The real thing","zh-Hans":"正式演练","zh-Hant":"正式演練",vi:"Làm thật"},
+      title:{en:"A whole practical question, timed","zh-Hans":"完整一道实验题，计时",
+             "zh-Hant":"完整一道實驗題，計時",vi:"Một câu thực hành trọn vẹn, tính giờ"},
+      aim:{en:"Reading, classifying, calculating and judging someone else's reasoning — all four, the way the practical will ask.",
+           "zh-Hans":"读数、分类、计算，还要判断别人的推理——四件事，正如实验会问的那样。",
+           "zh-Hant":"讀數、分類、計算，還要判斷別人的推理——四件事，正如實驗會問的那樣。",
+           vi:"Đọc, phân loại, tính toán và đánh giá lập luận của người khác — đủ bốn, đúng cách bài thực hành sẽ hỏi."},
+      goal:{en:"Five parts, all correct.","zh-Hans":"五小题全对。","zh-Hant":"五小題全對。",vi:"Năm phần, đúng hết."},
+      skills:["sc_ph","sc_mixtures"], build:a5 }
+  ];
+  var B = [
+    { id:"pb1", kind:"play", tab:{en:"Play","zh-Hans":"先玩","zh-Hant":"先玩",vi:"Chơi thử"},
+      title:{en:"The pond after rain","zh-Hans":"雨后的池塘","zh-Hant":"雨後的池塘",vi:"Ao sau cơn mưa"},
+      aim:{en:"Rain and lime pull the same number in opposite directions. Balancing them is one linear equation.",
+           "zh-Hans":"雨和石灰把同一个数往相反方向拉。让它们平衡，就是一个一次方程。",
+           "zh-Hant":"雨和石灰把同一個數往相反方向拉。讓它們平衡，就是一個一次方程式。",
+           vi:"Mưa và vôi kéo cùng một con số về hai hướng ngược nhau. Cân bằng chúng là một phương trình bậc nhất."},
+      goal:{en:"Bring the pond back to 7.0 after six days of rain.",
+            "zh-Hans":"下了六天雨之后，把池塘拉回 7.0。",
+            "zh-Hant":"下了六天雨之後，把池塘拉回 7.0。",
+            vi:"Đưa ao về 7,0 sau sáu ngày mưa."},
+      build:b1 },
+    { id:"pb2", kind:"read", tab:{en:"Read","zh-Hans":"读图","zh-Hant":"讀圖",vi:"Đọc"},
+      title:{en:"Read pH off a line graph","zh-Hans":"从折线图上读 pH",
+             "zh-Hant":"從折線圖上讀 pH",vi:"Đọc pH trên đồ thị đường"},
+      aim:{en:"A pH-against-days graph is read exactly like a distance-against-time graph — and its <span data-v=\"gradient\">gradient</span> means a rate, just the same.",
+           "zh-Hans":"pH 对天数的图，读法和距离对时间的图完全一样——它的<span data-v=\"gradient\">斜率</span>同样表示变化率。",
+           "zh-Hant":"pH 對天數的圖，讀法和距離對時間的圖完全一樣——它的<span data-v=\"gradient\">斜率</span>同樣表示變化率。",
+           vi:"Đồ thị pH theo ngày được đọc y hệt đồ thị quãng đường theo thời gian — và <span data-v=\"gradient\">độ dốc</span> của nó cũng là một tốc độ thay đổi."},
+      goal:{en:"Three correct.","zh-Hans":"三题全对。","zh-Hant":"三題全對。",vi:"Đúng cả ba."},
+      build:b2 },
+    { id:"pb3", kind:"predict", tab:{en:"Predict","zh-Hans":"预测","zh-Hant":"預測",vi:"Dự đoán"},
+      title:{en:"Predict the dose","zh-Hans":"预测用量","zh-Hant":"預測用量",vi:"Dự đoán liều lượng"},
+      aim:{en:"Two rates against each other give a ratio — the rule the groundskeeper actually needs.",
+           "zh-Hans":"两个变化率相比就得到一个比值——那才是管理员真正需要的规则。",
+           "zh-Hant":"兩個變化率相比就得到一個比值——那才是管理員真正需要的規則。",
+           vi:"Hai tốc độ so với nhau cho ra một tỉ số — chính là quy tắc người trông ao thực sự cần."},
+      goal:{en:"Three correct predictions.","zh-Hans":"三个预测全对。","zh-Hant":"三個預測全對。",vi:"Ba dự đoán đúng."},
+      build:b3 },
+    { id:"pb4", kind:"solve", tab:{en:"Solve","zh-Hans":"自己算","zh-Hant":"自己算",vi:"Tự tính"},
+      title:{en:"Two variables, one pond","zh-Hans":"两个变量，一个池塘",
+             "zh-Hant":"兩個變量，一個池塘",vi:"Hai biến, một cái ao"},
+      aim:{en:"Write the rule, then use an inequality for \"at least\" and \"at most\" — and round the way the real world rounds.",
+           "zh-Hans":"先写出规则，再用不等式处理“至少”和“至多”——而且要按现实世界的方式取整。",
+           "zh-Hant":"先寫出規則，再用不等式處理「至少」和「至多」——而且要按現實世界的方式取整。",
+           vi:"Viết quy tắc, rồi dùng bất phương trình cho \"ít nhất\" và \"nhiều nhất\" — và làm tròn theo cách thực tế."},
+      goal:{en:"All four parts correct.","zh-Hans":"四小题全对。","zh-Hant":"四小題全對。",vi:"Đúng cả bốn phần."},
+      skills:["sc_ph","k_eq"], build:b4 },
+    { id:"pb5", kind:"exam", tab:{en:"The real thing","zh-Hans":"正式演练","zh-Hant":"正式演練",vi:"Làm thật"},
+      title:{en:"The tank in the science room, timed","zh-Hans":"科学室里的鱼缸，计时",
+             "zh-Hant":"科學室裡的魚缸，計時",vi:"Bể cá trong phòng khoa học, tính giờ"},
+      aim:{en:"A whole monitoring problem: a band to stay inside, a rate that takes you out of it, and a dose to bring you back.",
+           "zh-Hans":"一个完整的监测问题：要待在一个区间里、有一个把你带出去的变化率、还要有把你拉回来的用量。",
+           "zh-Hant":"一個完整的監測問題：要待在一個區間裡、有一個把你帶出去的變化率、還要有把你拉回來的用量。",
+           vi:"Một bài theo dõi trọn vẹn: một khoảng phải ở trong, một tốc độ đưa em ra khỏi nó, và một liều đưa em trở lại."},
+      goal:{en:"Five parts, all correct.","zh-Hans":"五小题全对。","zh-Hant":"五小題全對。",vi:"Năm phần, đúng hết."},
+      skills:["sc_ph","k_eq","f_convert"], build:b5 }
+  ];
+
+  function boot(){
+    document.documentElement.lang = lang();
+    document.querySelectorAll("[data-i18n]").forEach(function(n){
+      var v = T(n.getAttribute("data-i18n"));
+      if (typeof v === "string") n.innerHTML = v;
+    });
+    var sel = document.querySelector(".language-select");
+    sel.value = lang();
+    sel.addEventListener("change", function(){
+      try { localStorage.setItem("elc_page_language", sel.value); } catch(e){}
+      location.reload();
+    });
+    var cp = null;
+    if (S2) S2.UNITS.forEach(function(u){ u.checkpoints.forEach(function(c){ if (c.id === "cp_ph") cp = c; }); });
+    document.getElementById("frameLine").innerHTML =
+      "<b>" + esc(cp ? T("buildsF")(cp.name) : T("buildsAlways")) + "</b>" +
+      "<span class='eng'>" + esc(T("engNote")) + "</span>";
+
+    SIM.mount(document.getElementById("sim"), {
+      id:"ph", cp:"cp_ph", room:"science", evidenceSrc:"The Fish Tank",
+      skills:["sc_ph","sc_mixtures"],
+      openAll: (function(){ try { return localStorage.getItem("elc_stem_sim_open") === "1"; } catch(e){ return false; } })(),
+      sets:[
+        { id:"a", name:{en:"A · the beaker","zh-Hans":"A · 烧杯","zh-Hant":"A · 燒杯",vi:"A · cái cốc"}, stages:A },
+        { id:"b", name:{en:"B · the pond","zh-Hans":"B · 池塘","zh-Hant":"B · 池塘",vi:"B · cái ao"}, stages:B }
+      ]
+    });
+    if (window.STEMVOCAB) window.STEMVOCAB.init();
+    document.getElementById("teacherUnlock").addEventListener("click", function(e){
+      e.preventDefault();
+      try { localStorage.setItem("elc_stem_sim_open", "1"); } catch(err){}
+      location.reload();
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
+</body>
+</html>

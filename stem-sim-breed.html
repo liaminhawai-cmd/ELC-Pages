@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Guinea Pig Shed — rehearsal for the Biology + Probability CAT</title>
+<!-- ================================================================
+     The Guinea Pig Shed — the rehearsal for the Biology + Probability
+     CAT. Same mathematics as the real task, a different story on
+     purpose: the CAT is 30 minutes of biology and 30 minutes of
+     probability, so this page is one shed of guinea pigs in which the
+     biology IS the probability.
+
+     TWO SETS, five steps each, scaffolding only ever coming off:
+       SET A  ONE GENE — coat colour, B black dominant over b white.
+              A monohybrid cross, a live Punnett square, and the
+              probability inside it: 3:1 is P(white) = 1/4 is 25%.
+              The numbers are chosen so every answer is a quarter and
+              so exactly ONE pair in the 3x3 option grid gives 3:1.
+       SET B  TWO EVENTS — coat length, L short dominant over l long,
+              and now two pups in a row. Sample space, tree diagram,
+              multiplying along a branch, and "at least one", which is
+              1 - P(none) and not the sum of the branches.
+     Set B stays locked until Set A is finished, because a tree is
+     only readable once one cross is automatic.
+
+     All the genetics lives in GENES and the crosses are ENUMERATED,
+     never hard-coded: change an allele letter there and the square,
+     the tree, the ratios, the questions and the worked solutions all
+     follow. Probabilities are kept as exact fractions so the page
+     prints 1/16, never 0.0625000001.
+
+     Every number on this page is proved by
+     scratchpad/breedmath.js, which enumerates the sample space
+     exhaustively and checks both play goals are unique.
+
+     The step shell, sliders, marking and timing all come from
+     stem-sim.js. The Punnett square and the tree diagram are drawn
+     here because no other sim needs them; both size themselves to the
+     box they land in and take every colour from a CSS token, so dark
+     mode and a phone are free.
+     ================================================================ -->
+<style>
+  :root {
+    --paper:#fcfcfa; --ink:#212427; --muted:#5c6166; --faint:#6b7075;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f; --on-accent:#ffffff;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#878d92;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px;
+         flex-wrap:wrap; margin-bottom:26px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  .top a:hover { text-decoration:underline; }
+  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:34px;
+    border-radius:8px; border:1px solid var(--hair); background:var(--paper); color:var(--ink); }
+  .masthead { margin:4px 0 20px; }
+  .masthead h1 { margin:0 0 6px; font-family:Georgia,"Times New Roman",serif; font-size:1.9rem;
+    font-weight:500; letter-spacing:-.01em; }
+  .masthead .sub { margin:0; color:var(--muted); font-size:.88rem; max-width:64ch; }
+  .frame { border-top:1px solid var(--ink); padding-top:12px; margin:0 0 20px;
+           font-size:.86rem; color:var(--muted); }
+  .frame b { color:var(--ink); }
+  .frame .eng { display:block; margin-top:.4rem; color:var(--faint); font-size:.82rem; }
+  .note { font-size:.8rem; color:var(--faint); margin:26px 0 0; }
+  footer { margin-top:34px; border-top:1px solid var(--hair); padding-top:14px;
+           font-size:.78rem; color:var(--faint); }
+  .teacherline { margin:10px 0 0; font-size:.76rem; }
+  .teacherline a { color:var(--faint); }
+  [data-v] { border-bottom:1px dotted var(--accent); cursor:help; }
+  .sim-live { font-variant-numeric:tabular-nums; font-size:.82rem; color:var(--muted); }
+  /* the Punnett square — hairlines and tokens only, same grammar as .sim-table */
+  .pn { border-collapse:collapse; margin:.1rem 0 .3rem; }
+  .pn th, .pn td { border:1px solid var(--hair); padding:.45rem .5rem; text-align:center; }
+  .pn th { font-size:.95rem; font-weight:600; color:var(--muted); min-width:2.4em; }
+  .pn td { min-width:4.4em; }
+  .pn td b { display:block; font-size:1.05rem; letter-spacing:.03em; }
+  .pn td .ph { display:block; font-size:.72rem; color:var(--muted); margin-top:.15rem; white-space:nowrap; }
+  .pn td .ph i { display:inline-block; width:.8em; height:.8em; border-radius:2px;
+                 margin-right:.3em; vertical-align:-1px; }
+  .pn .corner { border-color:transparent; }
+  .pn-cap { margin:.2rem 0 .35rem; font-size:.86rem; color:var(--muted); }
+  .pn-cap b { color:var(--ink); letter-spacing:.03em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="stem-genetics.html" data-i18n="back">← Genetics · Do</a>
+    <span id="tw-slot"></span>
+    <select class="language-select" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+      <option value="vi">Tiếng Việt</option>
+    </select>
+  </div>
+
+  <div class="masthead">
+    <h1 data-i18n="title">The Guinea Pig Shed</h1>
+    <p class="sub" data-i18n="sub">One shed, two genes, and the chance behind every pup. Play with it, read it,
+      predict it, then do the maths on your own. Two sets of five steps — each step hands more of
+      the work to you.</p>
+  </div>
+
+  <p class="frame" id="frameLine"></p>
+
+  <div id="sim"></div>
+
+  <p class="note" data-i18n="privacy">Anonymous. What you do on this page is stored in this browser
+    only — no accounts, no tracking.</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+  <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: open every step</a></p>
+</div>
+
+<script src="stem-vocab-data.js?v=20260821-4"></script>
+<script src="stem-shared.js?v=20260821-4"></script>
+<script src="stem-vocab.js?v=20260821-4"></script>
+<script src="stem-gloss.js?v=20260821-4"></script>
+<script src="stem-translate.js?v=20260821-5"></script>
+<script src="stem-sim.js?v=20260821-4"></script>
+<script>
+(function () {
+  "use strict";
+  var S2 = window.STEM2, SIM = window.STEMSIM;
+
+  /* ================================================================
+     PAGE CHROME, in the four page languages.
+     The WORDED PROBLEMS in steps 4 and 5 stay in English on purpose:
+     reading the English of a genetics problem IS the skill the CAT
+     tests. Every hard word inside them is tappable instead.
+     ================================================================ */
+  var COPY = {
+    en: {
+      back:"← Genetics · Do", title:"The Guinea Pig Shed",
+      sub:"One shed, two genes, and the chance behind every pup. Play with it, read it, predict it, then do the maths on your own. Two sets of five steps — each step hands more of the work to you.",
+      privacy:"Anonymous. What you do on this page is stored in this browser only — no accounts, no tracking.",
+      teacherU:"Teacher: open every step",
+      engNote:"Steps 4 and 5 stay in English — reading the English is part of the task. Tap any word you do not know.",
+      buildsF:function(n){ return "This rehearses "+n+"."; },
+      buildsAlways:"This keeps your inheritance and probability maths sharp for every task."
+    },
+    "zh-Hans": {
+      back:"← 遗传学 · 任务", title:"豚鼠棚",
+      sub:"一个棚，两个基因，每只幼崽背后都有概率。先玩，再读，再预测，最后自己算。两组，每组五步——每一步都把更多的工作交给你。",
+      privacy:"匿名。你在本页的记录只保存在这个浏览器里——没有账号，不做追踪。",
+      teacherU:"教师：开放全部步骤",
+      engNote:"第 4、5 步保持英文——读懂英文本身就是任务的一部分。不认识的词点一下即可。",
+      buildsF:function(n){ return "这是在为"+n+"做演练。"; },
+      buildsAlways:"这让你的遗传与概率计算保持熟练，每个任务都用得上。"
+    },
+    "zh-Hant": {
+      back:"← 遺傳學 · 任務", title:"天竺鼠棚",
+      sub:"一個棚，兩個基因，每隻幼鼠背後都有機率。先玩，再讀，再預測，最後自己算。兩組，每組五步——每一步都把更多的工作交給你。",
+      privacy:"匿名。你在本頁的紀錄只儲存在這個瀏覽器裡——沒有帳號，不做追蹤。",
+      teacherU:"教師：開放全部步驟",
+      engNote:"第 4、5 步保持英文——讀懂英文本身就是任務的一部分。不認識的字點一下即可。",
+      buildsF:function(n){ return "這是在為"+n+"做演練。"; },
+      buildsAlways:"這讓你的遺傳與機率計算保持熟練，每個任務都用得上。"
+    },
+    vi: {
+      back:"← Di truyền · Việc cần làm", title:"Chuồng chuột lang",
+      sub:"Một chuồng, hai gen, và xác suất đằng sau mỗi con non. Chơi thử, đọc số liệu, dự đoán, rồi tự tính. Hai nhóm, mỗi nhóm năm bước — mỗi bước giao thêm việc cho em.",
+      privacy:"Ẩn danh. Những gì em làm ở trang này chỉ lưu trong trình duyệt này — không tài khoản, không theo dõi.",
+      teacherU:"Giáo viên: mở tất cả các bước",
+      engNote:"Bước 4 và 5 giữ nguyên tiếng Anh — đọc được tiếng Anh chính là một phần của bài. Từ nào chưa biết thì chạm vào.",
+      buildsF:function(n){ return "Đây là buổi tập dượt cho bài "+n+"."; },
+      buildsAlways:"Phần này giữ cho kỹ năng di truyền và xác suất của em luôn nhạy, bài nào cũng cần."
+    }
+  };
+  function lang(){ try { return localStorage.getItem("elc_page_language") || "en"; } catch(e){ return "en"; } }
+  function T(k){ var d = COPY[lang()] || COPY.en; return d[k] !== undefined ? d[k] : COPY.en[k]; }
+  var esc = SIM.esc, num = SIM.num, L = SIM.L;
+  function C(k){ return SIM.colors()[k]; }
+  function clamp(v,a,b){ return v < a ? a : v > b ? b : v; }
+
+  /* ================================================================
+     EXACT FRACTIONS
+     A probability on this page is a fraction, not a decimal, so the
+     square and the tree can print 1/16 and the four ends of the tree
+     can be shown to add to exactly 1.
+     ================================================================ */
+  function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ var t=a%b; a=b; b=t; } return a; }
+  function fr(n,d){ if (d === undefined) d = 1; var g = gcd(n,d) || 1; return { n:n/g, d:d/g }; }
+  function fmul(a,b){ return fr(a.n*b.n, a.d*b.d); }
+  function fadd(a,b){ return fr(a.n*b.d + b.n*a.d, a.d*b.d); }
+  function fsub(a,b){ return fr(a.n*b.d - b.n*a.d, a.d*b.d); }
+  function fdec(f){ return f.n / f.d; }
+  function feq(a,b){ return a.n === b.n && a.d === b.d; }
+  function fstr(f){ return f.d === 1 ? String(f.n) : f.n + "/" + f.d; }
+  function fpc(f){ return num(fdec(f) * 100); }
+
+  /* ================================================================
+     THE GENETICS — everything downstream is derived from these two
+     genes. A cross is ENUMERATED (every gamete against every gamete),
+     never looked up, so the square, the tree and the ratios can never
+     drift apart from each other.
+     ================================================================ */
+  var GENES = {
+    coat: {
+      dom:"B", rec:"b",
+      domW:{en:"black", "zh-Hans":"黑色", "zh-Hant":"黑色", vi:"đen"},
+      recW:{en:"white", "zh-Hans":"白色", "zh-Hant":"白色", vi:"trắng"},
+      domS:{en:"black", "zh-Hans":"黑", "zh-Hant":"黑", vi:"đen"},
+      recS:{en:"white", "zh-Hans":"白", "zh-Hant":"白", vi:"trắng"},
+      what:{en:"coat colour", "zh-Hans":"毛色", "zh-Hant":"毛色", vi:"màu lông"}
+    },
+    hair: {
+      dom:"L", rec:"l",
+      domW:{en:"short hair", "zh-Hans":"短毛", "zh-Hant":"短毛", vi:"lông ngắn"},
+      recW:{en:"long hair", "zh-Hans":"长毛", "zh-Hant":"長毛", vi:"lông dài"},
+      domS:{en:"short", "zh-Hans":"短毛", "zh-Hant":"短毛", vi:"ngắn"},
+      recS:{en:"long", "zh-Hans":"长毛", "zh-Hant":"長毛", vi:"dài"},
+      what:{en:"coat length", "zh-Hans":"毛的长度", "zh-Hant":"毛的長度", vi:"độ dài lông"}
+    }
+  };
+  /* the three stops on a genotype slider: BB, Bb, bb */
+  function three(g){ return [g.dom + g.dom, g.dom + g.rec, g.rec + g.rec]; }
+  /* the two gametes a parent can make, each equally likely */
+  function gam(geno){ return [geno.charAt(0), geno.charAt(1)]; }
+  /* a pup's genotype, dominant allele written first so Bb and bB are one thing */
+  function pupGeno(a,b){
+    if (a === a.toUpperCase()) return a + b;
+    if (b === b.toUpperCase()) return b + a;
+    return a + b;
+  }
+  /* the four boxes of the Punnett square, read across then down:
+     the mother's gametes go down the side, the father's along the top */
+  function boxes(mum, dad){
+    var out = [];
+    gam(mum).forEach(function(a){
+      gam(dad).forEach(function(b){
+        var gt = pupGeno(a, b);
+        out.push({ geno: gt, dom: gt.charAt(0) === gt.charAt(0).toUpperCase() });
+      });
+    });
+    return out;
+  }
+  function counts(mum, dad){
+    var c = { dom:0, rec:0, geno:{} };
+    boxes(mum, dad).forEach(function(o){
+      c.geno[o.geno] = (c.geno[o.geno] || 0) + 1;
+      if (o.dom) c.dom++; else c.rec++;
+    });
+    return c;
+  }
+  function pRec(mum, dad){ return fr(counts(mum, dad).rec, 4); }
+  function pDom(mum, dad){ return fr(counts(mum, dad).dom, 4); }
+
+  /* ---------- the seeded litter, so the page is reproducible ---------- */
+  /* mulberry32, the same generator the skills engine uses. A litter of
+     100 pups must wobble around the prediction, but it must wobble the
+     SAME way every time the page is opened, or a screenshot and a test
+     would both be meaningless. */
+  function mulberry32(a){
+    return function(){
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+
+  /* ================================================================
+     THE PUNNETT SQUARE
+     An HTML table, not an SVG: a table is what a student will draw on
+     paper, and a screen reader can walk it. It sits in .sim-wrapx so a
+     narrow phone scrolls the square instead of the page.
+     ================================================================ */
+  var WHO = {
+    mum:{en:"mother", "zh-Hans":"母本", "zh-Hant":"母本", vi:"mẹ"},
+    dad:{en:"father", "zh-Hans":"父本", "zh-Hant":"父本", vi:"bố"}
+  };
+  var GAMNOTE = {en:"Across the top: the father's gametes. Down the side: the mother's gametes.",
+    "zh-Hans":"上方一行是父本的配子，左侧一列是母本的配子。",
+    "zh-Hant":"上方一列是父本的配子，左側一行是母本的配子。",
+    vi:"Hàng trên: giao tử của bố. Cột bên trái: giao tử của mẹ."};
+
+  function punnett(host, o){
+    var g = o.gene, bx = boxes(o.mum, o.dad);
+    var mg = gam(o.mum), dg = gam(o.dad);
+    var cd = C("a"), cr = C("b");
+    var h = "<p class='pn-cap'>" + esc(L(WHO.mum)) + " <b>" + esc(o.mum) + "</b> × " +
+            esc(L(WHO.dad)) + " <b>" + esc(o.dad) + "</b></p>";
+    h += "<div class='sim-wrapx'><table class='pn'><tbody>";
+    h += "<tr><th class='corner'></th><th>" + esc(dg[0]) + "</th><th>" + esc(dg[1]) + "</th></tr>";
+    for (var r = 0; r < 2; r++) {
+      h += "<tr><th>" + esc(mg[r]) + "</th>";
+      for (var c = 0; c < 2; c++) {
+        var b = bx[r * 2 + c];
+        h += "<td><b>" + esc(b.geno) + "</b><span class='ph'><i style='background:" +
+             (b.dom ? cd : cr) + "'></i>" + esc(L(b.dom ? g.domW : g.recW)) + "</span></td>";
+      }
+      h += "</tr>";
+    }
+    h += "</tbody></table></div>";
+    host.innerHTML = h;
+  }
+  /* the one line under a square that says what it came out at */
+  function ratioLine(mum, dad, g){
+    var c = counts(mum, dad);
+    return L({en:"phenotype ratio", "zh-Hans":"表现型比", "zh-Hant":"表現型比", vi:"tỉ số kiểu hình"}) +
+      " " + c.dom + " " + L(g.domS) + " : " + c.rec + " " + L(g.recS) +
+      "   ·   P(" + L(g.recS) + ") = " + fstr(pRec(mum, dad)) + " = " + fpc(pRec(mum, dad)) + "%";
+  }
+
+  /* ================================================================
+     THE TREE DIAGRAM
+     Two stages, four ends. Inline SVG drawn from CSS tokens and sized
+     to the box it lands in, exactly like SIM.plot, so 11px type is
+     11 real pixels on a phone and dark mode costs nothing.
+     ================================================================ */
+  function measure(host){
+    var w = host.clientWidth || (host.parentNode && host.parentNode.clientWidth) || 640;
+    return clamp(Math.round(w), 300, 720);
+  }
+  function svgText(x, y, txt, col, size, anchor, weight){
+    return "<text x='" + x + "' y='" + y + "' fill='" + col + "' font-size='" + size + "'" +
+      (anchor ? " text-anchor='" + anchor + "'" : "") +
+      (weight ? " font-weight='" + weight + "'" : "") + ">" + esc(txt) + "</text>";
+  }
+  function svgLine(x1, y1, x2, y2, col, w){
+    return "<line x1='" + x1 + "' y1='" + y1 + "' x2='" + x2 + "' y2='" + y2 +
+      "' stroke='" + col + "' stroke-width='" + (w || 1.8) + "' stroke-linecap='round'/>";
+  }
+  /* tree(host, {gene, p}) — p is P(the recessive phenotype) for ONE pup,
+     as a fraction. Returns the four end probabilities in order:
+     dom+dom, dom+rec, rec+dom, rec+rec. */
+  function tree(host, o){
+    var W = measure(host), H = 238;
+    var g = o.gene, pr = o.p, pd = fsub(fr(1), pr);
+    var cd = C("a"), cr = C("b");
+    var muted = SIM.cvar("--muted", "#5c6166"), faint = SIM.cvar("--faint", "#6b7075");
+    var ink = SIM.cvar("--ink", "#212427");
+    var x0 = 12, x1 = Math.round(W * 0.30), x2 = Math.round(W * 0.60);
+    var yE = [58, 106, 154, 202];
+    var y1 = [(yE[0] + yE[1]) / 2, (yE[2] + yE[3]) / 2];
+    var yR = (y1[0] + y1[1]) / 2;
+    var s = [];
+
+    s.push(svgText((x0 + x1) / 2, 20, L(o.head1), faint, 11, "middle"));
+    s.push(svgText((x1 + x2) / 2, 20, L(o.head2), faint, 11, "middle"));
+
+    /* stage one: one pup, two ways it can turn out */
+    var st1 = [{ p:pd, col:cd, w:g.domS }, { p:pr, col:cr, w:g.recS }];
+    st1.forEach(function(b, i){
+      s.push(svgLine(x0, yR, x1, y1[i], b.col));
+      var mx = (x0 + x1) / 2, my = (yR + y1[i]) / 2;
+      s.push(svgText(mx, y1[i] < yR ? my - 5 : my + 13, fstr(b.p), b.col, 11, "middle", "600"));
+      s.push("<circle cx='" + x1 + "' cy='" + y1[i] + "' r='3' fill='" + b.col + "'/>");
+      /* the outcome word sits in the wedge between the two branches that
+         leave this node, so it never lies on top of a line */
+      s.push(svgText(x1 + 6, y1[i] + 4, L(b.w), b.col, 10.5, "start", "600"));
+    });
+
+    /* stage two: the second pup, and the product along each branch */
+    var ends = [];
+    st1.forEach(function(b1, i){
+      st1.forEach(function(b2, j){
+        var k = i * 2 + j, y = yE[k], prod = fmul(b1.p, b2.p);
+        ends.push(prod);
+        s.push(svgLine(x1, y1[i], x2, y, b2.col));
+        var mx = (x1 + x2) / 2, my = (y1[i] + y) / 2;
+        s.push(svgText(mx, y < y1[i] ? my - 5 : my + 13, fstr(b2.p), b2.col, 11, "middle", "600"));
+        s.push("<circle cx='" + x2 + "' cy='" + y + "' r='3' fill='" + b2.col + "'/>");
+        s.push(svgText(x2 + 7, y - 3, L(b1.w) + ", " + L(b2.w), ink, 10.5, "start"));
+        s.push(svgText(x2 + 7, y + 11, "= " + fstr(prod), muted, 10.5, "start"));
+      });
+    });
+    s.push("<circle cx='" + x0 + "' cy='" + yR + "' r='3.4' fill='" + muted + "'/>");
+
+    host.classList.add("sim-fig");
+    host.innerHTML = "<svg viewBox='0 0 " + W + " " + H + "' role='img' aria-label='" +
+      esc(L(o.alt) || "tree diagram") + "'>" + s.join("") + "</svg>";
+    return ends;
+  }
+
+  /* ================================================================
+     BREED A LITTER — the seeded experiment that makes a probability
+     feel like a probability. Predicted next to observed, so the wobble
+     is the lesson and not a bug.
+     ================================================================ */
+  var BREED = {
+    btn:{en:"Breed 100 pups", "zh-Hans":"繁殖 100 只幼崽", "zh-Hant":"繁殖 100 隻幼鼠", vi:"Cho sinh 100 con non"},
+    pred:{en:"predicted", "zh-Hans":"预测", "zh-Hant":"預測", vi:"dự đoán"},
+    got:{en:"your 100 pups", "zh-Hans":"你的 100 只", "zh-Hant":"你的 100 隻", vi:"100 con của em"},
+    press:{en:"Press it a few times — the count moves, the prediction does not.",
+      "zh-Hans":"多按几次——实际数目会变，预测值不会。",
+      "zh-Hant":"多按幾次——實際數目會變，預測值不會。",
+      vi:"Bấm vài lần — số đếm thay đổi, còn dự đoán thì không."}
+  };
+  function breedBar(host, o){
+    var bar = document.createElement("div");
+    bar.className = "sim-run";
+    var btn = document.createElement("button");
+    btn.type = "button"; btn.className = "sim-btn ghost"; btn.textContent = L(BREED.btn);
+    var out = document.createElement("span"); out.className = "sim-live";
+    bar.appendChild(btn); bar.appendChild(out);
+    host.appendChild(bar);
+    var press = 0;
+    btn.addEventListener("click", function(){
+      var f = mulberry32((424242 + press * 2654435761) >>> 0);
+      press++;
+      var g = o.gene(), p = fdec(o.p()), dom = 0, i;
+      for (i = 0; i < o.n; i++) { if (f() < p) dom++; }
+      var res = { dom: dom, rec: o.n - dom };
+      out.textContent = L(BREED.pred) + " " + Math.round(p * o.n) + " " + L(g.domS) + " · " +
+        Math.round((1 - p) * o.n) + " " + L(g.recS) + "   —   " +
+        L(BREED.got) + ": " + res.dom + " " + L(g.domS) + " · " + res.rec + " " + L(g.recS);
+      if (o.onRun) o.onRun(res);
+    });
+    return { el: bar };
+  }
+
+  /* the two genotype sliders every play/read step uses */
+  function genoSliders(host, g, startM, startD, onChange){
+    var GT = three(g);
+    return SIM.sliders(host, [
+      { k:"m", min:0, max:2, step:1, value:startM, fmt:function(v){ return GT[v]; },
+        label:{en:"Mother's genotype (" + L(g.what) + ")",
+               "zh-Hans":"母本的基因型（" + L(g.what) + "）",
+               "zh-Hant":"母本的基因型（" + L(g.what) + "）",
+               vi:"Kiểu gen của mẹ (" + L(g.what) + ")"} },
+      { k:"d", min:0, max:2, step:1, value:startD, fmt:function(v){ return GT[v]; },
+        label:{en:"Father's genotype (" + L(g.what) + ")",
+               "zh-Hans":"父本的基因型（" + L(g.what) + "）",
+               "zh-Hant":"父本的基因型（" + L(g.what) + "）",
+               vi:"Kiểu gen của bố (" + L(g.what) + ")"} }
+    ], onChange);
+  }
+
+  /* ================================================================
+     SET A — ONE GENE
+     ================================================================ */
+
+  /* --- A1 PLAY: two genotype sliders, one 3:1 answer: Bb × Bb --- */
+  function a1(ctx){
+    var host = ctx.host, g = GENES.coat, GT = three(g);
+    var st = { m:0, d:2 };                       /* BB × bb — not the answer */
+    var figP = ctx.el("div"), live = ctx.el("p", "sim-live"), goalBox = ctx.el("p", "sim-goal");
+    genoSliders(host, g, 0, 2, function(v){ st.m = v.m; st.d = v.d; redraw(); });
+    host.appendChild(figP);
+    host.appendChild(live);
+    var bred = false;
+    breedBar(host, {
+      n: 100, gene: function(){ return g; },
+      p: function(){ return pDom(GT[st.m], GT[st.d]); },
+      onRun: function(){ if (is31()) bred = true; score(); }
+    });
+    host.appendChild(ctx.el("p", "sim-note", esc(L(BREED.press))));
+    host.appendChild(goalBox);
+
+    function is31(){ var c = counts(GT[st.m], GT[st.d]); return c.dom === 3 && c.rec === 1; }
+    function redraw(){
+      punnett(figP, { gene:g, mum:GT[st.m], dad:GT[st.d] });
+      live.textContent = ratioLine(GT[st.m], GT[st.d], g);
+      score();
+    }
+    var won = false;
+    function score(){
+      var g1 = is31();
+      goalBox.innerHTML =
+        "<span>" + (g1 ? "✓" : "○") + " " + esc(L(G1)) + "</span><br>" +
+        "<span>" + (bred ? "✓" : "○") + " " + esc(L(G2)) + "</span>";
+      if (g1 && bred && !won) {
+        won = true;
+        ctx.done({});
+        goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(A1WIN));
+      }
+    }
+    var G1 = {en:"The square comes out at 3 black : 1 white.",
+      "zh-Hans":"方格算出来是 3 黑 : 1 白。", "zh-Hant":"方格算出來是 3 黑 : 1 白。",
+      vi:"Bảng cho ra tỉ số 3 đen : 1 trắng."};
+    var G2 = {en:"You have bred 100 pups from that pair and seen how close the real count came.",
+      "zh-Hans":"你用这一对繁殖了 100 只幼崽，看到实际数目离预测有多近。",
+      "zh-Hant":"你用這一對繁殖了 100 隻幼鼠，看到實際數目離預測有多近。",
+      vi:"Em đã cho cặp đó sinh 100 con non và thấy số thực tế gần dự đoán đến đâu."};
+    var A1WIN = {en:"Bb × Bb. Both parents are black, and both are heterozygous — each one carries a hidden white allele. It is the only pair in the shed that gives 3:1. And your 100 pups did not come out at exactly 75: a probability tells you what happens in the long run, not what one litter must do.",
+      "zh-Hans":"Bb × Bb。两个亲本都是黑色，而且都是杂合的——各自带着一个看不见的白色等位基因。整个棚里只有这一对能给出 3:1。而你的 100 只幼崽并不正好是 75 只：概率说的是长期结果，不是对某一窝的承诺。",
+      "zh-Hant":"Bb × Bb。兩個親本都是黑色，而且都是雜合的——各自帶著一個看不見的白色對偶基因。整個棚裡只有這一對能給出 3:1。而你的 100 隻幼鼠並不正好是 75 隻：機率說的是長期結果，不是對某一窩的承諾。",
+      vi:"Bb × Bb. Cả hai bố mẹ đều đen, và cả hai đều dị hợp tử — mỗi con mang một alen trắng giấu kín. Đó là cặp duy nhất trong chuồng cho ra 3:1. Và 100 con non của em không ra đúng 75 con: xác suất nói về kết quả dài hạn, không phải lời hứa cho một lứa."};
+    redraw();
+  }
+
+  /* --- A2 READ: sliders still live, now read the square --- */
+  function a2(ctx){
+    var host = ctx.host, g = GENES.coat, GT = three(g);
+    var st = { m:1, d:1 };
+    var figP = ctx.el("div"), live = ctx.el("p", "sim-live");
+    genoSliders(host, g, 1, 1, function(v){ st.m = v.m; st.d = v.d; draw(); });
+    host.appendChild(figP);
+    host.appendChild(live);
+    host.appendChild(ctx.el("p", "sim-note", esc(L(GAMNOTE))));
+    function draw(){
+      punnett(figP, { gene:g, mum:GT[st.m], dad:GT[st.d] });
+      live.textContent = ratioLine(GT[st.m], GT[st.d], g);
+    }
+    draw();
+
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var got = 0, need = 4, times = [];
+    function tick(ok, info){
+      if (!ok) return;
+      got++; times.push(info.ms);
+      if (got === need) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+    }
+    var SETBB = {en:"Set <b>both</b> sliders to <b>Bb</b>. ", "zh-Hans":"把<b>两个</b>滑块都设为 <b>Bb</b>。",
+      "zh-Hant":"把<b>兩個</b>滑桿都設為 <b>Bb</b>。", vi:"Đặt <b>cả hai</b> thanh trượt về <b>Bb</b>. "};
+    SIM.ask(qs, {
+      prompt:{en:L(SETBB) + "How many of the four boxes show the <span data-v=\"genotype\">genotype</span> Bb?",
+              "zh-Hans":L(SETBB) + "四个格子里有几个是<span data-v=\"genotype\">基因型</span> Bb？",
+              "zh-Hant":L(SETBB) + "四個格子裡有幾個是<span data-v=\"genotype\">基因型</span> Bb？",
+              vi:L(SETBB) + "Trong bốn ô có mấy ô mang <span data-v=\"genotype\">kiểu gen</span> Bb?"},
+      inputs:[{ k:"n", answer:2, tol:0.01,
+                label:{en:"boxes", "zh-Hans":"格子数", "zh-Hant":"格子數", vi:"số ô"} }],
+      hint:{en:"One box has BB, one has bb. Count what is left.",
+            "zh-Hans":"一个格子是 BB，一个是 bb。剩下的数一数。",
+            "zh-Hant":"一個格子是 BB，一個是 bb。剩下的數一數。",
+            vi:"Một ô là BB, một ô là bb. Đếm phần còn lại."},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"Still Bb × Bb. Write the <span data-v=\"genotype\">genotype</span> <span data-v=\"ratio\">ratio</span> BB : Bb : bb.",
+              "zh-Hans":"仍然是 Bb × Bb。写出<span data-v=\"genotype\">基因型</span><span data-v=\"ratio\">比率</span> BB : Bb : bb。",
+              "zh-Hant":"仍然是 Bb × Bb。寫出<span data-v=\"genotype\">基因型</span><span data-v=\"ratio\">比率</span> BB : Bb : bb。",
+              vi:"Vẫn là Bb × Bb. Viết <span data-v=\"ratio\">tỉ số</span> <span data-v=\"genotype\">kiểu gen</span> BB : Bb : bb."},
+      inputs:[
+        { k:"a", answer:1, tol:0.01, label:"BB" },
+        { k:"b", answer:2, tol:0.01, label:"Bb" },
+        { k:"c", answer:1, tol:0.01, label:"bb" }],
+      hint:{en:"Count the boxes, do not simplify.", "zh-Hans":"直接数格子，不要化简。",
+            "zh-Hant":"直接數格子，不要化簡。", vi:"Đếm số ô, không rút gọn."},
+      worked:{en:"<p>The four boxes are BB, Bb, Bb, bb, so the genotype ratio is <b>1 : 2 : 1</b>.</p><p>The phenotype ratio is different: three of those four pups are black, so it is 3 : 1. One square, two ratios — the CAT asks for both.</p>",
+              "zh-Hans":"<p>四个格子是 BB、Bb、Bb、bb，所以基因型比是 <b>1 : 2 : 1</b>。</p><p>表现型比不一样：四只里有三只是黑色，所以是 3 : 1。同一个方格，两个比——CAT 两个都会问。</p>",
+              "zh-Hant":"<p>四個格子是 BB、Bb、Bb、bb，所以基因型比是 <b>1 : 2 : 1</b>。</p><p>表現型比不一樣：四隻裡有三隻是黑色，所以是 3 : 1。同一個方格，兩個比——CAT 兩個都會問。</p>",
+              vi:"<p>Bốn ô là BB, Bb, Bb, bb, nên tỉ số kiểu gen là <b>1 : 2 : 1</b>.</p><p>Tỉ số kiểu hình thì khác: ba trong bốn con là đen, nên là 3 : 1. Một bảng, hai tỉ số — bài CAT hỏi cả hai.</p>"},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"Still Bb × Bb. What is the <span data-v=\"probability\">probability</span> that one pup is white?",
+              "zh-Hans":"仍然是 Bb × Bb。一只幼崽是白色的<span data-v=\"probability\">概率</span>是多少？",
+              "zh-Hant":"仍然是 Bb × Bb。一隻幼鼠是白色的<span data-v=\"probability\">機率</span>是多少？",
+              vi:"Vẫn là Bb × Bb. <span data-v=\"probability\">Xác suất</span> một con non màu trắng là bao nhiêu?"},
+      inputs:[{ k:"p", answer:0.25, tol:0.005,
+                unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"},
+                label:"P(white)" }],
+      hint:{en:"One box out of the four is white. You may type 1/4 or 0.25.",
+            "zh-Hans":"四个格子里有一个是白色。可以填 1/4 或 0.25。",
+            "zh-Hant":"四個格子裡有一個是白色。可以填 1/4 或 0.25。",
+            vi:"Một trong bốn ô là trắng. Em có thể gõ 1/4 hoặc 0,25."},
+      worked:{en:"<p>One of the four equally likely boxes is bb, so P(white) = <b>1/4 = 0.25 = 25%</b>.</p><p>The ratio 3 : 1 and the probability 1/4 are the same fact said twice — the 1 out of the 3 + 1 = 4 boxes.</p>",
+              "zh-Hans":"<p>四个等可能的格子里有一个是 bb，所以 P(白) = <b>1/4 = 0.25 = 25%</b>。</p><p>比 3 : 1 和概率 1/4 是同一件事的两种说法——3 + 1 = 4 个格子里的那 1 个。</p>",
+              "zh-Hant":"<p>四個等可能的格子裡有一個是 bb，所以 P(白) = <b>1/4 = 0.25 = 25%</b>。</p><p>比 3 : 1 和機率 1/4 是同一件事的兩種說法——3 + 1 = 4 個格子裡的那 1 個。</p>",
+              vi:"<p>Một trong bốn ô đồng khả năng là bb, nên P(trắng) = <b>1/4 = 0,25 = 25%</b>.</p><p>Tỉ số 3 : 1 và xác suất 1/4 là cùng một điều nói hai lần — 1 trong 3 + 1 = 4 ô.</p>"},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"Now drag the <b>father</b> to <b>bb</b> and leave the mother on Bb. What <span data-v=\"percentage\">percentage</span> of the pups are white?",
+              "zh-Hans":"现在把<b>父本</b>拖到 <b>bb</b>，母本仍是 Bb。白色幼崽占<span data-v=\"percentage\">百分之</span>多少？",
+              "zh-Hant":"現在把<b>父本</b>拖到 <b>bb</b>，母本仍是 Bb。白色幼鼠佔<span data-v=\"percentage\">百分之</span>多少？",
+              vi:"Bây giờ kéo <b>bố</b> về <b>bb</b>, mẹ vẫn là Bb. Bao nhiêu <span data-v=\"percentage\">phần trăm</span> con non là trắng?"},
+      inputs:[{ k:"p", answer:50, tol:0.5, unit:"%",
+                label:{en:"white pups", "zh-Hans":"白色幼崽", "zh-Hant":"白色幼鼠", vi:"con non trắng"} }],
+      hint:{en:"Read the new square: how many of the four boxes are white now?",
+            "zh-Hans":"读新的方格：现在四个格子里有几个是白的？",
+            "zh-Hant":"讀新的方格：現在四個格子裡有幾個是白的？",
+            vi:"Đọc bảng mới: bây giờ mấy trong bốn ô là trắng?"},
+      worked:{en:"<p>Bb × bb gives Bb, Bb, bb, bb — two of the four boxes are white, so 2/4 = <b>50%</b>.</p><p>Nothing about the mother changed. Changing one parent changed the ratio from 3 : 1 to 1 : 1.</p>",
+              "zh-Hans":"<p>Bb × bb 得到 Bb、Bb、bb、bb——四个格子里有两个是白的，所以 2/4 = <b>50%</b>。</p><p>母本没有任何变化。只换了一个亲本，比就从 3 : 1 变成了 1 : 1。</p>",
+              "zh-Hant":"<p>Bb × bb 得到 Bb、Bb、bb、bb——四個格子裡有兩個是白的，所以 2/4 = <b>50%</b>。</p><p>母本沒有任何變化。只換了一個親本，比就從 3 : 1 變成了 1 : 1。</p>",
+              vi:"<p>Bb × bb cho Bb, Bb, bb, bb — hai trong bốn ô là trắng, nên 2/4 = <b>50%</b>.</p><p>Mẹ không thay đổi gì. Chỉ đổi một bố mẹ mà tỉ số đã từ 3 : 1 thành 1 : 1.</p>"},
+      onDone: tick
+    });
+  }
+
+  /* --- A3 PREDICT: name the ratio before the square is drawn --- */
+  var A3_CASES = [
+    { m:"BB", d:"bb", black:4, pw:0 },
+    { m:"Bb", d:"bb", black:2, pw:0.5 },
+    { m:"Bb", d:"Bb", black:3, pw:0.25, litter:12, expect:3 }
+  ];
+  function a3(ctx){
+    var host = ctx.host, g = GENES.coat;
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(L({en:"The parents are given to you and the square is hidden. Say what it will come out at BEFORE you see it.",
+             "zh-Hans":"亲本已经给出，方格是藏起来的。在看到之前先说出结果。",
+             "zh-Hant":"親本已經給出，方格是藏起來的。在看到之前先說出結果。",
+             vi:"Bố mẹ đã cho sẵn và bảng đang bị ẩn. Hãy nói trước kết quả rồi mới xem."}))));
+    var done = 0, times = [];
+    A3_CASES.forEach(function(c, i){
+      var fig = ctx.el("div");
+      var ins = [
+        { k:"b", answer:c.black, tol:0.01,
+          label:{en:"black boxes", "zh-Hans":"黑色格子", "zh-Hant":"黑色格子", vi:"số ô đen"} },
+        { k:"p", answer:c.pw, tol:0.005,
+          unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"},
+          label:"P(white)" }
+      ];
+      if (c.litter) ins.push({ k:"e", answer:c.expect, tol:0.01,
+        label:{en:"white pups expected in a litter of " + c.litter,
+               "zh-Hans":"一窝 " + c.litter + " 只中预计白色数",
+               "zh-Hant":"一窩 " + c.litter + " 隻中預計白色數",
+               vi:"số con trắng dự kiến trong lứa " + c.litter} });
+      var q = SIM.ask(host, {
+        prompt:"<b>" + (i + 1) + ".</b> " +
+          L({en:"A <b>" + c.m + "</b> mother is crossed with a <b>" + c.d + "</b> father. How many of the four boxes are black, and what is P(a pup is white)?",
+             "zh-Hans":"母本 <b>" + c.m + "</b> 与父本 <b>" + c.d + "</b> 杂交。四个格子里有几个是黑色？一只幼崽是白色的概率 P 是多少？",
+             "zh-Hant":"母本 <b>" + c.m + "</b> 與父本 <b>" + c.d + "</b> 雜交。四個格子裡有幾個是黑色？一隻幼鼠是白色的機率 P 是多少？",
+             vi:"Mẹ <b>" + c.m + "</b> lai với bố <b>" + c.d + "</b>. Mấy trong bốn ô là đen, và P(một con non màu trắng) bằng bao nhiêu?"}) +
+          (c.litter ? " " + L({en:"Then: in a litter of <b>" + c.litter + "</b>, how many white pups would you expect?",
+                               "zh-Hans":"然后：一窝 <b>" + c.litter + "</b> 只，预计有几只白色？",
+                               "zh-Hant":"然後：一窩 <b>" + c.litter + "</b> 隻，預計有幾隻白色？",
+                               vi:"Rồi: trong một lứa <b>" + c.litter + "</b> con, em dự kiến mấy con trắng?"}) : ""),
+        inputs: ins,
+        hint:{en:"Write the mother's two alleles down the side and the father's two along the top, then fill the four boxes in your head.",
+              "zh-Hans":"把母本的两个等位基因写在左侧，父本的两个写在上方，然后在心里填出四个格子。",
+              "zh-Hant":"把母本的兩個對偶基因寫在左側，父本的兩個寫在上方，然後在心裡填出四個格子。",
+              vi:"Viết hai alen của mẹ ở cột bên trái và hai alen của bố ở hàng trên, rồi điền bốn ô trong đầu."},
+        onDone: function(ok, info){
+          if (!ok) return;
+          q.el.appendChild(fig);
+          punnett(fig, { gene:g, mum:c.m, dad:c.d });
+          var lv = ctx.el("p", "sim-live", esc(ratioLine(c.m, c.d, g)));
+          q.el.appendChild(lv);
+          done++; times.push(info.ms);
+          if (done === A3_CASES.length) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+        }
+      });
+    });
+  }
+
+  /* --- A4 SOLVE: no square on the screen, only in your head --- */
+  function a4(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("noSim")) + " " + esc(T("engNote"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'>Tom keeps guinea pigs. Coat colour is controlled by one <span data-v>gene</span>. " +
+      "The black <span data-v='allele'>allele</span> <b>B</b> is <span data-v='dominant'>dominant</span> " +
+      "and the white allele <b>b</b> is <span data-v='recessive'>recessive</span>. Tom crosses two black " +
+      "guinea pigs that are both <span data-v='heterozygous'>heterozygous</span>.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) {
+        var fig = ctx.el("div"); host.appendChild(fig);
+        host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("showSim"))));
+        punnett(fig, { gene:GENES.coat, mum:"Bb", dad:"Bb" });
+        host.appendChild(ctx.el("p", "sim-live", esc(ratioLine("Bb", "Bb", GENES.coat))));
+        ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+      }
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> A white guinea pig is brought into the shed. What must its <span data-v='genotype'>genotype</span> be?",
+      opts:{ list:["BB", "Bb", "bb"], a:2 },
+      hint:"White is recessive. A single B would make the animal black.",
+      worked:"<p>White only shows when there is no B at all, so a white guinea pig must be <b>bb</b> — <span data-v='homozygous'>homozygous</span> recessive.</p>" +
+             "<p>This is why you can always write down a recessive animal's genotype from its <span data-v='phenotype'>phenotype</span>, but never a dominant one's.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> Draw Tom's cross in your head. Out of the four boxes, how many pups are black and how many are white?",
+      inputs:[
+        { k:"b", answer:3, tol:0.01, label:"black" },
+        { k:"w", answer:1, tol:0.01, label:"white" }],
+      hint:"Both parents are Bb. The boxes are BB, Bb, Bb and bb.",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> Give the <span data-v='probability'>probability</span> that a pup is white, first as a fraction or decimal and then as a percentage.",
+      inputs:[
+        { k:"p", answer:0.25, tol:0.005, label:"P(white)" },
+        { k:"pc", answer:25, tol:0.5, unit:"%", label:"as a percentage" }],
+      hint:"One of the four equally likely boxes is bb.",
+      worked:"<p>P(white) = 1 out of 4 = <b>1/4 = 0.25 = 25%</b>.</p>" +
+             "<p>A ratio of 3 : 1 has <b>four</b> parts, not three. The commonest mistake in this task is writing 1/3.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> The litter has <b>8</b> pups. How many of them would you expect to be white?",
+      inputs:[{ k:"n", answer:2, tol:0.01, label:"expected white pups" }],
+      hint:"Multiply the probability by the number of pups.",
+      worked:"<p>1/4 × 8 = <b>2 pups</b>.</p>" +
+             "<p>\"Expect\" does not mean \"will get\". A litter of 8 could easily come out 1 white, or 3, or none at all.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>e.</b> One black pup from that litter is later crossed with a white guinea pig, and some of their <span data-v='offspring'>offspring</span> are white. What is that black pup's genotype?",
+      opts:{ list:[
+        "BB — it cannot be carrying a white allele.",
+        "Bb — it carries one hidden white allele.",
+        "bb — it must be white itself."], a:1 },
+      hint:"A white pup needs a b from each parent. Where did the b from the black parent come from?",
+      worked:"<p>The white guinea pig is bb, so it gives a b every time. A white pup needs a second b, and that one has to come from the black parent. So the black pup is <b>Bb</b>.</p>" +
+             "<p>Working backwards from the offspring to the parents like this is called a <b>test cross</b>, and it is the hardest thing this topic asks you to do.</p>",
+      onDone: tick });
+  }
+
+  /* --- A5 EXAM: dense, timed, a whole CAT-style question --- */
+  function a5(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("timed")) + " " + esc(SIM.T("noSim"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'><b>Nadia's shed.</b> In guinea pigs, coat texture is controlled by one gene. " +
+      "A rough coat (<b>R</b>) is dominant and a smooth coat (<b>r</b>) is recessive. Nadia crosses a " +
+      "rough-coated male that is <span data-v='heterozygous'>heterozygous</span> with a smooth-coated " +
+      "female. Both animals are healthy and the <span data-v='inheritance'>inheritance</span> follows a " +
+      "simple one-gene pattern.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> Set the cross up. How many of the four boxes of the <span data-v='Punnett square'>Punnett square</span> show a rough-coated pup?",
+      inputs:[{ k:"n", answer:2, tol:0.01, label:"rough boxes" }],
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> What percentage of Nadia's pups are expected to be smooth-coated?",
+      inputs:[{ k:"p", answer:50, tol:0.5, unit:"%", label:"smooth pups" }],
+      worked:"<p>Rr × rr gives Rr, Rr, rr, rr. Two of the four boxes are rr, so <b>50%</b> are smooth.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> The litter has <b>6</b> pups. How many are expected to be smooth-coated?",
+      inputs:[{ k:"n", answer:3, tol:0.01, label:"expected smooth pups" }],
+      worked:"<p>0.5 × 6 = <b>3 pups</b>.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> Nadia now crosses two heterozygous rough-coated guinea pigs instead. Give P(a pup is rough-coated), and the number of rough-coated pups expected in a litter of <b>8</b>.",
+      inputs:[
+        { k:"p", answer:0.75, tol:0.005, label:"P(rough)" },
+        { k:"n", answer:6, tol:0.01, label:"expected rough pups" }],
+      worked:"<p>Rr × Rr gives RR, Rr, Rr, rr, so three of the four boxes are rough: P(rough) = <b>3/4 = 0.75</b>.</p>" +
+             "<p>0.75 × 8 = <b>6 pups</b>.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>e.</b> A rough-coated male in another shed is crossed with several smooth-coated females. Out of <b>40</b> pups, <b>21</b> are rough and <b>19</b> are smooth. What is the male's genotype, and how do you know?",
+      opts:{ list:[
+        "RR — a rough-coated animal always has two R alleles.",
+        "Rr — about half the pups are smooth, so he must be passing on an r.",
+        "rr — he passes on an r, which is why smooth pups appear."], a:1 },
+      worked:"<p>The females are all rr. If the male were RR, every single pup would get an R and every pup would be rough — 40 rough, 0 smooth. He is not.</p>" +
+             "<p>He cannot be rr, because he is rough himself. Rr × rr predicts 50% smooth, which is 20 out of 40; he got 19. So he is <b>Rr</b>.</p>" +
+             "<p>19 instead of 20 is not evidence against the answer. That is the wobble you saw in step 1.</p>",
+      onDone: tick });
+  }
+
+  /* ================================================================
+     SET B — TWO EVENTS
+     ================================================================ */
+  var HEAD1 = {en:"pup 1", "zh-Hans":"第 1 只", "zh-Hant":"第 1 隻", vi:"con thứ 1"};
+  var HEAD2 = {en:"pup 2", "zh-Hans":"第 2 只", "zh-Hant":"第 2 隻", vi:"con thứ 2"};
+  var TREEALT = {en:"tree diagram of two pups in a row",
+    "zh-Hans":"连续两只幼崽的树状图", "zh-Hant":"連續兩隻幼鼠的樹狀圖", vi:"sơ đồ cây cho hai con non liên tiếp"};
+
+  /* --- B1 PLAY: build the tree, make P(both long-haired) = 1/16 --- */
+  function b1(ctx){
+    var host = ctx.host, g = GENES.hair, GT = three(g);
+    var st = { m:0, d:0 };                        /* LL × LL — P(long) = 0 */
+    var figT = ctx.el("div"), live = ctx.el("p", "sim-live"), goalBox = ctx.el("p", "sim-goal");
+    genoSliders(host, g, 0, 0, function(v){ st.m = v.m; st.d = v.d; redraw(); });
+    host.appendChild(figT);
+    host.appendChild(live);
+    host.appendChild(goalBox);
+
+    var TARGET = fr(1, 16);
+    var won = false, ends = [];
+    function redraw(){
+      var p = pRec(GT[st.m], GT[st.d]);
+      ends = tree(figT, { gene:g, p:p, head1:HEAD1, head2:HEAD2, alt:TREEALT });
+      var both = ends[3], none = ends[0], atLeast = fsub(fr(1), none);
+      live.textContent =
+        "P(" + L(g.recS) + ") = " + fstr(p) + "   ·   " +
+        L(BOTH) + " = " + fstr(both) + "   ·   " + L(ATLEAST) + " = " + fstr(atLeast);
+      goalBox.innerHTML = "<span>" + (feq(both, TARGET) ? "✓" : "○") + " " + esc(L(BG1)) + "</span>";
+      if (feq(both, TARGET) && !won) {
+        won = true;
+        ctx.done({});
+        goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(B1WIN));
+      }
+    }
+    var BOTH = {en:"P(both long)", "zh-Hans":"P(两只都长毛)", "zh-Hant":"P(兩隻都長毛)", vi:"P(cả hai lông dài)"};
+    var ATLEAST = {en:"P(at least one long)", "zh-Hans":"P(至少一只长毛)", "zh-Hant":"P(至少一隻長毛)",
+      vi:"P(ít nhất một con lông dài)"};
+    var BG1 = {en:"P(both pups are long-haired) is exactly 1/16.",
+      "zh-Hans":"P(两只幼崽都是长毛) 正好等于 1/16。",
+      "zh-Hant":"P(兩隻幼鼠都是長毛) 正好等於 1/16。",
+      vi:"P(cả hai con non đều lông dài) đúng bằng 1/16."};
+    var B1WIN = {en:"Ll × Ll. Each pup has P(long) = 1/4 on its own, and 1/4 × 1/4 = 1/16 for the two together. Multiplying along a branch is what a tree diagram is for. Notice 1/16 is much smaller than 1/4 — and that no other pair in the shed can produce it.",
+      "zh-Hans":"Ll × Ll。每只幼崽单独的 P(长毛) = 1/4，两只一起就是 1/4 × 1/4 = 1/16。沿着树枝相乘正是树状图的用处。注意 1/16 比 1/4 小得多——而且棚里没有别的组合能给出它。",
+      "zh-Hant":"Ll × Ll。每隻幼鼠單獨的 P(長毛) = 1/4，兩隻一起就是 1/4 × 1/4 = 1/16。沿著樹枝相乘正是樹狀圖的用處。注意 1/16 比 1/4 小得多——而且棚裡沒有別的組合能給出它。",
+      vi:"Ll × Ll. Mỗi con non riêng lẻ có P(lông dài) = 1/4, và hai con cùng lúc là 1/4 × 1/4 = 1/16. Nhân dọc theo nhánh chính là công dụng của sơ đồ cây. Để ý 1/16 nhỏ hơn 1/4 rất nhiều — và không cặp nào khác trong chuồng tạo ra được nó."};
+    redraw();
+  }
+
+  /* --- B2 READ: read the branches, multiply along them --- */
+  function b2(ctx){
+    var host = ctx.host, g = GENES.hair, GT = three(g);
+    var st = { m:1, d:1 };
+    var figT = ctx.el("div"), live = ctx.el("p", "sim-live");
+    genoSliders(host, g, 1, 1, function(v){ st.m = v.m; st.d = v.d; draw(); });
+    host.appendChild(figT);
+    host.appendChild(live);
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(L({en:"The number on a branch is the chance of taking that branch. The number at the end of a path is the whole path multiplied together.",
+             "zh-Hans":"树枝上的数是走这条枝的概率。路径末端的数是整条路径相乘的结果。",
+             "zh-Hant":"樹枝上的數是走這條枝的機率。路徑末端的數是整條路徑相乘的結果。",
+             vi:"Số trên một nhánh là khả năng đi theo nhánh đó. Số ở cuối một đường là tích của cả đường đó."}))));
+    function draw(){
+      var p = pRec(GT[st.m], GT[st.d]);
+      var ends = tree(figT, { gene:g, p:p, head1:HEAD1, head2:HEAD2, alt:TREEALT });
+      live.textContent = L({en:"the four ends add to", "zh-Hans":"四个末端相加等于",
+        "zh-Hant":"四個末端相加等於", vi:"bốn đầu mút cộng lại bằng"}) + " " +
+        fstr(ends.reduce(fadd, fr(0)));
+    }
+    draw();
+
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, of = 4, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+    }
+    var SETLL = {en:"Set <b>both</b> sliders to <b>Ll</b>. ", "zh-Hans":"把<b>两个</b>滑块都设为 <b>Ll</b>。",
+      "zh-Hant":"把<b>兩個</b>滑桿都設為 <b>Ll</b>。", vi:"Đặt <b>cả hai</b> thanh trượt về <b>Ll</b>. "};
+    SIM.ask(qs, {
+      prompt:{en:L(SETLL) + "Read the first stage of the tree. What is the probability that pup 1 is long-haired?",
+              "zh-Hans":L(SETLL) + "读树状图的第一段。第 1 只是长毛的概率是多少？",
+              "zh-Hant":L(SETLL) + "讀樹狀圖的第一段。第 1 隻是長毛的機率是多少？",
+              vi:L(SETLL) + "Đọc chặng đầu của sơ đồ cây. Xác suất con thứ 1 có lông dài là bao nhiêu?"},
+      inputs:[{ k:"p", answer:0.25, tol:0.005, label:"P(long)",
+                unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"} }],
+      hint:{en:"It is written on the branch itself.", "zh-Hans":"这个数就写在树枝上。",
+            "zh-Hant":"這個數就寫在樹枝上。", vi:"Số đó viết ngay trên nhánh."},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"Still Ll × Ll. Multiply along the top path: what is P(pup 1 short <b>and</b> pup 2 short)?",
+              "zh-Hans":"仍然是 Ll × Ll。沿最上面那条路径相乘：P(第 1 只短毛 <b>且</b> 第 2 只短毛) 是多少？",
+              "zh-Hant":"仍然是 Ll × Ll。沿最上面那條路徑相乘：P(第 1 隻短毛 <b>且</b> 第 2 隻短毛) 是多少？",
+              vi:"Vẫn là Ll × Ll. Nhân dọc theo đường trên cùng: P(con 1 lông ngắn <b>và</b> con 2 lông ngắn) bằng bao nhiêu?"},
+      inputs:[{ k:"p", answer:0.5625, tol:0.005, label:"P(short, short)",
+                unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"} }],
+      hint:{en:"3/4 × 3/4. You may type 9/16 or 0.5625.",
+            "zh-Hans":"3/4 × 3/4。可以填 9/16 或 0.5625。",
+            "zh-Hant":"3/4 × 3/4。可以填 9/16 或 0.5625。",
+            vi:"3/4 × 3/4. Em có thể gõ 9/16 hoặc 0,5625."},
+      worked:{en:"<p>3/4 × 3/4 = <b>9/16 = 0.5625</b>.</p><p>Along a branch you <b>multiply</b>. You only add when you are collecting up several different ends.</p>",
+              "zh-Hans":"<p>3/4 × 3/4 = <b>9/16 = 0.5625</b>。</p><p>沿着一条枝要<b>相乘</b>。只有在把几个不同的末端合起来时才相加。</p>",
+              "zh-Hant":"<p>3/4 × 3/4 = <b>9/16 = 0.5625</b>。</p><p>沿著一條枝要<b>相乘</b>。只有在把幾個不同的末端合起來時才相加。</p>",
+              vi:"<p>3/4 × 3/4 = <b>9/16 = 0,5625</b>.</p><p>Dọc theo một nhánh thì <b>nhân</b>. Chỉ cộng khi gom nhiều đầu mút khác nhau lại.</p>"},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"Still Ll × Ll. Add all four end probabilities together. What do you get?",
+              "zh-Hans":"仍然是 Ll × Ll。把四个末端的概率全部相加，结果是多少？",
+              "zh-Hant":"仍然是 Ll × Ll。把四個末端的機率全部相加，結果是多少？",
+              vi:"Vẫn là Ll × Ll. Cộng cả bốn xác suất ở đầu mút lại. Em được bao nhiêu?"},
+      inputs:[{ k:"p", answer:1, tol:0.005, label:{en:"total", "zh-Hans":"总和", "zh-Hant":"總和", vi:"tổng"} }],
+      hint:{en:"9/16 + 3/16 + 3/16 + 1/16.", "zh-Hans":"9/16 + 3/16 + 3/16 + 1/16。",
+            "zh-Hant":"9/16 + 3/16 + 3/16 + 1/16。", vi:"9/16 + 3/16 + 3/16 + 1/16."},
+      worked:{en:"<p>9/16 + 3/16 + 3/16 + 1/16 = 16/16 = <b>1</b>.</p><p>The four ends are the whole <span data-v=\"sample space\">sample space</span>: one of them must happen, so they always add to 1. If yours do not, you have made an arithmetic slip — check before you go on.</p>",
+              "zh-Hans":"<p>9/16 + 3/16 + 3/16 + 1/16 = 16/16 = <b>1</b>。</p><p>四个末端就是整个<span data-v=\"sample space\">样本空间</span>：其中一定有一个会发生，所以总和永远是 1。如果你算出来不是 1，就是算错了——先检查再往下做。</p>",
+              "zh-Hant":"<p>9/16 + 3/16 + 3/16 + 1/16 = 16/16 = <b>1</b>。</p><p>四個末端就是整個<span data-v=\"sample space\">樣本空間</span>：其中一定有一個會發生，所以總和永遠是 1。如果你算出來不是 1，就是算錯了——先檢查再往下做。</p>",
+              vi:"<p>9/16 + 3/16 + 3/16 + 1/16 = 16/16 = <b>1</b>.</p><p>Bốn đầu mút chính là toàn bộ <span data-v=\"sample space\">không gian mẫu</span>: chắc chắn một trong số đó xảy ra, nên tổng luôn bằng 1. Nếu của em không bằng 1 thì đã tính nhầm — hãy kiểm tra trước khi đi tiếp.</p>"},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"Now drag the <b>father</b> to <b>ll</b> and leave the mother on Ll. The tree redraws itself. What is P(both pups are long-haired) now?",
+              "zh-Hans":"现在把<b>父本</b>拖到 <b>ll</b>，母本仍是 Ll。树状图会自己重画。现在 P(两只都是长毛) 是多少？",
+              "zh-Hant":"現在把<b>父本</b>拖到 <b>ll</b>，母本仍是 Ll。樹狀圖會自己重畫。現在 P(兩隻都是長毛) 是多少？",
+              vi:"Bây giờ kéo <b>bố</b> về <b>ll</b>, mẹ vẫn là Ll. Sơ đồ cây tự vẽ lại. Bây giờ P(cả hai con đều lông dài) là bao nhiêu?"},
+      inputs:[{ k:"p", answer:0.25, tol:0.005, label:"P(long, long)",
+                unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"} }],
+      hint:{en:"Read the new first branch, then multiply it by itself.",
+            "zh-Hans":"读新的第一段树枝，然后自己乘自己。",
+            "zh-Hant":"讀新的第一段樹枝，然後自己乘自己。",
+            vi:"Đọc nhánh đầu mới, rồi nhân nó với chính nó."},
+      worked:{en:"<p>Ll × ll gives Ll, Ll, ll, ll, so P(long) = 1/2 for each pup, and 1/2 × 1/2 = <b>1/4</b>.</p><p>Changing one parent moved the end of the tree from 1/16 to 1/4 — four times as likely.</p>",
+              "zh-Hans":"<p>Ll × ll 得到 Ll、Ll、ll、ll，所以每只幼崽的 P(长毛) = 1/2，而 1/2 × 1/2 = <b>1/4</b>。</p><p>只换了一个亲本，树的末端就从 1/16 变成 1/4——可能性变成四倍。</p>",
+              "zh-Hant":"<p>Ll × ll 得到 Ll、Ll、ll、ll，所以每隻幼鼠的 P(長毛) = 1/2，而 1/2 × 1/2 = <b>1/4</b>。</p><p>只換了一個親本，樹的末端就從 1/16 變成 1/4——可能性變成四倍。</p>",
+              vi:"<p>Ll × ll cho Ll, Ll, ll, ll, nên P(lông dài) = 1/2 cho mỗi con, và 1/2 × 1/2 = <b>1/4</b>.</p><p>Chỉ đổi một bố mẹ mà đầu mút của cây đã từ 1/16 thành 1/4 — khả năng gấp bốn lần.</p>"},
+      onDone: tick });
+  }
+
+  /* --- B3 PREDICT: "at least one" is 1 − P(none), never the sum --- */
+  var B3_CASES = [
+    { gene:"coat", m:"Bb", d:"Bb", n:2, none:0.5625, some:0.4375 },
+    { gene:"hair", m:"Ll", d:"ll", n:2, none:0.25,   some:0.75   },
+    { gene:"hair", m:"Ll", d:"ll", n:3, none:0.125,  some:0.875  }
+  ];
+  function b3(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(L({en:"No tree on the screen. Work out the chance of NONE first, then use it. The tree appears once you are right.",
+             "zh-Hans":"屏幕上没有树状图。先算“一只也没有”的概率，再用它。答对后树状图才出现。",
+             "zh-Hant":"畫面上沒有樹狀圖。先算「一隻也沒有」的機率，再用它。答對後樹狀圖才出現。",
+             vi:"Không có sơ đồ cây trên màn hình. Hãy tính xác suất KHÔNG con nào trước, rồi dùng nó. Sơ đồ cây hiện ra khi em trả lời đúng."}))));
+    var done = 0, times = [];
+    B3_CASES.forEach(function(c, i){
+      var g = GENES[c.gene], w = L(g.recW), fig = ctx.el("div");
+      var q = SIM.ask(host, {
+        prompt:"<b>" + (i + 1) + ".</b> " +
+          L({en:"A <b>" + c.m + "</b> mother and a <b>" + c.d + "</b> father have <b>" + c.n +
+                "</b> pups. Give P(<b>none</b> of them is " + w + "), then P(<b>at least one</b> of them is " + w + ").",
+             "zh-Hans":"母本 <b>" + c.m + "</b> 与父本 <b>" + c.d + "</b> 生了 <b>" + c.n +
+                "</b> 只幼崽。先给出 P(<b>一只也不是</b>" + w + ")，再给出 P(<b>至少一只是</b>" + w + ")。",
+             "zh-Hant":"母本 <b>" + c.m + "</b> 與父本 <b>" + c.d + "</b> 生了 <b>" + c.n +
+                "</b> 隻幼鼠。先給出 P(<b>一隻也不是</b>" + w + ")，再給出 P(<b>至少一隻是</b>" + w + ")。",
+             vi:"Mẹ <b>" + c.m + "</b> và bố <b>" + c.d + "</b> có <b>" + c.n +
+                "</b> con non. Cho P(<b>không con nào</b> " + w + "), rồi P(<b>ít nhất một con</b> " + w + ")."}),
+        inputs:[
+          { k:"none", answer:c.none, tol:0.005, label:"P(none)",
+            unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"} },
+          { k:"some", answer:c.some, tol:0.005, label:"P(at least one)",
+            unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"} }],
+        hint:{en:"\"None\" means every pup takes the other branch: multiply that branch by itself " + c.n + " times. Then \"at least one\" is 1 minus it.",
+              "zh-Hans":"“一只也没有”表示每只幼崽都走另一条枝：把那条枝自乘 " + c.n + " 次。然后“至少一只”就是 1 减去它。",
+              "zh-Hant":"「一隻也沒有」表示每隻幼鼠都走另一條枝：把那條枝自乘 " + c.n + " 次。然後「至少一隻」就是 1 減去它。",
+              vi:"\"Không con nào\" nghĩa là mọi con đều đi nhánh kia: nhân nhánh đó với chính nó " + c.n + " lần. Rồi \"ít nhất một con\" là 1 trừ đi kết quả ấy."},
+        worked:{en:"<p>You must not add the branches: that would count the litters where both are " + w + " twice, and it can even give an answer bigger than 1.</p><p>Instead take the whole sample space, 1, and cut away the one path in which it never happens.</p>",
+                "zh-Hans":"<p>不能把树枝相加：那样会把两只都是" + w + "的情况数两遍，甚至可能算出大于 1 的答案。</p><p>正确做法是从整个样本空间 1 里，切掉“完全没有发生”的那一条路径。</p>",
+                "zh-Hant":"<p>不能把樹枝相加：那樣會把兩隻都是" + w + "的情況數兩遍，甚至可能算出大於 1 的答案。</p><p>正確做法是從整個樣本空間 1 裡，切掉「完全沒有發生」的那一條路徑。</p>",
+                vi:"<p>Không được cộng các nhánh: làm vậy sẽ đếm hai lần những lứa mà cả hai đều " + w + ", thậm chí có thể ra đáp số lớn hơn 1.</p><p>Thay vào đó lấy toàn bộ không gian mẫu là 1 rồi cắt đi đúng một đường mà điều đó không hề xảy ra.</p>"},
+        onDone: function(okv, info){
+          if (!okv) return;
+          q.el.appendChild(fig);
+          tree(fig, { gene:g, p:pRec(c.m, c.d), head1:HEAD1, head2:HEAD2, alt:TREEALT });
+          if (c.n > 2) q.el.appendChild(ctx.el("p", "sim-note",
+            esc(L({en:"The tree shows the first two pups. The third pup adds another × 1/2 to every path.",
+                   "zh-Hans":"图上画的是前两只。第三只会给每条路径再乘一个 1/2。",
+                   "zh-Hant":"圖上畫的是前兩隻。第三隻會給每條路徑再乘一個 1/2。",
+                   vi:"Sơ đồ vẽ hai con đầu. Con thứ ba nhân thêm 1/2 vào mọi đường."}))));
+          done++; times.push(info.ms);
+          if (done === B3_CASES.length) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+        }
+      });
+    });
+  }
+
+  /* --- B4 SOLVE: two genes at once, in fractions --- */
+  function b4(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("noSim")) + " " + esc(T("engNote"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'>Sofia breeds guinea pigs and follows two genes at once. For coat colour, black " +
+      "(<b>B</b>) is dominant over white (<b>b</b>); for coat length, short hair (<b>L</b>) is dominant " +
+      "over long hair (<b>l</b>). The two genes sit on different chromosomes, so they are inherited " +
+      "independently. Sofia's pair are <b>Bb × Bb</b> for colour and <b>Ll × ll</b> for length. " +
+      "Give every answer as a fraction or a decimal.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) {
+        var f1 = ctx.el("div"), f2 = ctx.el("div");
+        host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("showSim"))));
+        host.appendChild(f1); host.appendChild(f2);
+        punnett(f1, { gene:GENES.coat, mum:"Bb", dad:"Bb" });
+        punnett(f2, { gene:GENES.hair, mum:"Ll", dad:"ll" });
+        ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+      }
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> What is P(a pup is white)?",
+      inputs:[{ k:"p", answer:0.25, tol:0.005, label:"P(white)" }],
+      hint:"Bb × Bb. One box in four.",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> What is P(a pup is long-haired)?",
+      inputs:[{ k:"p", answer:0.5, tol:0.005, label:"P(long)" }],
+      hint:"Ll × ll gives Ll, Ll, ll, ll.",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> What is P(a pup is white <b>and</b> long-haired)?",
+      inputs:[{ k:"p", answer:0.125, tol:0.005, label:"P(white and long)" }],
+      hint:"Draw a two-stage tree: colour, then length. Multiply along the branch.",
+      worked:"<p>1/4 × 1/2 = <b>1/8 = 0.125</b>.</p>" +
+             "<p>You are allowed to multiply because the two genes are <b>independent</b>: knowing a pup is white tells you nothing at all about its coat length.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> What is P(a pup is black <b>and</b> short-haired)?",
+      inputs:[{ k:"p", answer:0.375, tol:0.005, label:"P(black and short)" }],
+      hint:"P(black) = 3/4 and P(short) = 1/2.",
+      worked:"<p>3/4 × 1/2 = <b>3/8 = 0.375</b>.</p>" +
+             "<p>The four ends of that tree are 3/8, 3/8, 1/8, 1/8 — and they add to 1, which is how you check yourself.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>e.</b> Sofia's litter has <b>8</b> pups. How many would you expect to be white and long-haired?",
+      inputs:[{ k:"n", answer:1, tol:0.01, label:"expected pups" }],
+      hint:"Multiply your answer to part c by 8.",
+      worked:"<p>1/8 × 8 = <b>1 pup</b>.</p>" +
+             "<p>One pup out of eight — which is why a breeder wanting a white long-haired guinea pig has to be patient.</p>",
+      onDone: tick });
+  }
+
+  /* --- B5 EXAM: the real thing, timed, five parts, one in words --- */
+  function b5(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("timed")) + " " + esc(SIM.T("noSim"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'><b>Kiet's breeding record.</b> Kiet keeps guinea pigs and records two traits. " +
+      "Coat colour: black (<b>B</b>) is <span data-v='dominant'>dominant</span>, white (<b>b</b>) is " +
+      "<span data-v='recessive'>recessive</span>. Coat length: short hair (<b>L</b>) is dominant, long " +
+      "hair (<b>l</b>) is recessive. The two genes are on different chromosomes, so they are inherited " +
+      "independently. Kiet crosses a female of <span data-v='genotype'>genotype</span> <b>Bb Ll</b> with " +
+      "a male of genotype <b>bb Ll</b>. Give probabilities as fractions or decimals.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> Considering coat colour only, what is P(a pup is white)?",
+      inputs:[{ k:"p", answer:0.5, tol:0.005, label:"P(white)" }],
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> Considering coat length only, what is P(a pup is long-haired)?",
+      inputs:[{ k:"p", answer:0.25, tol:0.005, label:"P(long)" }],
+      worked:"<p>Ll × Ll gives LL, Ll, Ll, ll. One box in four is ll, so P(long) = <b>1/4</b>.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> What is P(a pup is white and long-haired)? Give it as a fraction or decimal, and then as a percentage.",
+      inputs:[
+        { k:"p", answer:0.125, tol:0.005, label:"P(white and long)" },
+        { k:"pc", answer:12.5, tol:0.25, unit:"%", label:"as a percentage" }],
+      worked:"<p>1/2 × 1/4 = <b>1/8 = 0.125 = 12.5%</b>.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> Kiet keeps <b>two</b> pups from the litter. What is P(<b>at least one</b> of the two is long-haired)?",
+      inputs:[{ k:"p", answer:0.4375, tol:0.005, label:"P(at least one long)" }],
+      worked:"<p>P(a pup is short) = 3/4, so P(neither of the two is long) = 3/4 × 3/4 = 9/16.</p>" +
+             "<p>P(at least one long) = 1 − 9/16 = <b>7/16 = 0.4375</b>.</p>" +
+             "<p>Adding 1/4 + 1/4 = 1/2 is the trap. It counts the litter where <b>both</b> are long-haired twice.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>e.</b> Kiet says: \"The first pup was long-haired, so the second pup is more likely to be short-haired.\" He is wrong. Write the one word that describes two events where the first result does not change the chance of the second.",
+      inputs:[{ k:"w", wide:true, label:"one word",
+                text:["independent", "independent events", "they are independent",
+                      "the events are independent", "the two events are independent",
+                      "independence", "independant", "independant events",
+                      "two independent events", "it is independent", "they are independent events"] }],
+      worked:"<p>The word is <b>independent</b>.</p>" +
+             "<p>A full answer: <i>\"No, Kiet is not right. The two pups are independent events, so the coat length of the first pup does not change anything for the second. P(the second pup is long-haired) is still 1/4, exactly as it was before the first pup was born.\"</i></p>" +
+             "<p>This is the same mistake as believing a coin is \"due\" for tails after three heads. The guinea pigs have no memory, and neither does a coin.</p>",
+      onDone: tick });
+  }
+
+  /* ================================================================
+     WIRE IT UP
+     ================================================================ */
+  var TAB = {
+    play:{en:"Play", "zh-Hans":"先玩", "zh-Hant":"先玩", vi:"Chơi thử"},
+    read:{en:"Read", "zh-Hans":"读图", "zh-Hant":"讀圖", vi:"Đọc"},
+    predict:{en:"Predict", "zh-Hans":"预测", "zh-Hant":"預測", vi:"Dự đoán"},
+    solve:{en:"Solve", "zh-Hans":"自己算", "zh-Hant":"自己算", vi:"Tự tính"},
+    exam:{en:"The real thing", "zh-Hans":"正式演练", "zh-Hant":"正式演練", vi:"Làm thật"}
+  };
+  var ALL4 = {en:"Answer all four.", "zh-Hans":"四题全部答对。", "zh-Hant":"四題全部答對。", vi:"Trả lời cả bốn câu."};
+  var ALL5 = {en:"Five parts, all correct.", "zh-Hans":"五小题全对。", "zh-Hant":"五小題全對。", vi:"Năm phần, đúng hết."};
+
+  var STAGES_A = [
+    { id:"a1", kind:"play", tab:TAB.play,
+      title:{en:"Fill a Punnett square by dragging", "zh-Hans":"拖动滑块，填出庞尼特方格",
+             "zh-Hant":"拖動滑桿，填出龐尼特方格", vi:"Kéo thanh trượt để điền bảng Punnett"},
+      aim:{en:"Each <span data-v=\"parent\">parent</span> gives one <span data-v=\"allele\">allele</span> to each pup. The four boxes of a <span data-v=\"Punnett square\">Punnett square</span> are the four equally likely ways that can happen — which makes the square a <span data-v=\"sample space\">sample space</span>.",
+           "zh-Hans":"每个<span data-v=\"parent\">亲本</span>给每只幼崽一个<span data-v=\"allele\">等位基因</span>。<span data-v=\"Punnett square\">庞尼特方格</span>的四个格子就是四种等可能的组合方式——所以这个方格就是一个<span data-v=\"sample space\">样本空间</span>。",
+           "zh-Hant":"每個<span data-v=\"parent\">親本</span>給每隻幼鼠一個<span data-v=\"allele\">對偶基因</span>。<span data-v=\"Punnett square\">龐尼特方格</span>的四個格子就是四種等可能的組合方式——所以這個方格就是一個<span data-v=\"sample space\">樣本空間</span>。",
+           vi:"Mỗi <span data-v=\"parent\">bố mẹ</span> cho mỗi con non một <span data-v=\"allele\">alen</span>. Bốn ô của <span data-v=\"Punnett square\">bảng Punnett</span> là bốn cách đồng khả năng điều đó xảy ra — nên bảng này chính là một <span data-v=\"sample space\">không gian mẫu</span>."},
+      goal:{en:"Find the one pair of parents that gives 3 black : 1 white, then breed 100 pups from them.",
+            "zh-Hans":"找出唯一一对能给出 3 黑 : 1 白 的亲本，然后用它们繁殖 100 只幼崽。",
+            "zh-Hant":"找出唯一一對能給出 3 黑 : 1 白 的親本，然後用牠們繁殖 100 隻幼鼠。",
+            vi:"Tìm cặp bố mẹ duy nhất cho tỉ số 3 đen : 1 trắng, rồi cho chúng sinh 100 con non."},
+      build:a1 },
+    { id:"a2", kind:"read", tab:TAB.read,
+      title:{en:"Read the genotypes, the ratios and the chance", "zh-Hans":"读出基因型、比和概率",
+             "zh-Hant":"讀出基因型、比和機率", vi:"Đọc kiểu gen, tỉ số và xác suất"},
+      aim:{en:"One square answers three different questions: the <span data-v=\"genotype\">genotype</span> ratio, the <span data-v=\"phenotype\">phenotype</span> ratio, and the <span data-v=\"probability\">probability</span> of one pup. A ratio of 3 : 1 has four parts, so it is 3/4 and 1/4 — never 1/3.",
+           "zh-Hans":"一个方格回答三个不同的问题：<span data-v=\"genotype\">基因型</span>比、<span data-v=\"phenotype\">表现型</span>比，以及一只幼崽的<span data-v=\"probability\">概率</span>。3 : 1 一共有四份，所以是 3/4 和 1/4——绝不是 1/3。",
+           "zh-Hant":"一個方格回答三個不同的問題：<span data-v=\"genotype\">基因型</span>比、<span data-v=\"phenotype\">表現型</span>比，以及一隻幼鼠的<span data-v=\"probability\">機率</span>。3 : 1 一共有四份，所以是 3/4 和 1/4——絕不是 1/3。",
+           vi:"Một bảng trả lời ba câu hỏi khác nhau: tỉ số <span data-v=\"genotype\">kiểu gen</span>, tỉ số <span data-v=\"phenotype\">kiểu hình</span>, và <span data-v=\"probability\">xác suất</span> của một con non. Tỉ số 3 : 1 có bốn phần, nên là 3/4 và 1/4 — không bao giờ là 1/3."},
+      goal:ALL4, build:a2 },
+    { id:"a3", kind:"predict", tab:TAB.predict,
+      title:{en:"Name the ratio before you see the square", "zh-Hans":"在看到方格之前先说出比",
+             "zh-Hant":"在看到方格之前先說出比", vi:"Nói tỉ số trước khi thấy bảng"},
+      aim:{en:"Once you can build the square in your head, the ratio, the probability and the expected number in a litter all come out of the same four boxes.",
+           "zh-Hans":"只要能在心里搭出方格，比、概率和一窝里的预期数目就都从同样的四个格子里出来。",
+           "zh-Hant":"只要能在心裡搭出方格，比、機率和一窩裡的預期數目就都從同樣的四個格子裡出來。",
+           vi:"Khi đã dựng được bảng trong đầu, tỉ số, xác suất và số con dự kiến trong một lứa đều ra từ cùng bốn ô đó."},
+      goal:{en:"Get all three predictions right.", "zh-Hans":"三个预测全部答对。",
+            "zh-Hant":"三個預測全部答對。", vi:"Dự đoán đúng cả ba."},
+      build:a3 },
+    { id:"a4", kind:"solve", tab:TAB.solve,
+      title:{en:"One cross, on paper, no square on the screen", "zh-Hans":"一个杂交，自己在纸上做，屏幕上没有方格",
+             "zh-Hant":"一個雜交，自己在紙上做，畫面上沒有方格", vi:"Một phép lai, làm trên giấy, không có bảng trên màn hình"},
+      aim:{en:"Write the parents' genotypes, fill the four boxes, then turn the ratio into a probability, a percentage and a number of pups. This is the biology half of the CAT and the probability half at the same time.",
+           "zh-Hans":"写出亲本的基因型，填出四个格子，再把比转成概率、百分比和幼崽只数。这同时就是 CAT 的生物学部分和概率部分。",
+           "zh-Hant":"寫出親本的基因型，填出四個格子，再把比轉成機率、百分比和幼鼠隻數。這同時就是 CAT 的生物學部分和機率部分。",
+           vi:"Viết kiểu gen của bố mẹ, điền bốn ô, rồi biến tỉ số thành xác suất, phần trăm và số con non. Đây vừa là nửa sinh học vừa là nửa xác suất của bài CAT."},
+      goal:{en:"All five parts correct. The square then shows you the cross.",
+            "zh-Hans":"五小题全对，方格会把这个杂交画给你看。",
+            "zh-Hant":"五小題全對，方格會把這個雜交畫給你看。",
+            vi:"Đúng cả năm phần. Sau đó bảng sẽ vẽ phép lai cho em xem."},
+      skills:["b_punnett", "b_genlang"], build:a4 },
+    { id:"a5", kind:"exam", tab:TAB.exam,
+      title:{en:"A whole task, on your own, timed", "zh-Hans":"完整一题，独立完成，计时",
+             "zh-Hant":"完整一題，獨立完成，計時", vi:"Một bài trọn vẹn, tự làm, tính giờ"},
+      aim:{en:"Same mathematics as the Biology + Probability CAT, different animals. No square, no sliders, no hints — and the last part asks you to reason backwards from the offspring to the parent.",
+           "zh-Hans":"和「生物 + 概率」CAT 同样的数学，换了动物。没有方格、没有滑块、没有提示——最后一小题还要你从后代反推亲本。",
+           "zh-Hant":"和「生物 + 機率」CAT 同樣的數學，換了動物。沒有方格、沒有滑桿、沒有提示——最後一小題還要你從後代反推親本。",
+           vi:"Cùng toán như bài CAT Sinh học + Xác suất, chỉ khác con vật. Không bảng, không thanh trượt, không gợi ý — và phần cuối bắt em suy ngược từ đời con về bố mẹ."},
+      goal:ALL5, skills:["b_punnett", "b_genlang", "b_samplespace"], build:a5 }
+  ];
+
+  var STAGES_B = [
+    { id:"b1", kind:"play", tab:TAB.play,
+      title:{en:"Build a tree for two pups in a row", "zh-Hans":"为连续两只幼崽搭一棵树",
+             "zh-Hant":"為連續兩隻幼鼠搭一棵樹", vi:"Dựng cây cho hai con non liên tiếp"},
+      aim:{en:"A tree diagram takes one event at a time. Along a branch you <b>multiply</b>, because both things have to happen. That is why two unlikely pups together are far less likely than one.",
+           "zh-Hans":"树状图一次只处理一个事件。沿着一条枝要<b>相乘</b>，因为两件事都必须发生。所以两只都不常见的幼崽合在一起，比一只要少见得多。",
+           "zh-Hant":"樹狀圖一次只處理一個事件。沿著一條枝要<b>相乘</b>，因為兩件事都必須發生。所以兩隻都不常見的幼鼠合在一起，比一隻要少見得多。",
+           vi:"Sơ đồ cây xử lý từng biến cố một. Dọc theo một nhánh thì <b>nhân</b>, vì cả hai điều đều phải xảy ra. Vì thế hai con non hiếm cùng lúc thì hiếm hơn một con rất nhiều."},
+      goal:{en:"Drag the two sliders until P(both pups are long-haired) is exactly 1/16.",
+            "zh-Hans":"拖动两个滑块，直到 P(两只都是长毛) 正好等于 1/16。",
+            "zh-Hant":"拖動兩個滑桿，直到 P(兩隻都是長毛) 正好等於 1/16。",
+            vi:"Kéo hai thanh trượt cho tới khi P(cả hai con đều lông dài) đúng bằng 1/16."},
+      build:b1 },
+    { id:"b2", kind:"read", tab:TAB.read,
+      title:{en:"Read the branches and multiply along them", "zh-Hans":"读树枝，沿着树枝相乘",
+             "zh-Hant":"讀樹枝，沿著樹枝相乘", vi:"Đọc các nhánh và nhân dọc theo chúng"},
+      aim:{en:"Every end of the tree is one <span data-v=\"outcome\">outcome</span> of the two-step experiment. Together the four ends are the whole <span data-v=\"sample space\">sample space</span>, so they must add to 1 — which is how you check your own work.",
+           "zh-Hans":"树的每一个末端都是这个两步试验的一个<span data-v=\"outcome\">结果</span>。四个末端合起来就是整个<span data-v=\"sample space\">样本空间</span>，所以必须加起来等于 1——这就是你检查自己的方法。",
+           "zh-Hant":"樹的每一個末端都是這個兩步試驗的一個<span data-v=\"outcome\">結果</span>。四個末端合起來就是整個<span data-v=\"sample space\">樣本空間</span>，所以必須加起來等於 1——這就是你檢查自己的方法。",
+           vi:"Mỗi đầu mút của cây là một <span data-v=\"outcome\">kết quả</span> của thí nghiệm hai bước. Bốn đầu mút gộp lại là toàn bộ <span data-v=\"sample space\">không gian mẫu</span>, nên chúng phải cộng lại bằng 1 — đó là cách em tự kiểm tra."},
+      goal:ALL4, build:b2 },
+    { id:"b3", kind:"predict", tab:TAB.predict,
+      title:{en:"Predict \"at least one\" before the tree appears", "zh-Hans":"在树状图出现前预测“至少一只”",
+             "zh-Hant":"在樹狀圖出現前預測「至少一隻」", vi:"Dự đoán \"ít nhất một con\" trước khi cây hiện ra"},
+      aim:{en:"\"At least one\" is never the branches added up. Find the chance that it happens to <b>none</b> of them, and take that away from 1.",
+           "zh-Hans":"“至少一只”绝不是把树枝加起来。先求“<b>一只也没有</b>”的概率，再用 1 减去它。",
+           "zh-Hant":"「至少一隻」絕不是把樹枝加起來。先求「<b>一隻也沒有</b>」的機率，再用 1 減去它。",
+           vi:"\"Ít nhất một con\" không bao giờ là cộng các nhánh lại. Hãy tìm khả năng điều đó xảy ra với <b>không con nào</b>, rồi lấy 1 trừ đi."},
+      goal:{en:"Get all three predictions right.", "zh-Hans":"三个预测全部答对。",
+            "zh-Hant":"三個預測全部答對。", vi:"Dự đoán đúng cả ba."},
+      build:b3 },
+    { id:"b4", kind:"solve", tab:TAB.solve,
+      title:{en:"Two genes at once, in fractions", "zh-Hans":"两个基因一起算，用分数",
+             "zh-Hant":"兩個基因一起算，用分數", vi:"Hai gen cùng lúc, bằng phân số"},
+      aim:{en:"Two genes on different chromosomes are <b>independent</b>: what a pup inherits for colour says nothing about its coat length. That is exactly the condition that lets you multiply the two probabilities.",
+           "zh-Hans":"位于不同染色体上的两个基因是<b>独立</b>的：幼崽在毛色上继承了什么，对毛的长度毫无影响。正是这个条件让你可以把两个概率相乘。",
+           "zh-Hant":"位於不同染色體上的兩個基因是<b>獨立</b>的：幼鼠在毛色上繼承了什麼，對毛的長度毫無影響。正是這個條件讓你可以把兩個機率相乘。",
+           vi:"Hai gen nằm trên hai nhiễm sắc thể khác nhau thì <b>độc lập</b>: con non thừa hưởng gì về màu lông cũng không nói lên điều gì về độ dài lông. Chính điều kiện đó cho phép em nhân hai xác suất."},
+      goal:{en:"All five parts correct. The two squares then show you both crosses.",
+            "zh-Hans":"五小题全对，两个方格会把两个杂交都画出来。",
+            "zh-Hant":"五小題全對，兩個方格會把兩個雜交都畫出來。",
+            vi:"Đúng cả năm phần. Sau đó hai bảng sẽ vẽ cả hai phép lai."},
+      skills:["b_tree", "b_samplespace"], build:b4 },
+    { id:"b5", kind:"exam", tab:TAB.exam,
+      title:{en:"Two traits, two pups, timed", "zh-Hans":"两个性状、两只幼崽、计时",
+             "zh-Hant":"兩個性狀、兩隻幼鼠、計時", vi:"Hai tính trạng, hai con non, tính giờ"},
+      aim:{en:"This is as close to the Biology + Probability CAT as practice gets: a worded breeding record, two independent traits, an \"at least one\" question, and one part answered in words.",
+           "zh-Hans":"这已经是最接近「生物 + 概率」CAT 的练习：一份文字繁殖记录、两个独立性状、一道“至少一只”的题，还有一小题要用文字作答。",
+           "zh-Hant":"這已經是最接近「生物 + 機率」CAT 的練習：一份文字繁殖紀錄、兩個獨立性狀、一道「至少一隻」的題，還有一小題要用文字作答。",
+           vi:"Đây là bài luyện gần bài CAT Sinh học + Xác suất nhất: một bản ghi nhân giống bằng lời, hai tính trạng độc lập, một câu \"ít nhất một con\", và một phần trả lời bằng chữ."},
+      goal:ALL5, skills:["b_tree", "b_samplespace", "b_punnett"], build:b5 }
+  ];
+
+  function boot(){
+    document.documentElement.lang = lang() === "en" ? "en" : lang();
+    document.querySelectorAll("[data-i18n]").forEach(function(n){
+      var v = T(n.getAttribute("data-i18n"));
+      if (typeof v === "string") n.innerHTML = v;
+    });
+    var sel = document.querySelector(".language-select");
+    sel.value = lang();
+    sel.addEventListener("change", function(){
+      try { localStorage.setItem("elc_page_language", sel.value); } catch(e){}
+      location.reload();
+    });
+
+    /* the framing line: which task this rehearses */
+    var cp = null;
+    if (S2) S2.UNITS.forEach(function(u){ u.checkpoints.forEach(function(c){ if (c.id === "cp_biocat") cp = c; }); });
+    document.getElementById("frameLine").innerHTML =
+      "<b>" + esc(cp ? T("buildsF")(cp.name) : T("buildsAlways")) + "</b>" +
+      "<span class='eng'>" + esc(T("engNote")) + "</span>";
+
+    SIM.mount(document.getElementById("sim"), {
+      id:"breed", cp:"cp_biocat", room:"science",
+      evidenceSrc:"The Guinea Pig Shed",
+      skills:["b_punnett", "b_genlang", "b_samplespace", "b_tree"],
+      openAll: (function(){ try { return localStorage.getItem("elc_stem_sim_open") === "1"; } catch(e){ return false; } })(),
+      sets:[
+        { id:"a", name:{en:"A · one gene", "zh-Hans":"A · 一个基因", "zh-Hant":"A · 一個基因", vi:"A · một gen"},
+          stages:STAGES_A },
+        { id:"b", name:{en:"B · two events", "zh-Hans":"B · 两个事件", "zh-Hant":"B · 兩個事件", vi:"B · hai biến cố"},
+          stages:STAGES_B }
+      ]
+    });
+
+    if (window.STEMVOCAB) window.STEMVOCAB.init();
+
+    document.getElementById("teacherUnlock").addEventListener("click", function(e){
+      e.preventDefault();
+      try { localStorage.setItem("elc_stem_sim_open", "1"); } catch(err){}
+      location.reload();
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
+</script>
+</body>
+</html>
