@@ -222,8 +222,12 @@
     }
     return out;
   }
+  /* a marked point sits ON the curve, so it gets a paper-coloured ring to lift
+     it off the stroke underneath — otherwise a turning-point dot in the curve's
+     own colour is invisible exactly where it matters most */
   function qdot(x, y, yLo, color) {
-    return "<circle cx='" + X(x) + "' cy='" + QY(y, yLo) + "' r='4.5' fill='" + (color || "var(--accent,#0d7a70)") + "'/>";
+    return "<circle cx='" + X(x) + "' cy='" + QY(y, yLo) + "' r='4.5' fill='" + (color || "var(--accent,#0d7a70)") +
+      "' stroke='var(--paper,#faf7ef)' stroke-width='1.6'/>";
   }
 
   /* trajectory sketch for projectile questions: motionChart's frame (320 × 220,

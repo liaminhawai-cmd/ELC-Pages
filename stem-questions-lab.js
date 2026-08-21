@@ -107,7 +107,7 @@
     var u = UNITS[unitKey];
     return { k: k, label: label, place: place, answer: fmt(value) + " " + u.show,
       check: function (v) {
-        var s = String(v == null ? "" : v).replace(/−/g, "-").replace(/ /g, " ")
+        var s = String(v == null ? "" : v).replace(/−/g, "-").replace(/\u00a0/g, " ")
           .trim().toLowerCase().replace(/\.$/, "");
         var m = s.match(/^(-?\d+(?:[.,]\d+)?)\s*(.*)$/);
         if (!m) return false;
@@ -187,7 +187,7 @@
       "' fill='var(--paper,#fcfcfa)'/>";
     s += "<path d='M" + (LX + 2) + "," + yEdge + " Q88," + yCtl + " " + (RX - 2) + "," + yEdge +
       " L" + (RX - 2) + "," + (GB - 2) + " L" + (LX + 2) + "," + (GB - 2) +
-      " Z' fill='var(--accent,#0d7a70)' opacity='.22'/>";
+      " Z' fill='var(--accent,#0d7a70)' opacity='0.22'/>";
     s += "<path d='M" + (LX + 2) + "," + yEdge + " Q88," + yCtl + " " + (RX - 2) + "," + yEdge +
       "' fill='none' stroke='var(--accent,#0d7a70)' stroke-width='1.8'/>";
     var steps = Math.round(sc.cap / sc.minor);
@@ -748,8 +748,10 @@
           inputs: [inp],
           workedHTML: "The numbered lines are " + ts.major + " °C apart with " + (ts.major / ts.minor) +
             " small marks between them, so one small mark = " + ts.major + " ÷ " + (ts.major / ts.minor) +
-            " = " + fmt(ts.minor) + " °C.<br>The liquid stops " + fmt(t - below) + " °C above the " +
-            below + " line, so the reading is <b>" + inp.answer + "</b>. " +
+            " = " + fmt(ts.minor) + " °C.<br>" +
+            (t === below ? "The liquid stops exactly on the " + below + " line"
+              : "The liquid stops " + fmt(t - below) + " °C above the " + below + " line") +
+            ", so the reading is <b>" + inp.answer + "</b>. " +
             "A number on its own would not tell anyone what it means."
         };
       }
@@ -767,8 +769,10 @@
           inputs: [inp2],
           workedHTML: "The numbered lines are " + cs.major + " mL apart with " + (cs.major / cs.minor) +
             " small marks between them, so one small mark = " + cs.major + " ÷ " + (cs.major / cs.minor) +
-            " = " + fmt(cs.minor) + " mL.<br>The bottom of the meniscus is " + fmt(v - below2) +
-            " mL above the " + below2 + " line, so the volume is <b>" + inp2.answer + "</b>."
+            " = " + fmt(cs.minor) + " mL.<br>" +
+            (v === below2 ? "The bottom of the meniscus sits exactly on the " + below2 + " line"
+              : "The bottom of the meniscus is " + fmt(v - below2) + " mL above the " + below2 + " line") +
+            ", so the volume is <b>" + inp2.answer + "</b>."
         };
       }
 
@@ -928,10 +932,18 @@
     flat: { answer: "stayed the same",
       alts: ["stayed constant", "stays the same", "stay the same", "did not change", "didnt change", "does not change", "no change", "constant", "same", "remained the same", "stayed level"] }
   };
+  /* Each context carries the directions its story can honestly go in: water over
+     a burner heats up, water on the bench cools down, water already boiling sits
+     still at 100 °C. `lo`/`hi` are the range the first reading is drawn from. */
   var TCTX = [
-    { unitX: "s", nameX: "time", stepX: 30, unitY: "°C", nameY: "temperature", thing: "water in a beaker" },
-    { unitX: "min", nameX: "time", stepX: 1, unitY: "°C", nameY: "temperature", thing: "water cooling on the bench" },
-    { unitX: "s", nameX: "time", stepX: 30, unitY: "mL", nameY: "volume", thing: "water dripping into a cylinder" }
+    { unitX: "s", nameX: "time", stepX: 30, unitY: "°C", nameY: "temperature",
+      thing: "water in a beaker over a Bunsen burner", dirs: ["up"], lo: 16, hi: 30 },
+    { unitX: "min", nameX: "time", stepX: 1, unitY: "°C", nameY: "temperature",
+      thing: "water cooling on the bench", dirs: ["down"], lo: 46, hi: 70 },
+    { unitX: "s", nameX: "time", stepX: 30, unitY: "mL", nameY: "volume",
+      thing: "water dripping into a measuring cylinder", dirs: ["up"], lo: 10, hi: 26 },
+    { unitX: "min", nameX: "time", stepX: 1, unitY: "°C", nameY: "temperature",
+      thing: "water that has already reached boiling point", dirs: ["flat"], lo: 100, hi: 100 }
   ];
 
   register({
@@ -948,13 +960,15 @@
     hint: "As ___ increased, ___ increased / decreased / stayed the same. The anomaly is the one that breaks the pattern.",
     gen: function (rng) {
       var n = rng.pick(NAMES);
-      var c = rng.pick(TCTX);
       var kind = rng.pick(["trend", "trend", "anomaly", "anomaly", "cause", "uncert"]);
+      /* the anomaly questions need a rising story, so they only ever use a rising context */
+      var c = rng.pick(kind === "trend" || kind === "uncert" ? TCTX
+        : TCTX.filter(function (x) { return x.dirs.indexOf("up") !== -1; }));
 
       /* --- state the trend from a generated table --- */
       if (kind === "trend") {
-        var dir = rng.pick(["up", "up", "down", "flat"]);
-        var start = rng.ri(16, 30);
+        var dir = rng.pick(c.dirs);
+        var start = rng.ri(c.lo, c.hi);
         var step = dir === "up" ? rng.pick([4, 6, 8]) : dir === "down" ? -rng.pick([3, 4, 5]) : 0;
         var rows = [], i;
         for (i = 0; i < 5; i++) rows.push([String(i * c.stepX), String(start + i * step)]);
@@ -980,7 +994,9 @@
         var vals = [], j;
         for (j = 0; j < 6; j++) vals.push(s0 + j * st);
         var bad = rng.ri(1, 4);                       /* never the first or last reading */
-        var offBy = rng.pick([-1, 1]) * rng.pick([st + 6, st + 10, 2 * st + 4]);
+        /* st + 3, 5 or 7 is more than a whole step out, and can never be a multiple
+           of the step — so the wrong reading never collides with a real one */
+        var offBy = rng.pick([-1, 1]) * (st + rng.pick([3, 5, 7]));
         var shown = vals.slice();
         shown[bad] = vals[bad] + offBy;
         var rows2 = [], k;
@@ -1497,13 +1513,13 @@
 
       /* --- which is more acidic? (no logarithms anywhere) --- */
       if (kind === "stronger") {
-        var a1 = rng.ri(0, 5), a2 = a1 + rng.ri(1, 5);
+        var a1 = rng.ri(0, 4), a2 = rng.ri(a1 + 2, 6);   /* both under 7, and never adjacent */
         var moreAcid = rng.raw() < 0.5;
         var lo = "pH " + a1, hi = "pH " + a2;
         var ansS = moreAcid ? lo : hi;
         return {
           qHTML: "Two liquids are tested: one is <b>" + lo + "</b> and the other is <b>" + hi +
-            "</b>. Which one is <b>more " + (moreAcid ? "acidic" : "nearly neutral") + "</b>?",
+            "</b>. Which one is <b>" + (moreAcid ? "more acidic" : "closer to neutral") + "</b>?",
           svg: phStripSVG([{ v: a1, tag: lo }, { v: a2, tag: hi }]),
           opts: { list: [lo, hi, "they are the same"], a: ansS },
           workedHTML: "Both are below 7, so both are acids. The <b>lower</b> the number the more acidic it is, " +
