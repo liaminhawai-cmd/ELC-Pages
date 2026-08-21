@@ -55,7 +55,12 @@
   .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px;
          flex-wrap:wrap; margin-bottom:26px; }
-  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  /* inline-flex + min-height, the same way the unit-page template does it:
+     the link keeps its one line of type but carries a finger-sized hit area.
+     (stem-commute.html only clears 44px because its back link happens to
+     wrap onto two lines at 360px — see the note in the handover.) */
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
+           display:inline-flex; align-items:center; min-height:44px; }
   .top a:hover { text-decoration:underline; }
   .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:34px;
     border-radius:8px; border:1px solid var(--hair); background:var(--paper); color:var(--ink); }
@@ -71,7 +76,7 @@
   footer { margin-top:34px; border-top:1px solid var(--hair); padding-top:14px;
            font-size:.78rem; color:var(--faint); }
   .teacherline { margin:10px 0 0; font-size:.76rem; }
-  .teacherline a { color:var(--faint); }
+  .teacherline a { color:var(--faint); display:inline-flex; align-items:center; min-height:44px; }
   [data-v] { border-bottom:1px dotted var(--accent); cursor:help; }
   .sim-live { font-variant-numeric:tabular-nums; font-size:.82rem; color:var(--muted); }
   /* the Punnett square — hairlines and tokens only, same grammar as .sim-table */
@@ -194,6 +199,24 @@
   function feq(a,b){ return a.n === b.n && a.d === b.d; }
   function fstr(f){ return f.d === 1 ? String(f.n) : f.n + "/" + f.d; }
   function fpc(f){ return num(fdec(f) * 100); }
+
+  /* Steps 1–3 are fully translated, and that includes the little label
+     over an answer box. pLabel(word, word) builds "P(white)" or
+     "P(short, short)" in all four languages out of the gene's own words,
+     so a label can never drift away from the square it belongs to. */
+  var LANGS = ["en", "zh-Hans", "zh-Hant", "vi"];
+  function pLabel(){
+    var words = Array.prototype.slice.call(arguments), out = {};
+    LANGS.forEach(function(lg){
+      out[lg] = "P(" + words.map(function(w){
+        return typeof w === "string" ? w : (w[lg] !== undefined ? w[lg] : w.en);
+      }).join(", ") + ")";
+    });
+    return out;
+  }
+  /* the unit string under a probability box, in the four languages */
+  var FRACD = {en:"fraction or decimal", "zh-Hans":"分数或小数",
+               "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"};
 
   /* ================================================================
      THE GENETICS — everything downstream is derived from these two
@@ -346,16 +369,16 @@
     s.push(svgText((x0 + x1) / 2, 20, L(o.head1), faint, 11, "middle"));
     s.push(svgText((x1 + x2) / 2, 20, L(o.head2), faint, 11, "middle"));
 
-    /* stage one: one pup, two ways it can turn out */
+    /* stage one: one pup, two ways it can turn out.
+       The probability and the outcome word ride together at the far end
+       of the branch, clear of the node — a first-stage branch is steep,
+       so a horizontal label sitting on its midpoint would cross it. */
     var st1 = [{ p:pd, col:cd, w:g.domS }, { p:pr, col:cr, w:g.recS }];
     st1.forEach(function(b, i){
       s.push(svgLine(x0, yR, x1, y1[i], b.col));
-      var mx = (x0 + x1) / 2, my = (yR + y1[i]) / 2;
-      s.push(svgText(mx, y1[i] < yR ? my - 5 : my + 13, fstr(b.p), b.col, 11, "middle", "600"));
+      s.push(svgText(x1 - 5, y1[i] + (i === 0 ? -9 : 16),
+        fstr(b.p) + "  " + L(b.w), b.col, 11, "end", "600"));
       s.push("<circle cx='" + x1 + "' cy='" + y1[i] + "' r='3' fill='" + b.col + "'/>");
-      /* the outcome word sits in the wedge between the two branches that
-         leave this node, so it never lies on top of a line */
-      s.push(svgText(x1 + 6, y1[i] + 4, L(b.w), b.col, 10.5, "start", "600"));
     });
 
     /* stage two: the second pup, and the product along each branch */
@@ -366,7 +389,7 @@
         ends.push(prod);
         s.push(svgLine(x1, y1[i], x2, y, b2.col));
         var mx = (x1 + x2) / 2, my = (y1[i] + y) / 2;
-        s.push(svgText(mx, y < y1[i] ? my - 5 : my + 13, fstr(b2.p), b2.col, 11, "middle", "600"));
+        s.push(svgText(mx, y < y1[i] ? my - 7 : my + 15, fstr(b2.p), b2.col, 11, "middle", "600"));
         s.push("<circle cx='" + x2 + "' cy='" + y + "' r='3' fill='" + b2.col + "'/>");
         s.push(svgText(x2 + 7, y - 3, L(b1.w) + ", " + L(b2.w), ink, 10.5, "start"));
         s.push(svgText(x2 + 7, y + 11, "= " + fstr(prod), muted, 10.5, "start"));
@@ -547,8 +570,8 @@
               "zh-Hant":"仍然是 Bb × Bb。一隻幼鼠是白色的<span data-v=\"probability\">機率</span>是多少？",
               vi:"Vẫn là Bb × Bb. <span data-v=\"probability\">Xác suất</span> một con non màu trắng là bao nhiêu?"},
       inputs:[{ k:"p", answer:0.25, tol:0.005,
-                unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"},
-                label:"P(white)" }],
+                unit:FRACD,
+                label:pLabel(g.recW) }],
       hint:{en:"One box out of the four is white. You may type 1/4 or 0.25.",
             "zh-Hans":"四个格子里有一个是白色。可以填 1/4 或 0.25。",
             "zh-Hant":"四個格子裡有一個是白色。可以填 1/4 或 0.25。",
@@ -598,8 +621,8 @@
         { k:"b", answer:c.black, tol:0.01,
           label:{en:"black boxes", "zh-Hans":"黑色格子", "zh-Hant":"黑色格子", vi:"số ô đen"} },
         { k:"p", answer:c.pw, tol:0.005,
-          unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"},
-          label:"P(white)" }
+          unit:FRACD,
+          label:pLabel(g.recW) }
       ];
       if (c.litter) ins.push({ k:"e", answer:c.expect, tol:0.01,
         label:{en:"white pups expected in a litter of " + c.litter,
@@ -839,8 +862,8 @@
               "zh-Hans":L(SETLL) + "读树状图的第一段。第 1 只是长毛的概率是多少？",
               "zh-Hant":L(SETLL) + "讀樹狀圖的第一段。第 1 隻是長毛的機率是多少？",
               vi:L(SETLL) + "Đọc chặng đầu của sơ đồ cây. Xác suất con thứ 1 có lông dài là bao nhiêu?"},
-      inputs:[{ k:"p", answer:0.25, tol:0.005, label:"P(long)",
-                unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"} }],
+      inputs:[{ k:"p", answer:0.25, tol:0.005, label:pLabel(g.recS),
+                unit:FRACD }],
       hint:{en:"It is written on the branch itself.", "zh-Hans":"这个数就写在树枝上。",
             "zh-Hant":"這個數就寫在樹枝上。", vi:"Số đó viết ngay trên nhánh."},
       onDone: tick });
@@ -849,8 +872,8 @@
               "zh-Hans":"仍然是 Ll × Ll。沿最上面那条路径相乘：P(第 1 只短毛 <b>且</b> 第 2 只短毛) 是多少？",
               "zh-Hant":"仍然是 Ll × Ll。沿最上面那條路徑相乘：P(第 1 隻短毛 <b>且</b> 第 2 隻短毛) 是多少？",
               vi:"Vẫn là Ll × Ll. Nhân dọc theo đường trên cùng: P(con 1 lông ngắn <b>và</b> con 2 lông ngắn) bằng bao nhiêu?"},
-      inputs:[{ k:"p", answer:0.5625, tol:0.005, label:"P(short, short)",
-                unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"} }],
+      inputs:[{ k:"p", answer:0.5625, tol:0.005, label:pLabel(g.domS, g.domS),
+                unit:FRACD }],
       hint:{en:"3/4 × 3/4. You may type 9/16 or 0.5625.",
             "zh-Hans":"3/4 × 3/4。可以填 9/16 或 0.5625。",
             "zh-Hant":"3/4 × 3/4。可以填 9/16 或 0.5625。",
@@ -878,8 +901,8 @@
               "zh-Hans":"现在把<b>父本</b>拖到 <b>ll</b>，母本仍是 Ll。树状图会自己重画。现在 P(两只都是长毛) 是多少？",
               "zh-Hant":"現在把<b>父本</b>拖到 <b>ll</b>，母本仍是 Ll。樹狀圖會自己重畫。現在 P(兩隻都是長毛) 是多少？",
               vi:"Bây giờ kéo <b>bố</b> về <b>ll</b>, mẹ vẫn là Ll. Sơ đồ cây tự vẽ lại. Bây giờ P(cả hai con đều lông dài) là bao nhiêu?"},
-      inputs:[{ k:"p", answer:0.25, tol:0.005, label:"P(long, long)",
-                unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"} }],
+      inputs:[{ k:"p", answer:0.25, tol:0.005, label:pLabel(g.recS, g.recS),
+                unit:FRACD }],
       hint:{en:"Read the new first branch, then multiply it by itself.",
             "zh-Hans":"读新的第一段树枝，然后自己乘自己。",
             "zh-Hant":"讀新的第一段樹枝，然後自己乘自己。",
@@ -892,6 +915,8 @@
   }
 
   /* --- B3 PREDICT: "at least one" is 1 − P(none), never the sum --- */
+  var PNONE = {en:"P(none)", "zh-Hans":"P(一只也没有)", "zh-Hant":"P(一隻也沒有)", vi:"P(không con nào)"};
+  var PSOME = {en:"P(at least one)", "zh-Hans":"P(至少一只)", "zh-Hant":"P(至少一隻)", vi:"P(ít nhất một con)"};
   var B3_CASES = [
     { gene:"coat", m:"Bb", d:"Bb", n:2, none:0.5625, some:0.4375 },
     { gene:"hair", m:"Ll", d:"ll", n:2, none:0.25,   some:0.75   },
@@ -918,10 +943,10 @@
              vi:"Mẹ <b>" + c.m + "</b> và bố <b>" + c.d + "</b> có <b>" + c.n +
                 "</b> con non. Cho P(<b>không con nào</b> " + w + "), rồi P(<b>ít nhất một con</b> " + w + ")."}),
         inputs:[
-          { k:"none", answer:c.none, tol:0.005, label:"P(none)",
-            unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"} },
-          { k:"some", answer:c.some, tol:0.005, label:"P(at least one)",
-            unit:{en:"fraction or decimal", "zh-Hans":"分数或小数", "zh-Hant":"分數或小數", vi:"phân số hoặc số thập phân"} }],
+          { k:"none", answer:c.none, tol:0.005, label:PNONE,
+            unit:FRACD },
+          { k:"some", answer:c.some, tol:0.005, label:PSOME,
+            unit:FRACD }],
         hint:{en:"\"None\" means every pup takes the other branch: multiply that branch by itself " + c.n + " times. Then \"at least one\" is 1 minus it.",
               "zh-Hans":"“一只也没有”表示每只幼崽都走另一条枝：把那条枝自乘 " + c.n + " 次。然后“至少一只”就是 1 减去它。",
               "zh-Hant":"「一隻也沒有」表示每隻幼鼠都走另一條枝：把那條枝自乘 " + c.n + " 次。然後「至少一隻」就是 1 減去它。",

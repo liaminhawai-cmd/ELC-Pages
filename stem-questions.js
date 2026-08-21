@@ -686,8 +686,9 @@
           inputs: [{ k: "tp", label: "turning point:", place: "(x, y)", answer: "(" + h + ", " + fmt(k) + ")",
             check: function (v) { var pt = parseCoord(v); return !!pt && near(pt.x, h, .01) && near(pt.y, k, .01); } }],
           workedHTML: "The curve stops " + (a > 0 ? "falling and starts rising" : "rising and starts falling") +
-            " at <b>(" + h + ", " + fmt(k) + ")</b> — across " + h + ", up " + fmt(k) + ". It is the " +
-            (a > 0 ? "lowest" : "highest") + " point of the curve." };
+            " there, so it is the " + (a > 0 ? "lowest" : "highest") + " point. From the origin: " +
+            Math.abs(h) + " " + (h >= 0 ? "right" : "left") + ", then " + Math.abs(k) + " " +
+            (k >= 0 ? "up" : "down") + " → <b>(" + h + ", " + fmt(k) + ")</b>." };
       }
       if (ask === "roots") {
         return { qHTML: "Write the two <b>x-intercepts</b> of this parabola.",
@@ -767,7 +768,8 @@
       var tpTxt = "(" + h + ", " + fmt(k) + ")", ptTxt = "(" + x1 + ", " + fmt(y1) + ")";
       var known = "y = a" + (h === 0 ? "x²" : "(x " + (h > 0 ? "− " + fmt(h) : "+ " + fmt(-h)) + ")²") +
         (k > 0 ? " + " + fmt(k) : k < 0 ? " − " + fmt(-k) : "");
-      var subs = "Substitute " + ptTxt + ": " + fmt(y1) + " = a × (" + bracket(x1) + " − " + bracket(h) + ")² " +
+      var subs = "Substitute " + ptTxt + ": " + fmt(y1) + " = a × " +
+        (h === 0 ? bracket(x1) + "²" : "(" + bracket(x1) + " − " + bracket(h) + ")²") + " " +
         (k > 0 ? "+ " + fmt(k) : k < 0 ? "− " + fmt(-k) : "+ 0") + " → " + fmt(y1 - k) + " = a × " + (o * o) +
         " → a = <b>" + fmt(a) + "</b>.";
       function ruleCheck(v) { var r = parseVertex(v); return !!r && near(r.a, a, .01) && near(r.h, h, .01) && near(r.k, k, .01); }
@@ -880,7 +882,8 @@
         return { qHTML: lead + "<b>" + vert + "</b>. How far from the start does " + f.noun + " <b>land</b>?",
           svg: arcChart(f.A, f.R, f.H, f.launch, null),
           inputs: [numInput("x", "landing distance (m) =", f.R, 0.02)],
-          workedHTML: "It lands where the height is zero. Put h = 0: " + fmt(f.A) + "(x − " + half + ")² = " + f.H +
+          workedHTML: "It lands where the height is zero. Put h = 0: 0 = −" + fmt(f.A) + "(x − " + half + ")² + " +
+            f.H + ", so " + fmt(f.A) + "(x − " + half + ")² = " + f.H +
             " → (x − " + half + ")² = " + f.H + " ÷ " + fmt(f.A) + " = " + (half * half) + " → x − " + half + " = ±" + half +
             ". That gives x = 0 (the start) and x = <b>" + f.R + "</b>. So it lands <b>" + f.R + " m</b> away." };
       }

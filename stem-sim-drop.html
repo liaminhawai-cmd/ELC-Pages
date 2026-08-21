@@ -159,6 +159,8 @@
   /* SIM.num strips trailing zeros, which is right for a distance and wrong for
      a stopwatch: this page's clocks always read two decimal places. */
   function fix2(v){ return (Math.round(v * 100) / 100).toFixed(2); }
+  /* stem-sim.js keeps clamp on the stage ctx, not on the SIM namespace */
+  function clamp(v, a, b){ return v < a ? a : v > b ? b : v; }
 
   /* ================================================================
      THE PHYSICS — everything downstream is derived from these
@@ -228,13 +230,13 @@
        fallFig(host, { top, release, y, height })
      ================================================================ */
   function fallFig(host, o){
-    var W = SIM.clamp(Math.round(host.clientWidth ||
+    var W = clamp(Math.round(host.clientWidth ||
       (host.parentNode && host.parentNode.clientWidth) || 640), 300, 720);
     var H = o.height || 250;
     var P = { l: 32, r: 12, t: 16, b: 22 };
     var ph = H - P.t - P.b;
     var top = Math.max(1, o.top);
-    function Y(m){ return P.t + ph - SIM.clamp(m / top, 0, 1) * ph; }
+    function Y(m){ return P.t + ph - clamp(m / top, 0, 1) * ph; }
 
     var ink = SIM.cvar("--ink", "#212427"), muted = SIM.cvar("--muted", "#5c6166");
     var hair = SIM.cvar("--hair", "#e6e7e3"), faint = SIM.cvar("--faint", "#6b7075");

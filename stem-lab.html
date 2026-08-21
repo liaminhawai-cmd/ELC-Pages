@@ -121,7 +121,9 @@
   .sp .line { font-size:.82rem; margin:3px 0; }
   .sp .dim { color:var(--muted); font-size:.78rem; margin:3px 0; max-width:34ch; }
   .sp .alert { color:var(--alert); font-weight:600; }
-  .sp a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.82rem; }
+  /* 44px tall for a finger, the same as every other link on this page */
+  .sp a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.82rem;
+    display:inline-flex; align-items:center; min-height:44px; }
   .sp a:hover { text-decoration:underline; }
   .sp a.act { font-size:.92rem; }
   .bar { display:block; max-width:180px; height:4px; background:var(--hair); border-radius:2px;

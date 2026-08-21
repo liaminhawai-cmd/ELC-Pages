@@ -269,6 +269,1092 @@
     host.innerHTML = "<svg viewBox='0 0 " + W + " " + H + "' role='img' aria-label='" +
       esc(SIM.L(o.alt) || "bars") + "'>" + g.join("") + "</svg>";
   }
+
+  /* ================================================================
+     SET A — HOW FAST IS FAST?
+     ================================================================ */
+
+  /* --- A1 PLAY: three sliders, two counted goals, one answer:
+         3 people, 1 each, every 8 hours --- */
+  function a1(ctx){
+    var host = ctx.host;
+    var state = { s:6, k:2, hi:1 };           /* deliberately not the answer */
+    var goalBox = ctx.el("p", "sim-goal");
+    var figBar = ctx.el("div"), figG = ctx.el("div");
+
+    SIM.sliders(host, [
+      { k:"s", min:1, max:12, step:1, value:state.s,
+        label:{en:"People who start the rumour", "zh-Hans":"最初传出谣言的人数",
+               "zh-Hant":"最初傳出謠言的人數", vi:"Số người bắt đầu tin đồn"},
+        unit:{en:"people", "zh-Hans":"人", "zh-Hant":"人", vi:"người"} },
+      { k:"k", min:1, max:5, step:1, value:state.k,
+        label:{en:"People each person tells", "zh-Hans":"每人告诉几个人",
+               "zh-Hant":"每人告訴幾個人", vi:"Mỗi người kể cho bao nhiêu người"},
+        unit:{en:"each", "zh-Hans":"人", "zh-Hant":"人", vi:"người"} },
+      { k:"hi", min:0, max:HOURS.length - 1, step:1, value:state.hi,
+        fmt:function(i){ return HOURS[i]; },
+        label:{en:"Hours before they tell them", "zh-Hans":"过多少小时才告诉别人",
+               "zh-Hant":"過多少小時才告訴別人", vi:"Bao nhiêu giờ sau mới kể"},
+        unit:{en:"hours", "zh-Hans":"小时", "zh-Hant":"小時", vi:"giờ"} }
+    ], function(v){ state.s = v.s; state.k = v.k; state.hi = v.hi; redraw(); });
+
+    host.appendChild(figBar);
+    var clock = SIM.anim(host, {
+      dur: 3, speed: 0.6,
+      labelFor: function(t){ return T("dayF")(num(t, 1)); },
+      onFrame: function(t){ drawBar(t); }
+    });
+    host.appendChild(figG);
+    host.appendChild(goalBox);
+
+    /* the whole school as one bar; the dot is how many know so far */
+    function drawBar(t){
+      var n = knowDay(state.s, state.k, HOURS[state.hi], t);
+      SIM.track(figBar, {
+        length: SCHOOL.roll,
+        labels: [
+          { x:0, name:{en:"nobody", "zh-Hans":"没有人", "zh-Hant":"沒有人", vi:"chưa ai"} },
+          { x:SCHOOL.roll / 2, name:{en:"half the school", "zh-Hans":"全校一半",
+            "zh-Hant":"全校一半", vi:"nửa trường"} },
+          { x:SCHOOL.roll, name:{en:"everyone", "zh-Hans":"全校", "zh-Hant":"全校", vi:"cả trường"} }
+        ],
+        movers: [{ name:{en:"know it", "zh-Hans":"知道的人", "zh-Hant":"知道的人", vi:"đã biết"},
+                   color:C(WHO.rumour.ck), x:n }],
+        alt:{en:"how many of the school know the rumour", "zh-Hans":"全校有多少人知道谣言",
+             "zh-Hant":"全校有多少人知道謠言", vi:"bao nhiêu người trong trường đã biết tin đồn"}
+      });
+    }
+    function redraw(){
+      drawBar(clock.time());
+      SIM.plot(figG, {
+        xMax: 3, yMax: SCHOOL.roll, xStep: 0.5, yStep: 100, height: 300,
+        xLabel:{en:"days", "zh-Hans":"天数", "zh-Hant":"天數", vi:"số ngày"},
+        yLabel:{en:"people who know", "zh-Hans":"知道的人数", "zh-Hant":"知道的人數", vi:"số người đã biết"},
+        hlines:[{ y:SCHOOL.roll, label:{en:"the whole school", "zh-Hans":"全校",
+          "zh-Hant":"全校", vi:"cả trường"} }],
+        vlines:[{ x:1, label:T("dayF")(1) }, { x:2, label:T("dayF")(2) }],
+        series:[{ fn:function(d){ return knowDay(state.s, state.k, HOURS[state.hi], d); },
+                  color:C(WHO.rumour.ck) }]
+      });
+      score();
+    }
+    var won = false;
+    function score(){
+      var d1 = knowDay(state.s, state.k, HOURS[state.hi], 1);
+      var d2 = knowDay(state.s, state.k, HOURS[state.hi], 2);
+      var g1 = Math.abs(d1 - SCHOOL.goalD1) < 0.5;
+      var g2 = Math.abs(d2 - SCHOOL.goalD2) < 0.5;
+      goalBox.innerHTML =
+        "<span>" + (g1 ? "✓" : "○") + " " + esc(SIM.L(A1G1)) + "</span><br>" +
+        "<span>" + (g2 ? "✓" : "○") + " " + esc(SIM.L(A1G2)) + "</span><br>" +
+        "<span class='sim-live'>" + esc(T("dayF")(1)) + ": " + num(Math.round(d1)) + " · " +
+        esc(T("dayF")(2)) + ": " + num(Math.round(d2)) + " · " +
+        esc(SIM.L(A1OF)) + " " + SCHOOL.roll + "</span>";
+      if (g1 && g2 && !won) {
+        won = true;
+        ctx.done({});
+        goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(SIM.L(A1WIN));
+      }
+    }
+    var A1G1 = {en:"At the end of day 1, exactly 24 people know it.",
+      "zh-Hans":"第 1 天结束时，正好有 24 人知道。",
+      "zh-Hant":"第 1 天結束時，正好有 24 人知道。",
+      vi:"Cuối ngày 1, đúng 24 người biết tin đồn."};
+    var A1G2 = {en:"At the end of day 2, exactly 192 people know it.",
+      "zh-Hans":"第 2 天结束时，正好有 192 人知道。",
+      "zh-Hant":"第 2 天結束時，正好有 192 人知道。",
+      vi:"Cuối ngày 2, đúng 192 người biết tin đồn."};
+    var A1OF = {en:"out of", "zh-Hans":"总共", "zh-Hant":"總共", vi:"trên tổng số"};
+    var A1WIN = {en:"Three people, one each, every eight hours. Now try it: pull the starting number from 3 up to 12 — four times as many people starting it — and day 2 only reaches 768, still 132 short of the school. Put it back and push \"people each person tells\" from 1 to 2 instead: the whole school knows before the end of day 2. The starting number is almost nothing; the number each person tells is everything.",
+      "zh-Hans":"三个人，每人告诉一个，每 8 小时一轮。现在试试：把最初的人数从 3 拉到 12——是原来的四倍——第 2 天也只有 768 人，离全校还差 132 人。再把它调回去，改成把“每人告诉几个人”从 1 提到 2：第 2 天还没结束，全校就都知道了。最初几个人几乎不重要；每人告诉几个人才是关键。",
+      "zh-Hant":"三個人，每人告訴一個，每 8 小時一輪。現在試試：把最初的人數從 3 拉到 12——是原來的四倍——第 2 天也只有 768 人，離全校還差 132 人。再把它調回去，改成把「每人告訴幾個人」從 1 提到 2：第 2 天還沒結束，全校就都知道了。最初幾個人幾乎不重要；每人告訴幾個人才是關鍵。",
+      vi:"Ba người, mỗi người kể cho một người, cứ tám giờ một vòng. Giờ thử xem: kéo số người bắt đầu từ 3 lên 12 — gấp bốn lần — mà ngày 2 mới được 768 người, vẫn còn thiếu 132 người nữa. Đưa nó về chỗ cũ rồi đổi \"mỗi người kể cho bao nhiêu người\" từ 1 lên 2: cả trường biết trước khi hết ngày 2. Số người bắt đầu gần như không quan trọng; số người mà mỗi người kể lại mới là tất cả."};
+    redraw();
+  }
+
+  /* --- A2 READ: the same rumour, hour by hour, read off the graph --- */
+  function a2(ctx){
+    var host = ctx.host;
+    var state = { s:SCHOOL.start, k:SCHOOL.tells, hi:HOURS.indexOf(SCHOOL.hours) };
+    var figG = ctx.el("div");
+    SIM.sliders(host, [
+      { k:"s", min:1, max:12, step:1, value:state.s,
+        label:{en:"People who start the rumour", "zh-Hans":"最初传出谣言的人数",
+               "zh-Hant":"最初傳出謠言的人數", vi:"Số người bắt đầu tin đồn"},
+        unit:{en:"people", "zh-Hans":"人", "zh-Hant":"人", vi:"người"} },
+      { k:"k", min:1, max:5, step:1, value:state.k,
+        label:{en:"People each person tells", "zh-Hans":"每人告诉几个人",
+               "zh-Hant":"每人告訴幾個人", vi:"Mỗi người kể cho bao nhiêu người"},
+        unit:{en:"each", "zh-Hans":"人", "zh-Hant":"人", vi:"người"} },
+      { k:"hi", min:0, max:HOURS.length - 1, step:1, value:state.hi,
+        fmt:function(i){ return HOURS[i]; },
+        label:{en:"Hours before they tell them", "zh-Hans":"过多少小时才告诉别人",
+               "zh-Hant":"過多少小時才告訴別人", vi:"Bao nhiêu giờ sau mới kể"},
+        unit:{en:"hours", "zh-Hans":"小时", "zh-Hant":"小時", vi:"giờ"} }
+    ], function(v){ state.s = v.s; state.k = v.k; state.hi = v.hi; draw(); });
+    host.appendChild(figG);
+    function draw(){
+      SIM.plot(figG, {
+        xMax: 48, yMax: 240, xStep: 8, yStep: 20, height: 320,
+        xLabel:{en:"hours", "zh-Hans":"小时", "zh-Hant":"小時", vi:"giờ"},
+        yLabel:{en:"people who know", "zh-Hans":"知道的人数", "zh-Hant":"知道的人數", vi:"số người đã biết"},
+        series:[{ fn:function(t){ return knowHour(state.s, state.k, HOURS[state.hi], t); },
+                  color:C(WHO.rumour.ck) }]
+      });
+    }
+    draw();
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(SIM.L({en:"The same rumour, hour by hour. Put the sliders back to 3 people, 1 each and 8 hours before you answer.",
+                 "zh-Hans":"还是那则谣言，只是按小时看。作答前请把滑块调回 3 人、每人 1 人、8 小时。",
+                 "zh-Hant":"還是那則謠言，只是按小時看。作答前請把滑桿調回 3 人、每人 1 人、8 小時。",
+                 vi:"Vẫn tin đồn đó, nhưng xem theo từng giờ. Hãy đưa thanh trượt về 3 người, mỗi người 1, và 8 giờ trước khi trả lời."}))));
+
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var got = 0, need = 4, times = [];
+    function tick(ok, info){
+      if (!ok) return;
+      got++; times.push(info.ms);
+      if (got === need) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+    }
+    SIM.ask(qs, {
+      prompt:{en:"How many people know the rumour after <b>48 hours</b>?",
+              "zh-Hans":"<b>48 小时</b>后有多少人知道这则谣言？",
+              "zh-Hant":"<b>48 小時</b>後有多少人知道這則謠言？",
+              vi:"Sau <b>48 giờ</b> có bao nhiêu người biết tin đồn?"},
+      inputs:[{ k:"n", answer:SCHOOL.goalD2, tol:6,
+                unit:{en:"people", "zh-Hans":"人", "zh-Hant":"人", vi:"người"},
+                label:{en:"people", "zh-Hans":"人数", "zh-Hant":"人數", vi:"số người"} }],
+      hint:{en:"Go up from 48 on the bottom axis until you hit the curve, then across to the side axis.",
+            "zh-Hans":"从横轴的 48 往上，碰到曲线后再横着读纵轴。",
+            "zh-Hant":"從橫軸的 48 往上，碰到曲線後再橫著讀縱軸。",
+            vi:"Từ số 48 ở trục ngang đi lên tới đường cong, rồi đi ngang sang trục dọc."},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"The curve passes 24 people, then later passes 48 people. How many <b>hours</b> does it take the number who know to <b>double</b>?",
+              "zh-Hans":"曲线先经过 24 人，之后经过 48 人。知道的人数<b>翻一倍</b>要多少<b>小时</b>？",
+              "zh-Hant":"曲線先經過 24 人，之後經過 48 人。知道的人數<b>加倍</b>要多少<b>小時</b>？",
+              vi:"Đường cong đi qua mốc 24 người, rồi sau đó qua mốc 48 người. Số người biết tin <b>gấp đôi</b> sau bao nhiêu <b>giờ</b>?"},
+      inputs:[{ k:"t", answer:SCHOOL.hours, tol:0.6,
+                unit:{en:"hours", "zh-Hans":"小时", "zh-Hant":"小時", vi:"giờ"},
+                label:{en:"doubling time", "zh-Hans":"翻倍时间", "zh-Hant":"加倍時間", vi:"thời gian gấp đôi"} }],
+      hint:{en:"Read the hour where the curve is at 24, then the hour where it is at 48, and take the difference.",
+            "zh-Hans":"读出曲线到 24 人时的小时数，再读出到 48 人时的小时数，两者相减。",
+            "zh-Hant":"讀出曲線到 24 人時的小時數，再讀出到 48 人時的小時數，兩者相減。",
+            vi:"Đọc giờ khi đường cong ở mức 24 người, rồi giờ khi ở mức 48 người, lấy hiệu."},
+      worked:{en:"<p>24 people at <b>24 hours</b>, 48 people at <b>32 hours</b>. 32 − 24 = <b>8 hours</b>.</p><p>It is the same 8 hours everywhere on the curve: 3 → 6, 6 → 12, 96 → 192. That fixed doubling time is what makes it exponential.</p>",
+              "zh-Hans":"<p>24 人在 <b>24 小时</b>，48 人在 <b>32 小时</b>。32 − 24 = <b>8 小时</b>。</p><p>曲线上任何一段都是这 8 小时：3 → 6、6 → 12、96 → 192。这个固定的翻倍时间正是“指数增长”的标志。</p>",
+              "zh-Hant":"<p>24 人在 <b>24 小時</b>，48 人在 <b>32 小時</b>。32 − 24 = <b>8 小時</b>。</p><p>曲線上任何一段都是這 8 小時：3 → 6、6 → 12、96 → 192。這個固定的加倍時間正是「指數成長」的標誌。</p>",
+              vi:"<p>24 người lúc <b>24 giờ</b>, 48 người lúc <b>32 giờ</b>. 32 − 24 = <b>8 giờ</b>.</p><p>Ở bất kỳ đoạn nào của đường cong cũng là 8 giờ đó: 3 → 6, 6 → 12, 96 → 192. Thời gian gấp đôi cố định ấy chính là dấu hiệu của tăng theo cấp số nhân.</p>"},
+      onDone: tick
+    });
+
+    /* the second figure: the rumour against something that only ever adds */
+    var fig2 = ctx.el("div"); host.appendChild(fig2);
+    SIM.plot(fig2, {
+      xMax: 72, yMax: SCHOOL.roll, xStep: 12, yStep: 100, height: 280,
+      xLabel:{en:"hours", "zh-Hans":"小时", "zh-Hant":"小時", vi:"giờ"},
+      yLabel:{en:"people who know", "zh-Hans":"知道的人数", "zh-Hant":"知道的人數", vi:"số người đã biết"},
+      series:[
+        { fn:function(t){ return knowHour(SCHOOL.start, SCHOOL.tells, SCHOOL.hours, t); },
+          color:C(WHO.rumour.ck) },
+        { fn:function(t){ return posterAt(t / 24); }, color:C(WHO.poster.ck), dash:"5 4" }
+      ]
+    });
+    host.appendChild(keyRow([{c:C(WHO.rumour.ck), n:WHO.rumour.name},
+                             {c:C(WHO.poster.ck), n:WHO.poster.name}]));
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(SIM.L({en:"The poster on the noticeboard is read by 60 new students every day. The rumour is told by everyone who knows it.",
+                 "zh-Hans":"公告栏上的海报每天新增 60 个学生看到。谣言则由每个知道的人往外传。",
+                 "zh-Hant":"公佈欄上的海報每天新增 60 個學生看到。謠言則由每個知道的人往外傳。",
+                 vi:"Tấm áp phích trên bảng tin mỗi ngày có thêm 60 học sinh đọc. Còn tin đồn thì do mọi người đã biết kể tiếp."}))));
+
+    var qs2 = ctx.el("div"); host.appendChild(qs2);
+    SIM.ask(qs2, {
+      prompt:{en:"Which of the two grows <span data-v=\"exponential\">exponentially</span>?",
+              "zh-Hans":"两者之中，哪一个是<span data-v=\"exponential\">指数</span>增长？",
+              "zh-Hant":"兩者之中，哪一個是<span data-v=\"exponential\">指數</span>成長？",
+              vi:"Trong hai đường, đường nào tăng theo <span data-v=\"exponential\">cấp số nhân</span>?"},
+      opts:{ list:[
+        {en:"The rumour", "zh-Hans":"谣言", "zh-Hant":"謠言", vi:"Tin đồn"},
+        {en:"The poster", "zh-Hans":"海报", "zh-Hant":"海報", vi:"Tấm áp phích"},
+        {en:"Both of them", "zh-Hans":"两个都是", "zh-Hant":"兩個都是", vi:"Cả hai"}], a:0 },
+      hint:{en:"One of them is a straight line. A straight line adds the same amount every day.",
+            "zh-Hans":"其中一条是直线。直线每天加上同样多的人。",
+            "zh-Hant":"其中一條是直線。直線每天加上同樣多的人。",
+            vi:"Một trong hai là đường thẳng. Đường thẳng mỗi ngày cộng thêm cùng một số."},
+      onDone: tick
+    });
+    SIM.ask(qs2, {
+      prompt:{en:"How can you tell, without doing any arithmetic?",
+              "zh-Hans":"不做任何计算，你怎么看出来？",
+              "zh-Hant":"不做任何計算，你怎麼看出來？",
+              vi:"Không cần tính toán gì, làm sao em nhận ra?"},
+      opts:{ list:[
+        {en:"It adds the same number of people every day", "zh-Hans":"它每天增加同样多的人",
+         "zh-Hant":"它每天增加同樣多的人", vi:"Mỗi ngày nó tăng thêm cùng một số người"},
+        {en:"It multiplies by the same number every day, so the curve bends upwards",
+         "zh-Hans":"它每天乘以同一个数，所以曲线越来越陡",
+         "zh-Hant":"它每天乘以同一個數，所以曲線越來越陡",
+         vi:"Mỗi ngày nó nhân với cùng một số, nên đường cong càng lúc càng dốc"},
+        {en:"It starts with more people", "zh-Hans":"它一开始的人就更多",
+         "zh-Hant":"它一開始的人就更多", vi:"Nó bắt đầu với nhiều người hơn"}], a:1 },
+      worked:{en:"<p>The poster <b>adds</b> 60 a day: 60, 120, 180, 240. Straight line, same step every time.</p><p>The rumour <b>multiplies</b> by 8 a day: 3, 24, 192, and then it runs out of school. Adding is <span data-v=\"linear\">linear</span>; multiplying is <span data-v=\"exponential\">exponential</span>.</p>",
+              "zh-Hans":"<p>海报每天<b>加</b> 60 人：60、120、180、240。直线，每一步一样大。</p><p>谣言每天<b>乘以</b> 8：3、24、192，然后全校就不够用了。加是<span data-v=\"linear\">线性</span>，乘是<span data-v=\"exponential\">指数</span>。</p>",
+              "zh-Hant":"<p>海報每天<b>加</b> 60 人：60、120、180、240。直線，每一步一樣大。</p><p>謠言每天<b>乘以</b> 8：3、24、192，然後全校就不夠用了。加是<span data-v=\"linear\">線性</span>，乘是<span data-v=\"exponential\">指數</span>。</p>",
+              vi:"<p>Áp phích mỗi ngày <b>cộng thêm</b> 60: 60, 120, 180, 240. Đường thẳng, mỗi bước bằng nhau.</p><p>Tin đồn mỗi ngày <b>nhân</b> với 8: 3, 24, 192, rồi hết cả trường. Cộng là <span data-v=\"linear\">tuyến tính</span>; nhân là <span data-v=\"exponential\">cấp số nhân</span>.</p>"},
+      onDone: tick
+    });
+  }
+
+  /* --- A3 PREDICT: say the number BEFORE the graph appears --- */
+  var A3_CASES = [
+    { id:"double", from:96, at:5, to:7, ans:384, kind:"x2",
+      fn:function(d){ return 3 * Math.pow(2, d); } },
+    { id:"triple", from:40, at:3, to:5, ans:360, kind:"x3",
+      fn:function(d){ return 40 * Math.pow(3, d - 3); } },
+    { id:"flat", from:96, at:5, to:7, ans:156, kind:"add30",
+      fn:function(d){ return Math.max(0, 96 + 30 * (d - 5)); } }
+  ];
+  function a3(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(SIM.L({en:"No sliders here. Say what the number will be BEFORE the graph is drawn.",
+                 "zh-Hans":"这里没有滑块。在画出图之前先说出那个数。",
+                 "zh-Hant":"這裡沒有滑桿。在畫出圖之前先說出那個數。",
+                 vi:"Ở đây không có thanh trượt. Hãy nói ra con số TRƯỚC khi đồ thị được vẽ."}))));
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var done = 0, times = [];
+    var PROMPTS = {
+      "x2":{en:"<b>1.</b> A rumour <b>doubles</b> every day. On day 5, <b>96</b> people know it. How many know it on <b>day 7</b>?",
+            "zh-Hans":"<b>1.</b> 一则谣言每天<b>翻一倍</b>。第 5 天有 <b>96</b> 人知道。<b>第 7 天</b>有多少人知道？",
+            "zh-Hant":"<b>1.</b> 一則謠言每天<b>加倍</b>。第 5 天有 <b>96</b> 人知道。<b>第 7 天</b>有多少人知道？",
+            vi:"<b>1.</b> Một tin đồn <b>gấp đôi</b> mỗi ngày. Ngày 5 có <b>96</b> người biết. Ngày <b>7</b> có bao nhiêu người biết?"},
+      "x3":{en:"<b>2.</b> A second rumour <b>triples</b> every day. On day 3, <b>40</b> people know it. How many know it on <b>day 5</b>?",
+            "zh-Hans":"<b>2.</b> 第二则谣言每天<b>变成三倍</b>。第 3 天有 <b>40</b> 人知道。<b>第 5 天</b>有多少人知道？",
+            "zh-Hant":"<b>2.</b> 第二則謠言每天<b>變成三倍</b>。第 3 天有 <b>40</b> 人知道。<b>第 5 天</b>有多少人知道？",
+            vi:"<b>2.</b> Tin đồn thứ hai <b>gấp ba</b> mỗi ngày. Ngày 3 có <b>40</b> người biết. Ngày <b>5</b> có bao nhiêu người biết?"},
+      "add30":{en:"<b>3.</b> A poster is read by <b>30 new students every day</b> — the same 30 each day. On day 5, <b>96</b> students have read it. How many have read it on <b>day 7</b>?",
+            "zh-Hans":"<b>3.</b> 一张海报<b>每天新增 30 个学生</b>看到——每天都是这 30 人。第 5 天有 <b>96</b> 人看过。<b>第 7 天</b>有多少人看过？",
+            "zh-Hant":"<b>3.</b> 一張海報<b>每天新增 30 個學生</b>看到——每天都是這 30 人。第 5 天有 <b>96</b> 人看過。<b>第 7 天</b>有多少人看過？",
+            vi:"<b>3.</b> Một tấm áp phích mỗi ngày có thêm <b>30 học sinh</b> đọc — đúng 30 mỗi ngày. Ngày 5 đã có <b>96</b> người đọc. Ngày <b>7</b> có bao nhiêu người đã đọc?"}
+    };
+    var HINTS = {
+      "x2":{en:"Two days means doubling twice: × 2 and then × 2 again.",
+            "zh-Hans":"过两天就是翻倍两次：× 2，再 × 2。",
+            "zh-Hant":"過兩天就是加倍兩次：× 2，再 × 2。",
+            vi:"Hai ngày là gấp đôi hai lần: × 2 rồi lại × 2."},
+      "x3":{en:"Two days means × 3 and then × 3 again.",
+            "zh-Hans":"过两天就是 × 3，再 × 3。",
+            "zh-Hant":"過兩天就是 × 3，再 × 3。",
+            vi:"Hai ngày là × 3 rồi lại × 3."},
+      "add30":{en:"This one does not multiply. It adds the same number twice.",
+            "zh-Hans":"这个不是乘，是把同一个数加两次。",
+            "zh-Hant":"這個不是乘，是把同一個數加兩次。",
+            vi:"Cái này không nhân. Nó cộng thêm cùng một số hai lần."}
+    };
+    var WORKED = {
+      "x2":{en:"<p>96 × 2 = 192 on day 6, and 192 × 2 = <b>384</b> on day 7.</p>",
+            "zh-Hans":"<p>第 6 天 96 × 2 = 192，第 7 天 192 × 2 = <b>384</b>。</p>",
+            "zh-Hant":"<p>第 6 天 96 × 2 = 192，第 7 天 192 × 2 = <b>384</b>。</p>",
+            vi:"<p>Ngày 6: 96 × 2 = 192; ngày 7: 192 × 2 = <b>384</b>.</p>"},
+      "x3":{en:"<p>40 × 3 = 120 on day 4, and 120 × 3 = <b>360</b> on day 5. Two days of tripling is × 9.</p>",
+            "zh-Hans":"<p>第 4 天 40 × 3 = 120，第 5 天 120 × 3 = <b>360</b>。两天各变三倍，就是 × 9。</p>",
+            "zh-Hant":"<p>第 4 天 40 × 3 = 120，第 5 天 120 × 3 = <b>360</b>。兩天各變三倍，就是 × 9。</p>",
+            vi:"<p>Ngày 4: 40 × 3 = 120; ngày 5: 120 × 3 = <b>360</b>. Hai ngày gấp ba là × 9.</p>"},
+      "add30":{en:"<p>96 + 30 + 30 = <b>156</b>. Two days of the doubling rumour turned 96 into 384; two days of this one turned 96 into 156.</p>",
+            "zh-Hans":"<p>96 + 30 + 30 = <b>156</b>。翻倍的谣言两天把 96 变成 384；这一个两天只把 96 变成 156。</p>",
+            "zh-Hant":"<p>96 + 30 + 30 = <b>156</b>。加倍的謠言兩天把 96 變成 384；這一個兩天只把 96 變成 156。</p>",
+            vi:"<p>96 + 30 + 30 = <b>156</b>. Tin đồn gấp đôi biến 96 thành 384 sau hai ngày; cái này chỉ biến 96 thành 156.</p>"}
+    };
+    A3_CASES.forEach(function(c){
+      var fig = ctx.el("div");
+      var q = SIM.ask(qs, {
+        prompt: PROMPTS[c.kind],
+        inputs:[{ k:"n", answer:c.ans, tol:0.5,
+                  unit:{en:"people", "zh-Hans":"人", "zh-Hant":"人", vi:"người"},
+                  label:{en:"on day " + c.to, "zh-Hans":"第 " + c.to + " 天",
+                         "zh-Hant":"第 " + c.to + " 天", vi:"ngày " + c.to} }],
+        hint: HINTS[c.kind],
+        worked: WORKED[c.kind],
+        onDone: function(ok, info){
+          if (!ok) return;
+          q.el.appendChild(fig);
+          var series = [{ fn:c.fn, color:C(WHO.rumour.ck) }];
+          if (c.kind === "add30") series.push({ fn:A3_CASES[0].fn, color:C(WHO.poster.ck), dash:"5 4" });
+          SIM.plot(fig, {
+            xMax: c.to, yMax: c.kind === "x3" ? 400 : 400, xStep: 1, yStep: 50, height: 240,
+            xLabel:{en:"days", "zh-Hans":"天数", "zh-Hant":"天數", vi:"số ngày"},
+            yLabel:{en:"people", "zh-Hans":"人数", "zh-Hant":"人數", vi:"số người"},
+            series: series,
+            marks:[{ x:c.to, y:c.ans, label: num(c.ans), color:C(WHO.rumour.ck) }]
+          });
+          done++; times.push(info.ms);
+          if (done === A3_CASES.length) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+        }
+      });
+    });
+  }
+
+  /* --- A4 SOLVE: no sim until the arithmetic is done --- */
+  function a4(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("noSim")) + " " + esc(T("engNote"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'>A rumour starts with <b>6</b> students. Every <b>12 hours</b>, each student who " +
+      "knows it tells <b>one</b> new student, so the number who know it <span data-v='rate'>doubles</span> " +
+      "every 12 hours. There are <b>960</b> students in the school. On the same noticeboard, a poster is " +
+      "read by <b>60 new students every day</b>; <b>6</b> students had read it before the rumour started.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 4, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) {
+        var fig = ctx.el("div"); host.appendChild(fig);
+        host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("showSim"))));
+        SIM.plot(fig, {
+          xMax: 4, yMax: 960, xStep: 1, yStep: 120, height: 280,
+          xLabel:"days", yLabel:"people who know",
+          hlines:[{ y:960, label:"the whole school" }],
+          series:[
+            { fn:function(d){ return Math.min(6 * Math.pow(2, 2 * d), 960); }, color:C(WHO.rumour.ck) },
+            { fn:function(d){ return 6 + 60 * d; }, color:C(WHO.poster.ck), dash:"5 4" }
+          ],
+          marks:[{ x:3, y:384, label:"day 3: 384", color:C(WHO.rumour.ck) }]
+        });
+        host.appendChild(keyRow([{c:C(WHO.rumour.ck), n:WHO.rumour.name},
+                                 {c:C(WHO.poster.ck), n:WHO.poster.name}]));
+        ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+      }
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> How many students know the rumour after <b>3 rounds</b> of telling — that is, after a day and a half?",
+      inputs:[{ k:"n", answer:48, tol:0.5, unit:"people", label:"after 3 rounds" }],
+      hint:"Each round doubles it: 6, then 12, then …",
+      worked:"<p>6 × 2 × 2 × 2 = 6 × 2³ = <b>48</b> students.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> After how many whole <b>rounds</b> does the number who know first reach the whole school of 960? And how many <b>days</b> is that?",
+      inputs:[
+        { k:"r", answer:8, tol:0.5, unit:"rounds", label:"rounds" },
+        { k:"d", answer:4, tol:0.05, unit:"days", label:"days" }],
+      hint:"Keep doubling 6 and write the list down: 6, 12, 24, 48, 96, 192, 384, 768, …",
+      worked:"<p>6, 12, 24, 48, 96, 192, 384, <b>768</b> after 7 rounds — still short — and <b>1536</b> after 8. So it is <b>8 rounds</b>.</p>" +
+             "<p>Each round is 12 hours, so 8 rounds = 96 hours = <b>4 days</b>.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> How many students have read the <b>poster</b> after 4 days?",
+      inputs:[{ k:"p", answer:246, tol:0.5, unit:"people", label:"poster readers" }],
+      hint:"It started at 6 and adds the same 60 every day for 4 days.",
+      worked:"<p>6 + 60 × 4 = <b>246</b> students. The rumour reached 960 in the same four days.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> On day 1 and day 2 the poster is ahead of the rumour. On which whole <b>day</b> does the rumour first pass the poster?",
+      inputs:[{ k:"d", answer:3, tol:0.05, unit:"day", label:"day" }],
+      hint:"Work out both on day 1, then day 2, then day 3. Two rounds happen each day.",
+      worked:"<p>Day 1: rumour 6 × 2² = 24, poster 66. Day 2: rumour 96, poster 126. Day 3: rumour 6 × 2⁶ = <b>384</b>, poster 186.</p>" +
+             "<p>The rumour is behind for two whole days and then goes past on <b>day 3</b>. That is why slow-looking exponential growth is so easy to dismiss early.</p>",
+      onDone: tick
+    });
+  }
+
+  /* --- A5 EXAM: dense, timed, nothing but words --- */
+  function a5(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("timed")) + " " + esc(SIM.T("noSim"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'><b>Two ways to spread a story.</b> A rumour begins with <b>2</b> students. Every " +
+      "<b>6 hours</b>, every student who knows it tells <b>one</b> new student. There are <b>1280</b> " +
+      "students in the school. At the same time, the student newsletter <i>The Corridor</i> runs a daily " +
+      "column that <b>90 new students</b> read each day; <b>2</b> students had read it at the start. " +
+      "Use the <span data-v='data'>data</span> above for every part.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> How many students know the rumour after <b>24 hours</b>?",
+      inputs:[{ k:"n", answer:32, tol:0.5, unit:"people", label:"after 24 h" }],
+      worked:"<p>24 ÷ 6 = 4 rounds, and each round doubles: 2 × 2⁴ = <b>32</b> students.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> After how many <b>rounds</b> does the rumour first reach all 1280 students, and how many <b>days</b> is that?",
+      inputs:[
+        { k:"r", answer:10, tol:0.5, unit:"rounds", label:"rounds" },
+        { k:"d", answer:2.5, tol:0.05, unit:"days", label:"days" }],
+      worked:"<p>2 × 2⁹ = 1024, which is not everyone; 2 × 2¹⁰ = 2048, which is. So <b>10 rounds</b>.</p>" +
+             "<p>10 × 6 = 60 hours = <b>2.5 days</b>.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> After <b>2 days</b>, how many <b>more</b> students know the rumour than have read the column?",
+      inputs:[{ k:"g", answer:330, tol:0.5, unit:"people", label:"difference" }],
+      worked:"<p>Rumour: 8 rounds, 2 × 2⁸ = 512. Column: 2 + 90 × 2 = 182. 512 − 182 = <b>330</b> students.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> How many <b>hours</b> does it take for the number who know the rumour to become <b>eight times</b> bigger?",
+      inputs:[{ k:"h", answer:18, tol:0.05, unit:"hours", label:"hours" }],
+      worked:"<p>Eight times is three doublings (2 × 2 × 2), and each doubling is 6 hours: 3 × 6 = <b>18 hours</b>.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>e.</b> <i>The Corridor</i> writes: “The rumour is spreading at about 90 students a day, the same <span data-v='rate'>rate</span> as this column.” Give the number of students the rumour added <b>between the end of day 1 and the end of day 2</b> — the number that settles the <span data-v='claim'>claim</span>.",
+      inputs:[{ k:"n", answer:480, tol:0.5, unit:"people", label:"added on day 2" }],
+      worked:"<p>End of day 1: 2 × 2⁴ = 32. End of day 2: 2 × 2⁸ = 512. It added <b>480</b> students in that one day, not 90.</p>" +
+             "<p>An exponential thing has no “rate per day”. The number it adds is different every day, because it depends on how many already know.</p>",
+      onDone: tick });
+  }
+
+  /* ================================================================
+     SET B — CHECK THE CLAIM
+     The one arrangement of the four sliders that fits every clue:
+     Year 9 is 100 students with 40 believers (40%), Year 10 is 240
+     students with 60 believers (25%). The bigger count is the
+     smaller share. Every misleading claim in step 5 is a version of
+     that one trick.
+     ================================================================ */
+  var SET_B = {
+    y9:  { size:100, believed:40 },     /* 40% */
+    y10: { size:240, believed:60 },     /* 25% */
+    together: 340,                      /* students in the two years  */
+    gap: 20                             /* more believers in Year 10  */
+  };
+  /* Step 2's table: Years 8 and 9 share a count and differ in share */
+  var B2_TABLE = [ { y:7, n:160, h:40 }, { y:8, n:150, h:60 },
+                   { y:9, n:240, h:60 }, { y:10, n:250, h:80 } ];
+  /* Step 5's table: heard it, and of those, believed it */
+  var B5_TABLE = [ { y:7, n:200, h:120, b:24 }, { y:8, n:150, h:90, b:45 },
+                   { y:9, n:250, h:100, b:50 }, { y:10, n:200, h:130, b:13 } ];
+  function sum(rows, k){ return rows.reduce(function(a, r){ return a + r[k]; }, 0); }
+  function pc(part, whole){ return whole ? 100 * part / whole : 0; }
+  function yearName(n){
+    var d = { en:"Year " + n, "zh-Hans":n + " 年级", "zh-Hant":n + " 年級", vi:"Lớp " + n };
+    return d[lang()] !== undefined ? d[lang()] : d.en;
+  }
+
+  /* --- B1 PLAY: four sliders, one school that fits every clue --- */
+  function b1(ctx){
+    var host = ctx.host;
+    var state = { n9:140, b9:20, n10:200, b10:50 };   /* not the answer */
+    var figCount = ctx.el("div"), capCount = ctx.el("p", "sim-note");
+    var figShare = ctx.el("div"), capShare = ctx.el("p", "sim-note");
+    var headBox = ctx.el("p", "sim-goal"), goalBox = ctx.el("p", "sim-goal");
+
+    SIM.sliders(host, [
+      { k:"n9", min:60, max:200, step:10, value:state.n9,
+        label:{en:"Students in Year 9", "zh-Hans":"九年级学生人数",
+               "zh-Hant":"九年級學生人數", vi:"Số học sinh lớp 9"},
+        unit:{en:"students", "zh-Hans":"人", "zh-Hant":"人", vi:"học sinh"} },
+      { k:"b9", min:0, max:80, step:2, value:state.b9,
+        label:{en:"Believed it in Year 9", "zh-Hans":"九年级相信的人数",
+               "zh-Hant":"九年級相信的人數", vi:"Lớp 9 tin tin đồn"},
+        unit:{en:"students", "zh-Hans":"人", "zh-Hant":"人", vi:"học sinh"} },
+      { k:"n10", min:120, max:320, step:10, value:state.n10,
+        label:{en:"Students in Year 10", "zh-Hans":"十年级学生人数",
+               "zh-Hant":"十年級學生人數", vi:"Số học sinh lớp 10"},
+        unit:{en:"students", "zh-Hans":"人", "zh-Hant":"人", vi:"học sinh"} },
+      { k:"b10", min:0, max:120, step:2, value:state.b10,
+        label:{en:"Believed it in Year 10", "zh-Hans":"十年级相信的人数",
+               "zh-Hant":"十年級相信的人數", vi:"Lớp 10 tin tin đồn"},
+        unit:{en:"students", "zh-Hans":"人", "zh-Hant":"人", vi:"học sinh"} }
+    ], function(v){ state.n9 = v.n9; state.b9 = v.b9; state.n10 = v.n10; state.b10 = v.b10; redraw(); });
+
+    host.appendChild(headBox);
+    host.appendChild(figCount); host.appendChild(capCount);
+    host.appendChild(figShare); host.appendChild(capShare);
+    host.appendChild(goalBox);
+
+    var won = false;
+    function redraw(){
+      var rows = [
+        { name:{en:"Year 9", "zh-Hans":"九年级", "zh-Hant":"九年級", vi:"Lớp 9"},
+          size:state.n9, hit:Math.min(state.b9, state.n9), color:C(WHO.y9.ck) },
+        { name:{en:"Year 10", "zh-Hans":"十年级", "zh-Hant":"十年級", vi:"Lớp 10"},
+          size:state.n10, hit:Math.min(state.b10, state.n10), color:C(WHO.y10.ck) }
+      ];
+      bars(figCount, { rows:rows, scale:"count",
+        alt:{en:"the two years drawn to size", "zh-Hans":"按人数画出的两个年级",
+             "zh-Hant":"按人數畫出的兩個年級", vi:"hai khối lớp vẽ theo số học sinh"} });
+      capCount.textContent = SIM.L(B1CAP1);
+      bars(figShare, { rows:rows, scale:"share",
+        alt:{en:"the two years drawn as shares", "zh-Hans":"按比例画出的两个年级",
+             "zh-Hant":"按比例畫出的兩個年級", vi:"hai khối lớp vẽ theo tỉ lệ"} });
+      capShare.textContent = SIM.L(B1CAP2);
+
+      /* the headline rewrites itself as you drag */
+      var win = state.b10 > state.b9 ? WHO.y10 : WHO.y9;
+      var lose = state.b10 > state.b9 ? WHO.y9 : WHO.y10;
+      var wn = Math.max(state.b9, state.b10), ln = Math.min(state.b9, state.b10);
+      headBox.innerHTML = "<b>" + esc(T("paper")) + ":</b> <i>" +
+        (wn === ln ? esc(SIM.L(B1TIE))
+                   : esc(SIM.L(B1HEAD)(SIM.L(win.name), SIM.L(lose.name), wn, ln))) + "</i>";
+
+      var p9 = pc(state.b9, state.n9), p10 = pc(state.b10, state.n10);
+      var g1 = Math.abs(p9 - 40) < 0.05;
+      var g2 = Math.abs(p10 - 25) < 0.05;
+      var g3 = (state.n9 + state.n10 === SET_B.together) && (state.b10 - state.b9 === SET_B.gap);
+      goalBox.innerHTML =
+        "<span>" + (g1 ? "✓" : "○") + " " + esc(SIM.L(B1G1)) + "</span><br>" +
+        "<span>" + (g2 ? "✓" : "○") + " " + esc(SIM.L(B1G2)) + "</span><br>" +
+        "<span>" + (g3 ? "✓" : "○") + " " + esc(SIM.L(B1G3)) + "</span><br>" +
+        "<span class='sim-live'>" + esc(SIM.L(WHO.y9.name)) + ": " + state.b9 + " / " + state.n9 +
+        " = " + num(p9, 1) + "% · " + esc(SIM.L(WHO.y10.name)) + ": " + state.b10 + " / " +
+        state.n10 + " = " + num(p10, 1) + "% · " + esc(SIM.L(B1TOT)) + " " +
+        (state.n9 + state.n10) + "</span>";
+      if (g1 && g2 && g3 && !won) {
+        won = true;
+        ctx.done({});
+        goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(SIM.L(B1WIN));
+      }
+    }
+    var B1HEAD = {
+      en: function(w, l, wn, ln){ return "“" + w + " believed it more — " + wn + " students to " + ln + ".”"; },
+      "zh-Hans": function(w, l, wn, ln){ return "“" + w + "更容易相信——" + wn + " 人对 " + ln + " 人。”"; },
+      "zh-Hant": function(w, l, wn, ln){ return "「" + w + "更容易相信——" + wn + " 人對 " + ln + " 人。」"; },
+      vi: function(w, l, wn, ln){ return "“" + w + " tin nhiều hơn — " + wn + " học sinh so với " + ln + ".”"; }
+    };
+    var B1TIE = {en:"“Both years believed it exactly the same.”",
+      "zh-Hans":"“两个年级相信的人数一模一样。”", "zh-Hant":"「兩個年級相信的人數一模一樣。」",
+      vi:"“Hai khối lớp tin đúng bằng nhau.”"};
+    var B1CAP1 = {en:"Drawn to size: the longer bar is the bigger year level.",
+      "zh-Hans":"按人数画：条越长，这个年级的人越多。",
+      "zh-Hant":"按人數畫：條越長，這個年級的人越多。",
+      vi:"Vẽ theo số học sinh: thanh dài hơn là khối đông hơn."};
+    var B1CAP2 = {en:"Drawn as shares: every year level is one whole bar, so only the fraction shows.",
+      "zh-Hans":"按比例画：每个年级都占满一整条，所以只看得到比例。",
+      "zh-Hant":"按比例畫：每個年級都佔滿一整條，所以只看得到比例。",
+      vi:"Vẽ theo tỉ lệ: mỗi khối là một thanh đầy, nên chỉ thấy phần trăm."};
+    var B1G1 = {en:"Year 9: exactly 40% of the year believed it.",
+      "zh-Hans":"九年级：正好有 40% 的人相信。", "zh-Hant":"九年級：正好有 40% 的人相信。",
+      vi:"Lớp 9: đúng 40% cả khối tin."};
+    var B1G2 = {en:"Year 10: exactly 25% of the year believed it.",
+      "zh-Hans":"十年级：正好有 25% 的人相信。", "zh-Hant":"十年級：正好有 25% 的人相信。",
+      vi:"Lớp 10: đúng 25% cả khối tin."};
+    var B1G3 = {en:"340 students in the two years altogether, and 20 more believers in Year 10 than in Year 9.",
+      "zh-Hans":"两个年级共 340 人，且十年级相信的人比九年级多 20 人。",
+      "zh-Hant":"兩個年級共 340 人，且十年級相信的人比九年級多 20 人。",
+      vi:"Hai khối cộng lại 340 học sinh, và lớp 10 có nhiều hơn lớp 9 đúng 20 người tin."};
+    var B1TOT = {en:"together", "zh-Hans":"合计", "zh-Hant":"合計", vi:"tổng cộng"};
+    var B1WIN = {en:"Both numbers in the headline are true. 60 really is more than 40 — and 25% really is less than 40%. The headline chose the count, because Year 10 is more than twice the size of Year 9 and a bigger group nearly always gives a bigger count. Whenever a number is used as evidence, ask the question the headline did not: out of how many?",
+      "zh-Hans":"标题里的两个数字都是真的。60 确实比 40 多——而 25% 也确实比 40% 少。标题挑了人数，因为十年级的人数是九年级的两倍多，人多的组几乎总能得出更大的人数。看到一个数字被当作证据时，就要问标题没问的那句话：这是多少人里的？",
+      "zh-Hant":"標題裡的兩個數字都是真的。60 確實比 40 多——而 25% 也確實比 40% 少。標題挑了人數，因為十年級的人數是九年級的兩倍多，人多的組幾乎總能得出更大的人數。看到一個數字被當作證據時，就要問標題沒問的那句話：這是多少人裡的？",
+      vi:"Cả hai con số trong tiêu đề đều đúng. 60 đúng là nhiều hơn 40 — và 25% cũng đúng là ít hơn 40%. Tiêu đề đã chọn số đếm, vì lớp 10 đông hơn lớp 9 gấp hơn hai lần, mà nhóm đông thì gần như luôn cho số đếm lớn hơn. Mỗi khi một con số được dùng làm bằng chứng, hãy hỏi câu mà tiêu đề đã không hỏi: trên tổng số bao nhiêu?"};
+    redraw();
+  }
+
+  /* --- B2 READ: read the counts and the percentages off a table --- */
+  function b2(ctx){
+    var host = ctx.host;
+    var students = sum(B2_TABLE, "n"), heard = sum(B2_TABLE, "h");
+    var TH = {
+      year:{en:"Year level", "zh-Hans":"年级", "zh-Hant":"年級", vi:"Khối lớp"},
+      n:{en:"Students", "zh-Hans":"学生人数", "zh-Hant":"學生人數", vi:"Học sinh"},
+      h:{en:"Heard the rumour", "zh-Hans":"听说过谣言", "zh-Hant":"聽說過謠言", vi:"Đã nghe tin đồn"},
+      p:{en:"% of the year", "zh-Hans":"占本年级", "zh-Hant":"佔本年級", vi:"% của khối"},
+      tot:{en:"Whole school", "zh-Hans":"全校", "zh-Hant":"全校", vi:"Cả trường"}
+    };
+    var h = "<div class='sim-wrapx'><table class='sim-table'><thead><tr>" +
+      "<th>" + esc(SIM.L(TH.year)) + "</th><th>" + esc(SIM.L(TH.n)) + "</th>" +
+      "<th>" + esc(SIM.L(TH.h)) + "</th><th>" + esc(SIM.L(TH.p)) + "</th></tr></thead><tbody>";
+    B2_TABLE.forEach(function(r){
+      h += "<tr><td>" + esc(yearName(r.y)) + "</td><td>" + r.n + "</td><td>" + r.h +
+           "</td><td>" + num(pc(r.h, r.n), 1) + "%</td></tr>";
+    });
+    h += "<tr><td><b>" + esc(SIM.L(TH.tot)) + "</b></td><td><b>" + students +
+         "</b></td><td><b>" + heard + "</b></td><td><b>?</b></td></tr>";
+    h += "</tbody></table></div>";
+    var tbl = ctx.el("div"); tbl.innerHTML = h; host.appendChild(tbl);
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(SIM.L({en:"Everything you need is in the table. Read, do not guess.",
+                 "zh-Hans":"你需要的一切都在表里。要读，不要猜。",
+                 "zh-Hant":"你需要的一切都在表裡。要讀，不要猜。",
+                 vi:"Mọi thứ em cần đều nằm trong bảng. Hãy đọc, đừng đoán."}))));
+
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var got = 0, need = 5, times = [];
+    function tick(ok, info){
+      if (!ok) return;
+      got++; times.push(info.ms);
+      if (got === need) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+    }
+    SIM.ask(qs, {
+      prompt:{en:"How many <b>Year 10</b> students had heard the rumour?",
+              "zh-Hans":"有多少<b>十年级</b>学生听说过这则谣言？",
+              "zh-Hant":"有多少<b>十年級</b>學生聽說過這則謠言？",
+              vi:"Có bao nhiêu học sinh <b>lớp 10</b> đã nghe tin đồn?"},
+      inputs:[{ k:"n", answer:80, tol:0.5,
+                unit:{en:"students", "zh-Hans":"人", "zh-Hant":"人", vi:"học sinh"},
+                label:{en:"students", "zh-Hans":"人数", "zh-Hant":"人數", vi:"số học sinh"} }],
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"What <span data-v=\"percentage\">percentage</span> of <b>Year 8</b> had heard it?",
+              "zh-Hans":"<b>八年级</b>有多少<span data-v=\"percentage\">百分比</span>的人听说过？",
+              "zh-Hant":"<b>八年級</b>有多少<span data-v=\"percentage\">百分比</span>的人聽說過？",
+              vi:"Bao nhiêu <span data-v=\"percentage\">phần trăm</span> học sinh <b>lớp 8</b> đã nghe?"},
+      inputs:[{ k:"p", answer:40, tol:0.05, unit:"%",
+                label:{en:"percentage", "zh-Hans":"百分比", "zh-Hant":"百分比", vi:"phần trăm"} }],
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"Year 8 and Year 9 both have <b>60</b> students who heard it. Which year is the bigger <b>share</b> of its year level?",
+              "zh-Hans":"八年级和九年级都有 <b>60</b> 人听说过。哪个年级占本年级的<b>比例</b>更大？",
+              "zh-Hant":"八年級和九年級都有 <b>60</b> 人聽說過。哪個年級佔本年級的<b>比例</b>更大？",
+              vi:"Lớp 8 và lớp 9 đều có <b>60</b> học sinh đã nghe. Khối nào chiếm <b>tỉ lệ</b> lớn hơn trong khối mình?"},
+      opts:{ list:[
+        {en:"Year 8", "zh-Hans":"八年级", "zh-Hant":"八年級", vi:"Lớp 8"},
+        {en:"Year 9", "zh-Hans":"九年级", "zh-Hant":"九年級", vi:"Lớp 9"},
+        {en:"They are exactly the same", "zh-Hans":"两者完全一样", "zh-Hant":"兩者完全一樣", vi:"Hai khối bằng nhau"}], a:0 },
+      worked:{en:"<p>Same count, different year sizes: 60 of 150 is <b>40%</b>, but 60 of 240 is only <b>25%</b>. The count alone cannot tell you which year the rumour spread further in.</p>",
+              "zh-Hans":"<p>人数相同，年级人数不同：150 人里的 60 人是 <b>40%</b>，240 人里的 60 人只有 <b>25%</b>。光看人数，判断不出谣言在哪个年级传得更广。</p>",
+              "zh-Hant":"<p>人數相同，年級人數不同：150 人裡的 60 人是 <b>40%</b>，240 人裡的 60 人只有 <b>25%</b>。光看人數，判斷不出謠言在哪個年級傳得更廣。</p>",
+              vi:"<p>Cùng số đếm, khác quy mô khối: 60 trên 150 là <b>40%</b>, còn 60 trên 240 chỉ là <b>25%</b>. Chỉ nhìn số đếm thì không biết tin đồn lan xa hơn ở khối nào.</p>"},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"What percentage of the <b>whole school</b> had heard it? (240 of 800.)",
+              "zh-Hans":"<b>全校</b>有多少百分比的人听说过？（800 人中的 240 人。）",
+              "zh-Hant":"<b>全校</b>有多少百分比的人聽說過？（800 人中的 240 人。）",
+              vi:"Bao nhiêu phần trăm <b>cả trường</b> đã nghe? (240 trên 800.)"},
+      inputs:[{ k:"p", answer:30, tol:0.05, unit:"%",
+                label:{en:"percentage", "zh-Hans":"百分比", "zh-Hant":"百分比", vi:"phần trăm"} }],
+      hint:{en:"240 ÷ 800, then × 100.", "zh-Hans":"240 ÷ 800，再 × 100。",
+            "zh-Hant":"240 ÷ 800，再 × 100。", vi:"240 ÷ 800, rồi × 100."},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"The newsletter's headline: <i>“Years 8 and 9 are the worst — sixty students in each.”</i> Which number from the table is the headline using?",
+              "zh-Hans":"校刊的标题：<i>“八、九年级最严重——各有六十人。”</i> 这个标题用的是表里的哪个数？",
+              "zh-Hant":"校刊的標題：<i>「八、九年級最嚴重——各有六十人。」</i> 這個標題用的是表裡的哪個數？",
+              vi:"Tiêu đề bản tin: <i>“Lớp 8 và lớp 9 tệ nhất — mỗi khối sáu mươi học sinh.”</i> Tiêu đề đang dùng con số nào trong bảng?"},
+      opts:{ list:[
+        {en:"The count of students", "zh-Hans":"学生人数", "zh-Hant":"學生人數", vi:"Số đếm học sinh"},
+        {en:"The percentage of the year", "zh-Hans":"占本年级的百分比", "zh-Hant":"佔本年級的百分比", vi:"Phần trăm của khối"},
+        {en:"The size of the year level", "zh-Hans":"年级的总人数", "zh-Hant":"年級的總人數", vi:"Quy mô của khối"}], a:0 },
+      worked:{en:"<p>It uses the <b>count</b>, and the count is true. But by percentage Year 8 is 40% and Year 9 is 25%, so calling them equally bad is <span data-v=\"misleading\">misleading</span>. Two numbers, two different stories, both from this one table.</p>",
+              "zh-Hans":"<p>它用的是<b>人数</b>，而且人数是真的。但按百分比，八年级是 40%，九年级是 25%，说两者一样严重就是<span data-v=\"misleading\">误导</span>。同一张表，两个数，两个不同的故事。</p>",
+              "zh-Hant":"<p>它用的是<b>人數</b>，而且人數是真的。但按百分比，八年級是 40%，九年級是 25%，說兩者一樣嚴重就是<span data-v=\"misleading\">誤導</span>。同一張表，兩個數，兩個不同的故事。</p>",
+              vi:"<p>Nó dùng <b>số đếm</b>, và số đếm đó đúng. Nhưng theo phần trăm thì lớp 8 là 40% còn lớp 9 là 25%, nên nói hai khối tệ như nhau là <span data-v=\"misleading\">gây hiểu lầm</span>. Một bảng, hai con số, hai câu chuyện khác nhau.</p>"},
+      onDone: tick });
+  }
+
+  /* --- B3 PREDICT: which claim survives being checked? --- */
+  function b3(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(SIM.L({en:"Decide first. The check appears once you are right.",
+                 "zh-Hans":"先判断。答对之后才会出现验算。",
+                 "zh-Hant":"先判斷。答對之後才會出現驗算。",
+                 vi:"Hãy quyết định trước. Phần kiểm tra chỉ hiện ra khi em trả lời đúng."}))));
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var got = 0, need = 3, times = [];
+    function tick(ok, info){
+      if (!ok) return;
+      got++; times.push(info.ms);
+      if (got === need) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
+    }
+
+    var fig1 = ctx.el("div");
+    var q1 = SIM.ask(qs, {
+      prompt:{en:"<b>1.</b> <b>40</b> of the <b>160</b> students in Year 7 heard the rumour. <b>30</b> of the <b>60</b> students in Year 11 heard it. Which claim is true?",
+              "zh-Hans":"<b>1.</b> 七年级 <b>160</b> 人中有 <b>40</b> 人听说过，十一年级 <b>60</b> 人中有 <b>30</b> 人听说过。哪个说法是真的？",
+              "zh-Hant":"<b>1.</b> 七年級 <b>160</b> 人中有 <b>40</b> 人聽說過，十一年級 <b>60</b> 人中有 <b>30</b> 人聽說過。哪個說法是真的？",
+              vi:"<b>1.</b> Lớp 7 có <b>40</b> trong <b>160</b> học sinh đã nghe. Lớp 11 có <b>30</b> trong <b>60</b> học sinh đã nghe. Lời khẳng định nào đúng?"},
+      opts:{ list:[
+        {en:"Only A: “More Year 7 students heard it than Year 11 students.”",
+         "zh-Hans":"只有 A：“听说过的七年级学生比十一年级多。”",
+         "zh-Hant":"只有 A：「聽說過的七年級學生比十一年級多。」",
+         vi:"Chỉ A: “Số học sinh lớp 7 đã nghe nhiều hơn lớp 11.”"},
+        {en:"Only B: “The rumour spread further in Year 7 than in Year 11.”",
+         "zh-Hans":"只有 B：“谣言在七年级比在十一年级传得更广。”",
+         "zh-Hant":"只有 B：「謠言在七年級比在十一年級傳得更廣。」",
+         vi:"Chỉ B: “Tin đồn lan xa hơn ở lớp 7 so với lớp 11.”"},
+        {en:"Both A and B", "zh-Hans":"A 和 B 都对", "zh-Hant":"A 和 B 都對", vi:"Cả A và B"}], a:0 },
+      hint:{en:"One claim is about how many. The other is about what share of the year.",
+            "zh-Hans":"一个说的是有多少人，另一个说的是占本年级多少。",
+            "zh-Hant":"一個說的是有多少人，另一個說的是佔本年級多少。",
+            vi:"Một lời nói về số người. Lời kia nói về tỉ lệ của khối."},
+      onDone: function(ok, info){
+        if (ok) {
+          q1.el.appendChild(fig1);
+          bars(fig1, { scale:"share", rows:[
+            { name:{en:"Year 7", "zh-Hans":"七年级", "zh-Hant":"七年級", vi:"Lớp 7"},
+              size:160, hit:40, color:C(WHO.y9.ck) },
+            { name:{en:"Year 11", "zh-Hans":"十一年级", "zh-Hant":"十一年級", vi:"Lớp 11"},
+              size:60, hit:30, color:C(WHO.y10.ck) }] });
+          q1.el.appendChild(ctx.el("p", "sim-note",
+            esc(SIM.L({en:"40 of 160 is 25%. 30 of 60 is 50%. More students, half the share.",
+                       "zh-Hans":"160 人里的 40 人是 25%，60 人里的 30 人是 50%。人更多，比例却只有一半。",
+                       "zh-Hant":"160 人裡的 40 人是 25%，60 人裡的 30 人是 50%。人更多，比例卻只有一半。",
+                       vi:"40 trên 160 là 25%. 30 trên 60 là 50%. Nhiều học sinh hơn, nhưng tỉ lệ chỉ bằng một nửa."}))));
+        }
+        tick(ok, info);
+      } });
+
+    var fig2 = ctx.el("div");
+    var q2 = SIM.ask(qs, {
+      prompt:{en:"<b>2.</b> The number of students who believed the rumour went from <b>20</b> to <b>25</b>. Which claim is right?",
+              "zh-Hans":"<b>2.</b> 相信这则谣言的学生人数从 <b>20</b> 变成 <b>25</b>。哪个说法正确？",
+              "zh-Hant":"<b>2.</b> 相信這則謠言的學生人數從 <b>20</b> 變成 <b>25</b>。哪個說法正確？",
+              vi:"<b>2.</b> Số học sinh tin tin đồn tăng từ <b>20</b> lên <b>25</b>. Lời khẳng định nào đúng?"},
+      opts:{ list:[
+        {en:"“A rise of 5%.”", "zh-Hans":"“上升了 5%。”", "zh-Hant":"「上升了 5%。」", vi:"“Tăng 5%.”"},
+        {en:"“A rise of 25%.”", "zh-Hans":"“上升了 25%。”", "zh-Hant":"「上升了 25%。」", vi:"“Tăng 25%.”"},
+        {en:"“A rise of 125%.”", "zh-Hans":"“上升了 125%。”", "zh-Hant":"「上升了 125%。」", vi:"“Tăng 125%.”"}], a:1 },
+      hint:{en:"The rise is 5 students. Compare that 5 with what you started from, not with 100.",
+            "zh-Hans":"增加的是 5 个人。要把这 5 和起点比，而不是和 100 比。",
+            "zh-Hant":"增加的是 5 個人。要把這 5 和起點比，而不是和 100 比。",
+            vi:"Phần tăng là 5 học sinh. Hãy so 5 đó với mốc ban đầu, không phải với 100."},
+      worked:{en:"<p>The rise is 25 − 20 = 5 students, and 5 out of the original 20 is 5 ÷ 20 = <b>25%</b>.</p><p>“A rise of 5” and “a rise of 25%” are both true. “A rise of 5%” is neither.</p>",
+              "zh-Hans":"<p>增加了 25 − 20 = 5 人，5 相对于原来的 20 是 5 ÷ 20 = <b>25%</b>。</p><p>“增加 5 人”和“上升 25%”都对，“上升 5%”两者都不是。</p>",
+              "zh-Hant":"<p>增加了 25 − 20 = 5 人，5 相對於原來的 20 是 5 ÷ 20 = <b>25%</b>。</p><p>「增加 5 人」和「上升 25%」都對，「上升 5%」兩者都不是。</p>",
+              vi:"<p>Phần tăng là 25 − 20 = 5 học sinh, và 5 trên 20 ban đầu là 5 ÷ 20 = <b>25%</b>.</p><p>“Tăng 5 người” và “tăng 25%” đều đúng. “Tăng 5%” thì không phải cái nào cả.</p>"},
+      onDone: function(ok, info){
+        if (ok) {
+          q2.el.appendChild(fig2);
+          bars(fig2, { scale:"count", rows:[
+            { name:{en:"before", "zh-Hans":"之前", "zh-Hant":"之前", vi:"trước"},
+              size:20, hit:20, color:C(WHO.y9.ck) },
+            { name:{en:"after", "zh-Hans":"之后", "zh-Hant":"之後", vi:"sau"},
+              size:25, hit:25, color:C(WHO.y10.ck) }] });
+        }
+        tick(ok, info);
+      } });
+
+    var fig3 = ctx.el("div");
+    var q3 = SIM.ask(qs, {
+      prompt:{en:"<b>3.</b> <b>25%</b> of the <b>240</b> students who heard the rumour passed it on. <b>10%</b> of the whole school of <b>800</b> put it in a group chat. Before you work them out — which group is bigger?",
+              "zh-Hans":"<b>3.</b> 听说过谣言的 <b>240</b> 人中，有 <b>25%</b> 又传给了别人；全校 <b>800</b> 人中，有 <b>10%</b> 把它发到了群里。先别算——哪一组人更多？",
+              "zh-Hant":"<b>3.</b> 聽說過謠言的 <b>240</b> 人中，有 <b>25%</b> 又傳給了別人；全校 <b>800</b> 人中，有 <b>10%</b> 把它發到了群組裡。先別算——哪一組人更多？",
+              vi:"<b>3.</b> <b>25%</b> trong <b>240</b> học sinh đã nghe tin đồn kể lại cho người khác. <b>10%</b> của cả trường <b>800</b> học sinh đăng nó vào nhóm chat. Trước khi tính — nhóm nào đông hơn?"},
+      opts:{ list:[
+        {en:"The 25% group is bigger", "zh-Hans":"25% 那一组更多", "zh-Hant":"25% 那一組更多", vi:"Nhóm 25% đông hơn"},
+        {en:"The 10% group is bigger", "zh-Hans":"10% 那一组更多", "zh-Hant":"10% 那一組更多", vi:"Nhóm 10% đông hơn"},
+        {en:"They are the same size", "zh-Hans":"两组一样多", "zh-Hant":"兩組一樣多", vi:"Hai nhóm bằng nhau"}], a:1 },
+      hint:{en:"A percentage on its own is not a number of people. It depends on what it is a percentage OF.",
+            "zh-Hans":"单独一个百分比不是人数。它取决于是“多少人”的百分比。",
+            "zh-Hant":"單獨一個百分比不是人數。它取決於是「多少人」的百分比。",
+            vi:"Một phần trăm đứng một mình không phải là số người. Nó phụ thuộc vào phần trăm CỦA cái gì."},
+      worked:{en:"<p>25% of 240 = <b>60</b> students. 10% of 800 = <b>80</b> students.</p><p>The smaller percentage is the bigger group, because it is taken from a much bigger number. This is exactly the mistake the claims in step 5 are built on.</p>",
+              "zh-Hans":"<p>240 的 25% = <b>60</b> 人。800 的 10% = <b>80</b> 人。</p><p>百分比小的那一组人反而更多，因为它是从一个大得多的数里取的。第 5 步里的那些说法，靠的正是这个错误。</p>",
+              "zh-Hant":"<p>240 的 25% = <b>60</b> 人。800 的 10% = <b>80</b> 人。</p><p>百分比小的那一組人反而更多，因為它是從一個大得多的數裡取的。第 5 步裡的那些說法，靠的正是這個錯誤。</p>",
+              vi:"<p>25% của 240 = <b>60</b> học sinh. 10% của 800 = <b>80</b> học sinh.</p><p>Phần trăm nhỏ hơn lại là nhóm đông hơn, vì nó được lấy từ một con số lớn hơn nhiều. Đây đúng là lỗi mà các lời khẳng định ở bước 5 dựa vào.</p>"},
+      onDone: function(ok, info){
+        if (ok) {
+          q3.el.appendChild(fig3);
+          bars(fig3, { scale:"count", rows:[
+            { name:{en:"25% of the 240 who heard it", "zh-Hans":"听说过的 240 人的 25%",
+                    "zh-Hant":"聽說過的 240 人的 25%", vi:"25% của 240 người đã nghe"},
+              size:240, hit:60, color:C(WHO.y9.ck) },
+            { name:{en:"10% of the whole school of 800", "zh-Hans":"全校 800 人的 10%",
+                    "zh-Hant":"全校 800 人的 10%", vi:"10% của cả trường 800 người"},
+              size:800, hit:80, color:C(WHO.y10.ck) }] });
+        }
+        tick(ok, info);
+      } });
+  }
+
+  /* --- B4 SOLVE: the percentage arithmetic, on your own --- */
+  function b4(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("noSim")) + " " + esc(T("engNote"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'><i>The Corridor</i>, the student newsletter, surveyed all <b>480</b> students in the " +
+      "senior school. <b>180</b> of them said they had heard the rumour, and <b>15%</b> of the 480 said " +
+      "they had passed it on. The newsletter's survey last term asked <b>400</b> students the same " +
+      "question, and <b>120</b> of them had heard a rumour. Give every answer as a number, without the " +
+      "% sign.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 4, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) {
+        var fig = ctx.el("div"); host.appendChild(fig);
+        host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("showSim"))));
+        bars(fig, { scale:"share", rows:[
+          { name:"last term: 120 of 400", size:400, hit:120, color:C(WHO.y9.ck) },
+          { name:"this term: 180 of 480", size:480, hit:180, color:C(WHO.y10.ck) }] });
+        ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+      }
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> What <span data-v='percentage'>percentage</span> of the 480 students had heard the rumour this term?",
+      inputs:[{ k:"p", answer:37.5, tol:0.05, unit:"%", label:"this term" }],
+      hint:"180 ÷ 480, then × 100.",
+      worked:"<p>180 ÷ 480 = 0.375, and 0.375 × 100 = <b>37.5%</b>.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> <b>15%</b> of the 480 students passed it on. How many students is that?",
+      inputs:[{ k:"n", answer:72, tol:0.5, unit:"students", label:"passed it on" }],
+      hint:"10% of 480 is 48, and 5% is half of that.",
+      worked:"<p>15% of 480 = 0.15 × 480 = <b>72</b> students. A percentage only becomes a number of people once you say what it is a percentage of.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> The <b>number</b> who had heard a rumour rose from 120 last term to 180 this term. By what <b>percentage</b> did that number rise?",
+      inputs:[{ k:"r", answer:50, tol:0.05, unit:"%", label:"rise" }],
+      hint:"The rise is 60 students. Compare 60 with the 120 you started from.",
+      worked:"<p>Rise = 180 − 120 = 60 students. 60 ÷ 120 = 0.5 = <b>50%</b>.</p>" +
+             "<p>“Up by 60” and “up by 50%” describe the same change. “Up by 60%” describes neither, and is the mistake a newsletter makes most often.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> Last term <b>30%</b> of those asked had heard a rumour; this term it is 37.5%. By how many <b>percentage points</b> did the share rise, and by what <b>percentage</b> is the new share bigger than the old one?",
+      inputs:[
+        { k:"pp", answer:7.5, tol:0.05, unit:"points", label:"percentage points" },
+        { k:"pr", answer:25, tol:0.05, unit:"%", label:"percentage bigger" }],
+      hint:"Subtracting gives the points. Dividing the difference by the old share gives the percentage.",
+      worked:"<p>37.5 − 30 = <b>7.5 percentage points</b>.</p><p>7.5 ÷ 30 = 0.25, so the new share is <b>25%</b> bigger than the old one.</p>" +
+             "<p>Both are correct and they are not the same number. A claim that says “up 25%” when it means 7.5 points, or the other way round, is worth checking every time.</p>",
+      onDone: tick });
+  }
+
+  /* --- B5 EXAM: four claims, four verdicts, timed --- */
+  function b5(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("timed")) + " " + esc(SIM.T("noSim"))));
+    var students = sum(B5_TABLE, "n"), heard = sum(B5_TABLE, "h"), believed = sum(B5_TABLE, "b");
+    var t = "<div class='sim-wrapx'><table class='sim-table'><thead><tr>" +
+      "<th>Year level</th><th>Students</th><th>Heard it</th><th>Believed it</th>" +
+      "</tr></thead><tbody>";
+    B5_TABLE.forEach(function(r){
+      t += "<tr><td>Year " + r.y + "</td><td>" + r.n + "</td><td>" + r.h + "</td><td>" + r.b + "</td></tr>";
+    });
+    t += "<tr><td><b>Whole school</b></td><td><b>" + students + "</b></td><td><b>" + heard +
+         "</b></td><td><b>" + believed + "</b></td></tr></tbody></table></div>";
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'><b>Four claims, one survey.</b> <i>The Corridor</i> surveyed every student in the " +
+      "school about the rumour and printed this <span data-v='data'>data</span> table. Four writers then " +
+      "used it. For each writer, decide whether the <span data-v='claim'>claim</span> is <b>TRUE</b> " +
+      "(the maths and the picture are both right), <b>MISLEADING</b> (the number is right but it gives " +
+      "the wrong picture) or <b>FALSE</b> (the maths is wrong) — and give the one number that settles " +
+      "it. Percentages as numbers, without the % sign.</p>" + t;
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var VERDICT = ["TRUE — the maths and the picture are both right",
+                   "MISLEADING — the number is right but the picture is wrong",
+                   "FALSE — the maths is wrong"];
+    var ok = 0, clean = 0, of = 8, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
+    }
+
+    /* 1 — the bigger count that is the smaller share */
+    SIM.ask(qs, {
+      prompt:"<b>1a.</b> Nadia writes: <i>“Year 9 is where this rumour really took hold. Fifty Year 9 students believed it — more than any other year in the school.”</i> What is your verdict?",
+      opts:{ list:VERDICT, a:1 },
+      worked:"<p>Her count is right: 50 is the largest number in the “Believed it” column. But Year 9 is also the biggest year, 250 students, so 50 is only 20% of it — while Year 8 has 45 of 150, which is 30%. The rumour took hold hardest in Year 8. Right number, wrong picture: <b>MISLEADING</b>.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>1b.</b> Give the number that settles it: what <span data-v='percentage'>percentage</span> of Year 9 believed the rumour?",
+      inputs:[{ k:"p", answer:20, tol:0.05, unit:"%", label:"Year 9" }],
+      worked:"<p>50 ÷ 250 = 0.2 = <b>20%</b>, against Year 8's 45 ÷ 150 = 30%.</p>",
+      onDone: tick });
+
+    /* 2 — two protections do not add */
+    SIM.ask(qs, {
+      prompt:"<b>2a.</b> Omar writes: <i>“Sitting at the back cuts your chance of hearing a rumour by 50%, and keeping your headphones on cuts it by another 60%. Do both and you are 110% protected — you literally cannot hear it.”</i> What is your verdict?",
+      opts:{ list:VERDICT, a:2 },
+      worked:"<p>Percentages that protect you do not add, they <b>multiply what is left</b>. Sitting at the back leaves 50% of the chance; headphones then cut that by 60%, leaving 40% of it: 0.5 × 0.4 = 0.2. So 20% of the chance is left and he is <b>80%</b> protected. Nothing can ever be more than 100% protected, so the claim is <b>FALSE</b>.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>2b.</b> Give the number that settles it: what percentage is Omar actually protected by?",
+      inputs:[{ k:"p", answer:80, tol:0.05, unit:"%", label:"protected" }],
+      worked:"<p>0.5 × 0.4 = 0.2 of the chance is left, so 1 − 0.2 = 0.8 = <b>80%</b> is removed.</p>",
+      onDone: tick });
+
+    /* 3 — the right percentage of the wrong group */
+    SIM.ask(qs, {
+      prompt:"<b>3a.</b> Sofia writes: <i>“Three-quarters of the students who heard the rumour passed it on. That is 600 students — most of the school.”</i> What is your verdict?",
+      opts:{ list:VERDICT, a:2 },
+      worked:"<p>Three-quarters of <b>the students who heard it</b> means three-quarters of 440, not of the whole school. 0.75 × 440 = 330. She has taken 75% of 800 instead. The maths is wrong: <b>FALSE</b>.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>3b.</b> Give the number that settles it: how many students is three-quarters of the number who heard it?",
+      inputs:[{ k:"n", answer:330, tol:0.5, unit:"students", label:"students" }],
+      worked:"<p>440 ÷ 4 = 110, and 110 × 3 = <b>330</b> students.</p>",
+      onDone: tick });
+
+    /* 4 — a claim that survives the check */
+    SIM.ask(qs, {
+      prompt:"<b>4a.</b> Layla writes: <i>“More than half the school has now heard the rumour.”</i> What is your verdict?",
+      opts:{ list:VERDICT, a:0 },
+      worked:"<p>440 students heard it out of 800, which is 55% — more than half. The claim is plain, checkable and right: <b>TRUE</b>. Checking a claim is not the same as attacking it; some claims survive.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>4b.</b> Give the number that settles it: what percentage of the school has heard the rumour?",
+      inputs:[{ k:"p", answer:55, tol:0.05, unit:"%", label:"whole school" }],
+      worked:"<p>440 ÷ 800 = 0.55 = <b>55%</b>. Half would be 400, so 440 clears it by 40 students.</p>",
+      onDone: tick });
+  }
+
+  /* ================================================================
+     WIRE IT UP
+     ================================================================ */
+  var STAGES_A = [
+    { id:"a1", kind:"play", tab:{en:"Play","zh-Hans":"先玩","zh-Hant":"先玩",vi:"Chơi thử"},
+      title:{en:"Start a rumour and watch it go", "zh-Hans":"传出一则谣言，看它怎么走",
+             "zh-Hant":"傳出一則謠言，看它怎麼走", vi:"Tung một tin đồn rồi xem nó chạy"},
+      aim:{en:"When every person who knows something tells someone else, the number who know is <span data-v=\"exponential\">multiplied</span> every round instead of added to. That is why it looks like nothing is happening, and then everything happens at once.",
+           "zh-Hans":"当每个知道的人都再告诉别人时，知道的人数每一轮是<span data-v=\"exponential\">乘</span>上去的，而不是加上去的。所以一开始看着毫无动静，然后一下子全发生了。",
+           "zh-Hant":"當每個知道的人都再告訴別人時，知道的人數每一輪是<span data-v=\"exponential\">乘</span>上去的，而不是加上去的。所以一開始看著毫無動靜，然後一下子全發生了。",
+           vi:"Khi mọi người đã biết đều kể cho người khác, số người biết được <span data-v=\"exponential\">nhân lên</span> sau mỗi vòng chứ không phải cộng thêm. Vì thế lúc đầu trông như chẳng có gì xảy ra, rồi bỗng dưng mọi thứ xảy ra cùng lúc."},
+      goal:{en:"Drag the three sliders until both ticks below turn green.",
+            "zh-Hans":"拖动三个滑块，直到下面两个勾都变绿。",
+            "zh-Hant":"拖動三個滑桿，直到下面兩個勾都變綠。",
+            vi:"Kéo ba thanh trượt cho đến khi cả hai dấu tích bên dưới chuyển xanh."},
+      build:a1 },
+    { id:"a2", kind:"read", tab:{en:"Read","zh-Hans":"读图","zh-Hant":"讀圖",vi:"Đọc"},
+      title:{en:"Read the growth off the graph", "zh-Hans":"从图上读出增长",
+             "zh-Hant":"從圖上讀出成長", vi:"Đọc mức tăng trên đồ thị"},
+      aim:{en:"An exponential curve has a <b>doubling time</b>: the same number of hours takes you from 3 to 6, from 24 to 48, from 96 to 192. A straight line has no such thing — it only ever adds.",
+           "zh-Hans":"指数曲线有一个<b>翻倍时间</b>：从 3 到 6、从 24 到 48、从 96 到 192，所花的小时数都一样。直线没有这种东西——它只会一直加。",
+           "zh-Hant":"指數曲線有一個<b>加倍時間</b>：從 3 到 6、從 24 到 48、從 96 到 192，所花的小時數都一樣。直線沒有這種東西——它只會一直加。",
+           vi:"Đường cong cấp số nhân có một <b>thời gian gấp đôi</b>: cùng số giờ đó đưa em từ 3 lên 6, từ 24 lên 48, từ 96 lên 192. Đường thẳng không có thứ đó — nó chỉ cộng thêm."},
+      goal:{en:"Answer all four.", "zh-Hans":"四题全部答对。", "zh-Hant":"四題全部答對。", vi:"Trả lời cả bốn câu."},
+      build:a2 },
+    { id:"a3", kind:"predict", tab:{en:"Predict","zh-Hans":"预测","zh-Hant":"預測",vi:"Dự đoán"},
+      title:{en:"Say the number before the graph does", "zh-Hans":"在图画出来之前先说出那个数",
+             "zh-Hant":"在圖畫出來之前先說出那個數", vi:"Nói ra con số trước khi đồ thị vẽ ra"},
+      aim:{en:"Two days ahead of a doubling rumour is × 2 × 2. Two days ahead of a poster is + 30 + 30. Knowing which of the two you are looking at is most of the work.",
+           "zh-Hans":"往后两天，翻倍的谣言是 × 2 × 2；海报是 + 30 + 30。判断出眼前是哪一种，就完成了大半的工作。",
+           "zh-Hant":"往後兩天，加倍的謠言是 × 2 × 2；海報是 + 30 + 30。判斷出眼前是哪一種，就完成了大半的工作。",
+           vi:"Hai ngày tới của tin đồn gấp đôi là × 2 × 2. Hai ngày tới của tấm áp phích là + 30 + 30. Biết mình đang nhìn cái nào đã là phần lớn công việc."},
+      goal:{en:"Get all three predictions right.", "zh-Hans":"三个预测全部答对。",
+            "zh-Hant":"三個預測全部答對。", vi:"Dự đoán đúng cả ba."},
+      build:a3 },
+    { id:"a4", kind:"solve", tab:{en:"Solve","zh-Hans":"自己算","zh-Hant":"自己算",vi:"Tự tính"},
+      title:{en:"Do it with arithmetic, no graph", "zh-Hans":"用算术做，不看图",
+             "zh-Hant":"用算術做，不看圖", vi:"Làm bằng phép tính, không đồ thị"},
+      aim:{en:"Multiply for the rumour, add for the poster, and compare them day by day. This is the core question of the real task.",
+           "zh-Hans":"谣言用乘，海报用加，再一天一天地比较。这就是正式任务的核心题型。",
+           "zh-Hant":"謠言用乘，海報用加，再一天一天地比較。這就是正式任務的核心題型。",
+           vi:"Tin đồn thì nhân, áp phích thì cộng, rồi so sánh từng ngày. Đây là dạng câu hỏi cốt lõi của bài thật."},
+      goal:{en:"All four parts correct. The sim then replays your answer.",
+            "zh-Hans":"四小题全对，模拟会播放你的答案。",
+            "zh-Hant":"四小題全對，模擬會播放你的答案。",
+            vi:"Đúng cả bốn phần. Sau đó mô phỏng sẽ chạy lại đáp án của em."},
+      skills:["p_exp"], build:a4 },
+    { id:"a5", kind:"exam", tab:{en:"The real thing","zh-Hans":"正式演练","zh-Hant":"正式演練",vi:"Làm thật"},
+      title:{en:"A whole growth task, on your own, timed", "zh-Hans":"完整一道增长题，独立完成，计时",
+             "zh-Hant":"完整一道成長題，獨立完成，計時", vi:"Một bài tăng trưởng trọn vẹn, tự làm, tính giờ"},
+      aim:{en:"Same mathematics as the real data task, different words. No sim, no sliders — and the last part asks you to check a claim, which is exactly what step 5 of Set B will do all the way through.",
+           "zh-Hans":"和正式数据任务同样的数学，不同的文字。没有模拟，没有滑块——最后一小题要你检验一个说法，而这正是 B 组第 5 步从头到尾要做的事。",
+           "zh-Hant":"和正式資料任務同樣的數學，不同的文字。沒有模擬，沒有滑桿——最後一小題要你檢驗一個說法，而這正是 B 組第 5 步從頭到尾要做的事。",
+           vi:"Cùng toán như bài dữ liệu thật, khác lời văn. Không mô phỏng, không thanh trượt — và phần cuối yêu cầu em kiểm tra một lời khẳng định, đúng thứ mà bước 5 của nhóm B sẽ làm suốt."},
+      goal:{en:"Five parts, all correct.", "zh-Hans":"五小题全对。", "zh-Hant":"五小題全對。", vi:"Năm phần, đúng hết."},
+      skills:["p_exp","p_claims"], build:a5 }
+  ];
+  var STAGES_B = [
+    { id:"b1", kind:"play", tab:{en:"Play","zh-Hans":"先玩","zh-Hant":"先玩",vi:"Chơi thử"},
+      title:{en:"Build the school the headline describes", "zh-Hans":"造出标题所说的那所学校",
+             "zh-Hant":"造出標題所說的那所學校", vi:"Dựng lại ngôi trường mà tiêu đề mô tả"},
+      aim:{en:"A count and a <span data-v=\"percentage\">percentage</span> can point in opposite directions from the very same data. The bigger group nearly always wins on count, and can still lose on share.",
+           "zh-Hans":"同一份数据，人数和<span data-v=\"percentage\">百分比</span>可以指向相反的方向。人多的组几乎总能在人数上胜出，却仍可能在比例上落后。",
+           "zh-Hant":"同一份資料，人數和<span data-v=\"percentage\">百分比</span>可以指向相反的方向。人多的組幾乎總能在人數上勝出，卻仍可能在比例上落後。",
+           vi:"Cùng một bộ dữ liệu, số đếm và <span data-v=\"percentage\">phần trăm</span> có thể chỉ về hai hướng ngược nhau. Nhóm đông gần như luôn thắng về số đếm, mà vẫn có thể thua về tỉ lệ."},
+      goal:{en:"Drag the four sliders until all three ticks turn green. Watch the headline rewrite itself as you drag.",
+            "zh-Hans":"拖动四个滑块，直到三个勾全变绿。拖的时候注意标题会自己改写。",
+            "zh-Hant":"拖動四個滑桿，直到三個勾全變綠。拖的時候注意標題會自己改寫。",
+            vi:"Kéo bốn thanh trượt cho đến khi cả ba dấu tích chuyển xanh. Vừa kéo vừa xem tiêu đề tự viết lại."},
+      build:b1 },
+    { id:"b2", kind:"read", tab:{en:"Read","zh-Hans":"读表","zh-Hant":"讀表",vi:"Đọc"},
+      title:{en:"Read a survey table", "zh-Hans":"读一张调查表", "zh-Hant":"讀一張調查表", vi:"Đọc bảng khảo sát"},
+      aim:{en:"Every row of a survey table holds two different numbers about the same students: how many, and what share. A headline gets to choose one of them.",
+           "zh-Hans":"调查表的每一行都装着关于同一批学生的两个数：有多少人，占多大比例。标题可以只挑其中一个。",
+           "zh-Hant":"調查表的每一行都裝著關於同一批學生的兩個數：有多少人，佔多大比例。標題可以只挑其中一個。",
+           vi:"Mỗi dòng của bảng khảo sát chứa hai con số khác nhau về cùng nhóm học sinh: bao nhiêu người, và chiếm bao nhiêu phần. Tiêu đề được quyền chọn một trong hai."},
+      goal:{en:"Answer all five.", "zh-Hans":"五题全部答对。", "zh-Hant":"五題全部答對。", vi:"Trả lời cả năm câu."},
+      build:b2 },
+    { id:"b3", kind:"predict", tab:{en:"Predict","zh-Hans":"预测","zh-Hant":"預測",vi:"Dự đoán"},
+      title:{en:"Decide which claim survives the check", "zh-Hans":"先判断哪个说法经得起检验",
+             "zh-Hant":"先判斷哪個說法經得起檢驗", vi:"Quyết định lời nào trụ được khi kiểm tra"},
+      aim:{en:"Most claims about people are one of three things: a count, a share, or a change. Naming which one you are being given is how you check it.",
+           "zh-Hans":"关于人的说法，多半不外乎三种：人数、比例、变化。先说清楚给你的是哪一种，才谈得上检验。",
+           "zh-Hant":"關於人的說法，多半不外乎三種：人數、比例、變化。先說清楚給你的是哪一種，才談得上檢驗。",
+           vi:"Hầu hết lời khẳng định về con người thuộc một trong ba loại: số đếm, tỉ lệ, hoặc mức thay đổi. Gọi đúng tên loại mình đang nhận chính là cách kiểm tra nó."},
+      goal:{en:"Three correct decisions.", "zh-Hans":"三次判断全对。", "zh-Hant":"三次判斷全對。", vi:"Ba quyết định đúng."},
+      build:b3 },
+    { id:"b4", kind:"solve", tab:{en:"Solve","zh-Hans":"自己算","zh-Hant":"自己算",vi:"Tự tính"},
+      title:{en:"The percentage arithmetic, on your own", "zh-Hans":"百分比的计算，自己来",
+             "zh-Hant":"百分比的計算，自己來", vi:"Tự làm phép tính phần trăm"},
+      aim:{en:"Percentage of, percentage change, and percentage points are three different questions with three different answers. The real task will hand you all three in one paragraph.",
+           "zh-Hans":"“占百分之几”“上升了百分之几”“上升了几个百分点”是三个不同的问题，答案也不同。正式任务会把这三个塞进同一段话里。",
+           "zh-Hant":"「佔百分之幾」「上升了百分之幾」「上升了幾個百分點」是三個不同的問題，答案也不同。正式任務會把這三個塞進同一段話裡。",
+           vi:"Phần trăm của, phần trăm thay đổi, và điểm phần trăm là ba câu hỏi khác nhau với ba đáp án khác nhau. Bài thật sẽ đưa cả ba vào cùng một đoạn văn."},
+      goal:{en:"All four parts correct. The sim then replays your answer.",
+            "zh-Hans":"四小题全对，模拟会播放你的答案。",
+            "zh-Hant":"四小題全對，模擬會播放你的答案。",
+            vi:"Đúng cả bốn phần. Sau đó mô phỏng sẽ chạy lại đáp án của em."},
+      skills:["p_percent"], build:b4 },
+    { id:"b5", kind:"exam", tab:{en:"The real thing","zh-Hans":"正式演练","zh-Hant":"正式演練",vi:"Làm thật"},
+      title:{en:"Four claims, four verdicts — timed", "zh-Hans":"四个说法，四个判定——计时",
+             "zh-Hant":"四個說法，四個判定——計時", vi:"Bốn lời khẳng định, bốn phán quyết — tính giờ"},
+      aim:{en:"This is as close to the real data task as practice gets: one table, four confident writers, and a decision to make about each of them with a number to back it up.",
+           "zh-Hans":"这已经是最接近正式数据任务的练习：一张表，四个说得很有把握的作者，你要对每一个作出判定，并给出支撑判定的数字。",
+           "zh-Hant":"這已經是最接近正式資料任務的練習：一張表，四個說得很有把握的作者，你要對每一個作出判定，並給出支撐判定的數字。",
+           vi:"Đây là bài luyện gần bài dữ liệu thật nhất: một bảng số, bốn người viết đầy tự tin, và với mỗi người em phải đưa ra một phán quyết kèm con số chứng minh."},
+      goal:{en:"Eight parts, all correct.", "zh-Hans":"八小题全对。", "zh-Hant":"八小題全對。", vi:"Tám phần, đúng hết."},
+      skills:["p_percent","p_claims"], build:b5 }
+  ];
+
+  function boot(){
+    document.documentElement.lang = lang() === "en" ? "en" : lang();
+    document.querySelectorAll("[data-i18n]").forEach(function(n){
+      var v = T(n.getAttribute("data-i18n"));
+      if (typeof v === "string") n.innerHTML = v;
+    });
+    var sel = document.querySelector(".language-select");
+    sel.value = lang();
+    sel.addEventListener("change", function(){
+      try { localStorage.setItem("elc_page_language", sel.value); } catch(e){}
+      location.reload();
+    });
+
+    /* the framing line: which task this rehearses */
+    var cp = null;
+    if (S2) S2.UNITS.forEach(function(u){ u.checkpoints.forEach(function(c){ if (c.id === "cp_pan") cp = c; }); });
+    document.getElementById("frameLine").innerHTML =
+      "<b>" + esc(cp ? T("buildsF")(cp.name) : T("buildsAlways")) + "</b>" +
+      "<span class='eng'>" + esc(T("engNote")) + "</span>";
+
+    SIM.mount(document.getElementById("sim"), {
+      id:"rumour", cp:"cp_pan", room:"science",
+      evidenceSrc:"The Rumour",
+      skills:["p_exp","p_percent","p_claims"],
+      openAll: (function(){ try { return localStorage.getItem("elc_stem_sim_open") === "1"; } catch(e){ return false; } })(),
+      sets:[
+        { id:"a", name:{en:"A · how fast is fast?","zh-Hans":"A · 到底有多快？",
+                        "zh-Hant":"A · 到底有多快？",vi:"A · nhanh là nhanh cỡ nào?"}, stages:STAGES_A },
+        { id:"b", name:{en:"B · check the claim","zh-Hans":"B · 检验说法",
+                        "zh-Hant":"B · 檢驗說法",vi:"B · kiểm tra lời khẳng định"}, stages:STAGES_B }
+      ]
+    });
+
+    if (window.STEMVOCAB) window.STEMVOCAB.init();
+
+    document.getElementById("teacherUnlock").addEventListener("click", function(e){
+      e.preventDefault();
+      try { localStorage.setItem("elc_stem_sim_open", "1"); } catch(err){}
+      location.reload();
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+})();
 </script>
 </body>
 </html>

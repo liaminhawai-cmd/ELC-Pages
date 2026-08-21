@@ -11744,6 +11744,6010 @@ window.STEM_VOCAB_DATA = {
      ]
     }
    ]
+  },
+  {
+   "id": "lab1",
+   "area": "lab",
+   "title": "In the laboratory",
+   "focus": "The room, the rules and the equipment: what everything is called and what it is for.",
+   "words": [
+    {
+     "w": "laboratory",
+     "meaning": "a room specially equipped for scientific experiments and practical work.",
+     "example": "We do our practical work in the science laboratory, not in a normal classroom.",
+     "parts": [
+      {
+       "surface": "labor",
+       "type": "root",
+       "meaning": "work",
+       "tr": {
+        "am": "ስራ",
+        "ar": "عمل",
+        "es": "trabajo",
+        "fa": "کار",
+        "fr": "travail",
+        "hi": "काम",
+        "ja": "働く",
+        "ko": "노동",
+        "ml": "ജോലി",
+        "ps": "کار",
+        "ro": "muncă",
+        "ru": "труд",
+        "ta": "வேலை",
+        "tl": "trabaho",
+        "ur": "کام",
+        "vi": "lao động",
+        "zh-Hans": "工作",
+        "zh-Hant": "工作"
+       }
+      },
+      {
+       "surface": "atory",
+       "type": "suffix",
+       "meaning": "relating to",
+       "tr": {
+        "am": "የተያያዘ",
+        "ar": "متعلق بـ",
+        "es": "relacionado con",
+        "fa": "مربوط به",
+        "fr": "relatif à",
+        "hi": "से संबंधित",
+        "ja": "〜に関する",
+        "ko": "관련된",
+        "ml": "സംബന്ധിച്ച",
+        "ps": "اړوند",
+        "ro": "referitor la",
+        "ru": "относящийся к",
+        "ta": "தொடர்பான",
+        "tl": "kaugnay",
+        "ur": "متعلق",
+        "vi": "liên quan đến",
+        "zh-Hans": "…性的",
+        "zh-Hant": "…性的"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "实验室",
+      "zh-Hant": "實驗室",
+      "ja": "実験室",
+      "ko": "실험실",
+      "vi": "phòng thí nghiệm",
+      "ar": "مختبر",
+      "fa": "آزمایشگاه",
+      "ur": "تجربہ گاہ",
+      "ps": "لابراتوار",
+      "am": "ላቦራቶሪ",
+      "ml": "പരീക്ഷണശാല",
+      "ta": "ஆய்வகம்",
+      "hi": "प्रयोगशाला",
+      "tl": "laboratoryo",
+      "ro": "laborator",
+      "fr": "laboratoire",
+      "ru": "лаборатория",
+      "es": "laboratorio"
+     },
+     "note": "<i>labor</i> (work) + <i>-atory</i> (a place for): a place for work. The same <i>labor</i> is in <b>collaborate</b> (work together) and <b>elaborate</b>. Everyone shortens it to <b>lab</b>, but the full word is what you write in a report.",
+     "apply": [
+      {
+       "id": "lab1_laby_desc",
+       "type": "desc",
+       "q": "Which word names a room specially fitted out for experiments and practical work?",
+       "a": "Laboratory",
+       "opts": [
+        "Laboratory",
+        "Equipment",
+        "Hazard",
+        "Beaker"
+       ],
+       "explain": "<i>labor</i> (work) + <i>-atory</i> (place for). Equipment is the tools inside it, not the room."
+      },
+      {
+       "id": "lab1_laby_scn",
+       "type": "scenario",
+       "q": "A door sign says: no food or drink, safety glasses must be worn, bags on the hooks. Which room is behind the door?",
+       "a": "The laboratory",
+       "opts": [
+        "The laboratory",
+        "The library",
+        "The canteen",
+        "The gym"
+       ],
+       "explain": "Those rules are there because the room is set up for experiments — that is a laboratory."
+      }
+     ]
+    },
+    {
+     "w": "hazard",
+     "meaning": "something in the environment that could cause harm.",
+     "example": "The open gas tap was a hazard, so we turned it off.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "危险源",
+      "zh-Hant": "危險源",
+      "ja": "危険源",
+      "ko": "위험 요소",
+      "vi": "mối nguy hiểm",
+      "ar": "خطر",
+      "fa": "خطر",
+      "ur": "خطرہ",
+      "ps": "خطر",
+      "am": "አደጋ",
+      "ml": "അപകടസാധ്യത",
+      "ta": "அபாயம்",
+      "hi": "खतरा",
+      "tl": "panganib",
+      "ro": "pericol",
+      "fr": "danger",
+      "ru": "опасность",
+      "es": "peligro"
+     },
+     "note": "<b>Hazard</b> came into English from an old French word for a dice game, so it has carried the idea of <b>chance</b> for hundreds of years. In science it is now exact: the hazard is the <b>thing</b> that could cause harm — the acid, the flame, the broken glass.",
+     "apply": [
+      {
+       "id": "lab1_haz_desc",
+       "type": "desc",
+       "q": "Which word means something that could cause harm?",
+       "a": "Hazard",
+       "opts": [
+        "Hazard",
+        "Risk",
+        "Equipment",
+        "Safety flame"
+       ],
+       "explain": "A hazard is the thing itself. The chance that it actually hurts someone is the risk."
+      },
+      {
+       "id": "lab1_haz_scn",
+       "type": "scenario",
+       "q": "A bottle of acid is standing open near the edge of the bench. What is the open bottle?",
+       "a": "A hazard",
+       "opts": [
+        "A hazard",
+        "A risk",
+        "A method",
+        "A result"
+       ],
+       "explain": "The acid is the thing that could cause harm, so it is the hazard."
+      },
+      {
+       "id": "lab1_haz_cloze",
+       "type": "cloze",
+       "before": "Boiling water, broken glass and an open gas tap could all cause harm, so each one is a",
+       "after": "in the laboratory.",
+       "a": "hazard",
+       "opts": [
+        "hazard",
+        "risk",
+        "beaker",
+        "tripod"
+       ],
+       "explain": "They are the things that could hurt you — hazards. How likely the harm is would be the risk."
+      }
+     ]
+    },
+    {
+     "w": "risk",
+     "meaning": "the chance that a hazard will actually cause harm.",
+     "example": "Wearing safety glasses lowers the risk of getting acid in your eyes.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "风险",
+      "zh-Hant": "風險",
+      "ja": "リスク",
+      "ko": "위험(가능성)",
+      "vi": "nguy cơ",
+      "ar": "احتمال الخطر",
+      "fa": "ریسک/احتمال خطر",
+      "ur": "خطرے کا امکان",
+      "ps": "خطر",
+      "am": "አደጋ ተጋላጭነት",
+      "ml": "അപകടസാധ്യത",
+      "ta": "ஆபத்து வாய்ப்பு",
+      "hi": "जोखिम",
+      "tl": "panganib na maaaring mangyari",
+      "ro": "risc",
+      "fr": "risque",
+      "ru": "риск",
+      "es": "riesgo"
+     },
+     "note": "<b>Risk</b> reached English through French <i>risque</i> and Italian <i>risco</i>, meaning danger. Keep the pair straight: the <b>hazard</b> is the thing, the <b>risk</b> is the chance of harm. Safety rules do not remove the hazard — they lower the risk.",
+     "apply": [
+      {
+       "id": "lab1_risk_desc",
+       "type": "desc",
+       "q": "Which word means the chance that something harmful will actually happen?",
+       "a": "Risk",
+       "opts": [
+        "Risk",
+        "Hazard",
+        "Equipment",
+        "Laboratory"
+       ],
+       "explain": "Risk is the chance. The dangerous thing itself is the hazard."
+      },
+      {
+       "id": "lab1_risk_scn",
+       "type": "scenario",
+       "q": "The open bottle of acid is closed and put back in the cupboard. What has changed?",
+       "a": "The risk is lower, but the acid is still a hazard",
+       "opts": [
+        "The risk is lower, but the acid is still a hazard",
+        "The hazard is gone, but the risk is the same",
+        "The risk is higher",
+        "Nothing has changed"
+       ],
+       "explain": "The acid can still cause harm, so it stays a hazard. Closing it makes harm much less likely, so the risk drops."
+      }
+     ]
+    },
+    {
+     "w": "safety glasses",
+     "meaning": "glasses worn in a laboratory to protect the eyes from chemicals and heat.",
+     "example": "Put your safety glasses on before you light the Bunsen burner.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "安全眼镜",
+      "zh-Hant": "安全眼鏡",
+      "ja": "安全眼鏡",
+      "ko": "보안경",
+      "vi": "kính bảo hộ",
+      "ar": "نظارات السلامة",
+      "fa": "عینک ایمنی",
+      "ur": "حفاظتی چشمہ",
+      "ps": "د خوندیتوب عینکې",
+      "am": "የደህንነት መነጽር",
+      "ml": "സുരക്ഷാ കണ്ണട",
+      "ta": "பாதுகாப்பு கண்ணாடி",
+      "hi": "सुरक्षा चश्मा",
+      "tl": "salaming pangkaligtasan",
+      "ro": "ochelari de protecție",
+      "fr": "lunettes de sécurité",
+      "ru": "защитные очки",
+      "es": "gafas de seguridad"
+     },
+     "note": "A compound of <b>safety</b> (<i>safe</i> + <i>-ty</i>, the state of being safe) and <b>glasses</b>. Like <b>scissors</b> and <b>tongs</b>, glasses is always plural — you say <i>a pair of safety glasses</i>, never <i>a safety glass</i>.",
+     "apply": [
+      {
+       "id": "lab1_sg_desc",
+       "type": "desc",
+       "q": "Which piece of equipment protects your eyes from chemicals and heat?",
+       "a": "Safety glasses",
+       "opts": [
+        "Safety glasses",
+        "Tongs",
+        "A spatula",
+        "The collar"
+       ],
+       "explain": "Safety glasses are worn over the eyes. Tongs protect your hands, not your eyes."
+      },
+      {
+       "id": "lab1_sg_scn",
+       "type": "scenario",
+       "q": "You are about to heat a test tube of liquid. What goes on first?",
+       "a": "Safety glasses",
+       "opts": [
+        "Safety glasses",
+        "A gauze mat",
+        "Tongs",
+        "A heatproof mat"
+       ],
+       "explain": "Heated liquid can spit. Eyes are protected before anything is lit."
+      }
+     ]
+    },
+    {
+     "w": "equipment",
+     "meaning": "the tools and instruments used to carry out scientific work.",
+     "example": "We collected our equipment from the trolley: a beaker, a tripod and a thermometer.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "设备",
+      "zh-Hant": "設備",
+      "ja": "器具",
+      "ko": "기구/장비",
+      "vi": "thiết bị",
+      "ar": "معدات",
+      "fa": "تجهیزات",
+      "ur": "سامان/آلات",
+      "ps": "تجهیزات",
+      "am": "መሳሪያ",
+      "ml": "ഉപകരണങ്ങൾ",
+      "ta": "கருவிகள்",
+      "hi": "उपकरण",
+      "tl": "kagamitan",
+      "ro": "echipament",
+      "fr": "équipement",
+      "ru": "оборудование",
+      "es": "equipo"
+     },
+     "note": "From French <i>équiper</i>, first used for fitting out a ship: <i>equip</i> + <i>-ment</i> (the thing that results). <b>Equipment</b> is uncountable — say <i>three pieces of equipment</i>, not <i>three equipments</i>.",
+     "apply": [
+      {
+       "id": "lab1_eq_desc",
+       "type": "desc",
+       "q": "Which word names all the tools and instruments used to do scientific work?",
+       "a": "Equipment",
+       "opts": [
+        "Equipment",
+        "Laboratory",
+        "Hazard",
+        "Risk"
+       ],
+       "explain": "Equipment is the tools. The laboratory is the room they live in."
+      },
+      {
+       "id": "lab1_eq_cloze",
+       "type": "cloze",
+       "before": "Beakers, tongs and thermometers are all",
+       "after": "that we use in the laboratory.",
+       "a": "equipment",
+       "opts": [
+        "equipment",
+        "hazards",
+        "risks",
+        "laboratories"
+       ],
+       "explain": "They are tools for doing the work, so they are equipment."
+      }
+     ]
+    },
+    {
+     "w": "beaker",
+     "meaning": "a container with a wide base, used to hold or heat liquids.",
+     "example": "We poured 100 mL of water into the beaker and heated it.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "烧杯",
+      "zh-Hant": "燒杯",
+      "ja": "ビーカー",
+      "ko": "비커",
+      "vi": "cốc thủy tinh",
+      "ar": "كأس مخبري",
+      "fa": "بشر آزمایشگاهی",
+      "ur": "بیکر",
+      "ps": "بیکر",
+      "am": "ቢከር",
+      "ml": "ബീക്കർ",
+      "ta": "பீக்கர்",
+      "hi": "बीकर",
+      "tl": "beaker",
+      "ro": "pahar de laborator",
+      "fr": "bécher",
+      "ru": "химический стакан",
+      "es": "vaso de precipitados"
+     },
+     "note": "<b>Beaker</b> is an old northern European word for a drinking cup, and the lab version keeps the shape: wide base, straight sides, a lip for pouring. The marks on the side are rough only — for an accurate volume you need a <b>measuring cylinder</b>.",
+     "apply": [
+      {
+       "id": "lab1_bkr_desc",
+       "type": "desc",
+       "q": "Which container has a wide base and is used to hold or heat liquids?",
+       "a": "A beaker",
+       "opts": [
+        "A beaker",
+        "A test tube",
+        "A measuring cylinder",
+        "A tripod"
+       ],
+       "explain": "The wide base makes a beaker steady on a gauze mat and easy to heat."
+      },
+      {
+       "id": "lab1_bkr_scn",
+       "type": "scenario",
+       "q": "Your group must heat 100 mL of water over a Bunsen burner. Which container do you use?",
+       "a": "A beaker",
+       "opts": [
+        "A beaker",
+        "A measuring cylinder",
+        "A test tube",
+        "A spatula"
+       ],
+       "explain": "A beaker is made to be heated. A measuring cylinder is for measuring a volume, not for heating."
+      }
+     ]
+    },
+    {
+     "w": "measuring cylinder",
+     "meaning": "a tall, narrow container marked with a scale, used to measure the volume of a liquid accurately.",
+     "example": "We used a measuring cylinder to measure exactly 25 mL of water.",
+     "parts": [
+      {
+       "surface": "measur",
+       "type": "root",
+       "meaning": "measure",
+       "tr": {
+        "zh-Hans": "测量",
+        "zh-Hant": "測量",
+        "ja": "測る",
+        "ko": "측정하다",
+        "vi": "đo lường",
+        "ar": "قياس",
+        "fa": "اندازه‌گیری کردن",
+        "ur": "پیمائش کرنا",
+        "am": "መለካት",
+        "ml": "അളക്കുക",
+        "ta": "அளவிடு",
+        "tl": "sukatin",
+        "ps": "اندازه کول",
+        "ro": "a măsura",
+        "ru": "измерять",
+        "fr": "mesurer",
+        "hi": "मापना",
+        "es": "medir"
+       }
+      },
+      {
+       "surface": "ing",
+       "type": "suffix",
+       "meaning": "action/process",
+       "tr": {
+        "am": "ተግባር",
+        "ar": "فعل",
+        "es": "el acto de",
+        "fa": "عمل",
+        "fr": "action de",
+        "hi": "क्रिया",
+        "ja": "動作",
+        "ko": "행위",
+        "ml": "പ്രവൃത്തി",
+        "ps": "کړنه",
+        "ro": "acțiunea de",
+        "ru": "действие",
+        "ta": "செயல்",
+        "tl": "kilos",
+        "ur": "فعل",
+        "vi": "hành động",
+        "zh-Hans": "行为",
+        "zh-Hant": "行為"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "量筒",
+      "zh-Hant": "量筒",
+      "ja": "メスシリンダー",
+      "ko": "메스실린더",
+      "vi": "ống đong",
+      "ar": "أسطوانة قياس",
+      "fa": "استوانه مدرج",
+      "ur": "پیمائشی سلنڈر",
+      "ps": "اندازه‌کوونکی سلنډر",
+      "am": "መለኪያ ሲሊንደር",
+      "ml": "അളവ് സിലിണ്ടർ",
+      "ta": "அளவீட்டு உருளை",
+      "hi": "मापन बेलन",
+      "tl": "panukat na silindro",
+      "ro": "cilindru gradat",
+      "fr": "éprouvette graduée",
+      "ru": "мерный цилиндр",
+      "es": "probeta graduada"
+     },
+     "note": "<i>measur</i> (measure) + <i>-ing</i> (the action), plus <b>cylinder</b>, from Greek <i>kylindros</i>, a roller — the tube shape. Tall and narrow means the scale is fine, so small differences in volume show up clearly.",
+     "apply": [
+      {
+       "id": "lab1_mc_desc",
+       "type": "desc",
+       "q": "Which container is tall and narrow, with a scale up the side for reading volume?",
+       "a": "A measuring cylinder",
+       "opts": [
+        "A measuring cylinder",
+        "A beaker",
+        "A test tube",
+        "A thermometer"
+       ],
+       "explain": "A thermometer also has a scale, but it measures temperature, not volume."
+      },
+      {
+       "id": "lab1_mc_scn",
+       "type": "scenario",
+       "q": "You need exactly 25 mL of water. Which piece of equipment gives the most accurate measurement?",
+       "a": "A measuring cylinder",
+       "opts": [
+        "A measuring cylinder",
+        "A beaker",
+        "A test tube",
+        "A gauze mat"
+       ],
+       "explain": "Only the measuring cylinder is marked with an accurate scale for volume."
+      }
+     ]
+    },
+    {
+     "w": "test tube",
+     "meaning": "a small glass tube, open at one end, used for heating small samples or mixing chemicals.",
+     "example": "We mixed the two liquids in a test tube and watched for a colour change.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "试管",
+      "zh-Hant": "試管",
+      "ja": "試験管",
+      "ko": "시험관",
+      "vi": "ống nghiệm",
+      "ar": "أنبوب اختبار",
+      "fa": "لوله آزمایش",
+      "ur": "ٹیسٹ ٹیوب",
+      "ps": "ازموینې پایپ",
+      "am": "የሙከራ ቱቦ",
+      "ml": "ടെസ്റ്റ് ട്യൂബ്",
+      "ta": "சோதனைக் குழாய்",
+      "hi": "परखनली",
+      "tl": "test tube",
+      "ro": "eprubetă",
+      "fr": "tube à essai",
+      "ru": "пробирка",
+      "es": "tubo de ensayo"
+     },
+     "note": "A plain compound: a <b>tube</b> for a <b>test</b>. It is small on purpose — a few drops are enough to see a colour change, and a small sample is a smaller hazard. Test tubes go in a rack, never left lying on the bench.",
+     "apply": [
+      {
+       "id": "lab1_tt_desc",
+       "type": "desc",
+       "q": "Which piece of equipment is a small glass tube, open at one end?",
+       "a": "A test tube",
+       "opts": [
+        "A test tube",
+        "A beaker",
+        "A measuring cylinder",
+        "An air hole"
+       ],
+       "explain": "A test tube holds a small sample for heating or mixing."
+      },
+      {
+       "id": "lab1_tt_scn",
+       "type": "scenario",
+       "q": "Your group must mix two chemicals, only a few drops of each. Which container fits the job?",
+       "a": "A test tube",
+       "opts": [
+        "A test tube",
+        "A beaker",
+        "A measuring cylinder",
+        "A heatproof mat"
+       ],
+       "explain": "A few drops would be lost in a beaker. A test tube is made for small samples."
+      }
+     ]
+    },
+    {
+     "w": "thermometer",
+     "meaning": "an instrument used to measure temperature.",
+     "example": "We put the thermometer in the water and read 63 °C.",
+     "parts": [
+      {
+       "surface": "therm",
+       "type": "root",
+       "meaning": "heat",
+       "tr": {
+        "vi": "nhiệt",
+        "fa": "گرما",
+        "am": "ሙቀት",
+        "ar": "حرارة",
+        "es": "calor",
+        "fr": "chaleur",
+        "hi": "ऊष्मा",
+        "ja": "熱",
+        "ko": "열",
+        "ml": "താപം",
+        "ps": "تودوخه",
+        "ro": "căldură",
+        "ru": "тепло",
+        "ta": "வெப்பம்",
+        "tl": "init",
+        "ur": "حرارت",
+        "zh-Hans": "热",
+        "zh-Hant": "熱"
+       }
+      },
+      {
+       "surface": "meter",
+       "type": "root",
+       "meaning": "measure",
+       "tr": {
+        "am": "መለኪያ",
+        "ar": "قياس",
+        "es": "medida",
+        "fa": "اندازه‌گیری",
+        "fr": "mesure",
+        "hi": "माप",
+        "ja": "測定",
+        "ko": "측정",
+        "ml": "അളവ്",
+        "ps": "اندازه",
+        "ro": "măsură",
+        "ru": "мера",
+        "ta": "அளவீடு",
+        "tl": "sukat",
+        "ur": "پیمائش",
+        "vi": "đo lường",
+        "zh-Hans": "测量",
+        "zh-Hant": "測量"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "温度计",
+      "zh-Hant": "溫度計",
+      "ja": "温度計",
+      "ko": "온도계",
+      "vi": "nhiệt kế",
+      "ar": "مقياس الحرارة",
+      "fa": "دماسنج",
+      "ur": "تھرمامیٹر",
+      "ps": "تودرجه پیمانه",
+      "am": "ቴርሞሜትር",
+      "ml": "താപമാപിനി",
+      "ta": "வெப்பமானி",
+      "hi": "तापमापी",
+      "tl": "thermometer",
+      "ro": "termometru",
+      "fr": "thermomètre",
+      "ru": "термометр",
+      "es": "termómetro"
+     },
+     "note": "<i>therm</i> (heat) + <i>meter</i> (measure): a heat-measurer. The same <i>therm</i> is in <b>thermos</b> and <b>thermal</b>; the same <i>meter</i> is in <b>speedometer</b>. Read it with the bulb still in the liquid and your eye level with the line.",
+     "apply": [
+      {
+       "id": "lab1_th_desc",
+       "type": "desc",
+       "q": "<i>therm</i> means heat and <i>meter</i> means measure, so a thermometer measures…",
+       "a": "Temperature",
+       "opts": [
+        "Temperature",
+        "Volume",
+        "Mass",
+        "Time"
+       ],
+       "explain": "Heat + measure. Volume is measured with a measuring cylinder."
+      },
+      {
+       "id": "lab1_th_scn",
+       "type": "scenario",
+       "q": "Your group heats water and must write down how hot it is every 30 seconds. Which instrument do you use?",
+       "a": "A thermometer",
+       "opts": [
+        "A thermometer",
+        "A measuring cylinder",
+        "A beaker",
+        "A tripod"
+       ],
+       "explain": "Only the thermometer reads temperature."
+      }
+     ]
+    },
+    {
+     "w": "tripod",
+     "meaning": "a three-legged stand placed over a Bunsen burner to support equipment being heated.",
+     "example": "The beaker sat on a gauze mat on top of the tripod.",
+     "parts": [
+      {
+       "surface": "tri",
+       "type": "prefix",
+       "meaning": "three",
+       "tr": {
+        "am": "ሶስት",
+        "ar": "ثلاثة",
+        "es": "tres",
+        "fa": "سه",
+        "fr": "trois",
+        "hi": "तीन",
+        "ja": "三",
+        "ko": "삼",
+        "ml": "മൂന്ന്",
+        "ps": "درې",
+        "ro": "trei",
+        "ru": "три",
+        "ta": "மூன்று",
+        "tl": "tatlo",
+        "ur": "تین",
+        "vi": "ba",
+        "zh-Hans": "三",
+        "zh-Hant": "三"
+       }
+      },
+      {
+       "surface": "pod",
+       "type": "root",
+       "meaning": "foot",
+       "tr": {
+        "zh-Hans": "脚",
+        "zh-Hant": "腳",
+        "ja": "足",
+        "ko": "발",
+        "vi": "bàn chân",
+        "ar": "قدم",
+        "fa": "پا",
+        "ur": "پاؤں",
+        "am": "እግር",
+        "ml": "കാൽ",
+        "ta": "கால்",
+        "tl": "paa",
+        "ps": "پښه",
+        "ro": "picior",
+        "ru": "нога/стопа",
+        "fr": "pied",
+        "hi": "पैर",
+        "es": "pie"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "三脚架",
+      "zh-Hant": "三腳架",
+      "ja": "三脚架",
+      "ko": "삼각대",
+      "vi": "chân đế ba chân",
+      "ar": "حامل ثلاثي القوائم",
+      "fa": "سه‌پایه",
+      "ur": "تپائی",
+      "ps": "دری پښې والا سټینډ",
+      "am": "ትሪፖድ",
+      "ml": "ത്രിക്കാൽ സ്റ്റാൻഡ്",
+      "ta": "முக்காலி",
+      "hi": "तिपाई",
+      "tl": "tripod",
+      "ro": "trepied",
+      "fr": "trépied",
+      "ru": "штатив",
+      "es": "trípode"
+     },
+     "note": "<i>tri</i> (three) + <i>pod</i> (foot): three feet. The same <i>tri</i> is in <b>triangle</b>, the same <i>pod</i> in <b>podium</b> and <b>octopus</b> (eight feet). Three legs never rock, so the beaker above the flame stays still.",
+     "apply": [
+      {
+       "id": "lab1_tri_desc",
+       "type": "desc",
+       "q": "Which piece of equipment is a three-legged stand that holds things above a Bunsen burner?",
+       "a": "A tripod",
+       "opts": [
+        "A tripod",
+        "A gauze mat",
+        "A heatproof mat",
+        "The collar"
+       ],
+       "explain": "<i>tri</i> (three) + <i>pod</i> (foot). The gauze mat sits on top of it."
+      },
+      {
+       "id": "lab1_tri_cloze",
+       "type": "cloze",
+       "before": "<i>tri</i> means three and <i>pod</i> means foot, so the three-legged stand we put over the Bunsen burner is a",
+       "after": ".",
+       "a": "tripod",
+       "opts": [
+        "tripod",
+        "spatula",
+        "beaker",
+        "collar"
+       ],
+       "explain": "Three (<i>tri</i>) plus foot (<i>pod</i>) gives the three-legged stand: a tripod."
+      }
+     ]
+    },
+    {
+     "w": "gauze mat",
+     "meaning": "a metal mesh mat placed on a tripod to spread heat evenly under a beaker.",
+     "example": "The gauze mat spreads the heat so the beaker does not crack.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "石棉网",
+      "zh-Hant": "石棉網",
+      "ja": "金網",
+      "ko": "석면망",
+      "vi": "tấm lưới thép",
+      "ar": "شبكة سلكية للتسخين",
+      "fa": "توری حرارتی",
+      "ur": "تار کی جالی",
+      "ps": "د تودوخې ټوکر",
+      "am": "ገመድ ማጣሪያ",
+      "ml": "ചൂട് വല",
+      "ta": "கம்பி வலை",
+      "hi": "तार की जाली",
+      "tl": "gauze mat",
+      "ro": "plasă de sârmă pentru încălzire",
+      "fr": "toile métallique",
+      "ru": "асбестовая сетка",
+      "es": "rejilla metálica"
+     },
+     "note": "<b>Gauze</b> is a thin, open-weave material; the lab version is woven metal. Laid on the tripod, the mesh spreads the flame's heat across the whole base of the beaker, so the glass does not get one very hot spot and crack.",
+     "apply": [
+      {
+       "id": "lab1_gm_desc",
+       "type": "desc",
+       "q": "Which piece of equipment is a metal mesh that spreads heat evenly under a beaker?",
+       "a": "A gauze mat",
+       "opts": [
+        "A gauze mat",
+        "A heatproof mat",
+        "A tripod",
+        "The collar"
+       ],
+       "explain": "The gauze mat goes on the tripod, between the flame and the glass."
+      },
+      {
+       "id": "lab1_gm_scn",
+       "type": "scenario",
+       "q": "A beaker is sitting straight on the tripod and the glass is heating in one small spot. What should be between the beaker and the tripod?",
+       "a": "A gauze mat",
+       "opts": [
+        "A gauze mat",
+        "A heatproof mat",
+        "Tongs",
+        "A spatula"
+       ],
+       "explain": "The mesh spreads the heat out. A heatproof mat protects the bench, not the beaker."
+      }
+     ]
+    },
+    {
+     "w": "tongs",
+     "meaning": "a tool with two arms, used to safely pick up and hold hot objects.",
+     "example": "Use tongs to move the hot beaker, never your fingers.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "坩埚钳",
+      "zh-Hant": "坩堝鉗",
+      "ja": "トング",
+      "ko": "집게",
+      "vi": "kẹp gắp",
+      "ar": "ملقط",
+      "fa": "انبرک",
+      "ur": "چمٹا",
+      "ps": "پینسه",
+      "am": "መጭመቂያ",
+      "ml": "ട്ടോங்ஸ்",
+      "ta": "இடுக்கி",
+      "hi": "चिमटा",
+      "tl": "tenacillas",
+      "ro": "clește",
+      "fr": "pince",
+      "ru": "щипцы",
+      "es": "pinzas"
+     },
+     "note": "An old English word, and always plural like <b>scissors</b> and <b>pliers</b>: you use <i>a pair of tongs</i>. Two arms that grip mean your fingers never touch the hot object — the whole point of the tool.",
+     "apply": [
+      {
+       "id": "lab1_tg_desc",
+       "type": "desc",
+       "q": "Which tool has two arms and is made for picking up hot objects?",
+       "a": "Tongs",
+       "opts": [
+        "Tongs",
+        "A spatula",
+        "A tripod",
+        "A gauze mat"
+       ],
+       "explain": "Tongs grip. A spatula only scoops small amounts of solid."
+      },
+      {
+       "id": "lab1_tg_scn",
+       "type": "scenario",
+       "q": "The beaker is hot and has to come off the tripod. What do you use?",
+       "a": "Tongs",
+       "opts": [
+        "Tongs",
+        "A spatula",
+        "The collar",
+        "Safety glasses"
+       ],
+       "explain": "Tongs are the tool made for holding hot things safely."
+      }
+     ]
+    },
+    {
+     "w": "spatula",
+     "meaning": "a small flat tool used to scoop, move or mix solid chemicals.",
+     "example": "We used a spatula to add one small scoop of salt to the water.",
+     "parts": [
+      {
+       "surface": "spat",
+       "type": "root",
+       "meaning": "broad blade",
+       "tr": {
+        "zh-Hans": "宽刃",
+        "zh-Hant": "寬刃",
+        "ja": "幅広の刃",
+        "ko": "넓은 날",
+        "vi": "lưỡi rộng",
+        "ar": "نصل عريض",
+        "fa": "تیغه پهن",
+        "ur": "چوڑا پھل",
+        "am": "ሰፊ ስለት",
+        "ml": "വീതിയുള്ള ബ്ലേഡ്",
+        "ta": "அகன்ற கத்தி",
+        "tl": "malapad na talim",
+        "ps": "پلن تیغه",
+        "ro": "lamă lată",
+        "ru": "широкое лезвие",
+        "fr": "lame large",
+        "hi": "चौड़ी धार",
+        "es": "hoja ancha"
+       }
+      },
+      {
+       "surface": "ula",
+       "type": "suffix",
+       "meaning": "little form",
+       "tr": {
+        "vi": "dạng nhỏ",
+        "zh-Hans": "小形式",
+        "ja": "小さい形",
+        "zh-Hant": "小形式",
+        "am": "ትንሽ ቅርፅ",
+        "ar": "صيغة صغيرة",
+        "es": "forma pequeña",
+        "fa": "شکل کوچک",
+        "fr": "petite forme",
+        "hi": "छोटा रूप",
+        "ko": "작은 형태",
+        "ml": "ചെറിയ രൂപം",
+        "ps": "کوچنی شکل",
+        "ro": "formă mică",
+        "ru": "маленькая форма",
+        "ta": "சிறிய வடிவம்",
+        "tl": "maliit na anyo",
+        "ur": "چھوٹی شکل"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "药匙",
+      "zh-Hant": "藥匙",
+      "ja": "薬さじ",
+      "ko": "약주걱",
+      "vi": "thìa xúc hóa chất",
+      "ar": "ملعقة مخبرية",
+      "fa": "اسپاتول",
+      "ur": "اسپیچولا",
+      "ps": "سپاچوله",
+      "am": "ስፓቱላ",
+      "ml": "സ്പാറ്റുല",
+      "ta": "ஸ்பேட்டுலா",
+      "hi": "स्पैचुला",
+      "tl": "spatula",
+      "ro": "spatulă",
+      "fr": "spatule",
+      "ru": "шпатель",
+      "es": "espátula"
+     },
+     "note": "<i>spat</i> (broad blade) + <i>-ula</i> (little): a little broad blade — the same family as <b>spade</b>. It handles <b>solids</b> only: one small scoop of powder at a time, so you never tip half the jar into the beaker.",
+     "apply": [
+      {
+       "id": "lab1_sp_desc",
+       "type": "desc",
+       "q": "Which small flat tool is used to scoop or move solid chemicals?",
+       "a": "A spatula",
+       "opts": [
+        "A spatula",
+        "Tongs",
+        "A beaker",
+        "A gauze mat"
+       ],
+       "explain": "<i>spat</i> (broad blade) + <i>-ula</i> (little). Tongs are for hot objects."
+      },
+      {
+       "id": "lab1_sp_scn",
+       "type": "scenario",
+       "q": "You must move a small amount of salt powder from the jar into the beaker. Which tool?",
+       "a": "A spatula",
+       "opts": [
+        "A spatula",
+        "Tongs",
+        "A measuring cylinder",
+        "A thermometer"
+       ],
+       "explain": "A spatula is made for small amounts of solid."
+      }
+     ]
+    },
+    {
+     "w": "Bunsen burner",
+     "meaning": "a piece of laboratory equipment that burns gas to produce a flame for heating.",
+     "example": "We lit the Bunsen burner and turned the collar to get a blue flame.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "本生灯",
+      "zh-Hant": "本生燈",
+      "ja": "ガスバーナー",
+      "ko": "분젠 버너",
+      "vi": "đèn Bunsen",
+      "ar": "موقد بنسن",
+      "fa": "مشعل بونزن",
+      "ur": "بنسن برنر",
+      "ps": "بنسن بلپ",
+      "am": "የቡንሰን ማቃጠያ",
+      "ml": "ബൺസൻ ബർണർ",
+      "ta": "பன்சன் பர்னர்",
+      "hi": "बुनसेन बर्नर",
+      "tl": "Bunsen burner",
+      "ro": "arzător Bunsen",
+      "fr": "bec Bunsen",
+      "ru": "горелка Бунзена",
+      "es": "mechero Bunsen"
+     },
+     "note": "Named after the nineteenth-century chemist Bunsen, who worked on this burner design — so it keeps a capital <b>B</b>, like <b>degrees Celsius</b>. It burns gas, and how much air you let in decides whether the flame is a safety flame or a heating flame.",
+     "apply": [
+      {
+       "id": "lab1_bb_desc",
+       "type": "desc",
+       "q": "Which piece of equipment burns gas to make a flame for heating?",
+       "a": "A Bunsen burner",
+       "opts": [
+        "A Bunsen burner",
+        "A thermometer",
+        "A heatproof mat",
+        "A tripod"
+       ],
+       "explain": "The burner makes the flame; the tripod and mat just hold things around it."
+      },
+      {
+       "id": "lab1_bb_cloze",
+       "type": "cloze",
+       "before": "Once the heatproof mat was on the bench we lit the",
+       "after": "and turned the collar until the flame went blue.",
+       "a": "Bunsen burner",
+       "opts": [
+        "Bunsen burner",
+        "thermometer",
+        "measuring cylinder",
+        "gauze mat"
+       ],
+       "explain": "Only the burner has a flame and a collar."
+      }
+     ]
+    },
+    {
+     "w": "collar",
+     "meaning": "the part of a Bunsen burner that turns to open or close the air hole.",
+     "example": "Turn the collar to open the air hole and the flame turns blue.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "气孔调节环",
+      "zh-Hant": "氣孔調節環",
+      "ja": "カラー（空気調節環）",
+      "ko": "공기 조절 고리",
+      "vi": "vòng điều chỉnh khí",
+      "ar": "طوق ضبط الهواء",
+      "fa": "حلقه تنظیم هوا",
+      "ur": "ہوا کنٹرول کالر",
+      "ps": "د هوا تنظیم حلقه",
+      "am": "የአየር መቆጣጠሪያ ቀለበት",
+      "ml": "വായു നിയന്ത്രണ വളയം",
+      "ta": "காற்று கட்டுப்பாட்டு வளையம்",
+      "hi": "हवा नियंत्रण छल्ला",
+      "tl": "kwelyo ng hangin",
+      "ro": "guler de reglare a aerului",
+      "fr": "collerette d'air",
+      "ru": "воздушное кольцо",
+      "es": "anillo de aire"
+     },
+     "note": "From Latin <i>collum</i>, neck — the same collar that sits round the neck of a shirt. On a Bunsen burner it is the ring you <b>turn</b>; turning it uncovers or covers the air hole underneath.",
+     "apply": [
+      {
+       "id": "lab1_col_desc",
+       "type": "desc",
+       "q": "Which part of a Bunsen burner do you turn to open or close the air hole?",
+       "a": "The collar",
+       "opts": [
+        "The collar",
+        "The air hole",
+        "The tripod",
+        "The safety flame"
+       ],
+       "explain": "The collar is the moving ring. The air hole is the opening it covers."
+      },
+      {
+       "id": "lab1_col_scn",
+       "type": "scenario",
+       "q": "The flame is yellow and you need it hot and blue. Which part do you turn?",
+       "a": "The collar",
+       "opts": [
+        "The collar",
+        "The tripod",
+        "The gauze mat",
+        "The heatproof mat"
+       ],
+       "explain": "Turning the collar opens the air hole, more air mixes with the gas, and the flame goes blue."
+      }
+     ]
+    },
+    {
+     "w": "air hole",
+     "meaning": "the opening on a Bunsen burner that lets air mix with the gas.",
+     "example": "With the air hole closed, the flame is yellow and easy to see.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "进气孔",
+      "zh-Hant": "進氣孔",
+      "ja": "空気孔",
+      "ko": "공기 구멍",
+      "vi": "lỗ thông khí",
+      "ar": "فتحة الهواء",
+      "fa": "سوراخ هوا",
+      "ur": "ہوا کا سوراخ",
+      "ps": "د هوا سوری",
+      "am": "የአየር ቀዳዳ",
+      "ml": "വായു ദ്വാരം",
+      "ta": "காற்று துளை",
+      "hi": "हवा का छिद्र",
+      "tl": "butas ng hangin",
+      "ro": "orificiu de aer",
+      "fr": "trou d'air",
+      "ru": "воздушное отверстие",
+      "es": "orificio de aire"
+     },
+     "note": "A plain compound — the <b>hole</b> that lets <b>air</b> in. Do not mix it up with the collar: the collar is the ring you turn, the air hole is the opening that ends up open or closed. More air in means a hotter, bluer flame.",
+     "apply": [
+      {
+       "id": "lab1_ah_desc",
+       "type": "desc",
+       "q": "Which part of a Bunsen burner lets air mix with the gas?",
+       "a": "The air hole",
+       "opts": [
+        "The air hole",
+        "The collar",
+        "The gauze mat",
+        "The tripod"
+       ],
+       "explain": "Air comes in through the hole. The collar is what you turn to open it."
+      },
+      {
+       "id": "lab1_ah_cloze",
+       "type": "cloze",
+       "before": "The collar has been turned so that the",
+       "after": "is closed, no air mixes with the gas and the flame stays yellow.",
+       "a": "air hole",
+       "opts": [
+        "air hole",
+        "collar",
+        "tripod",
+        "heatproof mat"
+       ],
+       "explain": "No air can get in, so the gas burns without it and the flame stays yellow and cool."
+      }
+     ]
+    },
+    {
+     "w": "safety flame",
+     "meaning": "the yellow, quiet flame of a Bunsen burner, used when it's lit but not heating anything.",
+     "example": "Leave the burner on the safety flame while you are not heating anything.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "安全火焰",
+      "zh-Hant": "安全火燄",
+      "ja": "安全炎",
+      "ko": "안전 불꽃",
+      "vi": "ngọn lửa an toàn",
+      "ar": "لهب الأمان",
+      "fa": "شعله ایمنی",
+      "ur": "حفاظتی شعلہ",
+      "ps": "خوندي لمبه",
+      "am": "የደህንነት ነበልባል",
+      "ml": "സുരക്ഷാ ജ്വാല",
+      "ta": "பாதுகாப்பு சுடர்",
+      "hi": "सुरक्षा ज्वाला",
+      "tl": "ligtas na apoy",
+      "ro": "flacără de siguranță",
+      "fr": "flamme de sécurité",
+      "ru": "защитное пламя",
+      "es": "llama de seguridad"
+     },
+     "note": "The <b>yellow</b>, quiet, easy-to-see flame you get with the air hole closed. It is the flame the burner waits on: cool enough to be safe, bright enough that nobody walks into it by accident.",
+     "apply": [
+      {
+       "id": "lab1_sf_desc",
+       "type": "desc",
+       "q": "Which flame is yellow and quiet, and used when the burner is lit but not heating?",
+       "a": "The safety flame",
+       "opts": [
+        "The safety flame",
+        "The heating flame",
+        "The air hole",
+        "The collar"
+       ],
+       "explain": "Yellow, quiet and easy to see — that is the safety flame."
+      },
+      {
+       "id": "lab1_sf_scn",
+       "type": "scenario",
+       "q": "Your group has lit the burner but is not ready to heat anything yet. Which flame should it show?",
+       "a": "The safety flame",
+       "opts": [
+        "The safety flame",
+        "The heating flame",
+        "Either one",
+        "It does not matter"
+       ],
+       "explain": "A yellow flame is visible and cooler, so nothing is heated by accident."
+      }
+     ]
+    },
+    {
+     "w": "heating flame",
+     "meaning": "the hot, blue, roaring flame of a Bunsen burner, used to heat things quickly.",
+     "example": "Open the air hole to get the blue heating flame before you boil the water.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "加热火焰",
+      "zh-Hant": "加熱火燄",
+      "ja": "加熱炎",
+      "ko": "가열 불꽃",
+      "vi": "ngọn lửa gia nhiệt",
+      "ar": "لهب التسخين",
+      "fa": "شعله حرارتی",
+      "ur": "حرارتی شعلہ",
+      "ps": "تودولو لمبه",
+      "am": "የማሞቂያ ነበልባል",
+      "ml": "ചൂടാക്കൽ ജ്വാല",
+      "ta": "வெப்பமூட்டும் சுடர்",
+      "hi": "तापन ज्वाला",
+      "tl": "apoy na pampainit",
+      "ro": "flacără de încălzire",
+      "fr": "flamme de chauffe",
+      "ru": "нагревающее пламя",
+      "es": "llama de calentamiento"
+     },
+     "note": "The <b>blue</b>, roaring flame you get with the air hole open. Air mixes with the gas, the gas burns completely, and the flame is much hotter than the yellow one — so it is the flame you use to boil, and only while you are actually heating.",
+     "apply": [
+      {
+       "id": "lab1_hf_desc",
+       "type": "desc",
+       "q": "Which flame is blue and roaring, and used to heat things quickly?",
+       "a": "The heating flame",
+       "opts": [
+        "The heating flame",
+        "The safety flame",
+        "The collar",
+        "The gauze mat"
+       ],
+       "explain": "Blue and roaring means air is mixing with the gas, and that flame is hot."
+      },
+      {
+       "id": "lab1_hf_scn",
+       "type": "scenario",
+       "q": "The water must boil as fast as possible. Which flame, and how do you get it?",
+       "a": "The heating flame — open the air hole",
+       "opts": [
+        "The heating flame — open the air hole",
+        "The heating flame — close the air hole",
+        "The safety flame — open the air hole",
+        "The safety flame — close the air hole"
+       ],
+       "explain": "Air in through the open hole gives the hot blue flame. Closing the hole gives the yellow safety flame."
+      }
+     ]
+    },
+    {
+     "w": "heatproof mat",
+     "meaning": "a mat placed on the bench to protect it from hot equipment.",
+     "example": "The Bunsen burner stands on a heatproof mat to protect the bench.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "隔热垫",
+      "zh-Hant": "隔熱墊",
+      "ja": "耐熱マット",
+      "ko": "내열 매트",
+      "vi": "tấm lót chịu nhiệt",
+      "ar": "حصيرة مقاومة للحرارة",
+      "fa": "زیرانداز نسوز",
+      "ur": "حرارت مزاحم چٹائی",
+      "ps": "د تودوخې ضد چوکاټ",
+      "am": "የሙቀት መከላከያ ምንጣፍ",
+      "ml": "ചൂട് പ്രതിരോധ പായ",
+      "ta": "வெப்ப எதிர்ப்பு பாய்",
+      "hi": "ऊष्मारोधी चटाई",
+      "tl": "hindi-nasusunog na banig",
+      "ro": "suport termorezistent",
+      "fr": "tapis résistant à la chaleur",
+      "ru": "термостойкий коврик",
+      "es": "estera resistente al calor"
+     },
+     "note": "<b>Heat</b> + <b>proof</b>, where <i>-proof</i> means able to keep something out — as in <b>waterproof</b> and <b>fireproof</b>. It lies on the <b>bench</b> under the burner. The gauze mat does a different job, on the tripod.",
+     "apply": [
+      {
+       "id": "lab1_hm_desc",
+       "type": "desc",
+       "q": "Which mat goes on the bench to protect it from hot equipment?",
+       "a": "A heatproof mat",
+       "opts": [
+        "A heatproof mat",
+        "A gauze mat",
+        "Safety glasses",
+        "A tripod"
+       ],
+       "explain": "<i>-proof</i> means keeps it out, as in waterproof. The gauze mat goes on the tripod instead."
+      },
+      {
+       "id": "lab1_hm_scn",
+       "type": "scenario",
+       "q": "You are setting the Bunsen burner up on the bench. What goes underneath it?",
+       "a": "A heatproof mat",
+       "opts": [
+        "A heatproof mat",
+        "A gauze mat",
+        "A measuring cylinder",
+        "A spatula"
+       ],
+       "explain": "Under the burner, on the bench: heatproof mat. On the tripod, under the beaker: gauze mat."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "lab2",
+   "area": "lab",
+   "title": "Measuring & graphs",
+   "focus": "Taking readings, recording them with units, and describing what the graph shows.",
+   "words": [
+    {
+     "w": "temperature",
+     "meaning": "a measure of how hot or cold something is.",
+     "example": "The temperature of the water rose from 20 °C to 80 °C.",
+     "parts": [
+      {
+       "surface": "temper",
+       "type": "root",
+       "meaning": "heat",
+       "tr": {
+        "vi": "nhiệt độ",
+        "am": "ሙቀት",
+        "ar": "حرارة",
+        "es": "calor",
+        "fa": "دما",
+        "fr": "chaleur",
+        "hi": "ताप",
+        "ja": "熱",
+        "ko": "열",
+        "ml": "ചൂട്",
+        "ps": "تودوخه",
+        "ro": "căldură",
+        "ru": "тепло",
+        "ta": "வெப்பம்",
+        "tl": "init",
+        "ur": "حرارت",
+        "zh-Hans": "热",
+        "zh-Hant": "熱"
+       }
+      },
+      {
+       "surface": "at",
+       "type": "suffix",
+       "meaning": "process",
+       "tr": {
+        "vi": "quá trình",
+        "am": "ሂደት",
+        "ar": "عملية",
+        "es": "proceso",
+        "fa": "فرآیند",
+        "fr": "processus",
+        "hi": "प्रक्रिया",
+        "ja": "過程",
+        "ko": "과정",
+        "ml": "പ്രക്രിയ",
+        "ps": "بهیر",
+        "ro": "proces",
+        "ru": "процесс",
+        "ta": "செயல்முறை",
+        "tl": "proseso",
+        "ur": "عمل",
+        "zh-Hans": "过程",
+        "zh-Hant": "過程",
+        "other": "عمل"
+       }
+      },
+      {
+       "surface": "ure",
+       "type": "suffix",
+       "meaning": "result",
+       "tr": {
+        "vi": "kết quả",
+        "am": "ውጤት",
+        "ar": "نتيجة",
+        "es": "resultado",
+        "fa": "نتیجه",
+        "fr": "résultat",
+        "hi": "परिणाम",
+        "ja": "結果",
+        "ko": "결과",
+        "ml": "ഫലം",
+        "ps": "پایله",
+        "ro": "rezultat",
+        "ru": "результат",
+        "ta": "முடிவு",
+        "tl": "resulta",
+        "ur": "نتیجہ",
+        "zh-Hans": "结果",
+        "zh-Hant": "結果",
+        "other": "構造"
+       }
+      }
+     ],
+     "tr": {
+      "am": "የሙቀት መጠን",
+      "ar": "درجة الحرارة",
+      "es": "temperatura",
+      "fa": "دما",
+      "fr": "température",
+      "hi": "तापमान",
+      "ja": "温度",
+      "ko": "온도",
+      "ml": "താപനില",
+      "ps": "تودوخه درجه",
+      "ro": "temperatură",
+      "ru": "температура",
+      "ta": "வெப்பநிலை",
+      "tl": "temperatura",
+      "ur": "درجہ حرارت",
+      "vi": "nhiệt độ",
+      "zh-Hans": "温度",
+      "zh-Hant": "溫度"
+     },
+     "note": "<i>temper</i> (heat, mixture) + <i>-at-</i> + <i>-ure</i> (the result): the state of heat something is in. The same <i>temper</i> is in <b>temperate</b> (mild weather). Temperature is <b>not</b> the same as heat — it is the number a thermometer gives you.",
+     "apply": [
+      {
+       "id": "lab2_temp_desc",
+       "type": "desc",
+       "q": "Which word means how hot or cold something is?",
+       "a": "Temperature",
+       "opts": [
+        "Temperature",
+        "Time interval",
+        "Data",
+        "Trend"
+       ],
+       "explain": "Temperature is the hot-or-cold measurement itself."
+      },
+      {
+       "id": "lab2_temp_scn",
+       "type": "scenario",
+       "q": "Your thermometer reads 63 °C. What have you just measured?",
+       "a": "The temperature of the water",
+       "opts": [
+        "The temperature of the water",
+        "The time interval",
+        "The trend",
+        "The uncertainty"
+       ],
+       "explain": "A thermometer gives temperature. The gap between readings would be the time interval."
+      }
+     ]
+    },
+    {
+     "w": "degrees Celsius",
+     "meaning": "the unit used to measure temperature, written °C.",
+     "example": "We wrote every reading in degrees Celsius, for example 63 °C.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "摄氏度",
+      "zh-Hant": "攝氏度",
+      "ja": "摂氏度",
+      "ko": "섭씨도",
+      "vi": "độ Celsius",
+      "ar": "درجة مئوية",
+      "fa": "درجه سلسیوس",
+      "ur": "سیلسیس درجہ",
+      "ps": "سیلسیس درجه",
+      "am": "ዲግሪ ሴልስየስ",
+      "ml": "സെൽഷ്യസ് ഡിഗ്രി",
+      "ta": "செல்சியஸ் டிகிரி",
+      "hi": "सेल्सियस डिग्री",
+      "tl": "digri Celsius",
+      "ro": "grade Celsius",
+      "fr": "degrés Celsius",
+      "ru": "градус Цельсия",
+      "es": "grados Celsius"
+     },
+     "note": "<b>Degree</b> comes from Latin <i>gradus</i>, a step — the steps marked up a scale. <b>Celsius</b> is the name of the astronomer whose scale we use, so it keeps a capital <b>C</b>. Written °C, and a number without it is not a finished measurement.",
+     "apply": [
+      {
+       "id": "lab2_dc_desc",
+       "type": "desc",
+       "q": "Which unit is used for temperature and written °C?",
+       "a": "Degrees Celsius",
+       "opts": [
+        "Degrees Celsius",
+        "Seconds",
+        "Millilitres",
+        "Grams"
+       ],
+       "explain": "Seconds measure time, millilitres volume, grams mass."
+      },
+      {
+       "id": "lab2_dc_scn",
+       "type": "scenario",
+       "q": "You write 63 in your results table and are told the measurement is not finished. What is missing?",
+       "a": "The unit, °C",
+       "opts": [
+        "The unit, °C",
+        "The title",
+        "The time",
+        "Nothing — 63 is complete"
+       ],
+       "explain": "63 on its own could be anything. Temperature is written in degrees Celsius: 63 °C."
+      }
+     ]
+    },
+    {
+     "w": "time interval",
+     "meaning": "an equal amount of time between one measurement and the next.",
+     "example": "We read the thermometer every 30 seconds, so our time interval was 30 seconds.",
+     "parts": [
+      {
+       "surface": "time",
+       "type": "root",
+       "meaning": "time",
+       "tr": {
+        "zh-Hans": "时间",
+        "zh-Hant": "時間",
+        "am": "ጊዜ",
+        "ar": "وقت",
+        "es": "tiempo",
+        "fa": "زمان",
+        "fr": "temps",
+        "hi": "समय",
+        "ja": "時間",
+        "ko": "시간",
+        "ml": "സമയം",
+        "ps": "وخت",
+        "ro": "timp",
+        "ru": "время",
+        "ta": "நேரம்",
+        "tl": "oras",
+        "ur": "وقت",
+        "vi": "thời gian"
+       }
+      },
+      {
+       "surface": "inter",
+       "type": "prefix",
+       "meaning": "between",
+       "tr": {
+        "am": "በ…መካከል",
+        "ar": "بين",
+        "es": "entre",
+        "fa": "میان",
+        "fr": "entre",
+        "hi": "बीच में",
+        "ja": "間",
+        "ko": "사이",
+        "ml": "ഇടയിൽ",
+        "ps": "ترمنځ",
+        "ro": "între",
+        "ru": "между",
+        "ta": "இடையே",
+        "tl": "pagitan",
+        "ur": "درمیان",
+        "vi": "giữa",
+        "zh-Hans": "之间",
+        "zh-Hant": "之間"
+       }
+      },
+      {
+       "surface": "val",
+       "type": "root",
+       "meaning": "wall/boundary",
+       "tr": {
+        "am": "ግድግዳ",
+        "ar": "جدار",
+        "es": "muro/límite",
+        "fa": "دیوار",
+        "fr": "mur",
+        "hi": "दीवार",
+        "ja": "壁",
+        "ko": "벽",
+        "ml": "മതിൽ",
+        "ps": "دیوال",
+        "ro": "zid",
+        "ru": "стена",
+        "ta": "சுவர்",
+        "tl": "pader",
+        "ur": "دیوار",
+        "vi": "bức tường",
+        "zh-Hans": "墙",
+        "zh-Hant": "牆"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "时间间隔",
+      "zh-Hant": "時間間隔",
+      "ja": "時間間隔",
+      "ko": "시간 간격",
+      "vi": "khoảng thời gian",
+      "ar": "الفاصل الزمني",
+      "fa": "بازه زمانی",
+      "ur": "وقت کا وقفہ",
+      "ps": "د وخت وقفه",
+      "am": "የጊዜ ክፍተት",
+      "ml": "സമയ ഇടവേള",
+      "ta": "கால இடைவெளி",
+      "hi": "समय अंतराल",
+      "tl": "agwat ng oras",
+      "ro": "interval de timp",
+      "fr": "intervalle de temps",
+      "ru": "временной интервал",
+      "es": "intervalo de tiempo"
+     },
+     "note": "<b>Time</b> plus <i>inter</i> (between) + <i>val</i> (wall): the space between two walls — here, the gap between one reading and the next. The intervals must be <b>equal</b>, or the shape of your graph is wrong.",
+     "apply": [
+      {
+       "id": "lab2_ti_scn",
+       "type": "scenario",
+       "q": "Your group reads the thermometer at 0 s, 30 s, 60 s and 90 s. What is the time interval?",
+       "a": "30 seconds",
+       "opts": [
+        "30 seconds",
+        "90 seconds",
+        "4 readings",
+        "0 seconds"
+       ],
+       "explain": "The interval is the equal gap between one reading and the next: 30 seconds."
+      },
+      {
+       "id": "lab2_ti_cloze",
+       "type": "cloze",
+       "before": "We took one reading every 30 seconds, so our",
+       "after": "was 30 seconds.",
+       "a": "time interval",
+       "opts": [
+        "time interval",
+        "temperature",
+        "trend",
+        "anomaly"
+       ],
+       "explain": "<i>inter</i> (between) + <i>val</i>: the gap between readings."
+      }
+     ]
+    },
+    {
+     "w": "data",
+     "meaning": "information — usually numbers — collected during an experiment or investigation.",
+     "example": "We wrote all our data in a results table with the units at the top.",
+     "parts": [
+      {
+       "surface": "dat",
+       "type": "root",
+       "meaning": "given",
+       "tr": {
+        "am": "መረጃ",
+        "ar": "بيانات",
+        "es": "datos",
+        "fa": "داده‌ها",
+        "fr": "données",
+        "hi": "आँकड़े",
+        "ja": "データ",
+        "ko": "자료",
+        "ml": "വിവരങ്ങൾ",
+        "ps": "معلومات",
+        "ro": "date",
+        "ru": "данные",
+        "ta": "தரவு",
+        "tl": "datos",
+        "ur": "اعداد و شمار",
+        "vi": "dữ liệu",
+        "zh-Hans": "数据",
+        "zh-Hant": "數據"
+       }
+      },
+      {
+       "surface": "a",
+       "type": "suffix",
+       "meaning": "plural marker",
+       "tr": {
+        "am": "የብዙ ቁጥር ምልክት",
+        "ar": "علامة الجمع",
+        "es": "marcador de plural",
+        "fa": "نشانه جمع",
+        "fr": "marqueur du pluriel",
+        "hi": "बहुवचन चिह्न",
+        "ja": "複数形マーカー",
+        "ko": "복수형 표시",
+        "ml": "ബഹുവചന അടയാളം",
+        "ps": "د جمع نښه",
+        "ro": "marcaj de plural",
+        "ru": "маркер множественного числа",
+        "ta": "பன்மை குறியீடு",
+        "tl": "tanda ng maramihan",
+        "ur": "جمع کی علامت",
+        "vi": "dấu hiệu số nhiều",
+        "zh-Hans": "复数标记",
+        "zh-Hant": "複數標記"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ውሂብ",
+      "ar": "بيانات",
+      "es": "datos",
+      "fa": "داده‌ها",
+      "fr": "données",
+      "hi": "आंकड़े",
+      "ja": "データ",
+      "ko": "데이터",
+      "ml": "ഡാറ്റ",
+      "ps": "ډاټا",
+      "ro": "date",
+      "ru": "данные",
+      "ta": "தரவு",
+      "tl": "datos",
+      "ur": "ڈیٹا",
+      "vi": "dữ liệu",
+      "zh-Hans": "数据",
+      "zh-Hant": "數據"
+     },
+     "note": "From Latin <i>datum</i>, a thing given: <i>dat</i> (given) + <i>-a</i> (the plural ending). So data is strictly plural — one reading is a <b>datum</b>. In this course it means the numbers you collected, before you have said anything about them.",
+     "apply": [
+      {
+       "id": "lab2_data_desc",
+       "type": "desc",
+       "q": "Which word means the information, usually numbers, collected during an experiment?",
+       "a": "Data",
+       "opts": [
+        "Data",
+        "Trend",
+        "Variable",
+        "Uncertainty"
+       ],
+       "explain": "Data is what you collected. The pattern you see in it afterwards is the trend."
+      },
+      {
+       "id": "lab2_data_cloze",
+       "type": "cloze",
+       "before": "The numbers we wrote in our results table are our",
+       "after": ", and we used them to draw the graph.",
+       "a": "data",
+       "opts": [
+        "data",
+        "anomaly",
+        "uncertainty",
+        "trend"
+       ],
+       "explain": "Collected numbers = data. One number that does not fit would be an anomaly."
+      }
+     ]
+    },
+    {
+     "w": "variable",
+     "meaning": "a factor in an experiment that can change or be changed.",
+     "example": "Time is the variable we changed and temperature is the variable we measured.",
+     "parts": [
+      {
+       "surface": "vari",
+       "type": "root",
+       "meaning": "change",
+       "tr": {
+        "am": "ለውጥ",
+        "ar": "يغير",
+        "es": "cambio",
+        "fa": "تغییر",
+        "fr": "changement",
+        "hi": "परिवर्तन",
+        "ja": "変わる",
+        "ko": "변화",
+        "ml": "മാറ്റം",
+        "ps": "بدلون",
+        "ro": "varia",
+        "ru": "изменять",
+        "ta": "மாற்றம்",
+        "tl": "pagbabago",
+        "ur": "تبدیلی",
+        "vi": "thay đổi",
+        "zh-Hans": "变化",
+        "zh-Hant": "變化"
+       }
+      },
+      {
+       "surface": "able",
+       "type": "suffix",
+       "meaning": "capable of",
+       "tr": {
+        "am": "ብቁ",
+        "ar": "قابل",
+        "es": "capaz de",
+        "fa": "قابل",
+        "fr": "capable",
+        "hi": "सक्षम",
+        "ja": "可能な",
+        "ko": "가능한",
+        "ml": "കഴിവുള്ള",
+        "ps": "وړ",
+        "ro": "capabil",
+        "ru": "способный",
+        "ta": "திறமையான",
+        "tl": "kaya",
+        "ur": "قابل",
+        "vi": "có thể",
+        "zh-Hans": "能够",
+        "zh-Hant": "能夠"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ተለዋዋጭ",
+      "ar": "متغير",
+      "es": "variable",
+      "fa": "متغیر",
+      "fr": "variable",
+      "hi": "चर",
+      "ja": "変数",
+      "ko": "변수",
+      "ml": "ചരം",
+      "ps": "متغیر",
+      "ro": "variabilă",
+      "ru": "переменная",
+      "ta": "மாறி",
+      "tl": "baryabol",
+      "ur": "متغیر",
+      "vi": "biến số",
+      "zh-Hans": "变量",
+      "zh-Hant": "變量"
+     },
+     "note": "<i>vari</i> (change) + <i>-able</i> (capable of): something capable of changing. The same <i>vari</i> is in <b>variety</b> and <b>various</b>. In a practical there are two you care about — the one you <b>change</b> and the one you <b>measure</b>.",
+     "apply": [
+      {
+       "id": "lab2_var_desc",
+       "type": "desc",
+       "q": "Which word means a factor in an experiment that can change or be changed?",
+       "a": "Variable",
+       "opts": [
+        "Variable",
+        "Data",
+        "Trend",
+        "Time interval"
+       ],
+       "explain": "<i>vari</i> (change) + <i>-able</i> (capable of)."
+      },
+      {
+       "id": "lab2_var_scn",
+       "type": "scenario",
+       "q": "In the heating-water practical you change the time and you measure the temperature. What are time and temperature?",
+       "a": "Both are variables",
+       "opts": [
+        "Both are variables",
+        "Both are units",
+        "Both are trends",
+        "Neither is a variable"
+       ],
+       "explain": "Any factor that changes in the experiment is a variable — the changed one and the measured one both count."
+      }
+     ]
+    },
+    {
+     "w": "line graph",
+     "meaning": "a graph that uses a line to show how something changes over time.",
+     "example": "We drew a line graph of temperature against time.",
+     "parts": [
+      {
+       "surface": "line",
+       "type": "root",
+       "meaning": "line",
+       "tr": {
+        "am": "መስመር/ቅደም ተከተል",
+        "ar": "خط / تسلسل",
+        "es": "línea/secuencia",
+        "fa": "خط / دنباله",
+        "fr": "ligne / séquence",
+        "hi": "रेखा / क्रम",
+        "ja": "線／順序",
+        "ko": "선/순서",
+        "ml": "വര / ക്രമം",
+        "ps": "کرښه / ترتیب",
+        "ro": "linie / secvență",
+        "ru": "линия / последовательность",
+        "ta": "கோடு / வரிசை",
+        "tl": "linya / pagkakasunod-sunod",
+        "ur": "لکیر / ترتیب",
+        "vi": "đường / trình tự",
+        "zh-Hans": "线／顺序",
+        "zh-Hant": "線／順序"
+       }
+      },
+      {
+       "surface": "graph",
+       "type": "root",
+       "meaning": "write",
+       "tr": {
+        "fa": "نوشتن",
+        "am": "መጻፍ",
+        "ar": "كتابة",
+        "es": "escribir",
+        "fr": "écrire",
+        "hi": "लिखना",
+        "ja": "書く",
+        "ko": "쓰다",
+        "ml": "എഴുതുക",
+        "ps": "لیکل",
+        "ro": "a scrie",
+        "ru": "писать",
+        "ta": "எழுதுதல்",
+        "tl": "sumulat",
+        "ur": "لکھنا",
+        "vi": "ghi chép",
+        "zh-Hans": "写",
+        "zh-Hant": "寫"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "折线图",
+      "zh-Hant": "折線圖",
+      "ja": "折れ線グラフ",
+      "ko": "꺾은선 그래프",
+      "vi": "biểu đồ đường",
+      "ar": "رسم بياني خطي",
+      "fa": "نمودار خطی",
+      "ur": "لائن گراف",
+      "ps": "کرښه ییز چارت",
+      "am": "የመስመር ግራፍ",
+      "ml": "രേഖാ ഗ്രാഫ്",
+      "ta": "கோட்டு வரைபடம்",
+      "hi": "रेखा आलेख",
+      "tl": "linear na graph",
+      "ro": "grafic liniar",
+      "fr": "graphique linéaire",
+      "ru": "линейный график",
+      "es": "gráfico lineal"
+     },
+     "note": "<b>Line</b> plus <i>graph</i>, from Greek <i>graphein</i> (to write or draw) — the same <i>graph</i> as in <b>autograph</b> and <b>paragraph</b>. Check it with <b>TAILS</b>: Title, Axes, Intervals, Labels, Scale.",
+     "apply": [
+      {
+       "id": "lab2_lg_desc",
+       "type": "desc",
+       "q": "Which graph uses a line to show how something changes over time?",
+       "a": "A line graph",
+       "opts": [
+        "A line graph",
+        "A bar chart",
+        "A pie chart",
+        "A results table"
+       ],
+       "explain": "A line joins the points so you can see the change."
+      },
+      {
+       "id": "lab2_lg_scn",
+       "type": "scenario",
+       "q": "You have the temperature of the water every 30 seconds for five minutes. Which shows the change best?",
+       "a": "A line graph",
+       "opts": [
+        "A line graph",
+        "A pie chart",
+        "A photograph",
+        "A list of the numbers"
+       ],
+       "explain": "The readings run over time, so a line graph shows the change clearly."
+      }
+     ]
+    },
+    {
+     "w": "horizontal axis",
+     "meaning": "the flat, sideways line (x-axis) on a graph, often showing the variable that was changed.",
+     "example": "Time goes on the horizontal axis, along the bottom of the graph.",
+     "parts": [
+      {
+       "surface": "horizont",
+       "type": "root",
+       "meaning": "boundary/limit",
+       "tr": {
+        "zh-Hans": "边界/界限",
+        "zh-Hant": "邊界/界限",
+        "ja": "境界/限界",
+        "ko": "경계/한계",
+        "vi": "ranh giới",
+        "ar": "حدود",
+        "fa": "مرز/حد",
+        "ur": "حد",
+        "am": "ወሰን",
+        "ml": "അതിർത്തി",
+        "ta": "எல்லை",
+        "tl": "hangganan",
+        "ps": "پوله/حد",
+        "ro": "graniță/limită",
+        "ru": "граница/предел",
+        "fr": "limite/frontière",
+        "hi": "सीमा",
+        "es": "límite/frontera"
+       }
+      },
+      {
+       "surface": "al",
+       "type": "suffix",
+       "meaning": "relating to",
+       "tr": {
+        "fa": "وابسته به",
+        "am": "ተያያዥ",
+        "ar": "متعلق بـ",
+        "es": "relativo a",
+        "fr": "relatif à",
+        "hi": "संबंधी",
+        "ja": "～の",
+        "ko": "관련된",
+        "ml": "ബന്ധപ്പെട്ട",
+        "ps": "اړوند",
+        "ro": "legat de",
+        "ru": "относящийся к",
+        "ta": "தொடர்பான",
+        "tl": "may kaugnayan sa",
+        "ur": "متعلق",
+        "vi": "thuộc về",
+        "zh-Hans": "……的",
+        "zh-Hant": "……的"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "横轴",
+      "zh-Hant": "橫軸",
+      "ja": "横軸",
+      "ko": "가로축",
+      "vi": "trục hoành",
+      "ar": "المحور الأفقي",
+      "fa": "محور افقی",
+      "ur": "افقی محور",
+      "ps": "افقي محور",
+      "am": "አግድም ዘንግ",
+      "ml": "തിരശ്ചീന അക്ഷം",
+      "ta": "கிடைமட்ட அச்சு",
+      "hi": "क्षैतिज अक्ष",
+      "tl": "pahalang na aksis",
+      "ro": "axa orizontală",
+      "fr": "axe horizontal",
+      "ru": "горизонтальная ось",
+      "es": "eje horizontal"
+     },
+     "note": "<i>horizont</i> (boundary) + <i>-al</i> (relating to) — the horizon is the flat line where the land meets the sky, so horizontal means flat and sideways. It is also called the <b>x-axis</b>, and it usually carries the variable you <b>changed</b>.",
+     "apply": [
+      {
+       "id": "lab2_hax_desc",
+       "type": "desc",
+       "q": "Which line on a graph runs flat and sideways?",
+       "a": "The horizontal axis",
+       "opts": [
+        "The horizontal axis",
+        "The vertical axis",
+        "The trend line",
+        "The anomaly"
+       ],
+       "explain": "Flat like the horizon. The vertical axis runs up and down."
+      },
+      {
+       "id": "lab2_hax_scn",
+       "type": "scenario",
+       "q": "You are graphing temperature against time. Time is the variable you changed. Which axis does time go on?",
+       "a": "The horizontal axis",
+       "opts": [
+        "The horizontal axis",
+        "The vertical axis",
+        "Either axis",
+        "Neither — time is not a variable"
+       ],
+       "explain": "The changed variable goes along the bottom, on the horizontal (x) axis."
+      }
+     ]
+    },
+    {
+     "w": "vertical axis",
+     "meaning": "the up-and-down line (y-axis) on a graph, often showing the variable that was measured.",
+     "example": "Temperature goes on the vertical axis, up the side of the graph.",
+     "parts": [
+      {
+       "surface": "vert",
+       "type": "root",
+       "meaning": "turn",
+       "tr": {
+        "am": "መዞር",
+        "ar": "دوران",
+        "es": "girar",
+        "fa": "چرخش",
+        "fr": "tourner",
+        "hi": "मुड़ना",
+        "ja": "回転",
+        "ko": "회전",
+        "ml": "തിരിയുക",
+        "ps": "ګرځېدل",
+        "ro": "a întoarce",
+        "ru": "поворот",
+        "ta": "திரும்புதல்",
+        "tl": "ikot",
+        "ur": "مڑنا",
+        "vi": "xoay",
+        "zh-Hans": "转",
+        "zh-Hant": "轉"
+       }
+      },
+      {
+       "surface": "ic",
+       "type": "suffix",
+       "meaning": "relating to",
+       "tr": {
+        "fa": "مربوط به",
+        "am": "ተያያዥ",
+        "ar": "متعلّق بـ",
+        "es": "relativo a",
+        "fr": "relatif à",
+        "hi": "संबंधी",
+        "ja": "～の",
+        "ko": "관련된",
+        "ml": "ബന്ധപ്പെട്ട",
+        "ps": "اړوند",
+        "ro": "legat de",
+        "ru": "относящийся",
+        "ta": "தொடர்பான",
+        "tl": "kaugnay sa",
+        "ur": "متعلق",
+        "vi": "thuộc về",
+        "zh-Hans": "……的",
+        "zh-Hant": "……的"
+       }
+      },
+      {
+       "surface": "al",
+       "type": "suffix",
+       "meaning": "relating to",
+       "tr": {
+        "fa": "وابسته به",
+        "am": "ተያያዥ",
+        "ar": "متعلق بـ",
+        "es": "relativo a",
+        "fr": "relatif à",
+        "hi": "संबंधी",
+        "ja": "～の",
+        "ko": "관련된",
+        "ml": "ബന്ധപ്പെട്ട",
+        "ps": "اړوند",
+        "ro": "legat de",
+        "ru": "относящийся к",
+        "ta": "தொடர்பான",
+        "tl": "may kaugnayan sa",
+        "ur": "متعلق",
+        "vi": "thuộc về",
+        "zh-Hans": "……的",
+        "zh-Hant": "……的"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "纵轴",
+      "zh-Hant": "縱軸",
+      "ja": "縦軸",
+      "ko": "세로축",
+      "vi": "trục tung",
+      "ar": "المحور الرأسي",
+      "fa": "محور عمودی",
+      "ur": "عمودی محور",
+      "ps": "عمودي محور",
+      "am": "ቀጥ ያለ ዘንግ",
+      "ml": "ലംബ അക്ഷം",
+      "ta": "செங்குத்து அச்சு",
+      "hi": "ऊर्ध्वाधर अक्ष",
+      "tl": "patayong aksis",
+      "ro": "axa verticală",
+      "fr": "axe vertical",
+      "ru": "вертикальная ось",
+      "es": "eje vertical"
+     },
+     "note": "<i>vert</i> (turn) + <i>-ic</i> + <i>-al</i>: the same <i>vert</i> as in <b>convert</b> and <b>reverse</b>, and in <b>vertex</b>, the point a shape turns at. Vertical means straight up. It is the <b>y-axis</b>, and it usually carries the variable you <b>measured</b>.",
+     "apply": [
+      {
+       "id": "lab2_vax_desc",
+       "type": "desc",
+       "q": "Which line on a graph runs up and down, and usually carries the measured variable?",
+       "a": "The vertical axis",
+       "opts": [
+        "The vertical axis",
+        "The horizontal axis",
+        "The trend",
+        "The time interval"
+       ],
+       "explain": "Vertical means straight up — the y-axis up the side."
+      },
+      {
+       "id": "lab2_vax_scn",
+       "type": "scenario",
+       "q": "Same graph: temperature is the variable you measured. Which axis does temperature go on?",
+       "a": "The vertical axis",
+       "opts": [
+        "The vertical axis",
+        "The horizontal axis",
+        "Either axis",
+        "It goes in the title"
+       ],
+       "explain": "The measured variable goes up the side, on the vertical (y) axis."
+      }
+     ]
+    },
+    {
+     "w": "trend",
+     "meaning": "the overall pattern shown by data, such as increasing, decreasing or staying the same.",
+     "example": "The trend was clear: as time increased, the temperature increased.",
+     "parts": [],
+     "tr": {
+      "am": "አዝማሚያ",
+      "ar": "اتجاه",
+      "es": "tendencia",
+      "fa": "روند",
+      "fr": "tendance",
+      "hi": "प्रवृत्ति",
+      "ja": "傾向",
+      "ko": "추세",
+      "ml": "പ്രവണത",
+      "ps": "رجحان / تمایل",
+      "ro": "tendință",
+      "ru": "тенденция",
+      "ta": "போக்கு",
+      "tl": "kalakaran",
+      "ur": "رجحان",
+      "vi": "xu hướng",
+      "zh-Hans": "趋势",
+      "zh-Hant": "趨勢"
+     },
+     "note": "An old word meaning to turn or roll — a trend is which way your data turns. Say it as a sentence, not a word: <i>As the time increased, the temperature increased.</i> A trend describes <b>all</b> the data, so one odd point does not change it.",
+     "apply": [
+      {
+       "id": "lab2_tr_desc",
+       "type": "desc",
+       "q": "Which word means the overall pattern shown by a set of data?",
+       "a": "Trend",
+       "opts": [
+        "Trend",
+        "Anomaly",
+        "Data",
+        "Uncertainty"
+       ],
+       "explain": "The trend is the pattern in all the readings. An anomaly is one reading that breaks it."
+      },
+      {
+       "id": "lab2_tr_scn",
+       "type": "scenario",
+       "q": "Your graph line rises steadily from 20 °C to 80 °C. How do you state the trend?",
+       "a": "As time increased, the temperature increased",
+       "opts": [
+        "As time increased, the temperature increased",
+        "As time increased, the temperature decreased",
+        "The temperature stayed the same",
+        "There is no trend"
+       ],
+       "explain": "A rising line means the measured variable went up as the changed variable went up."
+      }
+     ]
+    },
+    {
+     "w": "uncertainty",
+     "meaning": "a limit on how exact a measurement or result can be.",
+     "example": "The marks on the thermometer are 1 °C apart, so every reading has some uncertainty.",
+     "parts": [
+      {
+       "surface": "un",
+       "type": "prefix",
+       "meaning": "not",
+       "tr": {
+        "am": "ያልሆነ",
+        "ar": "غير",
+        "es": "no",
+        "fa": "نا / غیر",
+        "fr": "non-",
+        "hi": "अ-",
+        "ja": "否定",
+        "ko": "비-",
+        "ml": "അല്ല",
+        "ps": "نا",
+        "ro": "ne-",
+        "ru": "не-",
+        "ta": "இல்லை",
+        "tl": "hindi / di-",
+        "ur": "نا / غیر",
+        "vi": "không",
+        "zh-Hans": "不",
+        "zh-Hant": "不"
+       }
+      },
+      {
+       "surface": "certain",
+       "type": "root",
+       "meaning": "sure / fixed",
+       "tr": {
+        "am": "እርግጠኛ፣ የተወሰነ",
+        "ar": "متأكد، ثابت",
+        "es": "seguro / fijo",
+        "fa": "مطمئن، ثابت",
+        "fr": "sûr, fixe",
+        "hi": "निश्चित, स्थिर",
+        "ja": "確かな、一定の",
+        "ko": "확실한, 고정된",
+        "ml": "ഉറപ്പുള്ള, നിശ്ചിതമായ",
+        "ps": "ډاډه، ثابت",
+        "ro": "sigur, fix",
+        "ru": "уверенный, определённый",
+        "ta": "உறுதியான, நிலையான",
+        "tl": "sigurado, tiyak",
+        "ur": "یقینی، مقرر",
+        "vi": "chắc chắn, cố định",
+        "zh-Hans": "确定的、固定的",
+        "zh-Hant": "確定的、固定的"
+       }
+      },
+      {
+       "surface": "ty",
+       "type": "suffix",
+       "meaning": "state of",
+       "tr": {
+        "am": "ሁኔታ",
+        "ar": "حالة",
+        "es": "estado de",
+        "fa": "حالت",
+        "fr": "état de",
+        "hi": "अवस्था",
+        "ja": "状態",
+        "ko": "상태",
+        "ml": "അവസ്ഥ",
+        "ps": "حالت",
+        "ro": "stare de",
+        "ru": "состояние",
+        "ta": "நிலை",
+        "tl": "kalagayan",
+        "ur": "حالت",
+        "vi": "trạng thái",
+        "zh-Hans": "状态",
+        "zh-Hant": "狀態"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "不确定性",
+      "zh-Hant": "不確定性",
+      "ja": "不確かさ",
+      "ko": "불확실성",
+      "vi": "độ không chắc chắn",
+      "ar": "عدم اليقين",
+      "fa": "عدم قطعیت",
+      "ur": "غیریقینیت",
+      "ps": "نامعلومیت",
+      "am": "እርግጠኛ አለመሆን",
+      "ml": "അനിശ്ചിതത്വം",
+      "ta": "நிச்சயமின்மை",
+      "hi": "अनिश्चितता",
+      "tl": "kawalang-katiyakan",
+      "ro": "incertitudine",
+      "fr": "incertitude",
+      "ru": "неопределённость",
+      "es": "incertidumbre"
+     },
+     "note": "<i>un-</i> (not) + <i>certain</i> (sure) + <i>-ty</i> (the state of): the state of not being sure. In science it is not a mistake — every instrument has a limit, so every reading has some uncertainty. Say it with the smallest mark on your scale.",
+     "apply": [
+      {
+       "id": "lab2_unc_desc",
+       "type": "desc",
+       "q": "Which word means a limit on how exact a measurement can be?",
+       "a": "Uncertainty",
+       "opts": [
+        "Uncertainty",
+        "Anomaly",
+        "Trend",
+        "Variable"
+       ],
+       "explain": "<i>un-</i> + <i>certain</i> + <i>-ty</i>: the state of not being completely sure."
+      },
+      {
+       "id": "lab2_unc_scn",
+       "type": "scenario",
+       "q": "The smallest marks on your thermometer are 1 °C apart, so you cannot read it perfectly. What does that give every reading?",
+       "a": "Some uncertainty",
+       "opts": [
+        "Some uncertainty",
+        "An anomaly",
+        "A trend",
+        "An extra variable"
+       ],
+       "explain": "Uncertainty is about the limits of the measuring. An anomaly is one single odd result."
+      }
+     ]
+    },
+    {
+     "w": "anomaly",
+     "meaning": "a result in a set of data that does not fit the general pattern.",
+     "example": "One point sat far above the line, so we circled it as an anomaly.",
+     "parts": [
+      {
+       "surface": "an",
+       "type": "prefix",
+       "meaning": "not/without",
+       "tr": {
+        "am": "ያለ",
+        "ar": "بدون",
+        "es": "sin",
+        "fa": "بدون",
+        "fr": "sans",
+        "hi": "बिना",
+        "ja": "無",
+        "ko": "무",
+        "ml": "ഇല്ലാതെ",
+        "ps": "پرته",
+        "ro": "fără",
+        "ru": "без",
+        "ta": "இல்லாமல்",
+        "tl": "walang",
+        "ur": "بغیر",
+        "vi": "vô",
+        "zh-Hans": "无",
+        "zh-Hant": "無"
+       }
+      },
+      {
+       "surface": "omal",
+       "type": "root",
+       "meaning": "even/same",
+       "tr": {
+        "zh-Hans": "均匀/相同",
+        "zh-Hant": "均勻/相同",
+        "ja": "均一な/同じ",
+        "ko": "균일한/같은",
+        "vi": "đều/giống nhau",
+        "ar": "متساوٍ",
+        "fa": "یکنواخت",
+        "ur": "یکساں",
+        "am": "ተመሳሳይ",
+        "ml": "സമമായ",
+        "ta": "சமமான",
+        "tl": "pantay",
+        "ps": "یو شان",
+        "ro": "egal/uniform",
+        "ru": "равный/одинаковый",
+        "fr": "égal/uniforme",
+        "hi": "समान",
+        "es": "igual/uniforme"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "异常值",
+      "zh-Hant": "異常值",
+      "ja": "異常値",
+      "ko": "이상값",
+      "vi": "giá trị bất thường",
+      "ar": "قيمة شاذة",
+      "fa": "مقدار نامتعارف",
+      "ur": "غیرمعمولی نتیجہ",
+      "ps": "غیر معمولي پایله",
+      "am": "ያልተለመደ ውጤት",
+      "ml": "അസാധാരണ ഫലം",
+      "ta": "விதிவிலக்கு முடிவு",
+      "hi": "असामान्य परिणाम",
+      "tl": "hindi pangkaraniwang resulta",
+      "ro": "anomalie",
+      "fr": "anomalie",
+      "ru": "аномалия",
+      "es": "anomalía"
+     },
+     "note": "<i>an-</i> (not) + <i>omal</i> (even, the same): not the same as the rest — the odd one out. The same <i>an-</i> is in <b>anonymous</b> (no name). Circle an anomaly on the graph, but do not rub it out: you report it and say why it may have happened.",
+     "apply": [
+      {
+       "id": "lab2_an_scn",
+       "type": "scenario",
+       "q": "Your readings are 20, 30, 40, 95, 60, 70 °C. Which one is the anomaly?",
+       "a": "95 °C",
+       "opts": [
+        "95 °C",
+        "20 °C",
+        "70 °C",
+        "There is no anomaly"
+       ],
+       "explain": "The others climb by about 10 each time, so 95 should have been about 50. It does not fit the pattern."
+      },
+      {
+       "id": "lab2_an_desc",
+       "type": "desc",
+       "q": "<i>an-</i> means not and <i>omal</i> means the same, so an anomaly is a result that…",
+       "a": "Does not fit the pattern",
+       "opts": [
+        "Does not fit the pattern",
+        "Was measured twice",
+        "Has no unit",
+        "Is the largest number"
+       ],
+       "explain": "Not the same as the others — the odd one out. The largest number often fits the pattern perfectly."
+      },
+      {
+       "id": "lab2_an_cloze",
+       "type": "cloze",
+       "before": "Every point sits on the line except one, which is far above it, so that point is an",
+       "after": "and we circled it.",
+       "a": "anomaly",
+       "opts": [
+        "anomaly",
+        "uncertainty",
+        "trend",
+        "variable"
+       ],
+       "explain": "One point off the pattern is an anomaly; the pattern itself is the trend."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "lab3",
+   "area": "lab",
+   "title": "Atoms & bonding",
+   "focus": "What everything is made of, and the words for how the particles hold together.",
+   "words": [
+    {
+     "w": "atom",
+     "meaning": "a very small particle that makes up matter.",
+     "example": "Everything on the bench — the glass, the water, the air — is made of atoms.",
+     "parts": [
+      {
+       "surface": "a",
+       "type": "prefix",
+       "meaning": "not/without",
+       "tr": {
+        "am": "ያለ / አይ",
+        "ar": "بدون / لا",
+        "es": "no/sin",
+        "fa": "بدون / نه",
+        "fr": "sans / non",
+        "hi": "बिना / अ",
+        "ja": "ない",
+        "ko": "없음 / 아님",
+        "ml": "ഇല്ലാതെ / അല്ല",
+        "ps": "پرته / نه",
+        "ro": "fără / non",
+        "ru": "без / не",
+        "ta": "இல்லாமல் / அல்ல",
+        "tl": "walang / hindi",
+        "ur": "بغیر / نہ",
+        "vi": "không",
+        "zh-Hans": "无",
+        "zh-Hant": "無"
+       }
+      },
+      {
+       "surface": "tom",
+       "type": "root",
+       "meaning": "cut",
+       "tr": {
+        "zh-Hans": "切/切",
+        "zh-Hant": "切/切",
+        "am": "መቁረጥ",
+        "ar": "يقطع",
+        "es": "cortar",
+        "fa": "بریدن",
+        "fr": "couper",
+        "hi": "काटना",
+        "ja": "切る",
+        "ko": "자르다",
+        "ml": "മുറിക്കുക",
+        "ps": "پرېکول",
+        "ro": "a tăia",
+        "ru": "резать",
+        "ta": "வெட்டுதல்",
+        "tl": "gupitin",
+        "ur": "کاٹنا",
+        "vi": "cắt"
+       }
+      }
+     ],
+     "tr": {
+      "am": "አቶም",
+      "ar": "ذرة",
+      "es": "átomo",
+      "fa": "اتم",
+      "fr": "atome",
+      "hi": "परमाणु",
+      "ja": "原子",
+      "ko": "원자",
+      "ml": "അണു",
+      "ps": "اتوم",
+      "ro": "atom",
+      "ru": "атом",
+      "ta": "அணு",
+      "tl": "atomo",
+      "ur": "ایٹم",
+      "vi": "nguyên tử",
+      "zh-Hans": "原子",
+      "zh-Hant": "原子"
+     },
+     "note": "<i>a-</i> (not) + <i>tom</i> (cut): the thing that cannot be cut. The same <i>tom</i> is in <b>anatomy</b> (cutting a body up). The Greeks were wrong — we now know an atom has a nucleus and electrons inside it — but the name stuck.",
+     "apply": [
+      {
+       "id": "lab3_atom_desc",
+       "type": "desc",
+       "q": "Which word names the very small particle that all matter is made of?",
+       "a": "Atom",
+       "opts": [
+        "Atom",
+        "Element",
+        "Compound",
+        "Lattice"
+       ],
+       "explain": "An atom is the particle. An element is a substance made of one kind of atom."
+      },
+      {
+       "id": "lab3_atom_part",
+       "type": "desc",
+       "q": "<i>a-</i> means not and <i>tom</i> means cut, so the name atom first meant…",
+       "a": "It cannot be cut up",
+       "opts": [
+        "It cannot be cut up",
+        "It is very heavy",
+        "It is made of metal",
+        "It is full of water"
+       ],
+       "explain": "Not-cuttable. The Greeks thought it was the smallest possible piece of matter."
+      },
+      {
+       "id": "lab3_atom_cloze",
+       "type": "cloze",
+       "before": "Matter is built from very small particles called",
+       "after": ", and each one has a nucleus at its centre.",
+       "a": "atoms",
+       "opts": [
+        "atoms",
+        "bonds",
+        "lattices",
+        "ions"
+       ],
+       "explain": "Atoms are the particles; bonds are what hold them together."
+      }
+     ]
+    },
+    {
+     "w": "nucleus",
+     "meaning": "the centre of an atom, containing protons and neutrons.",
+     "example": "The protons and neutrons are packed together in the nucleus.",
+     "parts": [
+      {
+       "surface": "nucle",
+       "type": "root",
+       "meaning": "nucleus",
+       "tr": {
+        "fa": "هسته",
+        "ja": "核",
+        "zh-Hans": "核心 / 核心",
+        "zh-Hant": "核心 / 核心",
+        "tl": "sentro",
+        "ur": "مرکز",
+        "am": "ኒውክሊየስ",
+        "ar": "نواة",
+        "es": "núcleo",
+        "fr": "noyau",
+        "hi": "नाभिक",
+        "ko": "핵",
+        "ml": "ന്യൂക്ലിയസ്",
+        "ps": "هسته",
+        "ro": "nucleu",
+        "ru": "ядро",
+        "ta": "கரு",
+        "vi": "hạt nhân"
+       }
+      },
+      {
+       "surface": "us",
+       "type": "suffix",
+       "meaning": "structure",
+       "tr": {
+        "fa": "پسوند اسمی",
+        "ja": "構造",
+        "zh-Hans": "名词词尾 / 名詞詞尾",
+        "zh-Hant": "名詞詞尾 / 名詞詞尾",
+        "tl": "pangngalan",
+        "ur": "اسم کا لاحقہ",
+        "am": "መዋቅር",
+        "ar": "بنية",
+        "es": "estructura",
+        "fr": "structure",
+        "hi": "संरचना",
+        "ko": "구조",
+        "ml": "ഘടന",
+        "ps": "جوړښت",
+        "ro": "structură",
+        "ru": "структура",
+        "ta": "அமைப்பு",
+        "vi": "cấu trúc"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ኒውክሊየስ",
+      "ar": "نواة",
+      "es": "núcleo atómico",
+      "fa": "هسته",
+      "fr": "noyau",
+      "hi": "नाभिक",
+      "ja": "原子核",
+      "ko": "원자핵",
+      "ml": "അണുകേന്ദ്രം",
+      "ps": "نیوکلیوس",
+      "ro": "nucleu",
+      "ru": "ядро",
+      "ta": "அணுக்கரு",
+      "tl": "nucleus",
+      "ur": "مرکزہ",
+      "vi": "hạt nhân",
+      "zh-Hans": "原子核",
+      "zh-Hant": "原子核"
+     },
+     "note": "From Latin <i>nucula</i>, a little nut: <i>nucle</i> (nucleus, kernel) + <i>-us</i>. It is the hard centre — the same word is used for the centre of a cell in biology, and gives us <b>nuclear</b>. Plural: <b>nuclei</b>.",
+     "apply": [
+      {
+       "id": "lab3_nuc_desc",
+       "type": "desc",
+       "q": "Which part of an atom is at the centre and holds the protons and neutrons?",
+       "a": "The nucleus",
+       "opts": [
+        "The nucleus",
+        "The electron",
+        "The bond",
+        "The lattice"
+       ],
+       "explain": "Nucleus = the kernel at the centre. Electrons move around outside it."
+      },
+      {
+       "id": "lab3_nuc_scn",
+       "type": "scenario",
+       "q": "An atom has 6 protons and 6 neutrons. Where are all twelve of those particles?",
+       "a": "In the nucleus",
+       "opts": [
+        "In the nucleus",
+        "Moving around the outside",
+        "Half in each place",
+        "In the bonds"
+       ],
+       "explain": "Protons and neutrons both sit in the nucleus. Only electrons move around it."
+      }
+     ]
+    },
+    {
+     "w": "proton",
+     "meaning": "a positively charged particle in the nucleus of an atom.",
+     "example": "A carbon atom has six protons in its nucleus.",
+     "parts": [
+      {
+       "surface": "prot",
+       "type": "root",
+       "meaning": "first",
+       "tr": {
+        "vi": "đầu tiên",
+        "zh-Hans": "第一",
+        "ja": "最初",
+        "zh-Hant": "第一",
+        "am": "መጀመሪያ",
+        "ar": "أول",
+        "es": "primero",
+        "fa": "اول",
+        "fr": "premier",
+        "hi": "पहला",
+        "ko": "첫 번째",
+        "ml": "ആദ്യത്തെ",
+        "ps": "لومړی",
+        "ro": "primul",
+        "ru": "первый",
+        "ta": "முதல்",
+        "tl": "una",
+        "ur": "پہلا"
+       }
+      },
+      {
+       "surface": "on",
+       "type": "suffix",
+       "meaning": "particle",
+       "tr": {
+        "vi": "hạt",
+        "zh-Hans": "粒子",
+        "ja": "粒子",
+        "zh-Hant": "粒子",
+        "am": "ቅንጣት",
+        "ar": "جسيم",
+        "es": "partícula",
+        "fa": "ذره",
+        "fr": "particule",
+        "hi": "कण",
+        "ko": "입자",
+        "ml": "കണിക",
+        "ps": "ذره",
+        "ro": "particulă",
+        "ru": "частица",
+        "ta": "துகள்",
+        "tl": "partikulo",
+        "ur": "ذرہ"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ፕሮቶን",
+      "ar": "بروتون",
+      "es": "protón",
+      "fa": "پروتون",
+      "fr": "proton",
+      "hi": "प्रोटॉन",
+      "ja": "陽子",
+      "ko": "양성자",
+      "ml": "പ്രോട്ടോൺ",
+      "ps": "پروتون",
+      "ro": "proton",
+      "ru": "протон",
+      "ta": "புரோட்டான்",
+      "tl": "proton",
+      "ur": "پروٹون",
+      "vi": "proton",
+      "zh-Hans": "质子",
+      "zh-Hant": "質子"
+     },
+     "note": "<i>prot</i> (first) + <i>-on</i> (particle): the first particle. The same <i>prot</i> is in <b>prototype</b> (the first model). Its charge is <b>positive</b>, and the number of protons is what decides which element an atom is.",
+     "apply": [
+      {
+       "id": "lab3_pro_desc",
+       "type": "desc",
+       "q": "Which particle sits in the nucleus and carries a positive charge?",
+       "a": "Proton",
+       "opts": [
+        "Proton",
+        "Neutron",
+        "Electron",
+        "Ion"
+       ],
+       "explain": "Positive and in the nucleus: proton. The neutron is also in the nucleus but has no charge."
+      },
+      {
+       "id": "lab3_pro_scn",
+       "type": "scenario",
+       "q": "A neutral atom has 8 electrons. The positive and negative charges must cancel exactly. How many protons does it have?",
+       "a": "8",
+       "opts": [
+        "8",
+        "0",
+        "4",
+        "16"
+       ],
+       "explain": "Each proton is +1 and each electron is −1. To cancel 8 negatives you need 8 positives."
+      }
+     ]
+    },
+    {
+     "w": "neutron",
+     "meaning": "a neutral particle (no charge) in the nucleus of an atom.",
+     "example": "The neutron has no charge, so it does not pull on the electrons.",
+     "parts": [
+      {
+       "surface": "neutr",
+       "type": "root",
+       "meaning": "neutral",
+       "tr": {
+        "vi": "trung hòa",
+        "zh-Hans": "中性",
+        "ja": "中性",
+        "zh-Hant": "中性",
+        "am": "ገለልተኛ",
+        "ar": "محايد",
+        "es": "neutro",
+        "fa": "خنثی",
+        "fr": "neutre",
+        "hi": "उदासीन",
+        "ko": "중성",
+        "ml": "നിഷ്പക്ഷം",
+        "ps": "بې پرې",
+        "ro": "neutru",
+        "ru": "нейтральный",
+        "ta": "நடுநிலை",
+        "tl": "neutral",
+        "ur": "غیر جانبدار"
+       }
+      },
+      {
+       "surface": "on",
+       "type": "suffix",
+       "meaning": "particle",
+       "tr": {
+        "vi": "hạt",
+        "zh-Hans": "粒子",
+        "ja": "粒子",
+        "zh-Hant": "粒子",
+        "am": "ቅንጣት",
+        "ar": "جسيم",
+        "es": "partícula",
+        "fa": "ذره",
+        "fr": "particule",
+        "hi": "कण",
+        "ko": "입자",
+        "ml": "കണിക",
+        "ps": "ذره",
+        "ro": "particulă",
+        "ru": "частица",
+        "ta": "துகள்",
+        "tl": "partikulo",
+        "ur": "ذرہ"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ኒውትሮን",
+      "ar": "نيوترون",
+      "es": "neutrón",
+      "fa": "نوترون",
+      "fr": "neutron",
+      "hi": "न्यूट्रॉन",
+      "ja": "中性子",
+      "ko": "중성자",
+      "ml": "ന്യൂട്രോൺ",
+      "ps": "نیوترون",
+      "ro": "neutron",
+      "ru": "нейтрон",
+      "ta": "நியூட்ரான்",
+      "tl": "neutron",
+      "ur": "نیوٹران",
+      "vi": "neutron",
+      "zh-Hans": "中子",
+      "zh-Hant": "中子"
+     },
+     "note": "<i>neutr</i> (neutral) + <i>-on</i> (particle): the neutral particle. The same <i>neutr</i> is in <b>neutral</b> on the pH scale. It sits in the nucleus beside the protons and carries <b>no charge at all</b> — not positive, not negative.",
+     "apply": [
+      {
+       "id": "lab3_neu_desc",
+       "type": "desc",
+       "q": "Which particle is in the nucleus and has no charge?",
+       "a": "Neutron",
+       "opts": [
+        "Neutron",
+        "Proton",
+        "Electron",
+        "Ion"
+       ],
+       "explain": "<i>neutr</i> means neutral: no charge. The proton beside it is positive."
+      },
+      {
+       "id": "lab3_neu_cloze",
+       "type": "cloze",
+       "before": "Of the three particles in the simple model, the",
+       "after": "sits in the nucleus next to the protons, but it carries no charge at all.",
+       "a": "neutron",
+       "opts": [
+        "neutron",
+        "proton",
+        "electron",
+        "molecule"
+       ],
+       "explain": "In the nucleus and neutral — that is the neutron."
+      }
+     ]
+    },
+    {
+     "w": "electron",
+     "meaning": "a negatively charged particle that moves around the nucleus of an atom.",
+     "example": "An atom becomes a positive ion when it loses an electron.",
+     "parts": [
+      {
+       "surface": "electr",
+       "type": "root",
+       "meaning": "electricity",
+       "tr": {
+        "vi": "điện",
+        "zh-Hans": "电",
+        "ja": "電気",
+        "zh-Hant": "電",
+        "am": "ኤሌክትሪክ",
+        "ar": "كهرباء",
+        "es": "electricidad",
+        "fa": "الکتریسیته",
+        "fr": "électricité",
+        "hi": "बिजली",
+        "ko": "전기",
+        "ml": "വൈദ്യുതി",
+        "ps": "بریښنا",
+        "ro": "electricitate",
+        "ru": "электричество",
+        "ta": "மின்சாரம்",
+        "tl": "kuryente",
+        "ur": "بجلی"
+       }
+      },
+      {
+       "surface": "on",
+       "type": "suffix",
+       "meaning": "particle",
+       "tr": {
+        "vi": "hạt",
+        "zh-Hans": "粒子",
+        "ja": "粒子",
+        "zh-Hant": "粒子",
+        "am": "ቅንጣት",
+        "ar": "جسيم",
+        "es": "partícula",
+        "fa": "ذره",
+        "fr": "particule",
+        "hi": "कण",
+        "ko": "입자",
+        "ml": "കണിക",
+        "ps": "ذره",
+        "ro": "particulă",
+        "ru": "частица",
+        "ta": "துகள்",
+        "tl": "partikulo",
+        "ur": "ذرہ"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ኤሌክትሮን",
+      "ar": "إلكترون",
+      "es": "electrón",
+      "fa": "الکترون",
+      "fr": "électron",
+      "hi": "इलेक्ट्रॉन",
+      "ja": "電子",
+      "ko": "전자",
+      "ml": "ഇലക്ട്രോൺ",
+      "ps": "الکترون",
+      "ro": "electron",
+      "ru": "электрон",
+      "ta": "எலக்ட்ரான்",
+      "tl": "elektron",
+      "ur": "الیکٹران",
+      "vi": "electron",
+      "zh-Hans": "电子",
+      "zh-Hant": "電子"
+     },
+     "note": "<i>electr</i> (electricity) + <i>-on</i> (particle), from Greek <i>elektron</i>, amber — rubbed amber picks up dust, the first electricity anyone noticed. Electrons are <b>negative</b> and move <b>around</b> the nucleus, which is why atoms can lose or gain them.",
+     "apply": [
+      {
+       "id": "lab3_ele_desc",
+       "type": "desc",
+       "q": "Which particle is negatively charged and moves around the nucleus?",
+       "a": "Electron",
+       "opts": [
+        "Electron",
+        "Proton",
+        "Neutron",
+        "Nucleus"
+       ],
+       "explain": "Negative and outside the nucleus: the electron."
+      },
+      {
+       "id": "lab3_ele_scn",
+       "type": "scenario",
+       "q": "A neutral atom loses one electron. What happens to its charge?",
+       "a": "It becomes positive",
+       "opts": [
+        "It becomes positive",
+        "It becomes negative",
+        "It stays neutral",
+        "It becomes a neutron"
+       ],
+       "explain": "Taking away a negative particle leaves one more positive than negative, so the atom is now a positive ion."
+      }
+     ]
+    },
+    {
+     "w": "element",
+     "meaning": "a pure substance made from only one type of atom.",
+     "example": "Copper is an element, because it is made of copper atoms only.",
+     "parts": [],
+     "tr": {
+      "am": "ንጥረ ነገር",
+      "ar": "عنصر",
+      "es": "elemento",
+      "fa": "عنصر",
+      "fr": "élément",
+      "hi": "तत्व",
+      "ja": "元素",
+      "ko": "원소",
+      "ml": "മൂലകം",
+      "ps": "عنصر",
+      "ro": "element",
+      "ru": "элемент",
+      "ta": "தனிமம்",
+      "tl": "elemento",
+      "ur": "عنصر",
+      "vi": "nguyên tố",
+      "zh-Hans": "元素",
+      "zh-Hant": "元素"
+     },
+     "note": "From Latin <i>elementum</i>, a first or basic part. An element is as simple as a substance gets: <b>one type of atom only</b>. Copper, oxygen and carbon are elements; water is not, because it has two types of atom in it.",
+     "apply": [
+      {
+       "id": "lab3_el_desc",
+       "type": "desc",
+       "q": "Which word means a pure substance made from only one type of atom?",
+       "a": "Element",
+       "opts": [
+        "Element",
+        "Compound",
+        "Molecule",
+        "Ion"
+       ],
+       "explain": "One type of atom = element. Two or more types chemically joined = compound."
+      },
+      {
+       "id": "lab3_el_scn",
+       "type": "scenario",
+       "q": "A copper wire is made of copper atoms and nothing else. What is copper?",
+       "a": "An element",
+       "opts": [
+        "An element",
+        "A compound",
+        "A mixture",
+        "An ion"
+       ],
+       "explain": "Only one type of atom, so it is an element."
+      }
+     ]
+    },
+    {
+     "w": "molecule",
+     "meaning": "two or more atoms joined together.",
+     "example": "A water molecule is two hydrogen atoms joined to one oxygen atom.",
+     "parts": [
+      {
+       "surface": "molec",
+       "type": "root",
+       "meaning": "small mass",
+       "tr": {
+        "fa": "جرم کوچک",
+        "zh-Hans": "小质量",
+        "vi": "khối nhỏ",
+        "zh-Hant": "小質量",
+        "am": "ትንሽ ክብደት",
+        "ar": "كتلة صغيرة",
+        "es": "masa pequeña",
+        "fr": "petite masse",
+        "hi": "छोटा द्रव्यमान",
+        "ja": "小さな塊",
+        "ko": "작은 덩어리",
+        "ml": "ചെറിയ പിണ്ഡം",
+        "ps": "کوچنی کتله",
+        "ro": "masă mică",
+        "ru": "малая масса",
+        "ta": "சிறிய திணிவு",
+        "tl": "maliit na masa",
+        "ur": "چھوٹا کمیت"
+       }
+      },
+      {
+       "surface": "ule",
+       "type": "suffix",
+       "meaning": "small",
+       "tr": {
+        "fa": "کوچک",
+        "zh-Hans": "小",
+        "vi": "nhỏ",
+        "zh-Hant": "小",
+        "am": "ትንሽ",
+        "ar": "صغير",
+        "es": "pequeño",
+        "fr": "petit",
+        "hi": "छोटा",
+        "ja": "小さい",
+        "ko": "작은",
+        "ml": "ചെറിയ",
+        "ps": "کوچنی",
+        "ro": "mic",
+        "ru": "маленький",
+        "ta": "சிறிய",
+        "tl": "maliit",
+        "ur": "چھوٹا"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ሞለኪውል",
+      "ar": "جزيء",
+      "es": "molécula",
+      "fa": "مولکول",
+      "fr": "molécule",
+      "hi": "अणु",
+      "ja": "分子",
+      "ko": "분자",
+      "ml": "തന്മാത്ര",
+      "ps": "مالیکول",
+      "ro": "moleculă",
+      "ru": "молекула",
+      "ta": "மூலக்கூறு",
+      "tl": "molekula",
+      "ur": "سالمہ / مالیکیول",
+      "vi": "phân tử",
+      "zh-Hans": "分子",
+      "zh-Hant": "分子"
+     },
+     "note": "<i>molec</i> (small mass) + <i>-ule</i> (small): a little mass — the same <i>-ule</i> as in <b>capsule</b> and <b>granule</b>. A molecule is simply <b>atoms joined together</b>. They can be the same type (O₂) or different types (H₂O).",
+     "apply": [
+      {
+       "id": "lab3_mol_desc",
+       "type": "desc",
+       "q": "Which word means two or more atoms joined together?",
+       "a": "Molecule",
+       "opts": [
+        "Molecule",
+        "Element",
+        "Ion",
+        "Lattice"
+       ],
+       "explain": "Atoms joined = molecule. An ion is a particle with a charge."
+      },
+      {
+       "id": "lab3_mol_scn",
+       "type": "scenario",
+       "q": "O₂ is two oxygen atoms joined together. Is it an element, a molecule, or both?",
+       "a": "Both — a molecule of an element",
+       "opts": [
+        "Both — a molecule of an element",
+        "A compound only",
+        "An ion only",
+        "Neither"
+       ],
+       "explain": "Atoms joined makes it a molecule; only one type of atom makes it an element too."
+      }
+     ]
+    },
+    {
+     "w": "compound",
+     "meaning": "a substance made from two or more different elements chemically joined together.",
+     "example": "Water is a compound of hydrogen and oxygen.",
+     "parts": [
+      {
+       "surface": "com",
+       "type": "prefix",
+       "meaning": "together",
+       "tr": {
+        "vi": "cùng nhau",
+        "zh-Hans": "共同",
+        "ja": "共に",
+        "zh-Hant": "共同",
+        "am": "አብሮ",
+        "ar": "معًا",
+        "es": "juntos",
+        "fa": "باهم",
+        "fr": "ensemble",
+        "hi": "साथ",
+        "ko": "함께",
+        "ml": "കൂടെ",
+        "ps": "يوځای",
+        "ro": "împreună",
+        "ru": "вместе",
+        "ta": "ஒன்றாக",
+        "tl": "sama-sama",
+        "ur": "ساتھ",
+        "other": "باهم"
+       }
+      },
+      {
+       "surface": "pound",
+       "type": "root",
+       "meaning": "put / place",
+       "tr": {
+        "vi": "đặt / ghép",
+        "zh-Hans": "放置",
+        "ja": "置く",
+        "zh-Hant": "放置",
+        "am": "ማስቀመጥ",
+        "ar": "وضع",
+        "es": "poner / colocar",
+        "fa": "گذاشتن/قرار دادن",
+        "fr": "mettre / placer",
+        "hi": "रखना/स्थापित करना",
+        "ko": "놓다/두다",
+        "ml": "വയ്ക്കുക / സ്ഥാപിക്കുക",
+        "ps": "ایښودل / ځای پرځای کول",
+        "ro": "a pune / a plasa",
+        "ru": "класть / помещать",
+        "ta": "வைத்தல் / வைக்க",
+        "tl": "ilagay / maglagay",
+        "ur": "رکھنا/جگہ دینا",
+        "other": "قرار دادن"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ውህድ",
+      "ar": "مركّب",
+      "es": "compuesto",
+      "fa": "ترکیب",
+      "fr": "composé",
+      "hi": "यौगिक",
+      "ja": "化合物",
+      "ko": "화합물",
+      "ml": "സംയുക്തം",
+      "ps": "مرکب",
+      "ro": "compus",
+      "ru": "соединение",
+      "ta": "சேர்மம்",
+      "tl": "kompuwesto",
+      "ur": "مرکب",
+      "vi": "hợp chất",
+      "zh-Hans": "化合物",
+      "zh-Hant": "化合物"
+     },
+     "note": "<i>com-</i> (together) + <i>pound</i> (put, place): put together. The same idea is in <b>component</b>. A compound is not a mixture — the different elements are <b>chemically joined</b>, so you cannot separate them by stirring or filtering.",
+     "apply": [
+      {
+       "id": "lab3_cmp_desc",
+       "type": "desc",
+       "q": "Which word means a substance made from two or more different elements chemically joined?",
+       "a": "Compound",
+       "opts": [
+        "Compound",
+        "Element",
+        "Molecule",
+        "Lattice"
+       ],
+       "explain": "Different elements, chemically joined. An element has only one type of atom."
+      },
+      {
+       "id": "lab3_cmp_scn",
+       "type": "scenario",
+       "q": "Water (H₂O) has hydrogen atoms and oxygen atoms chemically joined. What is water?",
+       "a": "A compound",
+       "opts": [
+        "A compound",
+        "An element",
+        "A mixture",
+        "An ion"
+       ],
+       "explain": "Two different elements joined chemically, so it is a compound."
+      },
+      {
+       "id": "lab3_cmp_cloze",
+       "type": "cloze",
+       "before": "<i>com-</i> means together and <i>pound</i> means put, so a",
+       "after": "is two or more different elements put together chemically.",
+       "a": "compound",
+       "opts": [
+        "compound",
+        "element",
+        "electron",
+        "lattice"
+       ],
+       "explain": "Put together — and chemically joined, which is what makes it a compound and not a mixture."
+      }
+     ]
+    },
+    {
+     "w": "bond",
+     "meaning": "a force that holds atoms or ions together.",
+     "example": "A bond holds each hydrogen atom to the oxygen atom in a water molecule.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "化学键",
+      "zh-Hant": "化學鍵",
+      "ja": "結合（化学結合）",
+      "ko": "결합(화학 결합)",
+      "vi": "liên kết (hóa học)",
+      "ar": "رابطة (كيميائية)",
+      "fa": "پیوند (شیمیایی)",
+      "ur": "بندھن (کیمیائی بانڈ)",
+      "am": "ትስስር (ኬሚካላዊ ትስስር)",
+      "ml": "ബന്ധനം (രാസബന്ധനം)",
+      "ta": "பிணைப்பு (வேதிப் பிணைப்பு)",
+      "tl": "bigkis (chemical bond)",
+      "ps": "تړاو (کیمیاوي تړاو)",
+      "ro": "legătură (chimică)",
+      "ru": "связь (химическая связь)",
+      "fr": "liaison (chimique)",
+      "hi": "बंध (रासायनिक बंध)",
+      "es": "enlace (químico)"
+     },
+     "origin": "“Bond” is an old everyday word for a tie or a band — the same word as “band” — so it has no smaller word parts to cut.",
+     "note": "<b>Bond</b> is an old everyday word for a tie or a band — it is in fact the same word as <b>band</b> — so there are no smaller pieces to cut it into. In chemistry it is the <b>force</b> that holds particles together, not a thing you could pick up.",
+     "apply": [
+      {
+       "id": "lab3_bond_desc",
+       "type": "desc",
+       "q": "Which word means the force that holds atoms or ions together?",
+       "a": "Bond",
+       "opts": [
+        "Bond",
+        "Lattice",
+        "Ion",
+        "Nucleus"
+       ],
+       "explain": "A bond is the holding force. A lattice is the repeating pattern it can build."
+      },
+      {
+       "id": "lab3_bond_cloze",
+       "type": "cloze",
+       "before": "In a water molecule, a",
+       "after": "holds each hydrogen atom to the oxygen atom.",
+       "a": "bond",
+       "opts": [
+        "bond",
+        "lattice",
+        "nucleus",
+        "neutron"
+       ],
+       "explain": "What holds two atoms together is a bond."
+      }
+     ]
+    },
+    {
+     "w": "covalent bond",
+     "meaning": "a bond where two atoms share a pair of electrons.",
+     "example": "In a hydrogen molecule (H₂), a covalent bond joins the two atoms.",
+     "parts": [
+      {
+       "surface": "co",
+       "type": "prefix",
+       "meaning": "together",
+       "tr": {
+        "zh-Hans": "共同",
+        "zh-Hant": "共同",
+        "ja": "共に",
+        "ko": "함께",
+        "vi": "cùng",
+        "ar": "معًا",
+        "fa": "باهم",
+        "ur": "اکٹھا",
+        "am": "አብሮ",
+        "ml": "ഒരുമിച്ച്",
+        "ta": "ஒன்றாக",
+        "tl": "magkasama",
+        "ps": "يوځای",
+        "ro": "împreună",
+        "ru": "вместе",
+        "fr": "ensemble",
+        "hi": "साथ",
+        "es": "juntos"
+       }
+      },
+      {
+       "surface": "val",
+       "type": "root",
+       "meaning": "strength / worth",
+       "tr": {
+        "zh-Hans": "价值 / 强度",
+        "zh-Hant": "價值 / 強度",
+        "ja": "価値 / 強さ",
+        "ko": "힘・가치",
+        "vi": "giá trị / độ mạnh",
+        "ar": "قوة/قيمة",
+        "fa": "قدرت/ارزش",
+        "ur": "طاقت/قدر",
+        "am": "ጥንካሬ/ዋጋ",
+        "ml": "ശക്തി/മൂല്യം",
+        "ta": "வலிமை/மதிப்பு",
+        "tl": "lakas/halaga",
+        "ps": "ځواک/ارزښت",
+        "ro": "forță/valoare",
+        "ru": "сила/ценность",
+        "fr": "force/valeur",
+        "hi": "शक्ति/मूल्य",
+        "es": "fuerza/valor"
+       }
+      },
+      {
+       "surface": "ent",
+       "type": "suffix",
+       "meaning": "having the quality of",
+       "tr": {
+        "zh-Hans": "具有…性质",
+        "zh-Hant": "具有…性質",
+        "ja": "性質を持つ",
+        "ko": "가진",
+        "vi": "có tính chất",
+        "ar": "ذو",
+        "fa": "دارای",
+        "ur": "رکھنے والا",
+        "am": "ያለው",
+        "ml": "ഉള്ള",
+        "ta": "உடைய",
+        "tl": "may",
+        "ps": "لرونکی",
+        "ro": "având",
+        "ru": "обладающий",
+        "fr": "doté de",
+        "hi": "युक्त",
+        "es": "que tiene la cualidad de"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "共价键",
+      "zh-Hant": "共價鍵",
+      "ja": "共有結合",
+      "ko": "공유 결합",
+      "vi": "liên kết cộng hóa trị",
+      "ar": "رابطة تساهمية",
+      "fa": "پیوند کووالانسی (اشتراکی)",
+      "ur": "اشتراکی بندھن",
+      "am": "የጋራ ኤሌክትሮን ትስስር",
+      "ml": "സഹസംയോജക ബന്ധനം",
+      "ta": "சகப்பிணைப்பு",
+      "tl": "covalent bond (magkasalong elektron)",
+      "ps": "کوواليني تړاو",
+      "ro": "legătură covalentă",
+      "ru": "ковалентная связь",
+      "fr": "liaison covalente",
+      "hi": "सहसंयोजक बंध",
+      "es": "enlace covalente"
+     },
+     "origin": "Only “covalent” can be cut up: co + val + ent, “having strength together”. “Bond” is an old everyday word for a tie.",
+     "note": "Only <b>covalent</b> can be cut up: <i>co-</i> (together) + <i>val</i> (strength) + <i>-ent</i> — strength held together. Remember it by the <i>co-</i>: <b>co</b>valent means <b>co</b>-operating, and the two atoms <b>share</b> a pair of electrons rather than giving them away.",
+     "apply": [
+      {
+       "id": "lab3_cov_desc",
+       "type": "desc",
+       "q": "In which bond do two atoms share a pair of electrons?",
+       "a": "A covalent bond",
+       "opts": [
+        "A covalent bond",
+        "An ionic bond",
+        "Metallic bonding",
+        "No bond at all"
+       ],
+       "explain": "<i>co-</i> means together: sharing. In an ionic bond an electron is transferred instead."
+      },
+      {
+       "id": "lab3_cov_scn",
+       "type": "scenario",
+       "q": "Two hydrogen atoms join by sharing one pair of electrons between them. What kind of bond is that?",
+       "a": "Covalent",
+       "opts": [
+        "Covalent",
+        "Ionic",
+        "Metallic",
+        "It is not a bond"
+       ],
+       "explain": "Sharing electrons is what covalent means."
+      }
+     ]
+    },
+    {
+     "w": "ionic bond",
+     "meaning": "the attraction between a positive ion and a negative ion.",
+     "example": "Table salt is held together by ionic bonds between sodium ions and chloride ions.",
+     "parts": [
+      {
+       "surface": "ion",
+       "type": "root",
+       "meaning": "charged particle",
+       "tr": {
+        "zh-Hans": "离子",
+        "zh-Hant": "離子",
+        "ja": "イオン",
+        "ko": "이온",
+        "vi": "ion",
+        "ar": "أيون",
+        "fa": "یون",
+        "ur": "آئن",
+        "am": "አዮን",
+        "ml": "അയോൺ",
+        "ta": "அயனி",
+        "tl": "ion",
+        "ps": "آیون",
+        "ro": "ion",
+        "ru": "ион",
+        "fr": "ion",
+        "hi": "आयन",
+        "es": "partícula cargada"
+       }
+      },
+      {
+       "surface": "ic",
+       "type": "suffix",
+       "meaning": "relating to",
+       "tr": {
+        "zh-Hans": "～的",
+        "zh-Hant": "～的",
+        "ja": "～の",
+        "ko": "관련된",
+        "vi": "thuộc về",
+        "ar": "متعلّق بـ",
+        "fa": "مربوط به",
+        "ur": "متعلق",
+        "am": "ተያያዥ",
+        "ml": "ബന്ധപ്പെട്ട",
+        "ta": "தொடர்பான",
+        "tl": "kaugnay sa",
+        "ps": "اړوند",
+        "ro": "legat de",
+        "ru": "относящийся",
+        "fr": "relatif à",
+        "hi": "संबंधी",
+        "es": "relativo a"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "离子键",
+      "zh-Hant": "離子鍵",
+      "ja": "イオン結合",
+      "ko": "이온 결합",
+      "vi": "liên kết ion",
+      "ar": "رابطة أيونية",
+      "fa": "پیوند یونی",
+      "ur": "آیونی بندھن",
+      "am": "የአዮን ትስስር",
+      "ml": "അയോണിക ബന്ധനം",
+      "ta": "அயனிப் பிணைப்பு",
+      "tl": "ionic bond (bigkis ng magkasalungat na ion)",
+      "ps": "یوني تړاو",
+      "ro": "legătură ionică",
+      "ru": "ионная связь",
+      "fr": "liaison ionique",
+      "hi": "आयनिक बंध",
+      "es": "enlace iónico"
+     },
+     "origin": "Only “ionic” can be cut up: ion + ic. “Bond” is an old everyday word for a tie.",
+     "note": "Only <b>ionic</b> can be cut up: <i>ion</i> (charged particle) + <i>-ic</i> (relating to). Ionic bonding starts with a <b>transfer</b>: one atom gives an electron away and becomes positive, the other takes it and becomes negative — and opposite charges pull together.",
+     "apply": [
+      {
+       "id": "lab3_ion_b_desc",
+       "type": "desc",
+       "q": "Which bond is the attraction between a positive ion and a negative ion?",
+       "a": "An ionic bond",
+       "opts": [
+        "An ionic bond",
+        "A covalent bond",
+        "Metallic bonding",
+        "A lattice"
+       ],
+       "explain": "Ions pulling on each other. A covalent bond shares electrons instead."
+      },
+      {
+       "id": "lab3_ion_b_scn",
+       "type": "scenario",
+       "q": "A sodium atom gives one electron to a chlorine atom. One is now positive, the other negative, and they pull together. What holds them?",
+       "a": "An ionic bond",
+       "opts": [
+        "An ionic bond",
+        "A covalent bond",
+        "Metallic bonding",
+        "Nothing holds them"
+       ],
+       "explain": "The electron was transferred, not shared, so the two ions attract each other: an ionic bond."
+      }
+     ]
+    },
+    {
+     "w": "metallic bonding",
+     "meaning": "the bonding in a metal, where metal ions sit in a sea of electrons that can move.",
+     "example": "Metallic bonding is the reason a copper wire can carry electricity.",
+     "parts": [
+      {
+       "surface": "metal",
+       "type": "root",
+       "meaning": "metal",
+       "tr": {
+        "zh-Hans": "金属",
+        "zh-Hant": "金屬",
+        "ja": "金属",
+        "ko": "금속",
+        "vi": "kim loại",
+        "ar": "معدن",
+        "fa": "فلز",
+        "ur": "دھات",
+        "am": "ብረት",
+        "ml": "ലോഹം",
+        "ta": "உலோகம்",
+        "tl": "metal",
+        "ps": "فلز",
+        "ro": "metal",
+        "ru": "металл",
+        "fr": "métal",
+        "hi": "धातु",
+        "es": "metal"
+       }
+      },
+      {
+       "surface": "ic",
+       "type": "suffix",
+       "meaning": "relating to",
+       "tr": {
+        "zh-Hans": "～的",
+        "zh-Hant": "～的",
+        "ja": "～の",
+        "ko": "관련된",
+        "vi": "thuộc về",
+        "ar": "متعلّق بـ",
+        "fa": "مربوط به",
+        "ur": "متعلق",
+        "am": "ተያያዥ",
+        "ml": "ബന്ധപ്പെട്ട",
+        "ta": "தொடர்பான",
+        "tl": "kaugnay sa",
+        "ps": "اړوند",
+        "ro": "legat de",
+        "ru": "относящийся",
+        "fr": "relatif à",
+        "hi": "संबंधी",
+        "es": "relativo a"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "金属键",
+      "zh-Hant": "金屬鍵",
+      "ja": "金属結合",
+      "ko": "금속 결합",
+      "vi": "liên kết kim loại",
+      "ar": "الرابطة الفلزية",
+      "fa": "پیوند فلزی",
+      "ur": "دھاتی بندھن",
+      "am": "የብረት ትስስር",
+      "ml": "ലോഹ ബന്ധനം",
+      "ta": "உலோகப் பிணைப்பு",
+      "tl": "metallic bonding (bigkis ng mga metal)",
+      "ps": "فلزي تړاو",
+      "ro": "legătură metalică",
+      "ru": "металлическая связь",
+      "fr": "liaison métallique",
+      "hi": "धात्विक बंध",
+      "es": "enlace metálico"
+     },
+     "origin": "Only “metallic” can be cut up: metal + ic. “Bonding” is the everyday word “bond” with -ing on the end.",
+     "note": "Only <b>metallic</b> can be cut up: <i>metal</i> + <i>-ic</i> (relating to). The picture to hold on to is a <b>sea of electrons</b>: the metal ions sit still in rows while loose electrons move freely between them — which is exactly why metals conduct electricity.",
+     "apply": [
+      {
+       "id": "lab3_met_desc",
+       "type": "desc",
+       "q": "Which bonding has metal ions sitting in a sea of electrons that can move?",
+       "a": "Metallic bonding",
+       "opts": [
+        "Metallic bonding",
+        "Covalent bonding",
+        "Ionic bonding",
+        "No bonding"
+       ],
+       "explain": "Only metallic bonding has electrons free to move through the whole solid."
+      },
+      {
+       "id": "lab3_met_scn",
+       "type": "scenario",
+       "q": "A copper wire carries electricity from one end to the other. Which bonding explains that?",
+       "a": "Metallic bonding",
+       "opts": [
+        "Metallic bonding",
+        "Covalent bonding",
+        "Ionic bonding",
+        "Copper has no bonds"
+       ],
+       "explain": "The electrons in the sea can move, and moving charge is a current."
+      }
+     ]
+    },
+    {
+     "w": "ion",
+     "meaning": "an atom, or a group of atoms, that has an electric charge.",
+     "example": "When an atom loses one electron, it becomes a positive ion.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "离子",
+      "zh-Hant": "離子",
+      "ja": "イオン",
+      "ko": "이온",
+      "vi": "ion",
+      "ar": "أيون",
+      "fa": "یون",
+      "ur": "آئن",
+      "am": "አዮን",
+      "ml": "അയോൺ",
+      "ta": "அயனி",
+      "tl": "ion",
+      "ps": "آیون",
+      "ro": "ion",
+      "ru": "ион",
+      "fr": "ion",
+      "hi": "आयन",
+      "es": "ion"
+     },
+     "origin": "From the Greek word ion, “going”: these particles were named in the 1830s because they travel through a liquid to the electrodes.",
+     "note": "From Greek <i>ion</i>, going: these particles were named in the 1830s because they <b>travel</b> through a liquid towards the electrodes. An ion is just an atom (or group of atoms) that has lost or gained electrons, so it is no longer neutral.",
+     "apply": [
+      {
+       "id": "lab3_ion_desc",
+       "type": "desc",
+       "q": "Which word means an atom, or group of atoms, that carries an electric charge?",
+       "a": "Ion",
+       "opts": [
+        "Ion",
+        "Atom",
+        "Molecule",
+        "Element"
+       ],
+       "explain": "A plain atom is neutral. Once it has a charge it is an ion."
+      },
+      {
+       "id": "lab3_ion_scn",
+       "type": "scenario",
+       "q": "A neutral atom loses one electron. What is it now?",
+       "a": "A positive ion",
+       "opts": [
+        "A positive ion",
+        "A negative ion",
+        "A neutron",
+        "A molecule"
+       ],
+       "explain": "It has lost a negative particle, so the positive charge is no longer cancelled."
+      }
+     ]
+    },
+    {
+     "w": "lattice",
+     "meaning": "a repeating pattern of particles in a solid.",
+     "example": "A salt crystal has a lattice of sodium ions and chloride ions.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "晶格（点阵）",
+      "zh-Hant": "晶格（晶體格子）",
+      "ja": "格子（結晶格子）",
+      "ko": "격자(결정 격자)",
+      "vi": "mạng tinh thể",
+      "ar": "شبكة بلورية",
+      "fa": "شبکه بلوری",
+      "ur": "قلمی جالی",
+      "am": "የክሪስታል ጥልፍ",
+      "ml": "ക്രിസ്റ്റൽ ജാലിക",
+      "ta": "படிக அணி",
+      "tl": "latis (paulit-ulit na ayos)",
+      "ps": "کرسټالي جالۍ",
+      "ro": "rețea cristalină",
+      "ru": "кристаллическая решётка",
+      "fr": "réseau cristallin",
+      "hi": "जालक (क्रिस्टल जालक)",
+      "es": "red cristalina"
+     },
+     "origin": "From the Old French word latte, a thin strip of wood: a garden lattice is a criss-cross of strips, and a crystal lattice repeats in the same regular way.",
+     "note": "From Old French <i>latte</i>, a thin strip of wood: a garden lattice is a criss-cross of strips repeating the same shape. A crystal lattice repeats in the same regular way — which is why salt crystals come out as neat little cubes.",
+     "apply": [
+      {
+       "id": "lab3_lat_desc",
+       "type": "desc",
+       "q": "Which word means a repeating pattern of particles in a solid?",
+       "a": "Lattice",
+       "opts": [
+        "Lattice",
+        "Bond",
+        "Molecule",
+        "Element"
+       ],
+       "explain": "The repeating pattern is the lattice; each bond is one link inside it."
+      },
+      {
+       "id": "lab3_lat_scn",
+       "type": "scenario",
+       "q": "Under a lens, a salt crystal shows the same cube pattern over and over. What is that arrangement called?",
+       "a": "A lattice",
+       "opts": [
+        "A lattice",
+        "A bond",
+        "A molecule",
+        "An element"
+       ],
+       "explain": "A regular repeating arrangement of particles in a solid is a lattice."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "lab4",
+   "area": "lab",
+   "title": "Mixtures & pH",
+   "focus": "Dissolving, mixtures that are not solutions, and where a substance sits on the pH scale.",
+   "words": [
+    {
+     "w": "mixture",
+     "meaning": "two or more substances combined together without a new chemical being formed.",
+     "example": "Sand stirred into salt is a mixture, because no new substance is made.",
+     "parts": [
+      {
+       "surface": "mix",
+       "type": "root",
+       "meaning": "combine",
+       "tr": {
+        "fa": "مخلوط کردن",
+        "zh-Hans": "混合",
+        "vi": "trộn",
+        "zh-Hant": "混合",
+        "am": "መቀላቀል",
+        "ar": "يخلط",
+        "es": "mezclar",
+        "fr": "mélanger",
+        "hi": "मिलाना",
+        "ja": "混ぜる",
+        "ko": "섞다",
+        "ml": "കലർത്തുക",
+        "ps": "ګډول",
+        "ro": "a amesteca",
+        "ru": "смешивать",
+        "ta": "கலக்கு",
+        "tl": "haluin",
+        "ur": "ملانا"
+       }
+      },
+      {
+       "surface": "ture",
+       "type": "suffix",
+       "meaning": "state / result",
+       "tr": {
+        "fa": "وضعیت",
+        "zh-Hans": "结果",
+        "vi": "trạng thái",
+        "zh-Hant": "結果",
+        "am": "ሁኔታ / ውጤት",
+        "ar": "حالة / نتيجة",
+        "es": "estado/resultado",
+        "fr": "état / résultat",
+        "hi": "स्थिति / परिणाम",
+        "ja": "状態 / 結果",
+        "ko": "상태 / 결과",
+        "ml": "അവസ്ഥ / ഫലം",
+        "ps": "حالت / پایله",
+        "ro": "stare / rezultat",
+        "ru": "состояние / результат",
+        "ta": "நிலை / விளைவு",
+        "tl": "kalagayan / resulta",
+        "ur": "حالت / نتیجہ"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ድብልቅ",
+      "ar": "خليط",
+      "es": "mezcla",
+      "fa": "مخلوط",
+      "fr": "mélange",
+      "hi": "मिश्रण",
+      "ja": "混合物",
+      "ko": "혼합물",
+      "ml": "മിശ്രിതം",
+      "ps": "مخلوط",
+      "ro": "amestec",
+      "ru": "смесь",
+      "ta": "கலவை",
+      "tl": "timpla",
+      "ur": "آمیزہ",
+      "vi": "hỗn hợp",
+      "zh-Hans": "混合物",
+      "zh-Hant": "混合物"
+     },
+     "note": "<i>mix</i> (combine) + <i>-ture</i> (the state or result) — the same <i>-ture</i> as in <b>texture</b> and <b>structure</b>. The test for a mixture is that <b>no new substance is made</b>: the parts keep their own properties, so you can often separate them again.",
+     "apply": [
+      {
+       "id": "lab4_mix_desc",
+       "type": "desc",
+       "q": "Which word means two or more substances combined with no new chemical formed?",
+       "a": "Mixture",
+       "opts": [
+        "Mixture",
+        "Compound",
+        "Solute",
+        "Pure substance"
+       ],
+       "explain": "In a compound the elements are chemically joined. In a mixture nothing new is made."
+      },
+      {
+       "id": "lab4_mix_scn",
+       "type": "scenario",
+       "q": "You stir sand and salt together in a beaker. No new substance is made and you could pick them apart again. What have you got?",
+       "a": "A mixture",
+       "opts": [
+        "A mixture",
+        "A compound",
+        "A pure substance",
+        "An element"
+       ],
+       "explain": "Combined but not chemically joined — that is a mixture."
+      }
+     ]
+    },
+    {
+     "w": "solution",
+     "meaning": "a mixture formed when one substance (the solute) dissolves completely into another (the solvent).",
+     "example": "Salt water is a solution of salt in water.",
+     "parts": [
+      {
+       "surface": "solut",
+       "type": "root",
+       "meaning": "loosen/solve",
+       "tr": {
+        "am": "መፍታት",
+        "ar": "حل",
+        "es": "resolver",
+        "fa": "حل",
+        "fr": "résoudre",
+        "hi": "सुलझाना",
+        "ja": "解く",
+        "ko": "풀다",
+        "ml": "പരിഹരിക്കുക",
+        "ps": "حل کول",
+        "ro": "a rezolva",
+        "ru": "решать",
+        "ta": "தீர்த்தல்",
+        "tl": "lutasin",
+        "ur": "حل کرنا",
+        "vi": "giải",
+        "zh-Hans": "解",
+        "zh-Hant": "解"
+       }
+      },
+      {
+       "surface": "ion",
+       "type": "suffix",
+       "meaning": "act/process",
+       "tr": {
+        "fa": "فرایند/عمل",
+        "am": "ሂደት/ድርጊት",
+        "ar": "عملية/فعل",
+        "es": "proceso/acción",
+        "fr": "processus/action",
+        "hi": "प्रक्रिया/क्रिया",
+        "ja": "過程/作用",
+        "ko": "과정/작용",
+        "ml": "പ്രക്രിയ/പ്രവർത്തനം",
+        "ps": "بهیر/کړنه",
+        "ro": "proces/acțiune",
+        "ru": "процесс/действие",
+        "ta": "செயல்முறை/செயல்",
+        "tl": "proseso/kilos",
+        "ur": "عمل/فعل",
+        "vi": "quá trình/hành động",
+        "zh-Hans": "过程/动作",
+        "zh-Hant": "過程/動作"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "溶液",
+      "zh-Hant": "溶液",
+      "ja": "溶液",
+      "ko": "용액",
+      "vi": "dung dịch",
+      "ar": "محلول",
+      "fa": "محلول",
+      "ur": "محلول",
+      "ps": "محلول",
+      "am": "መፍትሔ (ኬሚካላዊ)",
+      "ml": "ലായനി",
+      "ta": "கரைசல்",
+      "hi": "विलयन",
+      "tl": "solusyon",
+      "ro": "soluție",
+      "fr": "solution",
+      "ru": "раствор",
+      "es": "disolución"
+     },
+     "note": "<i>solut</i> (loosen, dissolve) + <i>-ion</i> (the act of). The everyday <b>solution to a problem</b> is the same word: something knotted gets loosened. A chemical solution looks <b>clear</b> — if you can still see bits floating, it is a suspension, not a solution.",
+     "apply": [
+      {
+       "id": "lab4_soln_desc",
+       "type": "desc",
+       "q": "Which word means the mixture you get when a solute dissolves completely in a solvent?",
+       "a": "Solution",
+       "opts": [
+        "Solution",
+        "Suspension",
+        "Solute",
+        "Solvent"
+       ],
+       "explain": "The whole mixture is the solution. The solute and solvent are its two parts."
+      },
+      {
+       "id": "lab4_soln_scn",
+       "type": "scenario",
+       "q": "You stir sugar into water until you cannot see any sugar at all and the liquid is clear. What is the liquid now?",
+       "a": "A solution",
+       "opts": [
+        "A solution",
+        "A suspension",
+        "A pure substance",
+        "An element"
+       ],
+       "explain": "The sugar has dissolved completely, so the clear liquid is a solution."
+      }
+     ]
+    },
+    {
+     "w": "solute",
+     "meaning": "the substance that dissolves in a solution.",
+     "example": "In salt water, the salt is the solute.",
+     "parts": [
+      {
+       "surface": "solu",
+       "type": "root",
+       "meaning": "loosen/solve",
+       "tr": {
+        "am": "መፍታት",
+        "ar": "حل",
+        "es": "resolver",
+        "fa": "حل",
+        "fr": "résoudre",
+        "hi": "सुलझाना",
+        "ja": "解く",
+        "ko": "풀다",
+        "ml": "പരിഹരിക്കുക",
+        "ps": "حل کول",
+        "ro": "a rezolva",
+        "ru": "решать",
+        "ta": "தீர்த்தல்",
+        "tl": "lutasin",
+        "ur": "حل کرنا",
+        "vi": "giải",
+        "zh-Hans": "解",
+        "zh-Hant": "解"
+       }
+      },
+      {
+       "surface": "te",
+       "type": "suffix",
+       "meaning": "verb ending",
+       "tr": {
+        "ro": "sufix verb",
+        "ar": "لاحقة فعل",
+        "ps": "د فعل وروستاړی",
+        "zh-Hans": "动词词尾",
+        "zh-Hant": "動詞詞尾",
+        "ja": "動詞語尾",
+        "am": "የግስ መድረሻ",
+        "es": "terminación verbal",
+        "fa": "پایانه فعل",
+        "fr": "terminaison verbale",
+        "hi": "क्रिया प्रत्यय",
+        "ko": "동사 어미",
+        "ml": "ക്രിയാ പ്രത്യയം",
+        "ru": "глагольное окончание",
+        "ta": "வினை விகுதி",
+        "tl": "hulapi ng pandiwa",
+        "ur": "فعل کا لاحقہ",
+        "vi": "hậu tố động từ"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "溶质",
+      "zh-Hant": "溶質",
+      "ja": "溶質",
+      "ko": "용질",
+      "vi": "chất tan",
+      "ar": "المذاب",
+      "fa": "حل‌شونده",
+      "ur": "حل پذیر مادہ",
+      "ps": "منحل شوونکې ماده",
+      "am": "የሚሟሟ ንጥረ ነገር",
+      "ml": "ലയിക്കുന്ന പദാർത്ഥം",
+      "ta": "கரையும் பொருள்",
+      "hi": "विलेय",
+      "tl": "natutunaw na sangkap",
+      "ro": "substanță dizolvată",
+      "fr": "soluté",
+      "ru": "растворённое вещество",
+      "es": "soluto"
+     },
+     "note": "<i>solu</i> (loosen, dissolve) + <i>-te</i>. Keep the three <i>solu-</i> words apart by their endings: the <b>solute</b> is dissolved, the <b>solvent</b> does the dissolving, and the <b>solution</b> is what you end up with.",
+     "apply": [
+      {
+       "id": "lab4_slte_desc",
+       "type": "desc",
+       "q": "In a solution, which part is the substance that dissolves?",
+       "a": "The solute",
+       "opts": [
+        "The solute",
+        "The solvent",
+        "The suspension",
+        "The mixture"
+       ],
+       "explain": "Solute = the one that disappears into the liquid."
+      },
+      {
+       "id": "lab4_slte_scn",
+       "type": "scenario",
+       "q": "Salt water is made by dissolving salt in water. Which one is the solute?",
+       "a": "The salt",
+       "opts": [
+        "The salt",
+        "The water",
+        "Both of them",
+        "Neither of them"
+       ],
+       "explain": "The salt is what dissolves, so the salt is the solute."
+      }
+     ]
+    },
+    {
+     "w": "solvent",
+     "meaning": "the substance that dissolves the solute in a solution — often water.",
+     "example": "In salt water, the water is the solvent.",
+     "parts": [
+      {
+       "surface": "solv",
+       "type": "root",
+       "meaning": "loosen/solve",
+       "tr": {
+        "am": "መፍታት",
+        "ar": "حل",
+        "es": "resolver",
+        "fa": "حل",
+        "fr": "résoudre",
+        "hi": "सुलझाना",
+        "ja": "解く",
+        "ko": "풀다",
+        "ml": "പരിഹരിക്കുക",
+        "ps": "حل کول",
+        "ro": "a rezolva",
+        "ru": "решать",
+        "ta": "தீர்த்தல்",
+        "tl": "lutasin",
+        "ur": "حل کرنا",
+        "vi": "giải",
+        "zh-Hans": "解",
+        "zh-Hant": "解"
+       }
+      },
+      {
+       "surface": "ent",
+       "type": "suffix",
+       "meaning": "having the quality of",
+       "tr": {
+        "vi": "trạng thái",
+        "fa": "چیز",
+        "am": "ባሕርይ",
+        "ar": "صفة",
+        "es": "cualidad",
+        "fr": "qualité",
+        "hi": "गुण",
+        "ja": "性質",
+        "ko": "성질",
+        "ml": "ഗുണം",
+        "ps": "ځانګړتیا",
+        "ro": "calitate",
+        "ru": "качество",
+        "ta": "பண்பு",
+        "tl": "katangian",
+        "ur": "خاصیت",
+        "zh-Hans": "性质",
+        "zh-Hant": "性質",
+        "other": "بودن"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "溶剂",
+      "zh-Hant": "溶劑",
+      "ja": "溶媒",
+      "ko": "용매",
+      "vi": "dung môi",
+      "ar": "المذيب",
+      "fa": "حلال",
+      "ur": "حل کرنے والا مادہ",
+      "ps": "منحلوونکې ماده",
+      "am": "አሟሟቂ",
+      "ml": "ലായകം",
+      "ta": "கரைப்பான்",
+      "hi": "विलायक",
+      "tl": "tagatunaw",
+      "ro": "solvent",
+      "fr": "solvant",
+      "ru": "растворитель",
+      "es": "disolvente"
+     },
+     "note": "<i>solv</i> (loosen, dissolve) + <i>-ent</i>, the ending that marks the <b>doer</b> — as in <b>student</b> and <b>president</b>. So the solvent is the one <b>doing</b> the dissolving. In this course it is nearly always water.",
+     "apply": [
+      {
+       "id": "lab4_slvt_desc",
+       "type": "desc",
+       "q": "In a solution, which part does the dissolving — usually water?",
+       "a": "The solvent",
+       "opts": [
+        "The solvent",
+        "The solute",
+        "The suspension",
+        "The concentration"
+       ],
+       "explain": "<i>-ent</i> marks the doer, so the solvent does the dissolving."
+      },
+      {
+       "id": "lab4_slvt_scn",
+       "type": "scenario",
+       "q": "Salt water again. Which one is the solvent?",
+       "a": "The water",
+       "opts": [
+        "The water",
+        "The salt",
+        "Both of them",
+        "Neither of them"
+       ],
+       "explain": "The water does the dissolving, so it is the solvent."
+      },
+      {
+       "id": "lab4_slvt_cloze",
+       "type": "cloze",
+       "before": "<i>-ent</i> marks the thing that does the job, so the",
+       "after": "is the liquid that does the dissolving.",
+       "a": "solvent",
+       "opts": [
+        "solvent",
+        "solute",
+        "solution",
+        "solubility"
+       ],
+       "explain": "The <i>-ent</i> ending marks the doer, so the solvent is the one doing the dissolving."
+      }
+     ]
+    },
+    {
+     "w": "solubility",
+     "meaning": "how much of a solute can dissolve in a solvent at a given temperature.",
+     "example": "At 20 °C the solubility of salt is about 36 g in 100 g of water.",
+     "parts": [
+      {
+       "surface": "solu",
+       "type": "root",
+       "meaning": "dissolve",
+       "tr": {
+        "am": "መሟሟት",
+        "ar": "ذوبان",
+        "es": "disolver",
+        "fa": "حل شدن",
+        "fr": "dissoudre",
+        "hi": "घुलना",
+        "ja": "溶ける",
+        "ko": "녹다",
+        "ml": "അലിയുക",
+        "ps": "منحل کیدل",
+        "ro": "a dizolva",
+        "ru": "растворять",
+        "ta": "கரைத்தல்",
+        "tl": "matunaw",
+        "ur": "تحلیل ہونا",
+        "vi": "hòa tan",
+        "zh-Hans": "溶解",
+        "zh-Hant": "溶解"
+       }
+      },
+      {
+       "surface": "bility",
+       "type": "suffix",
+       "meaning": "capable of",
+       "tr": {
+        "am": "ችሎታ ያለው",
+        "ar": "قادر على",
+        "es": "capaz de",
+        "fa": "قابل / توانایی",
+        "fr": "capable de",
+        "hi": "करने में सक्षम",
+        "ja": "〜できる能力",
+        "ko": "~할 수 있는",
+        "ml": "കഴിവുള്ള",
+        "ps": "توان لرونکی",
+        "ro": "capabil de",
+        "ru": "способный к",
+        "ta": "திறன் உடைய",
+        "tl": "may kakayahang",
+        "ur": "قابل / صلاحیت رکھنے والا",
+        "vi": "có khả năng",
+        "zh-Hans": "能够…的",
+        "zh-Hant": "能夠…的"
+       }
+      }
+     ],
+     "tr": {
+      "am": "መሟሟት ችሎታ",
+      "ar": "قابلية الذوبان",
+      "es": "solubilidad",
+      "fa": "حلالیت",
+      "fr": "solubilité",
+      "hi": "घुलनशीलता",
+      "ja": "溶解度",
+      "ko": "용해도",
+      "ml": "ലയനക്ഷമത",
+      "ps": "منحلوالی",
+      "ro": "solubilitate",
+      "ru": "растворимость",
+      "ta": "கரைதிறன்",
+      "tl": "solubilidad",
+      "ur": "حل پذیری",
+      "vi": "độ tan",
+      "zh-Hans": "溶解度",
+      "zh-Hant": "溶解度"
+     },
+     "note": "<i>solu</i> (dissolve) + <i>-bility</i> (capable of). It is a <b>number with a temperature attached</b>: how much solute will dissolve in a set amount of solvent at that temperature. Warm the solvent and the solubility usually goes up.",
+     "apply": [
+      {
+       "id": "lab4_slb_desc",
+       "type": "desc",
+       "q": "Which word means how much solute can dissolve in a solvent at a given temperature?",
+       "a": "Solubility",
+       "opts": [
+        "Solubility",
+        "Concentration",
+        "Suspension",
+        "Solvent"
+       ],
+       "explain": "Solubility is the maximum possible. Concentration is how much is actually in there right now."
+      },
+      {
+       "id": "lab4_slb_scn",
+       "type": "scenario",
+       "q": "At 20 °C, 36 g of salt will dissolve in 100 g of water and no more. What does that number tell you?",
+       "a": "The solubility of salt at 20 °C",
+       "opts": [
+        "The solubility of salt at 20 °C",
+        "The concentration of the sea",
+        "The pH of salt water",
+        "How fast salt dissolves"
+       ],
+       "explain": "The most that will dissolve at a stated temperature is the solubility."
+      }
+     ]
+    },
+    {
+     "w": "dissolve",
+     "meaning": "to mix completely into a liquid, forming a solution.",
+     "example": "Sugar will dissolve in water, but sand will not.",
+     "parts": [
+      {
+       "surface": "dis",
+       "type": "prefix",
+       "meaning": "apart",
+       "tr": {
+        "fa": "جدا/نفی",
+        "am": "መለያየት/አይ",
+        "ar": "غير",
+        "es": "aparte/no",
+        "fr": "séparé/non",
+        "hi": "अलग/नहीं",
+        "ja": "分離",
+        "ko": "분리/부정",
+        "ml": "വേർപെട്ട്/അല്ല",
+        "ps": "بېل",
+        "ro": "des",
+        "ru": "раздельно/не",
+        "ta": "பிரி/இல்லை",
+        "tl": "hiwalay/hindi",
+        "ur": "الگ/نہیں",
+        "vi": "tách/không",
+        "zh-Hans": "分开",
+        "zh-Hant": "分開",
+        "other": "دو"
+       }
+      },
+      {
+       "surface": "solv",
+       "type": "root",
+       "meaning": "loosen/solve",
+       "tr": {
+        "am": "መፍታት",
+        "ar": "حل",
+        "es": "resolver",
+        "fa": "حل",
+        "fr": "résoudre",
+        "hi": "सुलझाना",
+        "ja": "解く",
+        "ko": "풀다",
+        "ml": "പരിഹരിക്കുക",
+        "ps": "حل کول",
+        "ro": "a rezolva",
+        "ru": "решать",
+        "ta": "தீர்த்தல்",
+        "tl": "lutasin",
+        "ur": "حل کرنا",
+        "vi": "giải",
+        "zh-Hans": "解",
+        "zh-Hant": "解"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "溶解",
+      "zh-Hant": "溶解",
+      "ja": "溶解する",
+      "ko": "용해되다",
+      "vi": "hòa tan",
+      "ar": "يذوب",
+      "fa": "حل شدن",
+      "ur": "حل ہونا",
+      "ps": "منحل کیدل",
+      "am": "መሟሟት",
+      "ml": "ലയിക്കുക",
+      "ta": "கரைதல்",
+      "hi": "घुलना",
+      "tl": "matunaw",
+      "ro": "a se dizolva",
+      "fr": "se dissoudre",
+      "ru": "растворяться",
+      "es": "disolver"
+     },
+     "note": "<i>dis-</i> (apart) + <i>solv</i> (loosen): loosened apart. Do not swap it with <b>melt</b> — melting is a solid turning into a liquid because of heat, while dissolving is a solid spreading out inside a liquid that is already there.",
+     "apply": [
+      {
+       "id": "lab4_dis_desc",
+       "type": "desc",
+       "q": "Which word means to mix completely into a liquid and form a solution?",
+       "a": "Dissolve",
+       "opts": [
+        "Dissolve",
+        "Melt",
+        "Settle",
+        "Float"
+       ],
+       "explain": "Melting needs heat and no liquid to mix into. Dissolving spreads a solid through a liquid."
+      },
+      {
+       "id": "lab4_dis_scn",
+       "type": "scenario",
+       "q": "You stir sugar into hot tea and the sugar disappears from view. What has the sugar done?",
+       "a": "It has dissolved",
+       "opts": [
+        "It has dissolved",
+        "It has melted",
+        "It has settled",
+        "It has evaporated"
+       ],
+       "explain": "It has spread out through the liquid. It is still there — taste the tea."
+      }
+     ]
+    },
+    {
+     "w": "concentration",
+     "meaning": "how much solute is dissolved in a given amount of solvent.",
+     "example": "Four spoons of salt in the same glass of water gives a higher concentration than one spoon.",
+     "parts": [
+      {
+       "surface": "con",
+       "type": "prefix",
+       "meaning": "together",
+       "tr": {
+        "am": "ከ… ጋር",
+        "ar": "معًا",
+        "es": "juntos",
+        "fa": "باهم",
+        "fr": "ensemble",
+        "hi": "साथ में",
+        "ja": "一緒に",
+        "ko": "함께",
+        "ml": "കൂടെ",
+        "ps": "یوځای",
+        "ro": "împreună",
+        "ru": "вместе",
+        "ta": "ஒன்றாக",
+        "tl": "magkasama",
+        "ur": "ساتھ",
+        "vi": "cùng",
+        "zh-Hans": "一起",
+        "zh-Hant": "一起",
+        "other": "باهم"
+       }
+      },
+      {
+       "surface": "centr",
+       "type": "root",
+       "meaning": "centre",
+       "tr": {
+        "am": "ማዕከል",
+        "ar": "مركز",
+        "es": "centro",
+        "fa": "مرکز",
+        "fr": "centre",
+        "hi": "केंद्र",
+        "ja": "中心",
+        "ko": "중심",
+        "ml": "കേന്ദ്രം",
+        "ps": "مرکز",
+        "ro": "centru",
+        "ru": "центр",
+        "ta": "மையம்",
+        "tl": "sentro",
+        "ur": "مرکز",
+        "vi": "trung tâm",
+        "zh-Hans": "中心",
+        "zh-Hant": "中心"
+       }
+      },
+      {
+       "surface": "ation",
+       "type": "suffix",
+       "meaning": "process of",
+       "tr": {
+        "am": "ሂደት",
+        "ar": "عملية",
+        "es": "proceso de",
+        "fa": "فرآیند",
+        "fr": "processus",
+        "hi": "प्रक्रिया",
+        "ja": "過程",
+        "ko": "과정",
+        "ml": "പ്രക്രിയ",
+        "ps": "پروسه",
+        "ro": "proces",
+        "ru": "процесс",
+        "ta": "செயல்முறை",
+        "tl": "proseso",
+        "ur": "عمل",
+        "vi": "quá trình",
+        "zh-Hans": "过程",
+        "zh-Hant": "過程"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ክምችት",
+      "ar": "تركيز",
+      "es": "concentración",
+      "fa": "غلظت",
+      "fr": "concentration",
+      "hi": "सांद्रता",
+      "ja": "濃度",
+      "ko": "농도",
+      "ml": "സാന്ദ്രത",
+      "ps": "تمرکز",
+      "ro": "concentrație",
+      "ru": "концентрация",
+      "ta": "செறிவு",
+      "tl": "konsentrasyon",
+      "ur": "ارتکاز",
+      "vi": "nồng độ",
+      "zh-Hans": "浓度",
+      "zh-Hant": "濃度"
+     },
+     "note": "<i>con-</i> (together) + <i>centr</i> (centre) + <i>-ation</i> (process of): brought together in one place. A <b>concentrated</b> drink has a lot of solute in a little solvent. Concentration is what you actually have; solubility is the most you <b>could</b> have.",
+     "apply": [
+      {
+       "id": "lab4_conc_desc",
+       "type": "desc",
+       "q": "Which word means how much solute is dissolved in a given amount of solvent?",
+       "a": "Concentration",
+       "opts": [
+        "Concentration",
+        "Solubility",
+        "Suspension",
+        "Solute"
+       ],
+       "explain": "Concentration is what is in the glass now. Solubility is the maximum that would ever dissolve."
+      },
+      {
+       "id": "lab4_conc_scn",
+       "type": "scenario",
+       "q": "Two glasses each hold 100 mL of water. One has 1 spoon of salt dissolved in it, the other has 4. Which has the higher concentration?",
+       "a": "The one with 4 spoons",
+       "opts": [
+        "The one with 4 spoons",
+        "The one with 1 spoon",
+        "They are the same",
+        "You cannot tell"
+       ],
+       "explain": "Same amount of solvent, more solute, so more solute per 100 mL."
+      }
+     ]
+    },
+    {
+     "w": "saturated",
+     "meaning": "describes a solution that has dissolved the maximum amount of solute it can hold at that temperature.",
+     "example": "The extra salt sat on the bottom, so the solution was saturated.",
+     "parts": [
+      {
+       "surface": "satur",
+       "type": "root",
+       "meaning": "full/filled",
+       "tr": {
+        "am": "የሞላ",
+        "ar": "ممتلئ / مشبع",
+        "es": "lleno / saturado",
+        "fa": "پر / اشباع‌شده",
+        "fr": "plein / saturé",
+        "hi": "भरा हुआ",
+        "ja": "満・飽和",
+        "ko": "포화",
+        "ml": "നിറഞ്ഞ",
+        "ps": "ډک",
+        "ro": "plin / saturat",
+        "ru": "полный / насыщенный",
+        "ta": "நிறைந்த",
+        "tl": "puno",
+        "ur": "بھرا ہوا",
+        "vi": "đầy / bão hòa",
+        "zh-Hans": "满/饱和",
+        "zh-Hant": "滿/飽和"
+       }
+      },
+      {
+       "surface": "ated",
+       "type": "suffix",
+       "meaning": "to make/do",
+       "tr": {
+        "am": "ማድረግ",
+        "ar": "جعل",
+        "es": "tener/hacer",
+        "fa": "ساختن",
+        "fr": "rendre",
+        "hi": "बनाना",
+        "ja": "〜化する",
+        "ko": "만들다",
+        "ml": "ഉണ്ടാക്കുക",
+        "ps": "لرونکی/جوړونکی",
+        "ro": "a face",
+        "ru": "делать",
+        "ta": "செய்தல்",
+        "tl": "gumawa",
+        "ur": "بنانا",
+        "vi": "làm",
+        "zh-Hans": "使…化",
+        "zh-Hant": "使…化"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "饱和的",
+      "zh-Hant": "飽和的",
+      "ja": "飽和した",
+      "ko": "포화된",
+      "vi": "bão hòa",
+      "ar": "مشبع",
+      "fa": "اشباع‌شده",
+      "ur": "سیر شدہ",
+      "ps": "ډک شوی",
+      "am": "የተሟላ (ኬሚካላዊ)",
+      "ml": "പൂരിതമായ",
+      "ta": "நிறைவுற்ற",
+      "hi": "संतृप्त",
+      "tl": "saturado",
+      "ro": "saturat",
+      "fr": "saturé",
+      "ru": "насыщенный",
+      "es": "saturado"
+     },
+     "note": "<i>satur</i> (full) + <i>-ated</i>: made full. The same word is used for <b>saturated fat</b> and for ground that is saturated after rain — full, and it cannot take any more. A saturated solution is full <b>at that temperature</b>; heat it and it can take more.",
+     "apply": [
+      {
+       "id": "lab4_sat_desc",
+       "type": "desc",
+       "q": "Which word describes a solution that cannot dissolve any more solute at that temperature?",
+       "a": "Saturated",
+       "opts": [
+        "Saturated",
+        "Insoluble",
+        "Neutral",
+        "Pure"
+       ],
+       "explain": "<i>satur</i> means full. Insoluble describes a substance that never dissolves at all."
+      },
+      {
+       "id": "lab4_sat_scn",
+       "type": "scenario",
+       "q": "You keep adding salt to water and stirring. In the end the extra salt just sits on the bottom and will not go. What is the solution now?",
+       "a": "Saturated",
+       "opts": [
+        "Saturated",
+        "Insoluble",
+        "Neutral",
+        "A suspension"
+       ],
+       "explain": "It has taken the maximum it can hold at that temperature, so it is saturated."
+      }
+     ]
+    },
+    {
+     "w": "pure substance",
+     "meaning": "matter made of one substance only, with nothing else mixed in.",
+     "example": "Distilled water is a pure substance, but sea water is a mixture.",
+     "parts": [
+      {
+       "surface": "pure",
+       "type": "root",
+       "meaning": "clean/unmixed",
+       "tr": {
+        "zh-Hans": "纯净",
+        "zh-Hant": "純淨",
+        "ja": "純粋な",
+        "ko": "순수한",
+        "vi": "tinh khiết",
+        "ar": "نقي",
+        "fa": "خالص",
+        "ur": "خالص",
+        "am": "ንፁህ",
+        "ml": "ശുദ്ധമായ",
+        "ta": "தூய்மையான",
+        "tl": "dalisay",
+        "ps": "پاک",
+        "ro": "pur",
+        "ru": "чистый",
+        "fr": "pur",
+        "hi": "शुद्ध",
+        "es": "puro"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "纯净物",
+      "zh-Hant": "純物質",
+      "ja": "純物質",
+      "ko": "순물질",
+      "vi": "chất tinh khiết",
+      "ar": "مادة نقية",
+      "fa": "مادهٔ خالص",
+      "ur": "خالص مادہ",
+      "am": "ንጹህ ንጥረ ነገር",
+      "ml": "ശുദ്ധ പദാർത്ഥം",
+      "ta": "தூயப் பொருள்",
+      "tl": "purong substansiya",
+      "ps": "سوچه ماده",
+      "ro": "substanță pură",
+      "ru": "чистое вещество",
+      "fr": "corps pur",
+      "hi": "शुद्ध पदार्थ",
+      "es": "sustancia pura"
+     },
+     "origin": "Only “pure” goes back to a root: Latin purus, “clean, unmixed”. “Substance” is kept as a whole word here.",
+     "note": "Only <b>pure</b> goes back to a root: Latin <i>purus</i>, clean and unmixed. In science <i>pure</i> does not mean healthy or natural — it means <b>one substance only</b>. Distilled water is pure; spring water is a mixture, however natural it is.",
+     "apply": [
+      {
+       "id": "lab4_pure_desc",
+       "type": "desc",
+       "q": "Which term means matter made of one substance only, with nothing else mixed in?",
+       "a": "Pure substance",
+       "opts": [
+        "Pure substance",
+        "Mixture",
+        "Solution",
+        "Suspension"
+       ],
+       "explain": "One substance and nothing else. A solution always has at least two."
+      },
+      {
+       "id": "lab4_pure_scn",
+       "type": "scenario",
+       "q": "Which of these is a pure substance?",
+       "a": "Distilled water",
+       "opts": [
+        "Distilled water",
+        "Sea water",
+        "Muddy water",
+        "Salt water"
+       ],
+       "explain": "The other three all have something else mixed in, so they are mixtures."
+      }
+     ]
+    },
+    {
+     "w": "insoluble",
+     "meaning": "not able to dissolve in a liquid such as water.",
+     "example": "Sand is insoluble in water, so it stays on the bottom of the beaker.",
+     "parts": [
+      {
+       "surface": "in",
+       "type": "prefix",
+       "meaning": "not",
+       "tr": {
+        "zh-Hans": "不/非",
+        "zh-Hant": "不/非",
+        "ja": "不",
+        "ko": "비-",
+        "vi": "không",
+        "ar": "غير",
+        "fa": "غیر",
+        "ur": "غیر",
+        "am": "ያልሆነ",
+        "ml": "അല്ലാത്ത",
+        "ta": "இல்லாத",
+        "tl": "hindi",
+        "ps": "نه",
+        "ro": "ne-",
+        "ru": "не-",
+        "fr": "non",
+        "hi": "अ-",
+        "es": "no / opuesto"
+       }
+      },
+      {
+       "surface": "solu",
+       "type": "root",
+       "meaning": "loosen / dissolve",
+       "tr": {
+        "zh-Hans": "溶解 / 松开",
+        "zh-Hant": "溶解 / 鬆開",
+        "ja": "溶かす / 緩める",
+        "ko": "녹이다 / 풀다",
+        "vi": "hòa tan / nới lỏng",
+        "ar": "إذابة / حَلّ",
+        "fa": "حل کردن / باز کردن",
+        "ur": "گھولنا / ڈھیلا کرنا",
+        "am": "መፍታት / ማሟሟት",
+        "ml": "അലിയിക്കുക / അഴിക്കുക",
+        "ta": "கரைத்தல் / தளர்த்துதல்",
+        "tl": "matunaw / luwagan",
+        "ps": "حل کول / خلاصول",
+        "ro": "a dizolva / a slăbi",
+        "ru": "растворять / ослаблять",
+        "fr": "dissoudre / desserrer",
+        "hi": "घोलना / ढीला करना",
+        "es": "aflojar / disolver"
+       }
+      },
+      {
+       "surface": "ble",
+       "type": "suffix",
+       "meaning": "able to",
+       "tr": {
+        "zh-Hans": "能够",
+        "zh-Hant": "能夠",
+        "ja": "できる",
+        "ko": "할 수 있는",
+        "vi": "có thể",
+        "ar": "قادر على",
+        "fa": "قادر به",
+        "ur": "قابل",
+        "am": "መቻል",
+        "ml": "കഴിയുന്ന",
+        "ta": "முடியக்கூடிய",
+        "tl": "kaya",
+        "ps": "وړ",
+        "ro": "capabil",
+        "ru": "способный",
+        "fr": "capable de",
+        "hi": "सक्षम",
+        "es": "capaz de"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "不溶的",
+      "zh-Hant": "不溶的",
+      "ja": "不溶性の",
+      "ko": "불용성의(녹지 않는)",
+      "vi": "không hòa tan được",
+      "ar": "غير قابل للذوبان",
+      "fa": "حل‌نشدنی",
+      "ur": "ناقابلِ حل",
+      "am": "የማይሟሟ",
+      "ml": "ലയിക്കാത്ത",
+      "ta": "கரையாத",
+      "tl": "hindi natutunaw",
+      "ps": "د حل کیدو نه وړ",
+      "ro": "insolubil",
+      "ru": "нерастворимый",
+      "fr": "insoluble",
+      "hi": "अघुलनशील",
+      "es": "insoluble"
+     },
+     "note": "<i>in-</i> (not) + <i>solu</i> (dissolve) + <i>-ble</i> (able to): not able to dissolve. The same <i>in-</i> that flips a word is in <b>invisible</b>. An insoluble solid does not disappear — it sinks, and you can filter it out again.",
+     "apply": [
+      {
+       "id": "lab4_insol_desc",
+       "type": "desc",
+       "q": "Which word means not able to dissolve in a liquid?",
+       "a": "Insoluble",
+       "opts": [
+        "Insoluble",
+        "Soluble",
+        "Saturated",
+        "Neutral"
+       ],
+       "explain": "<i>in-</i> flips the meaning: soluble means it dissolves, insoluble means it does not."
+      },
+      {
+       "id": "lab4_insol_scn",
+       "type": "scenario",
+       "q": "You stir sand into water. The sand sinks and stays on the bottom of the beaker. Sand is…",
+       "a": "Insoluble in water",
+       "opts": [
+        "Insoluble in water",
+        "Soluble in water",
+        "Saturated",
+        "Corrosive"
+       ],
+       "explain": "It will not dissolve, so it is insoluble."
+      }
+     ]
+    },
+    {
+     "w": "suspension",
+     "meaning": "a mixture with small solid pieces floating in a liquid. You can see the pieces, and they slowly settle.",
+     "example": "Muddy water is a suspension, and the mud settles at the bottom of the test tube.",
+     "parts": [
+      {
+       "surface": "sus",
+       "type": "prefix",
+       "meaning": "under",
+       "tr": {
+        "zh-Hans": "下/替代",
+        "zh-Hant": "下/替代",
+        "ja": "下に・代わりに",
+        "ko": "아래/대신",
+        "vi": "dưới / thay thế",
+        "ar": "تحت / بدلاً من",
+        "fa": "زیر / به‌جای",
+        "ur": "نیچے / بجائے",
+        "am": "ከታች / በምትክ",
+        "ml": "താഴെ / പകരം",
+        "ta": "கீழ் / பதிலாக",
+        "tl": "sa ilalim / kapalit",
+        "ps": "لاندې / پرځای",
+        "ro": "sub / în locul",
+        "ru": "под / вместо",
+        "fr": "sous / à la place de",
+        "hi": "नीचे / के स्थान पर",
+        "es": "bajo / en lugar de"
+       }
+      },
+      {
+       "surface": "pens",
+       "type": "root",
+       "meaning": "hang",
+       "tr": {
+        "zh-Hans": "悬挂 / 依赖",
+        "zh-Hant": "懸掛 / 依賴",
+        "ja": "掛かる / 頼る",
+        "ko": "매달리다 / 의존하다",
+        "vi": "treo / phụ thuộc",
+        "ar": "يعلّق / يعتمد",
+        "fa": "آویزان شدن / وابسته بودن",
+        "ur": "لٹکنا / انحصار کرنا",
+        "am": "መስቀል / መተማመን",
+        "ml": "തൂങ്ങുക / ആശ്രയിക്കുക",
+        "ta": "தொங்குதல் / சார்ந்திருத்தல்",
+        "tl": "sumabit / umasa",
+        "ps": "ځړول / تکیه کول",
+        "ro": "a atârna / a depinde",
+        "ru": "висеть / зависеть",
+        "fr": "pendre / dépendre",
+        "hi": "लटकना / निर्भर होना",
+        "es": "colgar/depender"
+       }
+      },
+      {
+       "surface": "ion",
+       "type": "suffix",
+       "meaning": "the act of (makes a noun)",
+       "tr": {
+        "zh-Hans": "……的行为（名词后缀）",
+        "zh-Hant": "……的行為（名詞後綴）",
+        "ja": "～する行為（名詞化）",
+        "ko": "~하는 행위 (명사화)",
+        "vi": "hành động (hậu tố danh từ)",
+        "ar": "فعل / عملية (لاحقة اسم)",
+        "fa": "عملِ ... (پسوند اسم)",
+        "ur": "عمل (اسمی لاحقہ)",
+        "am": "የ...ተግባር (ስም መስሪያ)",
+        "ml": "പ്രവൃത്തി (നാമപ്രത്യയം)",
+        "ta": "செயல் (பெயர்ச்சொல் ஈறு)",
+        "tl": "ang pagkilos (panlaping pangngalan)",
+        "ps": "عمل (نومي روستاړی)",
+        "ro": "actul de (sufix substantival)",
+        "ru": "действие (суффикс существительного)",
+        "fr": "l'action de (suffixe nominal)",
+        "hi": "क्रिया / कार्य (संज्ञा प्रत्यय)",
+        "es": "la acción de (forma un sustantivo)"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "悬浊液（悬浮液）",
+      "zh-Hant": "懸浮液",
+      "ja": "懸濁液",
+      "ko": "현탁액",
+      "vi": "huyền phù",
+      "ar": "مخلوط معلَّق",
+      "fa": "سوسپانسیون (مخلوط معلق)",
+      "ur": "معلق آمیزہ (سسپنشن)",
+      "am": "ተንጠልጣይ ቅልቅል (ሳስፔንሽን)",
+      "ml": "സസ്പെൻഷൻ (തങ്ങിനിൽക്കുന്ന മിശ്രിതം)",
+      "ta": "சஸ்பென்ஷன் (மிதவைக் கலவை)",
+      "tl": "suspensyon (halong may lumulutang na piraso)",
+      "ps": "ځوړنده ګډوله",
+      "ro": "suspensie",
+      "ru": "суспензия",
+      "fr": "suspension",
+      "hi": "निलंबन",
+      "es": "suspensión"
+     },
+     "note": "<i>sus-</i> (under) + <i>pens</i> (hang) + <i>-ion</i>: hanging underneath — the same <i>pens/pend</i> as in <b>pendulum</b> and <b>suspend</b>. The solid is hanging in the liquid, not dissolved: you can <b>see</b> the pieces, and they settle if you wait.",
+     "apply": [
+      {
+       "id": "lab4_susp_desc",
+       "type": "desc",
+       "q": "Which mixture has small solid pieces floating in a liquid that slowly settle?",
+       "a": "A suspension",
+       "opts": [
+        "A suspension",
+        "A solution",
+        "A pure substance",
+        "An indicator"
+       ],
+       "explain": "In a solution you cannot see the solute at all. In a suspension you can, and it settles."
+      },
+      {
+       "id": "lab4_susp_scn",
+       "type": "scenario",
+       "q": "You shake muddy water and it goes cloudy. Ten minutes later the mud is on the bottom. What is muddy water?",
+       "a": "A suspension",
+       "opts": [
+        "A suspension",
+        "A solution",
+        "A pure substance",
+        "A saturated solution"
+       ],
+       "explain": "The pieces were visible and they settled, so the mud was never dissolved."
+      }
+     ]
+    },
+    {
+     "w": "acid",
+     "meaning": "a substance with a pH below 7. An acid turns blue litmus paper red.",
+     "example": "Lemon juice is an acid with a pH of about 2.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "酸",
+      "zh-Hant": "酸",
+      "ja": "酸",
+      "ko": "산",
+      "vi": "axit",
+      "ar": "حمض",
+      "fa": "اسید",
+      "ur": "تیزاب",
+      "am": "አሲድ",
+      "ml": "അമ്ലം",
+      "ta": "அமிலம்",
+      "tl": "asido",
+      "ps": "تېزاب",
+      "ro": "acid",
+      "ru": "кислота",
+      "fr": "acide",
+      "hi": "अम्ल (एसिड)",
+      "es": "ácido"
+     },
+     "origin": "From the Latin word acidus, “sour” — the same family as “acute” (sharp), because an acid tastes sharp and sour.",
+     "note": "From Latin <i>acidus</i>, sour — the same family as <b>acute</b> (sharp), because an acid tastes sharp and sour. In the lab you judge an acid by its <b>pH below 7</b>, never by tasting. Blue litmus paper going red is the classic test.",
+     "apply": [
+      {
+       "id": "lab4_acid_desc",
+       "type": "desc",
+       "q": "Which word means a substance with a pH below 7?",
+       "a": "Acid",
+       "opts": [
+        "Acid",
+        "Base",
+        "Indicator",
+        "Neutral"
+       ],
+       "explain": "Below 7 is acidic. Above 7 is a base and exactly 7 is neutral."
+      },
+      {
+       "id": "lab4_acid_scn",
+       "type": "scenario",
+       "q": "You test a liquid and the pH meter reads 2. What is the liquid?",
+       "a": "An acid",
+       "opts": [
+        "An acid",
+        "A base",
+        "Neutral",
+        "You cannot tell from pH"
+       ],
+       "explain": "2 is below 7, so it is an acid — and a strong one."
+      },
+      {
+       "id": "lab4_acid_cloze",
+       "type": "cloze",
+       "before": "The blue litmus paper turned red in the lemon juice, so the lemon juice is an",
+       "after": ".",
+       "a": "acid",
+       "opts": [
+        "acid",
+        "base",
+        "indicator",
+        "ion"
+       ],
+       "explain": "Blue litmus going red is the acid test."
+      }
+     ]
+    },
+    {
+     "w": "base",
+     "meaning": "in chemistry: a substance with a pH above 7. A base is the opposite of an acid, and it cancels acids out.",
+     "example": "Bicarbonate of soda is a base, so it cancels out the acid in vinegar.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "碱",
+      "zh-Hant": "鹼",
+      "ja": "塩基",
+      "ko": "염기",
+      "vi": "bazơ",
+      "ar": "قاعدة (مادة قلوية)",
+      "fa": "باز (قلیا)",
+      "ur": "اساس (الکلی)",
+      "am": "ቤዝ (አልካላይን)",
+      "ml": "ക്ഷാരം",
+      "ta": "காரம்",
+      "tl": "base (alkalina)",
+      "ps": "قلیا (بېس)",
+      "ro": "bază (chimie)",
+      "ru": "основание (щёлочь)",
+      "fr": "base (chimie)",
+      "hi": "क्षार (बेस)",
+      "es": "base (química)"
+     },
+     "origin": "In chemistry, “base” comes from the Greek word basis, “a step or foundation”: early chemists saw the base as the foundation a salt is built on when it meets an acid. This is a different word from the “base” of a power in maths.",
+     "note": "In chemistry, from Greek <i>basis</i>, a step or foundation: early chemists saw the base as the foundation a salt is built on when it meets an acid. This is a <b>different word</b> from the base of a power in maths, or the base of a triangle.",
+     "apply": [
+      {
+       "id": "lab4_base_desc",
+       "type": "desc",
+       "q": "In chemistry, which word means a substance with a pH above 7?",
+       "a": "Base",
+       "opts": [
+        "Base",
+        "Acid",
+        "Indicator",
+        "Solute"
+       ],
+       "explain": "Above 7 is a base, and a base cancels an acid out."
+      },
+      {
+       "id": "lab4_base_scn",
+       "type": "scenario",
+       "q": "Vinegar (an acid) is spilled, and bicarbonate of soda is added to cancel it out. What is the bicarbonate of soda?",
+       "a": "A base",
+       "opts": [
+        "A base",
+        "An acid",
+        "A neutral substance",
+        "An indicator"
+       ],
+       "explain": "The substance that cancels an acid out is a base."
+      }
+     ]
+    },
+    {
+     "w": "neutral",
+     "meaning": "not acidic and not basic; a pH of exactly 7.",
+     "example": "Pure water is neutral, so universal indicator turns green in it.",
+     "parts": [
+      {
+       "surface": "neutr",
+       "type": "root",
+       "meaning": "neither / neutral",
+       "tr": {
+        "zh-Hans": "两者都不 / 中性",
+        "zh-Hant": "兩者都不 / 中性",
+        "ja": "どちらでもない / 中性",
+        "ko": "둘 다 아닌 / 중성",
+        "vi": "không bên nào / trung tính",
+        "ar": "لا هذا ولا ذاك / محايد",
+        "fa": "هیچ‌کدام از آن دو / خنثی",
+        "ur": "دونوں میں سے کوئی نہیں / غیر جانبدار",
+        "am": "ሁለቱም ያልሆነ / ገለልተኛ",
+        "ml": "രണ്ടും അല്ലാത്ത / നിഷ്പക്ഷം",
+        "ta": "இரண்டும் அல்லாத / நடுநிலை",
+        "tl": "wala sa dalawa / neutral",
+        "ps": "له دواړو هیڅ یو نه / بې طرفه",
+        "ro": "niciunul dintre cele două / neutru",
+        "ru": "ни тот, ни другой / нейтральный",
+        "fr": "ni l'un ni l'autre / neutre",
+        "hi": "दोनों में से कोई नहीं / तटस्थ",
+        "es": "ninguno de los dos / neutro"
+       }
+      },
+      {
+       "surface": "al",
+       "type": "suffix",
+       "meaning": "relating to",
+       "tr": {
+        "zh-Hans": "……的",
+        "zh-Hant": "……的",
+        "ja": "～の",
+        "ko": "관련된",
+        "vi": "thuộc về",
+        "ar": "متعلق بـ",
+        "fa": "وابسته به",
+        "ur": "متعلق",
+        "am": "ተያያዥ",
+        "ml": "ബന്ധപ്പെട്ട",
+        "ta": "தொடர்பான",
+        "tl": "may kaugnayan sa",
+        "ps": "اړوند",
+        "ro": "legat de",
+        "ru": "относящийся к",
+        "fr": "relatif à",
+        "hi": "संबंधी",
+        "es": "relativo a"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "中性",
+      "zh-Hant": "中性",
+      "ja": "中性",
+      "ko": "중성",
+      "vi": "trung tính",
+      "ar": "متعادل",
+      "fa": "خنثی",
+      "ur": "غیر جانبدار (نہ تیزابی نہ اساسی)",
+      "am": "ገለልተኛ",
+      "ml": "ഉദാസീനം (ന്യൂട്രൽ)",
+      "ta": "நடுநிலை",
+      "tl": "neutral (hindi asido, hindi base)",
+      "ps": "بې طرفه",
+      "ro": "neutru",
+      "ru": "нейтральный",
+      "fr": "neutre",
+      "hi": "उदासीन",
+      "es": "neutro"
+     },
+     "note": "<i>neutr</i> (neither) + <i>-al</i> (relating to): neither one nor the other — the same <i>neutr</i> as in <b>neutron</b>, the particle with neither charge. On the pH scale it means <b>exactly 7</b>: not acidic, not basic. Universal indicator turns green.",
+     "apply": [
+      {
+       "id": "lab4_neut_desc",
+       "type": "desc",
+       "q": "Which word describes a substance with a pH of exactly 7?",
+       "a": "Neutral",
+       "opts": [
+        "Neutral",
+        "Acidic",
+        "Basic",
+        "Corrosive"
+       ],
+       "explain": "<i>neutr</i> means neither: neither acid nor base."
+      },
+      {
+       "id": "lab4_neut_scn",
+       "type": "scenario",
+       "q": "You add universal indicator to pure water and it turns green. What does that tell you?",
+       "a": "The water is neutral",
+       "opts": [
+        "The water is neutral",
+        "The water is an acid",
+        "The water is a base",
+        "The water is corrosive"
+       ],
+       "explain": "Green is the middle of the scale, pH 7 — neither acidic nor basic."
+      }
+     ]
+    },
+    {
+     "w": "pH",
+     "meaning": "a scale from 0 to 14 that shows how acidic or basic a substance is.",
+     "example": "We measured the pH of the lemon juice and wrote the number in our results table.",
+     "parts": [],
+     "tr": {
+      "zh-Hans": "酸碱度（pH值）",
+      "zh-Hant": "酸鹼值（pH值）",
+      "ja": "水素イオン指数（pH）",
+      "ko": "수소 이온 농도 지수(pH)",
+      "vi": "độ pH",
+      "ar": "الأس الهيدروجيني (pH)",
+      "fa": "پی‌اچ (درجهٔ اسیدی و بازی)",
+      "ur": "پی ایچ (تیزابیت اور اساسیت کا پیمانہ)",
+      "am": "የአሲድና የቤዝ መለኪያ (pH)",
+      "ml": "പി.എച്ച്. (അമ്ല-ക്ഷാര മാപിനി)",
+      "ta": "பி.எச். (அமில–கார அளவை)",
+      "tl": "pH (sukat ng asido at base)",
+      "ps": "پی ایچ (د تېزابیت او قلیایت کچه)",
+      "ro": "pH-ul (scara acid–bază)",
+      "ru": "водородный показатель (pH)",
+      "fr": "le pH",
+      "hi": "पी.एच. मान (अम्ल–क्षार मान)",
+      "es": "el pH"
+     },
+     "origin": "A symbol, not a word: the small p stands for “power” and the capital H is the symbol for hydrogen, so pH means “power of hydrogen”.",
+     "note": "A symbol, not a word: the small <b>p</b> stands for power and the capital <b>H</b> is the symbol for hydrogen, so pH means power of hydrogen. Keep the capital H when you write it. Low pH means lots of hydrogen ions; high pH means very few.",
+     "apply": [
+      {
+       "id": "lab4_ph_desc",
+       "type": "desc",
+       "q": "What does the pH scale show?",
+       "a": "How acidic or basic a substance is",
+       "opts": [
+        "How acidic or basic a substance is",
+        "How hot a substance is",
+        "How much solute is dissolved",
+        "How fast something dissolves"
+       ],
+       "explain": "pH runs from 0 to 14 and tells you where a substance sits between acid and base."
+      },
+      {
+       "id": "lab4_ph_scn",
+       "type": "scenario",
+       "q": "Three liquids have pH 3, pH 7 and pH 11. Which one is the base?",
+       "a": "The pH 11 liquid",
+       "opts": [
+        "The pH 11 liquid",
+        "The pH 3 liquid",
+        "The pH 7 liquid",
+        "All three"
+       ],
+       "explain": "Above 7 is basic, below 7 is acidic, and 7 exactly is neutral."
+      }
+     ]
+    },
+    {
+     "w": "indicator",
+     "meaning": "in chemistry: a substance that changes colour to show whether something is an acid or a base.",
+     "example": "We added universal indicator to the vinegar and it turned red.",
+     "parts": [
+      {
+       "surface": "in",
+       "type": "prefix",
+       "meaning": "into",
+       "tr": {
+        "zh-Hans": "在 / 进入",
+        "zh-Hant": "在 / 進入",
+        "ja": "中に",
+        "ko": "안으로",
+        "vi": "trong",
+        "ar": "في",
+        "fa": "در",
+        "ur": "میں",
+        "am": "ወደ ውስጥ",
+        "ml": "അകത്ത്",
+        "ta": "உள்ளே",
+        "tl": "sa loob",
+        "ps": "دننه",
+        "ro": "în",
+        "ru": "в",
+        "fr": "dans",
+        "hi": "में",
+        "es": "en / hacia dentro"
+       }
+      },
+      {
+       "surface": "dic",
+       "type": "root",
+       "meaning": "point out/declare",
+       "tr": {
+        "zh-Hans": "说",
+        "zh-Hant": "說",
+        "ja": "言う",
+        "ko": "말함",
+        "vi": "nói / tuyên bố",
+        "ar": "يعلن",
+        "fa": "گفتن",
+        "ur": "کہنا",
+        "am": "መናገር",
+        "ml": "പറയുക",
+        "ta": "சொல்லுதல்",
+        "tl": "magsabi",
+        "ps": "ویل",
+        "ro": "a declara",
+        "ru": "говорить",
+        "fr": "déclarer",
+        "hi": "कहना",
+        "es": "decir/declarar"
+       }
+      },
+      {
+       "surface": "ator",
+       "type": "suffix",
+       "meaning": "agent or thing that does",
+       "tr": {
+        "zh-Hans": "……者/……物",
+        "zh-Hant": "……者/……物",
+        "ja": "…する人・物",
+        "ko": "…하는 사람/것",
+        "vi": "người/vật",
+        "ar": "فاعل",
+        "fa": "کننده",
+        "ur": "کرنے والا",
+        "am": "የሚያደርግ",
+        "ml": "ചെയ്യുന്ന ആൾ/വസ്തു",
+        "ta": "செய்பவர்/பொருள்",
+        "tl": "tagagawa",
+        "ps": "کوونکی",
+        "ro": "cel care face",
+        "ru": "тот, кто делает",
+        "fr": "celui qui fait",
+        "hi": "करने वाला/वस्तु",
+        "es": "quien/lo que"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "酸碱指示剂",
+      "zh-Hant": "酸鹼指示劑",
+      "ja": "指示薬",
+      "ko": "지시약",
+      "vi": "chất chỉ thị (axit–bazơ)",
+      "ar": "كاشف حمضي قاعدي",
+      "fa": "شناساگر (معرف اسید و باز)",
+      "ur": "اشاریہ محلول (اظہاریہ)",
+      "am": "አመልካች ኬሚካል",
+      "ml": "അമ്ല-ക്ഷാര സൂചകം",
+      "ta": "அமில–கார நிறங்காட்டி",
+      "tl": "indicator (kemikal na nagpapalit ng kulay)",
+      "ps": "ښودونکی محلول",
+      "ro": "indicator acido-bazic",
+      "ru": "кислотно-основный индикатор",
+      "fr": "indicateur coloré",
+      "hi": "अम्ल–क्षार सूचक",
+      "es": "indicador ácido-base"
+     },
+     "note": "<i>in-</i> (into) + <i>dic</i> (point out) + <i>-ator</i> (the thing that does it): the thing that points something out — the same <i>dic</i> as in <b>dictionary</b> and <b>predict</b>. It points out acid or base by <b>changing colour</b>, so you read the colour, not the liquid.",
+     "apply": [
+      {
+       "id": "lab4_ind_desc",
+       "type": "desc",
+       "q": "Which substance changes colour to show whether something is an acid or a base?",
+       "a": "An indicator",
+       "opts": [
+        "An indicator",
+        "A solvent",
+        "A solute",
+        "A suspension"
+       ],
+       "explain": "<i>dic</i> means point out: the colour points out the answer."
+      },
+      {
+       "id": "lab4_ind_scn",
+       "type": "scenario",
+       "q": "You add a few drops of a liquid to vinegar and the vinegar turns red. What was the liquid you added?",
+       "a": "An indicator",
+       "opts": [
+        "An indicator",
+        "A base",
+        "A solvent",
+        "A pure substance"
+       ],
+       "explain": "It changed colour to reveal that the vinegar is acidic, so it is an indicator."
+      }
+     ]
+    },
+    {
+     "w": "hydrogen ion",
+     "meaning": "a hydrogen atom that has lost its electron, written H⁺. Acids make hydrogen ions in water.",
+     "example": "The more hydrogen ions a solution has, the lower its pH.",
+     "parts": [
+      {
+       "surface": "hydr",
+       "type": "root",
+       "meaning": "water",
+       "tr": {
+        "zh-Hans": "水",
+        "zh-Hant": "水",
+        "ja": "水",
+        "ko": "물",
+        "vi": "nước",
+        "ar": "ماء",
+        "fa": "آب",
+        "ur": "پانی",
+        "am": "ውሃ",
+        "ml": "ജലം",
+        "ta": "நீர்",
+        "tl": "tubig",
+        "ps": "اوبه",
+        "ro": "apă",
+        "ru": "вода",
+        "fr": "eau",
+        "hi": "जल",
+        "es": "agua"
+       }
+      },
+      {
+       "surface": "gen",
+       "type": "suffix",
+       "meaning": "produce",
+       "tr": {
+        "zh-Hans": "产生",
+        "zh-Hant": "產生",
+        "ja": "生む",
+        "ko": "생성",
+        "vi": "sinh ra",
+        "ar": "يُنتج",
+        "fa": "تولید",
+        "ur": "پیدا کرنا",
+        "am": "ማመንጨት",
+        "ml": "ഉത്പാദിപ്പിക്കുക",
+        "ta": "உற்பத்தி",
+        "tl": "lumikha",
+        "ps": "تولید",
+        "ro": "a produce",
+        "ru": "производить",
+        "fr": "produire",
+        "hi": "उत्पन्न करना",
+        "es": "producir"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "氢离子（H⁺）",
+      "zh-Hant": "氫離子（H⁺）",
+      "ja": "水素イオン（H⁺）",
+      "ko": "수소 이온(H⁺)",
+      "vi": "ion hiđro (H⁺)",
+      "ar": "أيون الهيدروجين (H⁺)",
+      "fa": "یون هیدروژن (H⁺)",
+      "ur": "ہائیڈروجن آئن (H⁺)",
+      "am": "የሃይድሮጅን አዮን (H⁺)",
+      "ml": "ഹൈഡ്രജൻ അയോൺ (H⁺)",
+      "ta": "ஹைட்ரஜன் அயனி (H⁺)",
+      "tl": "hydrogen ion (H⁺)",
+      "ps": "د هایدروجن آیون (H⁺)",
+      "ro": "ion de hidrogen (H⁺)",
+      "ru": "ион водорода (H⁺)",
+      "fr": "ion hydrogène (H⁺)",
+      "hi": "हाइड्रोजन आयन (H⁺)",
+      "es": "ion hidrógeno (H⁺)"
+     },
+     "origin": "Only “hydrogen” can be cut up: hydr + gen, “water maker”, because burning hydrogen makes water. “Ion” is a whole word from Greek for “going”.",
+     "note": "Only <b>hydrogen</b> can be cut up: <i>hydr</i> (water) + <i>-gen</i> (produce) — the water maker, because burning hydrogen makes water. <b>Ion</b> stays whole. Written <b>H⁺</b>: acids make these in water, and the more there are, the lower the pH.",
+     "apply": [
+      {
+       "id": "lab4_hion_desc",
+       "type": "desc",
+       "q": "Which ion is written H⁺ and is made by acids in water?",
+       "a": "The hydrogen ion",
+       "opts": [
+        "The hydrogen ion",
+        "The hydroxide ion",
+        "The electron",
+        "The neutron"
+       ],
+       "explain": "H is the symbol for hydrogen, and the + shows it has lost its electron."
+      },
+      {
+       "id": "lab4_hion_scn",
+       "type": "scenario",
+       "q": "One solution has far more hydrogen ions in it than another. What does that mean about its pH?",
+       "a": "Its pH is lower",
+       "opts": [
+        "Its pH is lower",
+        "Its pH is higher",
+        "Its pH is exactly 7",
+        "pH does not change"
+       ],
+       "explain": "More hydrogen ions means more acidic, and more acidic means a lower pH number."
+      }
+     ]
+    },
+    {
+     "w": "hydroxide ion",
+     "meaning": "an ion made of one oxygen atom and one hydrogen atom, written OH⁻. Bases make hydroxide ions in water.",
+     "example": "Sodium hydroxide makes hydroxide ions when it dissolves in water.",
+     "parts": [
+      {
+       "surface": "hydr",
+       "type": "root",
+       "meaning": "water",
+       "tr": {
+        "zh-Hans": "水",
+        "zh-Hant": "水",
+        "ja": "水",
+        "ko": "물",
+        "vi": "nước",
+        "ar": "ماء",
+        "fa": "آب",
+        "ur": "پانی",
+        "am": "ውሃ",
+        "ml": "ജലം",
+        "ta": "நீர்",
+        "tl": "tubig",
+        "ps": "اوبه",
+        "ro": "apă",
+        "ru": "вода",
+        "fr": "eau",
+        "hi": "जल",
+        "es": "agua"
+       }
+      },
+      {
+       "surface": "ox",
+       "type": "root",
+       "meaning": "oxygen",
+       "tr": {
+        "zh-Hans": "氧",
+        "zh-Hant": "氧",
+        "ja": "酸素",
+        "ko": "산소",
+        "vi": "oxy",
+        "ar": "أكسجين",
+        "fa": "اکسیژن",
+        "ur": "آکسیجن",
+        "am": "ኦክስጅን",
+        "ml": "ഓക്സിജൻ",
+        "ta": "ஆக்ஸிஜன்",
+        "tl": "oxygen",
+        "ps": "اکسیجن",
+        "ro": "oxigen",
+        "ru": "кислород",
+        "fr": "oxygène",
+        "hi": "ऑक्सीजन",
+        "es": "oxígeno"
+       }
+      },
+      {
+       "surface": "ide",
+       "type": "suffix",
+       "meaning": "chemical compound",
+       "tr": {
+        "zh-Hans": "化合物",
+        "zh-Hant": "化合物",
+        "ja": "化合物",
+        "ko": "화합물",
+        "vi": "hợp chất hóa học",
+        "ar": "مركب كيميائي",
+        "fa": "ترکیب شیمیایی",
+        "ur": "کیمیائی مرکب",
+        "am": "ኬሚካላዊ ውህድ",
+        "ml": "രാസ സംയുക്തം",
+        "ta": "வேதியியல் சேர்மம்",
+        "tl": "kemikal na compound",
+        "ps": "کیمیاوي مرکب",
+        "ro": "compus chimic",
+        "ru": "химическое соединение",
+        "fr": "composé chimique",
+        "hi": "रासायनिक यौगिक",
+        "es": "compuesto químico"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "氢氧根离子（OH⁻）",
+      "zh-Hant": "氫氧根離子（OH⁻）",
+      "ja": "水酸化物イオン（OH⁻）",
+      "ko": "수산화 이온(OH⁻)",
+      "vi": "ion hiđroxit (OH⁻)",
+      "ar": "أيون الهيدروكسيد (OH⁻)",
+      "fa": "یون هیدروکسید (OH⁻)",
+      "ur": "ہائیڈرو آکسائیڈ آئن (OH⁻)",
+      "am": "የሃይድሮክሳይድ አዮን (OH⁻)",
+      "ml": "ഹൈഡ്രോക്സൈഡ് അയോൺ (OH⁻)",
+      "ta": "ஹைட்ராக்சைடு அயனி (OH⁻)",
+      "tl": "hydroxide ion (OH⁻)",
+      "ps": "د هایدروکسایډ آیون (OH⁻)",
+      "ro": "ion hidroxid (OH⁻)",
+      "ru": "гидроксид-ион (OH⁻)",
+      "fr": "ion hydroxyde (OH⁻)",
+      "hi": "हाइड्रॉक्साइड आयन (OH⁻)",
+      "es": "ion hidróxido (OH⁻)"
+     },
+     "origin": "Only “hydroxide” can be cut up: hydr + ox + ide, the water-and-oxygen part of a compound. “Ion” is a whole word from Greek for “going”.",
+     "note": "Only <b>hydroxide</b> can be cut up: <i>hydr</i> (water) + <i>ox</i> (oxygen) + <i>-ide</i> (a compound). <b>Ion</b> stays whole. Written <b>OH⁻</b> — one oxygen and one hydrogen, carrying a negative charge. Bases make these in water, the mirror image of an acid.",
+     "apply": [
+      {
+       "id": "lab4_ohion_desc",
+       "type": "desc",
+       "q": "Which ion is written OH⁻ and is made by bases in water?",
+       "a": "The hydroxide ion",
+       "opts": [
+        "The hydroxide ion",
+        "The hydrogen ion",
+        "The solute",
+        "The indicator"
+       ],
+       "explain": "O for oxygen and H for hydrogen, with a negative charge."
+      },
+      {
+       "id": "lab4_ohion_scn",
+       "type": "scenario",
+       "q": "A solution turns out to be full of OH⁻ particles. What are they, and what made them?",
+       "a": "Hydroxide ions, made by a base",
+       "opts": [
+        "Hydroxide ions, made by a base",
+        "Hydroxide ions, made by an acid",
+        "Hydrogen ions, made by a base",
+        "Hydrogen ions, made by an acid"
+       ],
+       "explain": "OH⁻ is one oxygen and one hydrogen with a negative charge — the hydroxide ion — and it is bases, not acids, that make it in water."
+      }
+     ]
+    },
+    {
+     "w": "corrosive",
+     "meaning": "able to damage skin, eyes or materials by attacking them chemically.",
+     "example": "The bottle had a corrosive hazard symbol, so we wore safety glasses and gloves.",
+     "parts": [
+      {
+       "surface": "cor",
+       "type": "prefix",
+       "meaning": "completely",
+       "tr": {
+        "zh-Hans": "完全",
+        "zh-Hant": "完全",
+        "ja": "完全に",
+        "ko": "완전히",
+        "vi": "hoàn toàn",
+        "ar": "تماماً",
+        "fa": "کاملاً",
+        "ur": "مکمل طور پر",
+        "am": "ሙሉ በሙሉ",
+        "ml": "പൂർണ്ണമായി",
+        "ta": "முழுமையாக",
+        "tl": "lubusan",
+        "ps": "بشپړ",
+        "ro": "complet",
+        "ru": "полностью",
+        "fr": "complètement",
+        "hi": "पूरी तरह",
+        "es": "completamente"
+       }
+      },
+      {
+       "surface": "ros",
+       "type": "root",
+       "meaning": "gnaw / eat",
+       "tr": {
+        "zh-Hans": "啃 / 吃",
+        "zh-Hant": "啃 / 吃",
+        "ja": "かじる / 食べる",
+        "ko": "갉아먹다 / 먹다",
+        "vi": "gặm / ăn",
+        "ar": "قرض / أكل",
+        "fa": "جویدن / خوردن",
+        "ur": "کترنا / کھانا",
+        "am": "መጋጥ / መብላት",
+        "ml": "കരളുക / തിന്നുക",
+        "ta": "கடித்தல் / தின்னுதல்",
+        "tl": "ngatngat / kain",
+        "ps": "ژول / خوړل",
+        "ro": "a roade / a mânca",
+        "ru": "грызть / есть",
+        "fr": "ronger / manger",
+        "hi": "कुतरना / खाना",
+        "es": "roer / comer"
+       }
+      },
+      {
+       "surface": "ive",
+       "type": "suffix",
+       "meaning": "tending to",
+       "tr": {
+        "zh-Hans": "有…性质的",
+        "zh-Hant": "有…性質的",
+        "ja": "的な",
+        "ko": "경향",
+        "vi": "có xu hướng",
+        "ar": "ذو",
+        "fa": "گرایش به",
+        "ur": "رجحان",
+        "am": "ዝንባሌ",
+        "ml": "പ്രവണത",
+        "ta": "போக்கு",
+        "tl": "hilig",
+        "ps": "لرونکی",
+        "ro": "care are",
+        "ru": "склонный к",
+        "fr": "tendance à",
+        "hi": "प्रवृत्ति",
+        "es": "que tiende a"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "腐蚀性的",
+      "zh-Hant": "腐蝕性的",
+      "ja": "腐食性の",
+      "ko": "부식성의",
+      "vi": "có tính ăn mòn",
+      "ar": "أكّال (مادة كاوية)",
+      "fa": "خورنده",
+      "ur": "کاٹ کھانے والا (تآکلی)",
+      "am": "የሚያበላሽ (ቆዳንና ብረትን የሚበላ)",
+      "ml": "ദ്രവിപ്പിക്കുന്ന (നശിപ്പിക്കുന്ന)",
+      "ta": "அரிக்கும் தன்மையுள்ள",
+      "tl": "nakakasira / nakakatunaw (corrosive)",
+      "ps": "خوړونکی (زیانمنونکی)",
+      "ro": "coroziv",
+      "ru": "едкий",
+      "fr": "corrosif",
+      "hi": "संक्षारक",
+      "es": "corrosivo"
+     },
+     "note": "<i>cor-</i> (completely) + <i>ros</i> (gnaw, eat) + <i>-ive</i> (tending to): tending to eat right through something. The same gnawing root is in <b>rodent</b> and <b>erode</b>. On a bottle it is a <b>hazard warning</b>, so safety glasses go on before the lid comes off.",
+     "apply": [
+      {
+       "id": "lab4_corr_desc",
+       "type": "desc",
+       "q": "Which word describes a substance that can damage skin, eyes or materials by attacking them chemically?",
+       "a": "Corrosive",
+       "opts": [
+        "Corrosive",
+        "Soluble",
+        "Neutral",
+        "Saturated"
+       ],
+       "explain": "<i>ros</i> means gnaw: a corrosive substance eats into what it touches."
+      },
+      {
+       "id": "lab4_corr_scn",
+       "type": "scenario",
+       "q": "A bottle carries the corrosive hazard symbol. What does that tell you to do before using it?",
+       "a": "Put on safety glasses and follow the teacher's instructions",
+       "opts": [
+        "Put on safety glasses and follow the teacher's instructions",
+        "Smell it to check what it is",
+        "Pour it quickly so it is over with",
+        "Nothing special is needed"
+       ],
+       "explain": "Corrosive means it can attack skin and eyes, so eye protection and the teacher's instructions come first."
+      }
+     ]
+    },
+    {
+     "w": "soluble",
+     "meaning": "able to dissolve in a liquid such as water.",
+     "example": "Sugar is soluble in water, so it disappears when you stir it.",
+     "parts": [
+      {
+       "surface": "solu",
+       "type": "root",
+       "meaning": "loosen / dissolve",
+       "tr": {
+        "am": "መፍታት / ማሟሟት",
+        "ar": "إذابة / حَلّ",
+        "es": "aflojar / disolver",
+        "fa": "حل کردن / باز کردن",
+        "fr": "dissoudre / desserrer",
+        "hi": "घोलना / ढीला करना",
+        "ja": "溶かす / 緩める",
+        "ko": "녹이다 / 풀다",
+        "ml": "അലിയിക്കുക / അഴിക്കുക",
+        "ps": "حل کول / خلاصول",
+        "ro": "a dizolva / a slăbi",
+        "ru": "растворять / ослаблять",
+        "ta": "கரைத்தல் / தளர்த்துதல்",
+        "tl": "matunaw / luwagan",
+        "ur": "گھولنا / ڈھیلا کرنا",
+        "vi": "hòa tan / nới lỏng",
+        "zh-Hans": "溶解 / 松开",
+        "zh-Hant": "溶解 / 鬆開"
+       }
+      },
+      {
+       "surface": "ble",
+       "type": "suffix",
+       "meaning": "able to",
+       "tr": {
+        "am": "መቻል",
+        "ar": "قادر على",
+        "es": "capaz de",
+        "fa": "قادر به",
+        "fr": "capable de",
+        "hi": "सक्षम",
+        "ja": "できる",
+        "ko": "할 수 있는",
+        "ml": "കഴിയുന്ന",
+        "ps": "وړ",
+        "ro": "capabil",
+        "ru": "способный",
+        "ta": "முடியக்கூடிய",
+        "tl": "kaya",
+        "ur": "قابل",
+        "vi": "có thể",
+        "zh-Hans": "能够",
+        "zh-Hant": "能夠"
+       }
+      }
+     ],
+     "tr": {
+      "am": "የሚሟሟ",
+      "ar": "قابل للذوبان",
+      "es": "soluble",
+      "fa": "حل‌شدنی",
+      "fr": "soluble",
+      "hi": "घुलनशील",
+      "ja": "可溶性",
+      "ko": "가용성",
+      "ml": "ലയിക്കുന്ന",
+      "ps": "د حل کیدو وړ",
+      "ro": "solubil",
+      "ru": "растворимый",
+      "ta": "கரையக்கூடிய",
+      "tl": "natutunaw",
+      "ur": "حل پذیر",
+      "vi": "hòa tan được",
+      "zh-Hans": "可溶的",
+      "zh-Hant": "可溶的"
+     },
+     "note": "<i>solu</i> (dissolve) + <i>-ble</i> (able to): able to dissolve. Always say what it is soluble <b>in</b> — sugar is soluble in water, and that is a fact about the pair, not about the sugar on its own.",
+     "apply": [
+      {
+       "id": "lab4_sol_desc",
+       "type": "desc",
+       "q": "Which word means able to dissolve in a liquid?",
+       "a": "Soluble",
+       "opts": [
+        "Soluble",
+        "Insoluble",
+        "Saturated",
+        "Corrosive"
+       ],
+       "explain": "<i>-ble</i> means able to. Insoluble is the opposite."
+      },
+      {
+       "id": "lab4_sol_scn",
+       "type": "scenario",
+       "q": "Sugar disappears completely when you stir it into water. Sugar is…",
+       "a": "Soluble in water",
+       "opts": [
+        "Soluble in water",
+        "Insoluble in water",
+        "Neutral",
+        "A pure substance"
+       ],
+       "explain": "It dissolved, so it is soluble in water."
+      }
+     ]
+    }
+   ]
   }
  ]
 };
