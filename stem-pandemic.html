@@ -3,12 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kinematics — ELC STEM</title>
+<title>Pandemic — ELC STEM</title>
 <!-- ================================================================
-     UNIT PAGE TEMPLATE (STEM hub v2) — stem-kinematics.html is the
-     master copy. Sibling unit pages (stem-foundations.html,
-     stem-genetics.html, stem-pandemic.html) copy this file and change
-     ONLY:
+     UNIT PAGE (STEM hub v2) — copied from stem-kinematics.html, which
+     is the master template. Only these things differ from the master:
        1. <title>, the masthead (h1 + .sub) and the intro paragraph
           (including its data-v words),
        2. the CONTENT block at the top of the page script
@@ -17,6 +15,11 @@
      Everything else paints itself from STEM2 using UNIT_ID:
      rail (WORDS / SKILLS / DO / PROVE), the visible-learning spine,
      the skill-group sections, and the checkpoint arc.
+
+     Pandemic has an opensFrom date in stem-shared.js. Before that
+     date the page shows a quiet "opens <date> — you can look around"
+     line and the spine counts down to opening; everything else on the
+     page works normally.
      ================================================================ -->
 <style>
   :root {
@@ -166,25 +169,29 @@
     </select>
   </div>
 
-  <!-- ===== masthead + intro — siblings rewrite these lines ===== -->
+  <!-- ===== masthead + intro — unit-specific ===== -->
   <div class="masthead">
-    <h1 data-i18n="title">Kinematics</h1>
-    <div class="sub" data-i18n="sub">Term 3 · motion, linear graphs, data</div>
+    <h1 data-i18n="title">Pandemic</h1>
+    <div class="sub" data-i18n="sub">Term 4 · reading the maths inside the news</div>
   </div>
-  <p class="intro">Kinematics is the study of <span data-v="motion">movement</span>: how far, how fast,
-    which way. First the words — why <span data-v>distance</span> is not <span data-v>displacement</span>,
-    and why <span data-v>velocity</span> is <span data-v>speed</span> with a <span data-v>direction</span>.
-    Then the graphs — a steady journey is a <span data-v>linear</span> line, and the
-    <span data-v>gradient</span> of a <span data-v>position</span>-time graph is the velocity.
-    Last, the <span data-v>data</span> — you drop a ball, <span data-v>plot</span> the numbers,
-    and find the <span data-v>trend</span> yourself.</p>
+  <p class="intro">A <span data-v>pandemic</span> is a health story, but it reaches most people as a
+    numbers story: a headline with a <span data-v>percentage</span> in it, repeated until it sounds
+    true. This unit teaches you to stop and check it. First the words — what
+    <span data-v>transmission</span> and <span data-v>immunity</span> really mean, and what a
+    <span data-v>vaccine</span> can and cannot promise. Then the maths — why a vaccine that removes
+    60% of your risk and a mask that removes 50% of what is left leave you 80% protected, not 110%,
+    and why <span data-v>exponential</span> growth looks slow right up until it is not. Last, four
+    opinion articles: find each <span data-v>claim</span>, test it against the
+    <span data-v>evidence</span>, and say which <span data-v>trend</span> the writer showed you and
+    which one they left out. Some of it is <span data-v>misleading</span> on purpose. Your job is to
+    prove that, with maths.</p>
   <p class="preview" id="preview" hidden></p>
 
   <div class="layout">
 
     <!-- ===== contents rail (sticky ≥760px; horizontal scroller below) ===== -->
     <nav class="rail" id="rail" aria-label="Unit contents">
-      <div class="rail-sec">
+      <div class="rail-sec" id="railWordsSec">
         <a class="rail-h" href="stem-vocab-hub.html" data-i18n="railWordsH">Words</a>
         <div id="railWords"></div>
       </div>
@@ -238,7 +245,7 @@
       <section id="prove">
         <h2 data-i18n="proveH2">Prove</h2>
         <p class="lead" data-i18n="proveLead">Each unit keeps its own checkpoints. This is the whole
-          Kinematics arc.</p>
+          Pandemic arc.</p>
         <div id="cps"></div>
       </section>
 
@@ -271,31 +278,19 @@
                    href: a normal link; ext: opens in a new tab.
      Nothing below the "end CONTENT" line needs editing.
      =================================================================== */
-  var UNIT_ID = "kin";
+  var UNIT_ID = "pan";
 
   var SCHOOL_LINKS = {
-    booklet:    "#",   /* Linear motion worded questions booklet (Compass) */
-    textbook:   "#",   /* Textbook exercises 1B / 1E / 1F (OneNote → Maths Skills Resources) */
-    ballreport: "#"    /* Ball-drop report template (Compass) */
+    articles: "#"   /* The four opinion articles (Compass) */
   };
 
   var DO_TASKS = [
-    { id:"entry", title:"Entry task — ×-tables, timed", short:"Entry task — ×-tables",
-      what:"The first two minutes of every lesson. Accuracy first, then speed — every table up to 12.",
-      linkLabel:"Start the timed practice", ext:true,
-      href:"https://liaminhawai-cmd.github.io/Multiplication-tables/" },
-    { id:"race", title:"Race to School", short:"Race to School",
-      what:"Tram, bike and car on the same 6 km — three lines on one position-time graph. Watch it, predict it, then do the maths yourself.",
-      linkLabel:"Start the race →", href:"stem-commute.html" },
-    { id:"booklet", title:"Worded questions booklet", short:"Worded questions booklet",
-      what:"Worded motion questions. For every question: write the units, write the formula, then the answer. Bring it to class marked.",
-      linkLabel:"Open the booklet on Compass", school:"booklet" },
-    { id:"textbook", title:"Textbook exercises 1B/1E/1F — OneNote", short:"Textbook 1B/1E/1F",
-      what:"Linear graph practice from the class textbook. Do the questions your teacher sets, mark them, fix the wrong ones.",
-      linkLabel:"OneNote → Maths Skills Resources", school:"textbook" },
-    { id:"ballreport", title:"Ball-drop report template", short:"Ball-drop template",
-      what:"Drop the ball, time the fall, put the data in Excel. Plot distance against t² to straighten the curve — then g = 2 × the gradient. Write it up in the template.",
-      linkLabel:"Open the template on Compass", school:"ballreport" }
+    { id:"articles", title:"The four opinion articles", short:"The four articles",
+      what:"Four short opinion pieces, each one built on a number. Read each straight through for the argument, then again with a pencil: underline every claim that uses maths and write its number beside it.",
+      linkLabel:"Open the articles on Compass", school:"articles" },
+    { id:"claims", title:"Claim-checking practice", short:"Claim-checking practice",
+      what:"Practise the checking itself before you meet the real articles: find the claim, redo its maths, then write what the data actually shows. Worked examples first, then questions of your own.",
+      linkLabel:"Open the practice →", href:"stem-skills.html#skill=p_claims" }
   ];
   /* ===== end CONTENT =============================================== */
 
@@ -320,12 +315,12 @@
       startWords:"start with the words →"
     },
     "zh-Hans": {
-      back:"← STEM 主页", sub:"第三学期 · 运动、线性图象、数据",
+      back:"← STEM 主页", sub:"第四学期 · 读懂新闻里的数学",
       goingH:"我要去哪里？", howH:"我走得怎样？", nextH:"接下来做什么？",
       railWordsH:"单词", railSkillsH:"技能", railDoH:"任务", railProveH:"证明",
       skillsNote:"下面的等级只是描述路径——这个页面没有自评。✓ 只来自技能引擎上一次完整的练习（3 题全对）。",
       doH2:"任务", doLead:"在检查点之前完成这些任务。🔒 表示需要学校账号——请打开 Compass 或班级 OneNote。",
-      proveH2:"证明", proveLead:"每个单元只保留自己的检查点。这是运动学的完整安排。",
+      proveH2:"证明", proveLead:"每个单元只保留自己的检查点。这是大流行病单元的完整安排。",
       privacy:"匿名 · 进度只保存在这个浏览器 · 工作纸在 Compass 和班级 OneNote（需学校账号）。",
       days: function(n){ return n===0 ? "今天" : n+" 天后"; },
       masteredW:"已掌握", notStarted:"未开始",
@@ -345,12 +340,12 @@
       startWords:"先从单词开始 →"
     },
     "zh-Hant": {
-      back:"← STEM 主頁", sub:"第三學期 · 運動、線性圖形、數據",
+      back:"← STEM 主頁", sub:"第四學期 · 讀懂新聞裡的數學",
       goingH:"我要去哪裡？", howH:"我走得如何？", nextH:"接下來做什麼？",
       railWordsH:"單字", railSkillsH:"技能", railDoH:"任務", railProveH:"證明",
       skillsNote:"下面的等級只是描述路徑——這個頁面沒有自評。✓ 只來自技能引擎上一次完整的練習（3 題全對）。",
       doH2:"任務", doLead:"在檢查點之前完成這些任務。🔒 表示需要學校帳號——請打開 Compass 或班級 OneNote。",
-      proveH2:"證明", proveLead:"每個單元只保留自己的檢查點。這是運動學的完整安排。",
+      proveH2:"證明", proveLead:"每個單元只保留自己的檢查點。這是大流行病單元的完整安排。",
       privacy:"匿名 · 進度只儲存在這個瀏覽器 · 學習單在 Compass 和班級 OneNote（需學校帳號）。",
       days: function(n){ return n===0 ? "今天" : n+" 天後"; },
       masteredW:"已精熟", notStarted:"未開始",
@@ -444,6 +439,8 @@
         "/" + c.total + "</span></a>";
     });
     document.getElementById("railWords").innerHTML = h;
+    /* a unit with no vocab sets (Foundations) simply has no Words rail */
+    document.getElementById("railWordsSec").style.display = UNIT.vocabSets.length ? "" : "none";
 
     h = "";
     UNIT.skillGroups.forEach(function(g){
@@ -506,12 +503,14 @@
     /* HOW AM I GOING — mastery counts + vocab built counts (objective only) */
     var mc = STEM2.Mastery.unitCounts(UNIT.id), v = vocabTotals();
     var mp = mc.total ? Math.round(100 * mc.done / mc.total) : 0;
-    var vp = v.total ? Math.round(100 * v.built / v.total) : 0;
     h = "<div class='line'>" + esc(T("skillsMasteredF")(mc.done, mc.total)) + "</div>" +
-      "<span class='bar'><i style='width:" + mp + "%'></i></span>" +
-      "<div class='line'>" + esc(T("wordsBuiltF")(v.built, v.total)) + "</div>" +
-      "<span class='bar'><i style='width:" + vp + "%'></i></span>" +
-      "<a href='stem-progress.html'>" + esc(T("reportLink")) + "</a>";
+      "<span class='bar'><i style='width:" + mp + "%'></i></span>";
+    if (v.total) {
+      var vp = Math.round(100 * v.built / v.total);
+      h += "<div class='line'>" + esc(T("wordsBuiltF")(v.built, v.total)) + "</div>" +
+        "<span class='bar'><i style='width:" + vp + "%'></i></span>";
+    }
+    h += "<a href='stem-progress.html'>" + esc(T("reportLink")) + "</a>";
     document.getElementById("spHow").innerHTML = h;
 
     /* WHERE TO NEXT — one action link */
@@ -655,7 +654,7 @@
 </script>
 <script>
 (function(){ if (window.STEMMAP && document.getElementById("projectmap"))
-  STEMMAP.render(document.getElementById("projectmap"), "kin"); })();
+  STEMMAP.render(document.getElementById("projectmap"), "pan"); })();
 </script>
 </body>
 </html>

@@ -6,15 +6,18 @@
 <title>Linear Graphs Revision — ELC STEM</title>
 <style>
   :root {
-    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
-    --accent:#0d9488; --accent-soft:#ccfbf1; --radius:14px;
-    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
+    --paper:#fcfcfa; --ink:#212427; --muted:#767b7f; --faint:#9aa0a5;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f;
+    /* aliases so the rest of this page's CSS (unchanged) and the shared
+       notebook panel (stem-vocab.js) keep reading the same v2 colours */
+    --bg:#fcfcfa; --card:#fcfcfa; --line:#e6e7e3; --radius:14px; --shadow:none;
     --good:#2f6a3e; --good-soft:#e5f3e8; --warn:#b45309; --warn-soft:#fef3c7;
     --bad:#a8432f; --bad-soft:#fde8e4;
   }
   @media (prefers-color-scheme:dark) {
-    :root { --bg:#0f1420; --card:#171e2e; --ink:#fff; --muted:#c7d0e2; --line:#34405b;
-            --accent:#2dd4bf; --accent-soft:#134e4a; --shadow:0 1px 2px rgba(0,0,0,.4);
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#767b7f;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a;
+            --bg:#121517; --card:#121517; --line:#2c3134;
             --good:#93cf9b; --good-soft:#1d3323; --warn:#fbbf24; --warn-soft:#3a2f12;
             --bad:#e8836f; --bad-soft:#3b201a; }
   }
@@ -29,11 +32,13 @@
   .top a:hover { text-decoration:underline; }
   select.language-select { font:inherit; border-radius:10px; border:1px solid var(--line);
     background:var(--card); color:var(--ink); padding:6px 10px; min-height:40px; }
-  .hero { border-radius:18px; padding:20px 22px; color:#fff;
-    background:linear-gradient(135deg,#047857,#0d9488 55%,#2563eb); box-shadow:var(--shadow); }
-  .hero .eyebrow { text-transform:uppercase; letter-spacing:.12em; font-size:.72rem; opacity:.9; }
-  .hero h1 { margin:.2em 0 .25em; font-family:Georgia,"Times New Roman",serif; font-size:1.6rem; }
-  .hero p { margin:0; font-size:.95rem; max-width:60ch; }
+  .serif { font-family:Georgia,"Times New Roman",serif; }
+  .masthead { margin:4px 0 22px; }
+  .masthead .eyebrow { margin:0 0 4px; text-transform:uppercase; letter-spacing:.08em;
+    font-size:.7rem; color:var(--accent); font-weight:700; }
+  .masthead h1 { margin:0 0 6px; font-family:Georgia,"Times New Roman",serif; font-size:1.9rem;
+    font-weight:500; letter-spacing:-.01em; }
+  .masthead .sub { margin:0; color:var(--muted); font-size:.88rem; max-width:64ch; }
   h2 { font-size:1.12rem; margin:26px 0 10px; }
   h3 { font-size:1rem; margin:0 0 6px; }
   .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
@@ -195,18 +200,20 @@
 <body>
 <div class="wrap">
   <div class="top">
-    <a href="stem.html" data-i18n="back">← STEM Hub</a>
+    <a href="stem-kinematics.html" data-i18n="back">← Kinematics</a>
+    <span id="tw-slot"></span>
     <select class="language-select" aria-label="Page language">
       <option value="en">English</option>
       <option value="zh-Hans">简体中文（中国）</option>
       <option value="zh-Hant">繁體中文（台灣）</option>
+      <option value="vi">Tiếng Việt</option>
     </select>
   </div>
 
-  <div class="hero">
-    <div class="eyebrow" data-i18n="eyebrow">Revision · the last unit</div>
-    <h1>📈 <span data-i18n="title">Linear Graphs — the quiz words</span></h1>
-    <p data-i18n="heroText">A short lesson in four steps. By the end you will know what every word in the
+  <div class="masthead">
+    <p class="eyebrow" data-i18n="eyebrow">Revision · the last unit</p>
+    <h1 data-i18n="title">Linear Graphs — the quiz words</h1>
+    <p class="sub" data-i18n="heroText">A short lesson in four steps. By the end you will know what every word in the
       Linear Equations Progress Quiz is asking you to do.</p>
   </div>
 
@@ -227,7 +234,7 @@
 
   <!-- ============ 1 · ENGAGE ============ -->
   <section class="phase" id="ph-engage">
-    <h2 data-i18n="engageHead">👀 1 · Engage — which words do you already know?</h2>
+    <h2 data-i18n="engageHead">1 · Engage — which words do you already know?</h2>
     <div class="lockrow"><div class="card"><p class="lockmsg"></p>
       <div class="btnrow"><button class="btn ghost" data-unlock="engage"></button></div></div></div>
     <div class="phasebody">
@@ -250,7 +257,7 @@
 
   <!-- ============ 2 · DEVELOP & DISCOVER ============ -->
   <section class="phase" id="ph-develop">
-    <h2 data-i18n="developHead">🔍 2 · Develop and Discover — the word parts</h2>
+    <h2 data-i18n="developHead">2 · Develop and Discover — the word parts</h2>
     <div class="lockrow"><div class="card"><p class="lockmsg"></p>
       <div class="btnrow"><button class="btn ghost" data-unlock="develop"></button></div></div></div>
     <div class="phasebody">
@@ -278,7 +285,7 @@
 
   <!-- ============ 3 · APPLY ============ -->
   <section class="phase" id="ph-apply">
-    <h2 data-i18n="applyHead">✍️ 3 · Apply — use the words</h2>
+    <h2 data-i18n="applyHead">3 · Apply — use the words</h2>
     <div class="lockrow"><div class="card"><p class="lockmsg"></p>
       <div class="btnrow"><button class="btn ghost" data-unlock="apply"></button></div></div></div>
     <div class="phasebody">
@@ -291,7 +298,7 @@
 
   <!-- ============ 4 · REVIEW & REFLECT ============ -->
   <section class="phase" id="ph-review">
-    <h2 data-i18n="reviewHead">🔁 4 · Review and Reflect</h2>
+    <h2 data-i18n="reviewHead">4 · Review and Reflect</h2>
     <div class="lockrow"><div class="card"><p class="lockmsg"></p>
       <div class="btnrow"><button class="btn ghost" data-unlock="review"></button></div></div></div>
     <div class="phasebody">
@@ -328,6 +335,8 @@
 <script src="stem-vocab-data.js?v=20260821-1"></script>
 <script src="stem-shared.js?v=20260821-1"></script>
 <script src="stem-vocab.js?v=20260821-1"></script>
+<script src="stem-gloss.js?v=20260821-3"></script>
+<script src="stem-translate.js?v=20260821-3"></script>
 <script>
 (function(){
   "use strict";
@@ -516,19 +525,19 @@
       noParts:function(list){ return "No Latin parts to cut: " + list + ". Learn these two as whole words."; }
     },
     "zh-Hans": {
-      back:"← STEM 主页", eyebrow:"复习 · 上一个单元", title:"直线图像——测验词汇",
+      back:"← 运动学", eyebrow:"复习 · 上一个单元", title:"直线图像——测验词汇",
       heroText:"一节四个步骤的短课。学完后，你会明白线性方程进度测验里每个词让你做什么。",
       liTag:"学习目标", liText:"我们要学会使用直线图像的语言，让测验题目变得看得懂。",
       scTag:"成功标准",
-      engageHead:"👀 1 · 导入——哪些词你已经会了？",
+      engageHead:"1 · 导入——哪些词你已经会了？",
       engageHelp:"哪些词你已经认识？哪些词根看起来眼熟？先点开至少三个词再继续。",
       engageBtn:"我看过这些词了 →",
-      developHead:"🔍 2 · 发展与探索——词根词缀",
+      developHead:"2 · 发展与探索——词根词缀",
       developHelp:"读下面的词部件。有相同部件的词属于同一个家族。然后回答下面三个问题。",
       langLabel:"你的第一语言：", mqHead:"快速检查——三个问题",
-      applyHead:"✍️ 3 · 应用——把词用起来",
+      applyHead:"3 · 应用——把词用起来",
       applyHelp:"十个小任务：用词根拼出单词、把词和意思配对、在真实测验题目里找出数学词。",
-      reviewHead:"🔁 4 · 复习与反思",
+      reviewHead:"4 · 复习与反思",
       reviewHelp:"勾选你现在做得到的。要诚实——这是给你自己看的。",
       readyHead:"准备好补考了吗？",
       privacy:"🔒 匿名。你在这节课的进度和词汇笔记本只保存在这个浏览器中——没有账号，没有追踪。",
@@ -572,19 +581,19 @@
       noParts:function(list){ return "没有拉丁部件可以拆：" + list + "。这两个词要整个记下来。"; }
     },
     "zh-Hant": {
-      back:"← STEM 主頁", eyebrow:"複習 · 上一個單元", title:"直線圖形——小考詞彙",
+      back:"← 運動學", eyebrow:"複習 · 上一個單元", title:"直線圖形——小考詞彙",
       heroText:"一節四個步驟的短課。上完之後，你會明白一次方程進度小考裡每個詞要你做什麼。",
       liTag:"學習目標", liText:"我們要學會使用直線圖形的語言，讓小考題目變得看得懂。",
       scTag:"成功標準",
-      engageHead:"👀 1 · 引起動機——哪些字你已經會了？",
+      engageHead:"1 · 引起動機——哪些字你已經會了？",
       engageHelp:"哪些字你已經認得？哪些字根看起來眼熟？先點開至少三個字再繼續。",
       engageBtn:"我看過這些字了 →",
-      developHead:"🔍 2 · 發展與探索——字首、字根、字尾",
+      developHead:"2 · 發展與探索——字首、字根、字尾",
       developHelp:"讀下面的字部件。有相同部件的字屬於同一個家族。然後回答下面三個問題。",
       langLabel:"你的第一語言：", mqHead:"快速檢查——三個問題",
-      applyHead:"✍️ 3 · 應用——把字用出來",
+      applyHead:"3 · 應用——把字用出來",
       applyHelp:"十個小任務：用字根拼出單字、把字和意思配對，並在真實的小考題目裡找出數學用字。",
-      reviewHead:"🔁 4 · 複習與反思",
+      reviewHead:"4 · 複習與反思",
       reviewHelp:"勾選你現在做得到的。要誠實——這是給你自己看的。",
       readyHead:"準備好重考了嗎？",
       privacy:"🔒 匿名。你在這節課的進度和詞彙筆記本只儲存在這個瀏覽器中——沒有帳號、沒有追蹤。",

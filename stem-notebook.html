@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My notebook — ELC STEM</title>
+<!-- ================================================================
+     THE NOTEBOOK (STEM hub v2) — stem-notebook.html
+     Two tabs over the same store:
+       My words      every word marked built or used, grouped by
+                     unit · set, newest units last. Serif headword,
+                     meaning, and the home-language gloss.
+       My morphemes  the pieces those built words are made of: a
+                     piece appears the first time a word containing
+                     it is built, and lists every owned word that
+                     uses it, with the piece in bold.
+     NOTHING is written here: every word, meaning, piece and
+     translation comes from stem-vocab-data.js, and ownership comes
+     from STEM2.Store (elc_stem_vocab) — the same marks the vocab
+     hub writes, so the hub, the notebook and the report agree.
+     Nothing on this page is self-rated and nothing can be ticked
+     here: the only way in is to build the word.
+     ================================================================ -->
+<style>
+  :root {
+    --paper:#fcfcfa; --ink:#212427; --muted:#767b7f; --faint:#9aa0a5;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f;
+    /* morpheme types — same three colours as the vocab hub */
+    --pre:#2c5f8a; --pre-soft:#eef4fa;
+    --root:#8a5a1e; --root-soft:#f9f1e5;
+    --suf:#3f7a4a; --suf-soft:#edf5ef;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#767b7f;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a;
+            --pre:#9cc4e2; --pre-soft:#1a2732; --root:#dcab6d; --root-soft:#2b2318;
+            --suf:#93cf9b; --suf-soft:#1c2a20; }
+  }
+  * { box-sizing:border-box; }
+  [hidden] { display:none !important; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  .top a:hover { text-decoration:underline; }
+  select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
+    background:var(--paper); color:var(--ink); padding:5px 8px; }
+  .masthead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:2rem; font-weight:500; letter-spacing:-.01em; }
+  .sub { color:var(--muted); font-size:.8rem; }
+  .lead { margin:14px 0 0; font-size:.86rem; color:var(--muted); max-width:62ch; }
+  .note { margin-top:30px; font-size:.72rem; color:var(--faint); }
+  footer { margin-top:8px; color:var(--faint); font-size:.75rem; }
+  a.plain { color:var(--accent); text-decoration:none; font-weight:600; }
+  a.plain:hover { text-decoration:underline; }
+
+  /* ---------- tabs ---------- */
+  .tabs { display:flex; gap:24px; margin:22px 0 0; border-top:1px solid var(--ink);
+    border-bottom:1px solid var(--hair); overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .tabbtn { flex:0 0 auto; border:0; background:none; font:inherit; font-size:.88rem; color:var(--muted);
+    cursor:pointer; padding:12px 0; min-height:44px; border-bottom:2px solid transparent; margin-bottom:-1px; }
+  .tabbtn:hover { color:var(--accent); }
+  .tabbtn[aria-pressed="true"] { color:var(--ink); font-weight:600; border-bottom-color:var(--accent); }
+
+  /* ---------- controls ---------- */
+  .ctl { display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center;
+    padding:14px 0; border-bottom:1px solid var(--hair); }
+  .ctl label { font-size:.78rem; color:var(--muted); display:flex; align-items:center; gap:8px; min-width:0; }
+  .ctl select, .ctl input { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
+    background:var(--paper); color:var(--ink); padding:9px 10px; min-height:44px; }
+  .ctl select { max-width:210px; }
+  .ctl input { width:min(230px,60vw); }
+  .counts { margin:12px 0 0; font-size:.78rem; color:var(--muted); }
+  .counts b { color:var(--accent); font-weight:600; }
+
+  /* ---------- empty / no-match ---------- */
+  .empty { margin:26px 0 0; max-width:46ch; }
+  .empty p { margin:0 0 8px; font-size:.95rem; }
+  .empty .small { font-size:.82rem; color:var(--muted); }
+
+  /* ---------- my words ---------- */
+  .ublk { border-top:1px solid var(--ink); margin-top:28px; padding-top:12px; }
+  .ublk:first-child { margin-top:20px; }
+  .ublk > h2 { margin:0 0 2px; font-family:Georgia,"Times New Roman",serif; font-size:1.25rem; font-weight:500; }
+  .seth { margin:16px 0 0; font-size:.68rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--muted); }
+  .seth .rev { color:var(--faint); font-weight:400; letter-spacing:.04em; }
+  .nw { padding:11px 0; border-bottom:1px solid var(--hair); max-width:64ch; }
+  .nwhead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+  .nw .hw { font-family:Georgia,"Times New Roman",serif; font-size:1.18rem; color:inherit;
+    text-decoration:none; }
+  .nw a.hw:hover { color:var(--accent); text-decoration:underline; }
+  .nw .marks { font-size:.7rem; color:var(--accent); white-space:nowrap; }
+  .nw p { margin:3px 0 0; }
+  .nw .mean { font-size:.86rem; }
+  .nw .tr { font-size:.9rem; color:var(--muted); }
+
+  /* ---------- my morphemes ---------- */
+  .chip { display:inline-flex; align-items:center; border-radius:8px; padding:6px 11px;
+    font-size:.95rem; font-weight:600; background:var(--hair); color:var(--ink); white-space:nowrap; }
+  .chip.prefix { background:var(--pre-soft); color:var(--pre); }
+  .chip.root { background:var(--root-soft); color:var(--root); }
+  .chip.suffix { background:var(--suf-soft); color:var(--suf); }
+  /* the chip column is held at one width so every gloss starts on the same line */
+  .mrow { display:grid; grid-template-columns:minmax(84px,auto) minmax(0,1fr); gap:4px 14px;
+    padding:13px 0; border-bottom:1px solid var(--hair); align-items:start; }
+  .mrow > .chip { justify-self:start; }
+  .mrow .mmean { margin:2px 0 0; font-size:.9rem; }
+  .mrow .mtr { margin:2px 0 0; font-size:.88rem; color:var(--muted); }
+  .mrow .mwords { margin:5px 0 0; font-size:.84rem; color:var(--muted); }
+  .mrow .mwords a { color:inherit; text-decoration:none; border-bottom:1px solid var(--hair); }
+  .mrow .mwords a:hover { color:var(--accent); border-bottom-color:var(--accent); }
+  .mrow .mwords b { font-weight:700; color:var(--ink); }
+  .mhead { margin:24px 0 0; padding-top:12px; border-top:1px solid var(--ink);
+    font-size:.68rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
+  .mhead:first-child { margin-top:20px; }
+
+  @media (max-width:520px) {   /* on a phone each control gets its own full row */
+    .ctl label { flex:1 1 100%; }
+    .ctl select, .ctl input { flex:1 1 auto; width:auto; max-width:none; min-width:0; }
+  }
+  @media (max-width:400px) {
+    .mrow { grid-template-columns:minmax(0,1fr); }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="stem.html" data-i18n="back">← STEM</a>
+    <span id="tw-slot"></span>
+    <select class="language-select" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+      <option value="vi">Tiếng Việt</option>
+    </select>
+  </div>
+
+  <div class="masthead">
+    <h1 data-i18n="title">My notebook</h1>
+    <div class="sub" data-i18n="sub">ELC STEM · the words you own</div>
+  </div>
+  <p class="lead" data-i18n="lead">Every word you have built, and every piece those words are made of.
+    A word arrives here when you build it in the word sets — nothing can be ticked on this page.</p>
+
+  <nav class="tabs" id="tabs" aria-label="Notebook">
+    <button class="tabbtn" type="button" data-tab="words" aria-pressed="true" data-i18n="tabWords">My words</button>
+    <button class="tabbtn" type="button" data-tab="morphemes" aria-pressed="false" data-i18n="tabPieces">My morphemes</button>
+  </nav>
+
+  <div class="ctl" id="ctl"></div>
+  <p class="counts" id="counts"></p>
+
+  <div id="paneWords"></div>
+  <div id="paneMorph" hidden></div>
+
+  <p class="note" data-i18n="privacy">Anonymous · your words stay in this browser only · nothing is sent anywhere.</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+</div>
+
+<script src="stem-vocab-data.js?v=20260821-2"></script>
+<script src="stem-shared.js?v=20260821-2"></script>
+<script src="stem-gloss.js?v=20260821-3"></script>
+<script src="stem-translate.js?v=20260821-3"></script>
+<script>
+(function(){
+  "use strict";
+  var S2 = window.STEM2, D = window.STEM_VOCAB_DATA;
+  var HOME_KEY = "elc_stem_home_lang";
+
+  /* ---------------- i18n (chrome only; the words stay English) ---------------- */
+  var COPY = {
+    en: {
+      homeLangL:"Home language", homeLangNone:"— none —",
+      searchL:"Search", searchPh:"word, meaning or piece",
+      countF: function(w,p){ return "<b>" + w + "</b> words · <b>" + p + "</b> pieces"; },
+      matchWF: function(n,t){ return n + " of " + t + " words match"; },
+      matchPF: function(n,t){ return n + " of " + t + " pieces match"; },
+      emptyWords:"Nothing here yet — words arrive when you build them.",
+      emptyPieces:"No pieces yet — a piece arrives when you build its first word.",
+      emptyGo:"Open the word sets →",
+      noMatchF: function(q){ return "Nothing matches “" + q + "”."; },
+      mBuilt:"✓ built", mUsed:"✓ used", revision:"revision",
+      typeL: { prefix:"prefix", root:"root", suffix:"suffix" },
+      dataMissing:"The word list did not load. Refresh the page.",
+      buildMore:"Build more words →"
+    },
+    "zh-Hans": {
+      back:"← STEM 主页", title:"我的笔记本", sub:"ELC STEM · 你掌握的单词",
+      lead:"你拼出过的每个单词，以及这些单词的每个词素。只有在单词组里拼出单词，它才会出现在这里——这个页面不能打勾。",
+      privacy:"匿名 · 你的单词只保存在这个浏览器 · 不会发送到任何地方。",
+      tabWords:"我的单词", tabPieces:"我的词素",
+      homeLangL:"母语", homeLangNone:"— 不显示 —",
+      searchL:"搜索", searchPh:"单词、意思或词素",
+      countF: function(w,p){ return "<b>" + w + "</b> 个单词 · <b>" + p + "</b> 个词素"; },
+      matchWF: function(n,t){ return "匹配 " + n + " / " + t + " 个单词"; },
+      matchPF: function(n,t){ return "匹配 " + n + " / " + t + " 个词素"; },
+      emptyWords:"这里还是空的——拼出单词，它们就会到这里来。",
+      emptyPieces:"还没有词素——拼出第一个含有它的单词，它就会出现。",
+      emptyGo:"打开单词组 →",
+      noMatchF: function(q){ return "没有匹配“" + q + "”的内容。"; },
+      mBuilt:"✓ 已拼成", mUsed:"✓ 已使用", revision:"复习",
+      typeL: { prefix:"前缀", root:"词根", suffix:"后缀" },
+      dataMissing:"单词数据没有加载成功，请刷新页面。",
+      buildMore:"继续拼更多单词 →"
+    },
+    "zh-Hant": {
+      back:"← STEM 主頁", title:"我的筆記本", sub:"ELC STEM · 你精熟的單字",
+      lead:"你拼出過的每個單字，以及這些單字的每個詞素。只有在單字組裡拼出單字，它才會出現在這裡——這個頁面不能打勾。",
+      privacy:"匿名 · 你的單字只儲存在這個瀏覽器 · 不會傳送到任何地方。",
+      tabWords:"我的單字", tabPieces:"我的詞素",
+      homeLangL:"母語", homeLangNone:"— 不顯示 —",
+      searchL:"搜尋", searchPh:"單字、意思或詞素",
+      countF: function(w,p){ return "<b>" + w + "</b> 個單字 · <b>" + p + "</b> 個詞素"; },
+      matchWF: function(n,t){ return "符合 " + n + " / " + t + " 個單字"; },
+      matchPF: function(n,t){ return "符合 " + n + " / " + t + " 個詞素"; },
+      emptyWords:"這裡還是空的——拼出單字，它們就會來到這裡。",
+      emptyPieces:"還沒有詞素——拼出第一個含有它的單字，它就會出現。",
+      emptyGo:"打開單字組 →",
+      noMatchF: function(q){ return "沒有符合「" + q + "」的內容。"; },
+      mBuilt:"✓ 已拼成", mUsed:"✓ 已使用", revision:"複習",
+      typeL: { prefix:"前綴", root:"字根", suffix:"字尾" },
+      dataMissing:"單字資料沒有載入成功，請重新整理頁面。",
+      buildMore:"繼續拼更多單字 →"
+    }
+  };
+  var sel = document.querySelector(".language-select");
+  var lang = "en";
+  try { lang = localStorage.getItem("elc_page_language") || "en"; } catch(e){}
+  if (!COPY[lang]) lang = "en";
+  sel.value = lang;
+  function T(k){ var v = COPY[lang][k]; return v !== undefined ? v : COPY.en[k]; }
+  function setStatic(){
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var k = el.getAttribute("data-i18n"), v = COPY[lang][k];
+      if (!el._en) el._en = el.textContent;
+      el.textContent = (typeof v === "string") ? v : el._en;
+    });
+    document.documentElement.lang = lang;
+  }
+
+  var elCtl = document.getElementById("ctl"),
+      elCounts = document.getElementById("counts"),
+      elWords = document.getElementById("paneWords"),
+      elMorph = document.getElementById("paneMorph");
+
+  if (!S2 || !D) {
+    setStatic();
+    elCounts.textContent = T("dataMissing");
+    return;
+  }
+  var Store = S2.Store, esc = S2.esc;
+
+  /* ---------------- indexes over the (unchanged) data file ---------------- */
+  function key(w){ return String(w).toLowerCase(); }
+  function isRev(set){ return set.id === "rev" || /\(revision\)/i.test(set.title); }
+  function setTitle(set){ return set.title.replace(/\s*\(revision\)\s*$/i, ""); }
+
+  var SET_BY_ID = {};
+  D.sets.forEach(function(s){ SET_BY_ID[s.id] = s; });
+  var UNITS = S2.UNITS.filter(function(u){ return u.vocabSets && u.vocabSets.length; });
+  /* a word can appear in two sets (revision sets re-use words) — it lives in
+     the first set it appears in, so the notebook never lists it twice */
+  var HOME = {};
+  UNITS.forEach(function(u){ u.vocabSets.forEach(function(sid){
+    var set = SET_BY_ID[sid]; if (!set) return;
+    set.words.forEach(function(w){ if (!HOME[key(w.w)]) HOME[key(w.w)] = sid; });
+  }); });
+
+  /* ---------------- state ---------------- */
+  var tab = "words", query = "";
+
+  function homeLang(){ try { return localStorage.getItem(HOME_KEY) || ""; } catch(e){ return ""; } }
+  function setHomeLang(v){ try { localStorage.setItem(HOME_KEY, v); } catch(e){} }
+  function fmtTs(ts){
+    if (typeof ts !== "number" || ts < 1000000000000) return "";
+    return new Date(ts).toLocaleDateString(undefined, { day:"numeric", month:"short" });
+  }
+
+  /* ---------------- what the student owns ---------------- */
+  /* owned = built (pieces put together) or used (checked in the Use questions) */
+  function ownedList(){
+    var v = Store.vocab(), out = [];
+    UNITS.forEach(function(u){
+      u.vocabSets.forEach(function(sid){
+        var set = SET_BY_ID[sid]; if (!set) return;
+        set.words.forEach(function(w){
+          if (HOME[key(w.w)] !== sid) return;
+          var st = v[key(w.w)];
+          if (!st || !(st.built || st.checked)) return;
+          out.push({ unit:u, set:set, w:w, st:st });
+        });
+      });
+    });
+    return out;
+  }
+
+  /* pieces arrive only once their first word is BUILT; every owned word that
+     contains a piece is then listed under it */
+  var TYPE_ORDER = { prefix:0, root:1, suffix:2 };
+  function pieceList(owned){
+    var map = {}, order = [];
+    owned.forEach(function(it){
+      if (!it.st.built) return;
+      (it.w.parts || []).forEach(function(p){
+        var k = key(p.surface) + "|" + p.type;
+        if (map[k]) return;
+        map[k] = { k:k, surface:p.surface, type:p.type, meaning:p.meaning, tr:p.tr || {}, words:[] };
+        order.push(map[k]);
+      });
+    });
+    owned.forEach(function(it){
+      var added = {};
+      (it.w.parts || []).forEach(function(p){
+        var k = key(p.surface) + "|" + p.type;
+        if (!map[k] || added[k]) return;
+        added[k] = 1;
+        map[k].words.push(it.w);
+      });
+    });
+    order.sort(function(a,b){
+      var ta = TYPE_ORDER[a.type] === undefined ? 3 : TYPE_ORDER[a.type];
+      var tb = TYPE_ORDER[b.type] === undefined ? 3 : TYPE_ORDER[b.type];
+      if (ta !== tb) return ta - tb;
+      return a.surface.toLowerCase() < b.surface.toLowerCase() ? -1 :
+             a.surface.toLowerCase() > b.surface.toLowerCase() ? 1 : 0;
+    });
+    return order;
+  }
+
+  /* ---------------- matching ---------------- */
+  function hay(parts){ return parts.filter(Boolean).join(" · ").toLowerCase(); }
+  function wordMatches(it, hl){
+    if (!query) return true;
+    var bits = [it.w.w, it.w.meaning, it.set.title];
+    if (hl && it.w.tr && it.w.tr[hl]) bits.push(it.w.tr[hl]);
+    (it.w.parts || []).forEach(function(p){ bits.push(p.surface); bits.push(p.meaning); });
+    return hay(bits).indexOf(query) >= 0;
+  }
+  function pieceMatches(p, hl){
+    if (!query) return true;
+    var bits = [p.surface, p.meaning, T("typeL")[p.type] || p.type];
+    if (hl && p.tr && p.tr[hl]) bits.push(p.tr[hl]);
+    p.words.forEach(function(w){ bits.push(w.w); });
+    return hay(bits).indexOf(query) >= 0;
+  }
+
+  /* ---------------- controls (built once, kept across repaints) ---------------- */
+  function langOptions(){
+    var hl = homeLang();
+    var h = "<option value=''>" + esc(T("homeLangNone")) + "</option>";
+    D.langs.forEach(function(l){
+      h += "<option value='" + esc(l.id) + "'" + (l.id === hl ? " selected" : "") + ">" +
+           esc(l.name) + "</option>";
+    });
+    return h;
+  }
+  function paintCtl(){
+    elCtl.innerHTML =
+      "<label>" + esc(T("homeLangL")) + "<select id='hlSel'>" + langOptions() + "</select></label>" +
+      "<label>" + esc(T("searchL")) +
+        "<input id='q' type='search' autocomplete='off' placeholder='" + esc(T("searchPh")) + "'" +
+        " value='" + esc(query) + "'></label>";
+    document.getElementById("hlSel").addEventListener("change", function(){
+      setHomeLang(this.value); paintPanes();
+    });
+    document.getElementById("q").addEventListener("input", function(){
+      query = this.value.trim().toLowerCase(); paintPanes();
+    });
+  }
+
+  /* ---------------- my words ---------------- */
+  function marksFor(st){
+    var bits = [];
+    if (st.built) {
+      var d = fmtTs(st.built);
+      bits.push(esc(T("mBuilt")) + (d ? " · " + esc(d) : ""));
+    }
+    if (st.checked) bits.push(esc(T("mUsed")));
+    return bits.join(" · ");
+  }
+  function wordHTML(it, hl){
+    var w = it.w;
+    var h = "<article class='nw'><div class='nwhead'>" +
+      "<a class='hw' href='stem-vocab-hub.html#word=" + encodeURIComponent(w.w) + "'>" + esc(w.w) + "</a>" +
+      "<span class='marks'>" + marksFor(it.st) + "</span></div>" +
+      "<p class='mean'>" + esc(w.meaning) + "</p>";
+    if (hl && w.tr && w.tr[hl]) {
+      h += "<p class='tr' lang='" + esc(hl) + "' dir='auto'>" + esc(w.tr[hl]) + "</p>";
+    }
+    return h + "</article>";
+  }
+  function paintWords(owned, hl){
+    if (!owned.length) {
+      elWords.innerHTML = "<div class='empty'><p>" + esc(T("emptyWords")) + "</p>" +
+        "<p class='small'><a class='plain' href='stem-vocab-hub.html'>" + esc(T("emptyGo")) + "</a></p></div>";
+      return 0;
+    }
+    var shown = 0, h = "";
+    UNITS.forEach(function(u){
+      var uh = "";
+      u.vocabSets.forEach(function(sid){
+        var set = SET_BY_ID[sid]; if (!set) return;
+        var rows = "";
+        owned.forEach(function(it){
+          if (it.set.id !== sid || !wordMatches(it, hl)) return;
+          shown++; rows += wordHTML(it, hl);
+        });
+        if (rows) {
+          uh += "<h3 class='seth'>" + esc(setTitle(set)) +
+                (isRev(set) ? " <span class='rev'>· " + esc(T("revision")) + "</span>" : "") + "</h3>" + rows;
+        }
+      });
+      if (uh) h += "<section class='ublk'><h2>" + esc(u.name) + "</h2>" + uh + "</section>";
+    });
+    if (!shown) {
+      h = "<div class='empty'><p>" + esc(T("noMatchF")(query)) + "</p></div>";
+    } else {
+      h += "<p class='counts'><a class='plain' href='stem-vocab-hub.html'>" + esc(T("buildMore")) + "</a></p>";
+    }
+    elWords.innerHTML = h;
+    return shown;
+  }
+
+  /* ---------------- my morphemes ---------------- */
+  /* bold the piece inside the word. The pieces are walked in order so that a
+     piece that also appears earlier in the spelling (the "a" of dat|a) is
+     still marked in its own place */
+  function boldPart(w, p){
+    var word = w.w, lw = key(word), ls = key(p.surface);
+    var parts = w.parts || [], cur = 0, at = -1;
+    for (var i = 0; i < parts.length; i++) {
+      var s = key(parts[i].surface);
+      var j = lw.indexOf(s, cur);
+      if (j < 0) j = lw.indexOf(s);
+      if (j < 0) continue;
+      if (at < 0 && s === ls && parts[i].type === p.type) at = j;
+      cur = j + s.length;
+    }
+    if (at < 0) at = lw.indexOf(ls);
+    if (at < 0 || !ls) return esc(word);
+    return esc(word.slice(0, at)) + "<b>" + esc(word.slice(at, at + p.surface.length)) + "</b>" +
+           esc(word.slice(at + p.surface.length));
+  }
+  function pieceHTML(p, hl){
+    var cls = TYPE_ORDER[p.type] === undefined ? "" : " " + p.type;
+    var h = "<div class='mrow'><span class='chip" + cls + "'>" + esc(p.surface) + "</span><div>" +
+      "<p class='mmean'>" + esc(p.meaning) + "</p>";
+    if (hl && p.tr && p.tr[hl]) {
+      h += "<p class='mtr' lang='" + esc(hl) + "' dir='auto'>" + esc(p.tr[hl]) + "</p>";
+    }
+    var links = p.words.map(function(w){
+      return "<a href='stem-vocab-hub.html#word=" + encodeURIComponent(w.w) + "'>" +
+             boldPart(w, p) + "</a>";
+    });
+    h += "<p class='mwords'>" + links.join(", ") + "</p>";
+    return h + "</div></div>";
+  }
+  function paintMorph(pieces, hl){
+    if (!pieces.length) {
+      elMorph.innerHTML = "<div class='empty'><p>" + esc(T("emptyPieces")) + "</p>" +
+        "<p class='small'><a class='plain' href='stem-vocab-hub.html'>" + esc(T("emptyGo")) + "</a></p></div>";
+      return 0;
+    }
+    var shown = 0, h = "", lastType = null;
+    pieces.forEach(function(p){
+      if (!pieceMatches(p, hl)) return;
+      shown++;
+      if (p.type !== lastType) {
+        lastType = p.type;
+        h += "<p class='mhead'>" + esc(T("typeL")[p.type] || p.type) + "</p>";
+      }
+      h += pieceHTML(p, hl);
+    });
+    if (!shown) h = "<div class='empty'><p>" + esc(T("noMatchF")(query)) + "</p></div>";
+    elMorph.innerHTML = h;
+    return shown;
+  }
+
+  /* ---------------- paint ---------------- */
+  function paintPanes(){
+    var hl = homeLang();
+    var owned = ownedList();
+    var pieces = pieceList(owned);
+    var nW = paintWords(owned, hl);
+    var nP = paintMorph(pieces, hl);
+
+    elWords.hidden = tab !== "words";
+    elMorph.hidden = tab === "words";
+
+    if (!query) {
+      elCounts.innerHTML = T("countF")(owned.length, pieces.length);
+    } else if (tab === "words") {
+      elCounts.textContent = T("matchWF")(nW, owned.length);
+    } else {
+      elCounts.textContent = T("matchPF")(nP, pieces.length);
+    }
+    document.querySelectorAll(".tabbtn").forEach(function(b){
+      b.setAttribute("aria-pressed", String(b.getAttribute("data-tab") === tab));
+    });
+  }
+
+  /* ---------------- tabs + routing (#words · #morphemes) ---------------- */
+  document.getElementById("tabs").addEventListener("click", function(ev){
+    var b = ev.target.closest(".tabbtn"); if (!b) return;
+    location.hash = b.getAttribute("data-tab") === "morphemes" ? "#morphemes" : "#words";
+  });
+  function route(){
+    tab = /morph/i.test(location.hash) ? "morphemes" : "words";
+    paintPanes();
+  }
+  window.addEventListener("hashchange", route);
+
+  sel.addEventListener("change", function(){
+    lang = sel.value;
+    try { localStorage.setItem("elc_page_language", lang); } catch(e){}
+    setStatic(); paintCtl(); paintPanes();
+  });
+
+  setStatic(); paintCtl(); route();
+})();
+</script>
+</body>
+</html>

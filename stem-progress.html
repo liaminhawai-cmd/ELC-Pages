@@ -3,383 +3,688 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>My STEM Progress — ELC</title>
+<title>My report — ELC STEM</title>
+<!-- ================================================================
+     THE REPORT (STEM hub v2) — stem-progress.html
+     Scoped to STEM2.currentUnit(): one unit, its own checkpoints,
+     its own skills and words. Checkpoints live inside units, so no
+     other unit's dates appear here.
+       1 the three visible-learning columns
+         WHERE AM I GOING? next checkpoint + the rest of this unit's arc
+         HOW AM I GOING?   earned counts, the latest proof, revision pace
+         WHERE TO NEXT?    the three skills the next checkpoint needs
+       2 the ledger — one row per skill: proof · when · needed by
+       3 the words — one bar per vocab set
+       4 Foundations — the always-open fluency ledger, compact
+     Every number is read from STEM2 (mastery runs, evidence lines,
+     vocab marks). NOTHING on this page is self-rated and nothing
+     here can be ticked: a ✓ only ever comes from a full practise
+     run on the skills engine.
+     ================================================================ -->
 <style>
   :root {
-    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
-    --accent:#0d9488; --accent-soft:#ccfbf1; --radius:14px;
-    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
-    --good:#2f6a3e; --good-soft:#e5f3e8; --warn:#b45309; --warn-soft:#fef3c7;
-    --bad:#a8432f; --bad-soft:#fde8e4;
+    --paper:#fcfcfa; --ink:#212427; --muted:#767b7f; --faint:#9aa0a5;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f;
   }
   @media (prefers-color-scheme:dark) {
-    :root { --bg:#0f1420; --card:#171e2e; --ink:#fff; --muted:#c7d0e2; --line:#34405b;
-            --accent:#2dd4bf; --accent-soft:#134e4a; --shadow:0 1px 2px rgba(0,0,0,.4);
-            --good:#93cf9b; --good-soft:#1d3323; --warn:#fbbf24; --warn-soft:#3a2f12;
-            --bad:#e8836f; --bad-soft:#3b201a; }
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#767b7f;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; }
   }
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink);
-         font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-  .wrap { max-width:1080px; margin:0 auto; padding:16px 16px 60px; }
-  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
-  .top a { color:var(--accent); text-decoration:none; font-weight:600; }
-  select.language-select { font:inherit; border-radius:10px; border:1px solid var(--line);
-    background:var(--card); color:var(--ink); padding:6px 10px; }
-  .hero { border-radius:18px; padding:20px 22px; color:#fff;
-    background:linear-gradient(135deg,#047857,#0d9488 55%,#2563eb); box-shadow:var(--shadow); }
-  .hero h1 { margin:0 0 .2em; font-family:Georgia,"Times New Roman",serif; font-size:1.6rem; }
-  .hero p { margin:0; font-size:.95rem; }
-  .chips { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0; }
-  .chipbox { background:var(--card); border:1px solid var(--line); border-radius:12px;
-    padding:10px 14px; box-shadow:var(--shadow); min-width:118px; }
-  .chipbox b { display:block; font-size:1.35rem; }
-  .chipbox span { font-size:.78rem; color:var(--muted); }
-  .chipbox.g b { color:var(--good); } .chipbox.w b { color:var(--warn); }
-  .chipbox.b b { color:var(--bad); }
-  h2 { font-size:1.12rem; margin:24px 0 8px; }
-  /* timeline */
-  .sched { display:flex; gap:10px; overflow-x:auto; padding:4px 2px 10px; }
-  .cp { min-width:158px; background:var(--card); border:1px solid var(--line); border-radius:12px;
-        padding:9px 12px; box-shadow:var(--shadow); position:relative; }
-  .cp .date { font-size:.75rem; color:var(--muted); }
-  .cp .name { font-weight:700; font-size:.85rem; margin:2px 0; }
-  .cp .when { font-size:.78rem; font-weight:600; }
-  .cp.done { opacity:.65; } .cp.done .when { color:var(--good); }
-  .cp.soon .when { color:var(--warn); } .cp.past .when { color:var(--bad); }
-  .cp.today { border-color:var(--accent); border-width:2px; }
-  .cp.today .name { color:var(--accent); }
-  /* grid */
-  .tblwrap { overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius);
-    background:var(--card); box-shadow:var(--shadow); margin-bottom:18px; }
-  table { border-collapse:collapse; width:100%; min-width:760px; font-size:.86rem; }
-  th, td { border-bottom:1px solid var(--line); padding:9px 10px; text-align:left; vertical-align:top; }
-  th { font-size:.75rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted);
-    position:sticky; top:0; background:var(--card); }
-  td.skill { min-width:180px; font-weight:600; }
-  td.skill .cont { display:block; font-weight:400; font-size:.72rem; color:var(--muted); }
-  td.band { min-width:170px; cursor:pointer; color:var(--muted); position:relative; }
-  td.band:hover { background:var(--accent-soft); color:var(--ink); }
-  td.band.on { background:var(--good-soft); color:var(--ink); font-weight:600;
-    box-shadow:inset 0 0 0 2px var(--good); border-radius:8px; }
-  td.due { white-space:nowrap; font-weight:600; font-size:.8rem; }
-  .due .pill { display:inline-block; border-radius:999px; padding:2px 10px; }
-  .due .g { background:var(--good-soft); color:var(--good); }
-  .due .w { background:var(--warn-soft); color:var(--warn); }
-  .due .b { background:var(--bad-soft); color:var(--bad); }
-  .due .u { background:var(--bg); color:var(--muted); }
-  .ev { color:var(--accent); font-weight:700; cursor:help; }
-  .legend { font-size:.8rem; color:var(--muted); margin:6px 0 14px; }
-  /* next steps */
-  .next { display:flex; flex-direction:column; gap:8px; }
-  .nextrow { background:var(--card); border:1px solid var(--line); border-left:5px solid var(--warn);
-    border-radius:10px; padding:10px 14px; box-shadow:var(--shadow); font-size:.92rem; }
-  .nextrow.behind { border-left-color:var(--bad); }
-  .nextrow a { color:var(--accent); font-weight:600; }
-  /* vocab summary */
-  .vrow { display:flex; justify-content:space-between; gap:10px; padding:8px 2px;
-    border-bottom:1px solid var(--line); font-size:.92rem; align-items:center; }
-  .bar { flex:1; max-width:220px; height:10px; border-radius:999px; background:var(--bg);
-    border:1px solid var(--line); overflow:hidden; }
-  .bar i { display:block; height:100%; background:var(--accent); }
-  .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
-  button.act { font:inherit; font-weight:600; border-radius:999px; padding:9px 18px; cursor:pointer;
-    border:1px solid var(--accent); background:var(--accent); color:#fff; }
-  button.act.ghost { background:none; color:var(--accent); }
-  .note { margin-top:20px; color:var(--muted); font-size:.85rem; }
-  footer { margin-top:26px; color:var(--muted); font-size:.85rem; }
+  [hidden] { display:none !important; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:900px; margin:0 auto; padding:34px 22px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  .top a:hover { text-decoration:underline; }
+  select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
+    background:var(--paper); color:var(--ink); padding:5px 8px; }
+  .masthead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:2rem; font-weight:500; letter-spacing:-.01em; }
+  .sub { color:var(--muted); font-size:.8rem; }
+  .lead { margin:14px 0 0; font-size:.86rem; color:var(--muted); max-width:62ch; }
+  .note { margin-top:30px; font-size:.72rem; color:var(--faint); max-width:64ch; }
+  footer { margin-top:8px; color:var(--faint); font-size:.75rem; }
+
+  /* ---- actions ---- */
+  .actions { display:flex; flex-wrap:wrap; gap:8px 22px; align-items:center; margin:14px 0 0; }
+  .linkbtn { border:0; background:none; color:var(--accent); font:inherit; font-size:.84rem;
+    font-weight:600; cursor:pointer; padding:11px 0; min-height:44px; }
+  .linkbtn:hover { text-decoration:underline; }
+  .linkbtn.sec { color:var(--muted); font-weight:400; }
+  .linkbtn.sec:hover { color:var(--alert); }
+  .cleared { margin:0; font-size:.8rem; color:var(--alert); }
+
+  /* ---- sections: a 1px ink rule opens each ---- */
+  section { border-top:1px solid var(--ink); margin-top:30px; padding-top:12px; }
+  section h2 { margin:0 0 4px; font-family:Georgia,"Times New Roman",serif; font-size:1.25rem; font-weight:500; }
+  .ghead { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .gcount { font-size:.8rem; color:var(--muted); white-space:nowrap; }
+  .lead2 { margin:2px 0 10px; font-size:.82rem; color:var(--muted); max-width:62ch; }
+
+  /* ---- the three columns ---- */
+  .spine-cols > div { padding:10px 0 14px; border-top:1px solid var(--hair); }
+  .spine-cols > div:first-child { border-top:0; }
+  @media (min-width:700px) {
+    .spine-cols { display:grid; grid-template-columns:1fr 1fr 1fr; }
+    .spine-cols > div { border-top:0; border-left:1px solid var(--hair); padding:10px 18px 14px; }
+    .spine-cols > div:first-child { border-left:0; padding-left:0; }
+  }
+  .sp h3 { margin:0 0 8px; font-size:.68rem; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--accent); font-weight:700; }
+  .sp .big { font-family:Georgia,"Times New Roman",serif; font-size:1.05rem; }
+  .sp .line { font-size:.82rem; margin:3px 0; }
+  .sp .dim { color:var(--muted); font-size:.78rem; margin:3px 0; max-width:34ch; }
+  .sp .alert { color:var(--alert); font-weight:600; }
+  .sp .ok { color:var(--accent); font-weight:600; }
+  .sp a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.82rem; }
+  .sp a:hover { text-decoration:underline; }
+  .sp a.act { display:block; font-size:.9rem; padding:5px 0; }
+  .sp .rest { margin:8px 0 0; }
+  .sp .rest div { font-size:.78rem; color:var(--muted); padding:2px 0; }
+  .bar { display:block; max-width:190px; height:4px; background:var(--hair); border-radius:2px;
+    margin:4px 0 10px; }
+  .bar i { display:block; height:4px; background:var(--accent); border-radius:2px; }
+  .pline { display:flex; justify-content:space-between; gap:10px; font-size:.78rem;
+    padding:3px 0; border-bottom:1px solid var(--hair); }
+  .pline:last-of-type { border-bottom:0; }
+  .pline .pwhen { color:var(--faint); white-space:nowrap; }
+  .subh { margin:12px 0 2px; font-size:.66rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--faint); font-weight:700; }
+
+  /* ---- the ledger ---- */
+  .lrow { display:flex; flex-wrap:wrap; align-items:baseline; gap:2px 14px;
+    padding:9px 0; border-bottom:1px solid var(--hair); }
+  .lrow:last-child { border-bottom:0; }
+  .lname { flex:1 1 230px; font-size:.88rem; min-width:0; }
+  .lproof { flex:0 0 auto; font-size:.78rem; color:var(--muted); white-space:nowrap; }
+  .lproof.ok { color:var(--accent); font-weight:600; }
+  .lproof.none { color:var(--faint); }
+  .lwhen { flex:0 0 auto; font-size:.78rem; color:var(--faint); white-space:nowrap; }
+  @media (min-width:620px) {   /* proof and date line up as columns */
+    .lproof { flex:0 0 118px; text-align:right; }
+    .lwhen { flex:0 0 50px; text-align:right; }
+  }
+  .pill { flex:0 0 auto; margin-left:auto; font-size:.72rem; border:1px solid var(--hair);
+    border-radius:999px; padding:3px 10px; color:var(--muted); white-space:nowrap; }
+  .pill.soon { border-color:var(--alert); color:var(--alert); font-weight:600; }
+  .pill.mid { border-color:var(--accent); color:var(--accent); }
+  .pill.far { border-color:var(--hair); color:var(--muted); }
+  .pill.done { border-color:var(--hair); color:var(--faint); }
+
+  /* ---- words ---- */
+  .vrow { display:flex; flex-wrap:wrap; align-items:center; gap:4px 14px;
+    padding:10px 0; border-bottom:1px solid var(--hair); }
+  .vrow:last-child { border-bottom:0; }
+  .vname { flex:1 1 200px; font-family:Georgia,"Times New Roman",serif; font-size:1.02rem;
+    color:inherit; text-decoration:none; min-width:0; }
+  .vname:hover { color:var(--accent); }
+  .vbar { flex:0 0 120px; height:4px; background:var(--hair); border-radius:2px; }
+  .vbar i { display:block; height:4px; background:var(--accent); border-radius:2px; }
+  .vcount { flex:0 0 auto; font-size:.78rem; color:var(--muted); white-space:nowrap; }
+  .vcount b { color:var(--accent); font-weight:600; }
+
+  /* ---- print ---- */
   @media print {
+    :root { --paper:#fff; --ink:#000; --muted:#444; --faint:#666;
+            --hair:#c8c8c8; --accent:#00534c; --accent-soft:#fff; --alert:#8a3d16; }
     .top, .actions, .noprint { display:none !important; }
-    body { background:#fff; color:#000; }
-    .hero { color:#000; background:none; border:2px solid #000; }
-    .tblwrap { box-shadow:none; overflow:visible; }
-    table { min-width:0; }
-    .sched { flex-wrap:wrap; }
+    .wrap { max-width:none; padding:0; }
+    body { font-size:12px; }
+    h1 { font-size:1.6rem; }
+    section { break-inside:auto; page-break-inside:auto; margin-top:18px; }
+    .lrow, .vrow, .pline { break-inside:avoid; page-break-inside:avoid; }
+    .spine-cols { display:grid; grid-template-columns:1fr 1fr 1fr; }
+    .spine-cols > div { border-top:0; border-left:1px solid var(--hair); padding:8px 12px 10px; }
+    .spine-cols > div:first-child { border-left:0; padding-left:0; }
+    a { color:inherit; text-decoration:none; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top">
-    <a href="stem.html" data-i18n="back">← STEM Hub</a>
+    <a href="stem.html" data-i18n="back">← STEM</a>
+    <span id="tw-slot"></span>
     <select class="language-select" aria-label="Page language">
       <option value="en">English</option>
       <option value="zh-Hans">简体中文（中国）</option>
       <option value="zh-Hant">繁體中文（台灣）</option>
+      <option value="vi">Tiếng Việt</option>
     </select>
   </div>
 
-  <div class="hero">
-    <h1>🧭 <span data-i18n="title">My STEM Progress</span></h1>
-    <p data-i18n="sub">Tap the band that describes you today. Green pills mean you are on time. Amber and red show where to catch up.</p>
+  <div class="masthead">
+    <h1 data-i18n="title">My report</h1>
+    <div class="sub" id="sub"></div>
   </div>
-
-  <div class="chips" id="chips"></div>
-
-  <h2 data-i18n="timeHead">📅 The road ahead</h2>
-  <div class="sched" id="sched"></div>
-
-  <div id="grids"></div>
-
-  <h2 data-i18n="nextHead">⭐ What to do next</h2>
-  <div class="next" id="next"></div>
-
-  <h2 data-i18n="vocabHead">📓 My vocab notebook</h2>
-  <div id="vocab"></div>
+  <p class="lead" data-i18n="lead">This report is built from work you have actually done — practice runs,
+    tasks and the words you built. Nothing on this page is self-rated, and nothing here can be ticked.</p>
 
   <div class="actions noprint">
-    <button class="act" onclick="window.print()" data-i18n="print">🖨️ Print / Save</button>
-    <button class="act ghost" id="clearBtn" data-i18n="clear">Clear my STEM record</button>
+    <button class="linkbtn" type="button" id="printBtn" data-i18n="printBtn">Print this report</button>
+    <button class="linkbtn sec" type="button" id="clearBtn" data-i18n="clearBtn">Clear my STEM record</button>
+    <p class="cleared" id="cleared" hidden></p>
   </div>
 
-  <p class="note" data-i18n="honest">🔒 Anonymous and stored in this browser only. This report shows your own
-    self-check and your practice on this device — it is not an official assessment.</p>
+  <!-- the three columns -->
+  <section aria-label="Visible learning">
+    <div class="spine-cols">
+      <div class="sp"><h3 data-i18n="goingH">Where am I going?</h3><div id="spGoing"></div></div>
+      <div class="sp"><h3 data-i18n="howH">How am I going?</h3><div id="spHow"></div></div>
+      <div class="sp"><h3 data-i18n="nextH">Where to next?</h3><div id="spNext"></div></div>
+    </div>
+  </section>
+
+  <!-- the ledger, one section per skill group -->
+  <div id="ledger"></div>
+
+  <!-- words -->
+  <section id="words">
+    <div class="ghead"><h2 data-i18n="wordsH2">Words</h2><span class="gcount" id="wordsCount"></span></div>
+    <p class="lead2" data-i18n="wordsLead">A word counts as built when you put its pieces together in the
+      word sets, and as used when you answer its question first try.</p>
+    <div id="vsets"></div>
+  </section>
+
+  <!-- foundations -->
+  <section id="found">
+    <div class="ghead"><h2 data-i18n="foundH2">Foundations</h2><span class="gcount" id="foundCount"></span></div>
+    <p class="lead2" data-i18n="foundLead">Foundations is open all year and keeps no checkpoints — it is the
+      fluency underneath everything else.</p>
+    <div id="foundRows"></div>
+  </section>
+
+  <p class="note" data-i18n="honest">Anonymous · this report is built in this browser from your own practice,
+    so a different device or browser starts empty · it is not an official school report and nothing is sent anywhere.</p>
   <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
 </div>
 
-<script src="stem-vocab-data.js?v=20260821-1"></script>
-<script src="stem-shared.js?v=20260821-1"></script>
+<script src="stem-vocab-data.js?v=20260821-2"></script>
+<script src="stem-shared.js?v=20260821-2"></script>
+<script src="stem-gloss.js?v=20260821-3"></script>
+<script src="stem-translate.js?v=20260821-3"></script>
 <script>
 (function(){
   "use strict";
+  var S2 = window.STEM2;
+
+  /* ---------------- i18n (chrome only; body content stays EAL English) ---------------- */
   var COPY = {
-    en: { bandsHead:["Working towards","At the standard","Above the standard"],
-          masterBy:"Master by", skillCol:"Skill",
-          mastered:"mastered", dueSoon:"due in 2 weeks", behind:"behind", upcoming:"still to come",
-          wordsBuilt:"words in my notebook",
-          today:"TODAY", done:"done", passed:"passed",
-          inDays: function(n){ return "in "+n+" days"; },
-          doBefore: function(cp,d){ return "Do this before <b>"+cp+"</b> ("+d+")"; },
-          behindMsg: function(cp){ return "This was due before <b>"+cp+"</b> — catch up now"; },
-          practice:"Practise", nothing:"Nothing urgent — you are on track. Keep building ahead!",
-          built:" built", checked:" checked", openSet:"open →",
-          evTitle:"Evidence from an interactive: ",
-          confirmClear:"Clear ALL your STEM progress on this device? This cannot be undone." },
-    "zh-Hans": { back:"← STEM 主页", title:"我的 STEM 进度",
-          sub:"点选今天最符合你的水平格。绿色表示按时，琥珀色和红色表示需要追赶。",
-          timeHead:"📅 前方的路", nextHead:"⭐ 接下来做什么", vocabHead:"📓 我的词汇笔记本",
-          print:"🖨️ 打印 / 保存", clear:"清除我的 STEM 记录",
-          honest:"🔒 匿名，只保存在这个浏览器中。这份报告显示你自己的自评和练习——不是正式评估。",
-          bandsHead:["努力达标中","达到标准","超越标准"], masterBy:"截止", skillCol:"技能",
-          mastered:"已掌握", dueSoon:"两周内到期", behind:"落后", upcoming:"待学",
-          wordsBuilt:"个单词已入笔记本", today:"今天", done:"完成", passed:"已过",
-          inDays:function(n){ return n+" 天后"; },
-          doBefore:function(cp,d){ return "在 <b>"+cp+"</b>（"+d+"）之前完成"; },
-          behindMsg:function(cp){ return "在 <b>"+cp+"</b> 之前就该掌握——现在赶上"; },
-          practice:"练习", nothing:"没有紧急任务——进度正常，继续前进！",
-          built:" 已构建", checked:" 已检查", openSet:"打开 →",
-          evTitle:"来自互动练习的证据：",
-          confirmClear:"清除此设备上所有 STEM 进度？此操作无法撤销。" },
-    "zh-Hant": { back:"← STEM 主頁", title:"我的 STEM 進度",
-          sub:"點選今天最符合你的等級格。綠色表示準時，琥珀色和紅色表示需要趕上。",
-          timeHead:"📅 前方的路", nextHead:"⭐ 接下來做什麼", vocabHead:"📓 我的詞彙筆記本",
-          print:"🖨️ 列印 / 儲存", clear:"清除我的 STEM 紀錄",
-          honest:"🔒 匿名，只儲存在這個瀏覽器中。這份報告顯示你自己的自評和練習——不是正式評量。",
-          bandsHead:["努力達標中","達到標準","超越標準"], masterBy:"截止", skillCol:"技能",
-          mastered:"已精熟", dueSoon:"兩週內到期", behind:"落後", upcoming:"待學",
-          wordsBuilt:"個單字已入筆記本", today:"今天", done:"完成", passed:"已過",
-          inDays:function(n){ return n+" 天後"; },
-          doBefore:function(cp,d){ return "在 <b>"+cp+"</b>（"+d+"）之前完成"; },
-          behindMsg:function(cp){ return "在 <b>"+cp+"</b> 之前就該精熟——現在趕上"; },
-          practice:"練習", nothing:"沒有緊急任務——進度正常，繼續前進！",
-          built:" 已建立", checked:" 已檢查", openSet:"打開 →",
-          evTitle:"來自互動練習的證據：",
-          confirmClear:"清除此裝置上所有 STEM 進度？此操作無法復原。" }
+    en: {
+      days: function(n){ return n===0 ? "today" : n===1 ? "in 1 day" : "in "+n+" days"; },
+      subF: function(u,t){ return t ? u + " · " + t : u; },
+      termL: {},   /* the unit's term label, translated where we have one */
+      ownCps:"Each unit keeps its own checkpoints. This report shows this unit only.",
+      noCp:"No checkpoints left in this unit.",
+      restH:"then",
+      skillsMasteredF: function(a,b){ return a+" of "+b+" skills mastered"; },
+      wordsBuiltF: function(a,b){ return a+" of "+b+" words built"; },
+      wordsUsedF: function(a){ return a===1 ? "1 word used in a question" : a+" words used in a question"; },
+      proofH:"Latest proof",
+      noProof:"Nothing recorded yet — a practice run or a built word starts this list.",
+      proofRunF: function(name,ok,of){ return name + " · " + ok + " of " + of; },
+      proofRevF: function(name,ok,of){ return "Revision · " + name + " · " + ok + " of " + of; },
+      proofWordF: function(w){ return "Built the word “" + w + "”"; },
+      proofUsedF: function(w){ return "Used “" + w + "” in a question"; },
+      paceH:"Revision pace",
+      noRev:"No revision run yet.",
+      revGo:"revise this unit →",
+      revLastF: function(pct,n,s){ return pct + "% right of " + n + " · ⏱ " + s + " s a question"; },
+      revFasterF: function(s,a,b){ return s + " s a question faster than the run before · accuracy " + a + "% → " + b + "%"; },
+      revSlowerF: function(s,a,b){ return s + " s a question slower than the run before · accuracy " + a + "% → " + b + "%"; },
+      revSameF: function(a,b){ return "Same pace as the run before · accuracy " + a + "% → " + b + "%"; },
+      nextLead:"The skills your next checkpoint needs:",
+      neededByF: function(name,when){ return "needed by " + name + " · " + when; },
+      actExample:"example →", actContinue:"continue →",
+      allMastered:"Everything in this unit is mastered — revise the whole unit →",
+      proofMasteredF: function(n){ return "✓ " + n + "/" + n; },
+      proofLastF: function(ok,of){ return ok + " of " + of + " last run"; },
+      proofRevisingF: function(ok,of){ return ok + " of " + of + " revising"; },
+      proofNone:"—",
+      masteredCountF: function(a,b){ return a+"/"+b+" ✓"; },
+      cpDone:"done",
+      ledgerLead:"✓ comes only from a full practise run — three questions, three right. Nothing here is self-rated.",
+      wordsCountF: function(b,t,c){ return b+" of "+t+" built · "+c+" used"; },
+      setCountF: function(b,t,c){ return "<b>"+b+"</b> of "+t+" built · "+c+" used"; },
+      confirmClear:"Clear every STEM record in this browser — mastery, words and proof? This cannot be undone.",
+      clearedMsg:"Cleared. This browser now holds no STEM record.",
+      noUnit:"No unit is open right now."
+    },
+    "zh-Hans": {
+      back:"← STEM 主页", title:"我的报告",
+      lead:"这份报告只由你真正完成的学习生成——练习、任务和你拼出的单词。这个页面没有自评，也不能打勾。",
+      printBtn:"打印这份报告", clearBtn:"清除我的 STEM 记录",
+      goingH:"我要去哪里？", howH:"我走得怎样？", nextH:"接下来做什么？",
+      wordsH2:"单词", wordsLead:"在单词组里把词素拼起来算“已拼成”，第一次就答对它的题目算“已使用”。",
+      foundH2:"基础", foundLead:"“基础”全年开放，没有检查点——它是其他一切下面的基本功。",
+      honest:"匿名 · 这份报告只在这个浏览器里生成，换设备或浏览器就是空的 · 这不是学校的正式成绩单，也不会发送到任何地方。",
+      days: function(n){ return n===0 ? "今天" : n+" 天后"; },
+      subF: function(u,t){ return t ? u + " · " + t : u; },
+      termL: { "Term 3":"第三学期", "Term 4":"第四学期" },
+      ownCps:"每个单元只保留自己的检查点。这份报告只显示当前单元。",
+      noCp:"本单元的检查点已全部完成。",
+      restH:"接着",
+      skillsMasteredF: function(a,b){ return "已掌握 "+a+" / "+b+" 项技能"; },
+      wordsBuiltF: function(a,b){ return "已拼成 "+a+" / "+b+" 个单词"; },
+      wordsUsedF: function(a){ return "已在题目里用过 "+a+" 个单词"; },
+      proofH:"最近的证据",
+      noProof:"还没有记录——做一次练习或拼出一个单词，这里就有内容了。",
+      proofRunF: function(name,ok,of){ return name + " · " + ok + " / " + of; },
+      proofRevF: function(name,ok,of){ return "复习 · " + name + " · " + ok + " / " + of; },
+      proofWordF: function(w){ return "拼出了单词“" + w + "”"; },
+      proofUsedF: function(w){ return "在题目里用了“" + w + "”"; },
+      paceH:"复习速度",
+      noRev:"还没有做过复习。",
+      revGo:"复习这个单元 →",
+      revLastF: function(pct,n,s){ return "答对 " + pct + "%（共 " + n + " 题）· ⏱ 每题 " + s + " 秒"; },
+      revFasterF: function(s,a,b){ return "比上一次每题快 " + s + " 秒 · 正确率 " + a + "% → " + b + "%"; },
+      revSlowerF: function(s,a,b){ return "比上一次每题慢 " + s + " 秒 · 正确率 " + a + "% → " + b + "%"; },
+      revSameF: function(a,b){ return "和上一次速度相同 · 正确率 " + a + "% → " + b + "%"; },
+      nextLead:"下一个检查点需要的技能：",
+      neededByF: function(name,when){ return name + " 会用到 · " + when; },
+      actExample:"看例题 →", actContinue:"继续 →",
+      allMastered:"本单元全部掌握——复习整个单元 →",
+      proofMasteredF: function(n){ return "✓ " + n + "/" + n; },
+      proofLastF: function(ok,of){ return "上次 " + ok + " / " + of; },
+      proofRevisingF: function(ok,of){ return "复习 " + ok + " / " + of; },
+      proofNone:"—",
+      masteredCountF: function(a,b){ return a+"/"+b+" ✓"; },
+      cpDone:"已完成",
+      ledgerLead:"✓ 只来自一次完整的练习——三题全对。这里没有任何自评。",
+      wordsCountF: function(b,t,c){ return "已拼成 "+b+" / "+t+" · 已使用 "+c; },
+      setCountF: function(b,t,c){ return "已拼成 <b>"+b+"</b> / "+t+" · 已使用 "+c; },
+      confirmClear:"清除这个浏览器里的全部 STEM 记录——掌握、单词和证据？此操作无法撤销。",
+      clearedMsg:"已清除。这个浏览器里现在没有 STEM 记录。",
+      noUnit:"现在没有开放的单元。"
+    },
+    "zh-Hant": {
+      back:"← STEM 主頁", title:"我的報告",
+      lead:"這份報告只由你真正完成的學習產生——練習、任務和你拼出的單字。這個頁面沒有自評，也不能打勾。",
+      printBtn:"列印這份報告", clearBtn:"清除我的 STEM 紀錄",
+      goingH:"我要去哪裡？", howH:"我走得如何？", nextH:"接下來做什麼？",
+      wordsH2:"單字", wordsLead:"在單字組裡把詞素拼起來算「已拼成」，第一次就答對它的題目算「已使用」。",
+      foundH2:"基礎", foundLead:"「基礎」全年開放，沒有檢查點——它是其他一切下面的基本功。",
+      honest:"匿名 · 這份報告只在這個瀏覽器裡產生，換裝置或瀏覽器就是空的 · 這不是學校的正式成績單，也不會傳送到任何地方。",
+      days: function(n){ return n===0 ? "今天" : n+" 天後"; },
+      subF: function(u,t){ return t ? u + " · " + t : u; },
+      termL: { "Term 3":"第三學期", "Term 4":"第四學期" },
+      ownCps:"每個單元只保留自己的檢查點。這份報告只顯示目前的單元。",
+      noCp:"本單元的檢查點已全部完成。",
+      restH:"接著",
+      skillsMasteredF: function(a,b){ return "已精熟 "+a+" / "+b+" 項技能"; },
+      wordsBuiltF: function(a,b){ return "已拼成 "+a+" / "+b+" 個單字"; },
+      wordsUsedF: function(a){ return "已在題目裡用過 "+a+" 個單字"; },
+      proofH:"最近的證據",
+      noProof:"還沒有紀錄——做一次練習或拼出一個單字，這裡就會有內容。",
+      proofRunF: function(name,ok,of){ return name + " · " + ok + " / " + of; },
+      proofRevF: function(name,ok,of){ return "複習 · " + name + " · " + ok + " / " + of; },
+      proofWordF: function(w){ return "拼出了單字「" + w + "」"; },
+      proofUsedF: function(w){ return "在題目裡用了「" + w + "」"; },
+      paceH:"複習速度",
+      noRev:"還沒有做過複習。",
+      revGo:"複習這個單元 →",
+      revLastF: function(pct,n,s){ return "答對 " + pct + "%（共 " + n + " 題）· ⏱ 每題 " + s + " 秒"; },
+      revFasterF: function(s,a,b){ return "比上一次每題快 " + s + " 秒 · 正確率 " + a + "% → " + b + "%"; },
+      revSlowerF: function(s,a,b){ return "比上一次每題慢 " + s + " 秒 · 正確率 " + a + "% → " + b + "%"; },
+      revSameF: function(a,b){ return "和上一次速度相同 · 正確率 " + a + "% → " + b + "%"; },
+      nextLead:"下一個檢查點需要的技能：",
+      neededByF: function(name,when){ return name + " 會用到 · " + when; },
+      actExample:"看例題 →", actContinue:"繼續 →",
+      allMastered:"本單元全部精熟——複習整個單元 →",
+      proofMasteredF: function(n){ return "✓ " + n + "/" + n; },
+      proofLastF: function(ok,of){ return "上次 " + ok + " / " + of; },
+      proofRevisingF: function(ok,of){ return "複習 " + ok + " / " + of; },
+      proofNone:"—",
+      masteredCountF: function(a,b){ return a+"/"+b+" ✓"; },
+      cpDone:"已完成",
+      ledgerLead:"✓ 只來自一次完整的練習——三題全對。這裡沒有任何自評。",
+      wordsCountF: function(b,t,c){ return "已拼成 "+b+" / "+t+" · 已使用 "+c; },
+      setCountF: function(b,t,c){ return "已拼成 <b>"+b+"</b> / "+t+" · 已使用 "+c; },
+      confirmClear:"清除這個瀏覽器裡的全部 STEM 紀錄——精熟、單字和證據？此操作無法復原。",
+      clearedMsg:"已清除。這個瀏覽器裡現在沒有 STEM 紀錄。",
+      noUnit:"現在沒有開放的單元。"
+    }
   };
   var sel = document.querySelector(".language-select");
   var lang = "en";
   try { lang = localStorage.getItem("elc_page_language") || "en"; } catch(e){}
   if (!COPY[lang]) lang = "en";
   sel.value = lang;
-  function T(){ return COPY[lang]; }
-  function tEn(k){ return COPY.en[k]; }
-  function tr(k){ var v = T()[k]; return v !== undefined ? v : tEn(k); }
-
+  function T(k){ var v = COPY[lang][k]; return v !== undefined ? v : COPY.en[k]; }
   function setStatic(){
-    var dict = T();
     document.querySelectorAll("[data-i18n]").forEach(function(el){
-      var k = el.getAttribute("data-i18n");
+      var k = el.getAttribute("data-i18n"), v = COPY[lang][k];
       if (!el._en) el._en = el.textContent;
-      el.textContent = (dict[k] !== undefined && typeof dict[k] === "string") ? dict[k] : el._en;
+      el.textContent = (typeof v === "string") ? v : el._en;
     });
-    document.documentElement.lang = lang === "en" ? "en" : lang;
+    document.documentElement.lang = lang;
   }
+
+  if (!S2) { setStatic(); return; }
+  var esc = S2.esc, dU = S2.daysUntil, fD = S2.fmtDate, Store = S2.Store, M = S2.Mastery;
+
+  /* ---------------- the unit this report is about ---------------- */
+  var UNIT = S2.currentUnit();
+  var FOUND = S2.UNIT_BY_ID["found"];
+  var CP = {}; if (UNIT) UNIT.checkpoints.forEach(function(c){ CP[c.id] = c; });
+
+  function fmtTs(ts){
+    if (typeof ts !== "number" || ts < 1000000000000) return "";
+    return new Date(ts).toLocaleDateString(undefined, { day:"numeric", month:"short" });
+  }
+  function skillHref(id, mode){ return "stem-skills.html#skill=" + encodeURIComponent(id) + "&mode=" + mode; }
+  function unitSkillIds(u){
+    var out = [];
+    (u.skillGroups || []).forEach(function(g){ g.skills.forEach(function(id){ out.push(id); }); });
+    return out;
+  }
+  function vocabTotals(u){
+    var built = 0, used = 0, total = 0;
+    (u.vocabSets || []).forEach(function(id){
+      var c = S2.setCounts(id); built += c.built; used += c.checked; total += c.total;
+    });
+    return { built: built, used: used, total: total };
+  }
+
+  /* ---------------- proof of one skill (objective only) ---------------- */
+  /* a practise run is always three questions; a run that ended early kept
+     the questions it reached, so it is still reported out of three */
+  function masteringRun(id){
+    var runs = M.runs(id) || [];
+    for (var i = 0; i < runs.length; i++) {
+      var r = runs[i];
+      if (r.mode === "p" && r.of >= 3 && r.ok === r.of) return r;
+    }
+    return null;
+  }
+  function proofOf(id){
+    var st = M.state(id);
+    if (st.status === "mastered") {
+      var mr = masteringRun(id);
+      return { cls:"ok", text: T("proofMasteredF")(mr ? mr.of : 3), when: fmtTs(st.mastered) };
+    }
+    if (st.status === "started") {
+      var last = st.lastRun;
+      var text = last.mode === "r"
+        ? T("proofRevisingF")(last.ok, last.of)
+        : T("proofLastF")(last.ok, Math.max(3, last.of));
+      return { cls:"", text: text, when: fmtTs(last.t) };
+    }
+    return { cls:"none", text: T("proofNone"), when:"" };
+  }
+  /* the needed-by pill, coloured by how close the checkpoint is */
+  function pillFor(id){
+    var sk = S2.SKILLS[id];
+    if (!sk || !sk.needs || !CP[sk.needs]) return "";
+    var c = CP[sk.needs], cls, txt;
+    if (c.status === "done") { cls = "done"; txt = esc(c.short) + " · " + esc(T("cpDone")); }
+    else {
+      var n = dU(c.date);
+      if (n < 0) { cls = "far"; txt = esc(c.short) + " · " + esc(fD(c.date)); }
+      else {
+        cls = n <= 7 ? "soon" : n <= 21 ? "mid" : "far";
+        txt = esc(c.short) + " · " + esc(T("days")(n));
+      }
+    }
+    return "<span class='pill " + cls + "'>" + txt + "</span>";
+  }
+
+  /* ---------------- WHERE AM I GOING ---------------- */
+  function paintGoing(){
+    var h = "";
+    var next = S2.nextCheckpoint(UNIT);
+    if (next) {
+      h += "<div class='big'>" + esc(next.name) + "</div>" +
+        "<div class='line'>" + esc(fD(next.date)) + " · <span class='alert'>" +
+          esc(T("days")(Math.max(0, dU(next.date)))) + "</span></div>" +
+        "<div class='dim'>" + esc(next.desc) + "</div>";
+    } else {
+      h += "<div class='line'>" + esc(T("noCp")) + "</div>";
+    }
+    /* the rest of THIS unit's arc — no other unit's dates ever appear here */
+    var rest = UNIT.checkpoints.filter(function(c){
+      return c.status !== "done" && (!next || c.id !== next.id) && dU(c.date) >= 0;
+    });
+    if (rest.length) {
+      h += "<div class='rest'><div class='subh'>" + esc(T("restH")) + "</div>";
+      rest.forEach(function(c){
+        h += "<div>" + esc(c.short) + " · " + esc(fD(c.date)) + "</div>";
+      });
+      h += "</div>";
+    }
+    h += "<div class='dim'>" + esc(T("ownCps")) + "</div>";
+    document.getElementById("spGoing").innerHTML = h;
+  }
+
+  /* ---------------- HOW AM I GOING ---------------- */
+  function proofEvents(){
+    var out = [], ids = unitSkillIds(UNIT), inUnit = {};
+    ids.forEach(function(id){ inUnit[id] = 1; });
+
+    ids.forEach(function(id){
+      var runs = M.runs(id) || [];
+      if (!runs.length) return;
+      var last = runs[runs.length - 1], name = S2.SKILLS[id] ? S2.SKILLS[id].name : id;
+      var mastered = M.mastered(id);
+      out.push({
+        t: last.t,
+        ok: last.mode === "p" && last.ok === last.of && !!mastered,
+        text: last.mode === "r" ? T("proofRevF")(name, last.ok, last.of)
+                                : T("proofRunF")(name, last.ok, Math.max(3, last.of))
+      });
+    });
+
+    var ev = Store.evidence();
+    Object.keys(ev).forEach(function(id){
+      if (!inUnit[id]) return;
+      var list = ev[id]; if (!list || !list.length) return;
+      var e = list[list.length - 1];
+      var name = S2.SKILLS[id] ? S2.SKILLS[id].name : id;
+      out.push({ t: e.ts, ok: true, text: name + " · " + (e.detail || e.src) });
+    });
+
+    /* the newest built word and the newest used word from this unit's sets */
+    var v = Store.vocab(), best = { built: null, checked: null };
+    (UNIT.vocabSets || []).forEach(function(sid){
+      var set = null;
+      if (window.STEM_VOCAB_DATA) {
+        window.STEM_VOCAB_DATA.sets.forEach(function(s){ if (s.id === sid) set = s; });
+      }
+      if (!set) return;
+      set.words.forEach(function(w){
+        var st = v[w.w.toLowerCase()]; if (!st) return;
+        [["built", st.built], ["checked", st.checked]].forEach(function(pair){
+          if (typeof pair[1] !== "number") return;
+          var f = pair[0];
+          if (!best[f] || pair[1] > best[f].t) best[f] = { t: pair[1], w: w.w };
+        });
+      });
+    });
+    if (best.built) out.push({ t: best.built.t, ok: true, text: T("proofWordF")(best.built.w) });
+    if (best.checked && (!best.built || best.checked.w !== best.built.w)) {
+      out.push({ t: best.checked.t, ok: true, text: T("proofUsedF")(best.checked.w) });
+    }
+
+    out = out.filter(function(e){ return typeof e.t === "number"; });
+    out.sort(function(a, b){ return b.t - a.t; });
+    return out.slice(0, 3);
+  }
+
+  function paintHow(){
+    var mc = M.unitCounts(UNIT.id), v = vocabTotals(UNIT);
+    var mp = mc.total ? Math.round(100 * mc.done / mc.total) : 0;
+    var vp = v.total ? Math.round(100 * v.built / v.total) : 0;
+    var h = "<div class='line'>" + esc(T("skillsMasteredF")(mc.done, mc.total)) + "</div>" +
+      "<span class='bar'><i style='width:" + mp + "%'></i></span>" +
+      "<div class='line'>" + esc(T("wordsBuiltF")(v.built, v.total)) + "</div>" +
+      "<span class='bar'><i style='width:" + vp + "%'></i></span>" +
+      "<div class='dim'>" + esc(T("wordsUsedF")(v.used)) + "</div>";
+
+    var ev = proofEvents();
+    h += "<div class='subh'>" + esc(T("proofH")) + "</div>";
+    if (!ev.length) h += "<div class='dim'>" + esc(T("noProof")) + "</div>";
+    else ev.forEach(function(e){
+      h += "<div class='pline'><span" + (e.ok ? " class='ok'" : "") + ">" + esc(e.text) + "</span>" +
+        "<span class='pwhen'>" + esc(fmtTs(e.t)) + "</span></div>";
+    });
+
+    /* revision pace + trend */
+    var rev = M.revisionHistory() || [];
+    h += "<div class='subh'>" + esc(T("paceH")) + "</div>";
+    if (!rev.length) {
+      h += "<div class='dim'>" + esc(T("noRev")) + "</div>" +
+        "<a href='stem-skills.html#unit=" + esc(UNIT.id) + "&amp;mode=revise'>" + esc(T("revGo")) + "</a>";
+    } else {
+      var last = rev[rev.length - 1];
+      var lastS = (last.msAvg / 1000).toFixed(1);
+      h += "<div class='line'>" + esc(T("revLastF")(last.okPct, last.n, lastS)) + "</div>";
+      if (rev.length > 1) {
+        var prev = rev[rev.length - 2];
+        var d = (prev.msAvg - last.msAvg) / 1000;   /* + = faster now */
+        var trend;
+        if (Math.abs(d) < 0.5) trend = T("revSameF")(prev.okPct, last.okPct);
+        else if (d > 0) trend = T("revFasterF")(d.toFixed(1), prev.okPct, last.okPct);
+        else trend = T("revSlowerF")((-d).toFixed(1), prev.okPct, last.okPct);
+        h += "<div class='dim'>" + esc(trend) + "</div>";
+      }
+    }
+    document.getElementById("spHow").innerHTML = h;
+  }
+
+  /* ---------------- WHERE TO NEXT ---------------- */
+  /* unmastered skills, nearest live checkpoint first, then unit order */
+  function nextActions(n){
+    var list = [], idx = 0;
+    UNIT.skillGroups.forEach(function(g){
+      g.skills.forEach(function(id){
+        idx++;
+        if (M.mastered(id)) return;
+        var sk = S2.SKILLS[id]; if (!sk) return;
+        var key = 900000 + idx;
+        if (sk.needs && CP[sk.needs] && CP[sk.needs].status !== "done") {
+          var d = dU(CP[sk.needs].date);
+          if (d >= 0) key = d * 1000 + idx;
+        }
+        list.push({ id: id, sk: sk, key: key });
+      });
+    });
+    list.sort(function(a, b){ return a.key - b.key; });
+    return list.slice(0, n);
+  }
+  function paintNext(){
+    var acts = nextActions(3), h = "";
+    if (!acts.length) {
+      h = "<a class='act' href='stem-skills.html#unit=" + esc(UNIT.id) + "&amp;mode=revise'>" +
+          esc(T("allMastered")) + "</a>";
+      document.getElementById("spNext").innerHTML = h;
+      return;
+    }
+    h += "<div class='dim'>" + esc(T("nextLead")) + "</div>";
+    acts.forEach(function(a){
+      var st = M.state(a.id);
+      var mode = st.status === "started" ? "practise" : "teach";
+      var label = st.status === "started" ? T("actContinue") : T("actExample");
+      h += "<a class='act' href='" + skillHref(a.id, mode) + "'>" +
+        esc(a.sk.name) + " · " + esc(label) + "</a>";
+      if (a.sk.needs && CP[a.sk.needs] && CP[a.sk.needs].status !== "done") {
+        var c = CP[a.sk.needs], d = dU(c.date);
+        if (d >= 0) h += "<div class='dim'>" + esc(T("neededByF")(c.short, T("days")(d))) + "</div>";
+      }
+    });
+    document.getElementById("spNext").innerHTML = h;
+  }
+
+  /* ---------------- the ledger ---------------- */
+  function ledgerRow(id, withPill){
+    var sk = S2.SKILLS[id]; if (!sk) return "";
+    var p = proofOf(id);
+    return "<div class='lrow'>" +
+      "<span class='lname'>" + esc(sk.name) + "</span>" +
+      "<span class='lproof " + p.cls + "'>" + esc(p.text) + "</span>" +
+      "<span class='lwhen'>" + esc(p.when) + "</span>" +
+      (withPill ? pillFor(id) : "") + "</div>";
+  }
+  function paintLedger(){
+    var h = "", first = true;
+    UNIT.skillGroups.forEach(function(g){
+      var rows = "", done = 0;
+      g.skills.forEach(function(id){
+        if (M.mastered(id)) done++;
+        rows += ledgerRow(id, true);
+      });
+      h += "<section><div class='ghead'><h2>" + esc(g.name) + "</h2>" +
+        "<span class='gcount'>" + esc(T("masteredCountF")(done, g.skills.length)) + "</span></div>" +
+        (first ? "<p class='lead2'>" + esc(T("ledgerLead")) + "</p>" : "") + rows + "</section>";
+      first = false;
+    });
+    document.getElementById("ledger").innerHTML = h;
+  }
+
+  /* ---------------- words ---------------- */
+  function paintWords(){
+    var h = "";
+    (UNIT.vocabSets || []).forEach(function(sid){
+      var c = S2.setCounts(sid);
+      if (!c.total) return;
+      var pct = Math.round(100 * c.built / c.total);
+      h += "<div class='vrow'>" +
+        "<a class='vname' href='stem-vocab-hub.html#set=" + encodeURIComponent(sid) + "'>" +
+          esc((c.title || sid).replace(/\s*\(revision\)\s*$/i, "")) + "</a>" +
+        "<span class='vbar'><i style='width:" + pct + "%'></i></span>" +
+        "<span class='vcount'>" + T("setCountF")(c.built, c.total, c.checked) + "</span></div>";
+    });
+    var v = vocabTotals(UNIT);
+    document.getElementById("vsets").innerHTML = h;
+    document.getElementById("wordsCount").textContent = T("wordsCountF")(v.built, v.total, v.used);
+    document.getElementById("words").hidden = !h;
+  }
+
+  /* ---------------- foundations (always open, no checkpoints) ---------------- */
+  function paintFound(){
+    if (!FOUND) { document.getElementById("found").hidden = true; return; }
+    var h = "", done = 0, total = 0;
+    FOUND.skillGroups.forEach(function(g){
+      g.skills.forEach(function(id){
+        total++; if (M.mastered(id)) done++;
+        h += ledgerRow(id, false);
+      });
+    });
+    document.getElementById("foundRows").innerHTML = h;
+    document.getElementById("foundCount").textContent = T("masteredCountF")(done, total);
+  }
+
+  /* ---------------- paint ---------------- */
+  function paintAll(){
+    if (!UNIT) {   /* cannot happen with the data as it stands, but stay honest */
+      document.getElementById("sub").textContent = T("noUnit");
+      document.getElementById("words").hidden = true;
+      paintFound();
+      return;
+    }
+    var term = UNIT.term || "";
+    document.getElementById("sub").textContent =
+      T("subF")(UNIT.name, (T("termL") || {})[term] || term);
+    paintGoing(); paintHow(); paintNext(); paintLedger(); paintWords(); paintFound();
+  }
+
+  document.getElementById("printBtn").addEventListener("click", function(){ window.print(); });
+  document.getElementById("clearBtn").addEventListener("click", function(){
+    if (!window.confirm(T("confirmClear"))) return;
+    S2.Store.clearAll();
+    var msg = document.getElementById("cleared");
+    msg.hidden = false; msg.textContent = T("clearedMsg");
+    paintAll();
+  });
+
   sel.addEventListener("change", function(){
     lang = sel.value;
     try { localStorage.setItem("elc_page_language", lang); } catch(e){}
     setStatic(); paintAll();
   });
 
-  var PRACTICE = {
-    k_coords:[["Vocab Hub — quiz words","stem-vocab-hub.html#set=rev"]],
-    k_table:[["Quiz words revision","stem-vocab-revision.html"]],
-    k_grad_graph:[["Race to School","stem-commute.html"],["Gradient (Maths is Fun)","https://www.mathsisfun.com/gradient.html"]],
-    k_grad_pts:[["Equation of a line (Maths is Fun)","https://www.mathsisfun.com/equation_of_line.html"]],
-    k_yint:[["Equation of a line (Maths is Fun)","https://www.mathsisfun.com/equation_of_line.html"]],
-    k_eq:[["Race to School","stem-commute.html"],["Equation of a line","https://www.mathsisfun.com/equation_of_line.html"]],
-    k_sketch:[["GeoGebra graphing","https://www.geogebra.org/m/S8QhwdX6"]],
-    k_intersect:[["Race to School","stem-commute.html"]],
-    k_simult:[["GeoGebra graphing","https://www.geogebra.org/m/S8QhwdX6"]],
-    k_convert:[["Converting units (Transum)","https://www.transum.org/maths/activity/units/Default.asp?Level=1"]],
-    k_squares:[["Vocab Hub","stem-vocab-hub.html"]],
-    k_mult:[["Multiplication — timed practice","https://liaminhawai-cmd.github.io/Multiplication-tables/"]],
-    s_vectors:[["Race to School","stem-commute.html"],["Vocab Hub — motion words","stem-vocab-hub.html#set=kin1"]],
-    s_ptgraph:[["Race to School","stem-commute.html"]],
-    s_story:[["Race to School","stem-commute.html"]],
-    s_variables:[["Variables (ABS)","https://www.abs.gov.au/statistics/understanding-statistics/statistical-terms-and-concepts/variables"]],
-    s_lobf:[["Correlation (Maths is Fun)","https://www.mathsisfun.com/data/correlation.html"]],
-    s_excel:[["Correlation (Maths is Fun)","https://www.mathsisfun.com/data/correlation.html"]],
-    s_corr:[["Correlation (Maths is Fun)","https://www.mathsisfun.com/data/correlation.html"]],
-    s_report:[["Kinematics page — tasks","stem-kinematics.html"]],
-    b_dna:[["DNA basics (Learn.Genetics)","https://learn.genetics.utah.edu/content/basics/"]],
-    b_genlang:[["Vocab Hub — inheritance","stem-vocab-hub.html#set=bio2"]],
-    b_punnett:[["Learn.Genetics","https://learn.genetics.utah.edu/content/basics/"]],
-    b_pedigree:[["Biology page — tasks","stem-biology.html"]],
-    b_samplespace:[["Vocab Hub — probability","stem-vocab-hub.html#set=bio3"]],
-    b_tree:[["Biology page — tasks","stem-biology.html"]],
-    p_percent:[["Biology page — pandemic unit","stem-biology.html"]],
-    p_exp:[["Biology page — pandemic unit","stem-biology.html"]],
-    p_claims:[["Biology page — pandemic unit","stem-biology.html"]]
-  };
-
-  function fmtDate(d){
-    return new Date(d+"T12:00:00").toLocaleDateString(undefined,{day:"numeric",month:"short"});
-  }
-  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){
-    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
-
-  function paintChips(){
-    var s = STEM.summary();
-    var v = STEM.Store.vocab(), words = 0;
-    Object.keys(v).forEach(function(k){ if (v[k].built || v[k].checked) words++; });
-    document.getElementById("chips").innerHTML =
-      "<div class='chipbox g'><b>"+(s.ahead+s.done)+"</b><span>"+tr("mastered")+"</span></div>"+
-      "<div class='chipbox w'><b>"+s.dueSoon+"</b><span>"+tr("dueSoon")+"</span></div>"+
-      "<div class='chipbox b'><b>"+s.behind+"</b><span>"+tr("behind")+"</span></div>"+
-      "<div class='chipbox'><b>"+s.upcoming+"</b><span>"+tr("upcoming")+"</span></div>"+
-      "<div class='chipbox'><b>"+words+"</b><span>"+tr("wordsBuilt")+"</span></div>";
-  }
-
-  function paintSched(){
-    var h="", todayShown=false;
-    STEM.CHECKPOINTS.forEach(function(c){
-      var days = STEM.daysUntil(c.date), cls, when;
-      if (c.status==="done"){ cls="done"; when="✓ "+tr("done"); }
-      else if (days<0){ cls="past"; when=tr("passed"); }
-      else if (days<=14){ cls="soon"; when="⏳ "+T().inDays(days); }
-      else { cls=""; when=T().inDays(days); }
-      if (!todayShown && c.status!=="done" && days>=0){ cls += " today"; todayShown=true;
-        when = "◀ "+tr("today")+" · "+when; }
-      h += "<div class='cp "+cls+"'><div class='date'>"+fmtDate(c.date)+"</div>"+
-           "<div class='name'>"+esc(c.short)+"</div><div class='when'>"+when+"</div></div>";
-    });
-    document.getElementById("sched").innerHTML = h;
-  }
-
-  function pillFor(st, cp){
-    var cls = st.timing==="ahead"||st.timing==="done" ? "g" :
-              st.timing==="dueSoon" ? "w" : st.timing==="behind" ? "b" : "u";
-    return "<span class='pill "+cls+"'>"+esc(cp.short)+" · "+fmtDate(cp.date)+"</span>";
-  }
-
-  function paintGrids(){
-    var bands = tr("bandsHead");
-    var h = "";
-    Object.keys(STEM.AREAS).forEach(function(areaId){
-      var rows = STEM.SKILLS.filter(function(s){ return s.area===areaId; });
-      if (!rows.length) return;
-      var a = STEM.AREAS[areaId];
-      h += "<h2>"+a.emoji+" "+esc(a.name)+"</h2><div class='tblwrap'><table><thead><tr>"+
-        "<th>"+esc(tr("skillCol"))+"</th><th>"+esc(bands[0])+"</th><th>"+esc(bands[1])+"</th>"+
-        "<th>"+esc(bands[2])+"</th><th>"+esc(tr("masterBy"))+"</th></tr></thead><tbody>";
-      rows.forEach(function(s){
-        var st = STEM.skillState(s);
-        var ev = "";
-        if (st.evidence){
-          var eList = STEM.Store.evidence()[s.id]||[];
-          var last = eList[eList.length-1];
-          ev = " <span class='ev' title='"+esc(tr("evTitle")+(last?last.detail:""))+"'>✦</span>";
-        }
-        h += "<tr data-skill='"+s.id+"'><td class='skill'>"+esc(s.name)+ev+
-             "<span class='cont'>"+esc(s.cont)+"</span></td>";
-        for (var b=0;b<3;b++){
-          var on = st.lv === b+1 ? " on" : "";
-          h += "<td class='band"+on+"' data-lv='"+(b+1)+"' role='button' tabindex='0'>"+esc(s.bands[b])+"</td>";
-        }
-        h += "<td class='due'>"+pillFor(st, st.checkpoint)+"</td></tr>";
-      });
-      h += "</tbody></table></div>";
-    });
-    var el = document.getElementById("grids");
-    el.innerHTML = h;
-    el.querySelectorAll("td.band").forEach(function(td){
-      function toggle(){
-        var id = td.parentNode.getAttribute("data-skill");
-        var lv = +td.getAttribute("data-lv");
-        var cur = (STEM.Store.skills()[id]||{}).lv || 0;
-        STEM.Store.setSkill(id, cur===lv ? 0 : lv);
-        paintAll();
-      }
-      td.addEventListener("click", toggle);
-      td.addEventListener("keydown", function(e){
-        if (e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(); } });
-    });
-  }
-
-  function paintNext(){
-    var items = [];
-    STEM.SKILLS.forEach(function(s){
-      var st = STEM.skillState(s);
-      if (st.timing==="behind" || st.timing==="dueSoon"){
-        items.push({ s:s, st:st, order: st.timing==="behind" ? 0 : 1 });
-      }
-    });
-    items.sort(function(a,b){ return a.order-b.order || a.st.daysLeft-b.st.daysLeft; });
-    var el = document.getElementById("next");
-    if (!items.length){ el.innerHTML = "<div class='nextrow' style='border-left-color:var(--good)'>🎉 "+esc(tr("nothing"))+"</div>"; return; }
-    var h="";
-    items.slice(0,8).forEach(function(it){
-      var cp = it.st.checkpoint;
-      var msg = it.st.timing==="behind" ? T().behindMsg(esc(cp.short))
-                                        : T().doBefore(esc(cp.short), fmtDate(cp.date));
-      var links = (PRACTICE[it.s.id]||[]).map(function(p){
-        var ext = /^http/.test(p[1]) ? " target='_blank' rel='noopener'" : "";
-        return "<a href='"+p[1]+"'"+ext+">"+esc(p[0])+"</a>";
-      }).join(" · ");
-      h += "<div class='nextrow "+(it.st.timing==="behind"?"behind":"")+"'>"+
-        "<b>"+esc(it.s.name)+"</b> — "+msg+
-        (links ? "<br><span style='font-size:.85rem'>"+esc(tr("practice"))+": "+links+"</span>" : "")+"</div>";
-    });
-    el.innerHTML = h;
-  }
-
-  function paintVocab(){
-    var el = document.getElementById("vocab");
-    if (!window.STEM_VOCAB_DATA){ el.innerHTML=""; return; }
-    var v = STEM.Store.vocab(), h="";
-    STEM_VOCAB_DATA.sets.forEach(function(set){
-      var built=0, checked=0;
-      set.words.forEach(function(w){
-        var s = v[w.w.toLowerCase()];
-        if (s && s.built) built++;
-        if (s && s.checked) checked++;
-      });
-      var pct = Math.round(100*built/Math.max(1,set.words.length));
-      h += "<div class='vrow'><span>"+esc(set.title)+"</span>"+
-        "<span class='bar'><i style='width:"+pct+"%'></i></span>"+
-        "<span style='color:var(--muted);font-size:.82rem'>"+built+"/"+set.words.length+tr("built")+" · "+checked+tr("checked")+"</span>"+
-        "<a href='stem-vocab-hub.html#set="+set.id+"' style='color:var(--accent);font-weight:600;text-decoration:none'>"+esc(tr("openSet"))+"</a></div>";
-    });
-    el.innerHTML = h;
-  }
-
-  document.getElementById("clearBtn").addEventListener("click", function(){
-    if (confirm(tr("confirmClear"))){ STEM.Store.clearAll(); paintAll(); }
-  });
-
-  function paintAll(){ paintChips(); paintSched(); paintGrids(); paintNext(); paintVocab(); }
-  setStatic();
-  paintAll();
+  setStatic(); paintAll();
 })();
 </script>
 </body>

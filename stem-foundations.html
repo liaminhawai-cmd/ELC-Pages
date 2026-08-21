@@ -3,12 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kinematics — ELC STEM</title>
+<title>Foundations — ELC STEM</title>
 <!-- ================================================================
-     UNIT PAGE TEMPLATE (STEM hub v2) — stem-kinematics.html is the
-     master copy. Sibling unit pages (stem-foundations.html,
-     stem-genetics.html, stem-pandemic.html) copy this file and change
-     ONLY:
+     UNIT PAGE (STEM hub v2) — copied from stem-kinematics.html, which
+     is the master template. Only these things differ from the master:
        1. <title>, the masthead (h1 + .sub) and the intro paragraph
           (including its data-v words),
        2. the CONTENT block at the top of the page script
@@ -17,6 +15,15 @@
      Everything else paints itself from STEM2 using UNIT_ID:
      rail (WORDS / SKILLS / DO / PROVE), the visible-learning spine,
      the skill-group sections, and the checkpoint arc.
+
+     Foundations is the one unit with no checkpoints and no vocab
+     sets in stem-shared.js, so this copy differs from the master in
+     two extra places, both marked "Foundations" in the script:
+       · PROVE is a standing statement, not a dated arc — the entry
+         task at the start of every lesson is the checkpoint;
+       · the WORDS rail hides itself when a unit has no vocab sets.
+     Both are written so that adding checkpoints or vocab sets to
+     Foundations later would simply switch the normal view back on.
      ================================================================ -->
 <style>
   :root {
@@ -149,6 +156,14 @@
   .cp .cwhen b { color:var(--alert); }
   .cp .cdesc { grid-column:2 / 4; font-size:.78rem; color:var(--muted); max-width:56ch; }
 
+  /* ---- Foundations: prove is a standing statement, not a dated arc ---- */
+  .always { padding:12px 0; }
+  .always .aname { font-family:Georgia,"Times New Roman",serif; font-size:1rem; }
+  .always .adesc { margin:4px 0 6px; font-size:.8rem; color:var(--muted); max-width:60ch; }
+  .always a { display:inline-flex; align-items:center; min-height:44px; color:var(--accent);
+    text-decoration:none; font-weight:600; font-size:.82rem; padding:0 20px 0 0; }
+  .always a:hover { text-decoration:underline; }
+
   .note { margin-top:26px; font-size:.72rem; color:var(--faint); }
   footer { margin-top:8px; color:var(--faint); font-size:.75rem; }
 </style>
@@ -166,25 +181,25 @@
     </select>
   </div>
 
-  <!-- ===== masthead + intro — siblings rewrite these lines ===== -->
+  <!-- ===== masthead + intro — unit-specific ===== -->
   <div class="masthead">
-    <h1 data-i18n="title">Kinematics</h1>
-    <div class="sub" data-i18n="sub">Term 3 · motion, linear graphs, data</div>
+    <h1 data-i18n="title">Foundations</h1>
+    <div class="sub" data-i18n="sub">Open all year · number fluency, units, symbols</div>
   </div>
-  <p class="intro">Kinematics is the study of <span data-v="motion">movement</span>: how far, how fast,
-    which way. First the words — why <span data-v>distance</span> is not <span data-v>displacement</span>,
-    and why <span data-v>velocity</span> is <span data-v>speed</span> with a <span data-v>direction</span>.
-    Then the graphs — a steady journey is a <span data-v>linear</span> line, and the
-    <span data-v>gradient</span> of a <span data-v>position</span>-time graph is the velocity.
-    Last, the <span data-v>data</span> — you drop a ball, <span data-v>plot</span> the numbers,
-    and find the <span data-v>trend</span> yourself.</p>
+  <p class="intro">Foundations is not a topic. It is the set of things you should never have to stop and
+    work out: the tables up to 12, the squares and their roots, and turning one unit into another
+    without guessing which way to divide. A speed in km/h is a <span data-v>rate</span> — a
+    <span data-v>ratio</span> of two different quantities, distance over time — so changing it to m/s
+    is two conversions, not one. The symbols matter as much as the numbers: ≤, ≥, ≠, ≈, ±, √ and π are
+    words, and an <span data-v>equation</span> is a sentence in which = means “is”. None of this is
+    new. All of it gets faster with practice, and every other unit runs on it.</p>
   <p class="preview" id="preview" hidden></p>
 
   <div class="layout">
 
     <!-- ===== contents rail (sticky ≥760px; horizontal scroller below) ===== -->
     <nav class="rail" id="rail" aria-label="Unit contents">
-      <div class="rail-sec">
+      <div class="rail-sec" id="railWordsSec">
         <a class="rail-h" href="stem-vocab-hub.html" data-i18n="railWordsH">Words</a>
         <div id="railWords"></div>
       </div>
@@ -216,29 +231,22 @@
           page is self-rated. ✓ comes only from a full practise run (3 of 3) on the skills engine.</p>
       </section>
 
-      <!-- the road to the projects -->
-      <section class="mapsec">
-        <h2 data-i18n="mapH2">The road to the projects</h2>
-        <p class="lead" data-i18n="mapLead">Every skill and word below builds towards the tall columns — the tasks you will actually do.</p>
-        <div id="projectmap"></div>
-      </section>
-
       <!-- one section per skill group (painted from STEM2) -->
       <div id="groups"></div>
 
       <!-- do -->
       <section id="do">
         <h2 data-i18n="doH2">Do</h2>
-        <p class="lead" data-i18n="doLead">Do these before their checkpoint. 🔒 means school login —
-          open Compass or the class OneNote.</p>
+        <p class="lead" data-i18n="doLead">These are the practice grounds — come back to them all year.
+          🔒 means school login: open Compass or the class OneNote.</p>
         <div id="tasks"></div>
       </section>
 
       <!-- prove: this unit's checkpoints only -->
       <section id="prove">
         <h2 data-i18n="proveH2">Prove</h2>
-        <p class="lead" data-i18n="proveLead">Each unit keeps its own checkpoints. This is the whole
-          Kinematics arc.</p>
+        <p class="lead" data-i18n="proveLead">Foundations has no test date — it is open all year. The
+          entry task at the start of every lesson is the checkpoint.</p>
         <div id="cps"></div>
       </section>
 
@@ -254,7 +262,6 @@
 <script src="stem-vocab.js?v=20260821-2"></script>
 <script src="stem-gloss.js?v=20260821-3"></script>
 <script src="stem-translate.js?v=20260821-3"></script>
-<script src="stem-map.js?v=20260821-3"></script>
 <script>
 (function(){
   "use strict";
@@ -271,31 +278,27 @@
                    href: a normal link; ext: opens in a new tab.
      Nothing below the "end CONTENT" line needs editing.
      =================================================================== */
-  var UNIT_ID = "kin";
+  var UNIT_ID = "found";
+
+  /* Foundations has no checkpoints — the entry task is the checkpoint.
+     ENTRY_HREF is the practice the Prove section sends students to. */
+  var ENTRY_HREF = "https://liaminhawai-cmd.github.io/Multiplication-tables/";
 
   var SCHOOL_LINKS = {
-    booklet:    "#",   /* Linear motion worded questions booklet (Compass) */
-    textbook:   "#",   /* Textbook exercises 1B / 1E / 1F (OneNote → Maths Skills Resources) */
-    ballreport: "#"    /* Ball-drop report template (Compass) */
+    langbook: "#"   /* Language of maths booklet — symbol pages (Compass) */
   };
 
   var DO_TASKS = [
-    { id:"entry", title:"Entry task — ×-tables, timed", short:"Entry task — ×-tables",
-      what:"The first two minutes of every lesson. Accuracy first, then speed — every table up to 12.",
-      linkLabel:"Start the timed practice", ext:true,
-      href:"https://liaminhawai-cmd.github.io/Multiplication-tables/" },
-    { id:"race", title:"Race to School", short:"Race to School",
-      what:"Tram, bike and car on the same 6 km — three lines on one position-time graph. Watch it, predict it, then do the maths yourself.",
-      linkLabel:"Start the race →", href:"stem-commute.html" },
-    { id:"booklet", title:"Worded questions booklet", short:"Worded questions booklet",
-      what:"Worded motion questions. For every question: write the units, write the formula, then the answer. Bring it to class marked.",
-      linkLabel:"Open the booklet on Compass", school:"booklet" },
-    { id:"textbook", title:"Textbook exercises 1B/1E/1F — OneNote", short:"Textbook 1B/1E/1F",
-      what:"Linear graph practice from the class textbook. Do the questions your teacher sets, mark them, fix the wrong ones.",
-      linkLabel:"OneNote → Maths Skills Resources", school:"textbook" },
-    { id:"ballreport", title:"Ball-drop report template", short:"Ball-drop template",
-      what:"Drop the ball, time the fall, put the data in Excel. Plot distance against t² to straighten the curve — then g = 2 × the gradient. Write it up in the template.",
-      linkLabel:"Open the template on Compass", school:"ballreport" }
+    { id:"tables", title:"Entry task — ×-tables, timed", short:"×-tables, timed",
+      what:"The first two minutes of every lesson. Accuracy first, then speed — every table up to 12. Do the same set often enough and you stop counting.",
+      linkLabel:"Start the timed practice", ext:true, href:ENTRY_HREF },
+    { id:"convert", title:"Unit conversion practice", short:"Unit conversions",
+      what:"Ten questions at a time on mm, cm, m and km. Write each conversion as a step with its arrow — that is what stops you dividing when you should multiply.",
+      linkLabel:"Transum · Units, Level 1", ext:true,
+      href:"https://www.transum.org/maths/activity/units/Default.asp?Level=1" },
+    { id:"langbook", title:"Language of maths booklet", short:"Language booklet",
+      what:"The symbol pages: ≤, ≥, ≠, ≈, ±, √, ² and π. Read the symbol, say the whole sentence out loud, then write it in your own words. Do the pages your teacher sets.",
+      linkLabel:"Open the booklet pages on Compass", school:"langbook" }
   ];
   /* ===== end CONTENT =============================================== */
 
@@ -317,15 +320,20 @@
       doneW:"done", noCp:"No checkpoints left this term.",
       opensWord:"unit opens", lookAround:"You can look around now.",
       opensNote: function(d){ return "Opens "+d+" — you can look around now."; },
-      startWords:"start with the words →"
+      startWords:"start with the words →",
+      alwaysName:"Always open", alwaysWhen:"no test date",
+      alwaysDesc:"The entry task is the checkpoint.",
+      alwaysProve:"Every lesson opens with two minutes of timed ×-tables. That is the proof — accuracy first, then speed. A skill only turns ✓ when you get 3 of 3 on a practise run, so nothing here is guessed.",
+      alwaysStart:"Start the entry task", alwaysReport:"see your pace in the report →",
+      alwaysMore:"how this is checked ↓"
     },
     "zh-Hans": {
-      back:"← STEM 主页", sub:"第三学期 · 运动、线性图象、数据",
+      back:"← STEM 主页", sub:"全年开放 · 数字流畅度、单位、符号",
       goingH:"我要去哪里？", howH:"我走得怎样？", nextH:"接下来做什么？",
       railWordsH:"单词", railSkillsH:"技能", railDoH:"任务", railProveH:"证明",
       skillsNote:"下面的等级只是描述路径——这个页面没有自评。✓ 只来自技能引擎上一次完整的练习（3 题全对）。",
-      doH2:"任务", doLead:"在检查点之前完成这些任务。🔒 表示需要学校账号——请打开 Compass 或班级 OneNote。",
-      proveH2:"证明", proveLead:"每个单元只保留自己的检查点。这是运动学的完整安排。",
+      doH2:"任务", doLead:"这些是练习的地方，全年都可以回来做。🔒 表示需要学校账号：请打开 Compass 或班级 OneNote。",
+      proveH2:"证明", proveLead:"基础单元没有考试日期，全年开放。每节课开始的入门任务就是检查点。",
       privacy:"匿名 · 进度只保存在这个浏览器 · 工作纸在 Compass 和班级 OneNote（需学校账号）。",
       days: function(n){ return n===0 ? "今天" : n+" 天后"; },
       masteredW:"已掌握", notStarted:"未开始",
@@ -342,15 +350,20 @@
       doneW:"已完成", noCp:"本学期检查点已全部完成。",
       opensWord:"单元开放", lookAround:"现在可以先浏览。",
       opensNote: function(d){ return d+" 开放——现在可以先浏览。"; },
-      startWords:"先从单词开始 →"
+      startWords:"先从单词开始 →",
+      alwaysName:"全年开放", alwaysWhen:"没有考试日期",
+      alwaysDesc:"入门任务就是检查点。",
+      alwaysProve:"每节课都以两分钟的乘法表计时开始。这就是证明——先求准确，再求速度。技能只有在一次练习中 3 题全对才会变成 ✓，所以这里没有任何猜测。",
+      alwaysStart:"开始入门任务", alwaysReport:"在报告里看你的速度 →",
+      alwaysMore:"怎样算通过 ↓"
     },
     "zh-Hant": {
-      back:"← STEM 主頁", sub:"第三學期 · 運動、線性圖形、數據",
+      back:"← STEM 主頁", sub:"全年開放 · 數字流暢度、單位、符號",
       goingH:"我要去哪裡？", howH:"我走得如何？", nextH:"接下來做什麼？",
       railWordsH:"單字", railSkillsH:"技能", railDoH:"任務", railProveH:"證明",
       skillsNote:"下面的等級只是描述路徑——這個頁面沒有自評。✓ 只來自技能引擎上一次完整的練習（3 題全對）。",
-      doH2:"任務", doLead:"在檢查點之前完成這些任務。🔒 表示需要學校帳號——請打開 Compass 或班級 OneNote。",
-      proveH2:"證明", proveLead:"每個單元只保留自己的檢查點。這是運動學的完整安排。",
+      doH2:"任務", doLead:"這些是練習的地方，整年都可以回來做。🔒 表示需要學校帳號：請打開 Compass 或班級 OneNote。",
+      proveH2:"證明", proveLead:"基礎單元沒有考試日期，全年開放。每節課開始的入門任務就是檢查點。",
       privacy:"匿名 · 進度只儲存在這個瀏覽器 · 學習單在 Compass 和班級 OneNote（需學校帳號）。",
       days: function(n){ return n===0 ? "今天" : n+" 天後"; },
       masteredW:"已精熟", notStarted:"未開始",
@@ -367,7 +380,12 @@
       doneW:"已完成", noCp:"本學期檢查點已全部完成。",
       opensWord:"單元開放", lookAround:"現在可以先瀏覽。",
       opensNote: function(d){ return d+" 開放——現在可以先瀏覽。"; },
-      startWords:"先從單字開始 →"
+      startWords:"先從單字開始 →",
+      alwaysName:"全年開放", alwaysWhen:"沒有考試日期",
+      alwaysDesc:"入門任務就是檢查點。",
+      alwaysProve:"每節課都以兩分鐘的乘法表計時開始。這就是證明——先求準確，再求速度。技能只有在一次練習中 3 題全對才會變成 ✓，所以這裡沒有任何猜測。",
+      alwaysStart:"開始入門任務", alwaysReport:"在報告裡看你的速度 →",
+      alwaysMore:"怎樣算通過 ↓"
     }
   };
   var sel = document.querySelector(".language-select");
@@ -444,6 +462,8 @@
         "/" + c.total + "</span></a>";
     });
     document.getElementById("railWords").innerHTML = h;
+    /* a unit with no vocab sets (Foundations) simply has no Words rail */
+    document.getElementById("railWordsSec").style.display = UNIT.vocabSets.length ? "" : "none";
 
     h = "";
     UNIT.skillGroups.forEach(function(g){
@@ -477,8 +497,13 @@
         "<span class='rname'>" + esc(c.short) + "</span>" +
         "<span class='rcount'>" + right + "</span></a>";
     });
+    /* Foundations: one standing line where the dated checkpoints would be */
+    if (!UNIT.checkpoints.length) {
+      h = "<a class='ritem' href='#prove'><span class='rname'>" + esc(T("alwaysName")) + "</span>" +
+        "<span class='rcount'>" + esc(T("alwaysWhen")) + "</span></a>";
+    }
     document.getElementById("railProve").innerHTML = h;
-    document.getElementById("railProveSec").style.display = UNIT.checkpoints.length ? "" : "none";
+    document.getElementById("railProveSec").style.display = "";
   }
 
   /* ---------------- visible-learning spine ---------------- */
@@ -490,6 +515,12 @@
       h = "<div class='big'>" + esc(T("opensWord")) + " · " + esc(fD(UNIT.opensFrom)) + "</div>" +
         "<div class='line'><span class='alert'>" + esc(T("days")(dU(UNIT.opensFrom))) + "</span></div>" +
         "<div class='dim'>" + esc(T("lookAround")) + "</div>";
+    } else if (UNIT.always && !UNIT.checkpoints.length) {
+      /* Foundations: no date to count down to — it is open all year */
+      h = "<div class='big'>" + esc(T("alwaysName")) + "</div>" +
+        "<div class='line'>" + esc(T("alwaysWhen")) + "</div>" +
+        "<div class='dim'>" + esc(T("alwaysDesc")) + "</div>" +
+        "<a href='#prove'>" + esc(T("alwaysMore")) + "</a>";
     } else {
       var cp = STEM2.nextCheckpoint(UNIT);
       if (cp) {
@@ -506,12 +537,14 @@
     /* HOW AM I GOING — mastery counts + vocab built counts (objective only) */
     var mc = STEM2.Mastery.unitCounts(UNIT.id), v = vocabTotals();
     var mp = mc.total ? Math.round(100 * mc.done / mc.total) : 0;
-    var vp = v.total ? Math.round(100 * v.built / v.total) : 0;
     h = "<div class='line'>" + esc(T("skillsMasteredF")(mc.done, mc.total)) + "</div>" +
-      "<span class='bar'><i style='width:" + mp + "%'></i></span>" +
-      "<div class='line'>" + esc(T("wordsBuiltF")(v.built, v.total)) + "</div>" +
-      "<span class='bar'><i style='width:" + vp + "%'></i></span>" +
-      "<a href='stem-progress.html'>" + esc(T("reportLink")) + "</a>";
+      "<span class='bar'><i style='width:" + mp + "%'></i></span>";
+    if (v.total) {
+      var vp = Math.round(100 * v.built / v.total);
+      h += "<div class='line'>" + esc(T("wordsBuiltF")(v.built, v.total)) + "</div>" +
+        "<span class='bar'><i style='width:" + vp + "%'></i></span>";
+    }
+    h += "<a href='stem-progress.html'>" + esc(T("reportLink")) + "</a>";
     document.getElementById("spHow").innerHTML = h;
 
     /* WHERE TO NEXT — one action link */
@@ -619,8 +652,17 @@
         "<div class='cwhen'>" + when + "</div>" +
         "<div class='cdesc'>" + esc(c.desc) + "</div></div>";
     });
+    /* Foundations: the entry task is the checkpoint, so Prove says so plainly */
+    if (!UNIT.checkpoints.length) {
+      h = "<div class='always'>" +
+        "<div class='aname'>" + esc(T("alwaysName")) + "</div>" +
+        "<div class='adesc'>" + esc(T("alwaysProve")) + "</div>" +
+        "<a href='" + esc(ENTRY_HREF) + "' target='_blank' rel='noopener'>" +
+          esc(T("alwaysStart")) + " ↗</a>" +
+        "<a href='stem-progress.html'>" + esc(T("alwaysReport")) + "</a></div>";
+    }
     document.getElementById("cps").innerHTML = h;
-    document.getElementById("prove").style.display = UNIT.checkpoints.length ? "" : "none";
+    document.getElementById("prove").style.display = "";
   }
 
   function paintPreview(){
@@ -652,10 +694,6 @@
   setStatic(); paintAll();
   if (window.STEMVOCAB) STEMVOCAB.init();
 })();
-</script>
-<script>
-(function(){ if (window.STEMMAP && document.getElementById("projectmap"))
-  STEMMAP.render(document.getElementById("projectmap"), "kin"); })();
 </script>
 </body>
 </html>

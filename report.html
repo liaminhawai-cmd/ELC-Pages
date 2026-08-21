@@ -95,22 +95,37 @@ if(goal){
 
 const stemBox=document.getElementById("stem");
 (function(){
-  const hasSTEM = typeof window.STEM !== "undefined";
-  const skills = hasSTEM ? STEM.Store.skills() : {};
-  const vocab = hasSTEM ? STEM.Store.vocab() : {};
-  const evidence = hasSTEM ? STEM.Store.evidence() : {};
-  const anyData = Object.keys(skills).length || Object.keys(vocab).length || Object.keys(evidence).length;
-  if (!hasSTEM || !anyData) {
+  const hasSTEM2 = typeof window.STEM2 !== "undefined";
+  const vocab = hasSTEM2 ? STEM2.Store.vocab() : {};
+  const skillIds = hasSTEM2 ? Object.keys(STEM2.SKILLS) : [];
+
+  let mastered = 0, anyPractice = false;
+  skillIds.forEach(id => {
+    const st = STEM2.Mastery.state(id);
+    if (st.status !== "none") anyPractice = true;
+    if (st.status === "mastered") mastered++;
+  });
+
+  const anyData = anyPractice || Object.keys(vocab).length > 0;
+  if (!hasSTEM2 || !anyData) {
     stemBox.append(text("p","No STEM practice recorded yet.","empty"));
     return;
   }
-  const summary = STEM.summary();
-  const mastered = summary.ahead + summary.done;
+
   let wordsBuilt = 0;
   Object.keys(vocab).forEach(w => { if (vocab[w].built) wordsBuilt++; });
-  const behindNames = STEM.SKILLS
-    .filter(s => STEM.skillState(s).timing === "behind")
-    .map(s => s.name);
+
+  /* "behind" = not yet mastered, and the checkpoint it is needed by has
+     already passed (each skill names the checkpoint id it belongs to) */
+  const behindNames = [];
+  skillIds.forEach(id => {
+    if (STEM2.Mastery.mastered(id)) return;
+    const sk = STEM2.SKILLS[id];
+    if (!sk.needs) return;
+    const unit = STEM2.UNIT_BY_ID[sk.unit];
+    const cp = unit && unit.checkpoints.filter(c => c.id === sk.needs)[0];
+    if (cp && STEM2.daysUntil(cp.date) < 0) behindNames.push(sk.name);
+  });
 
   const box=document.createElement("div");
   box.className="stem-box";
