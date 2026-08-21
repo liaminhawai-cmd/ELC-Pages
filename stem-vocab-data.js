@@ -4395,6 +4395,2463 @@ window.STEM_VOCAB_DATA = {
    ]
   },
   {
+   "id": "kin5",
+   "area": "kin",
+   "title": "Curves & projectiles",
+   "focus": "The words the Keg Toss and the Tennis Serve are made of — a thrown thing follows a curve, and the curve has a rule.",
+   "words": [
+    {
+     "w": "parabola",
+     "meaning": "The U-shaped curve you get from a squared relationship.",
+     "example": "The path of a thrown ball is a parabola.",
+     "parts": [
+      {
+       "surface": "para",
+       "type": "prefix",
+       "meaning": "beside",
+       "tr": {
+        "am": "አጠገብ",
+        "ar": "بجانب",
+        "es": "al lado de",
+        "fa": "کنار",
+        "fr": "à côté",
+        "hi": "पास",
+        "ja": "そば",
+        "ko": "옆",
+        "ml": "അരികിൽ",
+        "ps": "څنګ",
+        "ro": "lângă",
+        "ru": "рядом",
+        "ta": "அருகில்",
+        "tl": "tabi",
+        "ur": "پاس",
+        "vi": "bên cạnh",
+        "zh-Hans": "旁边",
+        "zh-Hant": "旁邊"
+       }
+      },
+      {
+       "surface": "bol",
+       "type": "root",
+       "meaning": "throw",
+       "tr": {
+        "am": "መወርወር",
+        "ar": "رمي",
+        "es": "lanzar",
+        "fa": "پرتاب",
+        "fr": "lancer",
+        "hi": "फेंकना",
+        "ja": "投げる",
+        "ko": "던지다",
+        "ml": "എറിയൽ",
+        "ps": "غورځول",
+        "ro": "aruncare",
+        "ru": "бросать",
+        "ta": "எறிதல்",
+        "tl": "paghagis",
+        "ur": "پھینکنا",
+        "vi": "ném",
+        "zh-Hans": "投掷",
+        "zh-Hant": "投擲"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "抛物线",
+      "zh-Hant": "拋物線",
+      "ja": "放物線",
+      "ko": "포물선",
+      "vi": "parabol",
+      "ar": "القطع المكافئ",
+      "fa": "سهمی (پارابولا)",
+      "ur": "شلجمی خط (پیرابولا)",
+      "am": "ፓራቦላ",
+      "ml": "പരവലയം",
+      "ta": "பரவளையம்",
+      "tl": "parabola",
+      "ps": "پارابولا",
+      "ro": "parabolă",
+      "ru": "парабола",
+      "fr": "parabole",
+      "hi": "परवलय",
+      "es": "parábola"
+     },
+     "note": "Greek <i>para-</i> (beside) + <i>bol</i> (throw): the curve that lies beside a throw. The same <i>bol</i> is in <b>symbol</b> (thrown together) and <b>hyperbola</b>. Every thrown ball, keg or shot put draws one, and the rule behind it always has an x² in it.",
+     "apply": [
+      {
+       "id": "kin5_par_desc",
+       "type": "desc",
+       "q": "Which word names the U-shaped curve that a thrown ball traces through the air?",
+       "a": "Parabola",
+       "opts": [
+        "Parabola",
+        "Coefficient",
+        "Symmetry",
+        "Projectile"
+       ],
+       "explain": "<i>para-</i> (beside) + <i>bol</i> (throw): the curve beside a throw. The projectile is the object; this is the shape of its path."
+      },
+      {
+       "id": "kin5_par_scn",
+       "type": "scenario",
+       "q": "A graph of height against distance for a thrown keg rises, turns over and comes down again, and its rule contains x². What shape is the graph?",
+       "a": "A parabola",
+       "opts": [
+        "A parabola",
+        "A straight line",
+        "A circle",
+        "A step"
+       ],
+       "explain": "An x² in the rule bends the graph: up one side, over a turning point, down the other. That shape is a parabola."
+      },
+      {
+       "id": "kin5_par_cloze",
+       "type": "cloze",
+       "before": "Because there is an x² in the rule, the graph is not a straight line but a",
+       "after": "with exactly one turning point.",
+       "a": "parabola",
+       "opts": [
+        "parabola",
+        "gradient",
+        "perimeter",
+        "ratio"
+       ],
+       "explain": "A squared term bends the graph into a curve with exactly one turning point."
+      }
+     ]
+    },
+    {
+     "w": "quadratic",
+     "meaning": "Describes a rule where the highest power of the letter is 2. Its graph is a parabola.",
+     "example": "y = a(x − h)² + k is a quadratic rule, so its graph curves.",
+     "parts": [
+      {
+       "surface": "quadr",
+       "type": "root",
+       "meaning": "four",
+       "tr": {
+        "zh-Hans": "四",
+        "ja": "四",
+        "vi": "bốn",
+        "zh-Hant": "四",
+        "am": "አራት",
+        "ar": "أربعة",
+        "es": "cuatro",
+        "fa": "چهار",
+        "fr": "quatre",
+        "hi": "चार",
+        "ko": "넷",
+        "ml": "നാല്",
+        "ps": "څلور",
+        "ro": "patru",
+        "ru": "четыре",
+        "ta": "நான்கு",
+        "tl": "apat",
+        "ur": "چار"
+       }
+      },
+      {
+       "surface": "at",
+       "type": "suffix",
+       "meaning": "make/cause",
+       "tr": {
+        "vi": "làm, gây ra",
+        "am": "ማድረግ",
+        "ar": "جعل",
+        "es": "hacer/causar",
+        "fa": "سبب شدن",
+        "fr": "faire / causer",
+        "hi": "बनाना / कारण बनना",
+        "ja": "～にする",
+        "ko": "만들다/일으키다",
+        "ml": "ചെയ്യുക",
+        "ps": "جوړول / لامل کېدل",
+        "ro": "a face / a cauza",
+        "ru": "делать / вызывать",
+        "ta": "உண்டாக்க",
+        "tl": "gawin / maging sanhi",
+        "ur": "بنانا / سبب بننا",
+        "zh-Hans": "使",
+        "zh-Hant": "使"
+       }
+      },
+      {
+       "surface": "ic",
+       "type": "suffix",
+       "meaning": "relating to",
+       "tr": {
+        "fa": "مربوط به",
+        "am": "ተያያዥ",
+        "ar": "متعلّق بـ",
+        "es": "relativo a",
+        "fr": "relatif à",
+        "hi": "संबंधी",
+        "ja": "～の",
+        "ko": "관련된",
+        "ml": "ബന്ധപ്പെട്ട",
+        "ps": "اړوند",
+        "ro": "legat de",
+        "ru": "относящийся",
+        "ta": "தொடர்பான",
+        "tl": "kaugnay sa",
+        "ur": "متعلق",
+        "vi": "thuộc về",
+        "zh-Hans": "……的",
+        "zh-Hant": "……的"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ካሬያዊ",
+      "ar": "تربيعي",
+      "es": "cuadrático",
+      "fa": "درجه دوم",
+      "fr": "quadratique",
+      "hi": "द्विघात",
+      "ja": "二次",
+      "ko": "이차",
+      "ml": "രണ്ടാം കൃതി",
+      "ps": "دویمه درجه",
+      "ro": "pătratic",
+      "ru": "квадратичный",
+      "ta": "இருபடி",
+      "tl": "kwadratiko",
+      "ur": "درجہ دوم",
+      "vi": "bậc hai",
+      "zh-Hans": "二次",
+      "zh-Hant": "二次"
+     },
+     "note": "Latin <i>quadr-</i> (four) + <i>-at-</i> + <i>-ic</i> (relating to): squaring a length is what makes a four-sided square, so a rule with a square in it is quadratic. The same <i>quadr</i> is in <b>quadrilateral</b> (four sides) and <b>quad bike</b> (four wheels). The test is simple: the highest power of the letter is <b>2</b> — never 1, never 3.",
+     "apply": [
+      {
+       "id": "kin5_quad_desc",
+       "type": "desc",
+       "q": "In which of these rules is the highest power of the letter equal to 2?",
+       "a": "y = 2x² − 5x + 1",
+       "opts": [
+        "y = 2x² − 5x + 1",
+        "y = 2x − 5",
+        "y = 2x³ + 1",
+        "y = 2 ÷ x"
+       ],
+       "explain": "Highest power 2 makes it quadratic. The second rule is linear (power 1) and the third is cubic (power 3)."
+      },
+      {
+       "id": "kin5_quad_scn",
+       "type": "scenario",
+       "q": "A group plots drop height against fall time and gets a curve. When they square the time and plot again, the points fall on a straight line. What kind of relationship is it?",
+       "a": "A quadratic relationship",
+       "opts": [
+        "A quadratic relationship",
+        "A linear relationship",
+        "A ratio",
+        "No relationship at all"
+       ],
+       "explain": "A curve that straightens when one variable is squared is the signature of a squared term — highest power 2."
+      },
+      {
+       "id": "kin5_quad_cloze",
+       "type": "cloze",
+       "before": "The highest power of x in y = 3x² + 4 is two, so this rule is",
+       "after": "and its graph is a curve, not a straight line.",
+       "a": "quadratic",
+       "opts": [
+        "quadratic",
+        "linear",
+        "perpendicular",
+        "uniform"
+       ],
+       "explain": "<i>quadr</i> = four, from the square: a squared term is what makes the rule this kind, and the graph curves."
+      }
+     ]
+    },
+    {
+     "w": "coefficient",
+     "meaning": "the number multiplying a variable in a term, e.g. the 3 in 3x².",
+     "example": "In the term 4x² the coefficient is 4.",
+     "parts": [
+      {
+       "surface": "co",
+       "type": "prefix",
+       "meaning": "together",
+       "tr": {
+        "am": "አብሮ",
+        "ar": "معًا",
+        "es": "juntos",
+        "fa": "باهم",
+        "fr": "ensemble",
+        "hi": "साथ",
+        "ja": "共に",
+        "ko": "함께",
+        "ml": "ഒരുമിച്ച്",
+        "ps": "يوځای",
+        "ro": "împreună",
+        "ru": "вместе",
+        "ta": "ஒன்றாக",
+        "tl": "magkasama",
+        "ur": "اکٹھا",
+        "vi": "cùng",
+        "zh-Hans": "共同",
+        "zh-Hant": "共同",
+        "other": "باهم"
+       }
+      },
+      {
+       "surface": "effic",
+       "type": "root",
+       "meaning": "make/do",
+       "tr": {
+        "zh-Hans": "制作/做",
+        "zh-Hant": "製作/做",
+        "ja": "作る/する",
+        "ko": "만들다/하다",
+        "vi": "làm/tạo ra",
+        "ar": "يصنع/يفعل",
+        "fa": "ساختن/انجام دادن",
+        "ur": "بنانا/کرنا",
+        "am": "መስራት",
+        "ml": "ഉണ്ടാക്കുക/ചെയ്യുക",
+        "ta": "செய்தல்",
+        "tl": "gumawa",
+        "ps": "جوړول/کول",
+        "ro": "a face",
+        "ru": "делать/создавать",
+        "fr": "faire",
+        "hi": "बनाना/करना",
+        "es": "hacer"
+       }
+      },
+      {
+       "surface": "ient",
+       "type": "suffix",
+       "meaning": "having the quality of",
+       "tr": {
+        "am": "ባህሪ ያለው",
+        "ar": "ذو صفة",
+        "es": "que tiene la cualidad de",
+        "fa": "دارای",
+        "fr": "ayant",
+        "hi": "गुण वाला",
+        "ja": "〜性",
+        "ko": "~성",
+        "ml": "ഉള്ള",
+        "ps": "لرونکی",
+        "ro": "care are",
+        "ru": "обладающий",
+        "ta": "தன்மை உடைய",
+        "tl": "may katangian",
+        "ur": "کا حامل",
+        "vi": "có tính chất",
+        "zh-Hans": "…性的",
+        "zh-Hant": "…性的"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ተባባሪ",
+      "ar": "معامل",
+      "es": "coeficiente",
+      "fa": "ضریب",
+      "fr": "coefficient",
+      "hi": "गुणांक",
+      "ja": "係数",
+      "ko": "계수",
+      "ml": "ഗുണാങ്കം",
+      "ps": "ضریب",
+      "ro": "coeficient",
+      "ru": "коэффициент",
+      "ta": "குணகம்",
+      "tl": "koepisyent",
+      "ur": "ضریب",
+      "vi": "hệ số",
+      "zh-Hans": "系数",
+      "zh-Hant": "係數"
+     },
+     "note": "Latin <i>co-</i> (together) + <i>effic</i> (make, do) + <i>-ient</i>: the number that works together with the letter to make the term. The same <i>effic</i> is in <b>efficient</b> and <b>effect</b>. In y = a(x − h)² + k the coefficient <b>a</b> decides how wide the curve is, and a negative <b>a</b> turns the whole curve upside down.",
+     "apply": [
+      {
+       "id": "kin5_coef_desc",
+       "type": "desc",
+       "q": "In the term 7x², which part is the coefficient?",
+       "a": "7",
+       "opts": [
+        "7",
+        "x",
+        "2",
+        "x²"
+       ],
+       "explain": "The coefficient is the number multiplying the letter: 7. The small 2 is the power, not the coefficient."
+      },
+      {
+       "id": "kin5_coef_scn",
+       "type": "scenario",
+       "q": "In y = −0.025(x − 4)² + 3.6, the number in front of the bracket is negative. What does that tell you about the curve?",
+       "a": "It opens downwards",
+       "opts": [
+        "It opens downwards",
+        "It opens upwards",
+        "It is a straight line",
+        "It has no turning point"
+       ],
+       "explain": "A negative number in front of the squared bracket flips the parabola over, so the arc rises and then comes back down."
+      },
+      {
+       "id": "kin5_coef_cloze",
+       "type": "cloze",
+       "before": "In the term 5x the number 5 multiplies the letter next to it, so 5 is the",
+       "after": "of that term.",
+       "a": "coefficient",
+       "opts": [
+        "coefficient",
+        "parabola",
+        "symmetry",
+        "projectile"
+       ],
+       "explain": "<i>co-</i> (together) + <i>effic</i> (make): the number that works together with the letter to make the term."
+      }
+     ]
+    },
+    {
+     "w": "substitute",
+     "meaning": "Put a number in place of a letter in a formula.",
+     "example": "Substitute x = 3 into the equation.",
+     "parts": [
+      {
+       "surface": "sub",
+       "type": "prefix",
+       "meaning": "under",
+       "tr": {
+        "am": "ከታች / በምትክ",
+        "ar": "تحت / بدلاً من",
+        "es": "bajo / en lugar de",
+        "fa": "زیر / به‌جای",
+        "fr": "sous / à la place de",
+        "hi": "नीचे / के स्थान पर",
+        "ja": "下に・代わりに",
+        "ko": "아래/대신",
+        "ml": "താഴെ / പകരം",
+        "ps": "لاندې / پرځای",
+        "ro": "sub / în locul",
+        "ru": "под / вместо",
+        "ta": "கீழ் / பதிலாக",
+        "tl": "sa ilalim / kapalit",
+        "ur": "نیچے / بجائے",
+        "vi": "dưới / thay thế",
+        "zh-Hans": "下/替代",
+        "zh-Hant": "下/替代"
+       }
+      },
+      {
+       "surface": "stitut",
+       "type": "root",
+       "meaning": "set up/establish",
+       "tr": {
+        "am": "መመስረት",
+        "ar": "يؤسس",
+        "es": "establecer",
+        "fa": "تأسیس کردن",
+        "fr": "établir",
+        "hi": "स्थापित करना",
+        "ja": "設立する",
+        "ko": "설립하다",
+        "ml": "സ്ഥാപിക്കുക",
+        "ps": "تاسیس کول",
+        "ro": "a înființa",
+        "ru": "учреждать",
+        "ta": "நிறுவு",
+        "tl": "itatag",
+        "ur": "قائم کرنا",
+        "vi": "thiết lập",
+        "zh-Hans": "建立",
+        "zh-Hant": "建立"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "代入",
+      "zh-Hant": "代入",
+      "ja": "代入する",
+      "ko": "대입하다",
+      "vi": "thay thế (thế vào)",
+      "ar": "يعوّض (يستبدل)",
+      "fa": "جایگذاری کردن",
+      "ur": "متبادل رکھنا (تبدیل کرنا)",
+      "am": "መተካት",
+      "ml": "പകരം വയ്ക്കുക",
+      "ta": "பதிலீடு செய்",
+      "tl": "ipalit (substitute)",
+      "ps": "ځای پرځای کول",
+      "ro": "a substitui",
+      "ru": "подставлять",
+      "fr": "substituer",
+      "hi": "प्रतिस्थापित करना",
+      "es": "sustituir"
+     },
+     "note": "Latin <i>sub-</i> (under) + <i>stitut</i> (set up): to set one thing up in place of another. The same <i>stitut</i> is in <b>institute</b> and <b>constitution</b>. In maths you substitute a <b>number</b> in place of a <b>letter</b> — exactly the way a substitute player comes on in place of another player.",
+     "apply": [
+      {
+       "id": "kin5_sub_scn",
+       "type": "scenario",
+       "q": "You know the rule y = 2x + 1 and you are told that x = 4. What is the first thing you do to find y?",
+       "a": "Put 4 in place of x",
+       "opts": [
+        "Put 4 in place of x",
+        "Put 4 in place of y",
+        "Divide both sides by 2",
+        "Draw the graph first"
+       ],
+       "explain": "Set the number up in place of the letter, then work it out: y = 2(4) + 1 = 9."
+      },
+      {
+       "id": "kin5_sub_desc",
+       "type": "desc",
+       "q": "Which word means to put a number in place of a letter in a rule?",
+       "a": "Substitute",
+       "opts": [
+        "Substitute",
+        "Sketch",
+        "Simplify",
+        "Symmetry"
+       ],
+       "explain": "<i>sub-</i> (under) + <i>stitut</i> (set up): set the number up in place of the letter. Simplify means tidy an expression up, not swap numbers in."
+      },
+      {
+       "id": "kin5_sub_cloze",
+       "type": "cloze",
+       "before": "The rule is y = a(x − 8)² + 3.6 and the ball is known to pass through (0, 2), so",
+       "after": "those two numbers and solve for a.",
+       "a": "substitute",
+       "opts": [
+        "substitute",
+        "sketch",
+        "measure",
+        "label"
+       ],
+       "explain": "Set the two known numbers up in place of x and y, and the only unknown left is a."
+      }
+     ]
+    },
+    {
+     "w": "projectile",
+     "meaning": "an object, such as a bullet, that is thrown or fired forward through the air.",
+     "example": "A thrown ball is a projectile — once it leaves the hand, only gravity acts on it.",
+     "parts": [
+      {
+       "surface": "pro",
+       "type": "prefix",
+       "meaning": "forward",
+       "tr": {
+        "am": "ወደ ፊት",
+        "ar": "إلى الأمام",
+        "es": "adelante",
+        "fa": "جلو",
+        "fr": "avant",
+        "hi": "आगे",
+        "ja": "前へ",
+        "ko": "앞으로",
+        "ml": "മുന്നോട്ട്",
+        "ps": "مخ ته",
+        "ro": "înainte",
+        "ru": "вперёд",
+        "ta": "முன்னோக்கி",
+        "tl": "pasulong",
+        "ur": "آگے",
+        "vi": "tiến về",
+        "zh-Hans": "向前",
+        "zh-Hant": "向前"
+       }
+      },
+      {
+       "surface": "ject",
+       "type": "root",
+       "meaning": "throw",
+       "tr": {
+        "am": "መወርወር",
+        "ar": "رمي",
+        "es": "lanzar",
+        "fa": "پرتاب کردن",
+        "fr": "jeter",
+        "hi": "फेंकना",
+        "ja": "投げる",
+        "ko": "던지다",
+        "ml": "എറിയുക",
+        "ps": "غورځول",
+        "ro": "a arunca",
+        "ru": "бросать",
+        "ta": "வீசு",
+        "tl": "ihagis",
+        "ur": "پھینکنا",
+        "vi": "ném",
+        "zh-Hans": "投射",
+        "zh-Hant": "投射"
+       }
+      },
+      {
+       "surface": "ile",
+       "type": "suffix",
+       "meaning": "capable of / a thing that",
+       "tr": {
+        "am": "የሚችል",
+        "ar": "قابل لـ",
+        "es": "capaz de / cosa que",
+        "fa": "قابلِ",
+        "fr": "capable de",
+        "hi": "योग्य",
+        "ja": "…できる",
+        "ko": "…할 수 있는",
+        "ml": "കഴിവുള്ള",
+        "ps": "د … وړ",
+        "ro": "capabil de",
+        "ru": "способный",
+        "ta": "தகுதியுள்ள",
+        "tl": "kayang",
+        "ur": "کے قابل",
+        "vi": "có thể",
+        "zh-Hans": "能……的",
+        "zh-Hant": "能……的"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ተወንጫፊ ነገር (ጥይት የመሳሰለ)",
+      "ar": "مقذوف",
+      "es": "proyectil",
+      "fa": "پرتابه",
+      "fr": "projectile",
+      "hi": "प्रक्षेप्य",
+      "ja": "発射体",
+      "ko": "발사체",
+      "ml": "പ്രക്ഷേപ്യവസ്തു",
+      "ps": "پرتاب شوی جسم، مرمۍ",
+      "ro": "proiectil",
+      "ru": "снаряд",
+      "ta": "எறிபொருள்",
+      "tl": "proyektil",
+      "ur": "پرتابی شے، گولی",
+      "vi": "vật phóng",
+      "zh-Hans": "抛射体；弹丸",
+      "zh-Hant": "拋射體；彈丸"
+     },
+     "note": "Latin <i>pro-</i> (forward) + <i>ject</i> (throw) + <i>-ile</i> (a thing that): a thing thrown forward. The same <i>ject</i> is in <b>eject</b> (throw out) and <b>inject</b> (throw in). Keep the pair straight: the projectile is the <b>object</b>, and the curved path it takes is its <b>trajectory</b>.",
+     "apply": [
+      {
+       "id": "kin5_proj_desc",
+       "type": "desc",
+       "q": "Which word names the object itself — the thing that is thrown or fired?",
+       "a": "Projectile",
+       "opts": [
+        "Projectile",
+        "Trajectory",
+        "Parabola",
+        "Symmetry"
+       ],
+       "explain": "<i>pro-</i> (forward) + <i>ject</i> (throw) + <i>-ile</i> (a thing that): the thing thrown forward. Its path is the trajectory."
+      },
+      {
+       "id": "kin5_proj_scn",
+       "type": "scenario",
+       "q": "A keg is thrown from the back of a truck and nothing pushes it after it leaves the hand. Which name fits the keg itself?",
+       "a": "It is a projectile",
+       "opts": [
+        "It is a projectile",
+        "It is a trajectory",
+        "It is a coefficient",
+        "It is a parabola"
+       ],
+       "explain": "Once it is in the air with nothing pushing it, the keg is the object thrown forward. The curve it draws is the trajectory."
+      }
+     ]
+    },
+    {
+     "w": "trajectory",
+     "meaning": "The curved path an object follows through the air after it is thrown or fired.",
+     "example": "The ball's trajectory took it just over the net and down inside the line.",
+     "parts": [
+      {
+       "surface": "tra",
+       "type": "prefix",
+       "meaning": "across",
+       "tr": {
+        "am": "ማዶ / አቋርጦ",
+        "ar": "عبر",
+        "es": "a través de",
+        "fa": "از میان / عبور",
+        "fr": "à travers",
+        "hi": "के पार / आर-पार",
+        "ja": "横切って・越えて",
+        "ko": "가로질러",
+        "ml": "കുറുകെ",
+        "ps": "پار / عبور",
+        "ro": "peste / transversal",
+        "ru": "через / поперёк",
+        "ta": "குறுக்கே",
+        "tl": "patawid / sa kabila",
+        "ur": "پار / آر پار",
+        "vi": "ngang qua",
+        "zh-Hans": "穿过／横过",
+        "zh-Hant": "穿過／橫過"
+       }
+      },
+      {
+       "surface": "ject",
+       "type": "root",
+       "meaning": "throw",
+       "tr": {
+        "am": "መወርወር",
+        "ar": "رمي",
+        "es": "lanzar",
+        "fa": "پرتاب کردن",
+        "fr": "jeter",
+        "hi": "फेंकना",
+        "ja": "投げる",
+        "ko": "던지다",
+        "ml": "എറിയുക",
+        "ps": "غورځول",
+        "ro": "a arunca",
+        "ru": "бросать",
+        "ta": "வீசு",
+        "tl": "ihagis",
+        "ur": "پھینکنا",
+        "vi": "ném",
+        "zh-Hans": "投射",
+        "zh-Hant": "投射"
+       }
+      },
+      {
+       "surface": "ory",
+       "type": "suffix",
+       "meaning": "relating to (makes a noun)",
+       "tr": {
+        "am": "የተመለከተ",
+        "ar": "متعلق بـ",
+        "es": "relativo a",
+        "fa": "مربوط به",
+        "fr": "relatif à",
+        "hi": "संबंधित",
+        "ja": "…に関する",
+        "ko": "…에 관한",
+        "ml": "സംബന്ധിച്ച",
+        "ps": "اړوند",
+        "ro": "referitor la",
+        "ru": "относящийся к",
+        "ta": "தொடர்பான",
+        "tl": "may kaugnayan sa",
+        "ur": "متعلق",
+        "vi": "liên quan đến",
+        "zh-Hans": "与……有关的",
+        "zh-Hant": "與……有關的"
+       }
+      }
+     ],
+     "tr": {
+      "am": "የጥይት አቅጣጫ",
+      "ar": "مسار المقذوف",
+      "es": "trayectoria",
+      "fa": "مسیر گلوله",
+      "fr": "trajectoire",
+      "hi": "प्रक्षेप-पथ",
+      "ja": "弾道",
+      "ko": "탄도",
+      "ml": "സഞ്ചാരപഥം",
+      "ps": "د مرمۍ لار",
+      "ro": "traiectorie",
+      "ru": "траектория",
+      "ta": "எறிபொருள் பாதை",
+      "tl": "trayektorya",
+      "ur": "گولی کا مسیر",
+      "vi": "quỹ đạo đạn",
+      "zh-Hans": "弹道",
+      "zh-Hant": "彈道"
+     },
+     "note": "Latin <i>tra-</i> (across) + <i>ject</i> (throw) + <i>-ory</i> (a thing relating to): the throw across. Same <i>ject</i> as in <b>projectile</b> and <b>eject</b>. Learn the three together: the projectile is the object, the trajectory is the path it takes, and drawn on a graph that path is a parabola.",
+     "apply": [
+      {
+       "id": "kin5_traj_desc",
+       "type": "desc",
+       "q": "Which word names the path — the line an object traces through the air?",
+       "a": "Trajectory",
+       "opts": [
+        "Trajectory",
+        "Projectile",
+        "Coefficient",
+        "Substitute"
+       ],
+       "explain": "<i>tra-</i> (across) + <i>ject</i> (throw): the throw across, which is the path. The projectile is the object that follows it."
+      },
+      {
+       "id": "kin5_traj_scn",
+       "type": "scenario",
+       "q": "A coach films a serve and draws the shape the ball made in the air from racket to court. What has the coach drawn?",
+       "a": "Its trajectory",
+       "opts": [
+        "Its trajectory",
+        "Its coefficient",
+        "Its symmetry",
+        "Its gradient"
+       ],
+       "explain": "The shape traced through the air is the trajectory. Plotted on axes, it comes out as a parabola."
+      },
+      {
+       "id": "kin5_traj_cloze",
+       "type": "cloze",
+       "before": "A camera followed the ball from the racket to the court and drew its",
+       "after": "as a smooth curve on the screen.",
+       "a": "trajectory",
+       "opts": [
+        "trajectory",
+        "coefficient",
+        "symmetry",
+        "substitute"
+       ],
+       "explain": "<i>tra-</i> (across) + <i>ject</i> (throw): the path thrown across the air."
+      }
+     ]
+    },
+    {
+     "w": "symmetry",
+     "meaning": "When one half of a shape matches the other half.",
+     "example": "A square has four lines of symmetry.",
+     "parts": [
+      {
+       "surface": "sym",
+       "type": "prefix",
+       "meaning": "together",
+       "tr": {
+        "am": "አንድ ላይ",
+        "ar": "معاً",
+        "es": "juntos",
+        "fa": "باهم",
+        "fr": "ensemble",
+        "hi": "एक साथ",
+        "ja": "共に",
+        "ko": "함께",
+        "ml": "ഒരുമിച്ച്",
+        "ps": "يوځای",
+        "ro": "împreună",
+        "ru": "вместе",
+        "ta": "ஒன்றாக",
+        "tl": "magkasama",
+        "ur": "اکٹھے",
+        "vi": "cùng",
+        "zh-Hans": "一起",
+        "zh-Hant": "一起"
+       }
+      },
+      {
+       "surface": "metr",
+       "type": "root",
+       "meaning": "measure",
+       "tr": {
+        "am": "መለኪያ",
+        "ar": "قياس",
+        "es": "medida",
+        "fa": "اندازه‌گیری",
+        "fr": "mesure",
+        "hi": "माप",
+        "ja": "測定",
+        "ko": "측정",
+        "ml": "അളവ്",
+        "ps": "اندازه",
+        "ro": "măsură",
+        "ru": "мера",
+        "ta": "அளவீடு",
+        "tl": "sukat",
+        "ur": "پیمائش",
+        "vi": "đo lường",
+        "zh-Hans": "测量",
+        "zh-Hant": "測量"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "对称",
+      "zh-Hant": "對稱",
+      "ja": "対称性",
+      "ko": "대칭",
+      "vi": "sự đối xứng",
+      "ar": "التماثل",
+      "fa": "تقارن",
+      "ur": "توازن (سمیٹری)",
+      "am": "ተመጣጣኝነት",
+      "ml": "സമമിതി",
+      "ta": "சமச்சீர்",
+      "tl": "simetriya",
+      "ps": "تناظر",
+      "ro": "simetrie",
+      "ru": "симметрия",
+      "fr": "symétrie",
+      "hi": "सममिति",
+      "es": "simetría"
+     },
+     "note": "Greek <i>sym-</i> (together) + <i>metr</i> (measure): measuring the same on both sides. The same <i>metr</i> is in <b>metre</b> and <b>thermometer</b>. A parabola has exactly one line of symmetry — a vertical line straight down through the turning point — so the two ground crossings sit the same distance either side of it.",
+     "apply": [
+      {
+       "id": "kin5_sym_scn",
+       "type": "scenario",
+       "q": "A thrown ball leaves the ground at x = 2 and lands at x = 14. Where is the vertical line that cuts its curve into two matching halves?",
+       "a": "x = 8",
+       "opts": [
+        "x = 8",
+        "x = 6",
+        "x = 12",
+        "x = 16"
+       ],
+       "explain": "Halfway between the two crossings: (2 + 14) ÷ 2 = 8. The line of symmetry always sits midway, and the turning point sits on it."
+      },
+      {
+       "id": "kin5_sym_desc",
+       "type": "desc",
+       "q": "Which word describes one half of a shape matching the other half exactly?",
+       "a": "Symmetry",
+       "opts": [
+        "Symmetry",
+        "Substitution",
+        "Trajectory",
+        "Coefficient"
+       ],
+       "explain": "<i>sym-</i> (together) + <i>metr</i> (measure): the two halves measure the same."
+      },
+      {
+       "id": "kin5_sym_cloze",
+       "type": "cloze",
+       "before": "Fold a parabola along the vertical line through its turning point and the two halves land exactly on each other:",
+       "after": "is what puts the two ground crossings the same distance out.",
+       "a": "symmetry",
+       "opts": [
+        "symmetry",
+        "gravity",
+        "substitution",
+        "correlation"
+       ],
+       "explain": "<i>sym-</i> + <i>metr</i>: measured the same on both sides of the line through the turning point."
+      }
+     ]
+    },
+    {
+     "w": "model",
+     "meaning": "A rule or equation that describes something real closely enough to predict it.",
+     "example": "We model the flight of the ball with y = a(x − h)² + k.",
+     "parts": [
+      {
+       "surface": "model",
+       "type": "root",
+       "meaning": "representation",
+       "tr": {
+        "zh-Hans": "模型",
+        "ja": "モデル",
+        "vi": "mô hình",
+        "zh-Hant": "模型",
+        "am": "ሞዴል",
+        "ar": "نموذج",
+        "es": "modelo",
+        "fa": "مدل",
+        "fr": "modèle",
+        "hi": "मॉडल",
+        "ko": "모형",
+        "ml": "മാതൃക",
+        "ps": "ماډل",
+        "ro": "model",
+        "ru": "модель",
+        "ta": "மாதிரி",
+        "tl": "modelo",
+        "ur": "نمونہ"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ሞዴል",
+      "ar": "نموذج",
+      "es": "modelo",
+      "fa": "مدل",
+      "fr": "modèle",
+      "hi": "मॉडल",
+      "ja": "モデル",
+      "ko": "모형",
+      "ml": "മാതൃക",
+      "ps": "ماډل",
+      "ro": "model",
+      "ru": "модель",
+      "ta": "மாதிரி",
+      "tl": "modelo",
+      "ur": "ماڈل",
+      "vi": "mô hình",
+      "zh-Hans": "模型",
+      "zh-Hant": "模型"
+     },
+     "note": "From Latin <i>modulus</i>, a small measure — a small thing that stands for a big real one. In maths a model is a <b>rule</b>, not a toy: y = a(x − h)² + k is a model of a thrown ball. A model is never perfect; it only has to be close enough to predict. (In business the same word means a plan of the money — the same idea doing a different job.)",
+     "apply": [
+      {
+       "id": "kin5_mod_desc",
+       "type": "desc",
+       "q": "In maths and science, what is a model?",
+       "a": "A rule you can put numbers into to predict what happens",
+       "opts": [
+        "A rule you can put numbers into to predict what happens",
+        "A small plastic copy of a real object",
+        "A perfect and exact copy of the real thing",
+        "A drawing of the equipment you used"
+       ],
+       "explain": "In maths a model is a rule, not an object. It is judged by how well it predicts, not by being perfect."
+      },
+      {
+       "id": "kin5_mod_scn",
+       "type": "scenario",
+       "q": "Your group fits y = −0.025(x − 4)² + 3.6 to a serve, then uses it to work out the height of the ball at the net. What have you just done?",
+       "a": "Used a model to predict",
+       "opts": [
+        "Used a model to predict",
+        "Measured the height at the net directly",
+        "Proved the rule is exactly correct",
+        "Changed the independent variable"
+       ],
+       "explain": "The rule stands in for the real serve, so it answers a question about the ball without another ball being hit. That is modelling."
+      },
+      {
+       "id": "kin5_mod_cloze",
+       "type": "cloze",
+       "before": "No equation matches a real throw perfectly, but y = a(x − h)² + k is close enough to be a useful",
+       "after": "of the flight.",
+       "a": "model",
+       "opts": [
+        "model",
+        "trajectory",
+        "coefficient",
+        "symmetry"
+       ],
+       "explain": "A rule that stands in for the real thing is judged by how well it predicts, not by being perfect."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "prac",
+   "area": "kin",
+   "title": "Writing up a practical",
+   "focus": "The words a report is marked on: which variable you changed, which you measured, and how far to trust the answer.",
+   "words": [
+    {
+     "w": "independent",
+     "meaning": "The variable you choose and change yourself in an experiment.",
+     "example": "Drop height was the independent variable, because we chose it.",
+     "parts": [
+      {
+       "surface": "in",
+       "type": "prefix",
+       "meaning": "not",
+       "tr": {
+        "zh-Hans": "不",
+        "ja": "不",
+        "vi": "không",
+        "zh-Hant": "不",
+        "am": "አይ",
+        "ar": "غير",
+        "es": "no",
+        "fa": "نه",
+        "fr": "non",
+        "hi": "नहीं",
+        "ko": "아닌",
+        "ml": "അല്ല",
+        "ps": "نه",
+        "ro": "nu",
+        "ru": "не",
+        "ta": "இல்லாத",
+        "tl": "hindi",
+        "ur": "نہیں",
+        "other": "نه"
+       }
+      },
+      {
+       "surface": "depend",
+       "type": "root",
+       "meaning": "rely on",
+       "tr": {
+        "zh-Hans": "依靠",
+        "ja": "依存する",
+        "vi": "phụ thuộc",
+        "zh-Hant": "依靠",
+        "am": "መደገፍ",
+        "ar": "يعتمد على",
+        "es": "depender de",
+        "fa": "وابسته بودن",
+        "fr": "dépendre de",
+        "hi": "निर्भर",
+        "ko": "의존",
+        "ml": "ആശ്രയിക്കുക",
+        "ps": "تکیه",
+        "ro": "a depinde de",
+        "ru": "зависеть",
+        "ta": "சார்ந்திருத்தல்",
+        "tl": "umasa",
+        "ur": "انحصار"
+       }
+      },
+      {
+       "surface": "ent",
+       "type": "suffix",
+       "meaning": "person / quality",
+       "tr": {
+        "zh-Hans": "人",
+        "ja": "性質",
+        "vi": "người",
+        "zh-Hant": "人",
+        "am": "ሰው/ባህርይ",
+        "ar": "شخص/صفة",
+        "es": "persona/cualidad",
+        "fa": "شخص/ویژگی",
+        "fr": "personne/qualité",
+        "hi": "व्यक्ति/गुण",
+        "ko": "사람/성질",
+        "ml": "വ്യക്തി/ഗുണം",
+        "ps": "کس/خاصیت",
+        "ro": "persoană/calitate",
+        "ru": "человек/качество",
+        "ta": "நபர்/பண்பு",
+        "tl": "tao/katangian",
+        "ur": "شخص/خاصیت",
+        "other": "بودن"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ነጻ",
+      "ar": "مستقل",
+      "es": "independiente",
+      "fa": "مستقل",
+      "fr": "indépendant",
+      "hi": "स्वतंत्र",
+      "ja": "独立の",
+      "ko": "독립적인",
+      "ml": "സ്വതന്ത്രം",
+      "ps": "خپلواک",
+      "ro": "independent",
+      "ru": "независимый",
+      "ta": "சார்பிலா",
+      "tl": "independiyente",
+      "ur": "آزاد",
+      "vi": "độc lập",
+      "zh-Hans": "自变",
+      "zh-Hant": "自變"
+     },
+     "note": "Latin <i>in-</i> (not) + <i>depend</i> (hang from, rely on) + <i>-ent</i>: not hanging on anything else. In a practical it is the one <b>you</b> decide before you start, and it goes across the bottom axis of the graph. Same <i>depend</i> as in <b>dependent</b> — the two together are your whole variables sentence.",
+     "apply": [
+      {
+       "id": "prac_ind_scn",
+       "type": "scenario",
+       "q": "Your group sets the ball at 2 m, 4 m, 6 m and 8 m and times each fall. Which quantity did the group decide before starting?",
+       "a": "The height of the drop",
+       "opts": [
+        "The height of the drop",
+        "The time of the fall",
+        "The mass of the ball",
+        "The temperature of the room"
+       ],
+       "explain": "The heights were decided in advance, so height is the independent variable. The time came out of the stopwatch instead."
+      },
+      {
+       "id": "prac_ind_desc",
+       "type": "desc",
+       "q": "Which variable goes across the bottom axis of your results graph?",
+       "a": "The one you chose and changed",
+       "opts": [
+        "The one you chose and changed",
+        "The one you measured",
+        "The one you kept the same",
+        "The one with the biggest numbers"
+       ],
+       "explain": "The independent variable — the one you set yourself — goes on the horizontal axis. The measured one goes up the side."
+      },
+      {
+       "id": "prac_ind_cloze",
+       "type": "cloze",
+       "before": "We chose the drop height ourselves and changed it for every run, so drop height was the",
+       "after": "variable in this experiment.",
+       "a": "independent",
+       "opts": [
+        "independent",
+        "dependent",
+        "controlled",
+        "reliable"
+       ],
+       "explain": "<i>in-</i> (not) + <i>depend</i>: it does not hang on anything else in the experiment, because you decide it."
+      }
+     ]
+    },
+    {
+     "w": "dependent",
+     "meaning": "The variable you measure; its value follows from the one you changed.",
+     "example": "Fall time was the dependent variable, because it depended on the height.",
+     "parts": [
+      {
+       "surface": "depend",
+       "type": "root",
+       "meaning": "rely on",
+       "tr": {
+        "zh-Hans": "依靠",
+        "ja": "依存する",
+        "vi": "phụ thuộc",
+        "zh-Hant": "依靠",
+        "am": "መደገፍ",
+        "ar": "يعتمد على",
+        "es": "depender de",
+        "fa": "وابسته بودن",
+        "fr": "dépendre de",
+        "hi": "निर्भर",
+        "ko": "의존",
+        "ml": "ആശ്രയിക്കുക",
+        "ps": "تکیه",
+        "ro": "a depinde de",
+        "ru": "зависеть",
+        "ta": "சார்ந்திருத்தல்",
+        "tl": "umasa",
+        "ur": "انحصار"
+       }
+      },
+      {
+       "surface": "ent",
+       "type": "suffix",
+       "meaning": "person / quality",
+       "tr": {
+        "zh-Hans": "人",
+        "ja": "性質",
+        "vi": "người",
+        "zh-Hant": "人",
+        "am": "ሰው/ባህርይ",
+        "ar": "شخص/صفة",
+        "es": "persona/cualidad",
+        "fa": "شخص/ویژگی",
+        "fr": "personne/qualité",
+        "hi": "व्यक्ति/गुण",
+        "ko": "사람/성질",
+        "ml": "വ്യക്തി/ഗുണം",
+        "ps": "کس/خاصیت",
+        "ro": "persoană/calitate",
+        "ru": "человек/качество",
+        "ta": "நபர்/பண்பு",
+        "tl": "tao/katangian",
+        "ur": "شخص/خاصیت",
+        "other": "بودن"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ጥገኛ",
+      "ar": "تابع",
+      "es": "dependiente",
+      "fa": "وابسته",
+      "fr": "dépendant",
+      "hi": "आश्रित",
+      "ja": "従属の",
+      "ko": "종속의",
+      "ml": "ആശ്രിതം",
+      "ps": "تابع",
+      "ro": "dependent",
+      "ru": "зависимый",
+      "ta": "சார்பு",
+      "tl": "dependent",
+      "ur": "منحصر",
+      "vi": "phụ thuộc",
+      "zh-Hans": "因变",
+      "zh-Hant": "因變"
+     },
+     "note": "Latin <i>depend</i> (hang from) + <i>-ent</i>: it hangs on something else. In a practical it is the one you <b>measure</b>, and it goes up the side axis. Say the sentence in this order and you cannot get it wrong: <i>we changed the independent variable and measured the dependent variable</i>.",
+     "apply": [
+      {
+       "id": "prac_dep_scn",
+       "type": "scenario",
+       "q": "You set four different heights, then read the stopwatch after every drop. Which quantity did you measure?",
+       "a": "The fall time",
+       "opts": [
+        "The fall time",
+        "The height",
+        "The mass of the ball",
+        "The number of people in the group"
+       ],
+       "explain": "The stopwatch reading is the measured quantity, so fall time is the dependent variable: it hangs on the height you chose."
+      },
+      {
+       "id": "prac_dep_desc",
+       "type": "desc",
+       "q": "Which variable is plotted up the side axis of a results graph?",
+       "a": "The one you measured",
+       "opts": [
+        "The one you measured",
+        "The one you chose",
+        "The one you kept the same",
+        "The one that was hardest to read"
+       ],
+       "explain": "The measured variable goes up the vertical axis. The one you chose goes across the bottom."
+      },
+      {
+       "id": "prac_dep_cloze",
+       "type": "cloze",
+       "before": "We measured the fall time, and it changed only because we changed the height, so time was the",
+       "after": "variable.",
+       "a": "dependent",
+       "opts": [
+        "dependent",
+        "independent",
+        "controlled",
+        "average"
+       ],
+       "explain": "It hangs on the variable you chose — change the height and the time changes with it."
+      }
+     ]
+    },
+    {
+     "w": "controlled",
+     "meaning": "Kept the same on purpose, so it cannot change the result.",
+     "example": "The same ball was used every time, so its mass was a controlled variable.",
+     "parts": [
+      {
+       "surface": "control",
+       "type": "root",
+       "meaning": "regulate",
+       "tr": {
+        "zh-Hans": "控制",
+        "ja": "制御",
+        "vi": "kiểm soát",
+        "zh-Hant": "控制",
+        "am": "መቆጣጠር",
+        "ar": "ينظّم",
+        "es": "regular",
+        "fa": "تنظیم کردن",
+        "fr": "réguler",
+        "hi": "नियंत्रित करना",
+        "ko": "조절하다",
+        "ml": "നിയന്ത്രിക്കുക",
+        "ps": "کنټرولول / تنظیمول",
+        "ro": "a regla",
+        "ru": "регулировать",
+        "ta": "கட்டுப்படுத்துதல்",
+        "tl": "kontrolin",
+        "ur": "قابو کرنا"
+       }
+      },
+      {
+       "surface": "led",
+       "type": "suffix",
+       "meaning": "past form",
+       "tr": {
+        "zh-Hans": "过去式",
+        "ja": "過去形",
+        "vi": "quá khứ",
+        "zh-Hant": "過去式",
+        "am": "ኃላፊ ጊዜ",
+        "ar": "صيغة الماضي",
+        "es": "forma pasada",
+        "fa": "شکل گذشته",
+        "fr": "forme du passé",
+        "hi": "भूतकाल रूप",
+        "ko": "과거형",
+        "ml": "ഭൂതകാല രൂപം",
+        "ps": "تېر مهال بڼه",
+        "ro": "formă de trecut",
+        "ru": "прошедшая форма",
+        "ta": "இறந்தகால வடிவம்",
+        "tl": "pangnagdaang anyo",
+        "ur": "ماضی کی شکل"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ቁጥጥር የተደረገበት",
+      "ar": "متحكم فيه",
+      "es": "controlado",
+      "fa": "کنترل‌شده",
+      "fr": "contrôlé",
+      "hi": "नियंत्रित",
+      "ja": "制御された",
+      "ko": "통제된",
+      "ml": "നിയന്ത്രിത",
+      "ps": "کنټرول شوی",
+      "ro": "controlat",
+      "ru": "контролируемый",
+      "ta": "கட்டுப்படுத்தப்பட்ட",
+      "tl": "kontrolado",
+      "ur": "کنٹرول شدہ",
+      "vi": "được kiểm soát",
+      "zh-Hans": "控制",
+      "zh-Hant": "控制"
+     },
+     "note": "<b>control</b> + <b>-led</b> (past form): held steady on purpose. A controlled variable is one you deliberately keep the same so that the only thing changing is the variable you chose. Change two things at once and you can no longer say which one caused the result — which is why every report names at least two of them.",
+     "apply": [
+      {
+       "id": "prac_ctrl_scn",
+       "type": "scenario",
+       "q": "You use the same ball, the same stopwatch and the same timekeeper for every drop. What are those three called?",
+       "a": "Controlled variables",
+       "opts": [
+        "Controlled variables",
+        "Independent variables",
+        "Dependent variables",
+        "Anomalies"
+       ],
+       "explain": "They were kept the same on purpose so that the height was the only thing changing from run to run."
+      },
+      {
+       "id": "prac_ctrl_desc",
+       "type": "desc",
+       "q": "Why do you keep some quantities exactly the same all the way through an experiment?",
+       "a": "So the only thing changing is the variable you chose",
+       "opts": [
+        "So the only thing changing is the variable you chose",
+        "So the experiment is quicker",
+        "So the graph looks neater",
+        "So you need fewer trials"
+       ],
+       "explain": "If two things change at once you cannot say which one caused the result. That is why some quantities are held steady."
+      },
+      {
+       "id": "prac_ctrl_cloze",
+       "type": "cloze",
+       "before": "Halfway through, one group swapped to a heavier ball. Mass was supposed to be a",
+       "after": "variable, so their results can no longer be compared.",
+       "a": "controlled",
+       "opts": [
+        "controlled",
+        "independent",
+        "dependent",
+        "reliable"
+       ],
+       "explain": "It was supposed to be held the same on purpose. Change it halfway through and the runs can no longer be compared."
+      }
+     ]
+    },
+    {
+     "w": "trendline",
+     "meaning": "One straight guide drawn through a set of plotted points to show the overall pattern.",
+     "example": "We added a trendline and read its gradient to find g.",
+     "parts": [
+      {
+       "surface": "trend",
+       "type": "root",
+       "meaning": "direction / general change",
+       "tr": {
+        "zh-Hans": "趋势",
+        "ja": "傾向",
+        "vi": "xu hướng",
+        "zh-Hant": "趨勢",
+        "am": "አዝማሚያ",
+        "ar": "اتجاه",
+        "es": "dirección/tendencia",
+        "fa": "روند",
+        "fr": "tendance",
+        "hi": "प्रवृत्ति",
+        "ko": "경향",
+        "ml": "പ്രവണത",
+        "ps": "رجحان",
+        "ro": "tendință",
+        "ru": "тенденция",
+        "ta": "போக்கு",
+        "tl": "tendensiya",
+        "ur": "رجحان"
+       }
+      },
+      {
+       "surface": "line",
+       "type": "root",
+       "meaning": "line",
+       "tr": {
+        "zh-Hans": "线",
+        "ja": "線",
+        "vi": "đường",
+        "zh-Hant": "線",
+        "am": "መስመር",
+        "ar": "خط",
+        "es": "línea",
+        "fa": "خط",
+        "fr": "ligne",
+        "hi": "रेखा",
+        "ko": "선",
+        "ml": "രേഖ",
+        "ps": "کرښه",
+        "ro": "linie",
+        "ru": "линия",
+        "ta": "கோடு",
+        "tl": "linya",
+        "ur": "لکیر"
+       }
+      }
+     ],
+     "tr": {
+      "am": "የአዝማሚያ መስመር",
+      "ar": "خط الاتجاه",
+      "es": "línea de tendencia",
+      "fa": "خط روند",
+      "fr": "ligne de tendance",
+      "hi": "प्रवृत्ति रेखा",
+      "ja": "トレンドライン",
+      "ko": "추세선",
+      "ml": "പ്രവണതാരേഖ",
+      "ps": "د رجحان کرښه",
+      "ro": "linie de tendință",
+      "ru": "линия тренда",
+      "ta": "போக்குக் கோடு",
+      "tl": "linya ng tendensiya",
+      "ur": "رجحان کی لکیر",
+      "vi": "đường xu hướng",
+      "zh-Hans": "趋势线",
+      "zh-Hant": "趨勢線"
+     },
+     "note": "<b>trend</b> (the general direction) + <b>line</b>: one straight line drawn through a cloud of points so the whole pattern can be read as a single number — its gradient. It does not have to touch every point; it should have points either side of it. A spreadsheet will add one for you and print its equation.",
+     "apply": [
+      {
+       "id": "prac_trend_scn",
+       "type": "scenario",
+       "q": "Your points are a little scattered but rise steadily. What is the best line to draw through them?",
+       "a": "One straight line with points on both sides of it",
+       "opts": [
+        "One straight line with points on both sides of it",
+        "A line joining every point, dot to dot",
+        "A line through the highest point only",
+        "No line at all — just the points"
+       ],
+       "explain": "One straight line shows the overall pattern and gives you a gradient. Joining the dots hides the pattern instead."
+      },
+      {
+       "id": "prac_trend_desc",
+       "type": "desc",
+       "q": "Which line shows the overall pattern of a scatter of points?",
+       "a": "A trendline",
+       "opts": [
+        "A trendline",
+        "An axis",
+        "An anomaly",
+        "An outlier"
+       ],
+       "explain": "<b>trend</b> means the general direction. One straight line through the points shows it, and its gradient is the number you want."
+      },
+      {
+       "id": "prac_trend_cloze",
+       "type": "cloze",
+       "before": "The points did not sit exactly on a line, so we drew a single straight",
+       "after": "through the middle of them and read its gradient.",
+       "a": "trendline",
+       "opts": [
+        "trendline",
+        "outlier",
+        "anomaly",
+        "average"
+       ],
+       "explain": "One straight line through the middle of the points, not a line joining them."
+      }
+     ]
+    },
+    {
+     "w": "gravity",
+     "meaning": "the non-contact force that pulls objects with mass towards each other.",
+     "example": "Gravity makes a dropped ball speed up by about 9.8 m/s every second.",
+     "parts": [
+      {
+       "surface": "grav",
+       "type": "root",
+       "meaning": "heavy",
+       "tr": {
+        "am": "ከባድ",
+        "ar": "ثقيل",
+        "es": "pesado",
+        "fa": "سنگین",
+        "fr": "lourd",
+        "hi": "भारी",
+        "ja": "重い",
+        "ko": "무거운",
+        "ml": "ഭാരമുള്ള",
+        "ps": "دروند",
+        "ro": "greu",
+        "ru": "тяжёлый",
+        "ta": "கனமான",
+        "tl": "mabigat",
+        "ur": "بھاری",
+        "vi": "nặng",
+        "zh-Hans": "重",
+        "zh-Hant": "重"
+       }
+      },
+      {
+       "surface": "ity",
+       "type": "suffix",
+       "meaning": "state of (makes a noun)",
+       "tr": {
+        "am": "ሁኔታ",
+        "ar": "حالة",
+        "es": "estado de (forma un sustantivo)",
+        "fa": "حالت",
+        "fr": "état de",
+        "hi": "अवस्था",
+        "ja": "状態",
+        "ko": "상태",
+        "ml": "അവസ്ഥ",
+        "ps": "حالت",
+        "ro": "stare",
+        "ru": "состояние",
+        "ta": "நிலை",
+        "tl": "kalagayan",
+        "ur": "حالت",
+        "vi": "trạng thái",
+        "zh-Hans": "状态",
+        "zh-Hant": "狀態",
+        "other": "حالت"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ስበት",
+      "ar": "جاذبية",
+      "es": "gravedad",
+      "fa": "گرانش",
+      "fr": "gravité",
+      "hi": "गुरुत्वाकर्षण",
+      "ja": "重力",
+      "ko": "중력",
+      "ml": "ഗുരുത്വാകർഷണം",
+      "ps": "جاذبه",
+      "ro": "gravitație",
+      "ru": "гравитация",
+      "ta": "புவியீர்ப்பு",
+      "tl": "grabidad",
+      "ur": "کشش ثقل",
+      "vi": "trọng lực",
+      "zh-Hans": "重力",
+      "zh-Hant": "重力"
+     },
+     "note": "Latin <i>grav</i> (heavy) + <i>-ity</i> (state of): the state of being heavy. The same <i>grav</i> is in <b>grave</b> (serious, weighty) and <b>gravel</b>. On Earth gravity gives every falling object the same acceleration, about <b>9.8 m/s²</b>, whatever it weighs — and that number is what the Ball Drop report sets out to measure.",
+     "apply": [
+      {
+       "id": "prac_grav_scn",
+       "type": "scenario",
+       "q": "A heavy ball and a light ball are released at the same moment from the same height, with no air resistance. Which lands first?",
+       "a": "They land together",
+       "opts": [
+        "They land together",
+        "The heavy one lands first",
+        "The light one lands first",
+        "It depends on their colour"
+       ],
+       "explain": "Gravity gives both the same acceleration, about 9.8 m/s². There is no mass anywhere in h = ½gt²."
+      },
+      {
+       "id": "prac_grav_desc",
+       "type": "desc",
+       "q": "Which force pulls a dropped object towards the ground?",
+       "a": "Gravity",
+       "opts": [
+        "Gravity",
+        "Mass",
+        "Symmetry",
+        "Correlation"
+       ],
+       "explain": "<i>grav</i> = heavy. Mass is the amount of matter in the object; this is the force that pulls on it."
+      },
+      {
+       "id": "prac_grav_cloze",
+       "type": "cloze",
+       "before": "A ball dropped on the Moon takes longer to fall than the same ball on Earth, because",
+       "after": "there is weaker.",
+       "a": "gravity",
+       "opts": [
+        "gravity",
+        "mass",
+        "average",
+        "symmetry"
+       ],
+       "explain": "The pull on the Moon is weaker, so g there is about 1.6 m/s² instead of 9.8 m/s²."
+      }
+     ]
+    },
+    {
+     "w": "mass",
+     "meaning": "the amount of matter in an object, measured in kilograms; it does not change with location.",
+     "example": "The mass of the ball was 0.2 kg on the balance.",
+     "parts": [],
+     "tr": {
+      "am": "ግዝፈት",
+      "ar": "الكتلة",
+      "es": "masa",
+      "fa": "جرم",
+      "fr": "masse",
+      "hi": "द्रव्यमान",
+      "ja": "質量",
+      "ko": "질량",
+      "ml": "പിണ്ഡം",
+      "ps": "کتله",
+      "ro": "masă",
+      "ru": "масса",
+      "ta": "நிறை",
+      "tl": "masa",
+      "ur": "کمیت",
+      "vi": "khối lượng",
+      "zh-Hans": "质量",
+      "zh-Hant": "質量"
+     },
+     "note": "From Latin <i>massa</i>, a lump of dough: how much stuff there is in something. Mass is measured in <b>kilograms</b> and it is the same on Earth, on the Moon or in space. Weight is a different word: weight is the pull of gravity on that mass, so weight changes when gravity changes and mass does not.",
+     "apply": [
+      {
+       "id": "prac_mass_scn",
+       "type": "scenario",
+       "q": "An astronaut carries a toolbox with a mass of two kilograms to the Moon. What is its mass once she is standing on the Moon?",
+       "a": "2 kg",
+       "opts": [
+        "2 kg",
+        "0 kg",
+        "12 kg",
+        "0.33 kg"
+       ],
+       "explain": "Mass is the amount of matter, so it does not change with location. The weight becomes about six times less, but weight is a different word."
+      },
+      {
+       "id": "prac_mass_desc",
+       "type": "desc",
+       "q": "Which quantity is measured in kilograms and stays the same wherever you take the object?",
+       "a": "Mass",
+       "opts": [
+        "Mass",
+        "Gravity",
+        "Trial",
+        "Average"
+       ],
+       "explain": "Mass is the amount of matter, measured in kilograms. Gravity is the force pulling on it, and that changes from place to place."
+      },
+      {
+       "id": "prac_mass_cloze",
+       "type": "cloze",
+       "before": "We used the same ball for every drop, so its",
+       "after": "was controlled — and in any case it does not appear in h = ½gt².",
+       "a": "mass",
+       "opts": [
+        "mass",
+        "gravity",
+        "trial",
+        "trendline"
+       ],
+       "explain": "There is no letter for it in h = ½gt², so a heavy ball and a light ball fall together."
+      }
+     ]
+    },
+    {
+     "w": "average",
+     "meaning": "The one number that stands for a whole set: add them all up and divide by how many there are.",
+     "example": "Three trials gave 1.08 s, 1.13 s and 1.09 s, so the average was 1.10 s.",
+     "parts": [
+      {
+       "surface": "average",
+       "type": "root",
+       "meaning": "middle value",
+       "tr": {
+        "zh-Hans": "平均",
+        "ja": "平均",
+        "vi": "trung bình",
+        "zh-Hant": "平均",
+        "am": "አማካይ",
+        "ar": "متوسط",
+        "es": "promedio",
+        "fa": "میانگین",
+        "fr": "moyenne",
+        "hi": "औसत",
+        "ko": "평균",
+        "ml": "ശരാശരി",
+        "ps": "اوسط",
+        "ro": "medie",
+        "ru": "среднее",
+        "ta": "சராசரி",
+        "tl": "average",
+        "ur": "اوسط"
+       }
+      }
+     ],
+     "tr": {
+      "am": "አማካይ",
+      "ar": "متوسط",
+      "es": "promedio",
+      "fa": "میانگین",
+      "fr": "moyenne",
+      "hi": "औसत",
+      "ja": "平均",
+      "ko": "평균",
+      "ml": "ശരാശരി",
+      "ps": "منځنی",
+      "ro": "medie",
+      "ru": "среднее",
+      "ta": "சராசரி",
+      "tl": "karaniwan",
+      "ur": "اوسط",
+      "vi": "trung bình",
+      "zh-Hans": "平均",
+      "zh-Hant": "平均"
+     },
+     "note": "The average is the one number that stands for a whole set of readings: add them up and divide by how many there are. A report asks for an average precisely because one reading can be wrong — three trials averaged sit closer to the truth than the best single go. The exact maths name for this average is the <b>mean</b>.",
+     "apply": [
+      {
+       "id": "prac_avg_scn",
+       "type": "scenario",
+       "q": "Three timings of the same drop are 1.08 s, 1.13 s and 1.09 s. What single number should go in the results table?",
+       "a": "1.10 s",
+       "opts": [
+        "1.10 s",
+        "1.08 s",
+        "1.13 s",
+        "3.30 s"
+       ],
+       "explain": "Add them: 1.08 + 1.13 + 1.09 = 3.30. Divide by how many there are: 3.30 ÷ 3 = 1.10 s."
+      },
+      {
+       "id": "prac_avg_desc",
+       "type": "desc",
+       "q": "Why does a report ask you to time each height three times instead of once?",
+       "a": "So one bad reading matters less",
+       "opts": [
+        "So one bad reading matters less",
+        "So the experiment takes longer",
+        "So the graph has more points along the bottom axis",
+        "So you can choose the fastest time"
+       ],
+       "explain": "Averaging three readings pulls the result closer to the truth, because one late thumb on the stopwatch is shared out between three."
+      },
+      {
+       "id": "prac_avg_cloze",
+       "type": "cloze",
+       "before": "One stopwatch reading can easily be late or early, so we timed each height three times and used the",
+       "after": "of the three.",
+       "a": "average",
+       "opts": [
+        "average",
+        "anomaly",
+        "outlier",
+        "trial"
+       ],
+       "explain": "Add the three readings and divide by three — one number that stands for all of them."
+      }
+     ]
+    },
+    {
+     "w": "mean",
+     "meaning": "the average: add all the values and divide by how many there are",
+     "example": "The mean of 4, 6 and 8 is 6.",
+     "parts": [
+      {
+       "surface": "mean",
+       "type": "root",
+       "meaning": "middle",
+       "tr": {
+        "zh-Hans": "中间",
+        "zh-Hant": "中間",
+        "ja": "中間",
+        "ko": "중간",
+        "vi": "giữa",
+        "ar": "وسط",
+        "fa": "میانه",
+        "ur": "درمیانی",
+        "am": "መካከለኛ",
+        "ml": "മധ്യം",
+        "ta": "நடு",
+        "tl": "gitna",
+        "ps": "منځنی",
+        "ro": "mijloc",
+        "ru": "середина",
+        "fr": "milieu",
+        "hi": "मध्य",
+        "es": "medio"
+       }
+      }
+     ],
+     "tr": {
+      "am": "አማካይ",
+      "ar": "المتوسط الحسابي",
+      "es": "media",
+      "fa": "میانگین",
+      "fr": "moyenne",
+      "hi": "माध्य",
+      "ja": "平均値",
+      "ko": "평균",
+      "ml": "ശരാശരി",
+      "ps": "اوسط",
+      "ro": "medie",
+      "ru": "среднее значение",
+      "ta": "சராசரி",
+      "tl": "katamtaman",
+      "ur": "اوسط",
+      "vi": "trung bình cộng",
+      "zh-Hans": "平均数",
+      "zh-Hant": "平均數"
+     },
+     "note": "In maths and science <b>mean</b> is the exact name for the average: add every value, then divide by how many there are. The root is <i>mean</i> = middle, the same idea as in <b>meantime</b> and <b>medium</b>. It has nothing to do with mean = unkind, and nothing to do with 'what does this word mean'. In a results table it is the column you plot.",
+     "apply": [
+      {
+       "id": "prac_mean_scn",
+       "type": "scenario",
+       "q": "One row of your results table reads 4 s, 6 s and 8 s for three trials at the same height. What is the mean?",
+       "a": "6 s",
+       "opts": [
+        "6 s",
+        "18 s",
+        "4 s",
+        "9 s"
+       ],
+       "explain": "Add the three readings: 4 + 6 + 8 = 18. Divide by how many there are: 18 ÷ 3 = 6 s."
+      },
+      {
+       "id": "prac_mean_desc",
+       "type": "desc",
+       "q": "In a maths or science report, which word is the exact name for the average of a set of values?",
+       "a": "Mean",
+       "opts": [
+        "Mean",
+        "Median",
+        "Range",
+        "Trial"
+       ],
+       "explain": "The mean is the add-them-up-and-divide average. The median is the middle one when they are put in order, and the range is the biggest minus the smallest."
+      },
+      {
+       "id": "prac_mean_cloze",
+       "type": "cloze",
+       "before": "Add the three readings and divide by three, then write the",
+       "after": "in the last column of the table — that is the number you plot.",
+       "a": "mean",
+       "opts": [
+        "mean",
+        "anomaly",
+        "gradient",
+        "trial"
+       ],
+       "explain": "Add up and divide: one value that stands for that whole row, and the one you plot on the graph."
+      }
+     ]
+    },
+    {
+     "w": "trial",
+     "meaning": "One single go of an experiment. You repeat it so you can take a mean.",
+     "example": "We timed three trials at each height and took the mean.",
+     "parts": [
+      {
+       "surface": "tri",
+       "type": "root",
+       "meaning": "attempt",
+       "tr": {
+        "am": "ሙከራ",
+        "ar": "محاولة",
+        "es": "intento",
+        "fa": "تلاش",
+        "fr": "tentative",
+        "hi": "प्रयास",
+        "ja": "試み",
+        "ko": "시도",
+        "ml": "ശ്രമം",
+        "ps": "هڅه",
+        "ro": "încercare",
+        "ru": "попытка",
+        "ta": "முயற்சி",
+        "tl": "pagsubok",
+        "ur": "کوشش",
+        "vi": "cố gắng",
+        "zh-Hans": "尝试",
+        "zh-Hant": "嘗試"
+       }
+      },
+      {
+       "surface": "al",
+       "type": "suffix",
+       "meaning": "relating to",
+       "tr": {
+        "fa": "وابسته به",
+        "am": "ተያያዥ",
+        "ar": "متعلق بـ",
+        "es": "relativo a",
+        "fr": "relatif à",
+        "hi": "संबंधी",
+        "ja": "～の",
+        "ko": "관련된",
+        "ml": "ബന്ധപ്പെട്ട",
+        "ps": "اړوند",
+        "ro": "legat de",
+        "ru": "относящийся к",
+        "ta": "தொடர்பான",
+        "tl": "may kaugnayan sa",
+        "ur": "متعلق",
+        "vi": "thuộc về",
+        "zh-Hans": "……的",
+        "zh-Hant": "……的"
+       }
+      }
+     ],
+     "tr": {
+      "am": "ሙከራ",
+      "ar": "تجربة",
+      "es": "prueba",
+      "fa": "آزمون",
+      "fr": "essai",
+      "hi": "परीक्षण",
+      "ja": "試行",
+      "ko": "시행",
+      "ml": "ശ്രമം",
+      "ps": "ازموینه",
+      "ro": "încercare",
+      "ru": "испытание",
+      "ta": "முயற்சி",
+      "tl": "pagsubok",
+      "ur": "آزمائش",
+      "vi": "phép thử",
+      "zh-Hans": "试验",
+      "zh-Hant": "試驗"
+     },
+     "note": "Latin <i>tri</i> (attempt) + <i>-al</i> (relating to): one attempt. In a practical, one trial is one go — one release, one timing. You repeat trials so you have something to average, which is why the method says 'repeat three times'. (In the news the same word means a case in court; in the laboratory it only ever means one attempt.)",
+     "apply": [
+      {
+       "id": "prac_trial_scn",
+       "type": "scenario",
+       "q": "The method says: release the ball, time the fall, and repeat until you have three timings at each height. What is one single release-and-time called?",
+       "a": "One trial",
+       "opts": [
+        "One trial",
+        "One anomaly",
+        "One average",
+        "One outlier"
+       ],
+       "explain": "Each single go is one trial. Three of them at the same height give you something to average."
+      },
+      {
+       "id": "prac_trial_desc",
+       "type": "desc",
+       "q": "Why does a method ask you to repeat the same measurement several times?",
+       "a": "So a single bad go does not decide the result",
+       "opts": [
+        "So a single bad go does not decide the result",
+        "So the table looks longer",
+        "So the trendline is steeper",
+        "So the independent variable changes"
+       ],
+       "explain": "More goes means you can take a mean, so one late thumb on the stopwatch matters much less."
+      },
+      {
+       "id": "prac_trial_cloze",
+       "type": "cloze",
+       "before": "The stopwatch is never exact, so the method asks for three goes at every height. Each single release-and-time is one",
+       "after": "of the three we averaged.",
+       "a": "trial",
+       "opts": [
+        "trial",
+        "anomaly",
+        "trendline",
+        "gradient"
+       ],
+       "explain": "<i>tri</i> = attempt. One attempt is one go, and the three goes are averaged."
+      }
+     ]
+    },
+    {
+     "w": "reliable",
+     "meaning": "You can trust it — it gives the same result again and again.",
+     "example": "Three trials that agree closely make the result more reliable.",
+     "parts": [
+      {
+       "surface": "re",
+       "type": "prefix",
+       "meaning": "again",
+       "tr": {
+        "fa": "دوباره/باز",
+        "am": "እንደገና",
+        "ar": "مرة أخرى",
+        "es": "de nuevo / atrás",
+        "fr": "de nouveau / en arrière",
+        "hi": "फिर से / वापस",
+        "ja": "再び / 戻る",
+        "ko": "다시 / 뒤로",
+        "ml": "വീണ്ടും",
+        "ps": "بیا / شاته",
+        "ro": "din nou / înapoi",
+        "ru": "снова / назад",
+        "ta": "மீண்டும் / பின்",
+        "tl": "muli / pabalik",
+        "ur": "دوبارہ / واپس",
+        "vi": "lại",
+        "zh-Hans": "再次；回",
+        "zh-Hant": "再次；回"
+       }
+      },
+      {
+       "surface": "li",
+       "type": "root",
+       "meaning": "bind",
+       "tr": {
+        "zh-Hans": "捆绑",
+        "zh-Hant": "綁",
+        "ja": "縛る",
+        "ko": "묶다",
+        "vi": "buộc",
+        "ar": "ربط",
+        "fa": "بستن",
+        "ur": "باندھنا",
+        "am": "ማሰር",
+        "ml": "ബന്ധിക്കുക",
+        "ta": "கட்டு",
+        "tl": "igapos",
+        "ps": "تړل",
+        "ro": "a lega",
+        "ru": "связывать",
+        "fr": "lier",
+        "hi": "बांधना",
+        "es": "atar"
+       }
+      },
+      {
+       "surface": "able",
+       "type": "suffix",
+       "meaning": "can be",
+       "tr": {
+        "fa": "قابل",
+        "am": "የሚችል",
+        "ar": "قادر على",
+        "es": "capaz de",
+        "fr": "capable de",
+        "hi": "योग्य",
+        "ja": "できる",
+        "ko": "할 수 있는",
+        "ml": "കഴിയുന്ന",
+        "ps": "وړ",
+        "ro": "capabil",
+        "ru": "способный",
+        "ta": "முடியும்",
+        "tl": "kaya",
+        "ur": "قابل",
+        "vi": "có thể",
+        "zh-Hans": "能够",
+        "zh-Hant": "能夠"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "可靠的",
+      "zh-Hant": "可靠的",
+      "ja": "信頼できる",
+      "ko": "신뢰할 수 있는",
+      "vi": "đáng tin cậy",
+      "ar": "موثوق",
+      "fa": "قابل اعتماد",
+      "ur": "قابل اعتماد",
+      "am": "አስተማማኝ",
+      "ml": "വിശ്വസനീയമായ",
+      "ta": "நம்பகமான",
+      "tl": "maaasahan",
+      "ps": "باوري",
+      "ro": "fiabil",
+      "ru": "надёжный",
+      "fr": "fiable",
+      "hi": "विश्वसनीय",
+      "es": "fiable"
+     },
+     "note": "Latin <i>re-</i> (again) + <i>li</i> (bind) + <i>-able</i> (can be): something you can bind yourself to again and again. In a practical, a result is reliable when repeating it gives nearly the same answer every time. Careful: reliable is about <b>repeating</b>, not about being right — a bent ruler will give you reliably wrong answers.",
+     "apply": [
+      {
+       "id": "prac_rel_scn",
+       "type": "scenario",
+       "q": "Group A's three timings are 1.09 s, 1.10 s and 1.11 s. Group B's are 0.9 s, 1.4 s and 1.1 s. Whose results can be trusted to repeat?",
+       "a": "Group A's",
+       "opts": [
+        "Group A's",
+        "Group B's",
+        "Neither group's",
+        "Both are equally trustworthy"
+       ],
+       "explain": "Group A's three readings sit very close together, so repeating gives nearly the same answer. Group B's are spread right out."
+      },
+      {
+       "id": "prac_rel_desc",
+       "type": "desc",
+       "q": "What makes a set of measurements trustworthy to repeat?",
+       "a": "Repeating them gives nearly the same answer",
+       "opts": [
+        "Repeating them gives nearly the same answer",
+        "They were taken very quickly",
+        "They were taken by the oldest student in the group",
+        "They all came from one careful go"
+       ],
+       "explain": "<i>re-</i> (again) + <i>li</i> (bind): you can bind yourself to it again. Note that this is about repeating, not about being correct."
+      },
+      {
+       "id": "prac_rel_cloze",
+       "type": "cloze",
+       "before": "Our three timings at each height agreed to within 0.03 s, so we could write that our results were",
+       "after": "and record the mean with confidence.",
+       "a": "reliable",
+       "opts": [
+        "reliable",
+        "independent",
+        "controlled",
+        "quadratic"
+       ],
+       "explain": "Repeat it and you get nearly the same number again — that is what the word claims, and nothing more."
+      }
+     ]
+    },
+    {
+     "w": "anomaly",
+     "meaning": "A value or result that does not fit the pattern.",
+     "example": "The reading of 92 is an anomaly and should be checked.",
+     "parts": [
+      {
+       "surface": "an",
+       "type": "prefix",
+       "meaning": "not/without",
+       "tr": {
+        "am": "ያለ",
+        "ar": "بدون",
+        "es": "sin",
+        "fa": "بدون",
+        "fr": "sans",
+        "hi": "बिना",
+        "ja": "無",
+        "ko": "무",
+        "ml": "ഇല്ലാതെ",
+        "ps": "پرته",
+        "ro": "fără",
+        "ru": "без",
+        "ta": "இல்லாமல்",
+        "tl": "walang",
+        "ur": "بغیر",
+        "vi": "vô",
+        "zh-Hans": "无",
+        "zh-Hant": "無"
+       }
+      },
+      {
+       "surface": "omal",
+       "type": "root",
+       "meaning": "even/same",
+       "tr": {
+        "zh-Hans": "均匀/相同",
+        "zh-Hant": "均勻/相同",
+        "ja": "均一な/同じ",
+        "ko": "균일한/같은",
+        "vi": "đều/giống nhau",
+        "ar": "متساوٍ",
+        "fa": "یکنواخت",
+        "ur": "یکساں",
+        "am": "ተመሳሳይ",
+        "ml": "സമമായ",
+        "ta": "சமமான",
+        "tl": "pantay",
+        "ps": "یو شان",
+        "ro": "egal/uniform",
+        "ru": "равный/одинаковый",
+        "fr": "égal/uniforme",
+        "hi": "समान",
+        "es": "igual/uniforme"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "异常值",
+      "zh-Hant": "異常值",
+      "ja": "異常値",
+      "ko": "이상치",
+      "vi": "giá trị bất thường",
+      "ar": "الشذوذ (القيمة الشاذة)",
+      "fa": "ناهنجاری (مقدار غیرعادی)",
+      "ur": "غیر معمولی قدر",
+      "am": "ያልተለመደ (ውጭ የሆነ) ዋጋ",
+      "ml": "അസാധാരണ മൂല്യം",
+      "ta": "முரண்பாடு (இயல்பிலிருந்து விலகல்)",
+      "tl": "kakaibang halaga (anomaly)",
+      "ps": "غیر معمولي ارزښت",
+      "ro": "anomalie",
+      "ru": "аномалия",
+      "fr": "anomalie",
+      "hi": "विसंगति",
+      "es": "anomalía"
+     },
+     "note": "Greek <i>an-</i> (not) + <i>omal</i> (even, same): not even with the rest. An anomaly is a reading that does not fit the pattern the others make, usually because something went wrong in that one go. In a report you name it, say what probably caused it, and leave it out of the mean — you never quietly delete it.",
+     "apply": [
+      {
+       "id": "prac_anom_scn",
+       "type": "scenario",
+       "q": "Four timings at the same height read 1.09 s, 1.10 s, 1.11 s and 2.40 s. What should your report do with the last one?",
+       "a": "It should be named and left out of the mean",
+       "opts": [
+        "It should be named and left out of the mean",
+        "It is the most accurate of the four readings",
+        "It should be averaged in with the other three",
+        "It proves the drop height was measured wrongly"
+       ],
+       "explain": "2.40 s does not fit the pattern of the other three — most likely the stopwatch was stopped late. Name it, explain it, and leave it out."
+      },
+      {
+       "id": "prac_anom_desc",
+       "type": "desc",
+       "q": "Which word names a single result that does not fit the pattern of the others?",
+       "a": "Anomaly",
+       "opts": [
+        "Anomaly",
+        "Average",
+        "Trendline",
+        "Trial"
+       ],
+       "explain": "<i>an-</i> (not) + <i>omal</i> (even): not even with the rest, because something went wrong in that one reading."
+      },
+      {
+       "id": "prac_anom_cloze",
+       "type": "cloze",
+       "before": "One timing was three times longer than the other three at that height, so we called it an",
+       "after": "and left it out of the mean.",
+       "a": "anomaly",
+       "opts": [
+        "anomaly",
+        "average",
+        "interval",
+        "axis"
+       ],
+       "explain": "<i>an-</i> + <i>omal</i>: not even with the rest of the set, so it is named and set aside."
+      }
+     ]
+    },
+    {
+     "w": "outlier",
+     "meaning": "A value that sits far away from the rest of the data.",
+     "example": "The value 210 is an outlier in this data set.",
+     "parts": [
+      {
+       "surface": "out",
+       "type": "prefix",
+       "meaning": "outside",
+       "tr": {
+        "am": "ውጭ",
+        "ar": "خارج",
+        "es": "afuera",
+        "fa": "بیرون",
+        "fr": "dehors",
+        "hi": "बाहर",
+        "ja": "外",
+        "ko": "밖",
+        "ml": "പുറത്ത്",
+        "ps": "بهر",
+        "ro": "afară",
+        "ru": "снаружи",
+        "ta": "வெளியே",
+        "tl": "labas",
+        "ur": "باہر",
+        "vi": "bên ngoài",
+        "zh-Hans": "外",
+        "zh-Hant": "外"
+       }
+      },
+      {
+       "surface": "li",
+       "type": "root",
+       "meaning": "lie/rest",
+       "tr": {
+        "zh-Hans": "躺/休息",
+        "zh-Hant": "躺/休息",
+        "ja": "横たわる",
+        "ko": "눕다",
+        "vi": "nằm/nghỉ",
+        "ar": "استلقاء",
+        "fa": "دراز کشیدن",
+        "ur": "لیٹنا",
+        "am": "መተኛት",
+        "ml": "കിടക്കുക",
+        "ta": "படு",
+        "tl": "humiga",
+        "ps": "پراته کیدل",
+        "ro": "a se întinde",
+        "ru": "лежать",
+        "fr": "s'allonger",
+        "hi": "लेटना",
+        "es": "yacer"
+       }
+      },
+      {
+       "surface": "er",
+       "type": "suffix",
+       "meaning": "one who",
+       "tr": {
+        "vi": "người",
+        "am": "ሰው",
+        "ar": "شخص",
+        "es": "persona que",
+        "fa": "شخص",
+        "fr": "personne qui",
+        "hi": "व्यक्ति जो",
+        "ja": "~する人",
+        "ko": "~하는 사람",
+        "ml": "ആൾ",
+        "ps": "هغه څوک چې",
+        "ro": "persoană care",
+        "ru": "тот, кто",
+        "ta": "செய்பவர்",
+        "tl": "taong",
+        "ur": "کرنے والا",
+        "zh-Hans": "人",
+        "zh-Hant": "人",
+        "other": "کننده"
+       }
+      }
+     ],
+     "tr": {
+      "zh-Hans": "离群值",
+      "zh-Hant": "離群值",
+      "ja": "外れ値",
+      "ko": "이상치",
+      "vi": "giá trị ngoại lai",
+      "ar": "القيمة الشاذة",
+      "fa": "داده پرت",
+      "ur": "غیر معمولی قدر",
+      "am": "ወጣ ያለ ውጤት (አውትላየር)",
+      "ml": "പുറംതള്ളൽ മൂല്യം",
+      "ta": "விலகல் மதிப்பு",
+      "tl": "kakaibang datos (outlier)",
+      "ps": "بهرنی ارزښت",
+      "ro": "valoare aberantă",
+      "ru": "выброс (аномальное значение)",
+      "fr": "valeur aberrante",
+      "hi": "अपवाद मान",
+      "es": "valor atípico"
+     },
+     "note": "<i>out</i> (outside) + <i>li</i> (lie) + <i>-er</i> (one that): the one that lies outside. An outlier is a point sitting far away from the rest of the data on the graph. Anomaly and outlier often point at the same dot, but they say different things: <b>anomaly</b> says something went wrong in that reading, <b>outlier</b> only says where the point sits.",
+     "apply": [
+      {
+       "id": "prac_out_scn",
+       "type": "scenario",
+       "q": "On your scatter plot, nine points sit close to a rising line and one sits far above everything else. What is that lonely point called?",
+       "a": "An outlier",
+       "opts": [
+        "An outlier",
+        "A trendline",
+        "A controlled variable",
+        "An average"
+       ],
+       "explain": "<i>out</i> + <i>li</i> (lie): it lies outside the rest of the data, a long way from where the others sit."
+      },
+      {
+       "id": "prac_out_desc",
+       "type": "desc",
+       "q": "A data set reads 12, 13, 14, 13 and 96. Which value lies far outside the rest?",
+       "a": "96",
+       "opts": [
+        "96",
+        "12",
+        "13",
+        "14"
+       ],
+       "explain": "The other four values are all around 13, so 96 sits a very long way outside the group."
+      },
+      {
+       "id": "prac_out_cloze",
+       "type": "cloze",
+       "before": "Most of the class measured between 148 cm and 162 cm, but one value of 210 cm sits far from the rest and is marked as an",
+       "after": "on the dot plot.",
+       "a": "outlier",
+       "opts": [
+        "outlier",
+        "trendline",
+        "trial",
+        "gradient"
+       ],
+       "explain": "<i>out</i> + <i>li</i> (lie): a point that lies well outside the group the others form."
+      }
+     ]
+    }
+   ]
+  },
+  {
    "id": "rev",
    "area": "kin",
    "title": "Linear graphs — quiz language (revision)",

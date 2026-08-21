@@ -661,12 +661,19 @@
     var help = el("div", "sim-help");
     var helpBody = el("div", "sim-help-body");
     helpBody.hidden = true;
+    /* A hint or a worked solution is written into the page long after the
+       stage was painted, so the notebook has to be run over it again — a
+       <span data-v> in one of them was styled but dead until this call. */
+    function relinkHelp() {
+      if (window.STEMVOCAB && window.STEMVOCAB.decorate) window.STEMVOCAB.decorate(helpBody);
+    }
     if (q.hint) {
       var hb = el("button", null, esc(T("hint")));
       hb.type = "button";
       hb.addEventListener("click", function () {
         helpBody.hidden = false;
         helpBody.innerHTML = "<p>" + (typeof q.hint === "string" ? q.hint : L(q.hint)) + "</p>";
+        relinkHelp();
       });
       help.appendChild(hb);
     }
@@ -676,6 +683,7 @@
       wb.addEventListener("click", function () {
         helpBody.hidden = false;
         helpBody.innerHTML = typeof q.worked === "string" ? q.worked : L(q.worked);
+        relinkHelp();
         if (!solved) assisted = true;
       });
       help.appendChild(wb);

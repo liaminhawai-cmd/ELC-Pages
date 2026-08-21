@@ -412,7 +412,7 @@
       "zh-Hant":"小梅在桿子上做記號，阿杰鬆手放下椰子，每個高度他們都計時三次。",
       vi:"Mai đánh dấu trên cây sào, Kiet thả quả dừa, và mỗi độ cao họ bấm giờ ba lần."}))));
     host.appendChild(tableEl(
-      [LBL.hAxis, {en:"trial 1", "zh-Hans":"第 1 次", "zh-Hant":"第 1 次", vi:"lần 1"},
+      [LBL.hAxis, {en:"<span data-v=\"trial\">trial</span> 1", "zh-Hans":"第 1 次", "zh-Hant":"第 1 次", vi:"<span data-v=\"trial\">lần</span> 1"},
        {en:"trial 2", "zh-Hans":"第 2 次", "zh-Hant":"第 2 次", vi:"lần 2"},
        {en:"trial 3", "zh-Hans":"第 3 次", "zh-Hant":"第 3 次", vi:"lần 3"},
        {en:"mean t (s)", "zh-Hans":"平均 t（秒）", "zh-Hant":"平均 t（秒）", vi:"t trung bình (giây)"}],
@@ -456,10 +456,10 @@
       if (got === need) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
     }
     SIM.ask(qs, {
-      prompt:{en:"Which quantity did Mai and Kiet <b>choose</b>? That one is the independent <span data-v>variable</span>.",
+      prompt:{en:"Which quantity did Mai and Kiet <b>choose</b>? That one is the <span data-v>independent</span> <span data-v>variable</span>.",
               "zh-Hans":"小梅和阿杰<b>自己选定</b>的是哪个量？那个就是自<span data-v=\"variable\">变量</span>。",
               "zh-Hant":"小梅和阿杰<b>自己選定</b>的是哪個量？那個就是自<span data-v=\"variable\">變數</span>。",
-              vi:"Đại lượng nào do Mai và Kiet <b>tự chọn</b>? Đó là <span data-v=\"variable\">biến</span> độc lập."},
+              vi:"Đại lượng nào do Mai và Kiet <b>tự chọn</b>? Đó là <span data-v=\"variable\">biến</span> <span data-v=\"independent\">độc lập</span>."},
       opts:{ list:[
         {en:"the drop height", "zh-Hans":"下落高度", "zh-Hant":"下落高度", vi:"độ cao thả"},
         {en:"the fall time", "zh-Hans":"下落时间", "zh-Hant":"下落時間", vi:"thời gian rơi"},
@@ -471,10 +471,10 @@
       onDone: tick
     });
     SIM.ask(qs, {
-      prompt:{en:"Which quantity did they <b>measure</b>? That one is the dependent <span data-v>variable</span>.",
+      prompt:{en:"Which quantity did they <b>measure</b>? That one is the <span data-v>dependent</span> <span data-v>variable</span>.",
               "zh-Hans":"他们<b>测量</b>的是哪个量？那个就是因<span data-v=\"variable\">变量</span>。",
               "zh-Hant":"他們<b>測量</b>的是哪個量？那個就是應<span data-v=\"variable\">變數</span>。",
-              vi:"Đại lượng nào họ <b>đo</b>? Đó là <span data-v=\"variable\">biến</span> phụ thuộc."},
+              vi:"Đại lượng nào họ <b>đo</b>? Đó là <span data-v=\"variable\">biến</span> <span data-v=\"dependent\">phụ thuộc</span>."},
       opts:{ list:[
         {en:"the drop height", "zh-Hans":"下落高度", "zh-Hant":"下落高度", vi:"độ cao thả"},
         {en:"the fall time", "zh-Hans":"下落时间", "zh-Hant":"下落時間", vi:"thời gian rơi"},
@@ -498,17 +498,17 @@
          vi:"biến độc lập thứ hai"},
         {en:"a mistake in the method", "zh-Hans":"方法上的错误", "zh-Hant":"方法上的錯誤",
          vi:"một lỗi trong phương pháp"}], a:0 },
-      worked:{en:"<p>A controlled variable is one you deliberately keep the same, so that the only thing changing is the height. Change the coconut halfway through and you can no longer say the height caused the change in time.</p>",
-              "zh-Hans":"<p>控制变量就是你刻意保持不变的量，这样唯一在变的就只有高度。中途换椰子，你就不能再说时间的变化是高度造成的了。</p>",
-              "zh-Hant":"<p>控制變因就是你刻意保持不變的量，這樣唯一在變的就只有高度。中途換椰子，你就不能再說時間的變化是高度造成的了。</p>",
-              vi:"<p>Biến kiểm soát là đại lượng em cố ý giữ nguyên, để thứ duy nhất thay đổi là độ cao. Đổi quả dừa giữa chừng thì em không còn nói được rằng độ cao gây ra thay đổi về thời gian nữa.</p>"},
+      worked:{en:"<p>A <span data-v=\"controlled\">controlled</span> variable is one you deliberately keep the same, so that the only thing changing is the height. Change the coconut halfway through and you can no longer say the height caused the change in time.</p>",
+              "zh-Hans":"<p><span data-v=\"controlled\">控制</span>变量就是你刻意保持不变的量，这样唯一在变的就只有高度。中途换椰子，你就不能再说时间的变化是高度造成的了。</p>",
+              "zh-Hant":"<p><span data-v=\"controlled\">控制</span>變因就是你刻意保持不變的量，這樣唯一在變的就只有高度。中途換椰子，你就不能再說時間的變化是高度造成的了。</p>",
+              vi:"<p>Biến <span data-v=\"controlled\">kiểm soát</span> là đại lượng em cố ý giữ nguyên, để thứ duy nhất thay đổi là độ cao. Đổi quả dừa giữa chừng thì em không còn nói được rằng độ cao gây ra thay đổi về thời gian nữa.</p>"},
       onDone: tick
     });
     SIM.ask(qs, {
-      prompt:{en:"From the <b>table</b>: what is the mean fall time for the 6 m drop?",
-              "zh-Hans":"看<b>表格</b>：6 米那次下落的平均时间是多少？",
-              "zh-Hant":"看<b>表格</b>：6 公尺那次下落的平均時間是多少？",
-              vi:"Từ <b>bảng</b>: thời gian rơi trung bình của lần thả 6 m là bao nhiêu?"},
+      prompt:{en:"From the <b>table</b>: what is the <span data-v>mean</span> fall time for the 6 m drop?",
+              "zh-Hans":"看<b>表格</b>：6 米那次下落的<span data-v=\"mean\">平均</span>时间是多少？",
+              "zh-Hant":"看<b>表格</b>：6 公尺那次下落的<span data-v=\"mean\">平均</span>時間是多少？",
+              vi:"Từ <b>bảng</b>: thời gian rơi <span data-v=\"mean\">trung bình</span> của lần thả 6 m là bao nhiêu?"},
       inputs:[{ k:"t", answer:1.10, tol:0.005, unit:LBL.sec,
                 label:{en:"mean time", "zh-Hans":"平均时间", "zh-Hant":"平均時間", vi:"thời gian trung bình"} }],
       hint:{en:"Add the three trials and divide by three: 1.08 + 1.13 + 1.09 = 3.30.",
@@ -900,10 +900,10 @@
       if (got === need) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
     }
     SIM.ask(qs, {
-      prompt:{en:"The dotted guides mark <b>t² = 2.00</b>. Read the height where the trendline crosses them.",
-              "zh-Hans":"虚线标出 <b>t² = 2.00</b>。读出趋势线在那里对应的高度。",
-              "zh-Hant":"虛線標出 <b>t² = 2.00</b>。讀出趨勢線在那裡對應的高度。",
-              vi:"Các đường chấm đánh dấu <b>t² = 2,00</b>. Đọc độ cao nơi đường xu hướng cắt chúng."},
+      prompt:{en:"The dotted guides mark <b>t² = 2.00</b>. Read the height where the <span data-v>trendline</span> crosses them.",
+              "zh-Hans":"虚线标出 <b>t² = 2.00</b>。读出<span data-v=\"trendline\">趋势线</span>在那里对应的高度。",
+              "zh-Hant":"虛線標出 <b>t² = 2.00</b>。讀出<span data-v=\"trendline\">趨勢線</span>在那裡對應的高度。",
+              vi:"Các đường chấm đánh dấu <b>t² = 2,00</b>. Đọc độ cao nơi <span data-v=\"trendline\">đường xu hướng</span> cắt chúng."},
       inputs:[{ k:"h", answer:9.8, tol:0.3, unit:"m",
                 label:{en:"height", "zh-Hans":"高度", "zh-Hant":"高度", vi:"độ cao"} }],
       hint:{en:"Go up from 2.00 on the bottom axis to the line, then across to the side axis.",
@@ -954,10 +954,10 @@
       onDone: tick
     });
     SIM.ask(qs, {
-      prompt:{en:"Another pair's spreadsheet printed <b>R² = 0.9604</b> for their straight line. What is r, the <span data-v>correlation</span> coefficient? Take the square root — the line slopes up, so r is <span data-v>positive</span>.",
-              "zh-Hans":"另一组的表格给出他们直线的 <b>R² = 0.9604</b>。<span data-v=\"correlation\">相关</span>系数 r 是多少？开平方——直线向上倾斜，所以 r 是<span data-v=\"positive\">正</span>的。",
-              "zh-Hant":"另一組的試算表給出他們直線的 <b>R² = 0.9604</b>。<span data-v=\"correlation\">相關</span>係數 r 是多少？開平方——直線向上傾斜，所以 r 是<span data-v=\"positive\">正</span>的。",
-              vi:"Bảng tính của một cặp khác in ra <b>R² = 0,9604</b> cho đường thẳng của họ. Hệ số <span data-v=\"correlation\">tương quan</span> r bằng bao nhiêu? Lấy căn bậc hai — đường dốc lên nên r <span data-v=\"positive\">dương</span>."},
+      prompt:{en:"Another pair's spreadsheet printed <b>R² = 0.9604</b> for their straight line. What is r, the <span data-v>correlation</span> <span data-v>coefficient</span>? Take the square root — the line slopes up, so r is <span data-v>positive</span>.",
+              "zh-Hans":"另一组的表格给出他们直线的 <b>R² = 0.9604</b>。<span data-v=\"correlation\">相关</span><span data-v=\"coefficient\">系数</span> r 是多少？开平方——直线向上倾斜，所以 r 是<span data-v=\"positive\">正</span>的。",
+              "zh-Hant":"另一組的試算表給出他們直線的 <b>R² = 0.9604</b>。<span data-v=\"correlation\">相關</span><span data-v=\"coefficient\">係數</span> r 是多少？開平方——直線向上傾斜，所以 r 是<span data-v=\"positive\">正</span>的。",
+              vi:"Bảng tính của một cặp khác in ra <b>R² = 0,9604</b> cho đường thẳng của họ. <span data-v=\"coefficient\">Hệ số</span> <span data-v=\"correlation\">tương quan</span> r bằng bao nhiêu? Lấy căn bậc hai — đường dốc lên nên r <span data-v=\"positive\">dương</span>."},
       inputs:[{ k:"r", answer:0.98, tol:0.005, label:"r" }],
       hint:{en:"√0.9604. Try squaring 0.98.",
             "zh-Hans":"√0.9604。试着把 0.98 平方看看。",
@@ -1320,18 +1320,18 @@
     { id:"b2", kind:"read", tab:TAB.read,
       title:{en:"Read g off the gradient", "zh-Hans":"从斜率读出 g",
              "zh-Hant":"從斜率讀出 g", vi:"Đọc g từ độ dốc"},
-      aim:{en:"On a plot of h against t², the gradient is <b>½g</b>. Read the gradient, double it, and you have measured gravity. The units of the gradient tell you the same story: m/s².",
-           "zh-Hans":"在 h 对 t² 的图上，斜率就是 <b>½g</b>。读出斜率，乘以 2，你就把重力测出来了。斜率的单位说的是同一件事：m/s²。",
-           "zh-Hant":"在 h 對 t² 的圖上，斜率就是 <b>½g</b>。讀出斜率，乘以 2，你就把重力測出來了。斜率的單位說的是同一件事：m/s²。",
-           vi:"Trên đồ thị h theo t², độ dốc chính là <b>½g</b>. Đọc độ dốc, nhân đôi, thế là em đã đo được trọng lực. Đơn vị của độ dốc nói cùng một điều: m/s²."},
+      aim:{en:"On a plot of h against t², the gradient is <b>½g</b>. Read the gradient, double it, and you have measured <span data-v>gravity</span>. The units of the gradient tell you the same story: m/s².",
+           "zh-Hans":"在 h 对 t² 的图上，斜率就是 <b>½g</b>。读出斜率，乘以 2，你就把<span data-v=\"gravity\">重力</span>测出来了。斜率的单位说的是同一件事：m/s²。",
+           "zh-Hant":"在 h 對 t² 的圖上，斜率就是 <b>½g</b>。讀出斜率，乘以 2，你就把<span data-v=\"gravity\">重力</span>測出來了。斜率的單位說的是同一件事：m/s²。",
+           vi:"Trên đồ thị h theo t², độ dốc chính là <b>½g</b>. Đọc độ dốc, nhân đôi, thế là em đã đo được <span data-v=\"gravity\">trọng lực</span>. Đơn vị của độ dốc nói cùng một điều: m/s²."},
       goal:GOAL.five, build:b2 },
     { id:"b3", kind:"predict", tab:TAB.predict,
       title:{en:"The Moon, and a heavier coconut", "zh-Hans":"月球，和一个更重的椰子",
              "zh-Hant":"月球，和一顆更重的椰子", vi:"Mặt Trăng, và một quả dừa nặng hơn"},
-      aim:{en:"The gradient is ½g and nothing else. Move to the Moon and it changes. Double the mass and it does not — there is no mass anywhere in h = ½gt².",
-           "zh-Hans":"斜率就是 ½g，别无其他。换到月球，它会变；把质量加倍，它不变——h = ½gt² 里根本没有质量。",
-           "zh-Hant":"斜率就是 ½g，別無其他。換到月球，它會變；把質量加倍，它不變——h = ½gt² 裡根本沒有質量。",
-           vi:"Độ dốc là ½g, không gì khác. Sang Mặt Trăng thì nó đổi. Gấp đôi khối lượng thì không — trong h = ½gt² chẳng có khối lượng ở đâu cả."},
+      aim:{en:"The gradient is ½g and nothing else. Move to the Moon and it changes. Double the <span data-v>mass</span> and it does not — there is no mass anywhere in h = ½gt².",
+           "zh-Hans":"斜率就是 ½g，别无其他。换到月球，它会变；把<span data-v=\"mass\">质量</span>加倍，它不变——h = ½gt² 里根本没有质量。",
+           "zh-Hant":"斜率就是 ½g，別無其他。換到月球，它會變；把<span data-v=\"mass\">質量</span>加倍，它不變——h = ½gt² 裡根本沒有質量。",
+           vi:"Độ dốc là ½g, không gì khác. Sang Mặt Trăng thì nó đổi. Gấp đôi <span data-v=\"mass\">khối lượng</span> thì không — trong h = ½gt² chẳng có khối lượng ở đâu cả."},
       goal:GOAL.three, build:b3 },
     { id:"b4", kind:"solve", tab:TAB.solve,
       title:{en:"From a spreadsheet equation to g, and to the error",

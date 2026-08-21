@@ -60,7 +60,7 @@
           name: "The Keg Toss task (quadratics)", short: "Keg Toss",
           desc: "Model a thrown keg's flight with a parabola. Opens after the Trains task." }
       ],
-      vocabSets: ["kin1", "kin2", "kin3", "kin4", "rev"],
+      vocabSets: ["kin1", "kin2", "kin3", "kin4", "kin5", "prac", "rev"],
       skillGroups: [
         { id: "kg_lines",  name: "Linear graphs",
           skills: ["k_coords", "k_table", "k_grad_graph", "k_grad_pts", "k_yint", "k_eq", "k_sketch", "k_intersect", "k_simult"] },
@@ -459,7 +459,7 @@
               science: null }
           ], project: "cp_quiz" },
         { cols: [
-            { words: { sets: ["kin3"] },
+            { words: { sets: ["kin3", "prac"] },
               maths: null,
               science: { skills: ["s_variables", "s_lobf", "s_excel", "s_corr"] } }
           ], project: "cp_report" },
@@ -470,7 +470,7 @@
             { words: null, maths: { label: "two lines meeting", skills: ["k_simult"] }, science: null }
           ], project: "cp_test" },
         { cols: [
-            { words: { sets: ["kin4"] },
+            { words: { sets: ["kin4", "kin5"] },
               maths: { label: "curvy lines", skills: ["k_parabola", "k_quadeq"] },
               science: { skills: ["k_project"] } }
           ], project: "cp_keg" }
