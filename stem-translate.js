@@ -158,7 +158,9 @@
     var t = TARGET[word];
     if (t) {
       var st = STEM2.Store.vocabWord(word);
-      if (st && (st.built || st.checked)) {
+      /* BUILT only — answering the USE quiz marks a word "checked", but the
+         translation is the reward for assembling the word from its parts. */
+      if (st && st.built) {
         var lg = homeLang();
         var tr = (t.w.tr || {})[lg] || "";
         showPop(el, "<div class='w'>" + esc(t.w.w) + "</div><div class='g'>" + esc(tr) + "</div>" +

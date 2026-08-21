@@ -346,7 +346,11 @@
             "run = how far right. gradient m = rise ÷ run."] },
     hint: "m = rise ÷ run between two grid points.",
     gen: function (rng) {
-      var run = rng.pick([1, 2, 3, 4]), rise = rng.pick([-4, -3, -2, -1, 1, 2, 3, 4]);
+      /* rise/run pairs chosen so the gradient is always a clean number a student
+         can write exactly: whole numbers and halves only — never 2 ÷ 3 = 0.67 */
+      var pair = rng.pick([[1, 1], [2, 1], [3, 1], [4, 1], [1, 2], [3, 2],
+                           [-1, 1], [-2, 1], [-3, 1], [-4, 1], [-1, 2], [-3, 2]]);
+      var rise = pair[0], run = pair[1];
       var m = rise / run;
       var x1 = rng.ri(-3, 0), y1 = rng.ri(-3, 3), y2 = y1 + rise, x2 = x1 + run;
       var guard = 0;
@@ -558,9 +562,23 @@
           workedHTML: "Section A climbs " + y1 + " km in " + t1 + " min → velocity = " + y1 + " ÷ " + t1 + " = <b>" + fmt(v1) + " km/min</b>." };
       }
       if (kind === "rest") {
+        /* the stop must not always be the middle section, or the answer is
+           always "B" and the question can be scored without reading the graph */
+        var restAt = rng.ri(0, 2);
+        var rsegs, rtMax, ryMax;
+        if (restAt === 1) { rsegs = segs; rtMax = tMax; ryMax = yMax; }
+        else if (restAt === 0) {   /* waiting first, then two moving legs */
+          rsegs = [{ dt: tRest, dy: 0 }, { dt: t1, dy: y1 }, { dt: t3, dy: Math.abs(dy3) }];
+          rtMax = tRest + t1 + t3; ryMax = y1 + Math.abs(dy3) + 1;
+        } else {                    /* moves, moves, then stops at the end */
+          rsegs = [{ dt: t1, dy: y1 }, { dt: t3, dy: Math.abs(dy3) }, { dt: tRest, dy: 0 }];
+          rtMax = t1 + t3 + tRest; ryMax = y1 + Math.abs(dy3) + 1;
+        }
+        var letter = ["A", "B", "C"][restAt];
         return { qHTML: "In which section is the traveller <b>at rest</b>?",
-          svg: svg, opts: { list: ["A", "B", "C"], a: "B" },
-          workedHTML: "Section <b>B</b> is flat — position doesn't change, so the traveller is at rest." };
+          svg: motionChart(rsegs, rtMax, ryMax, "position (km)", "t (min)"),
+          opts: { list: ["A", "B", "C"], a: letter },
+          workedHTML: "Section <b>" + letter + "</b> is the flat one — the position line does not climb or fall, so the traveller is not moving." };
       }
       var total = y1 + Math.abs(dy3);
       return { qHTML: "What <b>total distance</b> does the traveller cover in the whole journey?",

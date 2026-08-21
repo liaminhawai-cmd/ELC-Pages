@@ -795,12 +795,17 @@
       if (kind === "protect") {
         return { qHTML: setup + "<br>How well is " + c.who + " protected <b>altogether</b>, as a percentage?",
           inputs: [pctInput("p", "total protection (%) =", protPct)],
-          workedHTML: maths + " (Adding would have given " + (a + b) + "% — which is why adding is wrong.)" };
+          /* only call adding out as impossible when it actually exceeds 100% —
+             otherwise say plainly that it is still the wrong method */
+          workedHTML: maths + " (Adding would have given " + (a + b) + "%" +
+            (a + b > 100 ? " — impossible, which is why adding is wrong.)"
+                         : ", but adding is still wrong: the second protection only works on the risk the first one left.)") };
       }
       if (kind === "people") {
         var still = Math.round(thruA * thruB * 1000);
-        return { qHTML: setup + "<br>Out of <b>1000 people</b> who all use both, about how many are still at risk?",
-          inputs: [numInput("n", "people still at risk =", still, 0.5)],
+        return { qHTML: setup + "<br>Without any protection, 1000 people would catch it. " +
+            "If all 1000 use both protections, about how many would you <b>still expect to catch it</b>?",
+          inputs: [numInput("n", "people who still catch it =", still, 0.5)],
           workedHTML: maths + "<br>" + fmt(remPct) + "% of 1000 = " + fmt(thruA * thruB) + " × 1000 = <b>" + still + " people</b>." };
       }
 
@@ -932,7 +937,11 @@
       /* --- 1. dividing by the wrong number --- */
       if (tmpl === "drop") {
         var base = rng.pick([400, 800, 1000, 2000]);
-        var p = rng.pick([50, 60, 75]);
+        /* p > 50 only: the post divides by the NEW number, so its bogus figure is
+           fall ÷ (100−p) — it must land ABOVE 100% for the "a drop can never be
+           more than 100%" rule the worked solution teaches to actually refute it.
+           At p = 50 the two are equal and the rule would not fire. */
+        var p = rng.pick([60, 75, 80]);
         var v = [base, Math.round(base * 0.8), Math.round(base * 0.65), Math.round(base * (1 - p / 100))];
         var fall = base - v[3];
         var wrongPct = Math.round(fall / v[3] * 100);

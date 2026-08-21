@@ -295,12 +295,27 @@
     kin: {
       strands: [{ id: "words", label: "Words" }, { id: "maths", label: "Maths" }, { id: "science", label: "Science" }],
       stages: [
+        /* every column feeds the project on its right — and only skills whose
+           `needs` names that project appear in its road */
         { cols: [
-            { words: { sets: ["kin1"] }, maths: { skills: ["k_coords", "k_table", "k_grad_graph"] }, science: { skills: ["s_vectors"] } },
-            { words: { sets: ["kin2", "rev"] }, maths: { skills: ["k_grad_pts", "k_yint", "k_eq", "k_sketch"] }, science: { skills: ["s_ptgraph", "s_story"] } },
-            { words: { sets: ["kin3"] }, maths: { skills: ["k_intersect", "k_simult"] }, science: { skills: ["s_variables", "s_lobf", "s_excel", "s_corr"] } }
+            { words: { sets: ["kin1", "kin2", "rev"] },
+              maths: { skills: ["k_coords", "k_table", "k_grad_graph", "k_grad_pts"] },
+              science: null },
+            { words: null,
+              maths: { skills: ["k_yint", "k_eq", "k_sketch", "k_intersect"] },
+              science: null }
+          ], project: "cp_quiz" },
+        { cols: [
+            { words: { sets: ["kin3"] },
+              maths: null,
+              science: { skills: ["s_variables", "s_lobf", "s_excel", "s_corr"] } }
           ], project: "cp_report" },
-        { cols: [], project: "cp_cat" },
+        { cols: [
+            { words: null, maths: null, science: { skills: ["s_vectors", "s_ptgraph", "s_story"] } }
+          ], project: "cp_cat" },
+        { cols: [
+            { words: null, maths: { skills: ["k_simult"] }, science: null }
+          ], project: "cp_test" },
         { cols: [
             { words: { soon: "quadratic words" }, maths: { soon: "sketching parabolas" }, science: { soon: "projectile motion" } }
           ], project: "cp_keg" }
@@ -309,11 +324,13 @@
       strands: [{ id: "words", label: "Words" }, { id: "maths", label: "Maths" }, { id: "science", label: "Science" }],
       stages: [
         { cols: [
-            { words: { sets: ["bio1"] }, maths: { skills: ["b_samplespace"] }, science: { skills: ["b_dna", "b_genlang"] } },
-            { words: { sets: ["bio2"] }, maths: null, science: { skills: ["b_punnett"] } }
+            { words: { sets: ["bio3"] }, maths: { soon: "revise your probability" }, science: null }
+          ], project: "cp_probpre" },
+        { cols: [
+            { words: { sets: ["bio1", "bio2"] }, maths: null, science: { skills: ["b_dna", "b_genlang", "b_punnett"] } }
           ], project: "cp_traits" },
         { cols: [
-            { words: { sets: ["bio3"] }, maths: { skills: ["b_tree"] }, science: { skills: ["b_pedigree"] } }
+            { words: null, maths: { skills: ["b_samplespace", "b_tree"] }, science: { skills: ["b_pedigree"] } }
           ], project: "cp_biocat" },
         { cols: [
             { words: null, maths: { skills: ["s_lobf", "s_excel", "s_corr"], callback: "from Kinematics" }, science: { soon: "measure & report" } }
@@ -333,7 +350,14 @@
   function safeSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
     return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
-  function daysUntil(d) { return Math.ceil((new Date(d + "T23:59:59") - new Date()) / 86400000); }
+  /* whole days from TODAY to the target date: 0 on the day itself, 1 tomorrow.
+     (Comparing date-starts, not now-to-end-of-day, which read a day late.) */
+  function daysUntil(d) {
+    var target = new Date(d + "T00:00:00");
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    return Math.round((target - today) / 86400000);
+  }
   function fmtDate(d) { return new Date(d + "T12:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short" }); }
 
   var UNIT_BY_ID = {}; UNITS.forEach(function (u) { UNIT_BY_ID[u.id] = u; });
