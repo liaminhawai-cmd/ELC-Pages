@@ -1,0 +1,233 @@
+/* ============================================================
+   ELC STEM hub v2 — tap a word, see your language
+   ------------------------------------------------------------
+   Include after stem-vocab-data.js + stem-shared.js:
+       <script src="stem-translate.js?v=..."></script>
+   It runs itself. Two rules, on purpose:
+
+   1. HELPER WORDS (the instruction language of a task — "calculate",
+      "between", "table") can be tapped any time. One or two words at
+      a time, never the whole page.
+   2. TARGET WORDS (the subject vocabulary in the Vocab Hub) are
+      LOCKED until the student builds them. Tapping one says so and
+      offers the build. The translation is the reward for building.
+
+   Machine translation of the whole page is blocked (notranslate +
+   the Google meta), so the page can't be walked around.
+
+   Turn it off for one element with class="no-tap" (or any input).
+   ============================================================ */
+(function () {
+  "use strict";
+  if (!window.STEM2) return;
+
+  var LANG_KEY = "elc_stem_home_lang";
+  var MAX_PICK = 2;                    /* one or two words at a time */
+  var GLOSS = (window.STEM_GLOSS || {});
+  var DATA = window.STEM_VOCAB_DATA;
+
+  /* target words: everything the Vocab Hub teaches */
+  var TARGET = {};
+  if (DATA) DATA.sets.forEach(function (set) {
+    set.words.forEach(function (w) { TARGET[w.w.toLowerCase()] = { w: w, set: set }; });
+  });
+
+  function homeLang() { try { return localStorage.getItem(LANG_KEY) || ""; } catch (e) { return ""; } }
+  function setHomeLang(v) { try { localStorage.setItem(LANG_KEY, v); } catch (e) {} }
+  var esc = STEM2.esc;
+
+  /* ---------- block machine translation of the page ---------- */
+  (function blockMT() {
+    var m = document.createElement("meta");
+    m.name = "google"; m.content = "notranslate";
+    document.head.appendChild(m);
+    document.documentElement.setAttribute("translate", "no");
+    document.documentElement.classList.add("notranslate");
+  })();
+
+  var CSS = "" +
+    ".tw-bar{position:fixed;left:0;right:0;bottom:0;z-index:8500;display:flex;gap:10px;align-items:center;" +
+      "padding:9px 14px;background:var(--paper,#fcfcfa);border-top:1px solid var(--hair,#e6e7e3);" +
+      "font-size:.8rem;transform:translateY(102%);transition:transform .18s ease}" +
+    ".tw-bar.on{transform:none}" +
+    ".tw-bar select{font:inherit;font-size:.78rem;border:1px solid var(--hair,#e6e7e3);border-radius:8px;" +
+      "background:var(--paper,#fcfcfa);color:var(--ink,#212427);padding:4px 7px}" +
+    ".tw-bar .tw-x{margin-left:auto;border:0;background:none;color:var(--muted,#767b7f);font-size:1.1rem;cursor:pointer;padding:2px 8px}" +
+    ".tw-hit{cursor:help;border-bottom:1px dotted var(--faint,#9aa0a5)}" +
+    ".tw-hit.tw-lock{border-bottom-style:dashed}" +
+    ".tw-hit.tw-on{background:var(--accent-soft,#f4f9f8);border-bottom-color:var(--accent,#0d7a70)}" +
+    ".tw-pop{position:absolute;z-index:8600;max-width:250px;background:var(--paper,#fcfcfa);color:var(--ink,#212427);" +
+      "border:1px solid var(--hair,#e6e7e3);border-radius:9px;padding:9px 11px;font-size:.82rem;line-height:1.45;" +
+      "box-shadow:0 6px 20px rgba(16,24,40,.13)}" +
+    ".tw-pop .w{font-family:Georgia,'Times New Roman',serif;font-size:1rem}" +
+    ".tw-pop .g{font-size:1.02rem;font-weight:700;margin-top:3px}" +
+    ".tw-pop .n{color:var(--muted,#767b7f);font-size:.75rem;margin-top:4px}" +
+    ".tw-pop a{color:var(--accent,#0d7a70);font-weight:600;text-decoration:none}" +
+    ".tw-toggle{border:1px solid var(--hair,#e6e7e3);border-radius:999px;background:var(--paper,#fcfcfa);" +
+      "color:var(--muted,#767b7f);font:inherit;font-size:.72rem;padding:4px 11px;cursor:pointer}" +
+    ".tw-toggle.on{border-color:var(--accent,#0d7a70);color:var(--accent,#0d7a70)}";
+
+  var bar, pop, active = [], enabled = false;
+
+  function ensureChrome() {
+    var s = document.createElement("style"); s.textContent = CSS; document.head.appendChild(s);
+
+    bar = document.createElement("div");
+    bar.className = "tw-bar";
+    var opts = "<option value=''>choose…</option>";
+    ((DATA && DATA.langs) || []).forEach(function (l) {
+      opts += "<option value='" + esc(l.id) + "'>" + esc(l.name) + "</option>";
+    });
+    bar.innerHTML = "<span>My language</span><select aria-label='My first language'>" + opts + "</select>" +
+      "<span class='tw-hint' style='color:var(--muted,#767b7f)'>tap up to two words</span>" +
+      "<button class='tw-x' aria-label='Close'>×</button>";
+    document.body.appendChild(bar);
+    var sel = bar.querySelector("select");
+    sel.value = homeLang();
+    sel.addEventListener("change", function () { setHomeLang(sel.value); closePop(); });
+    bar.querySelector(".tw-x").addEventListener("click", function () { setEnabled(false); });
+
+    pop = document.createElement("div");
+    pop.className = "tw-pop";
+    pop.style.display = "none";
+    document.body.appendChild(pop);
+    document.addEventListener("click", function (e) {
+      if (!pop.contains(e.target) && !e.target.classList.contains("tw-hit")) closePop();
+    });
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") closePop(); });
+  }
+
+  function closePop() {
+    if (pop) pop.style.display = "none";
+    active.forEach(function (el) { el.classList.remove("tw-on"); });
+    active = [];
+  }
+
+  function showPop(el, html) {
+    var r = el.getBoundingClientRect();
+    pop.innerHTML = html;
+    pop.style.display = "block";
+    var top = r.bottom + window.scrollY + 6;
+    var left = Math.min(r.left + window.scrollX, window.scrollX + document.documentElement.clientWidth - pop.offsetWidth - 10);
+    pop.style.top = top + "px";
+    pop.style.left = Math.max(8, left) + "px";
+  }
+
+  function glossFor(word) {
+    var lg = homeLang();
+    if (!lg) return null;
+    var g = GLOSS[word];
+    return g && g[lg] ? g[lg] : null;
+  }
+
+  function onTap(el, word) {
+    if (!homeLang()) {
+      showPop(el, "<div class='n'>Choose your language in the bar below first.</div>");
+      return;
+    }
+    if (active.indexOf(el) === -1) {
+      if (active.length >= MAX_PICK) { var old = active.shift(); old.classList.remove("tw-on"); }
+      active.push(el); el.classList.add("tw-on");
+    }
+    var t = TARGET[word];
+    if (t) {
+      var st = STEM2.Store.vocabWord(word);
+      if (st && (st.built || st.checked)) {
+        var lg = homeLang();
+        var tr = (t.w.tr || {})[lg] || "";
+        showPop(el, "<div class='w'>" + esc(t.w.w) + "</div><div class='g'>" + esc(tr) + "</div>" +
+          "<div class='n'>" + esc((t.w.meaning || "").slice(0, 90)) + "</div>");
+      } else {
+        showPop(el, "<div class='w'>" + esc(t.w.w) + "</div>" +
+          "<div class='n'>This is one of your words to learn — <b>build it</b> and its translation is yours.</div>" +
+          "<div style='margin-top:6px'><a href='stem-vocab-hub.html#word=" + encodeURIComponent(t.w.w) + "'>Build it now →</a></div>");
+      }
+      return;
+    }
+    var g = glossFor(word);
+    if (g) showPop(el, "<div class='w'>" + esc(word) + "</div><div class='g'>" + esc(g) + "</div>");
+    else showPop(el, "<div class='w'>" + esc(word) + "</div><div class='n'>No translation stored for this word yet.</div>");
+  }
+
+  /* wrap eligible words in tappable spans (skips inputs, links, code, marked-up vocab) */
+  var SKIP = { SCRIPT: 1, STYLE: 1, INPUT: 1, TEXTAREA: 1, SELECT: 1, BUTTON: 1, A: 1, CODE: 1, SVG: 1, OPTION: 1 };
+  function decorate(root) {
+    var walker = document.createTreeWalker(root || document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function (n) {
+        if (!n.nodeValue || !/[A-Za-z]{3}/.test(n.nodeValue)) return NodeFilter.FILTER_REJECT;
+        var p = n.parentNode;
+        while (p && p !== document.body) {
+          if (SKIP[p.nodeName]) return NodeFilter.FILTER_REJECT;
+          if (p.classList && (p.classList.contains("no-tap") || p.classList.contains("tw-bar") ||
+              p.classList.contains("tw-pop") || p.classList.contains("sv-word"))) return NodeFilter.FILTER_REJECT;
+          if (p.hasAttribute && p.hasAttribute("data-v")) return NodeFilter.FILTER_REJECT;
+          p = p.parentNode;
+        }
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var nodes = [], n;
+    while ((n = walker.nextNode())) nodes.push(n);
+    nodes.forEach(function (node) {
+      var parts = node.nodeValue.split(/([A-Za-z][A-Za-z'-]{1,})/);
+      var any = false;
+      var frag = document.createDocumentFragment();
+      parts.forEach(function (p, i) {
+        if (i % 2 === 1) {
+          var lw = p.toLowerCase();
+          if (GLOSS[lw] || TARGET[lw]) {
+            var span = document.createElement("span");
+            span.className = "tw-hit" + (TARGET[lw] ? " tw-lock" : "");
+            span.textContent = p;
+            span.addEventListener("click", function (e) { e.stopPropagation(); onTap(span, lw); });
+            frag.appendChild(span); any = true; return;
+          }
+        }
+        if (p) frag.appendChild(document.createTextNode(p));
+      });
+      if (any) node.parentNode.replaceChild(frag, node);
+    });
+  }
+
+  var decorated = false;
+  function setEnabled(on) {
+    enabled = on;
+    if (on && !decorated) { decorate(document.body); decorated = true; }
+    bar.classList.toggle("on", on);
+    document.body.classList.toggle("tw-active", on);
+    document.querySelectorAll(".tw-hit").forEach(function (el) {
+      el.style.borderBottomStyle = on ? "" : "none";
+      el.style.cursor = on ? "" : "inherit";
+      el.style.pointerEvents = on ? "" : "none";
+    });
+    if (!on) closePop();
+    try { localStorage.setItem("elc_stem_tap", on ? "1" : "0"); } catch (e) {}
+    var t = document.querySelector(".tw-toggle");
+    if (t) t.classList.toggle("on", on);
+  }
+
+  /* the toggle button — pages put <span id="tw-slot"></span> in their top row */
+  function mountToggle() {
+    var slot = document.getElementById("tw-slot");
+    var btn = document.createElement("button");
+    btn.className = "tw-toggle";
+    btn.type = "button";
+    btn.textContent = "文 tap to translate";
+    btn.title = "Tap a word to see it in your language";
+    btn.addEventListener("click", function () { setEnabled(!enabled); });
+    (slot || document.body).appendChild(btn);
+    if (!slot) { btn.style.position = "fixed"; btn.style.right = "14px"; btn.style.bottom = "62px"; btn.style.zIndex = "8400"; }
+  }
+
+  function init() {
+    ensureChrome();
+    mountToggle();
+    var was = "0";
+    try { was = localStorage.getItem("elc_stem_tap") || "0"; } catch (e) {}
+    setEnabled(was === "1");
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
+
+  window.STEMTAP = { decorate: decorate, setEnabled: setEnabled };
+})();

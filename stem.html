@@ -3,63 +3,66 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>STEM Hub — ELC</title>
+<title>STEM — ELC</title>
 <style>
   :root {
-    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
-    --accent:#0d9488; --accent-soft:#ccfbf1; --radius:14px;
-    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
-    --good:#2f6a3e; --warn:#b45309; --bad:#a8432f;
+    --paper:#fcfcfa; --ink:#212427; --muted:#767b7f; --faint:#9aa0a5;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f;
   }
   @media (prefers-color-scheme:dark) {
-    :root { --bg:#0f1420; --card:#171e2e; --ink:#fff; --muted:#c7d0e2; --line:#34405b;
-            --accent:#2dd4bf; --accent-soft:#134e4a; --shadow:0 1px 2px rgba(0,0,0,.4);
-            --good:#93cf9b; --warn:#fbbf24; --bad:#e8836f; }
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#767b7f;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; }
   }
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink);
-         font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-  .wrap { max-width:1020px; margin:0 auto; padding:16px 16px 60px; }
-  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
-  .top a { color:var(--accent); text-decoration:none; font-weight:600; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
   .top a:hover { text-decoration:underline; }
-  select.language-select { font:inherit; border-radius:10px; border:1px solid var(--line);
-    background:var(--card); color:var(--ink); padding:6px 10px; }
-  .hero { border-radius:18px; padding:26px 24px; color:#fff;
-    background:linear-gradient(135deg,#047857,#0d9488 55%,#2563eb); box-shadow:var(--shadow); }
-  .hero .eyebrow { text-transform:uppercase; letter-spacing:.12em; font-size:.75rem; opacity:.9; }
-  .hero h1 { margin:.2em 0 .25em; font-family:Georgia,"Times New Roman",serif; font-size:2rem; }
-  .hero p { margin:.25em 0 0; max-width:60ch; }
-  h2 { font-size:1.15rem; margin:26px 0 10px; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
-  .card { display:flex; flex-direction:column; gap:6px; background:var(--card); border:1px solid var(--line);
-    border-radius:var(--radius); padding:16px; text-decoration:none; color:inherit; box-shadow:var(--shadow);
-    transition:transform .12s ease, border-color .12s ease; }
-  .card:hover { transform:translateY(-2px); border-color:var(--accent); }
-  .card .emoji { font-size:1.6rem; }
-  .card h3 { margin:0; font-size:1.05rem; }
-  .card p { margin:0; color:var(--muted); font-size:.9rem; flex:1; }
-  .card .open { color:var(--accent); font-weight:600; font-size:.9rem; margin-top:auto; }
-  .card.area { min-height:170px; }
-  .card.area h3 { font-family:Georgia,"Times New Roman",serif; font-size:1.25rem; }
-  /* schedule strip */
-  .sched { display:flex; gap:10px; overflow-x:auto; padding:4px 2px 10px; }
-  .cp { min-width:170px; background:var(--card); border:1px solid var(--line); border-radius:12px;
-        padding:10px 12px; box-shadow:var(--shadow); }
-  .cp .date { font-size:.78rem; color:var(--muted); }
-  .cp .name { font-weight:700; font-size:.9rem; margin:2px 0; }
-  .cp .when { font-size:.8rem; font-weight:600; }
-  .cp.done { opacity:.65; } .cp.done .when { color:var(--good); }
-  .cp.soon .when { color:var(--warn); }
-  .cp.past .when { color:var(--bad); }
-  .cp .planned { font-size:.72rem; color:var(--muted); }
-  /* progress chip */
-  .chip { display:flex; flex-wrap:wrap; gap:10px; align-items:center; background:var(--card);
-    border:1px solid var(--line); border-radius:var(--radius); padding:12px 16px; margin-top:14px; box-shadow:var(--shadow); }
-  .chip b.g { color:var(--good); } .chip b.w { color:var(--warn); } .chip b.b { color:var(--bad); }
-  .chip a { color:var(--accent); font-weight:600; text-decoration:none; margin-left:auto; }
-  .note { margin-top:26px; color:var(--muted); font-size:.85rem; }
-  footer { margin-top:30px; color:var(--muted); font-size:.85rem; }
+  select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
+    background:var(--paper); color:var(--ink); padding:5px 8px; }
+  .serif { font-family:Georgia,"Times New Roman",serif; }
+  .masthead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+  h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:2rem; font-weight:500; letter-spacing:-.01em; }
+  .sub { color:var(--muted); font-size:.8rem; }
+  /* entry task strip */
+  .entry { display:flex; gap:16px; align-items:center; margin:18px 0 30px; padding:13px 16px;
+    background:var(--accent-soft); border-radius:10px; flex-wrap:wrap; }
+  .entry .tag { font-size:.72rem; color:var(--accent); font-weight:700; letter-spacing:.05em; white-space:nowrap; }
+  .entry a { margin-left:auto; color:var(--accent); font-weight:600; text-decoration:none; font-size:.88rem; }
+  /* the shelf */
+  .shelf { border-top:1px solid var(--ink); }
+  .row { display:grid; grid-template-columns:150px 1fr 165px 110px; gap:16px; align-items:center;
+    padding:17px 0; border-bottom:1px solid var(--hair); text-decoration:none; color:inherit; }
+  .row:hover .uname { color:var(--accent); }
+  .row.now { background:linear-gradient(90deg,var(--accent-soft) 0%,transparent 70%); }
+  .row.closed { pointer-events:auto; }
+  .row.closed .uname, .row.closed .ublurb, .row.closed .meta { color:var(--faint); }
+  .uname { font-family:Georgia,"Times New Roman",serif; font-size:1.22rem; }
+  .uname sup { font-size:.65rem; color:var(--accent); font-family:system-ui,sans-serif; }
+  .ublurb { font-size:.8rem; color:var(--muted); }
+  .meta { font-size:.8rem; color:var(--muted); }
+  .bar { display:inline-block; width:84px; height:4px; background:var(--hair); border-radius:2px; vertical-align:middle; }
+  .bar i { display:block; height:4px; background:var(--accent); border-radius:2px; }
+  .due { font-size:.8rem; text-align:right; color:var(--muted); }
+  .due b { color:var(--alert); }
+  /* pocket cards */
+  .pocket { display:grid; grid-template-columns:1fr 1fr; gap:18px; margin-top:30px; }
+  .pcard { border:1px solid var(--hair); border-radius:10px; padding:15px 17px; text-decoration:none; color:inherit; }
+  .pcard:hover { border-color:var(--accent); }
+  .pcard .h { display:flex; justify-content:space-between; align-items:baseline; }
+  .pcard .h span:first-child { font-family:Georgia,"Times New Roman",serif; font-size:1.08rem; }
+  .pcard .h span:last-child { font-size:.82rem; color:var(--accent); font-weight:600; }
+  .pcard p { margin:5px 0 0; font-size:.8rem; color:var(--muted); }
+  .note { margin-top:26px; font-size:.72rem; color:var(--faint); }
+  footer { margin-top:8px; color:var(--faint); font-size:.75rem; }
+  @media (max-width:680px) {
+    .row { grid-template-columns:1fr 96px; }
+    .ublurb { display:none; }
+    .meta .bar { width:56px; }
+    .pocket { grid-template-columns:1fr; }
+  }
 </style>
 </head>
 <body>
@@ -70,189 +73,155 @@
       <option value="en">English</option>
       <option value="zh-Hans">简体中文（中国）</option>
       <option value="zh-Hant">繁體中文（台灣）</option>
+      <option value="vi">Tiếng Việt</option>
     </select>
   </div>
 
-  <div class="hero">
-    <div class="eyebrow" data-i18n="eyebrow">Science and Maths, together</div>
-    <h1>🧪 STEM Hub</h1>
-    <p data-i18n="heroText">Everything for the ELC STEM course: the words, the maths skills, the science skills,
-      the practice tools — and a report that shows where you are ahead and where to catch up.</p>
+  <div class="masthead">
+    <h1>STEM</h1>
+    <div class="sub" data-i18n="sub">ELC · Science and Maths together</div>
   </div>
 
-  <h2 data-i18n="schedHead">📅 Big checkpoints</h2>
-  <div class="sched" id="sched"></div>
-
-  <div class="chip" id="chip">
-    <span data-i18n="chipLoad">Loading your progress…</span>
+  <div class="entry">
+    <span class="tag" data-i18n="entryTag">TODAY'S ENTRY TASK</span>
+    <span style="font-size:.88rem" data-i18n="entryText">×-tables, timed — accuracy first, then speed</span>
+    <a href="https://liaminhawai-cmd.github.io/Multiplication-tables/" target="_blank" rel="noopener" data-i18n="entryGo">Start →</a>
   </div>
 
-  <h2 data-i18n="areasHead">Your two areas</h2>
-  <div class="grid">
-    <a class="card area" data-cat="STEM" data-title="Kinematics" href="stem-kinematics.html">
-      <span class="emoji">🚋</span><h3 data-i18n="kinTitle">Kinematics</h3>
-      <p data-i18n="kinText">Motion, straight-line graphs, gradients and data. Vocab hub, maths skills, science skills,
-        and the tasks to master before each checkpoint.</p>
-      <span class="open" data-i18n="open1">Open Kinematics →</span>
+  <div class="shelf" id="shelf"></div>
+
+  <div class="pocket">
+    <a class="pcard" href="stem-notebook.html" data-cat="STEM" data-title="STEM Notebook">
+      <div class="h"><span data-i18n="nbTitle">My notebook</span><span data-i18n="open">Open →</span></div>
+      <p id="nbLine" data-i18n="nbText">Your word list and morpheme dictionary — every word you have mastered, from every unit so far.</p>
     </a>
-    <a class="card area" data-cat="STEM" data-title="Biology" href="stem-biology.html">
-      <span class="emoji">🧬</span><h3 data-i18n="bioTitle">Biology</h3>
-      <p data-i18n="bioText">Unit 1: DNA, inheritance and the probability behind Punnett squares.
-        Unit 2: the pandemic — checking the maths behind the news.</p>
-      <span class="open" data-i18n="open2">Open Biology →</span>
+    <a class="pcard" href="stem-progress.html" data-cat="STEM" data-title="My STEM Report">
+      <div class="h"><span data-i18n="rpTitle">My report</span><span data-i18n="open2">Open →</span></div>
+      <p data-i18n="rpText">Where you're going, how you're going, what's next — built only from work you've actually done.</p>
     </a>
   </div>
 
-  <h2 data-i18n="toolsHead">Tools</h2>
-  <div class="grid">
-    <a class="card" data-cat="STEM" data-title="STEM Vocab Hub" href="stem-vocab-hub.html">
-      <span class="emoji">📓</span><h3 data-i18n="vhTitle">STEM Vocab Hub</h3>
-      <p data-i18n="vhText">Build every STEM word from its parts, check it, and see it in your language. Your notebook follows you across every page.</p>
-      <span class="open" data-i18n="open3">Open the Vocab Hub →</span>
-    </a>
-    <a class="card" data-cat="STEM" data-title="My STEM Progress" href="stem-progress.html">
-      <span class="emoji">🧭</span><h3 data-i18n="prTitle">My Progress</h3>
-      <p data-i18n="prText">Every skill in rows, the checkpoints on top — see what is mastered, what is due soon, and what needs attention.</p>
-      <span class="open" data-i18n="open4">See my report →</span>
-    </a>
-    <a class="card" data-cat="STEM" data-title="Race to School" href="stem-commute.html">
-      <span class="emoji">🚴</span><h3 data-i18n="rcTitle">Race to School</h3>
-      <p data-i18n="rcText">Tram vs bike vs car. Play with the simulation, then do the maths yourself — it checks your answers. Practice for the Motion CAT.</p>
-      <span class="open" data-i18n="open5">Start the race →</span>
-    </a>
-    <a class="card" data-cat="STEM" data-title="Linear Graphs Revision" href="stem-vocab-revision.html">
-      <span class="emoji">📈</span><h3 data-i18n="rvTitle">Linear Graphs revision</h3>
-      <p data-i18n="rvText">The quiz language from last unit — gradient, y-intercept, substitution, point of intersection — as a short revision sequence.</p>
-      <span class="open" data-i18n="open6">Revise the words →</span>
-    </a>
-    <a class="card" data-cat="STEM" data-title="Multiplication Practice" href="https://liaminhawai-cmd.github.io/Multiplication-tables/" target="_blank" rel="noopener">
-      <span class="emoji">⚡</span><h3 data-i18n="mtTitle">Multiplication — timed practice</h3>
-      <p data-i18n="mtText">The entry task, every lesson: accuracy first, then speed.</p>
-      <span class="open" data-i18n="open7">Practise now ↗</span>
-    </a>
-    <a class="card" data-cat="STEM" data-title="Word Builder" href="https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/" target="_blank" rel="noopener">
-      <span class="emoji">🔤</span><h3 data-i18n="wbTitle">Word Builder app</h3>
-      <p data-i18n="wbText">The whole-school vocabulary app — more subjects, more words. (Progress there is separate; use the STEM Vocab Hub for this report.)</p>
-      <span class="open" data-i18n="open8">Open Word Builder ↗</span>
-    </a>
-  </div>
-
-  <p class="note" data-i18n="privacy">🔒 Anonymous. Your progress is stored in this browser only — no accounts, no tracking.
-    Textbook pages and worksheets live on Compass and the class OneNote (school login needed).</p>
+  <p class="note" data-i18n="privacy">Anonymous · progress stays in this browser only · worksheets live on Compass and the class OneNote (school login).</p>
   <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
 </div>
 
-<script src="stem-shared.js?v=20260821-1"></script>
+<script src="stem-vocab-data.js?v=20260821-2"></script>
+<script src="stem-shared.js?v=20260821-2"></script>
 <script>
 (function(){
   "use strict";
-  /* ------- i18n (chrome only) ------- */
   var COPY = {
-    en: {},
-    "zh-Hans": {
-      back:"← ELC 主页", eyebrow:"科学与数学，一起学", heroText:"ELC STEM 课程的一切：词汇、数学技能、科学技能、练习工具，还有一份报告，告诉你哪里领先、哪里要追赶。",
-      schedHead:"📅 重要评估时间", chipLoad:"正在加载你的进度…", areasHead:"两个学习领域",
-      kinTitle:"运动学", kinText:"运动、直线图像、斜率和数据。词汇中心、数学技能、科学技能，以及每个检查点前要掌握的任务。",
-      bioTitle:"生物", bioText:"单元1：DNA、遗传和庞氏方格背后的概率。单元2：疫情——检查新闻背后的数学。",
-      toolsHead:"工具", vhTitle:"STEM 词汇中心", vhText:"用词根词缀拼出每个 STEM 单词，检查它，并查看你的语言。你的笔记本会跟着你到每一页。",
-      prTitle:"我的进度", prText:"每项技能一行，检查点在上方——看看哪些已掌握、哪些快到期、哪些需要加油。",
-      rcTitle:"上学竞速", rcText:"电车、自行车、汽车。先玩模拟，再自己做数学——它会检查你的答案。运动 CAT 的练习。",
-      rvTitle:"直线图像复习", rvText:"上个单元的测验词汇——斜率、y 截距、代入、交点——一个简短的复习序列。",
-      mtTitle:"乘法计时练习", mtText:"每节课的入门任务：先求准确，再求速度。",
-      wbTitle:"Word Builder 应用", wbText:"全校词汇应用——更多科目、更多单词。（那里进度是分开的；本报告请使用 STEM 词汇中心。）",
-      open1:"打开运动学 →", open2:"打开生物 →", open3:"打开词汇中心 →", open4:"查看我的报告 →",
-      open5:"开始竞速 →", open6:"复习词汇 →", open7:"现在练习 ↗", open8:"打开 Word Builder ↗",
-      privacy:"🔒 匿名。你的进度只保存在这个浏览器中——没有账号，没有追踪。课本页面和工作纸在 Compass 和班级 OneNote 上（需要学校账号登录）。"
-    },
-    "zh-Hant": {
-      back:"← ELC 主頁", eyebrow:"科學與數學，一起學", heroText:"ELC STEM 課程的一切：詞彙、數學技能、科學技能、練習工具，還有一份報告，告訴你哪裡領先、哪裡要趕上。",
-      schedHead:"📅 重要評量時間", chipLoad:"正在載入你的進度…", areasHead:"兩個學習領域",
-      kinTitle:"運動學", kinText:"運動、直線圖形、斜率和數據。詞彙中心、數學技能、科學技能，以及每個檢查點前要精熟的任務。",
-      bioTitle:"生物", bioText:"單元1：DNA、遺傳和龐氏方格背後的機率。單元2：疫情——檢查新聞背後的數學。",
-      toolsHead:"工具", vhTitle:"STEM 詞彙中心", vhText:"用詞根詞綴拼出每個 STEM 單字，檢查它，並查看你的語言。你的筆記本會跟著你到每一頁。",
-      prTitle:"我的進度", prText:"每項技能一列，檢查點在上方——看看哪些已精熟、哪些快到期、哪些需要加油。",
-      rcTitle:"上學競速", rcText:"電車、腳踏車、汽車。先玩模擬，再自己做數學——它會檢查你的答案。運動 CAT 的練習。",
-      rvTitle:"直線圖形複習", rvText:"上個單元的測驗詞彙——斜率、y 截距、代入、交點——一個簡短的複習序列。",
-      mtTitle:"乘法計時練習", mtText:"每節課的入門任務：先求準確，再求速度。",
-      wbTitle:"Word Builder 應用程式", wbText:"全校詞彙應用程式——更多科目、更多單字。（那裡的進度是分開的；本報告請使用 STEM 詞彙中心。）",
-      open1:"打開運動學 →", open2:"打開生物 →", open3:"打開詞彙中心 →", open4:"查看我的報告 →",
-      open5:"開始競速 →", open6:"複習詞彙 →", open7:"現在練習 ↗", open8:"打開 Word Builder ↗",
-      privacy:"🔒 匿名。你的進度只儲存在這個瀏覽器中——沒有帳號、沒有追蹤。課本頁面和學習單在 Compass 和班級 OneNote 上（需要學校帳號登入）。"
-    }
+    en: { nowTag:"now", openFrom:function(d){ return "from "+d; }, ongoing:"ongoing",
+          skills:function(a,b){ return a+"/"+b+" skills"; },
+          days:function(n){ return n===0 ? "today" : "in "+n+" days"; },
+          preview:"open for a look" },
+    "zh-Hans": { back:"← ELC 主页", sub:"ELC · 科学与数学一起学",
+      entryTag:"今日入门任务", entryText:"乘法表计时——先求准确，再求速度", entryGo:"开始 →",
+      nbTitle:"我的笔记本", nbText:"你的单词表和词素词典——你掌握过的每个单词，来自每个单元。",
+      rpTitle:"我的报告", rpText:"要去哪里、走得怎样、接下来做什么——只由你真正完成的学习生成。",
+      open:"打开 →", open2:"打开 →",
+      privacy:"匿名 · 进度只保存在这个浏览器 · 工作纸在 Compass 和班级 OneNote（需学校账号）。",
+      nowTag:"当前", openFrom:function(d){ return d+" 起"; }, ongoing:"持续进行",
+      skills:function(a,b){ return a+"/"+b+" 项技能"; },
+      days:function(n){ return n===0 ? "今天" : n+" 天后"; }, preview:"可先浏览" },
+    "zh-Hant": { back:"← ELC 主頁", sub:"ELC · 科學與數學一起學",
+      entryTag:"今日入門任務", entryText:"乘法表計時——先求準確，再求速度", entryGo:"開始 →",
+      nbTitle:"我的筆記本", nbText:"你的單字表和詞素詞典——你精熟過的每個單字，來自每個單元。",
+      rpTitle:"我的報告", rpText:"要去哪裡、走得如何、接下來做什麼——只由你真正完成的學習產生。",
+      open:"打開 →", open2:"打開 →",
+      privacy:"匿名 · 進度只儲存在這個瀏覽器 · 學習單在 Compass 和班級 OneNote（需學校帳號）。",
+      nowTag:"目前", openFrom:function(d){ return d+" 起"; }, ongoing:"持續進行",
+      skills:function(a,b){ return a+"/"+b+" 項技能"; },
+      days:function(n){ return n===0 ? "今天" : n+" 天後"; }, preview:"可先瀏覽" },
+    "vi": { back:"← Trang ELC", sub:"ELC · Khoa học và Toán học cùng nhau",
+      entryTag:"NHIỆM VỤ ĐẦU GIỜ", entryText:"Bảng cửu chương, tính giờ — chính xác trước, rồi mới nhanh", entryGo:"Bắt đầu →",
+      nbTitle:"Sổ tay của tôi", nbText:"Danh sách từ và từ điển hình vị của bạn — mọi từ bạn đã thành thạo, từ mọi bài học.",
+      rpTitle:"Báo cáo của tôi", rpText:"Bạn đang đi đâu, đi thế nào, tiếp theo làm gì — chỉ dựa trên việc bạn thực sự đã làm.",
+      open:"Mở →", open2:"Mở →",
+      privacy:"Ẩn danh · tiến độ chỉ lưu trong trình duyệt này · phiếu bài tập nằm trên Compass và OneNote của lớp (cần tài khoản trường).",
+      nowTag:"hiện tại", openFrom:function(d){ return "từ "+d; }, ongoing:"luôn mở",
+      skills:function(a,b){ return a+"/"+b+" kỹ năng"; },
+      days:function(n){ return n===0 ? "hôm nay" : "còn "+n+" ngày"; }, preview:"xem trước được" }
   };
   var sel = document.querySelector(".language-select");
-  function setPageLanguage(lang){
-    var dict = COPY[lang] || {};
+  var lang = "en";
+  try { lang = localStorage.getItem("elc_page_language") || "en"; } catch(e){}
+  if (!COPY[lang]) lang = "en";
+  sel.value = lang;
+  function T(k){ var v = COPY[lang][k]; return v !== undefined ? v : COPY.en[k]; }
+  function setStatic(){
     document.querySelectorAll("[data-i18n]").forEach(function(el){
-      var k = el.getAttribute("data-i18n");
+      var k = el.getAttribute("data-i18n"), v = COPY[lang][k];
       if (!el._en) el._en = el.textContent;
-      el.textContent = dict[k] || el._en;
+      el.textContent = (typeof v === "string") ? v : el._en;
     });
-    document.documentElement.lang = lang === "en" ? "en" : lang;
+    document.documentElement.lang = lang;
+  }
+  sel.addEventListener("change", function(){
+    lang = sel.value;
     try { localStorage.setItem("elc_page_language", lang); } catch(e){}
-  }
-  var saved = "en";
-  try { saved = localStorage.getItem("elc_page_language") || "en"; } catch(e){}
-  if (!COPY[saved]) saved = "en";
-  sel.value = saved;
-  sel.addEventListener("change", function(){ setPageLanguage(sel.value); paint(); });
-
-  /* ------- schedule strip ------- */
-  function fmtDate(d){
-    return new Date(d+"T12:00:00").toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short"});
-  }
-  function paintSched(){
-    var lang = sel.value;
-    var tDone = lang==="zh-Hans"?"已完成":lang==="zh-Hant"?"已完成":"done";
-    var tDays = function(n){ return lang==="en" ? ("in "+n+" days") : (n+" 天后"); };
-    var tPast = lang==="en"?"passed":"已过去";
-    var tPlanned = lang==="en"?"planned — check with your teacher":(lang==="zh-Hans"?"计划中——请与老师确认":"計畫中——請與老師確認");
-    var h="";
-    STEM.CHECKPOINTS.forEach(function(c){
-      var days = STEM.daysUntil(c.date);
-      var cls, when;
-      if (c.status==="done"){ cls="done"; when="✓ "+tDone; }
-      else if (days<0){ cls="past"; when=tPast; }
-      else if (days<=14){ cls="soon"; when="⏳ "+tDays(days); }
-      else { cls=""; when=tDays(days); }
-      h += "<div class='cp "+cls+"'><div class='date'>"+fmtDate(c.date)+"</div>"+
-           "<div class='name'>"+c.name+"</div><div class='when'>"+when+"</div>"+
-           (c.status==="planned" ? "<div class='planned'>"+tPlanned+"</div>" : "")+"</div>";
-    });
-    document.getElementById("sched").innerHTML = h;
-  }
-
-  /* ------- progress chip ------- */
-  function paintChip(){
-    var s = STEM.summary();
-    var lang = sel.value, chip = document.getElementById("chip");
-    var link = "<a href='stem-progress.html'>"+(lang==="en"?"Full report →":(lang==="zh-Hans"?"完整报告 →":"完整報告 →"))+"</a>";
-    if (lang==="en"){
-      chip.innerHTML = "🧭 <span><b class='g'>"+(s.ahead+s.done)+"</b> skills mastered · "+
-        "<b class='w'>"+s.dueSoon+"</b> due in the next 2 weeks · "+
-        "<b class='b'>"+s.behind+"</b> behind schedule · "+s.upcoming+" still to come</span>"+link;
-    } else {
-      var zh = lang==="zh-Hans";
-      chip.innerHTML = "🧭 <span><b class='g'>"+(s.ahead+s.done)+"</b> "+(zh?"项技能已掌握":"項技能已精熟")+" · "+
-        "<b class='w'>"+s.dueSoon+"</b> "+(zh?"项两周内到期":"項兩週內到期")+" · "+
-        "<b class='b'>"+s.behind+"</b> "+(zh?"项落后":"項落後")+" · "+s.upcoming+" "+(zh?"项待学":"項待學")+"</span>"+link;
-    }
-  }
-  function paint(){ paintSched(); paintChip(); }
-  setPageLanguage(saved);
-  paint();
-
-  /* ------- visit logging (same pattern as index) ------- */
-  document.querySelectorAll("a.card").forEach(function(card){
-    card.addEventListener("click", function(){
-      try {
-        var visits = JSON.parse(localStorage.getItem("elc_visited")||"[]");
-        visits = visits.filter(function(it){ return it.title !== card.dataset.title; });
-        visits.push({ title:card.dataset.title, cat:card.dataset.cat, ts:Date.now() });
-        localStorage.setItem("elc_visited", JSON.stringify(visits));
-      } catch(e){}
-    });
+    setStatic(); paintShelf();
   });
+
+  function vocabBuiltFor(unit){
+    var built=0, total=0;
+    unit.vocabSets.forEach(function(id){
+      var c = STEM2.setCounts(id); built += c.built; total += c.total;
+    });
+    return { built: built, total: total };
+  }
+
+  function paintShelf(){
+    var cur = STEM2.currentUnit();
+    var h = "";
+    STEM2.UNITS.forEach(function(u){
+      var counts = STEM2.Mastery.unitCounts(u.id);
+      var isNow = u.id === cur.id;
+      var opensLater = u.opensFrom && STEM2.daysUntil(u.opensFrom) > 0;
+      var cls = "row" + (isNow ? " now" : "") + (opensLater ? " closed" : "");
+      var pct = counts.total ? Math.round(100*counts.done/counts.total) : 0;
+      var due;
+      if (u.always) due = "<span>"+STEM2.esc(T("ongoing"))+"</span>";
+      else if (opensLater) due = "<span>"+STEM2.esc(T("openFrom")(STEM2.fmtDate(u.opensFrom)))+"</span>";
+      else {
+        var cp = STEM2.nextCheckpoint(u);
+        due = cp ? "<b>"+STEM2.esc(cp.short)+" · "+STEM2.esc(T("days")(Math.max(0,STEM2.daysUntil(cp.date))))+"</b>"
+                 : "<span>—</span>";
+      }
+      h += "<a class='"+cls+"' href='"+u.page+"' data-cat='STEM' data-title='"+STEM2.esc(u.name)+"'>"+
+        "<span class='uname'>"+STEM2.esc(u.name)+(isNow?" <sup>"+STEM2.esc(T("nowTag"))+"</sup>":"")+"</span>"+
+        "<span class='ublurb'>"+STEM2.esc(u.blurb)+(opensLater?" · "+STEM2.esc(T("preview")):"")+"</span>"+
+        "<span class='meta'><span class='bar'><i style='width:"+pct+"%'></i></span> "+
+          STEM2.esc(T("skills")(counts.done, counts.total))+"</span>"+
+        "<span class='due'>"+due+"</span></a>";
+    });
+    document.getElementById("shelf").innerHTML = h;
+    /* visit logging */
+    document.querySelectorAll("a.row, a.pcard").forEach(function(card){
+      if (card._wired) return; card._wired = true;
+      card.addEventListener("click", function(){
+        try {
+          var visits = JSON.parse(localStorage.getItem("elc_visited")||"[]");
+          visits = visits.filter(function(it){ return it.title !== card.dataset.title; });
+          if (card.dataset.title) visits.push({ title:card.dataset.title, cat:card.dataset.cat, ts:Date.now() });
+          localStorage.setItem("elc_visited", JSON.stringify(visits));
+        } catch(e){}
+      });
+    });
+  }
+
+  function paintNotebookLine(){
+    try {
+      var v = STEM2.Store.vocab(), words = 0;
+      Object.keys(v).forEach(function(k){ if (v[k].built || v[k].checked) words++; });
+      if (words > 0 && lang === "en") {
+        document.getElementById("nbLine").textContent =
+          words + " words mastered — your word list and morpheme dictionary, from every unit so far.";
+      }
+    } catch(e){}
+  }
+
+  setStatic(); paintShelf(); paintNotebookLine();
 })();
 </script>
 </body>

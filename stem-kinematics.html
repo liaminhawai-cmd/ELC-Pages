@@ -4,137 +4,159 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kinematics — ELC STEM</title>
+<!-- ================================================================
+     UNIT PAGE TEMPLATE (STEM hub v2) — stem-kinematics.html is the
+     master copy. Sibling unit pages (stem-foundations.html,
+     stem-genetics.html, stem-pandemic.html) copy this file and change
+     ONLY:
+       1. <title>, the masthead (h1 + .sub) and the intro paragraph
+          (including its data-v words),
+       2. the CONTENT block at the top of the page script
+          (UNIT_ID · SCHOOL_LINKS · DO_TASKS),
+       3. the "sub" and "proveLead" lines in the zh translations.
+     Everything else paints itself from STEM2 using UNIT_ID:
+     rail (WORDS / SKILLS / DO / PROVE), the visible-learning spine,
+     the skill-group sections, and the checkpoint arc.
+     ================================================================ -->
 <style>
   :root {
-    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
-    --accent:#0d9488; --accent-soft:#ccfbf1; --radius:14px;
-    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
-    --good:#2f6a3e; --good-soft:#e5f3e8; --warn:#b45309; --warn-soft:#fef3c7;
-    --bad:#a8432f; --bad-soft:#fde8e4;
-    /* solid-button pair — kept readable in both colour schemes */
-    --btn-bg:#0f766e; --btn-ink:#fff;
+    --paper:#fcfcfa; --ink:#212427; --muted:#767b7f; --faint:#9aa0a5;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f;
+    /* aliases so the shared notebook panel (stem-vocab.js) stays readable */
+    --card:#fcfcfa; --line:#e6e7e3;
   }
   @media (prefers-color-scheme:dark) {
-    :root { --bg:#0f1420; --card:#171e2e; --ink:#fff; --muted:#c7d0e2; --line:#34405b;
-            --accent:#2dd4bf; --accent-soft:#134e4a; --shadow:0 1px 2px rgba(0,0,0,.4);
-            --good:#93cf9b; --good-soft:#1d3323; --warn:#fbbf24; --warn-soft:#3a2f12;
-            --bad:#e8836f; --bad-soft:#3b201a;
-            --btn-bg:#2dd4bf; --btn-ink:#06231f; }
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#767b7f;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a;
+            --card:#121517; --line:#2c3134; }
   }
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink); overflow-x:hidden;
-         font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-  .wrap { max-width:1020px; margin:0 auto; padding:16px 16px 70px; }
-  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
-  .top a { color:var(--accent); text-decoration:none; font-weight:600;
-           display:inline-flex; align-items:center; min-height:40px; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:960px; margin:0 auto; padding:34px 22px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
   .top a:hover { text-decoration:underline; }
-  select.language-select { font:inherit; border-radius:10px; border:1px solid var(--line);
-    background:var(--card); color:var(--ink); padding:8px 10px; min-height:40px; }
-  .hero { border-radius:18px; padding:20px; color:#fff;
-    background:linear-gradient(135deg,#047857,#0d9488 55%,#2563eb); box-shadow:var(--shadow); }
-  .hero .eyebrow { text-transform:uppercase; letter-spacing:.12em; font-size:.72rem; opacity:.9; }
-  .hero h1 { margin:.2em 0 .25em; font-family:Georgia,"Times New Roman",serif; font-size:1.6rem; }
-  .hero p { margin:0; font-size:.95rem; max-width:62ch; }
-  .hero a { color:#ccfbf1; font-weight:600; }
-  h2 { font-size:1.15rem; margin:28px 0 6px; }
-  p.lead { margin:0 0 12px; color:var(--muted); font-size:.92rem; max-width:66ch; }
-  p.lead b { color:var(--ink); }
+  select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
+    background:var(--paper); color:var(--ink); padding:5px 8px; }
+  .serif { font-family:Georgia,"Times New Roman",serif; }
+  .masthead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:2rem; font-weight:500; letter-spacing:-.01em; }
+  .sub { color:var(--muted); font-size:.8rem; }
+  .intro { margin:14px 0 6px; font-size:.92rem; max-width:64ch; }
+  .preview { margin:12px 0 0; padding:9px 14px; background:var(--accent-soft); border-radius:10px;
+    font-size:.85rem; display:inline-block; }
+  .preview[hidden] { display:none; }
 
-  /* ---- checkpoint strip ---- */
-  .sched { display:flex; gap:10px; overflow-x:auto; padding:4px 2px 10px; }
-  .cp { min-width:168px; background:var(--card); border:1px solid var(--line); border-radius:12px;
-        padding:10px 12px; box-shadow:var(--shadow); }
-  .cp .date { font-size:.78rem; color:var(--muted); }
-  .cp .name { font-weight:700; font-size:.9rem; margin:2px 0; }
-  .cp .when { font-size:.8rem; font-weight:600; }
-  .cp .desc { font-size:.75rem; color:var(--muted); margin-top:4px; }
-  .cp.done { opacity:.7; } .cp.done .when { color:var(--good); }
-  .cp.soon .when { color:var(--warn); }
-  .cp.past .when { color:var(--bad); }
-  .cp.next { border-color:var(--accent); border-width:2px; }
-  .cp.next .name { color:var(--accent); }
+  /* ---- layout: contents rail + main pane ---- */
+  .layout { margin-top:20px; }
+  .rail { display:flex; gap:26px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    margin:0 -22px 6px; padding:2px 22px 12px; border-bottom:1px solid var(--hair); }
+  .rail-sec { flex:0 0 auto; min-width:172px; }
+  .rail-h { display:block; font-size:.68rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--muted); text-decoration:none; padding:9px 0 3px; border-top:1px solid var(--ink); }
+  .rail-h:hover { color:var(--accent); }
+  .ritem { display:flex; justify-content:space-between; align-items:center; gap:10px;
+    min-height:44px; padding:5px 0; text-decoration:none; color:inherit; font-size:.82rem; }
+  .ritem:hover .rname { color:var(--accent); }
+  .rname { min-width:0; }
+  .rname .lock { color:var(--faint); }
+  .rcount { color:var(--muted); font-size:.75rem; white-space:nowrap; }
+  .rcount .ok { color:var(--accent); font-weight:600; }
+  .rcount .soon { color:var(--alert); font-weight:600; }
+  @media (min-width:760px) {
+    .layout { display:grid; grid-template-columns:196px minmax(0,1fr); gap:38px; align-items:start; }
+    .rail { display:block; overflow:visible; margin:0; padding:0; border-bottom:0;
+      position:sticky; top:16px; max-height:calc(100vh - 32px); overflow-y:auto; }
+    .rail-sec { min-width:0; }
+    .rail-sec + .rail-sec .rail-h { margin-top:16px; }
+    .ritem { min-height:34px; padding:4px 0; }
+  }
 
-  /* ---- vocab set cards ---- */
-  .vgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(228px,1fr)); gap:12px; }
-  .vcard { display:flex; flex-direction:column; gap:6px; background:var(--card); border:1px solid var(--line);
-    border-radius:var(--radius); padding:14px; text-decoration:none; color:inherit; box-shadow:var(--shadow);
-    transition:transform .12s ease, border-color .12s ease; }
-  .vcard:hover { transform:translateY(-2px); border-color:var(--accent); }
-  .vcard h3 { margin:0; font-size:1rem; font-family:Georgia,"Times New Roman",serif; }
-  .vcard .focus { margin:0; color:var(--muted); font-size:.85rem; flex:1; }
-  .vcard .counts { font-size:.78rem; color:var(--muted); }
-  .vcard .open { color:var(--accent); font-weight:600; font-size:.85rem; }
-  .bar { height:9px; border-radius:999px; background:var(--bg); border:1px solid var(--line); overflow:hidden; }
-  .bar i { display:block; height:100%; background:var(--accent); }
-  .bigbtn { display:inline-flex; align-items:center; min-height:44px; margin-top:14px;
-    border-radius:999px; border:1px solid var(--btn-bg); background:var(--btn-bg); color:var(--btn-ink);
-    padding:8px 20px; font-weight:700; text-decoration:none; font-size:.95rem; }
-  .bigbtn:hover { filter:brightness(1.08); }
+  /* ---- main sections: a 1px ink rule opens each ---- */
+  section { border-top:1px solid var(--ink); margin-top:30px; padding-top:12px; }
+  .main > section:first-child { margin-top:0; }
+  section h2 { margin:0 0 4px; font-family:Georgia,"Times New Roman",serif; font-size:1.25rem; font-weight:500; }
+  .ghead { display:flex; justify-content:space-between; align-items:baseline; gap:12px; }
+  .gcount { font-size:.8rem; color:var(--muted); white-space:nowrap; }
+  .lead { margin:2px 0 10px; font-size:.82rem; color:var(--muted); max-width:60ch; }
+  .quiet { margin:14px 0 0; font-size:.75rem; color:var(--faint); max-width:60ch; }
+
+  /* ---- visible-learning spine ---- */
+  .spine-cols > div { padding:10px 0 14px; border-top:1px solid var(--hair); }
+  .spine-cols > div:first-child { border-top:0; }
+  @media (min-width:640px) {
+    .spine-cols { display:grid; grid-template-columns:1fr 1fr 1fr; }
+    .spine-cols > div { border-top:0; border-left:1px solid var(--hair); padding:10px 18px 14px; }
+    .spine-cols > div:first-child { border-left:0; padding-left:0; }
+  }
+  .sp h3 { margin:0 0 8px; font-size:.68rem; letter-spacing:.09em; text-transform:uppercase;
+    color:var(--accent); font-weight:700; }
+  .sp .big { font-family:Georgia,"Times New Roman",serif; font-size:1.05rem; }
+  .sp .line { font-size:.82rem; margin:3px 0; }
+  .sp .dim { color:var(--muted); font-size:.78rem; margin:3px 0; max-width:34ch; }
+  .sp .alert { color:var(--alert); font-weight:600; }
+  .sp a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.82rem; }
+  .sp a:hover { text-decoration:underline; }
+  .sp a.act { font-size:.92rem; }
+  .bar { display:block; max-width:180px; height:4px; background:var(--hair); border-radius:2px;
+    margin:4px 0 10px; }
+  .bar i { display:block; height:4px; background:var(--accent); border-radius:2px; }
 
   /* ---- skill rows ---- */
-  .hubcount { font-size:.85rem; color:var(--muted); margin:0 0 10px; }
-  .srow { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:13px 14px; box-shadow:var(--shadow); margin-bottom:10px; }
-  .srow .head { display:flex; flex-wrap:wrap; gap:8px; align-items:flex-start; }
-  .srow .nm { font-weight:600; flex:1 1 180px; min-width:0; font-size:.95rem; }
-  .srow .cont { display:block; font-weight:400; font-size:.73rem; color:var(--muted); margin-top:2px; }
-  .pill { display:inline-block; border-radius:999px; padding:3px 11px; font-size:.75rem;
-    font-weight:700; white-space:nowrap; }
-  .pill.g { background:var(--good-soft); color:var(--good); }
-  .pill.w { background:var(--warn-soft); color:var(--warn); }
-  .pill.b { background:var(--bad-soft); color:var(--bad); }
-  .pill.u { background:var(--bg); color:var(--muted); border:1px solid var(--line); }
-  .ev { color:var(--accent); font-weight:700; cursor:help; }
-  .seg { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:11px; }
-  .seg button { min-height:44px; border-radius:10px; border:1px solid var(--line); background:var(--bg);
-    color:var(--muted); font:inherit; font-size:.82rem; font-weight:600; cursor:pointer; padding:6px 6px; }
-  .seg button:hover { border-color:var(--accent); color:var(--ink); }
-  .seg button.on { background:var(--accent-soft); border-color:var(--accent); color:var(--ink);
-    box-shadow:inset 0 0 0 2px var(--accent); }
-  @media (min-width:620px) { .seg { grid-template-columns:repeat(4,1fr); } }
-  .srow details { margin-top:8px; border-top:1px dashed var(--line); }
-  .srow summary { cursor:pointer; font-size:.85rem; color:var(--accent); font-weight:600;
-    list-style:none; padding:9px 0 7px; min-height:40px; line-height:24px; }
-  .srow summary::-webkit-details-marker { display:none; }
-  .srow summary::before { content:"▸"; margin-right:6px; }
-  .srow details[open] summary::before { content:"▾"; }
-  .bands { display:grid; gap:8px; margin:2px 0 8px; }
-  @media (min-width:720px) { .bands { grid-template-columns:repeat(3,1fr); } }
-  .band { border:1px solid var(--line); border-radius:10px; padding:9px 11px; font-size:.85rem;
-    background:var(--bg); }
-  .band b { display:block; font-size:.7rem; text-transform:uppercase; letter-spacing:.05em;
-    color:var(--muted); margin-bottom:3px; }
-  .band.on { background:var(--good-soft); box-shadow:inset 0 0 0 2px var(--good); }
-  .prac { font-size:.85rem; color:var(--muted); margin:0 0 4px; }
-  .prac a { color:var(--accent); font-weight:600; text-decoration:none;
-    display:inline-block; padding:6px 0; }
-  .prac a:hover { text-decoration:underline; }
+  .skrow { border-bottom:1px solid var(--hair); }
+  .skmain { display:flex; flex-wrap:wrap; align-items:center; gap:2px 14px; padding:7px 0; min-height:44px; }
+  .skname { flex:1 1 220px; font-size:.9rem; min-width:0; }
+  .skstate { font-size:.78rem; color:var(--muted); white-space:nowrap; }
+  .skstate.m { color:var(--accent); font-weight:600; }
+  .skact { font-size:.82rem; color:var(--accent); font-weight:600; text-decoration:none; white-space:nowrap;
+    padding:8px 0; }
+  .skact:hover { text-decoration:underline; }
+  .fold { border:0; background:none; color:var(--muted); font:inherit; font-size:.85rem; cursor:pointer;
+    min-width:44px; min-height:44px; margin:-5px -10px -5px -6px; padding:0; }
+  .fold:hover { color:var(--accent); }
+  .skrow.open .fold { color:var(--accent); }
+  .bands { display:none; padding:2px 0 14px; }
+  .skrow.open .bands { display:block; }
+  .band { display:grid; grid-template-columns:96px minmax(0,1fr) auto; gap:2px 12px;
+    padding:5px 0; font-size:.82rem; align-items:baseline; }
+  .band .bl { font-size:.66rem; letter-spacing:.08em; text-transform:uppercase; color:var(--faint); font-weight:700; }
+  .band .eg { color:var(--accent); text-decoration:none; font-weight:600; font-size:.78rem;
+    white-space:nowrap; padding:4px 0 4px 6px; }
+  .band .eg:hover { text-decoration:underline; }
+  @media (max-width:520px) { .band { grid-template-columns:76px 1fr auto; } }
+  .contline { font-size:.72rem; color:var(--faint); margin-top:6px; }
 
-  /* ---- tasks ---- */
-  .task { background:var(--card); border:1px solid var(--line); border-left:5px solid var(--accent);
-    border-radius:12px; padding:14px; box-shadow:var(--shadow); margin-bottom:10px; }
-  .task h3 { margin:0 0 4px; font-size:1rem; }
-  .task p.what { margin:0 0 8px; font-size:.9rem; color:var(--muted); }
-  .tagrow { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:8px; }
-  .tag { border-radius:999px; background:var(--bg); border:1px solid var(--line); padding:3px 10px;
-    font-size:.74rem; color:var(--muted); }
-  .golink { display:inline-flex; align-items:center; min-height:40px; color:var(--accent);
-    font-weight:600; text-decoration:none; font-size:.9rem; }
-  .golink:hover { text-decoration:underline; }
-  .schoolonly { display:inline-flex; align-items:center; min-height:40px; color:var(--muted);
-    font-weight:600; text-decoration:none; border-bottom:1px dotted var(--muted); font-size:.9rem; }
-  .schoolmsg { font-size:.8rem; color:var(--muted); margin:4px 0 0; display:none; }
-  .schoolmsg.show { display:block; }
+  /* ---- do (task list) ---- */
+  .task { padding:12px 0; border-bottom:1px solid var(--hair); }
+  .task:last-child { border-bottom:0; }
+  .task .t { font-size:.92rem; font-weight:600; }
+  .task .w { margin:3px 0 4px; font-size:.8rem; color:var(--muted); max-width:60ch; }
+  .task a { display:inline-block; color:var(--accent); text-decoration:none; font-weight:600;
+    font-size:.82rem; padding:5px 0; }
+  .task a:hover { text-decoration:underline; }
+  .task .msg { display:none; font-size:.78rem; color:var(--alert); margin-top:3px; max-width:56ch; }
+  .task.show .msg { display:block; }
 
-  .note { margin-top:26px; color:var(--muted); font-size:.85rem; }
-  footer { margin-top:26px; color:var(--muted); font-size:.85rem; }
+  /* ---- prove (the unit's own arc) ---- */
+  .cp { display:grid; grid-template-columns:24px minmax(0,1fr) auto; gap:1px 12px;
+    padding:12px 0; border-bottom:1px solid var(--hair); }
+  .cp:last-child { border-bottom:0; }
+  .cp .mark { grid-row:1 / span 2; color:var(--accent); font-weight:700; }
+  .cp .mark.todo { color:var(--faint); font-weight:400; }
+  .cp .cname { font-family:Georgia,"Times New Roman",serif; font-size:1rem; }
+  .cp .cwhen { font-size:.78rem; color:var(--muted); text-align:right; white-space:nowrap; }
+  .cp .cwhen b { color:var(--alert); }
+  .cp .cdesc { grid-column:2 / 4; font-size:.78rem; color:var(--muted); max-width:56ch; }
+
+  .note { margin-top:26px; font-size:.72rem; color:var(--faint); }
+  footer { margin-top:8px; color:var(--faint); font-size:.75rem; }
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="top">
-    <a href="stem.html" data-i18n="back">← STEM Hub</a>
+    <a href="stem.html" data-i18n="back">← STEM</a>
     <select class="language-select" aria-label="Page language">
       <option value="en">English</option>
       <option value="zh-Hans">简体中文（中国）</option>
@@ -142,60 +164,85 @@
     </select>
   </div>
 
-  <div class="hero">
-    <div class="eyebrow" data-i18n="eyebrow">Term 3 · Maths and Science together</div>
-    <h1>🚋 <span data-i18n="title">Kinematics</span></h1>
-    <p data-i18n="sub">Kinematics is the study of movement: how far, how fast, which way — and the
-      straight-line graphs that show it. Everything you need before the next checkpoint is on this page.</p>
+  <!-- ===== masthead + intro — siblings rewrite these lines ===== -->
+  <div class="masthead">
+    <h1 data-i18n="title">Kinematics</h1>
+    <div class="sub" data-i18n="sub">Term 3 · motion, linear graphs, data</div>
+  </div>
+  <p class="intro">Kinematics is the study of <span data-v="motion">movement</span>: how far, how fast,
+    which way. First the words — why <span data-v>distance</span> is not <span data-v>displacement</span>,
+    and why <span data-v>velocity</span> is <span data-v>speed</span> with a <span data-v>direction</span>.
+    Then the graphs — a steady journey is a <span data-v>linear</span> line, and the
+    <span data-v>gradient</span> of a <span data-v>position</span>-time graph is the velocity.
+    Last, the <span data-v>data</span> — you drop a ball, <span data-v>plot</span> the numbers,
+    and find the <span data-v>trend</span> yourself.</p>
+  <p class="preview" id="preview" hidden></p>
+
+  <div class="layout">
+
+    <!-- ===== contents rail (sticky ≥760px; horizontal scroller below) ===== -->
+    <nav class="rail" id="rail" aria-label="Unit contents">
+      <div class="rail-sec">
+        <a class="rail-h" href="stem-vocab-hub.html" data-i18n="railWordsH">Words</a>
+        <div id="railWords"></div>
+      </div>
+      <div class="rail-sec">
+        <a class="rail-h" id="railSkillsH" href="stem-skills.html" data-i18n="railSkillsH">Skills</a>
+        <div id="railSkills"></div>
+      </div>
+      <div class="rail-sec">
+        <a class="rail-h" href="#do" data-i18n="railDoH">Do</a>
+        <div id="railDo"></div>
+      </div>
+      <div class="rail-sec" id="railProveSec">
+        <a class="rail-h" href="#prove" data-i18n="railProveH">Prove</a>
+        <div id="railProve"></div>
+      </div>
+    </nav>
+
+    <!-- ===== main pane ===== -->
+    <main class="main">
+
+      <!-- visible-learning spine -->
+      <section class="spine" aria-label="Visible learning">
+        <div class="spine-cols">
+          <div class="sp"><h3 data-i18n="goingH">Where am I going?</h3><div id="spGoing"></div></div>
+          <div class="sp"><h3 data-i18n="howH">How am I going?</h3><div id="spHow"></div></div>
+          <div class="sp"><h3 data-i18n="nextH">Where to next?</h3><div id="spNext"></div></div>
+        </div>
+        <p class="quiet" data-i18n="skillsNote">The bands below describe the journey — nothing on this
+          page is self-rated. ✓ comes only from a full practise run (3 of 3) on the skills engine.</p>
+      </section>
+
+      <!-- one section per skill group (painted from STEM2) -->
+      <div id="groups"></div>
+
+      <!-- do -->
+      <section id="do">
+        <h2 data-i18n="doH2">Do</h2>
+        <p class="lead" data-i18n="doLead">Do these before their checkpoint. 🔒 means school login —
+          open Compass or the class OneNote.</p>
+        <div id="tasks"></div>
+      </section>
+
+      <!-- prove: this unit's checkpoints only -->
+      <section id="prove">
+        <h2 data-i18n="proveH2">Prove</h2>
+        <p class="lead" data-i18n="proveLead">Each unit keeps its own checkpoints. This is the whole
+          Kinematics arc.</p>
+        <div id="cps"></div>
+      </section>
+
+    </main>
   </div>
 
-  <h2 data-i18n="schedHead">📅 Master by these dates</h2>
-  <p class="lead" data-i18n="schedLead">These are the four big checkpoints for this unit. Every skill and
-    task below shows the date it belongs to.</p>
-  <div class="sched" id="sched"></div>
-
-  <h2 data-i18n="vocabHead">📓 Vocab hub</h2>
-  <p class="lead">Every kinematics question is built from the same words. Once you know that
-    <span data-v>displacement</span> is not the same as <span data-v>distance</span>, and that
-    <span data-v>velocity</span> is <span data-v>speed</span> plus a <span data-v>direction</span>,
-    the question stops being hard. Tap any dotted word on this page — your notebook opens beside your work.</p>
-  <div class="vgrid" id="vsets"></div>
-  <a class="bigbtn" href="stem-vocab-hub.html" data-i18n="hubBtn">📓 Open the full Vocab Hub →</a>
-
-  <h2 data-i18n="mathsHead">📈 Maths skills hub</h2>
-  <p class="lead">The maths of this unit is one idea in many shapes: a <span data-v>linear</span> rule,
-    its <span data-v>gradient</span>, its <span data-v>y-intercept</span>, and the
-    <span data-v>coordinate</span> pairs that fit it. Use <span data-v>substitution</span> to build a table,
-    <span data-v>plot</span> the points, then read the <span data-v>intersection</span> where two lines meet.</p>
-  <p class="lead"><b data-i18n="selfHintA">Tap the level that is true for you today.</b>
-    <span data-i18n="selfHintB">It saves on this device and shows on your report. Open a row to see what
-    each level looks like, and where to practise.</span></p>
-  <p class="hubcount" id="mathsCount"></p>
-  <div id="mathsRows"></div>
-
-  <h2 data-i18n="sciHead">🔬 Science skills hub</h2>
-  <p class="lead">Same graphs, different story. Here the line is about <span data-v>motion</span>:
-    <span data-v>position</span> against <span data-v>time</span>, with <span data-v>acceleration</span> when the
-    line bends and <span data-v>rest</span> when it goes flat. In the experiment you choose one
-    <span data-v>variable</span> to change, measure the result, then describe the
-    <span data-v>trend</span> and the <span data-v>correlation</span> in your <span data-v>data</span>.</p>
-  <p class="hubcount" id="sciCount"></p>
-  <div id="sciRows"></div>
-
-  <h2 data-i18n="tasksHead">🎯 Tasks</h2>
-  <p class="lead" data-i18n="tasksLead">Finish each task before the date on its chip. 🔒 means you need your
-    school login — open Compass or the class OneNote.</p>
-  <div id="tasks"></div>
-
-  <p class="note" data-i18n="privacy">🔒 Anonymous. Your levels, your words and your practice are stored in
-    this browser only — no accounts, no tracking, nothing sent anywhere. Clearing your browser data clears them.
-    Worksheets and textbook pages stay on Compass and the class OneNote (school login needed).</p>
+  <p class="note" data-i18n="privacy">Anonymous · progress stays in this browser only · worksheets live on Compass and the class OneNote (school login).</p>
   <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
 </div>
 
-<script src="stem-vocab-data.js?v=20260821-1"></script>
-<script src="stem-shared.js?v=20260821-1"></script>
-<script src="stem-vocab.js?v=20260821-1"></script>
+<script src="stem-vocab-data.js?v=20260821-2"></script>
+<script src="stem-shared.js?v=20260821-2"></script>
+<script src="stem-vocab.js?v=20260821-2"></script>
 <script>
 (function(){
   "use strict";
@@ -203,192 +250,127 @@
   /* ===================================================================
      ===== CONTENT — teachers edit here ================================
      ===================================================================
-     1. SCHOOL_LINKS — the school-login files. They are "#" on purpose:
-        paste the real Compass / OneNote link between the quotes and the
-        task card starts working. Anything still "#" shows a 🔒 note.
-     2. CHECKPOINT_IDS / VOCAB_SETS — which checkpoints and which vocab
-        sets this page shows. Ids come from stem-shared.js and
-        stem-vocab-data.js.
-     3. PRACTICE — the "where do I practise this?" links per skill id.
-     4. TASKS — the task cards. cp = checkpoint id, skills = skill ids.
+     UNIT_ID       which unit this page shows (ids in stem-shared.js).
+     SCHOOL_LINKS  the 🔒 school-login files. They are "#" on purpose:
+                   paste the real Compass / OneNote link between the
+                   quotes and the task link starts working. Anything
+                   still "#" shows the "teacher is adding this" note.
+     DO_TASKS      the task list. school: key into SCHOOL_LINKS;
+                   href: a normal link; ext: opens in a new tab.
      Nothing below the "end CONTENT" line needs editing.
      =================================================================== */
+  var UNIT_ID = "kin";
 
   var SCHOOL_LINKS = {
     booklet:    "#",   /* Linear motion worded questions booklet (Compass) */
-    textbook:   "#",   /* Textbook exercises 1B / 1E / 1F  (OneNote → Maths Skills Resources) */
-    ballreport: "#"    /* Ball drop report template (Compass) */
+    textbook:   "#",   /* Textbook exercises 1B / 1E / 1F (OneNote → Maths Skills Resources) */
+    ballreport: "#"    /* Ball-drop report template (Compass) */
   };
 
-  var CHECKPOINT_IDS = ["cp_quiz", "cp_report", "cp_cat", "cp_test"];
-  var VOCAB_SETS     = ["kin1", "kin2", "kin3", "kin4", "rev"];
-
-  var LINK = {
-    mult:    "https://liaminhawai-cmd.github.io/Multiplication-tables/",
-    transum: "https://www.transum.org/maths/activity/units/Default.asp?Level=1",
-    grad:    "https://www.mathsisfun.com/gradient.html",
-    eqline:  "https://www.mathsisfun.com/equation_of_line.html",
-    corr:    "https://www.mathsisfun.com/data/correlation.html",
-    geo:     "https://www.geogebra.org/m/S8QhwdX6",
-    abs:     "https://www.abs.gov.au/statistics/understanding-statistics/statistical-terms-and-concepts/variables"
-  };
-
-  var PRACTICE = {
-    k_coords:     [["Vocab Hub — quiz words", "stem-vocab-hub.html#set=rev"],
-                   ["Linear graphs revision", "stem-vocab-revision.html"]],
-    k_table:      [["Linear graphs revision", "stem-vocab-revision.html"],
-                   ["Equation of a line (Maths is Fun)", LINK.eqline]],
-    k_grad_graph: [["Race to School", "stem-commute.html"],
-                   ["Gradient (Maths is Fun)", LINK.grad]],
-    k_grad_pts:   [["Gradient (Maths is Fun)", LINK.grad],
-                   ["Vocab Hub — graph words", "stem-vocab-hub.html#set=kin2"]],
-    k_yint:       [["Equation of a line (Maths is Fun)", LINK.eqline],
-                   ["Vocab Hub — quiz words", "stem-vocab-hub.html#set=rev"]],
-    k_eq:         [["Equation of a line (Maths is Fun)", LINK.eqline],
-                   ["Race to School", "stem-commute.html"]],
-    k_sketch:     [["GeoGebra graphing", LINK.geo],
-                   ["Vocab Hub — graph words", "stem-vocab-hub.html#set=kin2"]],
-    k_intersect:  [["Race to School", "stem-commute.html"],
-                   ["GeoGebra graphing", LINK.geo]],
-    k_simult:     [["GeoGebra graphing", LINK.geo],
-                   ["Vocab Hub — quiz words", "stem-vocab-hub.html#set=rev"]],
-    k_convert:    [["Converting units (Transum)", LINK.transum]],
-    k_squares:    [["Multiplication — timed practice", LINK.mult]],
-    k_mult:       [["Multiplication — timed practice", LINK.mult]],
-    s_vectors:    [["Race to School", "stem-commute.html"],
-                   ["Vocab Hub — motion words", "stem-vocab-hub.html#set=kin1"]],
-    s_ptgraph:    [["Race to School", "stem-commute.html"],
-                   ["Vocab Hub — graph words", "stem-vocab-hub.html#set=kin2"]],
-    s_story:      [["Race to School", "stem-commute.html"]],
-    s_variables:  [["What is a variable? (ABS)", LINK.abs],
-                   ["Vocab Hub — data words", "stem-vocab-hub.html#set=kin3"]],
-    s_lobf:       [["Correlation (Maths is Fun)", LINK.corr],
-                   ["GeoGebra graphing", LINK.geo]],
-    s_excel:      [["Correlation (Maths is Fun)", LINK.corr]],
-    s_corr:       [["Correlation (Maths is Fun)", LINK.corr],
-                   ["Vocab Hub — data words", "stem-vocab-hub.html#set=kin3"]],
-    s_report:     [["Vocab Hub — data words", "stem-vocab-hub.html#set=kin3"]]
-  };
-
-  var TASKS = [
-    { emoji:"⚡", title:"Entry task: multiplication, every lesson",
-      what:"The first two minutes of every lesson. Accuracy first, then speed. Aim for every table up to 12.",
-      skills:["k_mult","k_squares"], every:true,
-      link:{ label:"Open the timed practice ↗", href:LINK.mult } },
-
-    { emoji:"📘", title:"Linear motion worded questions booklet",
-      what:"The booklet of worded motion questions. For every question: write the units, write the formula, then the answer. Bring it to class marked.",
-      skills:["s_story","k_eq","k_intersect","k_convert"], cp:"cp_cat",
-      link:{ label:"Open the booklet on Compass", school:"booklet" } },
-
-    { emoji:"📗", title:"Textbook exercises 1B, 1E and 1F",
-      what:"Linear graph practice from the class textbook. Do the questions your teacher sets, then mark them and fix the ones you got wrong.",
-      skills:["k_table","k_grad_pts","k_yint","k_eq","k_sketch"], cp:"cp_test",
-      link:{ label:"OneNote → Maths Skills Resources", school:"textbook" } },
-
-    { emoji:"🧪", title:"Ball drop report",
-      what:"Drop the ball, time the fall, put your data in Excel. Plot distance against time squared (t²) — that turns the curve into a straight line. Its gradient is g ÷ 2, so g = 2 × gradient. Then write it up in the report template.",
-      skills:["s_variables","s_lobf","s_excel","s_corr","s_report"], cp:"cp_report",
-      link:{ label:"Open the report template on Compass", school:"ballreport" } },
-
-    { emoji:"🚴", title:"Race to School interactive",
-      what:"Tram, bike or car — the same 6 km, three different lines on one graph. Four levels: watch it, predict it, do the maths yourself, then a CAT-style challenge.",
-      skills:["s_ptgraph","s_story","k_grad_graph","s_vectors","k_eq"], cp:"cp_cat",
-      link:{ label:"Start the race →", href:"stem-commute.html" } },
-
-    { emoji:"🖍️", title:"Fix your quiz mistakes in a different colour",
-      what:"Take your Progress Quiz back out. Redo every wrong question in a different colour pen, next to the original. Under each one write a sentence: what did I not know? Then revise those words — the same skills come back in the next test.",
-      skills:["k_table","k_grad_pts","k_yint","k_eq","k_intersect"], cp:"cp_test",
-      link:{ label:"Revise the quiz words →", href:"stem-vocab-revision.html" } }
+  var DO_TASKS = [
+    { id:"entry", title:"Entry task — ×-tables, timed", short:"Entry task — ×-tables",
+      what:"The first two minutes of every lesson. Accuracy first, then speed — every table up to 12.",
+      linkLabel:"Start the timed practice", ext:true,
+      href:"https://liaminhawai-cmd.github.io/Multiplication-tables/" },
+    { id:"race", title:"Race to School", short:"Race to School",
+      what:"Tram, bike and car on the same 6 km — three lines on one position-time graph. Watch it, predict it, then do the maths yourself.",
+      linkLabel:"Start the race →", href:"stem-commute.html" },
+    { id:"booklet", title:"Worded questions booklet", short:"Worded questions booklet",
+      what:"Worded motion questions. For every question: write the units, write the formula, then the answer. Bring it to class marked.",
+      linkLabel:"Open the booklet on Compass", school:"booklet" },
+    { id:"textbook", title:"Textbook exercises 1B/1E/1F — OneNote", short:"Textbook 1B/1E/1F",
+      what:"Linear graph practice from the class textbook. Do the questions your teacher sets, mark them, fix the wrong ones.",
+      linkLabel:"OneNote → Maths Skills Resources", school:"textbook" },
+    { id:"ballreport", title:"Ball-drop report template", short:"Ball-drop template",
+      what:"Drop the ball, time the fall, put the data in Excel. Plot distance against t² to straighten the curve — then g = 2 × the gradient. Write it up in the template.",
+      linkLabel:"Open the template on Compass", school:"ballreport" }
   ];
+  /* ===== end CONTENT =============================================== */
 
-  /* ===== end CONTENT — code below ===================================== */
-
-  if (window.STEMVOCAB) STEMVOCAB.init();
-
-  /* ---------- i18n (chrome strings only; body text stays plain English) ---------- */
+  /* ---------------- i18n (chrome only; body content stays EAL English) ---------------- */
   var COPY = {
     en: {
-      bands:["Working towards","At the standard","Above the standard"],
-      levels:["Not yet","Getting there","Got it","I could teach it"],
-      detailsLabel:"What each level looks like · where to practise",
-      practice:"Practise here",
-      masterBy:"Master by", everyLesson:"Every lesson", skillsYours:"you have these skills",
-      built:"built", checked:"checked", openSet:"open the set →",
-      done:"done", passed:"passed", nextUp:"NEXT",
-      inDays:function(n){ return "in " + n + " days"; },
-      countLine:function(a,b){ return a + " of " + b + " skills at 'Got it' or better."; },
-      evTitle:"Proved in a practice activity: ",
-      schoolNote:"School login needed",
-      schoolMsg:"Your teacher is adding this link. For now: open Compass (or the class OneNote) and search for the file name."
+      days: function(n){ return n===0 ? "today" : n===1 ? "in 1 day" : "in "+n+" days"; },
+      masteredW:"mastered", notStarted:"not started",
+      lastRunF: function(a,b){ return a+" of "+b+" last run"; },
+      actExample:"example →", actContinue:"continue →", actAgain:"practise again →",
+      egLabel:"e.g. →",
+      bandL:["Working towards","At level","Above"],
+      skillsMasteredF: function(a,b){ return a+" of "+b+" skills mastered"; },
+      wordsBuiltF: function(a,b){ return a+" of "+b+" words built"; },
+      neededByF: function(name,when){ return "needed by "+name+" · "+when; },
+      allMastered:"Everything mastered — revise the unit →",
+      arcLink:"the whole arc ↓", reportLink:"full report →",
+      schoolMsg:"Your teacher is adding this link. For now, open Compass or the class OneNote and search for the file name.",
+      doneW:"done", noCp:"No checkpoints left this term.",
+      opensWord:"unit opens", lookAround:"You can look around now.",
+      opensNote: function(d){ return "Opens "+d+" — you can look around now."; },
+      startWords:"start with the words →"
     },
     "zh-Hans": {
-      back:"← STEM 主页", eyebrow:"第三学期 · 数学与科学一起学", title:"运动学",
-      sub:"运动学是研究运动的学科：多远、多快、朝哪个方向——以及显示这些的直线图像。下一个检查点之前你需要的一切都在这一页。",
-      schedHead:"📅 掌握截止日期",
-      schedLead:"这是本单元的四个重要检查点。下面每一项技能和任务都会显示它对应的日期。",
-      vocabHead:"📓 词汇中心", hubBtn:"📓 打开完整词汇中心 →",
-      mathsHead:"📈 数学技能中心", sciHead:"🔬 科学技能中心", tasksHead:"🎯 任务",
-      selfHintA:"点选今天最符合你的等级。",
-      selfHintB:"它保存在这台设备上，并显示在你的报告里。打开一行可以看到每个等级的样子，以及去哪里练习。",
-      tasksLead:"在标签上的日期之前完成每项任务。🔒 表示需要学校账号登录——请打开 Compass 或班级 OneNote。",
-      privacy:"🔒 匿名。你的等级、单词和练习只保存在这个浏览器中——没有账号，没有追踪，不会发送到任何地方。清除浏览器数据也会清除它们。学习单和课本页面在 Compass 和班级 OneNote 上（需要学校账号登录）。",
-      bands:["努力达标中","达到标准","超越标准"],
-      levels:["还不会","快会了","会了","我能教别人"],
-      detailsLabel:"每个等级什么样 · 去哪里练习",
-      practice:"在这里练习",
-      masterBy:"截止", everyLesson:"每节课", skillsYours:"这些技能你已经掌握",
-      built:"已构建", checked:"已检查", openSet:"打开这组 →",
-      done:"完成", passed:"已过去", nextUp:"下一个",
-      inDays:function(n){ return n + " 天后"; },
-      countLine:function(a,b){ return "共 " + b + " 项技能，你有 " + a + " 项达到“会了”或以上。"; },
-      evTitle:"在练习活动中已证明：",
-      schoolNote:"需要学校账号登录",
-      schoolMsg:"老师正在添加这个链接。现在请打开 Compass（或班级 OneNote）搜索文件名。"
+      back:"← STEM 主页", sub:"第三学期 · 运动、线性图象、数据",
+      goingH:"我要去哪里？", howH:"我走得怎样？", nextH:"接下来做什么？",
+      railWordsH:"单词", railSkillsH:"技能", railDoH:"任务", railProveH:"证明",
+      skillsNote:"下面的等级只是描述路径——这个页面没有自评。✓ 只来自技能引擎上一次完整的练习（3 题全对）。",
+      doH2:"任务", doLead:"在检查点之前完成这些任务。🔒 表示需要学校账号——请打开 Compass 或班级 OneNote。",
+      proveH2:"证明", proveLead:"每个单元只保留自己的检查点。这是运动学的完整安排。",
+      privacy:"匿名 · 进度只保存在这个浏览器 · 工作纸在 Compass 和班级 OneNote（需学校账号）。",
+      days: function(n){ return n===0 ? "今天" : n+" 天后"; },
+      masteredW:"已掌握", notStarted:"未开始",
+      lastRunF: function(a,b){ return "上次 "+a+" / "+b+" 题"; },
+      actExample:"看例题 →", actContinue:"继续 →", actAgain:"再练一次 →",
+      egLabel:"例 →",
+      bandL:["迈向","达到","超越"],
+      skillsMasteredF: function(a,b){ return "已掌握 "+a+" / "+b+" 项技能"; },
+      wordsBuiltF: function(a,b){ return "已拼成 "+a+" / "+b+" 个单词"; },
+      neededByF: function(name,when){ return name+" 会用到 · "+when; },
+      allMastered:"全部掌握——复习整个单元 →",
+      arcLink:"本单元全部检查点 ↓", reportLink:"完整报告 →",
+      schoolMsg:"老师正在添加这个链接。现在请打开 Compass（或班级 OneNote）搜索文件名。",
+      doneW:"已完成", noCp:"本学期检查点已全部完成。",
+      opensWord:"单元开放", lookAround:"现在可以先浏览。",
+      opensNote: function(d){ return d+" 开放——现在可以先浏览。"; },
+      startWords:"先从单词开始 →"
     },
     "zh-Hant": {
-      back:"← STEM 主頁", eyebrow:"第三學期 · 數學與科學一起學", title:"運動學",
-      sub:"運動學是研究運動的學問：多遠、多快、朝哪個方向——以及顯示這些的直線圖形。下一個檢查點之前你需要的一切都在這一頁。",
-      schedHead:"📅 精熟截止日期",
-      schedLead:"這是本單元的四個重要檢查點。下面每一項技能和任務都會顯示它對應的日期。",
-      vocabHead:"📓 詞彙中心", hubBtn:"📓 打開完整詞彙中心 →",
-      mathsHead:"📈 數學技能中心", sciHead:"🔬 科學技能中心", tasksHead:"🎯 任務",
-      selfHintA:"點選今天最符合你的等級。",
-      selfHintB:"它會存在這台裝置上，也會顯示在你的報告裡。打開一列就能看到每個等級的樣子，以及去哪裡練習。",
-      tasksLead:"在標籤上的日期之前完成每一項任務。🔒 表示需要學校帳號登入——請打開 Compass 或班級 OneNote。",
-      privacy:"🔒 匿名。你的等級、單字和練習只儲存在這個瀏覽器中——沒有帳號、沒有追蹤，不會送到任何地方。清除瀏覽器資料也會一併清除。學習單和課本頁面放在 Compass 和班級 OneNote 上（需要學校帳號登入）。",
-      bands:["努力達標中","達到標準","超越標準"],
-      levels:["還不會","快會了","會了","我可以教別人"],
-      detailsLabel:"每個等級長什麼樣 · 去哪裡練習",
-      practice:"在這裡練習",
-      masterBy:"截止", everyLesson:"每節課", skillsYours:"這些技能你已經精熟",
-      built:"已建立", checked:"已檢查", openSet:"打開這組 →",
-      done:"完成", passed:"已過去", nextUp:"下一個",
-      inDays:function(n){ return n + " 天後"; },
-      countLine:function(a,b){ return "共 " + b + " 項技能，你有 " + a + " 項達到「會了」或以上。"; },
-      evTitle:"在練習活動中已證明：",
-      schoolNote:"需要學校帳號登入",
-      schoolMsg:"老師正在加入這個連結。現在請打開 Compass（或班級 OneNote）搜尋檔案名稱。"
+      back:"← STEM 主頁", sub:"第三學期 · 運動、線性圖形、數據",
+      goingH:"我要去哪裡？", howH:"我走得如何？", nextH:"接下來做什麼？",
+      railWordsH:"單字", railSkillsH:"技能", railDoH:"任務", railProveH:"證明",
+      skillsNote:"下面的等級只是描述路徑——這個頁面沒有自評。✓ 只來自技能引擎上一次完整的練習（3 題全對）。",
+      doH2:"任務", doLead:"在檢查點之前完成這些任務。🔒 表示需要學校帳號——請打開 Compass 或班級 OneNote。",
+      proveH2:"證明", proveLead:"每個單元只保留自己的檢查點。這是運動學的完整安排。",
+      privacy:"匿名 · 進度只儲存在這個瀏覽器 · 學習單在 Compass 和班級 OneNote（需學校帳號）。",
+      days: function(n){ return n===0 ? "今天" : n+" 天後"; },
+      masteredW:"已精熟", notStarted:"未開始",
+      lastRunF: function(a,b){ return "上次 "+a+" / "+b+" 題"; },
+      actExample:"看例題 →", actContinue:"繼續 →", actAgain:"再練一次 →",
+      egLabel:"例 →",
+      bandL:["邁向","達到","超越"],
+      skillsMasteredF: function(a,b){ return "已精熟 "+a+" / "+b+" 項技能"; },
+      wordsBuiltF: function(a,b){ return "已拼成 "+a+" / "+b+" 個單字"; },
+      neededByF: function(name,when){ return name+" 會用到 · "+when; },
+      allMastered:"全部精熟——複習整個單元 →",
+      arcLink:"本單元全部檢查點 ↓", reportLink:"完整報告 →",
+      schoolMsg:"老師正在加入這個連結。現在請打開 Compass（或班級 OneNote）搜尋檔案名稱。",
+      doneW:"已完成", noCp:"本學期檢查點已全部完成。",
+      opensWord:"單元開放", lookAround:"現在可以先瀏覽。",
+      opensNote: function(d){ return d+" 開放——現在可以先瀏覽。"; },
+      startWords:"先從單字開始 →"
     }
   };
-
   var sel = document.querySelector(".language-select");
   var lang = "en";
   try { lang = localStorage.getItem("elc_page_language") || "en"; } catch(e){}
   if (!COPY[lang]) lang = "en";
   sel.value = lang;
-  function T(){ return COPY[lang]; }
-  function tr(k){ var v = T()[k]; return v !== undefined ? v : COPY.en[k]; }
-  function fn(k){ var v = T()[k]; return typeof v === "function" ? v : COPY.en[k]; }
-
+  function T(k){ var v = COPY[lang][k]; return v !== undefined ? v : COPY.en[k]; }
   function setStatic(){
-    var dict = T();
     document.querySelectorAll("[data-i18n]").forEach(function(el){
-      var k = el.getAttribute("data-i18n");
+      var k = el.getAttribute("data-i18n"), v = COPY[lang][k];
       if (!el._en) el._en = el.textContent;
-      el.textContent = (typeof dict[k] === "string") ? dict[k] : el._en;
+      el.textContent = (typeof v === "string") ? v : el._en;
     });
-    document.documentElement.lang = lang === "en" ? "en" : lang;
+    document.documentElement.lang = lang;
   }
   sel.addEventListener("change", function(){
     lang = sel.value;
@@ -396,269 +378,267 @@
     setStatic(); paintAll();
   });
 
-  /* ---------- helpers ---------- */
-  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
-    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
-  function fmtDate(d){
-    return new Date(d + "T12:00:00").toLocaleDateString(undefined, {day:"numeric", month:"short"});
-  }
-  function isExternal(href){ return /^https?:/i.test(href); }
-  var SKILL_BY_ID = {};
-  STEM.SKILLS.forEach(function(s){ SKILL_BY_ID[s.id] = s; });
-  var SET_BY_ID = {};
-  if (window.STEM_VOCAB_DATA) {
-    STEM_VOCAB_DATA.sets.forEach(function(s){ SET_BY_ID[s.id] = s; });
-  }
+  /* ---------------- unit data (from STEM2 — never redefined here) ---------------- */
+  var UNIT = STEM2.UNIT_BY_ID[UNIT_ID];
+  var CP = {}; UNIT.checkpoints.forEach(function(c){ CP[c.id] = c; });
+  var esc = STEM2.esc, dU = STEM2.daysUntil, fD = STEM2.fmtDate;
+  var opensLater = !!(UNIT.opensFrom && dU(UNIT.opensFrom) > 0);
 
-  /* ---------- 1. checkpoint strip ---------- */
-  function paintSched(){
-    var h = "", nextShown = false;
-    CHECKPOINT_IDS.forEach(function(id){
-      var c = STEM.CP_BY_ID[id];
-      if (!c) return;
-      var days = STEM.daysUntil(c.date), cls, when;
-      if (c.status === "done"){ cls = "done"; when = "✓ " + tr("done"); }
-      else if (days < 0){ cls = "past"; when = tr("passed"); }
-      else if (days <= 14){ cls = "soon"; when = "⏳ " + fn("inDays")(days); }
-      else { cls = ""; when = fn("inDays")(days); }
-      if (!nextShown && c.status !== "done" && days >= 0){
-        cls += " next"; nextShown = true; when = "◀ " + tr("nextUp") + " · " + when;
-      }
-      h += "<div class='cp " + cls + "'><div class='date'>" + fmtDate(c.date) + "</div>" +
-           "<div class='name'>" + esc(c.name) + "</div>" +
-           "<div class='when'>" + esc(when) + "</div>" +
-           "<div class='desc'>" + esc(c.desc) + "</div></div>";
+  function fmtTs(ts){ return new Date(ts).toLocaleDateString(undefined, { day:"numeric", month:"short" }); }
+  function skillHref(id, mode){ return "stem-skills.html#skill=" + encodeURIComponent(id) + "&mode=" + mode; }
+  function taskHref(t){ return t.school ? SCHOOL_LINKS[t.school] : t.href; }
+  function taskLocked(t){ var h = taskHref(t); return !!t.school && (!h || h === "#"); }
+
+  function vocabTotals(){
+    var built = 0, total = 0;
+    UNIT.vocabSets.forEach(function(id){
+      var c = STEM2.setCounts(id); built += c.built; total += c.total;
     });
-    document.getElementById("sched").innerHTML = h;
+    return { built: built, total: total };
   }
-
-  /* ---------- 2. vocab set cards ---------- */
-  function paintVocabSets(){
-    var host = document.getElementById("vsets");
-    if (!window.STEM_VOCAB_DATA){ host.innerHTML = ""; return; }
-    var v = STEM.Store.vocab(), h = "";
-    VOCAB_SETS.forEach(function(id){
-      var set = SET_BY_ID[id];
-      if (!set) return;
-      var built = 0, checked = 0;
-      set.words.forEach(function(w){
-        var st = v[w.w.toLowerCase()];
-        if (st && st.built) built++;
-        if (st && st.checked) checked++;
-      });
-      var total = set.words.length;
-      var pct = Math.round(100 * built / Math.max(1, total));
-      h += "<a class='vcard' href='stem-vocab-hub.html#set=" + encodeURIComponent(id) + "'>" +
-           "<h3>" + esc(set.title) + "</h3>" +
-           "<p class='focus'>" + esc(set.focus) + "</p>" +
-           "<span class='bar'><i style='width:" + pct + "%'></i></span>" +
-           "<span class='counts'>" + built + "/" + total + " " + esc(tr("built")) +
-           " · " + checked + " " + esc(tr("checked")) + "</span>" +
-           "<span class='open'>" + esc(tr("openSet")) + "</span></a>";
-    });
-    host.innerHTML = h;
+  function groupDone(g){
+    var done = 0;
+    g.skills.forEach(function(id){ if (STEM2.Mastery.mastered(id)) done++; });
+    return done;
   }
-
-  /* ---------- 3. skill rows ---------- */
-  function timingClass(st){
-    if (st.timing === "ahead" || st.timing === "done") return "g";
-    if (st.timing === "dueSoon") return "w";
-    if (st.timing === "behind") return "b";
-    return "u";
-  }
-  function pillHtml(st){
-    var cp = st.checkpoint;
-    if (!cp) return "";
-    return "<span class='pill " + timingClass(st) + "' data-role='pill'>" +
-           esc(cp.short) + " · " + fmtDate(cp.date) + "</span>";
-  }
-  function evHtml(skill, st){
-    if (!st.evidence) return "";
-    var list = STEM.Store.evidence()[skill.id] || [];
-    var last = list[list.length - 1];
-    return " <span class='ev' title='" + esc(tr("evTitle") + (last ? last.detail : "")) + "'>✦</span>";
-  }
-  function rowInner(skill){
-    var st = STEM.skillState(skill);
-    var bandNames = tr("bands"), levelNames = tr("levels");
-    var h = "<div class='head'><div class='nm'>" + esc(skill.name) + evHtml(skill, st) +
-            "<span class='cont'>" + esc(skill.cont) + "</span></div>" + pillHtml(st) + "</div>";
-
-    h += "<div class='seg' role='group' aria-label='" + esc(skill.name) + "'>";
-    for (var lv = 0; lv < 4; lv++){
-      var on = (st.lv === lv) ? " on" : "";
-      h += "<button type='button' class='seg-btn" + on + "' data-lv='" + lv + "'" +
-           " aria-pressed='" + (st.lv === lv ? "true" : "false") + "'>" +
-           esc(levelNames[lv]) + "</button>";
-    }
-    h += "</div>";
-
-    h += "<details><summary>" + esc(tr("detailsLabel")) + "</summary><div class='bands'>";
-    for (var b = 0; b < 3; b++){
-      h += "<div class='band" + (st.lv === b + 1 ? " on" : "") + "'><b>" + esc(bandNames[b]) + "</b>" +
-           esc(skill.bands[b]) + "</div>";
-    }
-    h += "</div>";
-    var links = PRACTICE[skill.id] || [];
-    if (links.length){
-      h += "<p class='prac'>" + esc(tr("practice")) + ": " +
-        links.map(function(p){
-          var ext = isExternal(p[1]) ? " target='_blank' rel='noopener'" : "";
-          return "<a href='" + esc(p[1]) + "'" + ext + ">" + esc(p[0]) + (isExternal(p[1]) ? " ↗" : "") + "</a>";
-        }).join(" · ") + "</p>";
-    }
-    h += "</details>";
-    return h;
-  }
-
-  function paintRows(hostId, areaId, countId){
-    var host = document.getElementById(hostId);
-    var rows = STEM.SKILLS.filter(function(s){ return s.area === areaId; });
-    var h = "";
-    rows.forEach(function(s){
-      h += "<div class='srow' data-skill='" + esc(s.id) + "'>" + rowInner(s) + "</div>";
-    });
-    host.innerHTML = h;
-    paintCount(areaId, countId);
-  }
-
-  function paintCount(areaId, countId){
-    var rows = STEM.SKILLS.filter(function(s){ return s.area === areaId; });
-    var got = 0;
-    rows.forEach(function(s){ if (STEM.skillState(s).mastered) got++; });
-    document.getElementById(countId).textContent = fn("countLine")(got, rows.length);
-  }
-
-  function refreshRow(rowEl){
-    var skill = SKILL_BY_ID[rowEl.getAttribute("data-skill")];
-    if (!skill) return;
-    var det = rowEl.querySelector("details");
-    var wasOpen = det ? det.open : false;
-    rowEl.innerHTML = rowInner(skill);
-    var newDet = rowEl.querySelector("details");
-    if (newDet) newDet.open = wasOpen;
-  }
-
-  function wireRows(hostId, areaId, countId){
-    var host = document.getElementById(hostId);
-    host.addEventListener("click", function(e){
-      var btn = e.target.closest ? e.target.closest("button.seg-btn") : null;
-      if (!btn || !host.contains(btn)) return;
-      var row = btn.closest(".srow");
-      if (!row) return;
-      var id = row.getAttribute("data-skill");
-      var lv = +btn.getAttribute("data-lv");
-      STEM.Store.setSkill(id, lv);
-      refreshRow(row);
-      paintCount(areaId, countId);
-      updateTaskTags();
-    });
-  }
-
-  /* ---------- 4. tasks ---------- */
-  /* the chip is coloured by the date it shows, so colour and words agree */
-  function cpClass(cp){
-    if (cp.status === "done") return "g";
-    var d = STEM.daysUntil(cp.date);
-    if (d < 0) return "b";
-    if (d <= 14) return "w";
-    return "u";
-  }
-  function allMastered(skillIds){
-    var any = false;
-    for (var i = 0; i < skillIds.length; i++){
-      var sk = SKILL_BY_ID[skillIds[i]];
-      if (!sk) continue;
-      any = true;
-      if (!STEM.skillState(sk).mastered) return false;
-    }
-    return any;
-  }
-  function updateTaskTags(){
-    document.querySelectorAll(".task[data-skills]").forEach(function(el){
-      var tag = el.querySelector("[data-role='mastered']");
-      if (!tag) return;
-      var ids = el.getAttribute("data-skills").split(",").filter(Boolean);
-      tag.style.display = allMastered(ids) ? "" : "none";
-    });
-  }
-  function paintTasks(){
-    var h = "";
-    TASKS.forEach(function(t){
-      var cp = STEM.CP_BY_ID[t.cp];
-      var pill = "";
-      if (t.every){
-        pill = "<span class='pill u'>" + esc(tr("everyLesson")) + "</span>";
-      } else if (cp){
-        pill = "<span class='pill " + cpClass(cp) + "'>" +
-               esc(tr("masterBy")) + ": " + esc(cp.short) + " · " + fmtDate(cp.date) + "</span>";
-      }
-      pill += "<span class='pill g' data-role='mastered' style='display:none'>✓ " +
-              esc(tr("skillsYours")) + "</span>";
-      var chips = t.skills.map(function(sid){
-        var sk = SKILL_BY_ID[sid];
-        return sk ? "<span class='tag'>" + esc(sk.name) + "</span>" : "";
-      }).join("");
-
-      var linkHtml = "";
-      if (t.link && t.link.school){
-        var href = SCHOOL_LINKS[t.link.school] || "#";
-        var real = href && href !== "#";
-        linkHtml = "<a class='" + (real ? "golink" : "schoolonly") + "' href='" + esc(href) + "'" +
-          (real ? (isExternal(href) ? " target='_blank' rel='noopener'" : "") : " data-locked='1'") +
-          " title='" + esc(tr("schoolNote")) + "'>🔒 " + esc(t.link.label) + "</a>" +
-          (real ? "" : "<p class='schoolmsg'>" + esc(tr("schoolMsg")) + "</p>");
-      } else if (t.link){
-        var ext = isExternal(t.link.href);
-        linkHtml = "<a class='golink' href='" + esc(t.link.href) + "'" +
-          (ext ? " target='_blank' rel='noopener'" : "") + ">" + esc(t.link.label) + "</a>";
-      }
-
-      h += "<div class='task' data-skills='" + esc(t.skills.join(",")) + "'>" +
-           "<h3>" + t.emoji + " " + esc(t.title) + "</h3>" +
-           "<p class='what'>" + esc(t.what) + "</p>" + linkHtml +
-           "<div class='tagrow'>" + pill + chips + "</div></div>";
-    });
-    var host = document.getElementById("tasks");
-    host.innerHTML = h;
-    host.querySelectorAll("a[data-locked]").forEach(function(a){
-      a.addEventListener("click", function(e){
-        e.preventDefault();
-        var msg = a.parentNode.querySelector(".schoolmsg");
-        if (msg) msg.classList.toggle("show");
+  /* the first unmastered skill whose (not-done, upcoming) checkpoint is nearest */
+  function nextAction(){
+    var best = null, bestKey = Infinity, idx = 0;
+    UNIT.skillGroups.forEach(function(g){
+      g.skills.forEach(function(id){
+        idx++;
+        if (STEM2.Mastery.mastered(id)) return;
+        var sk = STEM2.SKILLS[id], key = 900000 + idx;
+        if (sk.needs && CP[sk.needs] && CP[sk.needs].status !== "done") {
+          var n = dU(CP[sk.needs].date);
+          if (n >= 0) key = n * 1000 + idx;
+        }
+        if (key < bestKey) { bestKey = key; best = { id: id, sk: sk }; }
       });
     });
-    updateTaskTags();
+    return best;
   }
 
-  /* ---------- go ---------- */
-  function paintAll(){
-    paintSched();
-    paintVocabSets();
-    paintRows("mathsRows", "kin-maths", "mathsCount");
-    paintRows("sciRows", "kin-sci", "sciCount");
-    paintTasks();
-  }
-  setStatic();
-  paintAll();
-  wireRows("mathsRows", "kin-maths", "mathsCount");
-  wireRows("sciRows", "kin-sci", "sciCount");
+  /* ---------------- rail ---------------- */
+  function paintRail(){
+    document.getElementById("railSkillsH").href = "stem-skills.html#unit=" + UNIT_ID;
 
-  /* words that appear only after paint (set titles etc.) still get the notebook */
-  if (window.STEMVOCAB) STEMVOCAB.decorate(document);
+    var h = "";
+    UNIT.vocabSets.forEach(function(id){
+      var c = STEM2.setCounts(id);
+      h += "<a class='ritem' href='stem-vocab-hub.html#set=" + encodeURIComponent(id) + "'>" +
+        "<span class='rname'>" + esc(c.title || id) + "</span>" +
+        "<span class='rcount'>" + (c.built ? "<span class='ok'>" + c.built + "</span>" : "0") +
+        "/" + c.total + "</span></a>";
+    });
+    document.getElementById("railWords").innerHTML = h;
 
-  /* the notebook panel can build/check words while this page is open —
-     keep the set cards honest without a reload */
-  function refreshVocabIfChanged(){
-    var now = "";
-    try { now = localStorage.getItem("elc_stem_vocab") || ""; } catch(e){ return; }
-    if (now !== lastVocabRaw){ lastVocabRaw = now; paintVocabSets(); }
+    h = "";
+    UNIT.skillGroups.forEach(function(g){
+      var done = groupDone(g);
+      h += "<a class='ritem' href='stem-skills.html#unit=" + UNIT_ID + "'>" +
+        "<span class='rname'>" + esc(g.name) + "</span>" +
+        "<span class='rcount'>" + (done ? "<span class='ok'>" + done + "</span>" : "0") +
+        "/" + g.skills.length + " ✓</span></a>";
+    });
+    document.getElementById("railSkills").innerHTML = h;
+
+    h = "";
+    DO_TASKS.forEach(function(t){
+      var locked = taskLocked(t);
+      var href = locked ? "#" : taskHref(t);
+      h += "<a class='ritem" + (locked ? " locked" : "") + "' data-task='" + t.id + "' href='" + href + "'" +
+        (t.ext && !locked ? " target='_blank' rel='noopener'" : "") + ">" +
+        "<span class='rname'>" + (t.school ? "<span class='lock'>🔒</span> " : "") +
+        esc(t.short || t.title) + "</span></a>";
+    });
+    document.getElementById("railDo").innerHTML = h;
+
+    h = "";
+    var nextSeen = false;
+    UNIT.checkpoints.forEach(function(c){
+      var n = dU(c.date), right;
+      if (c.status === "done") right = "<span class='ok'>✓</span>";
+      else if (!nextSeen && n >= 0) { nextSeen = true; right = "<span class='soon'>" + esc(T("days")(n)) + "</span>"; }
+      else right = esc(fD(c.date));
+      h += "<a class='ritem' href='#cp-" + c.id + "'>" +
+        "<span class='rname'>" + esc(c.short) + "</span>" +
+        "<span class='rcount'>" + right + "</span></a>";
+    });
+    document.getElementById("railProve").innerHTML = h;
+    document.getElementById("railProveSec").style.display = UNIT.checkpoints.length ? "" : "none";
   }
-  var lastVocabRaw = "";
-  try { lastVocabRaw = localStorage.getItem("elc_stem_vocab") || ""; } catch(e){}
-  setInterval(refreshVocabIfChanged, 2500);
-  document.addEventListener("visibilitychange", refreshVocabIfChanged);
-  window.addEventListener("storage", refreshVocabIfChanged);
+
+  /* ---------------- visible-learning spine ---------------- */
+  function paintSpine(){
+    var h;
+
+    /* WHERE AM I GOING — the next checkpoint + days */
+    if (opensLater) {
+      h = "<div class='big'>" + esc(T("opensWord")) + " · " + esc(fD(UNIT.opensFrom)) + "</div>" +
+        "<div class='line'><span class='alert'>" + esc(T("days")(dU(UNIT.opensFrom))) + "</span></div>" +
+        "<div class='dim'>" + esc(T("lookAround")) + "</div>";
+    } else {
+      var cp = STEM2.nextCheckpoint(UNIT);
+      if (cp) {
+        h = "<div class='big'>" + esc(cp.name) + "</div>" +
+          "<div class='line'>" + esc(fD(cp.date)) + " · <span class='alert'>" + esc(T("days")(dU(cp.date))) + "</span></div>" +
+          "<div class='dim'>" + esc(cp.desc) + "</div>";
+      } else {
+        h = "<div class='line'>" + esc(T("noCp")) + "</div>";
+      }
+      if (UNIT.checkpoints.length) h += "<a href='#prove'>" + esc(T("arcLink")) + "</a>";
+    }
+    document.getElementById("spGoing").innerHTML = h;
+
+    /* HOW AM I GOING — mastery counts + vocab built counts (objective only) */
+    var mc = STEM2.Mastery.unitCounts(UNIT.id), v = vocabTotals();
+    var mp = mc.total ? Math.round(100 * mc.done / mc.total) : 0;
+    var vp = v.total ? Math.round(100 * v.built / v.total) : 0;
+    h = "<div class='line'>" + esc(T("skillsMasteredF")(mc.done, mc.total)) + "</div>" +
+      "<span class='bar'><i style='width:" + mp + "%'></i></span>" +
+      "<div class='line'>" + esc(T("wordsBuiltF")(v.built, v.total)) + "</div>" +
+      "<span class='bar'><i style='width:" + vp + "%'></i></span>" +
+      "<a href='stem-progress.html'>" + esc(T("reportLink")) + "</a>";
+    document.getElementById("spHow").innerHTML = h;
+
+    /* WHERE TO NEXT — one action link */
+    if (opensLater && UNIT.vocabSets.length) {
+      h = "<a class='act' href='stem-vocab-hub.html#set=" + encodeURIComponent(UNIT.vocabSets[0]) + "'>" +
+        esc(T("startWords")) + "</a>";
+    } else {
+      var best = nextAction();
+      if (best) {
+        var st = STEM2.Mastery.state(best.id);
+        var act = st.status === "started" ? T("actContinue") : T("actExample");
+        var mode = st.status === "started" ? "practise" : "teach";
+        h = "<a class='act' href='" + skillHref(best.id, mode) + "'>" +
+          esc(best.sk.name) + " · " + esc(act) + "</a>";
+        if (best.sk.needs && CP[best.sk.needs] && CP[best.sk.needs].status !== "done" && dU(CP[best.sk.needs].date) >= 0) {
+          var c2 = CP[best.sk.needs];
+          h += "<div class='dim'>" + esc(T("neededByF")(c2.short, T("days")(dU(c2.date)))) + "</div>";
+        }
+      } else {
+        h = "<a class='act' href='stem-skills.html#unit=" + UNIT_ID + "&mode=revise'>" + esc(T("allMastered")) + "</a>";
+      }
+    }
+    document.getElementById("spNext").innerHTML = h;
+  }
+
+  /* ---------------- skill-group sections ---------------- */
+  function paintGroups(){
+    var h = "";
+    UNIT.skillGroups.forEach(function(g){
+      var rows = "", done = 0;
+      g.skills.forEach(function(id){
+        var sk = STEM2.SKILLS[id];
+        var st = STEM2.Mastery.state(id);
+        var stateHTML, act, mode;
+        if (st.status === "mastered") {
+          done++;
+          stateHTML = "<span class='skstate m'>✓ " + esc(T("masteredW")) + " · " + esc(fmtTs(st.mastered)) + "</span>";
+          act = T("actAgain"); mode = "practise";
+        } else if (st.status === "started") {
+          stateHTML = "<span class='skstate'>" + esc(T("lastRunF")(st.lastRun.ok, st.lastRun.of)) + "</span>";
+          act = T("actContinue"); mode = "practise";
+        } else {
+          stateHTML = "<span class='skstate'>" + esc(T("notStarted")) + "</span>";
+          act = T("actExample"); mode = "teach";
+        }
+        /* the three bands are descriptors, never highlighted — nothing is self-assessed */
+        var bands = "";
+        sk.bands.forEach(function(b, i){
+          bands += "<div class='band'><span class='bl'>" + esc(T("bandL")[i]) + "</span>" +
+            "<span>" + esc(b) + "</span>" +
+            "<a class='eg' href='" + skillHref(id, "teach") + "'>" + esc(T("egLabel")) + "</a></div>";
+        });
+        var contBits = esc(sk.cont);
+        if (sk.needs && CP[sk.needs]) contBits += " · " + esc(CP[sk.needs].short) + " · " + esc(fD(CP[sk.needs].date));
+        bands += "<div class='contline'>" + contBits + "</div>";
+
+        rows += "<div class='skrow' id='sk-" + id + "'>" +
+          "<div class='skmain'>" +
+            "<span class='skname'>" + esc(sk.name) + "</span>" +
+            stateHTML +
+            "<a class='skact' href='" + skillHref(id, mode) + "'>" + esc(act) + "</a>" +
+            "<button class='fold' type='button' aria-expanded='false' aria-controls='b-" + id + "'>▾</button>" +
+          "</div>" +
+          "<div class='bands' id='b-" + id + "'>" + bands + "</div></div>";
+      });
+      h += "<section class='group' id='g-" + g.id + "'>" +
+        "<div class='ghead'><h2>" + esc(g.name) + "</h2>" +
+        "<span class='gcount'>" + done + "/" + g.skills.length + " ✓</span></div>" + rows + "</section>";
+    });
+    document.getElementById("groups").innerHTML = h;
+  }
+
+  /* ---------------- do ---------------- */
+  function paintDo(){
+    var h = "";
+    DO_TASKS.forEach(function(t){
+      var locked = taskLocked(t);
+      var lockIcon = t.school ? "🔒 " : "";
+      var link;
+      if (locked) {
+        link = "<a class='locked' data-task='" + t.id + "' href='#'>" + lockIcon + esc(t.linkLabel) + "</a>";
+      } else {
+        link = "<a href='" + esc(taskHref(t)) + "'" + (t.ext ? " target='_blank' rel='noopener'" : "") + ">" +
+          lockIcon + esc(t.linkLabel) + (t.ext ? " ↗" : "") + "</a>";
+      }
+      h += "<div class='task' id='task-" + t.id + "'>" +
+        "<div class='t'>" + esc(t.title) + "</div>" +
+        "<div class='w'>" + esc(t.what) + "</div>" + link +
+        "<div class='msg'>" + esc(T("schoolMsg")) + "</div></div>";
+    });
+    document.getElementById("tasks").innerHTML = h;
+  }
+
+  /* ---------------- prove: the unit's own arc ---------------- */
+  function paintProve(){
+    var h = "";
+    UNIT.checkpoints.forEach(function(c){
+      var n = dU(c.date), done = c.status === "done", when;
+      if (done) when = esc(fD(c.date)) + " · " + esc(T("doneW"));
+      else if (n >= 0) when = esc(fD(c.date)) + " · <b>" + esc(T("days")(n)) + "</b>";
+      else when = esc(fD(c.date));
+      h += "<div class='cp' id='cp-" + c.id + "'>" +
+        "<span class='mark" + (done ? "" : " todo") + "'>" + (done ? "✓" : "○") + "</span>" +
+        "<div class='cname'>" + esc(c.name) + "</div>" +
+        "<div class='cwhen'>" + when + "</div>" +
+        "<div class='cdesc'>" + esc(c.desc) + "</div></div>";
+    });
+    document.getElementById("cps").innerHTML = h;
+    document.getElementById("prove").style.display = UNIT.checkpoints.length ? "" : "none";
+  }
+
+  function paintPreview(){
+    var p = document.getElementById("preview");
+    if (opensLater) { p.hidden = false; p.textContent = T("opensNote")(fD(UNIT.opensFrom)); }
+    else p.hidden = true;
+  }
+
+  function paintAll(){ paintRail(); paintSpine(); paintGroups(); paintDo(); paintProve(); paintPreview(); }
+
+  /* fold-outs */
+  document.getElementById("groups").addEventListener("click", function(e){
+    var b = e.target.closest(".fold");
+    if (!b) return;
+    var row = b.closest(".skrow");
+    row.classList.toggle("open");
+    b.setAttribute("aria-expanded", row.classList.contains("open") ? "true" : "false");
+  });
+
+  /* 🔒 placeholder links: show the honest note on the task row */
+  document.addEventListener("click", function(e){
+    var a = e.target.closest("a.locked");
+    if (!a) return;
+    e.preventDefault();
+    var row = document.getElementById("task-" + a.getAttribute("data-task"));
+    if (row) { row.classList.add("show"); row.scrollIntoView({ behavior:"smooth", block:"center" }); }
+  });
+
+  setStatic(); paintAll();
+  if (window.STEMVOCAB) STEMVOCAB.init();
 })();
 </script>
 </body>

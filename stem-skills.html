@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STEM Skills — ELC</title>
+<style>
+  :root {
+    --paper:#fcfcfa; --ink:#212427; --muted:#767b7f; --faint:#9aa0a5;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#767b7f;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  .top a:hover { text-decoration:underline; }
+  select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
+    background:var(--paper); color:var(--ink); padding:5px 8px; }
+  .serif { font-family:Georgia,"Times New Roman",serif; }
+  .masthead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+  h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:2rem; font-weight:500; letter-spacing:-.01em; }
+  .sub { color:var(--muted); font-size:.8rem; }
+
+  /* unit switcher (list view) */
+  .units { display:flex; gap:2px; margin-top:22px; border-bottom:1px solid var(--hair);
+    overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .units a { display:flex; align-items:center; min-height:44px; padding:8px 14px; white-space:nowrap;
+    font-size:.9rem; color:var(--muted); text-decoration:none; border-bottom:2px solid transparent; margin-bottom:-1px; }
+  .units a.on { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
+  .units a:hover { color:var(--accent); }
+  .preview-note { margin:14px 0 0; font-size:.82rem; color:var(--muted); }
+
+  /* skill list */
+  .ghead { display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+    border-top:1px solid var(--ink); padding-top:12px; margin-top:30px; }
+  .ghead h2 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:1.15rem; font-weight:500; }
+  .ghead .gcount { font-size:.78rem; color:var(--muted); white-space:nowrap; }
+  .srow { display:grid; grid-template-columns:1fr auto 70px; gap:14px; align-items:center;
+    padding:12px 0; border-bottom:1px solid var(--hair); text-decoration:none; color:inherit; min-height:44px; }
+  .srow:hover .sname { color:var(--accent); }
+  .sname { font-family:Georgia,"Times New Roman",serif; font-size:1rem; }
+  .sstate { font-size:.78rem; color:var(--muted); text-align:right; white-space:nowrap; }
+  .sstate.done { color:var(--accent); }
+  .sgo { font-size:.82rem; color:var(--accent); font-weight:600; text-align:right; }
+
+  /* skill view */
+  .crumb { font-size:.85rem; margin-top:24px; color:var(--muted); }
+  .crumb a { color:var(--accent); text-decoration:none; font-weight:600; }
+  .crumb a:hover { text-decoration:underline; }
+  .skhead { border-top:1px solid var(--ink); margin-top:10px; padding-top:16px; }
+  h2.skname { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:1.5rem; font-weight:500; letter-spacing:-.01em; }
+  .skmeta { display:flex; flex-wrap:wrap; gap:2px 18px; align-items:center; margin-top:4px;
+    font-size:.8rem; color:var(--muted); }
+  .skmeta .done { color:var(--accent); font-weight:600; }
+  .rub-btn { background:none; border:none; padding:10px 0; margin:0; color:var(--accent);
+    font:inherit; font-size:.8rem; font-weight:600; cursor:pointer; min-height:44px; }
+  .rub-btn:hover { text-decoration:underline; }
+  .rubric { border:1px solid var(--hair); border-radius:10px; padding:2px 16px 14px; margin:2px 0 10px; max-width:640px; }
+  .rubric .band { display:grid; grid-template-columns:130px 1fr; gap:10px; padding:10px 0;
+    border-bottom:1px solid var(--hair); font-size:.85rem; }
+  .rubric .band b { font-size:.68rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--muted); padding-top:2px; }
+  .rubric .cont { font-size:.75rem; color:var(--faint); margin-top:12px; }
+  .modes { display:flex; gap:2px; border-bottom:1px solid var(--hair); margin-top:18px;
+    overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .modes a { display:flex; align-items:center; min-height:44px; padding:8px 18px; white-space:nowrap;
+    font-size:.92rem; color:var(--muted); text-decoration:none; border-bottom:2px solid transparent; margin-bottom:-1px; }
+  .modes a.on { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
+  .modes a:hover { color:var(--accent); }
+  .engine { max-width:640px; padding-top:20px; }
+  .modeintro { margin:0 0 6px; font-size:.9rem; color:var(--muted); }
+  .what { font-size:.95rem; }
+  h3.et { font-family:Georgia,"Times New Roman",serif; font-size:1.05rem; font-weight:600; margin:28px 0 8px;
+    border-top:1px solid var(--hair); padding-top:16px; }
+  ol.how { margin:6px 0 0; padding-left:22px; font-size:.92rem; }
+  ol.how li { margin:5px 0; }
+  .nogen { font-size:.9rem; color:var(--muted); }
+
+  /* question card */
+  .qcard { border:1px solid var(--hair); border-radius:10px; padding:16px 18px; margin-top:12px; }
+  .qtext { font-size:.95rem; overflow-x:auto; }
+  .qb-graph { display:block; width:100%; max-width:300px; height:auto; margin:12px 0 4px; }
+  .qb-minis { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin:12px 0 4px; }
+  .qb-minis figure { margin:0; }
+  .qb-minis figcaption { font-size:.8rem; font-weight:700; color:var(--muted); margin-bottom:2px; }
+  .qb-minis .qb-graph { max-width:180px; margin:0; }
+  .qb-table { border-collapse:collapse; margin:12px 0 4px; font-size:.9rem; }
+  .qb-table th, .qb-table td { border:1px solid var(--hair); padding:6px 10px; text-align:center; min-width:44px; }
+  .qb-table th { color:var(--muted); font-weight:600; background:var(--accent-soft); }
+  input.qin { font:inherit; font-size:.92rem; border:1px solid var(--hair); border-radius:8px;
+    background:var(--paper); color:var(--ink); padding:9px 10px; width:9em; max-width:100%; }
+  input.qin:focus { outline:none; border-color:var(--accent); }
+  input.qin.slot { width:3.8em; padding:5px 6px; text-align:center; }
+  input.qin.ok { border-color:var(--accent); }
+  input.qin.bad { border-color:var(--alert); }
+  .qrow { display:flex; align-items:center; gap:10px; margin-top:10px; font-size:.92rem; flex-wrap:wrap; }
+  .mark { font-weight:700; margin-left:4px; }
+  .mark.ok { color:var(--accent); }
+  .mark.bad { color:var(--alert); }
+  .slot-ans { color:var(--accent); font-weight:600; }
+  .opts { display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+  .opts .opt { display:inline-flex; align-items:center; font:inherit; font-size:.92rem; min-height:44px;
+    border:1px solid var(--hair); border-radius:8px; background:var(--paper); color:var(--ink);
+    padding:8px 16px; cursor:pointer; }
+  .opts button.opt:hover { border-color:var(--accent); }
+  .opts .opt.right { border-color:var(--accent); color:var(--accent); font-weight:600; }
+  .opts .opt.wrongpick { border-color:var(--alert); color:var(--alert); }
+  .opts.locked .opt { cursor:default; }
+  .opts span.opt { cursor:default; }
+  .btn { font:inherit; font-size:.9rem; font-weight:600; border:1px solid var(--accent); color:var(--accent);
+    background:none; border-radius:8px; padding:9px 18px; min-height:44px; cursor:pointer; }
+  .btn:hover { background:var(--accent-soft); }
+  .btn.quiet { border-color:var(--hair); color:var(--muted); font-weight:500; }
+  .btn.quiet:hover { border-color:var(--accent); color:var(--accent); background:none; }
+  .alink { color:var(--accent); font-weight:600; text-decoration:none; font-size:.88rem; }
+  .alink:hover { text-decoration:underline; }
+  .worked { margin-top:14px; border-left:2px solid var(--accent); background:var(--accent-soft);
+    padding:10px 14px; border-radius:0 8px 8px 0; font-size:.9rem; overflow-x:auto; }
+  .hint { margin:8px 0 0; font-size:.85rem; color:var(--muted); }
+  .hint b { color:var(--accent); }
+  .note2 { margin-top:10px; font-size:.75rem; color:var(--faint); }
+  .verdict { margin-top:14px; font-size:.92rem; font-weight:600; }
+  .verdict.ok { color:var(--accent); }
+  .verdict.bad { color:var(--alert); }
+  .runbar { display:flex; justify-content:space-between; align-items:baseline; gap:12px;
+    margin-top:14px; font-size:.8rem; color:var(--muted); }
+  .timer { font-variant-numeric:tabular-nums; color:var(--faint); white-space:nowrap; }
+  .qskillname { font-family:Georgia,"Times New Roman",serif; font-size:.9rem; color:var(--muted); margin-top:8px; }
+  .runend { margin:14px 0 0; font-size:.88rem; color:var(--muted); }
+  .mastered-banner { margin-top:18px; background:var(--accent-soft); border-radius:10px; padding:14px 18px; }
+  .mastered-banner .big { font-family:Georgia,"Times New Roman",serif; font-size:1.1rem; color:var(--accent); }
+  .mastered-banner p { margin:4px 0 0; font-size:.8rem; color:var(--muted); }
+  .aftergame { margin-top:14px; }
+
+  /* revise picker + summary */
+  .choice { display:flex; align-items:center; gap:10px; min-height:44px; padding:2px 0;
+    font-size:.92rem; cursor:pointer; }
+  input[type=radio], input[type=checkbox] { accent-color:var(--accent); width:17px; height:17px; margin:0; flex:none; }
+  .picklist { margin:2px 0 8px 27px; border-left:1px solid var(--hair); padding-left:14px; }
+  .picklist .unitlab { font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--faint); margin-top:10px; }
+  .picklist .choice { min-height:38px; font-size:.88rem; }
+  .countrow { display:flex; gap:22px; border-top:1px solid var(--hair); margin-top:10px; padding-top:4px; }
+  .errline { margin:8px 0 0; font-size:.82rem; color:var(--alert); }
+  .sum { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:16px; }
+  .sum > div { border:1px solid var(--hair); border-radius:10px; padding:12px 14px; }
+  .sum .lab { font-size:.68rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+  .sum .val { font-family:Georgia,"Times New Roman",serif; font-size:1.3rem; margin-top:4px; }
+  .sum .small { font-size:.78rem; color:var(--muted); margin-top:2px; }
+  .wnext { margin-top:16px; font-size:.88rem; }
+
+  .note { margin-top:34px; font-size:.72rem; color:var(--faint); }
+  footer { margin-top:8px; color:var(--faint); font-size:.75rem; }
+
+  @media (max-width:640px) {
+    .srow { grid-template-columns:1fr auto; }
+    .sgo { display:none; }
+    .rubric .band { grid-template-columns:1fr; gap:2px; }
+    .sum { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="stem.html">← STEM</a>
+    <select class="language-select" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+    </select>
+  </div>
+
+  <div class="masthead">
+    <h1 data-i18n="title">Skills</h1>
+    <div class="sub" data-i18n="sub">Every STEM skill — learn, practise, revise</div>
+  </div>
+
+  <div id="view"></div>
+
+  <p class="note" data-i18n="privacy">Anonymous · progress stays in this browser only · worksheets live on Compass and the class OneNote (school login).</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+</div>
+
+<script src="stem-shared.js?v=20260821-2"></script>
+<script src="stem-questions.js?v=20260821-2"></script>
+<script src="stem-questions-bio.js?v=20260821-2"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ============================================================
+     TEACHERS EDIT HERE — interface wording (en / zh-Hans / zh-Hant).
+     Question content comes from stem-questions.js; skills and
+     rubric bands from stem-shared.js. Nothing on this page is
+     self-rated: mastery is written only by STEM2.Mastery.
+     ============================================================ */
+  var COPY = {
+    en: {
+      previewNote: function(d){ return "opens "+d+" — open for a look until then"; },
+      masteredCount: function(a,b){ return a+"/"+b+" mastered"; },
+      stMastered: function(d){ return "✓ mastered · "+d; },
+      stNof: function(n,of){ return n+" of "+of; },
+      stStarted: "started",
+      stNone: "not started",
+      open: "open →",
+      neededBy: function(n,d){ return "needed by "+n+" · "+d; },
+      rubric: "Rubric ▾",
+      rubricClose: "Rubric ▴",
+      bandLabels: ["working towards","at level","above level"],
+      eg: "e.g. →",
+      mTeach: "Learn", mPractise: "Practise", mRevise: "Revise",
+      noGen: "This skill's questions aren't loaded yet — they arrive with the unit.",
+      howTitle: "The method",
+      exTitle: "Worked example",
+      anotherEx: "Another example →",
+      guidedTitle: "Your turn — guided",
+      hintLabel: "Hint —",
+      guidedNote: "Guided practice — nothing is recorded here. Practise is where it counts.",
+      check: "Check",
+      showWork: "Show the working ▾",
+      tryAnother: "Another try →",
+      correct: "✓ correct",
+      pIntro: "Three questions, timed. 3 of 3 = mastered. One wrong answer ends the run — accuracy first.",
+      pStart: "Start — 3 questions →",
+      qOf: function(i,n){ return "Question "+i+" of "+n; },
+      timer: function(s){ return "⏱ "+s+" s"; },
+      wrongLine: "✗ Not this time — read the working:",
+      runEnded: "The run ends here. Read the working, then try a fresh run.",
+      fresh: "Fresh run →",
+      mastered: function(d){ return "✓ Mastered — "+d; },
+      masteredNote: "Saved in this browser · it now counts on your report.",
+      alreadyM: function(d){ return "3 of 3 — already mastered ("+d+")."; },
+      allSkills: function(n){ return "All "+n+" skills →"; },
+      rIntro: "Mixed questions from more than one skill. Accuracy first, then speed.",
+      scopeUnit: function(n){ return "this unit — "+n; },
+      scopeMastered: "my mastered skills only",
+      scopePick: "pick skills",
+      nQs: function(n){ return n+" questions"; },
+      rStart: "Start →",
+      rEmpty: "No skills with questions in this scope yet.",
+      rPickNone: "Tick at least one skill.",
+      next: "Next →",
+      sumAcc: "Accuracy",
+      sumPace: "Pace",
+      perQ: function(s){ return s+" s/question"; },
+      sumVs: "Last time",
+      firstRev: "first revision — nothing to compare yet",
+      vsLine: function(p,s){ return p+"% · "+s+" s/question"; },
+      rAgain: "Revise again →",
+      whereNext: "Where to next — reread:"
+    },
+    "zh-Hans": {
+      title: "技能", sub: "每项 STEM 技能——学习、练习、复习",
+      privacy: "匿名 · 进度只保存在这个浏览器 · 工作纸在 Compass 和班级 OneNote（需学校账号）。",
+      previewNote: function(d){ return d+" 开放——现在可以先看看"; },
+      masteredCount: function(a,b){ return a+"/"+b+" 已掌握"; },
+      stMastered: function(d){ return "✓ 已掌握 · "+d; },
+      stNof: function(n,of){ return n+" / "+of+" 题"; },
+      stStarted: "已开始",
+      stNone: "未开始",
+      open: "打开 →",
+      neededBy: function(n,d){ return "“"+n+"”需要它 · "+d; },
+      rubric: "评分标准 ▾",
+      rubricClose: "评分标准 ▴",
+      bandLabels: ["接近目标","达到目标","超越目标"],
+      eg: "看例题 →",
+      mTeach: "学习", mPractise: "练习", mRevise: "复习",
+      noGen: "这项技能的题目还没有加载——单元开放时就会有。",
+      howTitle: "方法",
+      exTitle: "例题",
+      anotherEx: "换一道例题 →",
+      guidedTitle: "轮到你——有提示",
+      hintLabel: "提示——",
+      guidedNote: "这里是带提示的练手，不做任何记录。要算数的是“练习”。",
+      check: "检查",
+      showWork: "看解题过程 ▾",
+      tryAnother: "再来一题 →",
+      correct: "✓ 正确",
+      pIntro: "三道题，计时。3 题全对＝掌握。答错一题本轮就结束——先求准确。",
+      pStart: "开始——3 道题 →",
+      qOf: function(i,n){ return "第 "+i+" 题，共 "+n+" 题"; },
+      timer: function(s){ return "⏱ "+s+" 秒"; },
+      wrongLine: "✗ 这次没对——看解题过程：",
+      runEnded: "本轮到此结束。看懂过程，再重新开始。",
+      fresh: "重新开始 →",
+      mastered: function(d){ return "✓ 已掌握——"+d; },
+      masteredNote: "已保存在这个浏览器 · 会计入你的报告。",
+      alreadyM: function(d){ return "3 / 3——早已掌握（"+d+"）。"; },
+      allSkills: function(n){ return n+" 的全部技能 →"; },
+      rIntro: "多项技能混合出题。先求准确，再求速度。",
+      scopeUnit: function(n){ return "这个单元——"+n; },
+      scopeMastered: "只出我已掌握的",
+      scopePick: "自选技能",
+      nQs: function(n){ return n+" 道题"; },
+      rStart: "开始 →",
+      rEmpty: "这个范围里还没有可出题的技能。",
+      rPickNone: "至少勾选一项技能。",
+      next: "下一题 →",
+      sumAcc: "准确率",
+      sumPace: "速度",
+      perQ: function(s){ return "每题 "+s+" 秒"; },
+      sumVs: "上一次",
+      firstRev: "第一次复习——还没有可比较的记录",
+      vsLine: function(p,s){ return p+"% · 每题 "+s+" 秒"; },
+      rAgain: "再复习一轮 →",
+      whereNext: "接下来——再读一读："
+    },
+    "zh-Hant": {
+      title: "技能", sub: "每項 STEM 技能——學習、練習、複習",
+      privacy: "匿名 · 進度只儲存在這個瀏覽器 · 學習單在 Compass 和班級 OneNote（需學校帳號）。",
+      previewNote: function(d){ return d+" 開放——現在可以先看看"; },
+      masteredCount: function(a,b){ return a+"/"+b+" 已精熟"; },
+      stMastered: function(d){ return "✓ 已精熟 · "+d; },
+      stNof: function(n,of){ return n+" / "+of+" 題"; },
+      stStarted: "已開始",
+      stNone: "尚未開始",
+      open: "打開 →",
+      neededBy: function(n,d){ return "「"+n+"」會用到 · "+d; },
+      rubric: "評量規準 ▾",
+      rubricClose: "評量規準 ▴",
+      bandLabels: ["接近目標","達到目標","超越目標"],
+      eg: "看例題 →",
+      mTeach: "學習", mPractise: "練習", mRevise: "複習",
+      noGen: "這項技能的題目還沒載入——單元開放時就會有。",
+      howTitle: "方法",
+      exTitle: "例題",
+      anotherEx: "換一道例題 →",
+      guidedTitle: "換你試試——有提示",
+      hintLabel: "提示——",
+      guidedNote: "這裡是有提示的暖身，不會留下任何紀錄。要算數的是「練習」。",
+      check: "檢查",
+      showWork: "看解題過程 ▾",
+      tryAnother: "再來一題 →",
+      correct: "✓ 正確",
+      pIntro: "三道題，計時。3 題全對＝精熟。答錯一題這一輪就結束——先求準確。",
+      pStart: "開始——3 道題 →",
+      qOf: function(i,n){ return "第 "+i+" 題，共 "+n+" 題"; },
+      timer: function(s){ return "⏱ "+s+" 秒"; },
+      wrongLine: "✗ 這次沒對——看解題過程：",
+      runEnded: "這一輪到此結束。看懂過程，再重新開始。",
+      fresh: "重新開始 →",
+      mastered: function(d){ return "✓ 已精熟——"+d; },
+      masteredNote: "已儲存在這個瀏覽器 · 會列入你的報告。",
+      alreadyM: function(d){ return "3 / 3——早已精熟（"+d+"）。"; },
+      allSkills: function(n){ return n+" 的全部技能 →"; },
+      rIntro: "多項技能混合出題。先求準確，再求速度。",
+      scopeUnit: function(n){ return "這個單元——"+n; },
+      scopeMastered: "只出我已精熟的",
+      scopePick: "自選技能",
+      nQs: function(n){ return n+" 道題"; },
+      rStart: "開始 →",
+      rEmpty: "這個範圍裡還沒有可出題的技能。",
+      rPickNone: "至少勾選一項技能。",
+      next: "下一題 →",
+      sumAcc: "正確率",
+      sumPace: "速度",
+      perQ: function(s){ return "每題 "+s+" 秒"; },
+      sumVs: "上一次",
+      firstRev: "第一次複習——還沒有可比較的紀錄",
+      vsLine: function(p,s){ return p+"% · 每題 "+s+" 秒"; },
+      rAgain: "再複習一輪 →",
+      whereNext: "接下來——再讀一遍："
+    }
+  };
+
+  /* ---------------- i18n plumbing (same pattern as stem.html) ---------------- */
+  var sel = document.querySelector(".language-select");
+  var lang = "en";
+  try { lang = localStorage.getItem("elc_page_language") || "en"; } catch(e){}
+  if (!COPY[lang]) lang = "en";
+  sel.value = lang;
+  function T(k){ var v = COPY[lang][k]; return v !== undefined ? v : COPY.en[k]; }
+  function setStatic(){
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var k = el.getAttribute("data-i18n"), v = COPY[lang][k];
+      if (!el._en) el._en = el.textContent;
+      el.textContent = (typeof v === "string") ? v : el._en;
+    });
+    document.documentElement.lang = lang;
+  }
+  sel.addEventListener("change", function(){
+    lang = sel.value;
+    try { localStorage.setItem("elc_page_language", lang); } catch(e){}
+    setStatic(); route();
+  });
+
+  /* ---------------- helpers ---------------- */
+  var esc = STEM2.esc;
+  var view = document.getElementById("view");
+  function fmtTs(ts){ return new Date(ts).toLocaleDateString(undefined, { day:"numeric", month:"short" }); }
+  function shuffle(a){
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random()*(i+1)); var t = a[i]; a[i] = a[j]; a[j] = t; }
+    return a;
+  }
+  function hasGen(id){ return !!(window.QBANK && QBANK.list().indexOf(id) !== -1); }
+  function unitOpen(u){ return u.always || !u.opensFrom || STEM2.daysUntil(u.opensFrom) <= 0; }
+  function groupOf(sk){
+    var u = STEM2.UNIT_BY_ID[sk.unit], g = null;
+    (u.skillGroups || []).forEach(function(gr){ if (gr.id === sk.group) g = gr; });
+    return g;
+  }
+
+  /* ---------------- timers ---------------- */
+  var timerInt = null, pendingT = null;
+  function stopTimers(){
+    if (timerInt) { clearInterval(timerInt); timerInt = null; }
+    if (pendingT) { clearTimeout(pendingT); pendingT = null; }
+  }
+  function startTimer(el){
+    stopTimers();
+    var t0 = performance.now();
+    el.textContent = T("timer")(0);
+    timerInt = setInterval(function(){
+      el.textContent = T("timer")(Math.floor((performance.now() - t0)/1000));
+    }, 500);
+  }
+
+  /* ---------------- routing ---------------- */
+  var rubricFor = null;   /* keep the fold-out open across mode changes on one skill */
+  function parseHash(){
+    var h = location.hash.replace(/^#/, ""), o = {};
+    h.split("&").forEach(function(p){
+      var i = p.indexOf("=");
+      if (i > 0) o[p.slice(0, i)] = decodeURIComponent(p.slice(i + 1));
+    });
+    return o;
+  }
+  function route(){
+    stopTimers();
+    var p = parseHash();
+    if (p.skill && STEM2.SKILLS[p.skill]) {
+      var mode = (p.mode === "practise" || p.mode === "revise") ? p.mode : "teach";
+      if (rubricFor && rubricFor !== p.skill) rubricFor = null;
+      renderSkill(p.skill, mode);
+    } else {
+      rubricFor = null;
+      var uid = (p.unit && STEM2.UNIT_BY_ID[p.unit]) ? p.unit : STEM2.currentUnit().id;
+      renderUnit(uid);
+    }
+  }
+  window.addEventListener("hashchange", function(){ route(); window.scrollTo(0, 0); });
+
+  /* ---------------- skill state labels ---------------- */
+  function stateLabel(id){
+    var ms = STEM2.Mastery.mastered(id);
+    if (ms) return { cls: "done", txt: T("stMastered")(fmtTs(ms)) };
+    var runs = STEM2.Mastery.runs(id), lastP = null;
+    runs.forEach(function(r){ if (r.mode === "p") lastP = r; });
+    if (lastP) return { cls: "", txt: T("stNof")(lastP.ok, lastP.of) };
+    if (runs.length) return { cls: "", txt: T("stStarted") };
+    return { cls: "", txt: T("stNone") };
+  }
+
+  /* ---------------- unit list view ---------------- */
+  function renderUnit(uid){
+    var u = STEM2.UNIT_BY_ID[uid];
+    var h = "<nav class='units'>";
+    STEM2.UNITS.forEach(function(u2){
+      h += "<a class='" + (u2.id === uid ? "on" : "") + "' href='#unit=" + u2.id + "'>" + esc(u2.name) + "</a>";
+    });
+    h += "</nav>";
+    if (u.opensFrom && STEM2.daysUntil(u.opensFrom) > 0) {
+      h += "<p class='preview-note'>" + esc(T("previewNote")(STEM2.fmtDate(u.opensFrom))) + "</p>";
+    }
+    (u.skillGroups || []).forEach(function(g){
+      var done = 0;
+      g.skills.forEach(function(id){ if (STEM2.Mastery.mastered(id)) done++; });
+      h += "<div class='ghead'><h2>" + esc(g.name) + "</h2><span class='gcount'>" +
+           esc(T("masteredCount")(done, g.skills.length)) + "</span></div>";
+      g.skills.forEach(function(id){
+        var sk = STEM2.SKILLS[id]; if (!sk) return;
+        var st = stateLabel(id);
+        var mode = STEM2.Mastery.state(id).status === "none" ? "teach" : "practise";
+        h += "<a class='srow' href='#skill=" + id + "&mode=" + mode + "'>" +
+             "<span class='sname'>" + esc(sk.name) + "</span>" +
+             "<span class='sstate " + st.cls + "'>" + esc(st.txt) + "</span>" +
+             "<span class='sgo'>" + esc(T("open")) + "</span></a>";
+      });
+    });
+    view.innerHTML = h;
+  }
+
+  /* ---------------- skill view ---------------- */
+  function metaHtml(id){
+    var sk = STEM2.SKILLS[id], u = STEM2.UNIT_BY_ID[sk.unit];
+    var st = stateLabel(id);
+    var h = "<span class='" + st.cls + "'>" + esc(st.txt) + "</span>";
+    if (sk.needs) {
+      var cp = null;
+      u.checkpoints.forEach(function(c){ if (c.id === sk.needs) cp = c; });
+      if (cp) h += "<span>" + esc(T("neededBy")(cp.short, STEM2.fmtDate(cp.date))) + "</span>";
+    }
+    return h;
+  }
+
+  function renderSkill(id, mode){
+    var sk = STEM2.SKILLS[id];
+    var u = STEM2.UNIT_BY_ID[sk.unit];
+    var g = groupOf(sk);
+    var labels = T("bandLabels");
+    var open = rubricFor === id;
+
+    var h = "<div class='crumb'><a href='#unit=" + u.id + "'>← " + esc(u.name) + "</a>" +
+            (g ? " · " + esc(g.name) : "") + "</div>";
+    h += "<div class='skhead'>";
+    h += "<h2 class='skname'>" + esc(sk.name) + "</h2>";
+    h += "<div class='skmeta'><span id='skMeta' class='skmeta' style='margin:0'>" + metaHtml(id) + "</span>" +
+         "<button class='rub-btn' id='rubBtn' aria-expanded='" + (open ? "true" : "false") + "'>" +
+         esc(open ? T("rubricClose") : T("rubric")) + "</button></div>";
+    h += "<div class='rubric' id='rubric'" + (open ? "" : " hidden") + ">";
+    sk.bands.forEach(function(b, i){
+      h += "<div class='band'><b>" + esc(labels[i] || "") + "</b><span>" + esc(b) + "</span></div>";
+    });
+    h += "<div class='cont'>" + esc(sk.cont) + " · <a class='alink' id='egLink' href='#skill=" + id +
+         "&mode=teach'>" + esc(T("eg")) + "</a></div>";
+    h += "</div></div>";
+
+    h += "<nav class='modes'>";
+    [["teach","mTeach"], ["practise","mPractise"], ["revise","mRevise"]].forEach(function(m){
+      h += "<a class='" + (mode === m[0] ? "on" : "") + "' href='#skill=" + id + "&mode=" + m[0] + "'>" +
+           esc(T(m[1])) + "</a>";
+    });
+    h += "</nav><div class='engine' id='engine'></div>";
+    view.innerHTML = h;
+
+    var rubBtn = document.getElementById("rubBtn"), rub = document.getElementById("rubric");
+    rubBtn.addEventListener("click", function(){
+      var show = rub.hidden;
+      rub.hidden = !show;
+      rubricFor = show ? id : null;
+      rubBtn.textContent = show ? T("rubricClose") : T("rubric");
+      rubBtn.setAttribute("aria-expanded", show ? "true" : "false");
+    });
+    document.getElementById("egLink").addEventListener("click", function(ev){
+      if (mode === "teach") {
+        ev.preventDefault();
+        rub.hidden = true; rubricFor = null;
+        rubBtn.textContent = T("rubric"); rubBtn.setAttribute("aria-expanded", "false");
+        document.getElementById("engine").scrollIntoView({ behavior:"smooth", block:"start" });
+      }
+    });
+
+    var engine = document.getElementById("engine");
+    if (!hasGen(id)) { engine.innerHTML = "<p class='nogen'>" + esc(T("noGen")) + "</p>"; return; }
+    if (mode === "teach") renderTeach(id, engine);
+    else if (mode === "practise") renderPractise(id, engine);
+    else renderRevise(id, engine);
+  }
+
+  /* ---------------- generic question mount ----------------
+     inst comes straight from QBANK.gen():
+       inputs[] → label + input (slotted into [data-slot=k] when present),
+                  one Check submit; crossCheck (if present) validates the
+                  whole set together and overrides per-input verdicts.
+       opts     → shuffled buttons, exact match on the "a" string.       */
+  function paintVerdict(el, ok){
+    el.classList.remove("ok", "bad");
+    el.classList.add(ok ? "ok" : "bad");
+    var m = el._mark;
+    if (!m) { m = document.createElement("span"); el.parentNode.insertBefore(m, el.nextSibling); el._mark = m; }
+    m.className = "mark " + (ok ? "ok" : "bad");
+    m.textContent = ok ? "✓" : "✗";
+  }
+
+  function mountQuestion(host, inst, cfg){
+    cfg = cfg || {};
+    var card = document.createElement("div"); card.className = "qcard";
+    var qt = document.createElement("div"); qt.className = "qtext";
+    qt.innerHTML = inst.qHTML + (inst.svg || "");
+    card.appendChild(qt);
+    host.appendChild(card);
+
+    var t0 = performance.now(), done = false, workedDiv = null;
+    function showWorked(){
+      if (workedDiv) return;
+      workedDiv = document.createElement("div"); workedDiv.className = "worked";
+      workedDiv.innerHTML = inst.workedHTML;
+      card.appendChild(workedDiv);
+    }
+    function guidedOk(){
+      var v = document.createElement("div"); v.className = "verdict ok";
+      v.textContent = T("correct");
+      card.appendChild(v);
+      showWorked();
+    }
+    function finish(correct){
+      if (done) return;
+      done = true;
+      if (cfg.onDone) cfg.onDone(correct, Math.round(performance.now() - t0), showWorked, card);
+    }
+
+    if (inst.opts) {
+      var wrapEl = document.createElement("div"); wrapEl.className = "opts";
+      function lockOpts(){
+        wrapEl.classList.add("locked");
+        Array.prototype.forEach.call(wrapEl.querySelectorAll("button"), function(x){ x.disabled = true; });
+      }
+      function markRight(){
+        Array.prototype.forEach.call(wrapEl.querySelectorAll("button"), function(x){
+          if (x._val === inst.opts.a) x.classList.add("right");
+        });
+      }
+      shuffle(inst.opts.list).forEach(function(o){
+        var b = document.createElement("button");
+        b.type = "button"; b.className = "opt"; b.textContent = o; b._val = o;
+        b.addEventListener("click", function(){
+          if (done || b.disabled) return;
+          var right = (o === inst.opts.a);
+          if (cfg.guided) {
+            if (right) { b.classList.add("right"); lockOpts(); guidedOk(); }
+            else b.classList.add("wrongpick");
+            return;
+          }
+          lockOpts();
+          if (right) b.classList.add("right");
+          else { b.classList.add("wrongpick"); markRight(); }
+          finish(right);
+        });
+        wrapEl.appendChild(b);
+      });
+      card.appendChild(wrapEl);
+    } else if (inst.inputs) {
+      var form = document.createElement("form");
+      var fieldEls = {};
+      inst.inputs.forEach(function(inp){
+        var el = document.createElement("input");
+        el.className = "qin"; el.type = "text"; el.autocomplete = "off";
+        el.setAttribute("autocapitalize", "off"); el.spellcheck = false;
+        el.setAttribute("data-k", inp.k);
+        el.setAttribute("aria-label", inp.label);
+        if (inp.place) el.placeholder = inp.place;
+        var slot = qt.querySelector("[data-slot='" + inp.k + "']");
+        if (slot) { el.classList.add("slot"); slot.appendChild(el); }
+        else {
+          var row = document.createElement("label"); row.className = "qrow";
+          var sp = document.createElement("span"); sp.textContent = inp.label;
+          row.appendChild(sp); row.appendChild(el);
+          form.appendChild(row);
+        }
+        fieldEls[inp.k] = el;
+      });
+      var sub = document.createElement("button");
+      sub.type = "submit"; sub.className = "btn"; sub.textContent = T("check");
+      var subP = document.createElement("p"); subP.style.margin = "14px 0 0";
+      subP.appendChild(sub); form.appendChild(subP);
+      function lockForm(){
+        inst.inputs.forEach(function(inp){ fieldEls[inp.k].disabled = true; });
+        subP.style.display = "none";
+      }
+      form.addEventListener("submit", function(ev){
+        ev.preventDefault();
+        if (done) return;
+        var vals = {}, verd = {}, allOk = true;
+        inst.inputs.forEach(function(inp){
+          vals[inp.k] = fieldEls[inp.k].value;
+          var ok = false; try { ok = !!inp.check(vals[inp.k]); } catch(e){}
+          verd[inp.k] = ok; if (!ok) allOk = false;
+        });
+        var correct = allOk;
+        if (typeof inst.crossCheck === "function") {
+          var cc = false; try { cc = !!inst.crossCheck(vals); } catch(e){}
+          correct = cc;
+          if (cc) inst.inputs.forEach(function(inp){ verd[inp.k] = true; });
+          else if (allOk) inst.inputs.forEach(function(inp){ verd[inp.k] = false; });
+        }
+        inst.inputs.forEach(function(inp){ paintVerdict(fieldEls[inp.k], verd[inp.k]); });
+        if (cfg.guided) { if (correct) { lockForm(); guidedOk(); } return; }
+        lockForm();
+        finish(correct);
+      });
+      card.appendChild(form);
+    }
+    return { card: card, showWorked: showWorked };
+  }
+
+  /* ---------------- TEACH ---------------- */
+  function paintExample(box, id){
+    var inst = QBANK.gen(id);
+    box.innerHTML = "";
+    var card = document.createElement("div"); card.className = "qcard";
+    var qt = document.createElement("div"); qt.className = "qtext";
+    qt.innerHTML = inst.qHTML + (inst.svg || "");
+    card.appendChild(qt);
+    if (inst.inputs) {
+      inst.inputs.forEach(function(inp){
+        var slot = qt.querySelector("[data-slot='" + inp.k + "']");
+        if (slot) slot.innerHTML = "<span class='slot-ans'>" + esc(inp.answer) + "</span>";
+        else {
+          var r = document.createElement("div"); r.className = "qrow";
+          r.innerHTML = "<span>" + esc(inp.label) + "</span><span class='slot-ans'>" + esc(inp.answer) + "</span>";
+          card.appendChild(r);
+        }
+      });
+    } else if (inst.opts) {
+      var o = document.createElement("div"); o.className = "opts";
+      inst.opts.list.forEach(function(op){
+        var s = document.createElement("span");
+        s.className = "opt" + (op === inst.opts.a ? " right" : "");
+        s.textContent = op + (op === inst.opts.a ? " ✓" : "");
+        o.appendChild(s);
+      });
+      card.appendChild(o);
+    }
+    var w = document.createElement("div"); w.className = "worked";
+    w.innerHTML = inst.workedHTML;
+    card.appendChild(w);
+    box.appendChild(card);
+  }
+
+  function renderTeach(id, host){
+    var t = QBANK.teach(id);
+    var h = "<div class='what'>" + t.what + "</div>";
+    h += "<h3 class='et'>" + esc(T("howTitle")) + "</h3><ol class='how'>";
+    t.how.forEach(function(s){ h += "<li>" + s + "</li>"; });
+    h += "</ol>";
+    h += "<h3 class='et'>" + esc(T("exTitle")) + "</h3><div id='exBox'></div>" +
+         "<p style='margin:14px 0 0'><button class='btn quiet' id='exBtn'>" + esc(T("anotherEx")) + "</button></p>";
+    h += "<h3 class='et'>" + esc(T("guidedTitle")) + "</h3>" +
+         "<p class='hint'><b>" + esc(T("hintLabel")) + "</b> " + esc(QBANK.hint(id)) + "</p>" +
+         "<div id='tryBox'></div>" +
+         "<p class='note2'>" + esc(T("guidedNote")) + "</p>";
+    host.innerHTML = h;
+
+    var exBox = document.getElementById("exBox");
+    paintExample(exBox, id);
+    document.getElementById("exBtn").addEventListener("click", function(){ paintExample(exBox, id); });
+
+    var tryBox = document.getElementById("tryBox");
+    function guidedMount(){
+      tryBox.innerHTML = "";
+      var api = mountQuestion(tryBox, QBANK.gen(id), { guided: true });
+      var ctr = document.createElement("p"); ctr.className = "aftergame";
+      var again = document.createElement("button"); again.className = "btn quiet"; again.type = "button";
+      again.textContent = T("tryAnother");
+      var show = document.createElement("button"); show.className = "btn quiet"; show.type = "button";
+      show.textContent = T("showWork"); show.style.marginLeft = "10px";
+      again.addEventListener("click", guidedMount);
+      show.addEventListener("click", api.showWorked);
+      ctr.appendChild(again); ctr.appendChild(show);
+      tryBox.appendChild(ctr);
+    }
+    guidedMount();
+  }
+
+  /* ---------------- PRACTISE ---------------- */
+  function renderPractise(id, host){
+    host.innerHTML = "<p class='modeintro'>" + esc(T("pIntro")) + "</p>" +
+      "<p style='margin:14px 0 0'><button class='btn' id='pStart'>" + esc(T("pStart")) + "</button></p>";
+    document.getElementById("pStart").addEventListener("click", function(){ startPractiseRun(id, host); });
+  }
+
+  function startPractiseRun(id, host){
+    var sk = STEM2.SKILLS[id], u = STEM2.UNIT_BY_ID[sk.unit];
+    var N = 3, i = 0, ok = 0, ms = [];
+    var wasMastered = STEM2.Mastery.mastered(id);
+    host.innerHTML = "<div class='runbar'><span id='qOf'></span><span class='timer' id='tmr'></span></div>" +
+                     "<div id='qHost'></div><div id='tail'></div>";
+    var qHost = document.getElementById("qHost"), tail = document.getElementById("tail"),
+        qOfEl = document.getElementById("qOf"), tmr = document.getElementById("tmr");
+
+    function refreshMeta(){
+      var m = document.getElementById("skMeta");
+      if (m) m.innerHTML = metaHtml(id);
+    }
+    function next(){
+      qHost.innerHTML = ""; tail.innerHTML = "";
+      qOfEl.textContent = T("qOf")(i + 1, N);
+      startTimer(tmr);
+      mountQuestion(qHost, QBANK.gen(id), { onDone: function(correct, qms, showWorked, card){
+        stopTimers();
+        ms.push(qms);
+        i++;
+        if (correct) {
+          ok++;
+          if (i < N) { pendingT = setTimeout(function(){ pendingT = null; next(); }, 800); }
+          else finishRun();
+        } else {
+          var v = document.createElement("div"); v.className = "verdict bad";
+          v.textContent = T("wrongLine");
+          card.appendChild(v);
+          showWorked();
+          endWrong();
+        }
+      }});
+    }
+    function endWrong(){
+      STEM2.Mastery.record(id, { ok: ok, of: i, ms: ms, mode: "p" });
+      refreshMeta();
+      tail.innerHTML = "<p class='runend'>" + esc(T("runEnded")) + "</p>" +
+        "<p style='margin:12px 0 0'><button class='btn' id='freshBtn'>" + esc(T("fresh")) + "</button></p>";
+      document.getElementById("freshBtn").addEventListener("click", function(){ startPractiseRun(id, host); });
+    }
+    function finishRun(){
+      STEM2.Mastery.record(id, { ok: ok, of: N, ms: ms, mode: "p" });
+      refreshMeta();
+      var mts = STEM2.Mastery.mastered(id);
+      var h;
+      if (!wasMastered && mts) {
+        h = "<div class='mastered-banner'><div class='big'>" + esc(T("mastered")(fmtTs(mts))) + "</div>" +
+            "<p>" + esc(T("masteredNote")) + "</p></div>";
+      } else {
+        h = "<p class='verdict ok'>" + esc(T("alreadyM")(fmtTs(mts || Date.now()))) + "</p>";
+      }
+      h += "<p class='aftergame'><a class='alink' href='#unit=" + u.id + "'>" + esc(T("allSkills")(u.name)) + "</a>" +
+           " &nbsp;·&nbsp; <a class='alink' href='#skill=" + id + "&mode=revise'>" + esc(T("mRevise")) + " →</a></p>";
+      tail.innerHTML = h;
+    }
+    next();
+  }
+
+  /* ---------------- REVISE ---------------- */
+  function renderRevise(id, host){
+    var sk = STEM2.SKILLS[id], u = STEM2.UNIT_BY_ID[sk.unit];
+    var h = "<p class='modeintro'>" + esc(T("rIntro")) + "</p>";
+    h += "<label class='choice'><input type='radio' name='scope' value='unit' checked> " +
+         esc(T("scopeUnit")(u.name)) + "</label>";
+    h += "<label class='choice'><input type='radio' name='scope' value='mastered'> " +
+         esc(T("scopeMastered")) + "</label>";
+    h += "<label class='choice'><input type='radio' name='scope' value='pick'> " +
+         esc(T("scopePick")) + "</label>";
+    h += "<div class='picklist' id='pickList' hidden>";
+    STEM2.UNITS.forEach(function(u2){
+      if (!unitOpen(u2) && u2.id !== u.id) return;
+      var ids = [];
+      (u2.skillGroups || []).forEach(function(g){ g.skills.forEach(function(s2){ if (hasGen(s2)) ids.push(s2); }); });
+      if (!ids.length) return;
+      h += "<div class='unitlab'>" + esc(u2.name) + "</div>";
+      ids.forEach(function(s2){
+        h += "<label class='choice'><input type='checkbox' value='" + s2 + "'" + (s2 === id ? " checked" : "") + "> " +
+             esc(STEM2.SKILLS[s2].name) + (STEM2.Mastery.mastered(s2) ? " <span class='mark ok'>✓</span>" : "") +
+             "</label>";
+      });
+    });
+    h += "</div>";
+    h += "<div class='countrow'>" +
+         "<label class='choice'><input type='radio' name='qn' value='6' checked> " + esc(T("nQs")(6)) + "</label>" +
+         "<label class='choice'><input type='radio' name='qn' value='10'> " + esc(T("nQs")(10)) + "</label></div>";
+    h += "<p style='margin:14px 0 0'><button class='btn' id='rStart'>" + esc(T("rStart")) + "</button></p>" +
+         "<p class='errline' id='rErr' hidden></p>";
+    host.innerHTML = h;
+
+    var pickList = document.getElementById("pickList");
+    Array.prototype.forEach.call(host.querySelectorAll("input[name=scope]"), function(r){
+      r.addEventListener("change", function(){ pickList.hidden = r.value !== "pick"; });
+    });
+    document.getElementById("rStart").addEventListener("click", function(){
+      var scope = host.querySelector("input[name=scope]:checked").value;
+      var n = parseInt(host.querySelector("input[name=qn]:checked").value, 10);
+      var list = [];
+      if (scope === "unit") {
+        (u.skillGroups || []).forEach(function(g){ g.skills.forEach(function(s2){ if (hasGen(s2)) list.push(s2); }); });
+      } else if (scope === "mastered") {
+        Object.keys(STEM2.SKILLS).forEach(function(s2){ if (STEM2.Mastery.mastered(s2) && hasGen(s2)) list.push(s2); });
+      } else {
+        Array.prototype.forEach.call(pickList.querySelectorAll("input:checked"), function(c){ list.push(c.value); });
+      }
+      var err = document.getElementById("rErr");
+      if (!list.length) {
+        err.textContent = scope === "pick" ? T("rPickNone") : T("rEmpty");
+        err.hidden = false;
+        return;
+      }
+      startReviseRun(id, host, list, n);
+    });
+  }
+
+  function startReviseRun(backId, host, list, n){
+    var seq = [];
+    while (seq.length < n) seq = seq.concat(shuffle(list));
+    seq = seq.slice(0, n);
+    var i = 0, results = [];   /* {sid, ok, ms} */
+    host.innerHTML = "<div class='runbar'><span id='qOf'></span><span class='timer' id='tmr'></span></div>" +
+                     "<div class='qskillname' id='qSkill'></div><div id='qHost'></div><div id='tail'></div>";
+    var qHost = document.getElementById("qHost"), tail = document.getElementById("tail"),
+        qOfEl = document.getElementById("qOf"), tmr = document.getElementById("tmr"),
+        qSkill = document.getElementById("qSkill");
+
+    function next(){
+      if (i >= n) { finish(); return; }
+      var sid = seq[i];
+      qHost.innerHTML = ""; tail.innerHTML = "";
+      qOfEl.textContent = T("qOf")(i + 1, n);
+      qSkill.textContent = STEM2.SKILLS[sid].name;
+      startTimer(tmr);
+      mountQuestion(qHost, QBANK.gen(sid), { onDone: function(correct, qms, showWorked, card){
+        stopTimers();
+        results.push({ sid: sid, ok: correct, ms: qms });
+        i++;
+        if (correct) {
+          pendingT = setTimeout(function(){ pendingT = null; next(); }, 700);
+        } else {
+          var v = document.createElement("div"); v.className = "verdict bad";
+          v.textContent = T("wrongLine");
+          card.appendChild(v);
+          showWorked();
+          tail.innerHTML = "<p style='margin:12px 0 0'><button class='btn' id='nextBtn'>" + esc(T("next")) + "</button></p>";
+          document.getElementById("nextBtn").addEventListener("click", next);
+        }
+      }});
+    }
+
+    function finish(){
+      var okN = 0, msTotal = 0, agg = {};
+      results.forEach(function(r){
+        if (r.ok) okN++;
+        msTotal += r.ms;
+        var a = agg[r.sid] = agg[r.sid] || { ok: 0, of: 0, ms: [] };
+        a.of++; a.ms.push(r.ms); if (r.ok) a.ok++;
+      });
+      var okPct = Math.round(100 * okN / n);
+      var msAvg = Math.round(msTotal / n);
+      var prev = STEM2.Mastery.revisionHistory().slice(-1)[0] || null;
+      Object.keys(agg).forEach(function(sid){
+        STEM2.Mastery.record(sid, { ok: agg[sid].ok, of: agg[sid].of, ms: agg[sid].ms, mode: "r" });
+      });
+      STEM2.Mastery.recordRevision({ msAvg: msAvg, n: n, okPct: okPct });
+
+      var m = document.getElementById("skMeta");
+      if (m) m.innerHTML = metaHtml(backId);
+
+      var pace = (msAvg / 1000).toFixed(1);
+      var h = "<div class='sum'>";
+      h += "<div><div class='lab'>" + esc(T("sumAcc")) + "</div><div class='val'>" + okPct + "%</div>" +
+           "<div class='small'>" + okN + " / " + n + "</div></div>";
+      h += "<div><div class='lab'>" + esc(T("sumPace")) + "</div><div class='val'>" + esc(pace) + " s</div>" +
+           "<div class='small'>" + esc(T("perQ")(pace)) + "</div></div>";
+      h += "<div><div class='lab'>" + esc(T("sumVs")) + "</div>" +
+           (prev ? "<div class='val'>" + prev.okPct + "%</div><div class='small'>" +
+                   esc(T("vsLine")(prev.okPct, (prev.msAvg / 1000).toFixed(1))) + "</div>"
+                 : "<div class='small' style='margin-top:8px'>" + esc(T("firstRev")) + "</div>") +
+           "</div></div>";
+      var wrongIds = [];
+      Object.keys(agg).forEach(function(sid){ if (agg[sid].ok < agg[sid].of) wrongIds.push(sid); });
+      if (wrongIds.length) {
+        h += "<p class='wnext'>" + esc(T("whereNext")) + " ";
+        h += wrongIds.map(function(sid){
+          return "<a class='alink' href='#skill=" + sid + "&mode=teach'>" + esc(STEM2.SKILLS[sid].name) + " →</a>";
+        }).join(" · ");
+        h += "</p>";
+      }
+      h += "<p class='aftergame'><button class='btn quiet' id='rAgain'>" + esc(T("rAgain")) + "</button></p>";
+      qHost.innerHTML = ""; qSkill.textContent = ""; qOfEl.textContent = ""; tmr.textContent = "";
+      tail.innerHTML = h;
+      document.getElementById("rAgain").addEventListener("click", function(){ renderRevise(backId, host); });
+    }
+    next();
+  }
+
+  setStatic();
+  route();
+})();
+</script>
+</body>
+</html>

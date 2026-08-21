@@ -194,8 +194,7 @@
     if (!st.built) h += "<p class='sv-muted'>This word isn’t in your notebook yet — build it now, or do the full lesson in the Vocab Hub.</p>";
 
     h += "<div class='sv-buildarea'></div>";
-    h += "<p style='margin-top:14px'><a href='stem-vocab-hub.html#word=" + encodeURIComponent(entry.w) + "'>Open in the STEM Vocab Hub →</a><br>" +
-         "<a class='sv-muted' href='https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/' target='_blank' rel='noopener'>More practice in the Word Builder app ↗ (separate progress)</a></p>";
+    h += "<p style='margin-top:14px'><a href='stem-vocab-hub.html#word=" + encodeURIComponent(entry.w) + "'>Open in the STEM Vocab Hub →</a></p>";
 
     panelBody.innerHTML = h;
     var sel = panelBody.querySelector(".sv-langsel");
