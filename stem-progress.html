@@ -6,9 +6,10 @@
 <title>My report — ELC STEM</title>
 <!-- ================================================================
      THE REPORT (STEM hub v2) — stem-progress.html
-     Scoped to STEM2.currentUnit(): one unit, its own checkpoints,
-     its own skills and words. Checkpoints live inside units, so no
-     other unit's dates appear here.
+     Scoped to ONE unit at a time — #unit=<id>, or the first unit
+     marked "now". A picker appears whenever more than one unit is
+     open, because Kinematics and Lab & Matter share a term. Tasks
+     live inside units, so no other unit's tasks appear here.
        1 the three visible-learning columns
          WHERE AM I GOING? next checkpoint + the rest of this unit's arc
          HOW AM I GOING?   earned counts, the latest proof, revision pace
@@ -41,6 +42,12 @@
   select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
     background:var(--paper); color:var(--ink); padding:5px 8px; min-height:44px; }
   .masthead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  /* the unit picker — only shown when more than one unit is open */
+  .unitpick { display:flex; flex-wrap:wrap; gap:6px; margin:14px 0 0; }
+  .unitpick button { appearance:none; font:inherit; font-size:.82rem; background:none; color:var(--muted);
+    border:1px solid var(--hair); border-radius:999px; padding:6px 14px; min-height:34px; cursor:pointer; }
+  .unitpick button[aria-current=true] { border-color:var(--accent); color:var(--accent); font-weight:600; }
+  .unitpick button .nowdot { color:var(--alert); margin-left:.35em; font-size:.7rem; }
   h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:2rem; font-weight:500; letter-spacing:-.01em; }
   .sub { color:var(--muted); font-size:.8rem; }
   .lead { margin:14px 0 0; font-size:.86rem; color:var(--muted); max-width:62ch; }
@@ -164,6 +171,7 @@
     <h1 data-i18n="title">My report</h1>
     <div class="sub" id="sub"></div>
   </div>
+  <div class="unitpick noprint" id="unitPick" role="group" aria-label="Which unit"></div>
   <p class="lead" data-i18n="lead">This report is built from work you have actually done — practice runs,
     tasks and the words you built. Nothing on this page is self-rated, and nothing here can be ticked.</p>
   <p class="maplink"><a href="stem-map.html" data-i18n="mapLink">See the whole unit on the map →</a></p>
@@ -431,10 +439,23 @@
   if (!S2) { setStatic(); return; }
   var esc = S2.esc, cpDone = S2.cpDone, cpNow = S2.cpNow, Store = S2.Store, M = S2.Mastery;
 
-  /* ---------------- the unit this report is about ---------------- */
-  var UNIT = S2.currentUnit();
+  /* ---------------- the unit this report is about ----------------
+     More than one unit runs at a time, so the report is no longer
+     stuck on one. #unit=<id> picks it; otherwise the first unit
+     marked "now" in stem-shared.js. Foundations keeps its own
+     section at the foot and is never the chosen unit. */
   var FOUND = S2.UNIT_BY_ID["found"];
-  var CP = {}; if (UNIT) UNIT.checkpoints.forEach(function(c){ CP[c.id] = c; });
+  var PICKABLE = S2.UNITS.filter(function(u){ return !u.always && S2.unitOpen(u); });
+  function unitFromHash(){
+    var m = /(?:^|[#&])unit=([a-z0-9_]+)/i.exec(location.hash || "");
+    var u = m ? S2.UNIT_BY_ID[m[1]] : null;
+    if (u && !u.always) return u;
+    return S2.currentUnit();
+  }
+  var UNIT = unitFromHash();
+  var CP = {};
+  function reindexCP(){ CP = {}; if (UNIT) UNIT.checkpoints.forEach(function(c){ CP[c.id] = c; }); }
+  reindexCP();
 
   function fmtTs(ts){
     if (typeof ts !== "number" || ts < 1000000000000) return "";
@@ -720,8 +741,29 @@
     document.getElementById("foundCount").textContent = T("masteredCountF")(done, total);
   }
 
+  function paintPicker(){
+    var box = document.getElementById("unitPick");
+    if (PICKABLE.length < 2) { box.hidden = true; return; }
+    box.hidden = false;
+    box.innerHTML = "";
+    PICKABLE.forEach(function(u){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.innerHTML = esc(u.name) + (u.now ? "<span class='nowdot'>\u25CF</span>" : "");
+      if (UNIT && u.id === UNIT.id) b.setAttribute("aria-current", "true");
+      b.addEventListener("click", function(){
+        if (UNIT && u.id === UNIT.id) return;
+        UNIT = u; reindexCP();
+        try { history.replaceState(null, "", "#unit=" + u.id); } catch(e){ location.hash = "unit=" + u.id; }
+        paintAll();
+      });
+      box.appendChild(b);
+    });
+  }
+
   /* ---------------- paint ---------------- */
   function paintAll(){
+    paintPicker();
     if (!UNIT) {   /* cannot happen with the data as it stands, but stay honest */
       document.getElementById("sub").textContent = T("noUnit");
       document.getElementById("words").hidden = true;

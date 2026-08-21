@@ -41,7 +41,7 @@
         { id: "f_fluency", name: "Number fluency", skills: ["f_mult", "f_squares"] },
         { id: "f_units",   name: "Units & symbols", skills: ["f_convert", "f_symbols"] }
       ] },
-    { id: "kin", name: "Kinematics", page: "stem-kinematics.html", term: "Term 3",
+    { id: "kin", name: "Kinematics", page: "stem-kinematics.html", term: "Term 3", now: true,
       blurb: "Motion · linear graphs · data — Race to School inside",
       checkpoints: [
         { id: "cp_quiz", status: "done",
@@ -70,6 +70,37 @@
           skills: ["s_variables", "s_lobf", "s_corr", "s_excel"] },
         { id: "kg_quad",   name: "Curves & quadratics",
           skills: ["k_parabola", "k_quadeq", "k_project"] }
+      ] },
+    { id: "lab", name: "Lab & Matter", page: "stem-lab.html", term: "Term 3", now: true,
+      blurb: "Working safely, measuring well, and what everything is made of",
+      checkpoints: [
+        { id: "cp_bunsen", status: "done",
+          name: "Bunsen burner safety check", short: "Bunsen check",
+          desc: "Light and use a Bunsen burner safely, every critical step." },
+        { id: "cp_heat", status: "done",
+          name: "Heating water — data table", short: "Data table",
+          desc: "Heat water, read the thermometer every 30 seconds, record with units." },
+        { id: "cp_graph", status: "done",
+          name: "Graph checklist (TAILS)", short: "Graph check",
+          desc: "A line graph with a title, labelled axes, even intervals and a scale." },
+        { id: "cp_atoms", status: "done",
+          name: "Atoms quiz", short: "Atoms quiz",
+          desc: "Protons, neutrons, electrons: charge, location, and simple models." },
+        { id: "cp_bonding", status: "done",
+          name: "Bonding quick check", short: "Bonding check",
+          desc: "Element, molecule, compound; covalent, ionic and metallic bonding." },
+        { id: "cp_ph", status: "now",
+          name: "Acids & bases practical", short: "pH practical",
+          desc: "Test substances with an indicator and classify them by pH." }
+      ],
+      vocabSets: ["lab1", "lab2", "lab3", "lab4"],
+      skillGroups: [
+        { id: "lg_safe",   name: "In the laboratory",
+          skills: ["sc_safety", "sc_equipment", "sc_bunsen"] },
+        { id: "lg_data",   name: "Measuring & recording",
+          skills: ["sc_measure", "sc_graph", "sc_trend"] },
+        { id: "lg_matter", name: "What things are made of",
+          skills: ["sc_atom", "sc_bonding", "sc_mixtures", "sc_ph"] }
       ] },
     { id: "gen", name: "Genetics", page: "stem-genetics.html", term: "Term 4",
       open: false,
@@ -259,6 +290,72 @@
       vocab: ["correlation", "trend", "data"] },
 
     /* Genetics */
+    /* Lab & Matter · in the laboratory */
+    sc_safety: { name: "Work safely in a laboratory", unit: "lab", group: "lg_safe",
+      cont: "Science · Science inquiry", needs: "cp_bunsen",
+      bands: ["I can name the safety rules and the hazard symbols.",
+              "I can look at a situation and say what is unsafe about it.",
+              "I can say which rule applies and what to do instead."],
+      vocab: ["laboratory", "hazard", "risk", "safety glasses"] },
+    sc_equipment: { name: "Name the equipment and say what it is for", unit: "lab", group: "lg_safe",
+      cont: "Science · Science inquiry", needs: "cp_bunsen",
+      bands: ["I can name the common pieces of equipment.",
+              "I can say what each one is used for, in a full sentence.",
+              "I can choose the right tool for a job and say why."],
+      vocab: ["beaker", "measuring cylinder", "test tube", "thermometer", "tongs"] },
+    sc_bunsen: { name: "Light and use a Bunsen burner", unit: "lab", group: "lg_safe",
+      cont: "Science · Science inquiry", needs: "cp_bunsen",
+      bands: ["I know the parts of the burner and the two flames.",
+              "I can put the lighting steps in the right order.",
+              "I can say which flame to use for a job, and why the safety flame comes first."],
+      vocab: ["collar", "air hole", "safety flame", "heating flame"] },
+
+    /* Lab & Matter · measuring & recording */
+    sc_measure: { name: "Read a scale and record with units", unit: "lab", group: "lg_data",
+      cont: "Science · Measurement · Maths · Number", needs: "cp_heat",
+      bands: ["I can read a scale to the nearest marked line.",
+              "I can read between the lines and always write the unit.",
+              "I can say how precise my reading is and why."],
+      vocab: ["temperature", "degrees Celsius", "time interval", "data"] },
+    sc_graph: { name: "Build a line graph that passes TAILS", unit: "lab", group: "lg_data",
+      cont: "Science · Science inquiry · Maths · Statistics", needs: "cp_graph",
+      bands: ["I know what T, A, I, L and S each stand for.",
+              "I can find which part of TAILS a graph is missing.",
+              "I can decide which variable belongs on which axis, and why."],
+      vocab: ["line graph", "horizontal axis", "vertical axis", "scale"] },
+    sc_trend: { name: "Describe a trend and spot an anomaly", unit: "lab", group: "lg_data",
+      cont: "Science · Science inquiry", needs: "cp_graph",
+      bands: ["I can say whether the data went up, went down or stayed the same.",
+              "I can write the trend in a full sentence: as ___ increased, ___ ___.",
+              "I can pick out the anomaly and say what might have caused it."],
+      vocab: ["trend", "uncertainty", "anomaly", "variable"] },
+
+    /* Lab & Matter · what things are made of */
+    sc_atom: { name: "Protons, neutrons and electrons", unit: "lab", group: "lg_matter",
+      cont: "Science · Chemical sciences", needs: "cp_atoms",
+      bands: ["I can name the three particles and say where each one sits.",
+              "I can give the charge of each particle.",
+              "I can work out the particle counts for a neutral atom from its element."],
+      vocab: ["atom", "nucleus", "proton", "neutron", "electron"] },
+    sc_bonding: { name: "Elements, compounds and the bonds between them", unit: "lab", group: "lg_matter",
+      cont: "Science · Chemical sciences", needs: "cp_bonding",
+      bands: ["I can tell an element from a compound.",
+              "I can tell a molecule from a lattice, and name the three kinds of bond.",
+              "I can say what happens to the electrons in each kind of bond."],
+      vocab: ["element", "molecule", "compound", "bond", "covalent bond", "ionic bond"] },
+    sc_mixtures: { name: "Mixtures, solutions and solubility", unit: "lab", group: "lg_matter",
+      cont: "Science · Chemical sciences", needs: "cp_ph",
+      bands: ["I can tell a pure substance from a mixture.",
+              "I can name the solute and the solvent in a solution.",
+              "I can predict whether something will dissolve and say what a suspension looks like."],
+      vocab: ["pure substance", "mixture", "solute", "solvent", "soluble", "insoluble", "suspension"] },
+    sc_ph: { name: "Acids, bases and the pH scale", unit: "lab", group: "lg_matter",
+      cont: "Science · Chemical sciences", needs: "cp_ph",
+      bands: ["I can say whether a pH number is acidic, neutral or basic.",
+              "I can match an indicator colour to a range on the scale.",
+              "I can link H\u207A with acids and OH\u207B with bases."],
+      vocab: ["acid", "base", "neutral", "pH", "indicator", "corrosive"] },
+
     b_dna: { name: "DNA and base pairing", unit: "gen", group: "gg_code",
       cont: "Science · Biological L10", needs: "cp_traits",
       bands: ["I can label a simple DNA diagram.",
@@ -378,6 +475,31 @@
               science: { skills: ["k_project"] } }
           ], project: "cp_keg" }
       ] },
+    lab: {
+      strands: [{ id: "words", label: "Words" }, { id: "maths", label: "Maths" }, { id: "science", label: "Science" }],
+      stages: [
+        { cols: [
+            { words: { sets: ["lab1"] }, maths: null,
+              science: { skills: ["sc_safety", "sc_equipment", "sc_bunsen"] } }
+          ], project: "cp_bunsen" },
+        { cols: [
+            { words: null, maths: { label: "reading a scale", skills: ["sc_measure"] }, science: null }
+          ], project: "cp_heat" },
+        { cols: [
+            { words: { sets: ["lab2"] }, maths: { label: "plotting", skills: ["sc_graph"] },
+              science: { skills: ["sc_trend"] } }
+          ], project: "cp_graph" },
+        { cols: [
+            { words: { sets: ["lab3"] }, maths: null, science: { skills: ["sc_atom"] } }
+          ], project: "cp_atoms" },
+        { cols: [
+            { words: null, maths: null, science: { skills: ["sc_bonding"] } }
+          ], project: "cp_bonding" },
+        { cols: [
+            { words: { sets: ["lab4"] }, maths: null,
+              science: { skills: ["sc_mixtures", "sc_ph"] } }
+          ], project: "cp_ph" }
+      ] },
     gen: {
       strands: [{ id: "words", label: "Words" }, { id: "maths", label: "Maths" }, { id: "science", label: "Science" }],
       stages: [
@@ -422,9 +544,17 @@
   var UNIT_BY_ID = {}; UNITS.forEach(function (u) { UNIT_BY_ID[u.id] = u; });
 
   function unitOpen(u) { return !!u && (u.always || u.open !== false); }
-  function currentUnit() {
+  /* More than one unit runs at a time — Kinematics and Lab & Matter share a
+     term. currentUnits() is the honest answer; currentUnit() is the single one
+     a page needs when it can only show one. */
+  function currentUnits() {
+    var now = UNITS.filter(function (u) { return !u.always && u.now && unitOpen(u); });
+    if (now.length) return now;
     var timed = UNITS.filter(function (u) { return !u.always && unitOpen(u); });
-    return timed[timed.length - 1] || UNITS.filter(function (u) { return !u.always; })[0];
+    return timed.length ? [timed[timed.length - 1]] : [];
+  }
+  function currentUnit() {
+    return currentUnits()[0] || UNITS.filter(function (u) { return !u.always; })[0];
   }
   /* the task the unit is working towards: the one marked "now", else the first
      one not yet done. Order in the array IS the order of the unit. */
@@ -541,10 +671,13 @@
   }
 
   /* which room a skill belongs to: maths | science (drives the page aesthetic) */
+  /* which row of the project map a skill group sits in. lg_data is maths on
+     purpose: reading a scale and building a graph is maths done in a lab coat. */
   var STRAND = { kg_lines: "maths", kg_data: "science", kg_motion: "science",
-                 f_fluency: "maths", f_units: "maths",
+                 kg_quad: "maths", f_fluency: "maths", f_units: "maths",
                  gg_code: "science", gg_inherit: "science", gg_prob: "maths",
-                 pg_claims: "science" };
+                 pg_claims: "science",
+                 lg_safe: "science", lg_data: "maths", lg_matter: "science" };
   function strandOf(skillId) {
     var sk = SKILLS[skillId];
     return sk ? (STRAND[sk.group] || "maths") : "maths";
@@ -563,7 +696,8 @@
 
   window.STEM2 = {
     UNITS: UNITS, UNIT_BY_ID: UNIT_BY_ID, SKILLS: SKILLS, MAPS: MAPS,
-    currentUnit: currentUnit, nextCheckpoint: nextCheckpoint, cellState: cellState,
+    currentUnit: currentUnit, currentUnits: currentUnits,
+    nextCheckpoint: nextCheckpoint, cellState: cellState,
     setLocation: setLocation, strandOf: strandOf, unitOpen: unitOpen,
     Mastery: Mastery, Store: Store, setCounts: setCounts,
     cpDone: cpDone, cpNow: cpNow, cpWhen: cpWhen, esc: esc

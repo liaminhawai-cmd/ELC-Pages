@@ -182,11 +182,12 @@
   }
 
   function paintShelf(){
-    var cur = STEM2.currentUnit();
+    var curIds = STEM2.currentUnits().map(function(u){ return u.id; });
     var h = "";
     STEM2.UNITS.forEach(function(u){
       var counts = STEM2.Mastery.unitCounts(u.id);
-      var isNow = u.id === cur.id;
+      /* more than one unit can be running: the shelf says so */
+      var isNow = curIds.indexOf(u.id) !== -1;
       var opensLater = !STEM2.unitOpen(u);
       var cls = "row" + (isNow ? " now" : "") + (opensLater ? " closed" : "");
       var pct = counts.total ? Math.round(100*counts.done/counts.total) : 0;

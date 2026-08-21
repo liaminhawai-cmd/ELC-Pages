@@ -83,8 +83,11 @@
     ".pm-wrap{overflow-x:auto;overflow-y:hidden;max-width:100%;padding-bottom:6px}" +
     ".pm{display:grid;gap:6px;align-items:stretch;min-width:560px}" +
     /* the strand name stays put while the road scrolls under it */
+    /* the negative margins let the label's paper cover the grid gaps too,
+       so nothing shows through beside it while the road scrolls under */
     ".pm .pm-strand{font-size:.68rem;letter-spacing:.06em;color:var(--faint,#9aa0a5);" +
-      "display:flex;align-items:center;padding-right:8px;white-space:nowrap;" +
+      "display:flex;align-items:center;white-space:nowrap;" +
+      "margin:-3px -6px -3px 0;padding-right:14px;" +
       "position:sticky;left:0;z-index:2;background:var(--paper,#fcfcfa)}" +
     ".pm-band{display:grid;grid-auto-rows:1fr;gap:5px;min-width:0}" +
     ".pm-cell{border:1px solid var(--hair,#e6e7e3);border-radius:8px;padding:7px 9px;min-width:0;" +
@@ -117,7 +120,7 @@
     /* ---- large: the whole-unit view on stem-map.html ---- */
     ".pm-lg{gap:10px}" +
     ".pm-lg .pm-strand{font-size:.78rem;letter-spacing:.11em;font-weight:700;" +
-      "color:var(--muted,#767b7f);padding-right:14px}" +
+      "color:var(--muted,#767b7f);margin:-5px -10px -5px 0;padding-right:24px}" +
     ".pm-lg .pm-band{gap:9px}" +
     ".pm-lg .pm-cell{padding:11px 13px;border-radius:10px;font-size:.78rem}" +
     ".pm-lg .pm-cell .hd{display:flex;justify-content:space-between;align-items:baseline;gap:10px;" +
