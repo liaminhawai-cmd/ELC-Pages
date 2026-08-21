@@ -124,7 +124,7 @@
     ".pm-lg .pm-band{gap:9px}" +
     ".pm-lg .pm-cell{padding:11px 13px;border-radius:10px;font-size:.78rem}" +
     ".pm-lg .pm-cell .hd{display:flex;justify-content:space-between;align-items:baseline;gap:10px;" +
-      "text-decoration:none;color:inherit;min-height:30px}" +
+      "text-decoration:none;color:inherit;min-height:34px}" +
     ".pm-lg .pm-cell .t{font-family:Georgia,'Times New Roman',serif;font-size:.98rem;color:var(--ink,#212427)}" +
     ".pm-lg .pm-cell.soon .t{color:var(--faint,#9aa0a5)}" +
     ".pm-lg .pm-cell .n{font-size:.9rem;font-variant-numeric:tabular-nums}" +
@@ -134,7 +134,13 @@
     ".pm-lg .pm-cell .bar{height:4px;margin-top:8px}" +
     ".pm-lg .pm-cell .bar i{height:4px}" +
     ".pm-lg .items{margin-top:9px;border-top:1px solid var(--hair,#e6e7e3);padding-top:5px}" +
-    ".pm-lg .it{display:flex;gap:8px;align-items:flex-start;font-size:.76rem;line-height:1.35;" +
+    /* TAP TARGETS. Every control in the hub is 44px except these grid rows,
+       which are 34. The map's whole purpose is seeing a unit's road at once,
+       and 25 rows at 44px would add roughly 400px of scroll to the one page
+       that must not need scrolling. 34px clears WCAG 2.5.8 AA (24px) with
+       room to spare, and the rows are separated rather than butted together.
+       If the teacher finds it fiddly on a real phone, raise it here. */
+    ".pm-lg .it{display:flex;gap:8px;align-items:center;min-height:34px;font-size:.76rem;line-height:1.35;" +
       "color:var(--muted,#767b7f);text-decoration:none;padding:6px 5px;border-radius:6px}" +
     ".pm-lg a.it:hover{background:var(--accent-soft,#f4f9f8);color:var(--ink,#212427)}" +
     ".pm-lg .it .mk{flex:0 0 auto;width:12px;color:var(--faint,#9aa0a5)}" +

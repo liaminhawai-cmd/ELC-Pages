@@ -51,9 +51,10 @@
   .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px;
          flex-wrap:wrap; margin-bottom:26px; }
-  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
+           display:inline-flex; align-items:center; min-height:44px; }
   .top a:hover { text-decoration:underline; }
-  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:34px;
+  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:44px;
     border-radius:8px; border:1px solid var(--hair); background:var(--paper); color:var(--ink); }
   .masthead { margin:4px 0 20px; }
   .masthead h1 { margin:0 0 6px; font-family:Georgia,"Times New Roman",serif; font-size:1.9rem;
@@ -67,7 +68,7 @@
   footer { margin-top:34px; border-top:1px solid var(--hair); padding-top:14px;
            font-size:.78rem; color:var(--faint); }
   .teacherline { margin:10px 0 0; font-size:.76rem; }
-  .teacherline a { color:var(--faint); }
+  .teacherline a { color:var(--faint); display:inline-flex; align-items:center; min-height:44px; display:inline-flex; align-items:center; min-height:44px; }
   [data-v] { border-bottom:1px dotted var(--accent); cursor:help; }
   .sim-live { font-variant-numeric:tabular-nums; font-size:.82rem; color:var(--muted); }
 </style>
@@ -102,12 +103,12 @@
   <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: open every step</a></p>
 </div>
 
-<script src="stem-vocab-data.js?v=20260821-4"></script>
-<script src="stem-shared.js?v=20260821-4"></script>
-<script src="stem-vocab.js?v=20260821-4"></script>
-<script src="stem-gloss.js?v=20260821-4"></script>
-<script src="stem-translate.js?v=20260821-5"></script>
-<script src="stem-sim.js?v=20260821-4"></script>
+<script src="stem-vocab-data.js?v=v3"></script>
+<script src="stem-shared.js?v=v3"></script>
+<script src="stem-vocab.js?v=v3"></script>
+<script src="stem-gloss.js?v=v3"></script>
+<script src="stem-translate.js?v=v3"></script>
+<script src="stem-sim.js?v=v3"></script>
 <script>
 (function () {
   "use strict";
@@ -232,13 +233,34 @@
   }
 
   /* ================================================================
+     UP THE SIDE — the y-axis, named under the figure instead of on it.
+     Every count on this page runs to three digits, and at 360px the
+     engine draws its rotated y-label straight through three-digit tick
+     numbers. The x-axis label sits under the graph and is safe, so the
+     y-axis is named in a line of its own below.
+     ================================================================ */
+  var UPSIDE = {
+    en: function(s){ return "Up the side: " + s + "."; },
+    "zh-Hans": function(s){ return "纵轴：" + s + "。"; },
+    "zh-Hant": function(s){ return "縱軸：" + s + "。"; },
+    vi: function(s){ return "Trục dọc: " + s + "."; }
+  };
+  var Y_PEOPLE = {en:"people who know", "zh-Hans":"知道的人数",
+                  "zh-Hant":"知道的人數", vi:"số người đã biết"};
+  function yNote(ctx, host, label){
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.L(UPSIDE)(SIM.L(label || Y_PEOPLE)))));
+  }
+
+  /* ================================================================
      BARS — the picture at the heart of Set B. One row per group: the
      bar is the whole group, the filled part is the number it happened
      to. In "count" mode the bars are scaled against the biggest group,
      so a bigger year draws a longer bar and a longer filled piece; in
      "share" mode every bar is the same length, so only the fraction
      shows. Same data, two pictures — which is the whole lesson.
-     bars(host, { rows:[{name,size,hit,color}], scale:"count"|"share" })
+     A row may carry its own `label` where "hit / size = %" would say
+     nothing — a plain before-and-after comparison, for instance.
+     bars(host, { rows:[{name,size,hit,color,label}], scale:"count"|"share" })
      ================================================================ */
   function bars(host, o){
     var W = Math.max(300, Math.min(720, Math.round(host.clientWidth ||
@@ -259,7 +281,8 @@
         "' font-size='11.5'>" + esc(SIM.L(r.name)) + "</text>");
       g.push("<text x='" + (W - pad) + "' y='" + (y + 12) + "' fill='" + ink +
         "' font-size='11.5' font-weight='600' text-anchor='end'>" +
-        esc(r.hit + " / " + r.size + " = " + num(pct, 1) + "%") + "</text>");
+        esc(r.label ? SIM.L(r.label) : (r.hit + " / " + r.size + " = " + num(pct, 1) + "%")) +
+        "</text>");
       g.push("<rect x='" + pad + "' y='" + (y + 20) + "' width='" + num(bw, 1) +
         "' height='16' rx='3' fill='" + hair + "'/>");
       g.push("<rect x='" + pad + "' y='" + (y + 20) + "' width='" + num(bw * frac, 1) +
@@ -305,6 +328,7 @@
       onFrame: function(t){ drawBar(t); }
     });
     host.appendChild(figG);
+    yNote(ctx, host);
     host.appendChild(goalBox);
 
     /* the whole school as one bar; the dot is how many know so far */
@@ -329,7 +353,8 @@
       SIM.plot(figG, {
         xMax: 3, yMax: SCHOOL.roll, xStep: 0.5, yStep: 100, height: 300,
         xLabel:{en:"days", "zh-Hans":"天数", "zh-Hant":"天數", vi:"số ngày"},
-        yLabel:{en:"people who know", "zh-Hans":"知道的人数", "zh-Hant":"知道的人數", vi:"số người đã biết"},
+        alt:{en:"people who know the rumour against days", "zh-Hans":"知道谣言的人数随天数变化",
+             "zh-Hant":"知道謠言的人數隨天數變化", vi:"số người biết tin đồn theo số ngày"},
         hlines:[{ y:SCHOOL.roll, label:{en:"the whole school", "zh-Hans":"全校",
           "zh-Hant":"全校", vi:"cả trường"} }],
         vlines:[{ x:1, label:T("dayF")(1) }, { x:2, label:T("dayF")(2) }],
@@ -397,12 +422,14 @@
       SIM.plot(figG, {
         xMax: 48, yMax: 240, xStep: 8, yStep: 20, height: 320,
         xLabel:{en:"hours", "zh-Hans":"小时", "zh-Hant":"小時", vi:"giờ"},
-        yLabel:{en:"people who know", "zh-Hans":"知道的人数", "zh-Hant":"知道的人數", vi:"số người đã biết"},
+        alt:{en:"people who know the rumour against hours", "zh-Hans":"知道谣言的人数随小时变化",
+             "zh-Hant":"知道謠言的人數隨小時變化", vi:"số người biết tin đồn theo giờ"},
         series:[{ fn:function(t){ return knowHour(state.s, state.k, HOURS[state.hi], t); },
                   color:C(WHO.rumour.ck) }]
       });
     }
     draw();
+    yNote(ctx, host);
     host.appendChild(ctx.el("p", "sim-note",
       esc(SIM.L({en:"The same rumour, hour by hour. Put the sliders back to 3 people, 1 each and 8 hours before you answer.",
                  "zh-Hans":"还是那则谣言，只是按小时看。作答前请把滑块调回 3 人、每人 1 人、8 小时。",
@@ -454,7 +481,8 @@
     SIM.plot(fig2, {
       xMax: 72, yMax: SCHOOL.roll, xStep: 12, yStep: 100, height: 280,
       xLabel:{en:"hours", "zh-Hans":"小时", "zh-Hant":"小時", vi:"giờ"},
-      yLabel:{en:"people who know", "zh-Hans":"知道的人数", "zh-Hant":"知道的人數", vi:"số người đã biết"},
+      alt:{en:"the rumour and the poster against hours", "zh-Hans":"谣言与海报随小时的对比",
+           "zh-Hant":"謠言與海報隨小時的對比", vi:"tin đồn và áp phích theo giờ"},
       series:[
         { fn:function(t){ return knowHour(SCHOOL.start, SCHOOL.tells, SCHOOL.hours, t); },
           color:C(WHO.rumour.ck) },
@@ -463,6 +491,7 @@
     });
     host.appendChild(keyRow([{c:C(WHO.rumour.ck), n:WHO.rumour.name},
                              {c:C(WHO.poster.ck), n:WHO.poster.name}]));
+    yNote(ctx, host);
     host.appendChild(ctx.el("p", "sim-note",
       esc(SIM.L({en:"The poster on the noticeboard is read by 60 new students every day. The rumour is told by everyone who knows it.",
                  "zh-Hans":"公告栏上的海报每天新增 60 个学生看到。谣言则由每个知道的人往外传。",
@@ -508,13 +537,12 @@
   }
 
   /* --- A3 PREDICT: say the number BEFORE the graph appears --- */
+  /* kind: which model · to: the day being asked for · ans: the answer ·
+     fn: the model itself, drawn only once the student has committed */
   var A3_CASES = [
-    { id:"double", from:96, at:5, to:7, ans:384, kind:"x2",
-      fn:function(d){ return 3 * Math.pow(2, d); } },
-    { id:"triple", from:40, at:3, to:5, ans:360, kind:"x3",
-      fn:function(d){ return 40 * Math.pow(3, d - 3); } },
-    { id:"flat", from:96, at:5, to:7, ans:156, kind:"add30",
-      fn:function(d){ return Math.max(0, 96 + 30 * (d - 5)); } }
+    { kind:"x2",    to:7, ans:384, fn:function(d){ return 3 * Math.pow(2, d); } },
+    { kind:"x3",    to:5, ans:360, fn:function(d){ return 40 * Math.pow(3, d - 3); } },
+    { kind:"add30", to:7, ans:156, fn:function(d){ return Math.max(0, 96 + 30 * (d - 5)); } }
   ];
   function a3(ctx){
     var host = ctx.host;
@@ -585,10 +613,12 @@
           SIM.plot(fig, {
             xMax: c.to, yMax: c.kind === "x3" ? 400 : 400, xStep: 1, yStep: 50, height: 240,
             xLabel:{en:"days", "zh-Hans":"天数", "zh-Hant":"天數", vi:"số ngày"},
-            yLabel:{en:"people", "zh-Hans":"人数", "zh-Hant":"人數", vi:"số người"},
+            alt:{en:"how the number grows day by day", "zh-Hans":"人数逐日增长的情况",
+                 "zh-Hant":"人數逐日成長的情況", vi:"số người tăng theo từng ngày"},
             series: series,
             marks:[{ x:c.to, y:c.ans, label: num(c.ans), color:C(WHO.rumour.ck) }]
           });
+          yNote(ctx, q.el, {en:"people", "zh-Hans":"人数", "zh-Hant":"人數", vi:"số người"});
           done++; times.push(info.ms);
           if (done === A3_CASES.length) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0) });
         }
@@ -618,7 +648,7 @@
         host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("showSim"))));
         SIM.plot(fig, {
           xMax: 4, yMax: 960, xStep: 1, yStep: 120, height: 280,
-          xLabel:"days", yLabel:"people who know",
+          xLabel:"days", alt:"the rumour and the poster against days",
           hlines:[{ y:960, label:"the whole school" }],
           series:[
             { fn:function(d){ return Math.min(6 * Math.pow(2, 2 * d), 960); }, color:C(WHO.rumour.ck) },
@@ -628,6 +658,7 @@
         });
         host.appendChild(keyRow([{c:C(WHO.rumour.ck), n:WHO.rumour.name},
                                  {c:C(WHO.poster.ck), n:WHO.poster.name}]));
+        yNote(ctx, host, "people who know");
         ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
       }
     }
@@ -724,12 +755,13 @@
      smaller share. Every misleading claim in step 5 is a version of
      that one trick.
      ================================================================ */
-  var SET_B = {
-    y9:  { size:100, believed:40 },     /* 40% */
-    y10: { size:240, believed:60 },     /* 25% */
-    together: 340,                      /* students in the two years  */
-    gap: 20                             /* more believers in Year 10  */
-  };
+  var SET_B = { y9:{ size:100, believed:40 },      /* 40% */
+                y10:{ size:240, believed:60 } };   /* 25% */
+  /* the two clues the goal gives, derived so they can never drift apart */
+  SET_B.together = SET_B.y9.size + SET_B.y10.size;              /* 340 students */
+  SET_B.gap = SET_B.y10.believed - SET_B.y9.believed;           /* 20 believers */
+  SET_B.p9 = 100 * SET_B.y9.believed / SET_B.y9.size;           /* 40 %         */
+  SET_B.p10 = 100 * SET_B.y10.believed / SET_B.y10.size;        /* 25 %         */
   /* Step 2's table: Years 8 and 9 share a count and differ in share */
   var B2_TABLE = [ { y:7, n:160, h:40 }, { y:8, n:150, h:60 },
                    { y:9, n:240, h:60 }, { y:10, n:250, h:80 } ];
@@ -801,8 +833,8 @@
                    : esc(SIM.L(B1HEAD)(SIM.L(win.name), SIM.L(lose.name), wn, ln))) + "</i>";
 
       var p9 = pc(state.b9, state.n9), p10 = pc(state.b10, state.n10);
-      var g1 = Math.abs(p9 - 40) < 0.05;
-      var g2 = Math.abs(p10 - 25) < 0.05;
+      var g1 = Math.abs(p9 - SET_B.p9) < 0.05;
+      var g2 = Math.abs(p10 - SET_B.p10) < 0.05;
       var g3 = (state.n9 + state.n10 === SET_B.together) && (state.b10 - state.b9 === SET_B.gap);
       goalBox.innerHTML =
         "<span>" + (g1 ? "✓" : "○") + " " + esc(SIM.L(B1G1)) + "</span><br>" +
@@ -1021,9 +1053,18 @@
           q2.el.appendChild(fig2);
           bars(fig2, { scale:"count", rows:[
             { name:{en:"before", "zh-Hans":"之前", "zh-Hant":"之前", vi:"trước"},
-              size:20, hit:20, color:C(WHO.y9.ck) },
+              size:20, hit:20, color:C(WHO.y9.ck),
+              label:{en:"20 students", "zh-Hans":"20 人", "zh-Hant":"20 人", vi:"20 học sinh"} },
             { name:{en:"after", "zh-Hans":"之后", "zh-Hant":"之後", vi:"sau"},
-              size:25, hit:25, color:C(WHO.y10.ck) }] });
+              size:25, hit:25, color:C(WHO.y10.ck),
+              label:{en:"25 students", "zh-Hans":"25 人", "zh-Hant":"25 人", vi:"25 học sinh"} }],
+            alt:{en:"the number before and after", "zh-Hans":"变化前后的人数",
+                 "zh-Hant":"變化前後的人數", vi:"số người trước và sau"} });
+          q2.el.appendChild(ctx.el("p", "sim-note",
+            esc(SIM.L({en:"The extra piece is 5 students, and 5 is a quarter of the 20 it started from.",
+                       "zh-Hans":"多出来的那一段是 5 人，而 5 是起点 20 的四分之一。",
+                       "zh-Hant":"多出來的那一段是 5 人，而 5 是起點 20 的四分之一。",
+                       vi:"Phần thêm ra là 5 học sinh, và 5 là một phần tư của 20 ban đầu."}))));
         }
         tick(ok, info);
       } });

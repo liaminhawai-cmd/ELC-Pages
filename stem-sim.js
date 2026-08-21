@@ -70,6 +70,9 @@
     if (s.indexOf(".") > -1) s = s.replace(/0+$/, "").replace(/\.$/, "");
     return s;
   }
+  /* num() strips trailing zeros, which is right for "12 km" and wrong for a
+     stopwatch: a fall of exactly one second must read 1.00 s, not 1 s. */
+  function fix(v, dp) { return isFinite(v) ? Number(v).toFixed(dp == null ? 2 : dp) : "—"; }
   function pageLang() {
     var l = "en";
     try { l = localStorage.getItem("elc_page_language") || "en"; } catch (e) {}
@@ -173,7 +176,7 @@
     ".sim-setbar{display:flex;flex-wrap:wrap;gap:.4rem;align-items:baseline;margin:0 0 .5rem}",
     ".sim-setbar b{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);font-weight:600}",
     ".sim-setbtn{appearance:none;background:none;border:1px solid var(--hair);border-radius:999px;font:inherit;",
-      "font-size:.8rem;color:var(--muted);padding:.3rem .8rem;min-height:34px;cursor:pointer}",
+      "font-size:.8rem;color:var(--muted);padding:.5rem .9rem;min-height:44px;cursor:pointer}",
     ".sim-setbtn.on{border-color:var(--accent);color:var(--accent);font-weight:600}",
     ".sim-aim{margin:0 0 .9rem;padding:0 0 0 .8rem;border-left:2px solid var(--accent)}",
     ".sim-aim .k{display:block;font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);margin-bottom:.15rem}",
@@ -184,7 +187,7 @@
     ".sim-sl label{display:flex;justify-content:space-between;align-items:baseline;gap:.5rem;",
       "font-size:.82rem;color:var(--muted);margin-bottom:.15rem}",
     ".sim-sl label b{color:var(--ink);font-variant-numeric:tabular-nums;font-weight:600}",
-    ".sim-sl input[type=range]{width:100%;min-height:34px;accent-color:var(--accent);cursor:pointer}",
+    ".sim-sl input[type=range]{width:100%;min-height:44px;accent-color:var(--accent);cursor:pointer}",
     ".sim-sl.lock input[type=range]{opacity:.45;pointer-events:none}",
     ".sim-fig{margin:.9rem 0}",
     ".sim-fig svg{display:block;width:100%;height:auto;overflow:visible}",
@@ -195,7 +198,7 @@
       "border:1px solid var(--accent);border-radius:8px;padding:.5rem 1rem;min-height:44px;cursor:pointer}",
     ".sim-btn.ghost{background:none;color:var(--accent)}",
     ".sim-btn[disabled]{opacity:.45;cursor:not-allowed}",
-    ".sim-scrub{flex:1 1 160px;min-width:140px;min-height:34px;accent-color:var(--accent)}",
+    ".sim-scrub{flex:1 1 160px;min-width:140px;min-height:44px;accent-color:var(--accent)}",
     ".sim-clock{font-variant-numeric:tabular-nums;font-size:.86rem;color:var(--muted);min-width:5.5em}",
     ".sim-q{border-top:1px solid var(--hair);padding-top:.9rem;margin-top:.9rem}",
     ".sim-q:first-child{border-top:0;padding-top:0;margin-top:0}",
@@ -219,7 +222,7 @@
     ".sim-fb.no{color:var(--alert)}",
     ".sim-help{margin:.5rem 0 0;display:flex;gap:1rem;flex-wrap:wrap}",
     ".sim-help button{appearance:none;background:none;border:0;font:inherit;font-size:.82rem;",
-      "color:var(--muted);text-decoration:underline;text-underline-offset:3px;padding:.3rem 0;min-height:34px;cursor:pointer}",
+      "color:var(--muted);text-decoration:underline;text-underline-offset:3px;padding:.6rem 0;min-height:44px;cursor:pointer}",
     ".sim-help-body{font-size:.88rem;color:var(--muted);border-left:2px solid var(--hair);padding-left:.8rem;margin:.5rem 0 0}",
     ".sim-help-body p{margin:0 0 .4rem}",
     ".sim-foot{border-top:1px solid var(--hair);margin-top:1.2rem;padding-top:.9rem;",
@@ -265,7 +268,17 @@
       return clamp(Math.round(w), 300, 720);
     }
     var W = measure(), H = o.height || 340;
-    var P = { l: W < 420 ? 38 : 52, r: 14, t: 14, b: 40 };
+    /* the y gutter has to hold the widest tick number AND the rotated axis
+       label. A fixed 38px was fine for "6 km" and collided with "900". */
+    function gutter(o) {
+      var yMin = o.yMin || 0, ys = o.yStep || 0, wide = 0, v;
+      if (!ys) ys = (o.yMax - yMin) / 6;
+      for (v = Math.ceil(yMin / ys) * ys; v <= o.yMax + 1e-9; v += ys) {
+        wide = Math.max(wide, String(num(v)).length);
+      }
+      return (o.yLabel ? 16 : 0) + 12 + wide * 6.5;
+    }
+    var P = { l: Math.max(W < 420 ? 30 : 40, gutter(o)), r: 14, t: 14, b: 40 };
 
     function build(o) {
       var xMin = o.xMin || 0, yMin = o.yMin || 0;
@@ -301,7 +314,7 @@
         "' stroke='" + muted + "' stroke-width='1.4'/>");
       if (o.xLabel) g.push("<text x='" + (P.l + pw / 2) + "' y='" + (H - 6) + "' fill='" + muted +
         "' font-size='12' text-anchor='middle'>" + esc(L(o.xLabel)) + "</text>");
-      if (o.yLabel) g.push("<text transform='translate(13," + (P.t + ph / 2) + ") rotate(-90)' fill='" + muted +
+      if (o.yLabel) g.push("<text transform='translate(11," + (P.t + ph / 2) + ") rotate(-90)' fill='" + muted +
         "' font-size='12' text-anchor='middle'>" + esc(L(o.yLabel)) + "</text>");
 
       /* reference lines */
@@ -382,7 +395,7 @@
     return {
       update: function (next) {
         o = next || o;
-        W = measure(); P.l = W < 420 ? 38 : 52;
+        W = measure(); P.l = Math.max(W < 420 ? 30 : 40, gutter(o));
         host.innerHTML = build(o);
       },
       opts: function () { return o; }
@@ -684,9 +697,11 @@
       } else {
         inputs.forEach(function (o) {
           var ok;
+          /* a written answer may carry BOTH a list of accepted strings and a
+             check() fallback, so a long answer is not brittle: either passes */
           if (o.d.text) ok = o.d.text.some(function (a) { return normText(a) === normText(o.inp.value); });
-          else if (o.d.check) ok = !!o.d.check(o.inp.value);
-          else ok = near(parseNum(o.inp.value), o.d.answer, o.d.tol);
+          if (!ok && o.d.check) ok = !!o.d.check(o.inp.value);
+          if (!ok && !o.d.text && !o.d.check) ok = near(parseNum(o.inp.value), o.d.answer, o.d.tol);
           o.inp.classList.remove("right", "wrong");
           o.inp.classList.add(ok ? "right" : "wrong");
           if (!ok) allOk = false;
@@ -905,8 +920,12 @@
         if (window.console) console.error("[stem-sim]", cfg.id, st.id, e);
       }
 
-      /* new nodes need the tap-to-translate pass run over them */
+      /* A repainted panel is all new nodes, so BOTH word layers have to be
+         run over it again — the tap-to-translate helper words and the
+         notebook's own data-v words. Without the second call every stage
+         after the first had inert vocabulary. */
       if (window.STEMTAP && window.STEMTAP.decorate) window.STEMTAP.decorate(panel);
+      if (window.STEMVOCAB && window.STEMVOCAB.decorate) window.STEMVOCAB.decorate(panel);
     }
 
     function paintAll() { paintSets(); paintTabs(); paintPanel(); }
@@ -933,8 +952,8 @@
   window.STEMSIM = {
     mount: mount,
     plot: plot, track: track, anim: anim, sliders: sliders, ask: ask,
-    num: num, esc: esc, L: L, T: T, cvar: cvar, parseNum: parseNum, near: near,
-    reduceMotion: reduceMotion,
+    num: num, fix: fix, esc: esc, L: L, T: T, cvar: cvar, clamp: clamp,
+    parseNum: parseNum, near: near, reduceMotion: reduceMotion,
     /* the mover colours every sim shares, so a bike is the same colour everywhere */
     colors: function () {
       return {

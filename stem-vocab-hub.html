@@ -38,7 +38,7 @@
   .wrap { max-width:960px; margin:0 auto; padding:34px 22px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
-           display:inline-flex; align-items:center; min-height:34px; }
+           display:inline-flex; align-items:center; min-height:44px; }
   .top a:hover { text-decoration:underline; }
   select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
     background:var(--paper); color:var(--ink); padding:5px 8px; min-height:44px; }
@@ -96,7 +96,7 @@
 
   /* ---------- morpheme chips ---------- */
   .chip { display:inline-flex; flex-direction:column; justify-content:center; align-items:flex-start;
-    border:0; border-radius:8px; padding:6px 10px; font:inherit; text-align:left; min-height:34px;
+    border:0; border-radius:8px; padding:6px 10px; font:inherit; text-align:left; min-height:44px;
     background:var(--hair); color:var(--ink); }
   .chip b { font-weight:600; font-size:.88rem; }
   .chip small { font-size:.67rem; opacity:.85; line-height:1.3; }
@@ -257,7 +257,7 @@
     .wctl select { max-width:170px; }
   }
 </style>
-<link rel="stylesheet" href="stem-theme.css?v=20260821-3">
+<link rel="stylesheet" href="stem-theme.css?v=v3">
 </head>
 <body data-room="vocab">
 <div class="wrap">
@@ -307,10 +307,10 @@
   <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
 </div>
 
-<script src="stem-vocab-data.js?v=20260821-2"></script>
-<script src="stem-shared.js?v=20260821-2"></script>
-<script src="stem-gloss.js?v=20260821-3"></script>
-<script src="stem-translate.js?v=20260821-5"></script>
+<script src="stem-vocab-data.js?v=v3"></script>
+<script src="stem-shared.js?v=v3"></script>
+<script src="stem-gloss.js?v=v3"></script>
+<script src="stem-translate.js?v=v3"></script>
 <script>
 (function(){
   "use strict";
@@ -532,9 +532,30 @@
   var UNITS = S2.UNITS.filter(function(u){ return u.vocabSets && u.vocabSets.length; });
   var UNIT_OF_SET = {};
   UNITS.forEach(function(u){ u.vocabSets.forEach(function(id){ if (!UNIT_OF_SET[id]) UNIT_OF_SET[id] = u; }); });
+  /* WORD_HOME: where a repeated word is really learned. First-in-file was
+     wrong across units — "solution" sent a chemistry student to the maths
+     sense in the revision set, and "nucleus" sent them to the cell nucleus
+     in biology. A word's home is now resolved WITHIN the unit being read
+     first, and only falls back to first-in-file for a word that genuinely
+     appears nowhere else in this unit. */
   var WORD_HOME = {};
   D.sets.forEach(function(s){ s.words.forEach(function(w){
     var k = w.w.toLowerCase(); if (!WORD_HOME[k]) WORD_HOME[k] = s.id; }); });
+  /* the same map, but scoped to one unit */
+  function homeInUnit(word, unit){
+    if (!unit) return null;
+    var k = word.toLowerCase(), found = null;
+    (unit.vocabSets || []).forEach(function(sid){
+      if (found) return;
+      var set = null;
+      D.sets.forEach(function(s){ if (s.id === sid) set = s; });
+      if (!set) return;
+      for (var i = 0; i < set.words.length; i++) {
+        if (set.words[i].w.toLowerCase() === k) { found = sid; return; }
+      }
+    });
+    return found;
+  }
 
   var el = {
     home: document.getElementById("home"), setview: document.getElementById("setview"),
@@ -708,7 +729,10 @@
   function homeNote(w){
     var st = wState(w.w);
     if (st && st.built) return "";
-    var home = WORD_HOME[key(w.w)];
+    /* prefer a set inside this unit — a word can mean different things in
+       two subjects, and pointing out of the unit teaches the wrong one */
+    var unit = UNIT_OF_SET[cur.set.id];
+    var home = homeInUnit(w.w, unit) || WORD_HOME[key(w.w)];
     if (!home || home === cur.set.id) return "";
     var loc = S2.setLocation(home);
     if (!loc) return "";

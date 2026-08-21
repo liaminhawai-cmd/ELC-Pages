@@ -44,9 +44,9 @@
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px;
          flex-wrap:wrap; margin-bottom:26px; }
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
-           display:inline-flex; align-items:center; min-height:34px; }
+           display:inline-flex; align-items:center; min-height:44px; }
   .top a:hover { text-decoration:underline; }
-  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:34px;
+  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:44px;
     border-radius:8px; border:1px solid var(--hair); background:var(--paper); color:var(--ink); }
   .masthead { margin:4px 0 20px; }
   .masthead h1 { margin:0 0 6px; font-family:Georgia,"Times New Roman",serif; font-size:1.9rem;
@@ -60,11 +60,11 @@
   footer { margin-top:34px; border-top:1px solid var(--hair); padding-top:14px;
            font-size:.78rem; color:var(--faint); }
   .teacherline { margin:10px 0 0; font-size:.76rem; }
-  .teacherline a { color:var(--faint); }
+  .teacherline a { color:var(--faint); display:inline-flex; align-items:center; min-height:44px; }
   [data-v] { border-bottom:1px dotted var(--accent); cursor:help; }
   .sim-live { font-variant-numeric:tabular-nums; font-size:.82rem; color:var(--muted); }
 </style>
-<link rel="stylesheet" href="stem-theme.css?v=20260821-4">
+<link rel="stylesheet" href="stem-theme.css?v=v3">
 </head>
 <body data-room="maths">
 <div class="wrap">
@@ -96,12 +96,12 @@
   <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: open every step</a></p>
 </div>
 
-<script src="stem-vocab-data.js?v=20260821-4"></script>
-<script src="stem-shared.js?v=20260821-4"></script>
-<script src="stem-vocab.js?v=20260821-4"></script>
-<script src="stem-gloss.js?v=20260821-4"></script>
-<script src="stem-translate.js?v=20260821-5"></script>
-<script src="stem-sim.js?v=20260821-4"></script>
+<script src="stem-vocab-data.js?v=v3"></script>
+<script src="stem-shared.js?v=v3"></script>
+<script src="stem-vocab.js?v=v3"></script>
+<script src="stem-gloss.js?v=v3"></script>
+<script src="stem-translate.js?v=v3"></script>
+<script src="stem-sim.js?v=v3"></script>
 <script>
 (function () {
   "use strict";
@@ -884,7 +884,7 @@
       "<p class='qp'><b>Ashwood to Central.</b> The 7:42 train travels the <b>30 km</b> from Ashwood to " +
       "Central at a top speed of <b>60 km/h</b>. It calls at <b>4</b> stations on the way and stands at " +
       "each one for <b>2 minutes 30 seconds</b>. A bus leaves Ashwood at <b>7:30</b> and covers the same " +
-      "30 km at an <span data-v='average'>average</span> speed of <b>36 km/h</b> without stopping.</p>";
+      "30 km at an average speed of <b>36 km/h</b> without stopping.</p>";
     host.appendChild(story);
     var qs = ctx.el("div"); host.appendChild(qs);
     var ok = 0, clean = 0, of = 5, times = [];
@@ -975,7 +975,7 @@
     { id:"b1", kind:"play", tab:{en:"Play","zh-Hans":"先玩","zh-Hant":"先玩",vi:"Chơi thử"},
       title:{en:"Add the stops and watch the average fall", "zh-Hans":"加上停靠，看平均速度掉下来",
              "zh-Hant":"加上停靠，看平均速度掉下來", vi:"Thêm điểm dừng và xem tốc độ trung bình tụt xuống"},
-      aim:{en:"A flat step is time passing with no distance gained. Top speed and <span data-v=\"average\">average</span> speed are not the same thing.",
+      aim:{en:"A flat step is time passing with no distance gained. Top speed and average speed are not the same thing.",
            "zh-Hans":"水平段就是时间在走、距离没变。最高速度和<span data-v=\"average\">平均</span>速度不是一回事。",
            "zh-Hant":"水平段就是時間在走、距離沒變。最高速度和<span data-v=\"average\">平均</span>速度不是一回事。",
            vi:"Đoạn nằm ngang là thời gian trôi mà không đi thêm được mét nào. Tốc độ tối đa và tốc độ <span data-v=\"average\">trung bình</span> không phải một."},

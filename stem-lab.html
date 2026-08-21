@@ -42,7 +42,8 @@
          font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
   .wrap { max-width:960px; margin:0 auto; padding:34px 22px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
-  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
+           display:inline-flex; align-items:center; min-height:44px; }
   .top a:hover { text-decoration:underline; }
   .top { flex-wrap:wrap; }
   .topnav { display:flex; align-items:center; gap:16px; flex-wrap:wrap; }
@@ -89,7 +90,7 @@
       position:sticky; top:16px; max-height:calc(100vh - 32px); overflow-y:auto; }
     .rail-sec { min-width:0; }
     .rail-sec + .rail-sec .rail-h { margin-top:16px; }
-    .ritem { min-height:34px; padding:4px 0; }
+    .ritem { min-height:44px; padding:4px 0; }
   }
 
   /* ---- main sections: a 1px ink rule opens each ---- */
@@ -182,7 +183,7 @@
   .note { margin-top:26px; font-size:.72rem; color:var(--faint); }
   footer { margin-top:8px; color:var(--faint); font-size:.75rem; }
 </style>
-<link rel="stylesheet" href="stem-theme.css?v=20260821-3">
+<link rel="stylesheet" href="stem-theme.css?v=v3">
 </head>
 <body data-room="science">
 <div class="wrap">
@@ -291,19 +292,19 @@
   <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
 </div>
 
-<script src="stem-vocab-data.js?v=20260821-4"></script>
-<script src="stem-shared.js?v=20260821-2"></script>
-<script src="stem-vocab.js?v=20260821-2"></script>
+<script src="stem-vocab-data.js?v=v3"></script>
+<script src="stem-shared.js?v=v3"></script>
+<script src="stem-vocab.js?v=v3"></script>
 <!-- QBANK: the base bank, then this unit's generators. The page runs no
      questions itself — it reads QBANK.list() for one honest line in the
      skill fold-outs ("practice questions not loaded yet"), which removes
      itself the moment stem-questions-lab.js lands. Both are optional:
      with either file missing the line simply never prints. -->
-<script src="stem-questions.js?v=20260821-2"></script>
-<script src="stem-questions-lab.js?v=20260821-1"></script>
-<script src="stem-gloss.js?v=20260821-3"></script>
-<script src="stem-translate.js?v=20260821-5"></script>
-<script src="stem-map.js?v=20260821-4"></script>
+<script src="stem-questions.js?v=v3"></script>
+<script src="stem-questions-lab.js?v=v3"></script>
+<script src="stem-gloss.js?v=v3"></script>
+<script src="stem-translate.js?v=v3"></script>
+<script src="stem-map.js?v=v3"></script>
 <script>
 (function(){
   "use strict";
@@ -360,6 +361,9 @@
     { id:"solubility", title:"Solubility test — salt, sugar, sand, oil", short:"Solubility test",
       what:"Four substances, four beakers of water, one stir each. Which dissolve? Which sink? Which one turns the water cloudy instead of dissolving? Record the solute, the solvent and what you saw.",
       linkLabel:"Open the results sheet on Compass", school:"solubility" },
+    { id:"fishtank", title:"The Fish Tank", short:"The Fish Tank",
+      what:"The rehearsal for the acids and bases practical. Move the number and watch the indicator colour follow, then work out the dose: how many drops, how much lime, how many tablets. Ten steps, each handing more of the work to you.",
+      linkLabel:"Open the tank →", href:"stem-sim-ph.html" },
     { id:"indicator", title:"Indicator test — acids and bases", short:"Indicator test",
       what:"Add the indicator to each substance, write down the colour, then read the colour against the chart to place each one on the pH scale: acidic, neutral or basic. Safety glasses on, teacher in the room.",
       linkLabel:"Open the practical sheet on Compass", school:"indicator" }

@@ -52,9 +52,10 @@
   .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px;
          flex-wrap:wrap; margin-bottom:26px; }
-  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
+           display:inline-flex; align-items:center; min-height:44px; }
   .top a:hover { text-decoration:underline; }
-  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:34px;
+  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:44px;
     border-radius:8px; border:1px solid var(--hair); background:var(--paper); color:var(--ink); }
   .masthead { margin:4px 0 20px; }
   .masthead h1 { margin:0 0 6px; font-family:Georgia,"Times New Roman",serif; font-size:1.9rem;
@@ -68,7 +69,7 @@
   footer { margin-top:34px; border-top:1px solid var(--hair); padding-top:14px;
            font-size:.78rem; color:var(--faint); }
   .teacherline { margin:10px 0 0; font-size:.76rem; }
-  .teacherline a { color:var(--faint); }
+  .teacherline a { color:var(--faint); display:inline-flex; align-items:center; min-height:44px; }
   [data-v] { border-bottom:1px dotted var(--accent); cursor:help; }
   .sim-live { font-variant-numeric:tabular-nums; font-size:.82rem; color:var(--muted); }
 </style>
@@ -103,12 +104,12 @@
   <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: open every step</a></p>
 </div>
 
-<script src="stem-vocab-data.js?v=20260821-4"></script>
-<script src="stem-shared.js?v=20260821-4"></script>
-<script src="stem-vocab.js?v=20260821-4"></script>
-<script src="stem-gloss.js?v=20260821-4"></script>
-<script src="stem-translate.js?v=20260821-5"></script>
-<script src="stem-sim.js?v=20260821-4"></script>
+<script src="stem-vocab-data.js?v=v3"></script>
+<script src="stem-shared.js?v=v3"></script>
+<script src="stem-vocab.js?v=v3"></script>
+<script src="stem-gloss.js?v=v3"></script>
+<script src="stem-translate.js?v=v3"></script>
+<script src="stem-sim.js?v=v3"></script>
 <script>
 (function () {
   "use strict";
@@ -179,7 +180,10 @@
   var RES  = [ 2, -2,  3, -3, -3,  3, -2,  2];
   var WHO  = ["Mai", "Anh", "Hiro", "Amara", "Tom", "Layla", "Nadia", "Omar"];
   var PRINT = 26.5;              /* the print in the garden bed, in cm */
-  var SOFIA = { s: 31, name: "Sofia" };   /* the ninth person, in borrowed boots */
+  var SOFIA = { s: 31 };         /* the ninth person, in borrowed boots — Set B only */
+  /* the eight are named on the page so the dots stay people, not numbers */
+  var NAMEJOIN = {en:", ", "zh-Hans":"、", "zh-Hant":"、", vi:", "};
+  function squadNames(bundle){ return L(bundle).replace("NAMES", WHO.join(L(NAMEJOIN))); }
 
   /* the squad, with everyone's scatter multiplied by k (k = 1 is the real data) */
   function squad(k){
@@ -262,6 +266,10 @@
                "zh-Hans":"把差距平方和降到 55 cm² 以下。",
                "zh-Hant":"把差距平方和降到 55 cm² 以下。",
                vi:"Đưa tổng bình phương khoảng cách xuống dưới 55 cm²."};
+    var A1WHO = {en:"The eight, smallest shoe to largest: NAMES.",
+                 "zh-Hans":"这八个人，按鞋从小到大：NAMES。",
+                 "zh-Hant":"這八個人，按鞋從小到大：NAMES。",
+                 vi:"Tám bạn, từ giày nhỏ nhất đến lớn nhất: NAMES."};
     var A1NOTE = {en:"Each dashed stick is one person's gap from your line. The gaps are squared before they are added, so one big gap costs far more than two small ones.",
                   "zh-Hans":"每根虚线就是一个人与你这条线的差距。差距要先平方再相加，所以一个大差距的代价远大于两个小差距。",
                   "zh-Hant":"每根虛線就是一個人與你這條線的差距。差距要先平方再相加，所以一個大差距的代價遠大於兩個小差距。",
@@ -289,6 +297,7 @@
     host.appendChild(yCap(ctx));
     host.appendChild(fig);
     host.appendChild(keyRow([{c:C("a"),n:KEY.people},{c:C("b"),n:KEY.yourLine},{c:C("d"),n:KEY.gaps}]));
+    host.appendChild(ctx.el("p", "sim-note", esc(squadNames(A1WHO))));
     host.appendChild(live);
     host.appendChild(goalBox);
     host.appendChild(ctx.el("p", "sim-note", esc(L(A1NOTE))));
@@ -838,10 +847,10 @@
                    "zh-Hans":"Sofia 检查了鞋子，发现那双靴子是她哥哥的，大了两号。她自己的鞋是 24 厘米，不是 31 厘米——所以那条数据量的根本不是<i>她</i>。小组把她那一行从表格里删掉，重新拟合直线。",
                    "zh-Hant":"Sofia 檢查了鞋子，發現那雙靴子是她哥哥的，大了兩號。她自己的鞋是 24 公分，不是 31 公分——所以那筆資料量的根本不是<i>她</i>。小組把她那一列從試算表裡刪掉，重新配一次直線。",
                    vi:"Sofia kiểm tra lại giày và phát hiện đôi bốt là của anh trai, rộng hơn hai cỡ. Giày của chính bạn ấy dài 24 cm chứ không phải 31 cm — nên số đo đó chưa bao giờ là số đo của <i>bạn ấy</i>. Cả nhóm xóa dòng của bạn ấy khỏi bảng tính và khớp lại đường thẳng."};
-    var B3AFTER = {en:"With Sofia in, the same print predicted about 171 cm. Cleaning one wrong row moved the answer by five centimetres.",
-                   "zh-Hans":"有 Sofia 在时，同一个鞋印预测约 171 厘米。清掉一行错数据，答案就差了五厘米。",
-                   "zh-Hant":"有 Sofia 在時，同一個鞋印預測約 171 公分。清掉一列錯資料，答案就差了五公分。",
-                   vi:"Khi còn Sofia, chính dấu giày đó dự đoán khoảng 171 cm. Xóa một dòng sai đã làm đáp án lệch năm xăng-ti-mét."};
+    var B3AFTER = {en:"The upper ring is your cleaned answer, 176 cm. The lower ring is what the same print predicted while Sofia was still in the data: about 171 cm. Cleaning one wrong row moved the answer by five centimetres.",
+                   "zh-Hans":"上面那个圈是你清理后的答案，176 厘米。下面那个圈是 Sofia 还在数据里时，同一个鞋印的预测：约 171 厘米。清掉一行错数据，答案就差了五厘米。",
+                   "zh-Hant":"上面那個圈是你清理後的答案，176 公分。下面那個圈是 Sofia 還在資料裡時，同一個鞋印的預測：約 171 公分。清掉一列錯資料，答案就差了五公分。",
+                   vi:"Vòng tròn phía trên là đáp án đã làm sạch của em, 176 cm. Vòng tròn phía dưới là điều mà chính dấu giày đó dự đoán khi Sofia vẫn còn trong dữ liệu: khoảng 171 cm. Xóa một dòng sai đã làm đáp án lệch năm xăng-ti-mét."};
     host.appendChild(ctx.el("p", "sim-note", esc(L(B3NOTE))));
     var story = ctx.el("div", "sim-q");
     story.innerHTML = "<p class='qp'>" + L(B3STORY) + "</p>";
@@ -878,7 +887,7 @@
               dots([[SOFIA.s, 160]], C("c"))
             ]
           });
-          q1.el.appendChild(keyRow([{c:C("d"),n:KEY.withS},{c:C("b"),n:KEY.without}]));
+          q1.el.appendChild(keyRow([{c:C("d"),n:KEY.withS},{c:C("b"),n:KEY.without},{c:C("c"),n:KEY.sofia}]));
         }
         tick(ok, info);
       } });
@@ -925,14 +934,18 @@
             series:[
               { fn: function(s){ return withS.m * s + withS.c; }, color:C("d"), dash:"5 4" },
               { fn: trueLine, color:C("b") },
-              dots(squad(1), C("a"))
+              dots(squad(1), C("a")),
+              dots([[SOFIA.s, 160]], C("c"))
             ],
+            /* both predictions are marked, but only the cleaned one is labelled:
+               five centimetres apart on this axis is about twelve pixels, and two
+               labels that close sit on top of each other. The note says the other. */
             marks:[
-              { x:PRINT, y:176, label:"176 cm", color:C("b") },
-              { x:PRINT, y:Math.round(withS.m * PRINT + withS.c),
-                label: num(Math.round(withS.m * PRINT + withS.c)) + " cm", color:C("d") }
+              { x:PRINT, y:Math.round(withS.m * PRINT + withS.c), color:C("d") },
+              { x:PRINT, y:176, color:C("b") }
             ]
           });
+          q3.el.appendChild(keyRow([{c:C("d"),n:KEY.withS},{c:C("b"),n:KEY.without},{c:C("c"),n:KEY.sofia}]));
           q3.el.appendChild(ctx.el("p", "sim-note", esc(L(B3AFTER))));
         }
         tick(ok, info);

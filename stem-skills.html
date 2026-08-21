@@ -19,7 +19,7 @@
   .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
-           display:inline-flex; align-items:center; min-height:34px; }
+           display:inline-flex; align-items:center; min-height:44px; }
   .top a:hover { text-decoration:underline; }
   select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
     background:var(--paper); color:var(--ink); padding:5px 8px; min-height:44px; }
@@ -148,7 +148,7 @@
   .picklist { margin:2px 0 8px 27px; border-left:1px solid var(--hair); padding-left:14px; }
   .picklist .unitlab { font-size:.7rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
     color:var(--faint); margin-top:10px; }
-  .picklist .choice { min-height:38px; font-size:.88rem; }
+  .picklist .choice { min-height:44px; font-size:.88rem; }
   .countrow { display:flex; gap:22px; border-top:1px solid var(--hair); margin-top:10px; padding-top:4px; }
   .errline { margin:8px 0 0; font-size:.82rem; color:var(--alert); }
   .sum { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:16px; }
@@ -168,7 +168,7 @@
     .sum { grid-template-columns:1fr; }
   }
 </style>
-<link rel="stylesheet" href="stem-theme.css?v=20260821-3">
+<link rel="stylesheet" href="stem-theme.css?v=v3">
 </head>
 <body data-room="maths">
 <div class="wrap">
@@ -194,19 +194,21 @@
   <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
 </div>
 
-<script src="stem-vocab-data.js?v=20260821-4"></script>
-<script src="stem-shared.js?v=20260821-2"></script>
-<script src="stem-questions.js?v=20260821-2"></script>
-<script src="stem-questions-bio.js?v=20260821-2"></script>
-<script src="stem-gloss.js?v=20260821-3"></script>
-<script src="stem-translate.js?v=20260821-5"></script>
+<script src="stem-vocab-data.js?v=v3"></script>
+<script src="stem-shared.js?v=v3"></script>
+<script src="stem-questions.js?v=v3"></script>
+<script src="stem-questions-bio.js?v=v3"></script>
+<script src="stem-questions-lab.js?v=v3"></script>
+<script src="stem-gloss.js?v=v3"></script>
+<script src="stem-translate.js?v=v3"></script>
 <script>
 (function(){
   "use strict";
 
   /* ============================================================
      TEACHERS EDIT HERE — interface wording (en / zh-Hans / zh-Hant).
-     Question content comes from stem-questions.js; skills and
+     Question content comes from stem-questions.js, -bio.js and
+     -lab.js; skills and
      rubric bands from stem-shared.js. Nothing on this page is
      self-rated: mastery is written only by STEM2.Mastery.
      ============================================================ */

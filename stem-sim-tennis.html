@@ -54,9 +54,10 @@
   .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px;
          flex-wrap:wrap; margin-bottom:26px; }
-  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
+           display:inline-flex; align-items:center; min-height:44px; }
   .top a:hover { text-decoration:underline; }
-  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:34px;
+  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:44px;
     border-radius:8px; border:1px solid var(--hair); background:var(--paper); color:var(--ink); }
   .masthead { margin:4px 0 20px; }
   .masthead h1 { margin:0 0 6px; font-family:Georgia,"Times New Roman",serif; font-size:1.9rem;
@@ -70,7 +71,7 @@
   footer { margin-top:34px; border-top:1px solid var(--hair); padding-top:14px;
            font-size:.78rem; color:var(--faint); }
   .teacherline { margin:10px 0 0; font-size:.76rem; }
-  .teacherline a { color:var(--faint); }
+  .teacherline a { color:var(--faint); display:inline-flex; align-items:center; min-height:44px; }
   [data-v] { border-bottom:1px dotted var(--accent); cursor:help; }
   .sim-live { font-variant-numeric:tabular-nums; font-size:.82rem; color:var(--muted); }
 </style>
@@ -105,12 +106,12 @@
   <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: open every step</a></p>
 </div>
 
-<script src="stem-vocab-data.js?v=20260821-4"></script>
-<script src="stem-shared.js?v=20260821-4"></script>
-<script src="stem-vocab.js?v=20260821-4"></script>
-<script src="stem-gloss.js?v=20260821-4"></script>
-<script src="stem-translate.js?v=20260821-5"></script>
-<script src="stem-sim.js?v=20260821-4"></script>
+<script src="stem-vocab-data.js?v=v3"></script>
+<script src="stem-shared.js?v=v3"></script>
+<script src="stem-vocab.js?v=v3"></script>
+<script src="stem-gloss.js?v=v3"></script>
+<script src="stem-translate.js?v=v3"></script>
+<script src="stem-sim.js?v=v3"></script>
 <script>
 (function () {
   "use strict";
@@ -195,6 +196,16 @@
   function fromHK(c, h, k) { return para((c - k) / (h * h), h, k); }
 
   function C(k){ return SIM.colors()[k]; }
+  /* stem-sim.js re-paints the whole panel whenever the student changes step,
+     and afterwards runs only the tap-to-translate pass over it. The notebook
+     linker (stem-vocab.js) is never run again, so every <span data-v> in the
+     new markup would be a dotted underline that does nothing — and, because
+     tap-to-translate skips data-v subtrees, it would not be tappable either.
+     Every stage ends by calling this. Worth fixing in stem-sim.js itself. */
+  function relink(){
+    if (window.STEMVOCAB && window.STEMVOCAB.decorate) window.STEMVOCAB.decorate(document);
+  }
+  function withVocab(fn){ return function (ctx) { fn(ctx); relink(); }; }
   /* the colour key under a figure — a real node, because it gets appended */
   function keyRow(items){
     var p = document.createElement("p");
@@ -209,14 +220,14 @@
   var LX = {
     dist:  {en:"distance from the baseline (m)", "zh-Hans":"离底线的距离（米）",
             "zh-Hant":"離底線的距離（公尺）", vi:"khoảng cách từ vạch cuối sân (m)"},
-    height:{en:"height above the court (m)", "zh-Hans":"离场地的高度（米）",
-            "zh-Hant":"離場地的高度（公尺）", vi:"độ cao so với mặt sân (m)"},
+    height:{en:"height (m)", "zh-Hans":"高度（米）",
+            "zh-Hant":"高度（公尺）", vi:"độ cao (m)"},
     x:     {en:"x — metres from contact", "zh-Hans":"x — 离击球点的米数",
             "zh-Hant":"x — 離擊球點的公尺數", vi:"x — số mét từ điểm chạm vợt"},
     y:     {en:"y — metres above the court", "zh-Hans":"y — 离场地的米数",
             "zh-Hant":"y — 離場地的公尺數", vi:"y — số mét trên mặt sân"},
     net:   {en:"net", "zh-Hans":"球网", "zh-Hant":"球網", vi:"lưới"},
-    svc:   {en:"service line", "zh-Hans":"发球线", "zh-Hant":"發球線", vi:"vạch giao bóng"},
+    svc:   {en:"service line", "zh-Hans":"发球线", "zh-Hant":"發球線", vi:"vạch 18 m"},
     tape:  {en:"tape 0.9 m", "zh-Hans":"网带 0.9 米", "zh-Hant":"網帶 0.9 公尺", vi:"mép lưới 0,9 m"},
     ball:  {en:"the ball", "zh-Hans":"球", "zh-Hant":"球", vi:"quả bóng"},
     boxk:  {en:"service box", "zh-Hans":"发球区", "zh-Hant":"發球區", vi:"ô giao bóng"},
@@ -369,11 +380,10 @@
       goalBox.innerHTML =
         "<span>" + (g1 ? "✓" : "○") + " " + esc(L(A1G1)) + "</span><br>" +
         "<span>" + (g2 ? "✓" : "○") + " " + esc(L(A1G2)) + "</span>";
-      if (g1 && g2 && !won) {
-        won = true;
-        ctx.done({});
-        goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(A1WIN));
-      }
+      if (g1 && g2 && !won) { won = true; ctx.done({}); }
+      /* keep the explanation on screen once it is won: it is the point of the
+         step, and a student who carries on dragging should not lose it */
+      if (won) goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(A1WIN));
     }
     redraw();
   }
@@ -422,10 +432,10 @@
       onDone: tick
     });
     SIM.ask(qs, {
-      prompt:{en:"Read the <b>y-<span data-v=\"intercept\">intercept</span></b> — how high the curve is when x = 0. In this story, what does that number mean?",
-              "zh-Hans":"读出 <b>y <span data-v=\"intercept\">截距</span></b>——x = 0 时曲线的高度。在这个故事里，这个数表示什么？",
-              "zh-Hant":"讀出 <b>y <span data-v=\"intercept\">截距</span></b>——x = 0 時曲線的高度。在這個故事裡，這個數表示什麼？",
-              vi:"Đọc <b>tung độ gốc</b> (<span data-v=\"intercept\">giao điểm</span> với trục y) — độ cao của đường cong khi x = 0. Trong câu chuyện này, số đó có nghĩa gì?"},
+      prompt:{en:"Read the <b><span data-v=\"y-intercept\">y-intercept</span></b> — how high the curve is when x = 0. In this story, what does that number mean?",
+              "zh-Hans":"读出 <b><span data-v=\"y-intercept\">y 截距</span></b>——x = 0 时曲线的高度。在这个故事里，这个数表示什么？",
+              "zh-Hant":"讀出 <b><span data-v=\"y-intercept\">y 截距</span></b>——x = 0 時曲線的高度。在這個故事裡，這個數表示什麼？",
+              vi:"Đọc <b><span data-v=\"y-intercept\">tung độ gốc</span></b> (giao điểm với trục y) — độ cao của đường cong khi x = 0. Trong câu chuyện này, số đó có nghĩa gì?"},
       inputs:[{ k:"c", answer:A.c, tol:0.15, unit:LX.metres,
                 label:{en:"y-intercept", "zh-Hans":"y 截距", "zh-Hant":"y 截距", vi:"tung độ gốc"} }],
       hint:{en:"x = 0 is the moment the racket hits the ball.",
@@ -437,10 +447,10 @@
       onDone: tick
     });
     SIM.ask(qs, {
-      prompt:{en:"Read <b>both x-<span data-v=\"intercept\">intercepts</span></b> — the two places where the curve meets the court.",
-              "zh-Hans":"读出<b>两个 x <span data-v=\"intercept\">截距</span></b>——曲线与场地相交的两处。",
-              "zh-Hant":"讀出<b>兩個 x <span data-v=\"intercept\">截距</span></b>——曲線與場地相交的兩處。",
-              vi:"Đọc <b>cả hai hoành độ giao điểm</b> (<span data-v=\"intercept\">giao điểm</span> với trục x) — hai chỗ đường cong gặp mặt sân."},
+      prompt:{en:"Read <b>both <span data-v=\"x-intercept\">x-intercepts</span></b> — the two places where the curve meets the court.",
+              "zh-Hans":"读出<b>两个 <span data-v=\"x-intercept\">x 截距</span></b>——曲线与场地相交的两处。",
+              "zh-Hant":"讀出<b>兩個 <span data-v=\"x-intercept\">x 截距</span></b>——曲線與場地相交的兩處。",
+              vi:"Đọc <b><span data-v=\"x-intercept\">cả hai hoành độ giao điểm</span></b> — hai chỗ đường cong gặp mặt sân."},
       inputs:[
         { k:"x1", answer:A.other, tol:0.5, unit:LX.metres,
           label:{en:"left one", "zh-Hans":"左边那个", "zh-Hant":"左邊那個", vi:"cái bên trái"} },
@@ -567,7 +577,7 @@
       "<b>2 m</b> above the court. The ball reaches its greatest height <b>3.6 m</b> above the court when " +
       "it has travelled <b>8 m</b> horizontally. Let <b>x</b> be the horizontal <span data-v='distance'>distance</span> " +
       "in metres from the point of contact and <b>y</b> the height in metres above the court. The " +
-      "<span data-v='curve'>curve</span> of the flight has the rule <b>y = a(x − h)² + k</b>.</p>";
+      "curve of the flight has the rule <b>y = a(x − h)² + k</b>.</p>";
     host.appendChild(story);
     var qs = ctx.el("div"); host.appendChild(qs);
     var ok = 0, clean = 0, of = 4, times = [];
@@ -595,7 +605,7 @@
     });
     SIM.ask(qs, {
       prompt:"<b>b.</b> The ball leaves the racket at the point <b>(0, 2)</b>. Use it to find <b>a</b>.",
-      inputs:[{ k:"a", answer:-0.025, tol:0.0005, label:"a" }],
+      inputs:[{ k:"a", answer:-0.025, tol:0.0002, label:"a" }],
       hint:"<span data-v='substitution'>Substitute</span> x = 0 and y = 2 into y = a(x − 8)² + 3.6 and solve for a.",
       worked:"<p>2 = a(0 − 8)² + 3.6<br>2 = 64a + 3.6<br>64a = −1.6<br><b>a = −0.025</b></p>" +
              "<p>a is negative because the arc opens downwards. It is small because 3.6 m of height is spread over a long, flat flight.</p>",
@@ -642,12 +652,12 @@
       if (ok === of) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
     }
     SIM.ask(qs, {
-      prompt:"<b>a.</b> Write down the coordinates of the turning point.",
+      prompt:"<b>a.</b> Write down the <span data-v='coordinate'>coordinates</span> of the turning point.",
       inputs:[{ k:"h", answer:6, tol:0.01, unit:"m", label:"x" },
               { k:"k", answer:5, tol:0.01, unit:"m", label:"y" }], onDone: tick });
     SIM.ask(qs, {
       prompt:"<b>b.</b> Find the value of <b>a</b>.",
-      inputs:[{ k:"a", answer:-0.05, tol:0.0005, label:"a" }],
+      inputs:[{ k:"a", answer:-0.05, tol:0.0002, label:"a" }],
       worked:"<p>3.2 = a(0 − 6)² + 5 → 36a = −1.8 → <b>a = −0.05</b>, so y = −0.05(x − 6)² + 5.</p>",
       onDone: tick });
     SIM.ask(qs, {
@@ -759,11 +769,8 @@
         "<span>" + (g2 ? "✓" : "○") + " " + esc(L(B1G2)) + "</span><br>" +
         "<span class='sim-live'>" + esc(L(over ? B1OK : B1NO)) + " · " +
         esc(L(inBox ? B1IN : B1OUT)) + "</span>";
-      if (g1 && g2 && !won) {
-        won = true;
-        ctx.done({});
-        goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(B1WIN));
-      }
+      if (g1 && g2 && !won) { won = true; ctx.done({}); }
+      if (won) goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(B1WIN));
     }
     redraw();
   }
@@ -1017,7 +1024,7 @@
       onDone: tick });
     SIM.ask(qs, {
       prompt:"<b>b.</b> Find <b>a</b>, using the point where the ball leaves the racket.",
-      inputs:[{ k:"a", answer:-0.02, tol:0.0005, label:"a" }],
+      inputs:[{ k:"a", answer:-0.02, tol:0.0002, label:"a" }],
       hint:"That point is (0, 1.44). <span data-v='substitution'>Substitute</span> it into y = a(x − 7)² + 2.42.",
       worked:"<p>1.44 = a(0 − 7)² + 2.42<br>1.44 = 49a + 2.42<br>49a = −0.98<br><b>a = −0.02</b>, so y = −0.02(x − 7)² + 2.42.</p>",
       onDone: tick });
@@ -1070,12 +1077,12 @@
       if (ok === of) ctx.done({ ms: times.reduce(function(a,b){ return a+b; }, 0), ok: clean, of: of, msList: times });
     }
     SIM.ask(qs, {
-      prompt:"<b>a.</b> Write down the coordinates of the turning point of the flight.",
+      prompt:"<b>a.</b> Write down the <span data-v='coordinate'>coordinates</span> of the turning point of the flight.",
       inputs:[{ k:"h", answer:10, tol:0.01, unit:"m", label:"x" },
               { k:"k", answer:7.2, tol:0.01, unit:"m", label:"y" }], onDone: tick });
     SIM.ask(qs, {
       prompt:"<b>b.</b> Show that <b>a = −0.05</b> by using the point where the ball leaves the racket. Write the value of a.",
-      inputs:[{ k:"a", answer:-0.05, tol:0.0005, label:"a" }],
+      inputs:[{ k:"a", answer:-0.05, tol:0.0002, label:"a" }],
       worked:"<p>2.2 = a(0 − 10)² + 7.2 → 100a = −5 → <b>a = −0.05</b>, so y = −0.05(x − 10)² + 7.2.</p>",
       onDone: tick });
     SIM.ask(qs, {
@@ -1125,15 +1132,15 @@
             "zh-Hans":"拖动两个滑块，直到下面两个勾都变绿。",
             "zh-Hant":"拖動兩個滑桿，直到下面兩個勾都變綠。",
             vi:"Kéo hai thanh trượt cho đến khi cả hai dấu tích bên dưới chuyển xanh."},
-      build:a1 },
+      build:withVocab(a1) },
     { id:"a2", kind:"read", tab:TAB.read,
       title:{en:"Read the parabola off the graph", "zh-Hans":"从图上读出这条抛物线",
              "zh-Hant":"從圖上讀出這條拋物線", vi:"Đọc parabol trên đồ thị"},
-      aim:{en:"Five things live on every parabola and every one of them can be read straight off the picture: the turning point, both <span data-v=\"intercept\">intercepts</span> with the ground, the y-<span data-v=\"intercept\">intercept</span>, and the <span data-v=\"axis\">axis</span> of symmetry.",
-           "zh-Hans":"每条抛物线上都有五样东西，而且每一样都能直接从图上读出来：顶点、与地面的两个<span data-v=\"intercept\">交点</span>、y <span data-v=\"intercept\">截距</span>，以及对称<span data-v=\"axis\">轴</span>。",
-           "zh-Hant":"每條拋物線上都有五樣東西，而且每一樣都能直接從圖上讀出來：頂點、與地面的兩個<span data-v=\"intercept\">交點</span>、y <span data-v=\"intercept\">截距</span>，以及對稱<span data-v=\"axis\">軸</span>。",
-           vi:"Mỗi parabol đều có năm thứ, và cả năm đều đọc được thẳng trên hình: điểm cực trị, hai <span data-v=\"intercept\">giao điểm</span> với mặt đất, tung độ gốc, và trục đối xứng (<span data-v=\"axis\">trục</span>)."},
-      goal:GOALQ5, build:a2 },
+      aim:{en:"Five things live on every parabola and every one of them can be read straight off the picture: the turning point, both <span data-v=\"x-intercept\">x-intercepts</span>, the <span data-v=\"y-intercept\">y-intercept</span>, and the <span data-v=\"axis\">axis</span> of symmetry.",
+           "zh-Hans":"每条抛物线上都有五样东西，而且每一样都能直接从图上读出来：顶点、两个 <span data-v=\"x-intercept\">x 截距</span>、<span data-v=\"y-intercept\">y 截距</span>，以及对称<span data-v=\"axis\">轴</span>。",
+           "zh-Hant":"每條拋物線上都有五樣東西，而且每一樣都能直接從圖上讀出來：頂點、兩個 <span data-v=\"x-intercept\">x 截距</span>、<span data-v=\"y-intercept\">y 截距</span>，以及對稱<span data-v=\"axis\">軸</span>。",
+           vi:"Mỗi parabol đều có năm thứ, và cả năm đều đọc được thẳng trên hình: điểm cực trị, hai <span data-v=\"x-intercept\">hoành độ giao điểm</span>, <span data-v=\"y-intercept\">tung độ gốc</span>, và trục đối xứng (<span data-v=\"axis\">trục</span>)."},
+      goal:GOALQ5, build:withVocab(a2) },
     { id:"a3", kind:"predict", tab:TAB.predict,
       title:{en:"Say where it lands before you see it", "zh-Hans":"在看到之前先说出落点",
              "zh-Hant":"在看到之前先說出落點", vi:"Nói trước điểm rơi trước khi nhìn"},
@@ -1143,7 +1150,7 @@
            vi:"Có quy tắc rồi thì độ cao lớn nhất đã nằm sẵn ở đó — chính là k. Điểm rơi chỉ cần một bước: cho y = 0 và giải <span data-v=\"equation\">phương trình</span>."},
       goal:{en:"Get all three predictions right.", "zh-Hans":"三个预测全部答对。",
             "zh-Hant":"三個預測全部答對。", vi:"Dự đoán đúng cả ba."},
-      build:a3 },
+      build:withVocab(a3) },
     { id:"a4", kind:"solve", tab:TAB.solve,
       title:{en:"Build the rule from the words", "zh-Hans":"从文字里写出规则",
              "zh-Hant":"從文字裡寫出規則", vi:"Dựng quy tắc từ lời văn"},
@@ -1155,7 +1162,7 @@
             "zh-Hans":"四小题全对，模拟会播放你的答案。",
             "zh-Hant":"四小題全對，模擬會播放你的答案。",
             vi:"Đúng cả bốn phần. Sau đó mô phỏng sẽ chạy lại đáp án của em."},
-      skills:["k_parabola","k_quadeq"], build:a4 },
+      skills:["k_parabola","k_quadeq"], build:withVocab(a4) },
     { id:"a5", kind:"exam", tab:TAB.exam,
       title:{en:"A whole task, on your own, timed", "zh-Hans":"完整一题，独立完成，计时",
              "zh-Hant":"完整一題，獨立完成，計時", vi:"Một bài trọn vẹn, tự làm, tính giờ"},
@@ -1163,7 +1170,7 @@
            "zh-Hans":"和抛酒桶任务同样的数学，不同的文字。没有模拟、没有滑块、没有提示。",
            "zh-Hant":"和拋酒桶任務同樣的數學，不同的文字。沒有模擬、沒有滑桿、沒有提示。",
            vi:"Cùng toán như bài Keg Toss, khác lời văn. Không mô phỏng, không thanh trượt, không gợi ý."},
-      goal:GOAL5, skills:["k_parabola","k_quadeq","k_project","s_story"], build:a5 }
+      goal:GOAL5, skills:["k_parabola","k_quadeq","k_project"], build:withVocab(a5) }
   ];
   var STAGES_B = [
     { id:"b1", kind:"play", tab:TAB.play,
@@ -1177,15 +1184,15 @@
             "zh-Hans":"拖动两个滑块，直到下面两个勾都变绿。",
             "zh-Hant":"拖動兩個滑桿，直到下面兩個勾都變綠。",
             vi:"Kéo hai thanh trượt cho đến khi cả hai dấu tích bên dưới chuyển xanh."},
-      build:b1 },
+      build:withVocab(b1) },
     { id:"b2", kind:"read", tab:TAB.read,
       title:{en:"Read a graph that has a net drawn on it", "zh-Hans":"读一张画了球网的图",
              "zh-Hant":"讀一張畫了球網的圖", vi:"Đọc đồ thị có vẽ cả lưới"},
-      aim:{en:"A condition on a graph is a line you compare the <span data-v=\"curve\">curve</span> against. The tape is a horizontal line; the net is a vertical one. What matters is where the curve sits at the crossing.",
-           "zh-Hans":"图上的条件就是一条用来和<span data-v=\"curve\">曲线</span>比较的线。网带是一条水平线，球网是一条竖线。关键是曲线在交会处的位置。",
-           "zh-Hant":"圖上的條件就是一條用來和<span data-v=\"curve\">曲線</span>比較的線。網帶是一條水平線，球網是一條豎線。關鍵是曲線在交會處的位置。",
-           vi:"Một điều kiện trên đồ thị là một đường thẳng để so với <span data-v=\"curve\">đường cong</span>. Mép lưới là đường ngang; lưới là đường dọc. Quan trọng là đường cong nằm ở đâu tại chỗ giao."},
-      goal:GOALQ5, build:b2 },
+      aim:{en:"A condition on a graph is a line you compare the curve against. The tape is a horizontal line; the net is a vertical one. What matters is where the curve sits at the crossing.",
+           "zh-Hans":"图上的条件就是一条用来和曲线比较的线。网带是一条水平线，球网是一条竖线。关键是曲线在交会处的位置。",
+           "zh-Hant":"圖上的條件就是一條用來和曲線比較的線。網帶是一條水平線，球網是一條豎線。關鍵是曲線在交會處的位置。",
+           vi:"Một điều kiện trên đồ thị là một đường thẳng để so với đường cong. Mép lưới là đường ngang; lưới là đường dọc. Quan trọng là đường cong nằm ở đâu tại chỗ giao."},
+      goal:GOALQ5, build:withVocab(b2) },
     { id:"b3", kind:"predict", tab:TAB.predict,
       title:{en:"Three shots — which one is good?", "zh-Hans":"三记球——哪一记是好球？",
              "zh-Hant":"三記球——哪一記是好球？", vi:"Ba cú đánh — cú nào tốt?"},
@@ -1197,7 +1204,7 @@
             "zh-Hans":"三个预测加最后的判断，全部答对。",
             "zh-Hant":"三個預測加最後的判斷，全部答對。",
             vi:"Ba dự đoán và câu kết luận, đúng hết."},
-      build:b3 },
+      build:withVocab(b3) },
     { id:"b4", kind:"solve", tab:TAB.solve,
       title:{en:"Build the rule, then test both conditions", "zh-Hans":"写出规则，再检验两个条件",
              "zh-Hant":"寫出規則，再檢驗兩個條件", vi:"Dựng quy tắc rồi kiểm cả hai điều kiện"},
@@ -1205,7 +1212,7 @@
            "zh-Hans":"写出规则只是一半。建模题接着会要你把值<span data-v=\"substitution\">代入</span>、解出某个高度对应的位置，并用一句话说明这一球好不好。",
            "zh-Hant":"寫出規則只是一半。建模題接著會要你把值<span data-v=\"substitution\">代入</span>、解出某個高度對應的位置，並用一句話說明這一球好不好。",
            vi:"Dựng được quy tắc mới chỉ là một nửa. Bài mô hình hoá sau đó bắt em <span data-v=\"substitution\">thế</span> vào, giải nó cho một độ cao cho trước, và nói bằng một câu rằng cú đánh có tốt không."},
-      goal:GOAL5, skills:["k_quadeq","k_project"], build:b4 },
+      goal:GOAL5, skills:["k_quadeq","k_project"], build:withVocab(b4) },
     { id:"b5", kind:"exam", tab:TAB.exam,
       title:{en:"A lob over a player at the net — timed", "zh-Hans":"越过网前球员的高吊球——计时",
              "zh-Hant":"越過網前球員的高吊球——計時", vi:"Cú lốp qua đầu người đứng lưới — tính giờ"},
@@ -1213,7 +1220,7 @@
            "zh-Hans":"这已经是最接近抛酒桶任务的练习：一段文字描述的飞行、一条要写出的规则、两个要检验的条件，最后还要给出理由。",
            "zh-Hant":"這已經是最接近拋酒桶任務的練習：一段文字描述的飛行、一條要寫出的規則、兩個要檢驗的條件，最後還要給出理由。",
            vi:"Đây là bài luyện gần bài Keg Toss nhất: một đường bay bằng lời, một quy tắc phải dựng, hai điều kiện phải kiểm, và một kết luận phải lý giải ở cuối."},
-      goal:GOAL5, skills:["k_parabola","k_quadeq","k_project","s_story"], build:b5 }
+      goal:GOAL5, skills:["k_parabola","k_quadeq","k_project"], build:withVocab(b5) }
   ];
 
   /* i18n strings shared by two stages, declared where both can see them */

@@ -19,7 +19,7 @@
   .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
-           display:inline-flex; align-items:center; min-height:34px; }
+           display:inline-flex; align-items:center; min-height:44px; }
   .top a:hover { text-decoration:underline; }
   .pilot { font-size:.75rem; color:var(--faint); }
   .masthead h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:2rem;
@@ -125,9 +125,9 @@
   <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
 </div>
 
-<script src="stem-vocab-data.js?v=20260821-1"></script>
-<script src="stem-shared.js?v=20260821-1"></script>
-<script src="stem-vocab.js?v=20260821-1"></script>
+<script src="stem-vocab-data.js?v=v3"></script>
+<script src="stem-shared.js?v=v3"></script>
+<script src="stem-vocab.js?v=v3"></script>
 <script>
 (function(){
   "use strict";
@@ -471,7 +471,7 @@
       while (m2 === m1) m2 = pick([-3,-2,-1,1,2,3]);
       var c1 = py - m1*px, c2 = py - m2*px;
       var svg = gridSvg(lineSvg(m1,c1) + lineSvg(m2,c2,"var(--alert)"));
-      var q = "<p>The two lines cross once. State the <span data-v='point of intersection'>point of intersection</span> as a "+
+      var q = "<p>The two lines cross once. State the <span data-v='intersection'>point of intersection</span> as a "+
         "<span data-v='coordinate'>coordinate</span>.</p>"+svg+
         "<p>Point: <input class='wide' data-k='pt' placeholder='(x, y)'></p>";
       var worked = "<b>Working:</b> the lines cross where BOTH rules are true at once — on the graph that is the single crossing point: <b>("+px+", "+py+")</b>. "+

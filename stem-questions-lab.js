@@ -256,60 +256,60 @@
 
   /* ---------------- sc_safety ---------------- */
 
-  /* Short actions for "which one of these four is unsafe?". Each is one
-     decision, so there is nothing to argue about in the four on screen. */
+  /* Short actions, written WITHOUT a full stop: they are option labels and
+     sentence parts, so the punctuation belongs to whatever uses them. */
   var SAFE_ACTS = [
-    "Pushing your stool right under the bench before you start.",
-    "Putting your bag under the bench, out of the walkway.",
-    "Putting safety glasses on before anything is heated.",
-    "Reading the label on a bottle before pouring from it.",
-    "Telling your teacher straight away when a test tube cracks.",
-    "Standing up while you heat something on the tripod.",
-    "Walking, never running, while carrying a beaker.",
-    "Tying long hair back before the burner is lit.",
-    "Washing your hands before leaving the laboratory.",
-    "Waiting for your teacher to say the practical can start."
+    "Pushing your stool right under the bench before you start",
+    "Putting your bag under the bench, out of the walkway",
+    "Putting safety glasses on before anything is heated",
+    "Reading the label on a bottle before pouring from it",
+    "Telling your teacher straight away when a test tube cracks",
+    "Standing up while you heat something on the tripod",
+    "Walking, never running, while carrying a beaker",
+    "Tying long hair back before the burner is lit",
+    "Washing your hands before leaving the laboratory",
+    "Waiting for your teacher to say the practical can start"
   ];
   var UNSAFE = [
-    { act: "Tasting a white powder to find out what it is.",
-      story: "{n} cannot tell whether the white powder is salt or sugar, so {n} tastes a little of it.",
-      rule: "Nothing in a laboratory ever goes in your mouth.",
+    { act: "Tasting a white powder to find out what it is",
+      story: "{n} cannot tell whether the white powder is salt or sugar, so {n} tastes a little of it",
+      rule: "Nothing in a laboratory ever goes in your mouth",
       fix: "read the label on the jar, and ask the teacher if the label does not say" },
-    { act: "Leaving your bag in the walkway between the benches.",
-      story: "{n} drops a school bag in the walkway between two benches and starts the practical.",
-      rule: "The floor and the walkway stay clear, so nobody trips while carrying something hot.",
+    { act: "Leaving your bag in the walkway between the benches",
+      story: "{n} drops a school bag in the walkway between two benches and starts the practical",
+      rule: "The floor and the walkway stay clear, so nobody trips while carrying something hot",
       fix: "put the bag under the bench, out of the walkway" },
-    { act: "Pointing the open end of a hot test tube at the person beside you.",
-      story: "{n} heats a test tube of water with the open end pointing at the next student along the bench.",
-      rule: "The open end of a heated test tube points at nobody.",
+    { act: "Pointing the open end of a hot test tube at the person beside you",
+      story: "{n} heats a test tube of water with the open end pointing at the next student along the bench",
+      rule: "The open end of a heated test tube points at nobody",
       fix: "turn the test tube so the open end points at an empty part of the bench" },
-    { act: "Picking a hot beaker up with your fingers.",
-      story: "{n} lifts a beaker straight off the gauze mat with bare fingers.",
-      rule: "Hot glass looks exactly like cold glass.",
+    { act: "Picking a hot beaker up with your fingers",
+      story: "{n} lifts a beaker straight off the gauze mat with bare fingers",
+      rule: "Hot glass looks exactly like cold glass",
       fix: "use tongs, and let the beaker cool on the heatproof mat first" },
-    { act: "Running across the laboratory to fetch a spatula.",
-      story: "{n} is missing a spatula and runs across the laboratory to the front bench to get one.",
-      rule: "You walk in a laboratory, because other people are carrying hot and sharp things.",
+    { act: "Running across the laboratory to fetch a spatula",
+      story: "{n} is missing a spatula and runs across the laboratory to the front bench to get one",
+      rule: "You walk in a laboratory, because other people are carrying hot and sharp things",
       fix: "walk, and look at what other people are carrying on the way" },
-    { act: "Lighting the burner before the teacher has said to start.",
-      story: "{n} has read the sheet and lights the burner while the teacher is still explaining the practical.",
-      rule: "A practical starts when the teacher says it starts, not before.",
+    { act: "Lighting the burner before the teacher has said to start",
+      story: "{n} has read the sheet and lights the burner while the teacher is still explaining the practical",
+      rule: "A practical starts when the teacher says it starts, not before",
       fix: "wait, listen to the whole instruction, and light the burner only when the teacher says to" },
-    { act: "Wiping a spill with your sleeve and saying nothing.",
-      story: "{n} spills a little of the liquid on the bench and wipes it up with a sleeve.",
-      rule: "Every spill gets reported, however small it looks.",
+    { act: "Wiping a spill with your sleeve and saying nothing",
+      story: "{n} spills a little of the liquid on the bench and wipes it up with a sleeve",
+      rule: "Every spill gets reported, however small it looks",
       fix: "step back and tell the teacher straight away, before touching the spill" },
-    { act: "Leaning over a beaker to smell what is inside.",
-      story: "{n} wants to know what is in the beaker and leans over it to take a deep sniff.",
-      rule: "You never put your face over an open container.",
-      fix: "keep your face away, and ask the teacher what is in the beaker" },
-    { act: "Taking your safety glasses off while the burner is still lit.",
-      story: "{n} has finished heating the water and pushes the safety glasses up while the burner is still lit.",
-      rule: "Safety glasses stay on until every flame is out and everything is cool.",
+    { act: "Leaning over a beaker to smell what is inside",
+      story: "{n} wants to know what is in the beaker and leans over it to take a deep sniff",
+      rule: "You never put your face over an open container",
+      fix: "keep well back, and ask the teacher what is in the beaker" },
+    { act: "Taking your safety glasses off while the burner is still lit",
+      story: "{n} has finished heating the water and pushes the safety glasses up while the burner is still lit",
+      rule: "Safety glasses stay on until every flame is out and everything is cool",
       fix: "turn the gas off first, then wait until everything is cool before taking the glasses off" },
-    { act: "Walking away from a burner that is still on the heating flame.",
-      story: "{n} leaves a lit burner on the blue heating flame and goes to the sink for more water.",
-      rule: "A lit burner is never left on its own, and a blue flame is hard to see.",
+    { act: "Walking away from a burner that is still on the heating flame",
+      story: "{n} leaves a lit burner on the blue heating flame and goes to the sink for more water",
+      rule: "A lit burner is never left on its own, and a blue flame is hard to see",
       fix: "close the air hole so the flame is orange, or turn the gas off before walking away" }
   ];
   /* Hazard symbols, described in words. No artwork, ever. */
@@ -353,7 +353,7 @@
         return {
           qHTML: "Four students are working in the laboratory. Which one of these is <b>unsafe</b>?",
           opts: { list: [bad].concat(good), a: bad },
-          workedHTML: "<b>" + bad + "</b> is the unsafe one. The other three are exactly what you are asked to do every lesson. " + TEACHER_LINE
+          workedHTML: "<b>" + bad + "</b> — that is the unsafe one. The other three are exactly what you are asked to do every lesson. " + TEACHER_LINE
         };
       }
 
@@ -363,9 +363,9 @@
         var pool = UNSAFE.filter(function (x) { return x !== u; }).map(function (x) { return x.fix; });
         var right = u.fix;
         return {
-          qHTML: fill(u.story, n) + "<br>What should " + n + " do <b>instead</b>?",
+          qHTML: fill(u.story, n) + ".<br>What should " + n + " do <b>instead</b>?",
           opts: mcq(rng, right, pool),
-          workedHTML: "The rule: " + u.rule + " So " + n + " should <b>" + right + "</b>. " + TEACHER_LINE
+          workedHTML: "The rule: " + u.rule + ". So " + n + " should <b>" + right + "</b>. " + TEACHER_LINE
         };
       }
 
@@ -402,7 +402,7 @@
             "</b>. What is the sensible extra care?",
           opts: mcq(rng, h3.care, pool3),
           workedHTML: h3.word.charAt(0).toUpperCase() + h3.word.slice(1) + " means " + h3.mean +
-            ", so " + n + " should <b>" + h3.care + "</b>. " + TEACHER_LINE
+            ", so the sensible extra care is to <b>" + h3.care + "</b>. " + TEACHER_LINE
         };
       }
 
@@ -434,7 +434,7 @@
     { name: "test tube rack", job: "stand test tubes upright so they cannot roll or fall over", alts: ["rack", "tube rack"] },
     { name: "thermometer", job: "measure a temperature in degrees Celsius", alts: [] },
     { name: "tripod", job: "stand over the burner so something can be heated above the flame", alts: ["tripod stand"] },
-    { name: "gauze mat", job: "spread the heat evenly and hold the beaker flat on the tripod", alts: ["gauze", "wire gauze"] },
+    { name: "gauze mat", job: "spread the heat evenly so the bottom of the glass never gets one hot spot", alts: ["gauze", "wire gauze"] },
     { name: "tongs", job: "pick something hot up without touching it", alts: ["pair of tongs"] },
     { name: "spatula", job: "scoop up a small amount of a solid powder", alts: [] },
     { name: "stirring rod", job: "stir a liquid until the solid has dissolved", alts: ["glass rod", "stirrer", "rod"] },
@@ -448,6 +448,17 @@
     { name: "balance", job: "measure a mass in grams", alts: ["scales", "scale", "electronic balance"] },
     { name: "filter paper", job: "catch the solid pieces as a mixture is poured through", alts: ["filter"] }
   ];
+  /* "This is a beaker" but "These are tongs" and "This is filter paper" — the
+     sentence frame has to fit the word, or the model sentence teaches an error. */
+  var PLURAL_KIT = { "safety glasses": 1, "tongs": 1 };
+  var MASS_KIT = { "filter paper": 1 };
+  function kitFrame(name) {
+    if (PLURAL_KIT[name]) return { intro: "These are " + name, subj: "They are" };
+    if (MASS_KIT[name]) return { intro: "This is " + name, subj: "It is" };
+    return { intro: "This is " + ("aeiou".indexOf(name.charAt(0).toLowerCase()) !== -1 ? "an " : "a ") + name,
+             subj: "It is" };
+  }
+
   /* Jobs on the bench. `avoid` keeps a second genuinely-right tool out of the
      options — the tripod and the gauze mat are both needed to heat a beaker,
      so neither is ever offered against the other. */
@@ -500,7 +511,8 @@
         return {
           qHTML: "Which piece of equipment is used to <b>" + k.job + "</b>?",
           opts: mcq(rng, k.name, KIT.map(function (x) { return x.name; })),
-          workedHTML: "That is the <b>" + k.name + "</b>. This is a " + k.name + ". It is used to " + k.job + "."
+          workedHTML: "<b>" + k.name + "</b>. Say it as a whole sentence: " + kitFrame(k.name).intro +
+            ". " + kitFrame(k.name).subj + " used to " + k.job + "."
         };
       }
 
@@ -508,9 +520,10 @@
       if (kind === "name2job") {
         var k2 = rng.pick(KIT);
         return {
-          qHTML: n + " picks up a <b>" + k2.name + "</b>. What is it used for?",
+          qHTML: n + " picks up the <b>" + k2.name + "</b>. What is it used for?",
           opts: mcq(rng, k2.job, KIT.map(function (x) { return x.job; })),
-          workedHTML: "This is a " + k2.name + ". It is used to <b>" + k2.job + "</b>."
+          workedHTML: kitFrame(k2.name).intro + ". " + kitFrame(k2.name).subj +
+            " used to <b>" + k2.job + "</b>."
         };
       }
 
@@ -528,13 +541,14 @@
       }
 
       /* --- type the name into the sentence frame --- */
-      var k3 = rng.pick(KIT);
-      var inp = wordInput("e", "This is a ... (write the name)", k3.name, k3.alts, "e.g. beaker");
+      var k3 = rng.pick(KIT), f3 = kitFrame(k3.name);
+      var inp = wordInput("e", "the name of the equipment =", k3.name, k3.alts, "e.g. beaker");
       return {
-        qHTML: n + " is writing an equipment card. The card says: <i>It is used to " + k3.job +
+        qHTML: n + " is writing an equipment card. The card says: <i>" + f3.subj + " used to " + k3.job +
           ".</i><br>Which piece of equipment is the card about?",
         inputs: [inp],
-        workedHTML: "This is a <b>" + inp.answer + "</b>. It is used to " + k3.job + "."
+        workedHTML: f3.intro.replace(k3.name, "<b>" + k3.name + "</b>") + ". " + f3.subj +
+          " used to " + k3.job + "."
       };
     }
   });
@@ -624,8 +638,13 @@
         }
         var listed = order.map(function (ix) { return STEPS[ix]; });
         var labels = ["Step 1", "Step 2", "Step 3", "Step 4"];
-        var belongs = order[badAt] === 0 ? "before all of them" :
-          (badAt === 0 ? "later, not first" : "somewhere else in the order");
+        /* where the displaced step should have gone, said against the other three */
+        var rest = order.filter(function (ix, i) { return i !== badAt; })
+          .sort(function (a, b) { return a - b; });
+        var belongs;
+        if (order[badAt] < rest[0]) belongs = "before all three of the others";
+        else if (order[badAt] > rest[rest.length - 1]) belongs = "after all three of the others";
+        else belongs = "after “" + STEPS[rest.filter(function (ix) { return ix < order[badAt]; }).pop()] + "”";
         return {
           qHTML: n + " wrote down the order the burner was lit in. <b>One step is in the wrong place.</b> Which one?" +
             olHTML(listed),
@@ -649,17 +668,17 @@
       /* --- the parts, and what each one does --- */
       if (kind === "collar") {
         var parts = [
-          { ask: "turn to open and close the air hole", a: "the collar" },
+          { ask: "open and close the air hole", a: "the collar" },
           { ask: "let air in so the flame turns blue", a: "the air hole" },
           { ask: "stand the burner on so the bench is not damaged", a: "the heatproof mat" },
-          { ask: "turn to let the gas through", a: "the gas tap" }
+          { ask: "let the gas through to the burner", a: "the gas tap" }
         ];
         var p = rng.pick(parts);
         var pool2 = parts.map(function (x) { return x.a; }).concat(["the barrel"]);
         return {
-          qHTML: "Which part of the set-up do you use to <b>" + p.ask + "</b>?",
+          qHTML: "Which part do you use to <b>" + p.ask + "</b>?",
           opts: mcq(rng, p.a, pool2),
-          workedHTML: "<b>" + p.a + "</b>. The collar turns to open and close the air hole, and the air hole is what decides the colour of the flame."
+          workedHTML: "It is <b>" + p.a + "</b>. You turn the collar to open and close the air hole, and the air hole is what decides the colour of the flame."
         };
       }
 
@@ -722,15 +741,15 @@
   register({
     id: "sc_measure",
     teach: {
-      what: "Reading a scale is two questions. First: <b>what is one small mark worth?</b> Count the small marks between two numbered lines and divide. Second: <b>where has it stopped?</b> Count the small marks up from the number below it. On a measuring cylinder the water curves up at the glass — that curve is the <b>meniscus</b>, and you read the <b>bottom</b> of it, with your eye level with the water. " +
+      what: "Reading a scale is two questions. First: <b>what is one small division worth?</b> Count how many small divisions the gap between two numbered lines is split into, and divide. Second: <b>where has it stopped?</b> Count the small marks up from the number below it. On a measuring cylinder the water curves up at the glass — that curve is the <b>meniscus</b>, and you read the <b>bottom</b> of it, with your eye level with the water. " +
         "Then the part everybody forgets: <b>a number with no unit means nothing</b>. 46 is not a temperature. 46 °C is.",
-      how: ["Find two numbered lines and count the small marks between them.",
-        "One small mark = the gap between the numbers ÷ the number of small marks.",
-        "Start at the number below the reading and count small marks up.",
-        "If it has stopped exactly between two marks, add half a mark.",
+      how: ["Find two numbered lines and count the small divisions the gap is split into.",
+        "One division = the gap between the numbers ÷ the number of divisions.",
+        "Start at the number below the reading and count divisions up.",
+        "If it has stopped exactly between two lines, add half a division.",
         "Write the number AND the unit: °C for temperature, mL for volume."]
     },
-    hint: "Work out what one small mark is worth first — and never write the number without its unit.",
+    hint: "Work out what one small division is worth first — and never write the number without its unit.",
     gen: function (rng) {
       var n = rng.pick(NAMES);
       var kind = rng.pick(["therm", "therm", "cyl", "cyl", "div", "heading"]);
@@ -746,9 +765,9 @@
             "Write the unit as well as the number.",
           svg: thermometerSVG(ts, t),
           inputs: [inp],
-          workedHTML: "The numbered lines are " + ts.major + " °C apart with " + (ts.major / ts.minor) +
-            " small marks between them, so one small mark = " + ts.major + " ÷ " + (ts.major / ts.minor) +
-            " = " + fmt(ts.minor) + " °C.<br>" +
+          workedHTML: "The numbered lines are " + ts.major + " °C apart and the gap is split into " +
+            (ts.major / ts.minor) + " small divisions, so one division = " + ts.major + " ÷ " +
+            (ts.major / ts.minor) + " = " + fmt(ts.minor) + " °C.<br>" +
             (t === below ? "The liquid stops exactly on the " + below + " line"
               : "The liquid stops " + fmt(t - below) + " °C above the " + below + " line") +
             ", so the reading is <b>" + inp.answer + "</b>. " +
@@ -767,9 +786,9 @@
             "Read the bottom of the curved surface, and write the unit as well as the number.",
           svg: cylinderSVG(cs, v),
           inputs: [inp2],
-          workedHTML: "The numbered lines are " + cs.major + " mL apart with " + (cs.major / cs.minor) +
-            " small marks between them, so one small mark = " + cs.major + " ÷ " + (cs.major / cs.minor) +
-            " = " + fmt(cs.minor) + " mL.<br>" +
+          workedHTML: "The numbered lines are " + cs.major + " mL apart and the gap is split into " +
+            (cs.major / cs.minor) + " small divisions, so one division = " + cs.major + " ÷ " +
+            (cs.major / cs.minor) + " = " + fmt(cs.minor) + " mL.<br>" +
             (v === below2 ? "The bottom of the meniscus sits exactly on the " + below2 + " line"
               : "The bottom of the meniscus is " + fmt(v - below2) + " mL above the " + below2 + " line") +
             ", so the volume is <b>" + inp2.answer + "</b>."
@@ -781,29 +800,29 @@
         if (rng.raw() < 0.5) {
           var ts2 = rng.pick(TSCALES);
           var t2 = readingOn(rng, ts2.min, ts2.max, ts2.minor, false);
-          var inp3 = unitInput("d", "one small mark (with the unit) =", ts2.minor, "°C", "e.g. 2 °C");
+          var inp3 = unitInput("d", "one small division (with the unit) =", ts2.minor, "°C", "e.g. 2 °C");
           return {
-            qHTML: "Look at the scale on this thermometer. <b>How much is one small mark worth?</b> " +
+            qHTML: "Look at the scale on this thermometer. <b>How much is one small division worth?</b> " +
               "Write the unit as well as the number.",
             svg: thermometerSVG(ts2, t2),
             inputs: [inp3],
-            workedHTML: "Between two numbered lines there is a gap of " + ts2.major + " °C, and there are " +
-              (ts2.major / ts2.minor) + " small marks in that gap. " + ts2.major + " ÷ " +
-              (ts2.major / ts2.minor) + " = <b>" + inp3.answer + "</b> for one small mark. " +
+            workedHTML: "Between two numbered lines there is a gap of " + ts2.major + " °C, split into " +
+              (ts2.major / ts2.minor) + " small divisions. " + ts2.major + " ÷ " +
+              (ts2.major / ts2.minor) + " = <b>" + inp3.answer + "</b> for one division. " +
               "That is also the smallest change this thermometer can show you."
           };
         }
         var cs2 = rng.pick(CSCALES);
         var v2 = readingOn(rng, 0, cs2.cap, cs2.minor, false);
-        var inp4 = unitInput("d", "one small mark (with the unit) =", cs2.minor, "mL", "e.g. 5 mL");
+        var inp4 = unitInput("d", "one small division (with the unit) =", cs2.minor, "mL", "e.g. 5 mL");
         return {
-          qHTML: "Look at the scale on this measuring cylinder. <b>How much is one small mark worth?</b> " +
+          qHTML: "Look at the scale on this measuring cylinder. <b>How much is one small division worth?</b> " +
             "Write the unit as well as the number.",
           svg: cylinderSVG(cs2, v2),
           inputs: [inp4],
-          workedHTML: "Between two numbered lines there is a gap of " + cs2.major + " mL, and there are " +
-            (cs2.major / cs2.minor) + " small marks in that gap. " + cs2.major + " ÷ " +
-            (cs2.major / cs2.minor) + " = <b>" + inp4.answer + "</b> for one small mark."
+          workedHTML: "Between two numbered lines there is a gap of " + cs2.major + " mL, split into " +
+            (cs2.major / cs2.minor) + " small divisions. " + cs2.major + " ÷ " +
+            (cs2.major / cs2.minor) + " = <b>" + inp4.answer + "</b> for one division."
         };
       }
 
@@ -895,7 +914,8 @@
             good.join("; ") + ". But " + say(gone.no) + ".<br>Which part of <b>TAILS</b> is missing?",
           opts: { list: TAILS.map(function (x) { return x.word; }), a: gone.word },
           workedHTML: "The missing one is <b>" + gone.word + "</b> (the <b>" + gone.L +
-            "</b> of TAILS): " + gone.means + ". Everything else on the list is already there."
+            "</b> of TAILS): " + gone.means.replace(/^[^—]*—\s*/, "") +
+            ". Everything else on the list is already there."
         };
       }
 
@@ -1025,7 +1045,7 @@
             "the graph is missing its title",
             "the readings were taken too close together",
             "every other reading in the table is wrong"]),
-          workedHTML: "<b>" + right + "</b>. One reading out of six that breaks a steady pattern is almost always a reading or recording mistake. " +
+          workedHTML: "The likely cause is that <b>" + right + "</b>. One reading out of six that breaks a steady pattern is almost always a reading or recording mistake. " +
             "The honest thing is to keep it in the table, mark it as an anomaly, and repeat that measurement if you can."
         };
       }
@@ -1099,10 +1119,10 @@
           qHTML: "The proton number of <b>" + e.name + "</b> (" + e.sym + ") is <b>" + e.Z +
             "</b>. Fill in the counts for one <b>neutral</b> atom of " + e.name + ".",
           inputs: [p, el],
-          workedHTML: "The proton number IS the number of protons, so there are <b>" + p.answer +
-            "</b> protons. A neutral atom has one electron for every proton, so it has <b>" + el.answer +
-            "</b> electrons as well. " + e.Z + " positives and " + e.Z +
-            " negatives cancel, which is what <i>neutral</i> means."
+          workedHTML: "The proton number IS the number of protons, so the number of protons is <b>" +
+            p.answer + "</b>. A neutral atom has one electron for every proton, so the number of electrons is <b>" +
+            el.answer + "</b> too. Every + on a proton is cancelled by a − on an electron, " +
+            "which is what <i>neutral</i> means."
         };
       }
 
@@ -1153,8 +1173,8 @@
           "the neutrons cancel out the protons",
           "the nucleus is too small to have a charge",
           "the electrons move too fast for their charge to count"]),
-        workedHTML: "<b>" + rightN + "</b>. " + e.Z + " positives and " + e.Z +
-          " negatives add up to zero. Neutrons have no charge, so they change the mass but never the charge."
+        workedHTML: "<b>" + rightN + "</b>. Every + on a proton is cancelled by a − on an electron, " +
+          "so the charges add up to zero. Neutrons have no charge at all, so they change the mass but never the charge."
       };
     }
   });
@@ -1209,7 +1229,8 @@
         return {
           qHTML: "A model shows <b>" + s.desc + "</b> (" + s.f + ").<br>Is it an <b>element</b> or a <b>compound</b>?",
           opts: { list: ["an element", "a compound", "a mixture"], a: "a" + (s.type === "element" ? "n element" : " compound") },
-          workedHTML: "There " + (s.els === 1 ? "is only <b>one</b> kind of atom" : "are <b>" + s.els + "</b> different kinds of atom") +
+          workedHTML: "There " + (s.els === 1 ? "is only <b>one</b> kind of " + (s.shape === "lattice" ? "particle" : "atom")
+              : "are <b>" + s.els + "</b> different kinds of " + (s.shape === "lattice" ? "particle" : "atom")) +
             " in " + s.f + ", so it is <b>a" + (s.type === "element" ? "n element" : " compound") + "</b>. " +
             "It is not a mixture: these particles are <i>joined</i>, and a mixture is only stirred together."
         };
@@ -1341,7 +1362,7 @@
           return {
             qHTML: "Which one of these is a <b>pure substance</b>?",
             opts: { list: [p].concat(rng.shuffle(MIXED).slice(0, 3)), a: p },
-            workedHTML: "<b>" + p + "</b> is the pure one — there is only that one substance in it. " +
+            workedHTML: "The pure substance here is <b>" + p + "</b> — there is only that one substance in it. " +
               "The other three are mixtures: more than one substance, together but not joined."
           };
         }
@@ -1349,7 +1370,7 @@
         return {
           qHTML: "Which one of these is a <b>mixture</b>?",
           opts: { list: [mx].concat(rng.shuffle(PURE).slice(0, 3)), a: mx },
-          workedHTML: "<b>" + mx + "</b> is the mixture — you could separate what is in it again. " +
+          workedHTML: "The mixture here is <b>" + mx + "</b> — you could separate what is in it again. " +
             "The other three are pure substances: one substance, nothing else."
         };
       }
@@ -1362,7 +1383,7 @@
         return {
           qHTML: n + " stirs a spoonful of <b>" + it.s + "</b> into a beaker of water. What will " + n + " see?",
           opts: { list: pool, a: say(it.out) },
-          workedHTML: "<b>" + say(it.out) + "</b>. " +
+          workedHTML: n + " would see: <b>" + say(it.out) + "</b>. " +
             (it.out === DISSOLVE ? "Soluble means the solid breaks up into pieces far too small to see, and the solution stays clear."
               : it.out === SINKS ? "Insoluble means the grains never break up, so they fall straight to the bottom."
                 : it.out === FLOATS ? "Oil and water do not mix at all, so the oil stays as its own layer."
@@ -1450,7 +1471,9 @@
           opts: { list: ["acidic", "neutral", "basic"], a: ans },
           workedHTML: "pH " + v + " is " + (v < 7 ? "<b>below</b> 7" : v > 7 ? "<b>above</b> 7" : "<b>exactly</b> 7") +
             ", so the liquid is <b>" + ans + "</b>" +
-            (ans === "neutral" ? " — the same as pure water." : ". It sits in the " + bandOf(v).say + " part of the scale.")
+            (ans === "neutral" ? " — the same as pure water. Universal indicator would turn it green."
+              : ". Universal indicator would turn it <b>" + bandOf(v).col + "</b> there — that is the " +
+                bandOf(v).say + " part of the scale.")
         };
       }
 
