@@ -218,8 +218,16 @@
   }
   var AX = {
     x: {en:"shoe length (cm)", "zh-Hans":"鞋长（厘米）", "zh-Hant":"鞋長（公分）", vi:"chiều dài giày (cm)"},
-    y: {en:"height (cm)", "zh-Hans":"身高（厘米）", "zh-Hant":"身高（公分）", vi:"chiều cao (cm)"}
+    y: {en:"height (cm)", "zh-Hans":"身高（厘米）", "zh-Hant":"身高（公分）", vi:"chiều cao (cm)"},
+    alt: {en:"height against shoe length", "zh-Hans":"身高对鞋长的散点图",
+          "zh-Hant":"身高對鞋長的散布圖", vi:"chiều cao theo chiều dài giày"}
   };
+  /* The y-axis NAME goes above the graph, not sideways beside it. Below 420px
+     stem-sim.js leaves the y-axis 38px, and a three-digit height fills that on
+     its own — a rotated axis name would land on top of the numbers and take a
+     digit with it. Above the axis it is legible at every width, and the SVG
+     still names both axes to a screen reader through `alt`. */
+  function yCap(ctx){ return ctx.el("p", "sim-key", "<span>\u2191 " + esc(L(AX.y)) + "</span>"); }
   var KEY = {
     people: {en:"the eight measured", "zh-Hans":"量过的八个人", "zh-Hant":"量過的八個人", vi:"tám bạn đã đo"},
     yourLine: {en:"your line", "zh-Hans":"你的直线", "zh-Hant":"你的直線", vi:"đường của em"},
@@ -278,6 +286,7 @@
                vi:"Tung độ gốc — đường thẳng bắt đầu từ đâu"} }
     ], function(v){ state.m = v.m; state.c = v.c; redraw(); });
 
+    host.appendChild(yCap(ctx));
     host.appendChild(fig);
     host.appendChild(keyRow([{c:C("a"),n:KEY.people},{c:C("b"),n:KEY.yourLine},{c:C("d"),n:KEY.gaps}]));
     host.appendChild(live);
@@ -293,7 +302,7 @@
       });
       SIM.plot(fig, {
         xMin:20, xMax:30, yMin:140, yMax:200, xStep:2, yStep:10, height:320,
-        xLabel:AX.x, yLabel:AX.y,
+        xLabel:AX.x, alt:AX.alt,
         series: sticks.concat([
           { fn: function(s){ return state.m * s + state.c; }, color:C("b") },
           dots(pts, C("a"))
@@ -335,6 +344,7 @@
         label:{en:"Intercept", "zh-Hans":"截距", "zh-Hant":"截距", vi:"Tung độ gốc"} }
     ], function(v){ state.m = v.m; state.c = v.c; draw(); });
 
+    host.appendChild(yCap(ctx));
     host.appendChild(fig);
     host.appendChild(keyRow([{c:C("a"),n:KEY.people},{c:C("b"),n:KEY.bestLine}]));
     host.appendChild(live);
@@ -343,7 +353,7 @@
     function draw(){
       SIM.plot(fig, {
         xMin:20, xMax:30, yMin:140, yMax:200, xStep:2, yStep:10, height:320,
-        xLabel:AX.x, yLabel:AX.y,
+        xLabel:AX.x, alt:AX.alt,
         vlines:[{ x:PRINT, label:{en:"the print", "zh-Hans":"鞋印", "zh-Hant":"鞋印", vi:"dấu giày"}, color:C("c") }],
         hlines:[{ y:184, label:"184 cm", color:C("c") }],
         series:[
@@ -468,10 +478,11 @@
              vi:"Nhân chiều dài giày với 4, rồi cộng 70."},
         onDone: function(ok, info){
           if (!ok) return;
+          q.el.appendChild(yCap(ctx));
           q.el.appendChild(fig);
           SIM.plot(fig, {
             xMin:20, xMax:30, yMin:140, yMax:200, xStep:2, yStep:10, height:240,
-            xLabel:AX.x, yLabel:AX.y,
+            xLabel:AX.x, alt:AX.alt,
             series:[{ fn: trueLine, color:C("b") }, dots(squad(1), C("a"))],
             marks:[{ x:c.s, y:c.h, label: num(c.s) + " cm → " + num(c.h) + " cm", color:C("c") }]
           });
@@ -502,11 +513,12 @@
       ok++; if (!info.assisted) clean++;
       times.push(info.ms);
       if (ok === of) {
-        var fig = ctx.el("div"); host.appendChild(fig);
+        var fig = ctx.el("div");
+        host.appendChild(yCap(ctx)); host.appendChild(fig);
         host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("showSim"))));
         SIM.plot(fig, {
           xMin:20, xMax:36, yMin:140, yMax:220, xStep:2, yStep:10, height:280,
-          xLabel:AX.x, yLabel:AX.y,
+          xLabel:AX.x, alt:AX.alt,
           series:[{ fn: function(s){ return A4.m * s + A4.c; }, color:C("b") }],
           vlines:[{ x:A4.lo, color:C("d") }, { x:A4.hi, color:C("d") }],
           marks:[
@@ -657,6 +669,7 @@
                vi:"Đo cẩu thả — tám bạn kia phân tán tới đâu"} }
     ], function(v){ state.h = v.h; state.k = v.k; redraw(); });
 
+    host.appendChild(yCap(ctx));
     host.appendChild(fig);
     host.appendChild(keyRow([{c:C("a"),n:KEY.people},{c:C("c"),n:KEY.sofia},{c:C("b"),n:KEY.bestLine}]));
     host.appendChild(live);
@@ -668,7 +681,7 @@
       var pts = nine(state.h, state.k), f = fit(pts);
       SIM.plot(fig, {
         xMin:20, xMax:32, yMin:130, yMax:210, xStep:2, yStep:10, height:320,
-        xLabel:AX.x, yLabel:AX.y,
+        xLabel:AX.x, alt:AX.alt,
         series:[
           { fn: function(s){ return f.m * s + f.c; }, color:C("b") },
           dots(squad(state.k), C("a")),
@@ -711,6 +724,7 @@
         label:{en:"Sloppy measuring", "zh-Hans":"测量马虎程度",
                "zh-Hant":"測量馬虎程度", vi:"Đo cẩu thả"} }
     ], function(v){ state.h = v.h; state.k = v.k; draw(); });
+    host.appendChild(yCap(ctx));
     host.appendChild(fig);
     host.appendChild(keyRow([{c:C("a"),n:KEY.people},{c:C("c"),n:KEY.sofia},{c:C("b"),n:KEY.bestLine}]));
     host.appendChild(live);
@@ -719,7 +733,7 @@
       var pts = nine(state.h, state.k), f = fit(pts);
       SIM.plot(fig, {
         xMin:20, xMax:32, yMin:130, yMax:210, xStep:2, yStep:10, height:300,
-        xLabel:AX.x, yLabel:AX.y,
+        xLabel:AX.x, alt:AX.alt,
         series:[
           { fn: function(s){ return f.m * s + f.c; }, color:C("b") },
           dots(squad(state.k), C("a")),
@@ -852,10 +866,11 @@
             vi:"Em đã gặp tám bạn này rồi — chính là đường ở nhóm A."},
       onDone: function(ok, info){
         if (ok) {
-          var fig = ctx.el("div"); q1.el.appendChild(fig);
+          var fig = ctx.el("div");
+          q1.el.appendChild(yCap(ctx)); q1.el.appendChild(fig);
           SIM.plot(fig, {
             xMin:20, xMax:32, yMin:130, yMax:210, xStep:2, yStep:10, height:250,
-            xLabel:AX.x, yLabel:AX.y,
+            xLabel:AX.x, alt:AX.alt,
             series:[
               { fn: function(s){ return withS.m * s + withS.c; }, color:C("d"), dash:"5 4" },
               { fn: trueLine, color:C("b") },
@@ -901,10 +916,11 @@
             vi:"h = 4 × 26,5 + 70."},
       onDone: function(ok, info){
         if (ok) {
-          var fig = ctx.el("div"); q3.el.appendChild(fig);
+          var fig = ctx.el("div");
+          q3.el.appendChild(yCap(ctx)); q3.el.appendChild(fig);
           SIM.plot(fig, {
             xMin:20, xMax:32, yMin:130, yMax:210, xStep:2, yStep:10, height:250,
-            xLabel:AX.x, yLabel:AX.y,
+            xLabel:AX.x, alt:AX.alt,
             vlines:[{ x:PRINT, color:C("c") }],
             series:[
               { fn: function(s){ return withS.m * s + withS.c; }, color:C("d"), dash:"5 4" },
