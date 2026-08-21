@@ -479,6 +479,25 @@
     return { built: built, checked: checked, total: set.words.length, title: set.title };
   }
 
+  /* where a vocab set lives: "Kinematics · word list 3" for the locked-word message */
+  function setLocation(setId) {
+    for (var i = 0; i < UNITS.length; i++) {
+      var idx = (UNITS[i].vocabSets || []).indexOf(setId);
+      if (idx !== -1) return { unit: UNITS[i], unitName: UNITS[i].name, index: idx + 1, page: UNITS[i].page };
+    }
+    return null;
+  }
+
+  /* which room a skill belongs to: maths | science (drives the page aesthetic) */
+  var STRAND = { kg_lines: "maths", kg_data: "science", kg_motion: "science",
+                 f_fluency: "maths", f_units: "maths",
+                 gg_code: "science", gg_inherit: "science", gg_prob: "maths",
+                 pg_claims: "science" };
+  function strandOf(skillId) {
+    var sk = SKILLS[skillId];
+    return sk ? (STRAND[sk.group] || "maths") : "maths";
+  }
+
   /* progress of one map cell: {done, total, met} (null cell → null) */
   function cellState(cell) {
     if (!cell || cell.soon) return null;
@@ -493,6 +512,7 @@
   window.STEM2 = {
     UNITS: UNITS, UNIT_BY_ID: UNIT_BY_ID, SKILLS: SKILLS, MAPS: MAPS,
     currentUnit: currentUnit, nextCheckpoint: nextCheckpoint, cellState: cellState,
+    setLocation: setLocation, strandOf: strandOf,
     Mastery: Mastery, Store: Store, setCounts: setCounts,
     daysUntil: daysUntil, fmtDate: fmtDate, esc: esc
   };
