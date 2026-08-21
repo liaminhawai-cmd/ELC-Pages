@@ -22,7 +22,7 @@
   if (!window.STEM2) return;
 
   var LANG_KEY = "elc_stem_home_lang";
-  var MAX_PICK = 2;                    /* one or two words at a time */
+  var MAX_PICK = 1;                    /* ONE word or phrase at a time, like the Grammar Hub */
   var GLOSS = (window.STEM_GLOSS || {});
   var DATA = window.STEM_VOCAB_DATA;
 
@@ -68,6 +68,9 @@
     /* the bar is fixed to the bottom, so the page reserves the same height
        underneath it — otherwise it sits on top of the last lines of the page. */
     "body.tw-active{padding-bottom:var(--tw-bar-h,56px)}" +
+    /* the notebook's floating 📓 lives at bottom-right too — while the bar is
+       open it rides up above it, or it covers the bar's close button */
+    "body.tw-active .sv-book{bottom:calc(var(--tw-bar-h,56px) + 10px)}" +
     ".tw-hit{cursor:help;border-bottom:1px dotted var(--faint,#9aa0a5)}" +
     ".tw-hit.tw-lock{border-bottom-style:dashed}" +
     ".tw-hit.tw-on{background:var(--accent-soft,#f4f9f8);border-bottom-color:var(--accent,#0d7a70)}" +
@@ -78,6 +81,11 @@
     ".tw-pop .g{font-size:1.02rem;font-weight:700;margin-top:3px}" +
     ".tw-pop .n{color:var(--muted,#767b7f);font-size:.75rem;margin-top:4px}" +
     ".tw-pop a{color:var(--accent,#0d7a70);font-weight:600;text-decoration:none}" +
+    /* a held control keeps full text contrast — only its frame goes quiet, so
+       nothing on the page becomes harder to READ while it cannot be pressed */
+    "body.tw-active button:not(.tw-x):not(.tw-toggle):not(.sv-panel *)," +
+      "body.tw-active a:not(.tw-toggle):not(.sv-panel *){border-color:var(--hair,#e6e7e3)!important}" +
+    "body.tw-active button:not(.tw-x):not(.tw-toggle):not(.sv-panel *){cursor:not-allowed}" +
     ".tw-toggle{border:1px solid var(--hair,#e6e7e3);border-radius:999px;background:var(--paper,#fcfcfa);" +
       "color:var(--muted,#767b7f);font:inherit;font-size:.72rem;padding:4px 13px;cursor:pointer;min-height:44px}" +
     ".tw-toggle.on{border-color:var(--accent,#0d7a70);color:var(--accent,#0d7a70)}";
@@ -86,22 +94,30 @@
 
   /* the few strings this component shows, in the page languages */
   var UI = {
-    en:        { btn: "tap to translate", my: "My language", pick: "choose…", hint: "tap up to two words",
+    en:        { btn: "tap to translate", my: "My language", pick: "choose…",
+                 hint: "tap one word · buttons are off",
+                 held: "Translate is on, so the page is held. Turn it off to use this.",
                  first: "Choose your language in the bar below first.",
                  learnAtF: function (u, n) { return "Go to <b>" + u + " · word list " + n + "</b> to learn this word."; },
                  learnFallback: "Build it to learn this word.",
                  build: "Build it now →", none: "No translation stored for this word yet." },
-    "zh-Hans": { btn: "点词翻译", my: "我的语言", pick: "选择…", hint: "最多点两个词",
+    "zh-Hans": { btn: "点词翻译", my: "我的语言", pick: "选择…",
+                 hint: "一次点一个词 · 按钮已停用",
+                 held: "翻译模式开着，页面被暂停了。关掉它才能点这个。",
                  first: "请先在下面选择你的语言。",
                  learnAtF: function (u, n) { return "去 <b>" + u + " · 单词表 " + n + "</b> 学这个词。"; },
                  learnFallback: "拼出它就能学会这个词。",
                  build: "现在去拼 →", none: "这个词还没有翻译。" },
-    "zh-Hant": { btn: "點字翻譯", my: "我的語言", pick: "選擇…", hint: "最多點兩個字",
+    "zh-Hant": { btn: "點字翻譯", my: "我的語言", pick: "選擇…",
+                 hint: "一次點一個字 · 按鈕已停用",
+                 held: "翻譯模式開著，頁面被暫停了。關掉它才能點這個。",
                  first: "請先在下面選擇你的語言。",
                  learnAtF: function (u, n) { return "去 <b>" + u + " · 單字表 " + n + "</b> 學這個字。"; },
                  learnFallback: "拼出它就能學會這個字。",
                  build: "現在去拼 →", none: "這個字還沒有翻譯。" },
-    vi:        { btn: "chạm để dịch", my: "Tiếng của tôi", pick: "chọn…", hint: "chạm tối đa hai từ",
+    vi:        { btn: "chạm để dịch", my: "Tiếng của tôi", pick: "chọn…",
+                 hint: "chạm một từ · các nút đang tắt",
+                 held: "Chế độ dịch đang bật nên trang bị giữ lại. Hãy tắt nó để dùng nút này.",
                  first: "Hãy chọn tiếng của bạn ở thanh bên dưới trước.",
                  learnAtF: function (u, n) { return "Đến <b>" + u + " · danh sách từ " + n + "</b> để học từ này."; },
                  learnFallback: "Ghép nó để học từ này.",
@@ -166,27 +182,42 @@
   }
 
   function onTap(el, word) {
+    /* tapping the selected word again clears it — one at a time, and the
+       student can always put it back down */
+    if (active.length && active[0] === el) { closePop(); return; }
+
+    var t = TARGET[word];
+
+    /* A WORD BUILDER WORD OPENS THE NOTEBOOK, never a tooltip.
+       The notebook is where a word's parts, its meaning, its ✓ and its build
+       live; showing a stripped-down copy of that in a bubble taught students
+       that the two were different things. If the word is not built yet the
+       notebook says so and offers the build there and then — which is the
+       point: the translation is the reward for assembling the word. */
+    if (t && window.STEMVOCAB && window.STEMVOCAB.dict &&
+        window.STEMVOCAB.dict[String(t.w.w).toLowerCase()]) {
+      closePop();
+      window.STEMVOCAB.openWord(t.w.w);
+      return;
+    }
+
     if (!homeLang()) {
+      select(el);
       showPop(el, "<div class='n'>" + esc(U("first")) + "</div>");
       return;
     }
-    if (active.indexOf(el) === -1) {
-      if (active.length >= MAX_PICK) { var old = active.shift(); old.classList.remove("tw-on"); }
-      active.push(el); el.classList.add("tw-on");
-    }
-    var t = TARGET[word];
+    select(el);
+
+    /* no notebook on this page (or the word is not in it): keep the honest
+       fallback — say where the word is taught rather than handing it over */
     if (t) {
       var st = STEM2.Store.vocabWord(word);
-      /* BUILT only — answering the USE quiz marks a word "checked", but the
-         translation is the reward for assembling the word from its parts. */
       if (st && st.built) {
         var lg = homeLang();
         var tr = (t.w.tr || {})[lg] || "";
         showPop(el, "<div class='w'>" + esc(t.w.w) + "</div><div class='g'>" + esc(tr) + "</div>" +
           "<div class='n'>" + esc((t.w.meaning || "").slice(0, 90)) + "</div>");
       } else {
-        /* say WHERE to learn it: the first set (in unit order) that teaches
-           this word, via the shared STEM2.setLocation() helper. */
         var loc = STEM2.setLocation(t.set.id);
         var locMsg = loc ? U("learnAtF")(esc(loc.unitName), loc.index) : U("learnFallback");
         showPop(el, "<div class='w'>" + esc(t.w.w) + "</div>" +
@@ -195,9 +226,17 @@
       }
       return;
     }
+
+    /* an ordinary helper word: the gloss, one at a time */
     var g = glossFor(word);
     if (g) showPop(el, "<div class='w'>" + esc(word) + "</div><div class='g'>" + esc(g) + "</div>");
     else showPop(el, "<div class='w'>" + esc(word) + "</div><div class='n'>" + esc(U("none")) + "</div>");
+  }
+
+  function select(el) {
+    if (active.indexOf(el) !== -1) return;
+    while (active.length >= MAX_PICK) active.shift().classList.remove("tw-on");
+    active.push(el); el.classList.add("tw-on");
   }
 
   /* ---------- the word splitter ----------
@@ -214,8 +253,12 @@
     (HYPHENATED.length ? "(?:" + HYPHENATED.map(escRe).join("|") + ")(?![A-Za-z])|" : "") +
     "[A-Za-z][A-Za-z'-]{1,})", "i");
 
-  /* wrap eligible words in tappable spans (skips inputs, links, code, marked-up vocab) */
-  var SKIP = { SCRIPT: 1, STYLE: 1, INPUT: 1, TEXTAREA: 1, SELECT: 1, BUTTON: 1, A: 1, CODE: 1, SVG: 1, OPTION: 1 };
+  /* Wrap eligible words in tappable spans. A BUTTON's and an A's text IS
+     decorated: while translate is on the page is held, so the words on a
+     button are readable like any others and the button cannot fire. Form
+     fields and code stay out — there is nothing to translate in a number a
+     student typed. */
+  var SKIP = { SCRIPT: 1, STYLE: 1, INPUT: 1, TEXTAREA: 1, SELECT: 1, CODE: 1, SVG: 1, OPTION: 1 };
   function decorate(root) {
     var walker = document.createTreeWalker(root || document.body, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
@@ -247,7 +290,11 @@
             var span = document.createElement("span");
             span.className = "tw-hit" + (TARGET[lw] ? " tw-lock" : "");
             span.textContent = p;
-            span.addEventListener("click", function (e) { e.stopPropagation(); onTap(span, lw); });
+            span.addEventListener("click", function (e) {
+              /* preventDefault as well as stopPropagation: stopping the bubble
+                 does not stop an enclosing <a> from navigating. */
+              e.preventDefault(); e.stopPropagation(); onTap(span, lw);
+            });
             frag.appendChild(span); any = true; return;
           }
         }
@@ -297,6 +344,35 @@
     if (observer) { observer.disconnect(); observer = null; }
     if (pending) { clearTimeout(pending); pending = null; }
   }
+
+  /* ---------- holding the page while translate is on ----------
+     The teacher's rule: you deselect translate to actually click things. So
+     while the mode is on, every control outside our own chrome is inert, and
+     tapping one says why rather than doing nothing silently. Without this a
+     student tapping a word that happens to sit on a button navigates away
+     mid-sentence and never sees the translation. */
+  var EXEMPT = ".tw-bar,.tw-pop,.tw-toggle,.sv-panel,.sv-scrim,.sv-book,.language-select";
+  var CONTROL = "a,button,select,input,textarea,summary,label,[role=button],[onclick]";
+  function heldNudge(el) {
+    showPop(el, "<div class='n'>" + esc(U("held")) + "</div>");
+  }
+  function hold(e) {
+    if (!enabled) return;
+    var t = e.target;
+    if (!t || !t.closest) return;
+    if (t.classList && t.classList.contains("tw-hit")) return;   /* our own word */
+    if (t.closest(EXEMPT)) return;                               /* our own chrome + the notebook */
+    var ctl = t.closest(CONTROL);
+    if (!ctl) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "click") heldNudge(ctl);
+  }
+  document.addEventListener("click", hold, true);
+  document.addEventListener("submit", hold, true);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" || e.key === " ") hold(e);
+  }, true);
 
   /* the bar is fixed to the bottom of the viewport, so reserve its height under
      the page while it is open — otherwise it covers the last lines. */
