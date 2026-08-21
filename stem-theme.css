@@ -1,0 +1,294 @@
+/* ================================================================
+   stem-theme.css — three rooms, three materials
+   ----------------------------------------------------------------
+   The STEM hub has one design language: quiet type, hairline rules,
+   no gradients-as-decoration, no cards-with-shadows, no emoji chrome.
+   This file does NOT change that. It changes the MATERIAL under it,
+   so a student always knows which room they are standing in:
+
+     <body data-room="vocab">    a NOTEBOOK  — warm paper, ruled lines,
+                                 a margin rule, book-serif headwords
+     <body data-room="maths">    GRAPH PAPER — faint cool grid, axis
+                                 stubs on section rules, monospace numerals
+     <body data-room="science">  THE LAB     — cool white/slate, ruler
+                                 ticks on section rules, sans headings
+
+   Anything with no data-room (the shelf, unit pages, the report, the
+   map) stays exactly as it was: that is the connective tissue between
+   rooms, not a room.
+
+   HOW IT WORKS
+   Every page already declares the v2 tokens on :root and swaps them
+   in @media (prefers-color-scheme:dark). Custom properties inherit,
+   so re-declaring a token on <body> re-tints everything downstream —
+   including rules the pages wrote themselves, e.g. body{background:
+   var(--paper)} and .card{background:var(--card)} — without touching
+   a single page rule. Each room therefore restates its tokens TWICE,
+   once for light and once inside the dark media query: a token set
+   only in the light block would leak into dark mode.
+
+   NO images, NO webfonts, NO CDNs, NO JS. Texture is drawn with
+   repeating-linear-gradient on backgrounds and with absolutely
+   positioned ::after pseudo-elements, both of which are outside
+   normal flow — nothing here can move a box, so layout is bit-for-bit
+   what it was and cumulative layout shift stays zero. Every face is a
+   system stack, so there is no font swap either.
+
+   CONTRAST (WCAG 2.1 AA, 4.5:1 for body text)
+   The base palette runs close to the line already: --faint on --paper
+   is 4.87:1 and --alert is 4.74:1. Any texture drawn UNDER text eats
+   that headroom, so each textured room does two things:
+     1. caps the texture alpha (light rules .085, light grid .075 per
+        axis, dark .075 / .055) and
+     2. nudges --faint, --accent and --alert a few percent darker
+        INSIDE that room only.
+   Worst case measured on the darkest composite a glyph can sit on
+   (a rule crossing text; a grid intersection):
+     vocab  light  bg #eae9e5  faint 4.56  accent 4.58  alert 4.58
+     maths  light  bg #dde4ed  faint 4.58  accent 4.58  alert 4.57
+     vocab  dark   bg #222018  faint 4.86  accent 6.30  alert 6.23
+     maths  dark   bg #1f2832  faint 4.68  accent 6.07  alert 6.00
+   Science draws no texture under text (its ticks live in the padding
+   gap under a section rule), so it keeps the page tokens and only
+   cools the paper. Contrast is never reduced below AA in any room, in
+   either scheme.
+
+   The morpheme chips (.chip.prefix / .chip.root / .chip.suffix) are
+   deliberately NOT touched anywhere in this file: the three type
+   colours are the vocabulary system and they must read the same on
+   the hub, in the notebook and on the build board.
+   ================================================================ */
+
+/* ---------------- shared: the faces each room can reach for -------- */
+body[data-room] {
+  --room-serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua",
+                Georgia, "Times New Roman", serif;
+  --room-sans:  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --room-mono:  ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas,
+                "Liberation Mono", "Courier New", monospace;
+}
+
+/* ================================================================
+   VOCAB — a notebook
+   ================================================================ */
+body[data-room="vocab"] {
+  --paper:#faf7ef;                 /* warm cream */
+  --bg:#faf7ef;                    /* alias used by stem-vocab-revision.html */
+  --card:#faf7ef;
+  --accent-soft:#eff6f2;           /* the teal wash, warmed to sit on cream */
+  --faint:#64696e;                 /* +0.4 contrast, to survive a ruled line */
+  --accent:#0d756c;
+  --alert:#a2522b;
+  --room-rule:rgba(58,86,122,.085);   /* the ruling */
+  --room-margin:transparent;          /* the margin rule — only where there is room */
+  --room-margin-x:12px;
+}
+@media (min-width:700px) {
+  body[data-room="vocab"] { --room-margin:rgba(176,89,47,.24); }
+}
+
+/* ================================================================
+   MATHS — graph paper
+   ================================================================ */
+body[data-room="maths"] {
+  --paper:#fbfcfd;                 /* cool white */
+  --bg:#fbfcfd;
+  --card:#fbfcfd;
+  --faint:#61656a;                 /* +0.7 contrast, to survive a grid line */
+  --accent:#0c7168;
+  --alert:#9d4f2a;
+  --room-grid:rgba(40,89,140,.075);
+  --room-grid-step:24px;
+  --room-axis:rgba(33,36,39,.5);
+}
+
+/* ================================================================
+   SCIENCE — the lab
+   ================================================================ */
+body[data-room="science"] {
+  --paper:#fafbfb;                 /* clean lab white, a shade of slate in it */
+  --bg:#fafbfb;
+  --card:#fafbfb;
+  --hair:#e2e7e8;                  /* every hairline goes slate */
+  --faint:#696e73;                 /* kept a touch above the base 4.87:1 */
+  --room-edge:#7c888f;             /* section rules: slate, not ink */
+  --room-tick:rgba(90,105,114,.38);
+  --room-tick-major:rgba(90,105,114,.62);
+}
+
+/* ================================================================
+   DARK — every room restates every token it owns
+   ================================================================ */
+@media (prefers-color-scheme:dark) {
+  body[data-room="vocab"] {
+    --paper:#15140f;               /* warm near-black */
+    --bg:#15140f;
+    --card:#15140f;
+    --accent-soft:#1b2523;
+    --faint:#878d92;               /* base values clear AA on this paper */
+    --accent:#2fb3a5;
+    --alert:#d98e6a;
+    --room-rule:rgba(200,180,138,.075);
+    --room-margin:transparent;
+  }
+  @media (min-width:700px) {
+    body[data-room="vocab"] { --room-margin:rgba(217,142,106,.20); }
+  }
+  body[data-room="maths"] {
+    --paper:#0f1317;               /* cool near-black */
+    --bg:#0f1317;
+    --card:#0f1317;
+    --faint:#878d92;
+    --accent:#2fb3a5;
+    --alert:#d98e6a;
+    --room-grid:rgba(130,175,225,.055);
+    --room-axis:rgba(242,243,241,.45);
+  }
+  body[data-room="science"] {
+    --paper:#0f1315;               /* slate near-black */
+    --bg:#0f1315;
+    --card:#0f1315;
+    --hair:#2a3033;
+    --faint:#878d92;
+    --room-edge:#5f6a70;
+    --room-tick:rgba(160,178,188,.34);
+    --room-tick-major:rgba(160,178,188,.58);
+  }
+}
+
+/* ================================================================
+   MATERIAL — drawn, not laid out
+   ================================================================ */
+
+/* ---------------- vocab: ruled paper ---------------- */
+/* Two background layers on the content column: the ruling (a 28px
+   rhythm, the line on the last pixel of each band) and, on screens
+   wide enough to have a gutter, a margin rule down the left. Both are
+   backgrounds — zero layout cost, and they scroll with the column. */
+body[data-room="vocab"] .wrap {
+  background-image:
+    linear-gradient(90deg,
+      transparent 0, transparent var(--room-margin-x),
+      var(--room-margin) var(--room-margin-x),
+      var(--room-margin) calc(var(--room-margin-x) + 1px),
+      transparent calc(var(--room-margin-x) + 1px)),
+    repeating-linear-gradient(to bottom,
+      transparent 0, transparent 27px,
+      var(--room-rule) 27px, var(--room-rule) 28px);
+}
+/* stem-vocab-revision.html stacks opaque .card blocks; on ruled paper
+   they read better as boxes drawn ON the page than as pasted-on tiles,
+   so the top-level card loses its fill and keeps its hairline. Every
+   control inside it (.tile .pw .mn .dot svg.graph) still fills with
+   var(--card) and stays opaque. */
+body[data-room="vocab"] .card { background:transparent; }
+/* the ruling must not run through a tap target: the one control on
+   these pages with no fill of its own gets the paper colour */
+body[data-room="vocab"] .wchip { background:var(--card); }
+
+/* Headwords go book-serif. The pages already set Georgia on most of
+   these; the room swaps in a warmer old-style face where the device
+   has one and falls back to Georgia where it does not. Meanings,
+   glosses, controls and chips stay in the page sans. */
+body[data-room="vocab"] h1,
+body[data-room="vocab"] h2,
+body[data-room="vocab"] .hw,
+body[data-room="vocab"] .sname,
+body[data-room="vocab"] .score,
+body[data-room="vocab"] .tword,          /* build board, if present */
+body[data-room="vocab"] .brow .bw {      /* build board, if present */
+  font-family:var(--room-serif);
+}
+
+/* ---------------- maths: graph paper ---------------- */
+body[data-room="maths"] .wrap {
+  background-image:
+    repeating-linear-gradient(to right,
+      var(--room-grid) 0, var(--room-grid) 1px,
+      transparent 1px, transparent var(--room-grid-step)),
+    repeating-linear-gradient(to bottom,
+      var(--room-grid) 0, var(--room-grid) 1px,
+      transparent 1px, transparent var(--room-grid-step));
+}
+/* Section rules become axes: the page's horizontal rule, plus a short
+   stub dropping from its left end. The stub is an absolutely
+   positioned pseudo living in the heading's existing padding-top, so
+   it never touches the text and never moves a box. */
+body[data-room="maths"] .ghead,
+body[data-room="maths"] .skhead,
+body[data-room="maths"] h3.et { position:relative; }
+body[data-room="maths"] .ghead::after,
+body[data-room="maths"] .skhead::after,
+body[data-room="maths"] h3.et::after {
+  content:"";
+  position:absolute; left:0; top:0;
+  width:1px; height:11px;
+  background:var(--room-axis);
+  pointer-events:none;
+}
+body[data-room="maths"] h3.et::after { height:7px; opacity:.6; }
+
+/* Numerals in answers, inputs, tables and the timer go monospace and
+   tabular, so a column of working lines up. Prose keeps the sans;
+   option buttons hold words as often as numbers, so they only get
+   tabular figures, not the mono face. */
+body[data-room="maths"] input.qin,
+body[data-room="maths"] .slot-ans,
+body[data-room="maths"] .timer,
+body[data-room="maths"] .mark,
+body[data-room="maths"] .qb-table th,
+body[data-room="maths"] .qb-table td {
+  font-family:var(--room-mono);
+  font-variant-numeric:tabular-nums;
+  letter-spacing:0;
+}
+body[data-room="maths"] .opts .opt,
+body[data-room="maths"] .worked,
+body[data-room="maths"] .sum .val,
+body[data-room="maths"] .sstate,
+body[data-room="maths"] .gcount { font-variant-numeric:tabular-nums; }
+
+/* ---------------- science: the lab ---------------- */
+/* No field texture — the room is clean. Its signal is slate rules
+   carrying fine measurement ticks, and sans headings. */
+body[data-room="science"] .ghead,
+body[data-room="science"] .skhead { border-top-color:var(--room-edge); }
+
+body[data-room="science"] .ghead,
+body[data-room="science"] .skhead,
+body[data-room="science"] h3.et { position:relative; }
+body[data-room="science"] .ghead::after,
+body[data-room="science"] .skhead::after,
+body[data-room="science"] h3.et::after {
+  content:"";
+  position:absolute; left:0; right:0; top:0;
+  height:9px;
+  background-image:
+    repeating-linear-gradient(to right,
+      var(--room-tick-major) 0, var(--room-tick-major) 1px,
+      transparent 1px, transparent 60px),
+    repeating-linear-gradient(to right,
+      var(--room-tick) 0, var(--room-tick) 1px,
+      transparent 1px, transparent 12px);
+  background-size:100% 9px, 100% 5px;
+  background-repeat:no-repeat, no-repeat;
+  background-position:left top, left top;
+  pointer-events:none;
+}
+body[data-room="science"] h3.et::after { opacity:.55; }
+
+/* Headings go sans: the lab writes in the same face it labels with. */
+body[data-room="science"] h1,
+body[data-room="science"] h2,
+body[data-room="science"] .skname,
+body[data-room="science"] h3.et {
+  font-family:var(--room-sans);
+  font-weight:600;
+  letter-spacing:-.008em;
+}
+body[data-room="science"] h1 { font-weight:500; }   /* the masthead stays quiet */
+body[data-room="science"] .sname {
+  font-family:var(--room-sans);
+  font-weight:500;
+  letter-spacing:0;
+}

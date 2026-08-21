@@ -167,8 +167,9 @@
     .sum { grid-template-columns:1fr; }
   }
 </style>
+<link rel="stylesheet" href="stem-theme.css?v=20260821-3">
 </head>
-<body>
+<body data-room="maths">
 <div class="wrap">
   <div class="top">
     <a href="stem.html">← STEM</a>
@@ -210,7 +211,7 @@
      ============================================================ */
   var COPY = {
     en: {
-      previewNote: function(d){ return "opens "+d+" — open for a look until then"; },
+      previewNote:"opens later in the year — open for a look until then",
       masteredCount: function(a,b){ return a+"/"+b+" mastered"; },
       stMastered: function(d){ return "✓ mastered · "+d; },
       stNof: function(n,of){ return n+" of "+of; },
@@ -219,7 +220,7 @@
       open: "open →",
       neededBy: function(n,d){ return "needed by "+n+" · "+d; },
       /* project framing — practice is always preparation for a task */
-      buildsFor: function(n,w){ return "This builds your toolkit for the "+n+" — "+w; },
+      buildsFor: function(n){ return "This builds your toolkit for the "+n+"."; },
       builtFor: function(n){ return "The "+n+" used this — keep it sharp."; },
       buildsAll: "This keeps your number work sharp for every task.",
       rubric: "Rubric ▾",
@@ -272,7 +273,7 @@
     "zh-Hans": {
       title: "技能", sub: "每项 STEM 技能——学习、练习、复习",
       privacy: "匿名 · 进度只保存在这个浏览器 · 工作纸在 Compass 和班级 OneNote（需学校账号）。",
-      previewNote: function(d){ return d+" 开放——现在可以先看看"; },
+      previewNote:"稍后开放——现在可以先看看",
       masteredCount: function(a,b){ return a+"/"+b+" 已掌握"; },
       stMastered: function(d){ return "✓ 已掌握 · "+d; },
       stNof: function(n,of){ return n+" / "+of+" 题"; },
@@ -280,7 +281,7 @@
       stNone: "未开始",
       open: "打开 →",
       neededBy: function(n,d){ return "“"+n+"”需要它 · "+d; },
-      buildsFor: function(n,w){ return "练这一项，是在为“"+n+"”做准备——"+w; },
+      buildsFor: function(n){ return "练这一项，是在为“"+n+"”做准备。"; },
       builtFor: function(n){ return "“"+n+"”已经用过这一项——继续保持手感。"; },
       buildsAll: "这一项让你的计算又快又稳，每个任务都用得上。",
       rubric: "评分标准 ▾",
@@ -333,7 +334,7 @@
     "zh-Hant": {
       title: "技能", sub: "每項 STEM 技能——學習、練習、複習",
       privacy: "匿名 · 進度只儲存在這個瀏覽器 · 學習單在 Compass 和班級 OneNote（需學校帳號）。",
-      previewNote: function(d){ return d+" 開放——現在可以先看看"; },
+      previewNote:"稍後開放——現在可以先看看",
       masteredCount: function(a,b){ return a+"/"+b+" 已精熟"; },
       stMastered: function(d){ return "✓ 已精熟 · "+d; },
       stNof: function(n,of){ return n+" / "+of+" 題"; },
@@ -341,7 +342,7 @@
       stNone: "尚未開始",
       open: "打開 →",
       neededBy: function(n,d){ return "「"+n+"」會用到 · "+d; },
-      buildsFor: function(n,w){ return "練這一項，是在為「"+n+"」做準備——"+w; },
+      buildsFor: function(n){ return "練這一項，是在為「"+n+"」做準備。"; },
       builtFor: function(n){ return "「"+n+"」已經用過這一項——繼續保持手感。"; },
       buildsAll: "這一項讓你的計算又快又穩，每項任務都用得上。",
       rubric: "評量規準 ▾",
@@ -394,7 +395,7 @@
     "vi": {
       title: "Kỹ năng", sub: "Mọi kỹ năng STEM — học, luyện tập, ôn tập",
       privacy: "Ẩn danh · tiến độ chỉ lưu trong trình duyệt này · phiếu bài tập nằm trên Compass và OneNote của lớp (cần tài khoản trường).",
-      previewNote: function(d){ return "mở ngày "+d+" — từ giờ đến đó bạn vẫn xem trước được"; },
+      previewNote:"mở ở phần sau của năm học — từ giờ đến đó bạn vẫn xem trước được",
       masteredCount: function(a,b){ return "đã thành thạo "+a+"/"+b; },
       stMastered: function(d){ return "✓ đã thành thạo · "+d; },
       stNof: function(n,of){ return n+" / "+of+" câu"; },
@@ -402,7 +403,7 @@
       stNone: "chưa bắt đầu",
       open: "Mở →",
       neededBy: function(n,d){ return "cần cho bài "+n+" · "+d; },
-      buildsFor: function(n,w){ return "Luyện phần này để chuẩn bị cho bài "+n+" — "+w; },
+      buildsFor: function(n){ return "Luyện phần này để chuẩn bị cho bài "+n+"."; },
       builtFor: function(n){ return "Bài "+n+" đã dùng đến kỹ năng này — giữ cho thật quen tay."; },
       buildsAll: "Phần này giúp bạn tính toán luôn nhanh và chắc, dùng cho mọi bài.",
       rubric: "Tiêu chí đánh giá ▾",
@@ -485,7 +486,7 @@
     return a;
   }
   function hasGen(id){ return !!(window.QBANK && QBANK.list().indexOf(id) !== -1); }
-  function unitOpen(u){ return u.always || !u.opensFrom || STEM2.daysUntil(u.opensFrom) <= 0; }
+  function unitOpen(u){ return STEM2.unitOpen(u); }
   function groupOf(sk){
     var u = STEM2.UNIT_BY_ID[sk.unit], g = null;
     (u.skillGroups || []).forEach(function(gr){ if (gr.id === sk.group) g = gr; });
@@ -517,15 +518,28 @@
     });
     return o;
   }
+  /* which room this page is standing in — see stem-theme.css.
+     A skill takes its strand (maths | science); the unit list, which
+     shows both strands at once, stays on the maths default set in the
+     <body> tag, so there is never an unthemed first paint. */
+  function setRoom(room){
+    if (room !== "maths" && room !== "science") room = "maths";
+    if (document.body.getAttribute("data-room") !== room) {
+      document.body.setAttribute("data-room", room);
+    }
+  }
+
   function route(){
     stopTimers();
     var p = parseHash();
     if (p.skill && STEM2.SKILLS[p.skill]) {
       var mode = (p.mode === "practise" || p.mode === "revise") ? p.mode : "teach";
       if (rubricFor && rubricFor !== p.skill) rubricFor = null;
+      setRoom(STEM2.strandOf(p.skill));
       renderSkill(p.skill, mode);
     } else {
       rubricFor = null;
+      setRoom("maths");
       var uid = (p.unit && STEM2.UNIT_BY_ID[p.unit]) ? p.unit : STEM2.currentUnit().id;
       renderUnit(uid);
     }
@@ -551,8 +565,8 @@
       h += "<a class='" + (u2.id === uid ? "on" : "") + "' href='#unit=" + u2.id + "'>" + esc(u2.name) + "</a>";
     });
     h += "</nav>";
-    if (u.opensFrom && STEM2.daysUntil(u.opensFrom) > 0) {
-      h += "<p class='preview-note'>" + esc(T("previewNote")(STEM2.fmtDate(u.opensFrom))) + "</p>";
+    if (!unitOpen(u)) {
+      h += "<p class='preview-note'>" + esc(T("previewNote")) + "</p>";
     }
     (u.skillGroups || []).forEach(function(g){
       var done = 0;
@@ -592,8 +606,8 @@
     if (!sk) return "";
     var cp = projectOf(id);
     if (!cp) return sk.needs ? "" : T("buildsAll");
-    if (cp.status === "done" || STEM2.daysUntil(cp.date) < 0) return T("builtFor")(cp.short);
-    return T("buildsFor")(cp.short, STEM2.fmtDate(cp.date));
+    if (STEM2.cpDone(cp)) return T("builtFor")(cp.short);
+    return T("buildsFor")(cp.short);
   }
 
   function renderSkill(id, mode){
@@ -1040,13 +1054,13 @@
       Object.keys(agg).forEach(function(sid){
         var sk2 = STEM2.SKILLS[sid], cp = projectOf(sid);
         if (!cp) { if (sk2 && !sk2.needs) anyFluency = true; return; }
-        if (cp.status === "done" || STEM2.daysUntil(cp.date) < 0) return;
+        if (STEM2.cpDone(cp)) return;
         if (seen[cp.id]) return;
         seen[cp.id] = 1;
         projects.push(cp);
       });
-      projects.sort(function(a, b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
-      var feedList = projects.map(function(c){ return c.short + " — " + STEM2.fmtDate(c.date); });
+      /* already in unit order — that order IS the order of the tasks */
+      var feedList = projects.map(function(c){ return c.short; });
       if (anyFluency) feedList.push(T("feedsAll"));
       if (feedList.length) {
         h += "<p class='frame'>" + esc(T("feeds")) + " " + esc(feedList.join(" · ")) + "</p>";

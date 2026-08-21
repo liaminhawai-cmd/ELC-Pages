@@ -3,104 +3,65 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Race to School — Linear Motion</title>
+<title>Race to School — rehearsal for the Trains task</title>
+<!-- ================================================================
+     Race to School — the rehearsal for the Trains task (Motion CAT).
+     Same mathematics as the real task, a different story on purpose.
+
+     TWO SETS, five steps each, scaffolding only ever coming off:
+       SET A  THE STRAIGHT ROAD — constant speeds, no stops. The
+              algebra is 0.3t = 0.6(t − 5): one line meeting another.
+              The numbers are chosen so every answer lands on a whole
+              number and the car catches the bike EXACTLY at the shops
+              and the tram EXACTLY at the school gate.
+       SET B  WITH STOPS — the same road, but now the tram stands at
+              five stops and the car meets lights and has to park.
+              Piecewise graphs, average speed vs top speed.
+     Set B stays locked until Set A is finished, because the stops are
+     what made the old single-ladder version too hard too early.
+
+     All the numbers live in ROAD and SET_A / SET_B below. Change a
+     speed there and the animation, the graph, the questions and the
+     worked solutions all follow — nothing is written twice.
+
+     The step shell, sliders, graphs, animation, marking and timing
+     all come from stem-sim.js. This file is only the story and the
+     numbers.
+     ================================================================ -->
 <style>
   :root {
     --paper:#fcfcfa; --ink:#212427; --muted:#5c6166; --faint:#6b7075;
     --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f; --on-accent:#ffffff;
-    /* aliases so the rest of this page's CSS (unchanged) and the shared
-       notebook panel (stem-vocab.js) keep reading the same v2 colours */
-    --bg:#fcfcfa; --card:#fcfcfa; --line:#e6e7e3; --radius:14px; --shadow:none;
-    --good:#2f6a3e; --good-soft:#e5f3e8; --warn:#b45309; --warn-soft:#fef3c7;
-    --bad:#a8432f; --bad-soft:#fde8e4;
-    --tram:#0369a1; --bike:#b45309; --car:#7e22ce;
   }
   @media (prefers-color-scheme:dark) {
     :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#878d92;
-            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517;
-            --bg:#121517; --card:#121517; --line:#2c3134;
-            --good:#93cf9b; --good-soft:#1d3323; --warn:#fbbf24; --warn-soft:#3a2f12;
-            --bad:#e8836f; --bad-soft:#3b201a;
-            --tram:#38bdf8; --bike:#fbbf24; --car:#c084fc; }
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517; }
   }
   * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); color:var(--ink);
-         font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-  .wrap { max-width:900px; margin:0 auto; padding:16px 16px 70px; }
-  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px;
+         flex-wrap:wrap; margin-bottom:26px; }
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem; }
   .top a:hover { text-decoration:underline; }
-  select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
-    background:var(--paper); color:var(--ink); padding:5px 8px; min-height:44px; }
-  .serif { font-family:Georgia,"Times New Roman",serif; }
-  .masthead { margin:4px 0 22px; }
+  .language-select { font:inherit; font-size:.82rem; padding:6px 8px; min-height:34px;
+    border-radius:8px; border:1px solid var(--hair); background:var(--paper); color:var(--ink); }
+  .masthead { margin:4px 0 20px; }
   .masthead h1 { margin:0 0 6px; font-family:Georgia,"Times New Roman",serif; font-size:1.9rem;
     font-weight:500; letter-spacing:-.01em; }
-  .masthead .sub { margin:0; color:var(--muted); font-size:.88rem; max-width:62ch; }
-  h2 { font-size:1.12rem; margin:24px 0 10px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:16px; box-shadow:var(--shadow); margin-bottom:14px; }
-  .muted { color:var(--muted); font-size:.88rem; }
-  /* level picker */
-  .levels { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 18px; }
-  .ltab { border-radius:12px; border:1px solid var(--line); background:var(--card); color:var(--ink);
-    padding:9px 14px; font:inherit; cursor:pointer; text-align:left; min-height:44px; box-shadow:var(--shadow); }
-  .ltab b { display:block; font-size:.9rem; }
-  .ltab small { color:var(--muted); font-size:.72rem; }
-  .ltab.on { border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent); }
-  .ltab.on b { color:var(--accent); }
-  .ltab.lock { opacity:.55; cursor:not-allowed; }
-  .ltab .tick { color:var(--good); }
-  /* teacher affordance lives in the page foot, quietly, out of the student's path */
-  .teacherline { font-size:.72rem; color:var(--faint); margin:14px 0 0; }
+  .masthead .sub { margin:0; color:var(--muted); font-size:.88rem; max-width:64ch; }
+  .frame { border-top:1px solid var(--ink); padding-top:12px; margin:0 0 20px;
+           font-size:.86rem; color:var(--muted); }
+  .frame b { color:var(--ink); }
+  .frame .eng { display:block; margin-top:.4rem; color:var(--faint); font-size:.82rem; }
+  .note { font-size:.8rem; color:var(--faint); margin:26px 0 0; }
+  footer { margin-top:34px; border-top:1px solid var(--hair); padding-top:14px;
+           font-size:.78rem; color:var(--faint); }
+  .teacherline { margin:10px 0 0; font-size:.76rem; }
   .teacherline a { color:var(--faint); }
-  .teacherline a:hover { color:var(--accent); }
-  /* sim */
-  .simbox canvas { display:block; width:100%; border:1px solid var(--line); border-radius:10px;
-    background:var(--card); margin-bottom:8px; }
-  .legend { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; font-size:.85rem; }
-  .mchip { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line);
-    border-radius:999px; padding:4px 12px; font-weight:600; background:var(--card); }
-  .mchip .dot { width:12px; height:12px; border-radius:50%; display:inline-block; }
-  .ctrl { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
-  button.go { font:inherit; font-weight:600; border-radius:999px; padding:9px 18px; cursor:pointer;
-    min-height:44px; border:1px solid var(--accent); background:var(--accent); color:var(--on-accent); }
-  button.go.ghost { background:none; color:var(--accent); }
-  button.go:disabled { opacity:.5; cursor:default; }
-  .speedp { border-radius:999px; border:1px solid var(--line); background:none; color:var(--muted);
-    padding:8px 13px; min-height:44px; font:inherit; font-weight:600; cursor:pointer; font-size:.85rem; }
-  .speedp.on { background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
-  .timer { margin-left:auto; color:var(--muted); font-size:.9rem; font-variant-numeric:tabular-nums; }
-  .podium { margin-top:10px; font-weight:600; font-size:.95rem; }
-  /* questions */
-  .qrow { margin:12px 0; }
-  .lvl input[type=text] { font:inherit; width:96px; padding:8px 10px; min-height:44px; border-radius:8px;
-    border:1px solid var(--line); background:var(--bg); color:var(--ink); text-align:center; }
-  .lvl input.wide { width:150px; }
-  .lvl input.right { border-color:var(--good); background:var(--good-soft);
-    box-shadow:0 0 0 3px var(--good-soft); }
-  .lvl input.wrong { border-color:var(--bad); background:var(--bad-soft); }
-  .fb { font-weight:700; margin-top:8px; }
-  .fb.ok { color:var(--good); } .fb.no { color:var(--bad); }
-  .worked { border-left:4px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0;
-    padding:10px 14px; margin-top:10px; font-size:.9rem; }
-  .party { animation:pop .5s ease; color:var(--good); font-weight:700; font-size:1.02rem; margin-top:10px; }
-  @keyframes pop { from { transform:scale(.7); opacity:0; } to { transform:none; opacity:1; } }
-  .goal { font-size:.82rem; color:var(--muted); border:1px dashed var(--line); border-radius:10px;
-    padding:7px 12px; margin:10px 0; }
-  .hintbtn { border:none; background:none; color:var(--accent); font:inherit; font-size:.85rem;
-    cursor:pointer; padding:6px 8px; text-decoration:underline; }
-  /* chunky slider */
-  input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:44px;
-    background:none; margin:4px 0; }
-  input[type=range]::-webkit-slider-runnable-track { height:8px; border-radius:999px; background:var(--line); }
-  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:26px; height:26px;
-    border-radius:50%; background:var(--accent); margin-top:-9px; border:none; box-shadow:var(--shadow); }
-  input[type=range]::-moz-range-track { height:8px; border-radius:999px; background:var(--line); }
-  input[type=range]::-moz-range-thumb { width:26px; height:26px; border-radius:50%;
-    background:var(--accent); border:none; }
-  .note { margin-top:22px; color:var(--muted); font-size:.85rem; }
-  footer { margin-top:24px; color:var(--muted); font-size:.85rem; }
+  [data-v] { border-bottom:1px dotted var(--accent); cursor:help; }
+  .sim-live { font-variant-numeric:tabular-nums; font-size:.82rem; color:var(--muted); }
 </style>
 </head>
 <body>
@@ -118,1058 +79,987 @@
 
   <div class="masthead">
     <h1 data-i18n="title">Race to School</h1>
-    <p class="sub" data-i18n="sub">Three ways to school, one straight route. Watch the race, predict it,
-      then do the maths that decides it. Four levels — each one hands more of the work to you.</p>
+    <p class="sub" data-i18n="sub">One straight road, three ways to get there. Play with it, read it,
+      predict it, then do the maths on your own. Two sets of five steps — each step hands more of
+      the work to you.</p>
   </div>
 
-  <div class="card" id="intro"></div>
+  <p class="frame" id="frameLine"></p>
 
-  <div class="levels" id="levelTabs"></div>
+  <div id="sim"></div>
 
-  <div id="levelPanel" class="lvl"></div>
-
-  <p class="note" data-i18n="privacy">🔒 Anonymous. Your progress on this page is stored in this
-    browser only — no accounts, no tracking.</p>
+  <p class="note" data-i18n="privacy">Anonymous. What you do on this page is stored in this browser
+    only — no accounts, no tracking.</p>
   <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
-  <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: unlock all levels</a></p>
+  <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: open every step</a></p>
 </div>
 
-<script src="stem-vocab-data.js?v=20260821-1"></script>
-<script src="stem-shared.js?v=20260821-1"></script>
-<script src="stem-vocab.js?v=20260821-1"></script>
-<script src="stem-gloss.js?v=20260821-3"></script>
-<script src="stem-translate.js?v=20260821-3"></script>
+<script src="stem-vocab-data.js?v=20260821-4"></script>
+<script src="stem-shared.js?v=20260821-4"></script>
+<script src="stem-vocab.js?v=20260821-4"></script>
+<script src="stem-gloss.js?v=20260821-4"></script>
+<script src="stem-translate.js?v=20260821-4"></script>
+<script src="stem-sim.js?v=20260821-4"></script>
 <script>
-(function(){
+(function () {
   "use strict";
+  var S2 = window.STEM2, SIM = window.STEMSIM;
 
-  /* ===== CONTENT — teachers edit here =====================================
-     One scenario config drives EVERYTHING: the animation, the graph, every
-     question and every marking check. Change a number here and the whole
-     page (questions, answers, celebrations) recalculates itself.
-     Units: km, km/h, seconds and minutes as named.
-     Note: the Level 3 tie question needs the bike slower than the tram's
-     cruise speed (it always is on the way to school…).                    */
-  var SCENARIO = {
-    routeKm: 6,                       /* home → school distance */
-    tram: { cruiseKmh: 30, stops: 6, dwellS: 40 },   /* stops evenly spaced */
-    bike: { cruiseKmh: 18 },
-    car:  { cruiseKmh: 36, leaveLateMin: 6,          /* leaves home late    */
-            lights: 2, lightsTotalS: 90,             /* wait shared evenly  */
-            parkMin: 3 },                            /* parking at the end  */
-    l1: { sliderMax: 15 },            /* range of the tram-stops slider */
-    l2: { tolMin: 0.5, tolKm: 0.4 },  /* prediction tolerances */
-    l3: { stops: 8, tolGrad: 0.02, tolDwellS: 2 },
-    l4: { names: ["Mai","Anh","Hiro","Amara","Tom","Layla"],
-          places: ["library","sports centre","market","pool"],
-          walkKmh: [4,5,6], rideKmh: [10,12,15,16,18,20],
-          lateMin: [3,4,5,6,8,10,12], distKm: [3,4,5,6],
-          tolMin: 0.5, tolKm: 0.1 }
-  };
-  /* ======================================================================= */
-
-  if (window.STEMVOCAB) STEMVOCAB.init();
-
-  /* ---------- small helpers ---------- */
-  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){
-    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
-  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-  function fmt(n){ return String(Math.round(n*100)/100); }
-  function fmtT(n){ return fmt(Math.round(n*10)/10) + " min"; }
-  function fmtKm(n){ return fmt(n) + " km"; }
-  /* parse a number, allowing fractions like "3/10".
-     Strict, and deliberately the same rule as stem-questions.js: the WHOLE
-     string must be a plain number or a simple fraction, so "20 minutes",
-     "3abc", "1e99", "0x10" and "Infinity" are all rejected rather than
-     silently read as 20, 3, 1e99, 0 and Infinity. */
-  function num(str){
-    if (str==null) return NaN;
-    str = String(str).replace(/−/g,"-").replace(/\s+/g,"")
-      .replace(/^\+-/,"-").replace(/^-\+/,"-").replace(/^\+/,"");
-    if (!str) return NaN;
-    var m = str.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
-    if (m) return parseFloat(m[1])/parseFloat(m[2]);
-    if (!/^-?\d+(?:\.\d+)?$/.test(str)) return NaN;
-    return parseFloat(str);
-  }
-  function near(a,b,tol){ return !isNaN(a) && Math.abs(a-b) <= tol; }
-  function markInput(inp, ok){ inp.classList.remove("right","wrong"); inp.classList.add(ok?"right":"wrong"); }
-  function cvar(name){
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#888";
-  }
-  function fmtDate(d){
-    return new Date(d+"T12:00:00").toLocaleDateString(undefined,{day:"numeric",month:"short"});
-  }
-
-  /* ---------- the motion model (everything derives from SCENARIO) ----------
-     A journey is a list of straight segments {t0,t1,x0,x1} (minutes, km).
-     Position at any time comes from walking the segments, so the animation,
-     the graph and every answer check all read the SAME numbers.            */
-  var D = SCENARIO.routeKm;
-
-  function journey(vKmh, opts){
-    opts = opts || {};
-    var v = vKmh/60;                          /* km per minute */
-    var segs = [], t = opts.startMin || 0, x = 0;
-    if (t > 0) segs.push({t0:0, t1:t, x0:0, x1:0});
-    var stops = (opts.stops || []).slice().sort(function(a,b){ return a.km-b.km; });
-    stops.forEach(function(s){
-      var dt = (s.km - x)/v;
-      segs.push({t0:t, t1:t+dt, x0:x, x1:s.km}); t += dt; x = s.km;
-      if (s.waitMin > 0){ segs.push({t0:t, t1:t+s.waitMin, x0:x, x1:x}); t += s.waitMin; }
-    });
-    var dt2 = (D - x)/v;
-    segs.push({t0:t, t1:t+dt2, x0:x, x1:D}); t += dt2;
-    var gate = t;                             /* moment it reaches school */
-    if (opts.endWaitMin > 0){ segs.push({t0:t, t1:t+opts.endWaitMin, x0:D, x1:D}); t += opts.endWaitMin; }
-    return { segs:segs, arrive:t, gate:gate };
-  }
-  function posAt(j, t){
-    if (t <= 0) return 0;
-    for (var i=0; i<j.segs.length; i++){
-      var s = j.segs[i];
-      if (t <= s.t1){
-        if (s.t1 - s.t0 <= 1e-9) return s.x1;
-        return s.x0 + (s.x1 - s.x0) * ((t - s.t0)/(s.t1 - s.t0));
-      }
-    }
-    return j.segs.length ? j.segs[j.segs.length-1].x1 : 0;
-  }
-  function evenKm(n){                        /* n points evenly spaced along the route */
-    var a = []; for (var i=1; i<=n; i++) a.push(D*i/(n+1)); return a;
-  }
-  function tramJourney(nStops, dwellS){
-    return journey(SCENARIO.tram.cruiseKmh,
-      { stops: evenKm(nStops).map(function(km){ return {km:km, waitMin:dwellS/60}; }) });
-  }
-  function bikeJourney(){ return journey(SCENARIO.bike.cruiseKmh, {}); }
-  function carJourney(){
-    var n = SCENARIO.car.lights;
-    return journey(SCENARIO.car.cruiseKmh, {
-      startMin: SCENARIO.car.leaveLateMin,
-      stops: evenKm(n).map(function(km){ return {km:km, waitMin: SCENARIO.car.lightsTotalS/60/n}; }),
-      endWaitMin: SCENARIO.car.parkMin });
-  }
-
-  /* L1: the flip point, found NUMERICALLY by racing tram vs bike at every
-     slider value (never hard-coded). With the default numbers:
-     bike = 6/18 h = 20 min; tram = 6/30 h + N×40 s = 12 + N×(2/3) min;
-     tram wins while 12 + 2N/3 < 20  →  N < 12  →  flip point = 11.        */
-  function tramFlipPoint(){
-    var bikeT = bikeJourney().arrive, best = -1;
-    for (var n = 0; n <= SCENARIO.l1.sliderMax; n++){
-      if (tramJourney(n, SCENARIO.tram.dwellS).arrive < bikeT - 1e-9) best = n;
-    }
-    return best;
-  }
-
-  /* L3: dwell time that makes tram and bike arrive together.
-     Algebra (default numbers): bike time = 6/18 h = 1/3 h = 20 min.
-     Tram moving time = 6/30 h = 1/5 h = 12 min. For a tie with 8 stops:
-       12 + totalDwell = 20  →  totalDwell = 8 min = 480 s
-       → 480 ÷ 8 stops = 60 s per stop.
-     The formula below is the same algebra for ANY config:
-       dwell = (D/vBike − D/vTram) hours × 3600 ÷ nStops
-             = (6/18 − 6/30)×3600 ÷ 8 = (0.3333−0.2)×3600 ÷ 8 = 480/8 = 60 ✓ */
-  function dwellExactS(){
-    return (D/SCENARIO.bike.cruiseKmh - D/SCENARIO.tram.cruiseKmh) * 3600 / SCENARIO.l3.stops;
-  }
-
-  /* first time (min) mover A catches mover B after being behind — scans the
-     piecewise model, then interpolates. Returns {t, km} or null.           */
-  function firstPass(jA, jB){
-    var end = Math.max(jA.arrive, jB.arrive), prev = null, step = 0.01;
-    for (var t = 0; t <= end + step; t += step){
-      var d = posAt(jA, t) - posAt(jB, t);
-      if (prev !== null && prev < 0 && d >= 0){
-        var f = prev/(prev - d), tc = t - step + f*step;
-        return { t: tc, km: posAt(jB, tc) };
-      }
-      prev = d;
-    }
-    return null;
-  }
-
-  /* self-check the model (config-independent invariants, console only) */
-  (function verifyModel(){
-    var b = bikeJourney().arrive, flip = tramFlipPoint();
-    if (flip >= 0)
-      console.assert(tramJourney(flip, SCENARIO.tram.dwellS).arrive < b,
-        "L1 flip check: tram should beat the bike at the flip point");
-    if (flip < SCENARIO.l1.sliderMax)
-      console.assert(tramJourney(flip+1, SCENARIO.tram.dwellS).arrive >= b - 1e-9,
-        "L1 flip check: tram should NOT beat the bike past the flip point");
-    console.assert(Math.abs(tramJourney(SCENARIO.l3.stops, dwellExactS()).arrive - b) < 1e-6,
-      "L3 dwell check: exact dwell should make tram and bike tie");
-  })();
-
-  /* ---------- page state ---------- */
-  var K_STATE = "elc_stem_commute";
-  var state = { cur:1, max:1, done:{}, teacher:false };
-  try {
-    var saved = JSON.parse(localStorage.getItem(K_STATE));
-    if (saved && typeof saved === "object"){
-      state.cur = Math.min(4, Math.max(1, saved.cur||1));
-      state.max = Math.min(4, Math.max(1, saved.max||1));
-      state.done = (saved.done && typeof saved.done === "object" && !Array.isArray(saved.done)) ? saved.done : {};
-      state.teacher = !!saved.teacher;
-    }
-  } catch(e){}
-  function saveState(){ try { localStorage.setItem(K_STATE, JSON.stringify(state)); } catch(e){} }
-  function unlocked(n){ return state.teacher || n <= state.max; }
-  function award(level, skillIds, detail){
-    if (state.done[level]) return false;
-    state.done[level] = true;
-    if (level < 4) state.max = Math.max(state.max, level+1);
-    saveState();
-    skillIds.forEach(function(id){ STEM.Store.addEvidence(id, "race-to-school", detail); });
-    renderTabs();
-    return true;
-  }
-
-  /* ---------- i18n (chrome only — body stays plain EAL English) ---------- */
+  /* ================================================================
+     PAGE CHROME, in the four page languages.
+     The WORDED PROBLEMS in steps 4 and 5 stay in English on purpose:
+     reading the English of a motion problem IS the skill the CAT
+     tests. Every hard word inside them is tappable instead.
+     ================================================================ */
   var COPY = {
     en: {
-      tabs:["1 · Watch & wonder","2 · Predict & check","3 · You do the maths","4 · CAT challenge"],
-      tabSub:["I show you","We do it together","You do it — the sim checks","You do it alone"],
-      locked:"Finish the level before this one to unlock it.",
-      play:"▶ Play", pause:"⏸ Pause", reset:"↺ Reset", speed:"speed",
-      run:"▶ Run the race",
-      confirmT:"Unlock all four levels? (Meant for teachers.)",
-      buildsF: function(name,when){ return "This builds your "+name+" toolkit — "+when; },
-      buildsAlways:"This keeps your number work sharp for every task."
+      back:"← Kinematics · Do", title:"Race to School",
+      sub:"One straight road, three ways to get there. Play with it, read it, predict it, then do the maths on your own. Two sets of five steps — each step hands more of the work to you.",
+      privacy:"Anonymous. What you do on this page is stored in this browser only — no accounts, no tracking.",
+      teacherU:"Teacher: open every step",
+      engNote:"Steps 4 and 5 stay in English — reading the English is part of the task. Tap any word you do not know.",
+      setA:"A · straight road", setB:"B · with stops",
+      buildsF:function(n){ return "This rehearses "+n+"."; },
+      buildsAlways:"This keeps your motion maths sharp for every task."
     },
     "zh-Hans": {
       back:"← 运动学 · 任务", title:"上学竞速",
-      sub:"上学的三种方式，同一条直线路线。先看比赛，再预测，最后用数学算出胜负。四个关卡——一关比一关更多由你来做。",
-      teacherU:"教师：解锁全部关卡",
-      privacy:"🔒 匿名。本页进度只保存在这个浏览器中——没有账号，没有追踪。",
-      tabs:["1 · 看一看，想一想","2 · 先预测，再检验","3 · 你来算","4 · CAT 挑战"],
-      tabSub:["老师示范","我们一起做","你来做，模拟检查","你独立完成"],
-      locked:"先完成上一关才能解锁。",
-      play:"▶ 播放", pause:"⏸ 暂停", reset:"↺ 重新开始", speed:"速度",
-      run:"▶ 开始比赛",
-      confirmT:"解锁全部四个关卡？（供教师使用。）",
-      buildsF: function(name,when){ return "这是在为 "+name+" 做准备 · "+when; },
-      buildsAlways:"这让你的数字运算保持熟练，每个任务都用得上。"
+      sub:"一条直路，三种去学校的方式。先玩，再读，再预测，最后自己算。两组，每组五步——每一步都把更多的工作交给你。",
+      privacy:"匿名。你在本页的记录只保存在这个浏览器里——没有账号，不做追踪。",
+      teacherU:"教师：开放全部步骤",
+      engNote:"第 4、5 步保持英文——读懂英文本身就是任务的一部分。不认识的词点一下即可。",
+      setA:"A · 直路", setB:"B · 有停靠",
+      buildsF:function(n){ return "这是在为"+n+"做演练。"; },
+      buildsAlways:"这让你的运动学计算保持熟练，每个任务都用得上。"
     },
     "zh-Hant": {
       back:"← 運動學 · 任務", title:"上學競速",
-      sub:"上學的三種方式，同一條直線路線。先看比賽，再預測，最後用數學算出勝負。四個關卡——一關比一關更多由你來做。",
-      teacherU:"老師：解鎖全部關卡",
-      privacy:"🔒 匿名。本頁進度只儲存在這個瀏覽器中——沒有帳號、沒有追蹤。",
-      tabs:["1 · 看一看，想一想","2 · 先預測，再檢驗","3 · 你來算","4 · CAT 挑戰"],
-      tabSub:["老師示範","我們一起做","你來做，模擬檢查","你獨立完成"],
-      locked:"先完成前一關才能解鎖。",
-      play:"▶ 播放", pause:"⏸ 暫停", reset:"↺ 重新開始", speed:"速度",
-      run:"▶ 開始比賽",
-      confirmT:"要解鎖全部四關嗎？（供老師使用。）",
-      buildsF: function(name,when){ return "這是在為 "+name+" 做準備 · "+when; },
-      buildsAlways:"這讓你的數字運算保持熟練，每個任務都用得上。"
+      sub:"一條直路，三種去學校的方式。先玩，再讀，再預測，最後自己算。兩組，每組五步——每一步都把更多的工作交給你。",
+      privacy:"匿名。你在本頁的紀錄只儲存在這個瀏覽器裡——沒有帳號，不做追蹤。",
+      teacherU:"教師：開放全部步驟",
+      engNote:"第 4、5 步保持英文——讀懂英文本身就是任務的一部分。不認識的字點一下即可。",
+      setA:"A · 直路", setB:"B · 有停靠",
+      buildsF:function(n){ return "這是在為"+n+"做演練。"; },
+      buildsAlways:"這讓你的運動學計算保持熟練，每個任務都用得上。"
     },
     vi: {
       back:"← Động học · Việc cần làm", title:"Đua tới trường",
-      sub:"Ba cách đi học, cùng một tuyến đường thẳng. Hãy xem cuộc đua, dự đoán kết quả, rồi làm phép toán quyết định ai thắng. Bốn cấp độ — mỗi cấp giao thêm phần việc cho em.",
-      teacherU:"Giáo viên: mở khoá tất cả các cấp độ",
-      privacy:"🔒 Ẩn danh. Tiến độ của em ở trang này chỉ được lưu trong trình duyệt này — không có tài khoản, không theo dõi.",
-      tabs:["1 · Xem và suy nghĩ","2 · Dự đoán rồi kiểm chứng","3 · Em tự tính","4 · Thử thách CAT"],
-      tabSub:["Thầy cô làm mẫu","Chúng ta cùng làm","Em làm — mô phỏng sẽ kiểm chứng","Em tự làm một mình"],
-      locked:"Hãy hoàn thành cấp độ trước để mở khoá cấp này.",
-      play:"▶ Phát", pause:"⏸ Tạm dừng", reset:"↺ Bắt đầu lại", speed:"tốc độ",
-      run:"▶ Bắt đầu cuộc đua",
-      confirmT:"Mở khoá cả bốn cấp độ? (Dành cho giáo viên.)",
-      buildsF: function(name,when){ return "Đây là phần chuẩn bị cho bài "+name+" — "+when; },
-      buildsAlways:"Phần này giữ cho kỹ năng tính toán của em luôn nhạy, bài nào cũng cần."
+      sub:"Một con đường thẳng, ba cách tới trường. Chơi thử, đọc số liệu, dự đoán, rồi tự tính. Hai nhóm, mỗi nhóm năm bước — mỗi bước giao thêm việc cho em.",
+      privacy:"Ẩn danh. Những gì em làm ở trang này chỉ lưu trong trình duyệt này — không tài khoản, không theo dõi.",
+      teacherU:"Giáo viên: mở tất cả các bước",
+      engNote:"Bước 4 và 5 giữ nguyên tiếng Anh — đọc được tiếng Anh chính là một phần của bài. Từ nào chưa biết thì chạm vào.",
+      setA:"A · đường thẳng", setB:"B · có điểm dừng",
+      buildsF:function(n){ return "Đây là buổi tập dượt cho bài "+n+"."; },
+      buildsAlways:"Phần này giữ cho kỹ năng động học của em luôn nhạy, bài nào cũng cần."
     }
   };
-  var sel = document.querySelector(".language-select");
-  var lang = "en";
-  try { lang = localStorage.getItem("elc_page_language") || "en"; } catch(e){}
-  if (!COPY[lang]) lang = "en";
-  sel.value = lang;
-  function tr(k){ var v = COPY[lang][k]; return v !== undefined ? v : COPY.en[k]; }
-  function tf(k){ var v = COPY[lang][k]; return typeof v === "function" ? v : COPY.en[k]; }
-  function setStatic(){
-    var dict = COPY[lang];
-    document.querySelectorAll("[data-i18n]").forEach(function(el){
-      var k = el.getAttribute("data-i18n");
-      if (!el._en) el._en = el.textContent;
-      el.textContent = (typeof dict[k] === "string") ? dict[k] : el._en;
+  function lang(){ try { return localStorage.getItem("elc_page_language") || "en"; } catch(e){ return "en"; } }
+  function T(k){ var d = COPY[lang()] || COPY.en; return d[k] !== undefined ? d[k] : COPY.en[k]; }
+  var esc = SIM.esc, num = SIM.num;
+
+  /* ================================================================
+     THE ROAD — everything downstream is derived from these numbers
+     ================================================================ */
+  var ROAD = {
+    D: 6,                 /* km, home to school                     */
+    shops: 3,             /* km, the halfway landmark               */
+    stopEvery: 1,         /* km between tram stops in Set B         */
+    bike: 0.3,            /* km/min = 18 km/h                       */
+    tram: 0.4,            /* km/min = 24 km/h (top speed)           */
+    carV: 0.6,            /* km/min = 36 km/h                       */
+    carLate: 5            /* minutes after the others               */
+  };
+  function kmh(v){ return v * 60; }
+  function mmss(t){                       /* minutes -> 7:35 clock time */
+    var total = 7 * 60 + 30 + t;
+    var h = Math.floor(total / 60), m = Math.floor(total % 60);
+    var s = Math.round((total % 1) * 60);
+    return h + ":" + (m < 10 ? "0" : "") + m + (s ? ":" + (s < 10 ? "0" : "") + s : "");
+  }
+
+  /* ---------- Set A: three straight lines ---------- */
+  function lineA(v, late){ return function(t){ return t < late ? 0 : Math.min(ROAD.D, v * (t - late)); }; }
+  function arriveA(v, late){ return late + ROAD.D / v; }
+  /* where a late, faster mover catches a slower one that left at t = 0 */
+  function catchUp(vSlow, vFast, late){
+    if (vFast <= vSlow) return null;
+    var t = vFast * late / (vFast - vSlow);
+    return { t: t, x: vSlow * t };
+  }
+
+  /* ---------- Set B: the tram staircase ---------- */
+  /* stops sit at 1, 2, 3 ... km. Dwell is s seconds at each of the
+     first n of them. Returns the segments and the arrival time. */
+  function tramRun(n, dwellS){
+    var d = dwellS / 60, segs = [], t = 0, x = 0, i;
+    for (i = 1; i <= n; i++) {
+      var to = i * ROAD.stopEvery;
+      if (to >= ROAD.D) break;
+      segs.push({ t0: t, t1: t + (to - x) / ROAD.tram, x0: x, x1: to });
+      t = t + (to - x) / ROAD.tram; x = to;
+      segs.push({ t0: t, t1: t + d, x0: x, x1: x });   /* standing */
+      t += d;
+    }
+    segs.push({ t0: t, t1: t + (ROAD.D - x) / ROAD.tram, x0: x, x1: ROAD.D });
+    return { segs: segs, arrive: t + (ROAD.D - x) / ROAD.tram, dwell: n * d, stops: n };
+  }
+  function atSegs(segs, t){
+    for (var i = 0; i < segs.length; i++) {
+      var s = segs[i];
+      if (t <= s.t1 + 1e-9) {
+        if (t < s.t0) return s.x0;
+        var f = s.t1 === s.t0 ? 0 : (t - s.t0) / (s.t1 - s.t0);
+        return s.x0 + f * (s.x1 - s.x0);
+      }
+    }
+    return ROAD.D;
+  }
+  function segPoints(segs){
+    var p = [[0, 0]];
+    segs.forEach(function(s){ p.push([s.t0, s.x0]); p.push([s.t1, s.x1]); });
+    return p;
+  }
+
+  /* ---------- the three riders, named, never a real student ---------- */
+  var WHO = {
+    bike: { name:{en:"Mai · bike", "zh-Hans":"小梅 · 自行车", "zh-Hant":"小梅 · 腳踏車", vi:"Mai · xe đạp"}, ck:"a" },
+    tram: { name:{en:"Anh · tram", "zh-Hans":"阿英 · 电车", "zh-Hant":"阿英 · 電車", vi:"Anh · xe điện"}, ck:"c" },
+    car:  { name:{en:"Tom · car",  "zh-Hans":"阿汤 · 汽车", "zh-Hant":"阿湯 · 汽車", vi:"Tom · ô tô"},   ck:"b" }
+  };
+  function C(k){ return SIM.colors()[k]; }
+  /* the colour key under a graph — a real node, because it gets appended */
+  function keyRow(items){
+    var p = document.createElement("p");
+    p.className = "sim-key";
+    p.innerHTML = items.map(function(i){
+      return "<span><i style='background:" + i.c + "'></i>" + esc(SIM.L(i.n)) + "</span>";
+    }).join("");
+    return p;
+  }
+  var PLACES = [
+    { x:0, name:{en:"home", "zh-Hans":"家", "zh-Hant":"家", vi:"nhà"} },
+    { x:ROAD.shops, name:{en:"shops", "zh-Hans":"商店", "zh-Hant":"商店", vi:"cửa hàng"} },
+    { x:ROAD.D, name:{en:"school", "zh-Hans":"学校", "zh-Hant":"學校", vi:"trường"} }
+  ];
+
+  /* ================================================================
+     SET A — THE STRAIGHT ROAD
+     ================================================================ */
+
+  /* --- A1 PLAY: two sliders, two goals, one answer: 36 km/h, 5 min --- */
+  function a1(ctx){
+    var host = ctx.host;
+    var state = { v: 48 / 60, late: 0 };
+    var goalBox = ctx.el("p", "sim-goal");
+    var figT = ctx.el("div"), figG = ctx.el("div");
+
+    SIM.sliders(host, [
+      { k:"v", min:12, max:60, step:2, value:48,
+        label:{en:"Tom's car — speed", "zh-Hans":"阿汤的车速", "zh-Hant":"阿湯的車速", vi:"Tốc độ xe của Tom"},
+        unit:"km/h" },
+      { k:"late", min:0, max:10, step:1, value:0,
+        label:{en:"Tom leaves this many minutes after the others",
+               "zh-Hans":"阿汤比别人晚出发（分钟）", "zh-Hant":"阿湯比別人晚出發（分鐘）",
+               vi:"Tom xuất phát muộn hơn (phút)"},
+        unit:{en:"min", "zh-Hans":"分钟", "zh-Hant":"分鐘", vi:"phút"} }
+    ], function(v){ state.v = v.v / 60; state.late = v.late; redraw(); });
+
+    host.appendChild(figT);
+    var clock = SIM.anim(host, {
+      dur: 26, speed: 3,
+      labelFor: function(t){ return mmss(t); },
+      onFrame: function(t){ drawTrack(t); }
     });
-    document.documentElement.lang = lang === "en" ? "en" : lang;
-  }
-  sel.addEventListener("change", function(){
-    lang = sel.value;
-    try { localStorage.setItem("elc_page_language", lang); } catch(e){}
-    setStatic(); renderIntro(); renderTabs(); openLevel(state.cur);
-  });
+    host.appendChild(figG);
+    host.appendChild(keyRow([{c:C("a"),n:WHO.bike.name},{c:C("c"),n:WHO.tram.name},{c:C("b"),n:WHO.car.name}]));
+    host.appendChild(goalBox);
 
-  /* ---------- the task this practice feeds (read from STEM2, never typed here) ----------
-     The four levels log these skills. SKILLS[id].needs names the checkpoint each
-     skill is needed by, and the unit that owns the skill owns the date. The
-     soonest checkpoint still ahead is the one this page is preparing for.      */
-  var PRACTICE_SKILLS = ["s_ptgraph","s_story","s_vectors","k_grad_graph","k_eq"];
-  function projectCp(){
-    var S2 = window.STEM2;
-    if (!S2) return null;
-    var best = null;
-    PRACTICE_SKILLS.forEach(function(id){
-      var sk = S2.SKILLS[id];
-      if (!sk || !sk.needs) return;
-      var unit = S2.UNIT_BY_ID[sk.unit];
-      if (!unit) return;
-      unit.checkpoints.forEach(function(c){
-        if (c.id !== sk.needs || c.status === "done" || S2.daysUntil(c.date) < 0) return;
-        if (!best || c.date < best.date) best = c;
-      });
-    });
-    return best;
-  }
-  function projectLine(){
-    var cp = projectCp();
-    return cp ? tf("buildsF")(cp.short, fmtDate(cp.date)) : tr("buildsAlways");
-  }
-
-  /* ---------- mover builders for the sim ---------- */
-  function tramMover(nStops, dwellS){
-    return { key:"tram", label:"Tram", emoji:"🚋", cvarName:"--tram",
-             j: tramJourney(nStops, dwellS), stopsKm: evenKm(nStops), lightsKm: [] };
-  }
-  function bikeMover(){
-    return { key:"bike", label:"Bike", emoji:"🚲", cvarName:"--bike",
-             j: bikeJourney(), stopsKm: [], lightsKm: [] };
-  }
-  function carMover(){
-    return { key:"car", label:"Car", emoji:"🚗", cvarName:"--car",
-             j: carJourney(), stopsKm: [], lightsKm: evenKm(SCENARIO.car.lights) };
-  }
-
-  /* ---------- the simulation (route view + live position-time graph) ---------- */
-  var activeSim = null;
-  function makeSim(host, opts){
-    opts = opts || {};
-    var movers = [], endT = 1, tMax = 10;
-    var simT = 0, playing = false, speed = opts.speed || 2, raf = 0;
-    var finished = false, podiumShown = false, lastTs = 0;
-
-    var h = "<div class='simbox'>" +
-      "<canvas class='route' aria-label='Route view: the movers travel from home to school'></canvas>" +
-      "<canvas class='pgraph' aria-label='Position-time graph drawing live'></canvas>" +
-      "<div class='legend'></div>";
-    if (opts.controls !== false){
-      h += "<div class='ctrl'><button class='go' data-a='play'>" + esc(tr("play")) + "</button>" +
-        "<button class='go ghost' data-a='reset'>" + esc(tr("reset")) + "</button>" +
-        "<span class='muted'>" + esc(tr("speed")) + ":</span>";
-      [1,2,4].forEach(function(sp){
-        h += "<button class='speedp" + (sp===speed?" on":"") + "' data-sp='" + sp + "'>×" + sp + "</button>";
-      });
-      h += "<span class='timer'>⏱ 0 min</span></div>";
-    }
-    h += "<div class='podium'></div></div>";
-    host.innerHTML = h;
-
-    var routeCv = host.querySelector(".route"), graphCv = host.querySelector(".pgraph");
-    var legendEl = host.querySelector(".legend"), podiumEl = host.querySelector(".podium");
-    var playBtn = host.querySelector("[data-a='play']"), timerEl = host.querySelector(".timer");
-
-    function fit(cv, cssH){
-      var w = cv.clientWidth || host.clientWidth || 320;
-      var dpr = window.devicePixelRatio || 1;
-      cv.width = Math.round(w*dpr); cv.height = Math.round(cssH*dpr);
-      cv.style.height = cssH + "px";
-      var ctx = cv.getContext("2d");
-      ctx.setTransform(dpr,0,0,dpr,0,0);
-      return { ctx:ctx, w:w, h:cssH };
-    }
-    var routeH = 140;
-    function sizeAll(){
-      routeH = 44 + movers.length*36 + 8;
-      route = fit(routeCv, routeH);
-      graph = fit(graphCv, 250);
-    }
-    var route, graph;
-
-    function drawRoute(){
-      var c = route.ctx, w = route.w;
-      c.clearRect(0,0,w,routeH);
-      var xL = 44, xR = w - 40;
-      function px(km){ return xL + (km/D)*(xR-xL); }
-      c.font = "16px system-ui, sans-serif"; c.textAlign = "center"; c.textBaseline = "middle";
-      c.fillText("🏠", xL, 18); c.fillText("🏫", xR, 18);
-      c.font = "10px system-ui, sans-serif"; c.fillStyle = cvar("--muted");
-      c.fillText("0 km", xL, 34); c.fillText(fmt(D) + " km", xR, 34);
-      movers.forEach(function(m, i){
-        var y = 52 + i*36;
-        c.strokeStyle = cvar("--line"); c.lineWidth = 3;
-        c.beginPath(); c.moveTo(xL, y); c.lineTo(xR, y); c.stroke();
-        c.fillStyle = cvar("--muted");
-        m.stopsKm.forEach(function(km){
-          c.beginPath(); c.arc(px(km), y, 3.5, 0, Math.PI*2); c.fill();
-        });
-        c.fillStyle = cvar("--warn");
-        m.lightsKm.forEach(function(km){ c.fillRect(px(km)-3.5, y-3.5, 7, 7); });
-        var pos = posAt(m.j, simT), x = px(pos);
-        /* "at rest" ring while stationary mid-journey (or waiting to leave) */
-        var moving = Math.abs(posAt(m.j, simT+0.02) - posAt(m.j, Math.max(0,simT-0.02))) > 1e-6;
-        if (!moving && simT > 0 && simT < m.j.arrive){
-          c.strokeStyle = cvar("--muted"); c.lineWidth = 1.5; c.setLineDash([3,3]);
-          c.beginPath(); c.arc(x, y-4, 15, 0, Math.PI*2); c.stroke(); c.setLineDash([]);
-        }
-        c.fillStyle = cvar(m.cvarName);
-        c.fillRect(x-9, y+7, 18, 3);
-        c.font = "20px system-ui, sans-serif"; c.fillStyle = cvar("--ink");
-        c.fillText(m.emoji, x, y-4);
-        if (simT >= m.j.arrive - 1e-9){
-          c.font = "11px system-ui, sans-serif"; c.fillStyle = cvar("--good");
-          c.fillText("✓", x+16, y-8);
-        }
-        c.font = "10px system-ui, sans-serif";
+    function drawTrack(t){
+      SIM.track(figT, {
+        length: ROAD.D, labels: PLACES,
+        movers: [
+          { name:WHO.bike.name, color:C("a"), x: lineA(ROAD.bike, 0)(t) },
+          { name:WHO.tram.name, color:C("c"), x: lineA(ROAD.tram, 0)(t) },
+          { name:WHO.car.name,  color:C("b"), x: lineA(state.v, state.late)(t) }
+        ]
       });
     }
+    function redraw(){
+      drawTrack(clock.time());
+      SIM.plot(figG, {
+        xMax: 26, yMax: ROAD.D, xStep: 5, yStep: 1, height: 300,
+        xLabel:{en:"minutes after 7:30", "zh-Hans":"7:30 之后的分钟数", "zh-Hant":"7:30 之後的分鐘數", vi:"số phút sau 7:30"},
+        yLabel:{en:"distance from home (km)", "zh-Hans":"离家距离（公里）", "zh-Hant":"離家距離（公里）", vi:"khoảng cách từ nhà (km)"},
+        hlines:[{ y:ROAD.shops, label:PLACES[1].name }],
+        series:[
+          { fn: lineA(ROAD.bike, 0), color:C("a") },
+          { fn: lineA(ROAD.tram, 0), color:C("c") },
+          { fn: lineA(state.v, state.late), color:C("b") }
+        ]
+      });
+      score();
+    }
+    var won = false;
+    function score(){
+      var cu = catchUp(ROAD.bike, state.v, state.late);
+      var g1 = !!cu && Math.abs(cu.x - ROAD.shops) < 0.15 && cu.x < ROAD.D - 0.05;
+      var g2 = Math.abs(arriveA(state.v, state.late) - arriveA(ROAD.tram, 0)) < 0.2;
+      goalBox.innerHTML =
+        "<span>" + (g1 ? "✓" : "○") + " " + esc(SIM.L(G1)) + "</span><br>" +
+        "<span>" + (g2 ? "✓" : "○") + " " + esc(SIM.L(G2)) + "</span>";
+      if (g1 && g2 && !won) {
+        won = true;
+        ctx.done({});
+        goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(SIM.L(A1WIN));
+      }
+    }
+    var G1 = {en:"Tom's car passes Mai exactly at the shops.",
+              "zh-Hans":"阿汤的车正好在商店处追上小梅。", "zh-Hant":"阿湯的車正好在商店處追上小梅。",
+              vi:"Xe của Tom vượt Mai đúng ngay chỗ cửa hàng."};
+    var G2 = {en:"Tom's car reaches school at the same moment as Anh's tram.",
+              "zh-Hans":"阿汤的车和阿英的电车同时到校。", "zh-Hant":"阿湯的車和阿英的電車同時到校。",
+              vi:"Xe của Tom tới trường cùng lúc với xe điện của Anh."};
+    var A1WIN = {en:"36 km/h, five minutes late. Notice you could not choose the speed and the head start separately — fixing both meeting points fixed both numbers.",
+                 "zh-Hans":"36 km/h，晚 5 分钟。注意：速度和迟出发的时间不能各自随便选——两个相遇点一定，两个数就都定下来了。",
+                 "zh-Hant":"36 km/h，晚 5 分鐘。注意：速度和遲出發的時間不能各自隨便選——兩個相遇點一定，兩個數就都定下來了。",
+                 vi:"36 km/h, muộn 5 phút. Để ý: em không thể chọn tốc độ và thời gian muộn một cách riêng rẽ — cố định hai điểm gặp là cố định luôn cả hai con số."};
+    redraw();
+  }
 
-    function drawGraph(){
-      var c = graph.ctx, w = graph.w, hh = 250;
-      c.clearRect(0,0,w,hh);
-      var L = 46, R = 12, T = 14, B = 36, pw = w-L-R, ph = hh-T-B;
-      function xt(t){ return L + (t/tMax)*pw; }
-      function yk(k){ return T + (1 - k/D)*ph; }
-      var stepT = tMax > 30 ? 5 : 2;
-      var labEvery = (pw/(tMax/stepT) < 30) ? 2 : 1, li = 0;
-      c.font = "10px system-ui, sans-serif";
-      for (var t = 0; t <= tMax + 1e-9; t += stepT){
-        c.strokeStyle = cvar("--line"); c.lineWidth = 1;
-        c.beginPath(); c.moveTo(xt(t), T); c.lineTo(xt(t), T+ph); c.stroke();
-        if (li % labEvery === 0){
-          c.fillStyle = cvar("--muted"); c.textAlign = "center"; c.textBaseline = "top";
-          c.fillText(String(Math.round(t)), xt(t), T+ph+5);
-        }
-        li++;
-      }
-      var stepK = D > 8 ? 2 : 1;
-      for (var k = 0; k <= D + 1e-9; k += stepK){
-        c.strokeStyle = cvar("--line"); c.lineWidth = 1;
-        c.beginPath(); c.moveTo(L, yk(k)); c.lineTo(L+pw, yk(k)); c.stroke();
-        c.fillStyle = cvar("--muted"); c.textAlign = "right"; c.textBaseline = "middle";
-        c.fillText(String(Math.round(k*10)/10), L-6, yk(k));
-      }
-      /* school line (dashed) */
-      c.strokeStyle = cvar("--muted"); c.lineWidth = 1.5; c.setLineDash([5,4]);
-      c.beginPath(); c.moveTo(L, yk(D)); c.lineTo(L+pw, yk(D)); c.stroke(); c.setLineDash([]);
-      c.fillStyle = cvar("--muted"); c.textAlign = "right"; c.textBaseline = "bottom";
-      c.fillText("school", L+pw-2, yk(D)-3);
-      /* axes */
-      c.strokeStyle = cvar("--muted"); c.lineWidth = 2;
-      c.beginPath(); c.moveTo(L, T); c.lineTo(L, T+ph); c.lineTo(L+pw, T+ph); c.stroke();
-      c.fillStyle = cvar("--ink"); c.font = "11px system-ui, sans-serif";
-      c.textAlign = "center"; c.textBaseline = "alphabetic";
-      c.fillText("Time (minutes)", L+pw/2, hh-4);
-      c.save(); c.translate(11, T+ph/2); c.rotate(-Math.PI/2);
-      c.fillText("Position (km)", 0, 0); c.restore();
-      /* journey lines up to simT */
-      movers.forEach(function(m){
-        var col = cvar(m.cvarName);
-        c.strokeStyle = col; c.lineWidth = 2.5;
-        c.lineJoin = "round"; c.lineCap = "round";
-        c.beginPath();
-        var started = false;
-        for (var i=0; i<m.j.segs.length; i++){
-          var s = m.j.segs[i];
-          if (!started){ c.moveTo(xt(s.t0), yk(s.x0)); started = true; }
-          if (s.t1 <= simT){ c.lineTo(xt(s.t1), yk(s.x1)); }
-          else {
-            c.lineTo(xt(simT), yk(posAt(m.j, simT)));
-            break;
-          }
-        }
-        if (started) c.stroke();
-        var cx = xt(Math.min(simT, m.j.arrive)), cy = yk(posAt(m.j, simT));
-        c.fillStyle = col;
-        c.beginPath(); c.arc(cx, cy, 3.5, 0, Math.PI*2); c.fill();
+  /* --- A2 READ: sliders live, but now read the graph --- */
+  function a2(ctx){
+    var host = ctx.host;
+    var state = { v: ROAD.carV, late: ROAD.carLate };
+    var figG = ctx.el("div");
+    SIM.sliders(host, [
+      { k:"v", min:12, max:60, step:2, value:kmh(ROAD.carV), unit:"km/h",
+        label:{en:"Tom's car — speed", "zh-Hans":"阿汤的车速", "zh-Hant":"阿湯的車速", vi:"Tốc độ xe của Tom"} },
+      { k:"late", min:0, max:10, step:1, value:ROAD.carLate,
+        unit:{en:"min", "zh-Hans":"分钟", "zh-Hant":"分鐘", vi:"phút"},
+        label:{en:"Tom leaves this many minutes late", "zh-Hans":"阿汤晚出发（分钟）",
+               "zh-Hant":"阿湯晚出發（分鐘）", vi:"Tom xuất phát muộn (phút)"} }
+    ], function(v){ state.v = v.v / 60; state.late = v.late; draw(); });
+    host.appendChild(figG);
+    host.appendChild(keyRow([{c:C("a"),n:WHO.bike.name},{c:C("c"),n:WHO.tram.name},{c:C("b"),n:WHO.car.name}]));
+    function draw(){
+      SIM.plot(figG, {
+        xMax: 24, yMax: ROAD.D, xStep: 2, yStep: 1, height: 320,
+        xLabel:{en:"minutes after 7:30", "zh-Hans":"7:30 之后的分钟数", "zh-Hant":"7:30 之後的分鐘數", vi:"số phút sau 7:30"},
+        yLabel:{en:"distance from home (km)", "zh-Hans":"离家距离（公里）", "zh-Hant":"離家距離（公里）", vi:"khoảng cách từ nhà (km)"},
+        hlines:[{ y:ROAD.shops, label:PLACES[1].name }],
+        series:[
+          { fn: lineA(ROAD.bike, 0), color:C("a") },
+          { fn: lineA(ROAD.tram, 0), color:C("c") },
+          { fn: lineA(state.v, state.late), color:C("b") }
+        ]
       });
     }
+    draw();
+    var reset = ctx.el("p", "sim-note",
+      esc(SIM.L({en:"Put the sliders back to 36 km/h and 5 minutes before you answer.",
+                 "zh-Hans":"作答前请把滑块调回 36 km/h 和 5 分钟。",
+                 "zh-Hant":"作答前請把滑桿調回 36 km/h 和 5 分鐘。",
+                 vi:"Hãy đưa thanh trượt về 36 km/h và 5 phút trước khi trả lời."})));
+    host.appendChild(reset);
 
-    function drawAll(){ drawRoute(); drawGraph(); }
-    function updateTimer(){ if (timerEl) timerEl.textContent = "⏱ " + fmtT(simT); }
-
-    function paintLegend(){
-      legendEl.innerHTML = movers.map(function(m){
-        return "<span class='mchip'><span class='dot' style='background:var(" + m.cvarName + ")'></span>" +
-          m.emoji + " " + esc(m.label) + " · " + esc(fmt(m.vKmh)) + " km/h</span>";
-      }).join("");
-    }
-
-    function showPodium(){
-      podiumShown = true;
-      var order = movers.slice().sort(function(a,b){ return a.j.arrive - b.j.arrive; });
-      var medals = ["🥇","🥈","🥉","4️⃣"];
-      var parts = order.map(function(m, i){
-        var tieWithPrev = i > 0 && Math.abs(m.j.arrive - order[i-1].j.arrive) < 0.005;
-        var tieWithNext = i < order.length-1 && Math.abs(m.j.arrive - order[i+1].j.arrive) < 0.005;
-        var tie = tieWithPrev || tieWithNext;   /* both sides of a tie get 🤝 — nobody gets gold in a draw */
-        return (tie ? "🤝" : medals[i]) + " " + m.emoji + " " + esc(m.label) +
-          " — " + esc(fmtT(m.j.arrive)) + (tie ? " (tie!)" : "");
-      });
-      podiumEl.innerHTML = "Finish order: " + parts.join(" · ");
-      if (opts.onFinish) opts.onFinish();
-    }
-
-    function frame(ts){
-      var dt = lastTs ? (ts - lastTs)/1000 : 0;
-      lastTs = ts;
-      simT += dt * speed;
-      if (simT >= endT){ simT = endT; playing = false; finished = true; }
-      drawAll(); updateTimer();
-      if (playing){ raf = requestAnimationFrame(frame); }
-      else {
-        if (playBtn) playBtn.textContent = tr("play");
-        if (finished && !podiumShown) showPodium();
-      }
-    }
-    function play(){
-      if (finished || simT >= endT){ resetSim(); }
-      playing = true; lastTs = 0;
-      if (playBtn) playBtn.textContent = tr("pause");
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(frame);
-    }
-    function pause(){
-      playing = false; cancelAnimationFrame(raf);
-      if (playBtn) playBtn.textContent = tr("play");
-    }
-    function resetSim(){
-      pause(); simT = 0; finished = false; podiumShown = false;
-      podiumEl.innerHTML = ""; drawAll(); updateTimer();
-    }
-
-    if (playBtn){
-      playBtn.addEventListener("click", function(){ if (playing) pause(); else play(); });
-      host.querySelector("[data-a='reset']").addEventListener("click", resetSim);
-      host.querySelectorAll(".speedp").forEach(function(b){
-        b.addEventListener("click", function(){
-          speed = +b.getAttribute("data-sp");
-          host.querySelectorAll(".speedp").forEach(function(x){ x.classList.remove("on"); });
-          b.classList.add("on");
-        });
-      });
-    }
-
-    function onResize(){ sizeAll(); drawAll(); }
-    window.addEventListener("resize", onResize);
-
-    var api = {
-      setScenario: function(list){
-        pause();
-        movers = list;
-        movers.forEach(function(m){
-          m.vKmh = m.key === "tram" ? SCENARIO.tram.cruiseKmh :
-                   m.key === "bike" ? SCENARIO.bike.cruiseKmh : SCENARIO.car.cruiseKmh;
-        });
-        endT = 1;
-        movers.forEach(function(m){ endT = Math.max(endT, m.j.arrive); });
-        tMax = Math.ceil(endT) + 1;
-        simT = 0; playing = false; finished = false; podiumShown = false;
-        podiumEl.innerHTML = "";
-        sizeAll(); paintLegend(); drawAll(); updateTimer();
-        if (playBtn) playBtn.textContent = tr("play");
-      },
-      playFromStart: function(){ resetSim(); play(); },
-      reset: resetSim,
-      destroy: function(){ pause(); window.removeEventListener("resize", onResize); }
-    };
-    return api;
-  }
-
-  /* ---------- intro card (numbers all read from SCENARIO) ---------- */
-  function renderIntro(){
-    var s = SCENARIO;
-    document.getElementById("intro").innerHTML =
-      "<p>Every morning, Mai has three ways to travel the same <b>" + fmt(D) + " km</b> to school. " +
-      "Same <span data-v>distance</span> — three very different journeys. " +
-      "(Nobody turns back today, so the distance and the <span data-v>displacement</span> are the same.)</p>" +
-      "<p>🚋 <b style='color:var(--tram)'>Tram</b> — cruises at " + fmt(s.tram.cruiseKmh) + " km/h, " +
-      "but makes " + s.tram.stops + " stops of " + fmt(s.tram.dwellS) + " seconds each.<br>" +
-      "🚲 <b style='color:var(--bike)'>Bike</b> — a <span data-v='uniform'>steady</span> " +
-      fmt(s.bike.cruiseKmh) + " km/h the whole way, no stops.<br>" +
-      "🚗 <b style='color:var(--car)'>Car</b> — the fastest <span data-v>speed</span> (" +
-      fmt(s.car.cruiseKmh) + " km/h), but it leaves " + fmt(s.car.leaveLateMin) + " minutes late, " +
-      "waits " + fmt(s.car.lightsTotalS) + " seconds at traffic lights, and needs " +
-      fmt(s.car.parkMin) + " minutes to park.</p>" +
-      "<p>The bottom picture is a <b>position-time graph</b>: it plots each vehicle's " +
-      "<span data-v>position</span> against <span data-v>time</span>, so every journey becomes a line. " +
-      "The <span data-v>gradient</span> of a line is that vehicle's speed — steep means fast, " +
-      "flat means at <span data-v>rest</span>.</p>" +
-      "<p class='muted'>" + esc(projectLine()) + "</p>";
-    if (window.STEMVOCAB) STEMVOCAB.decorate(document.getElementById("intro"));
-  }
-
-  /* ---------- level tabs ---------- */
-  function renderTabs(){
-    var tabs = tr("tabs"), subs = tr("tabSub");
-    var h = "";
-    for (var i=1; i<=4; i++){
-      var cls = "ltab" + (state.cur===i ? " on":"") + (!unlocked(i) ? " lock":"");
-      h += "<button class='" + cls + "' data-lv='" + i + "'" +
-        (!unlocked(i) ? " aria-disabled='true' title='" + esc(tr("locked")) + "'" : "") + ">" +
-        "<b>" + (!unlocked(i) ? "🔒 " : (state.done[i] ? "<span class='tick'>✓</span> " : "")) +
-        esc(tabs[i-1]) + "</b><small>" + esc(subs[i-1]) + "</small></button>";
-    }
-    var el = document.getElementById("levelTabs");
-    el.innerHTML = h;
-    el.querySelectorAll(".ltab").forEach(function(b){
-      b.addEventListener("click", function(){
-        var n = +b.getAttribute("data-lv");
-        if (!unlocked(n)){ alert(tr("locked")); return; }
-        if (n === state.cur) return;   /* don't reset a level mid-play */
-        openLevel(n);
-      });
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var got = 0, need = 4, times = [];
+    function tick(ok, info){ if (ok) { got++; times.push(info.ms); if (got === need) ctx.done({ ms: times.reduce(function(a,b){return a+b;},0) }); } }
+    SIM.ask(qs, {
+      prompt:{en:"Read Mai's line. How far has she ridden <b>10 minutes</b> after 7:30?",
+              "zh-Hans":"读小梅的那条线。7:30 之后 <b>10 分钟</b>，她骑了多远？",
+              "zh-Hant":"讀小梅的那條線。7:30 之後 <b>10 分鐘</b>，她騎了多遠？",
+              vi:"Đọc đường của Mai. Sau 7:30 <b>10 phút</b>, em ấy đã đi được bao xa?"},
+      inputs:[{ k:"d", answer:3, tol:0.05, unit:"km",
+                label:{en:"distance", "zh-Hans":"距离", "zh-Hant":"距離", vi:"khoảng cách"} }],
+      hint:{en:"Go up from 10 on the bottom axis until you hit her line, then across to the side axis.",
+            "zh-Hans":"从横轴的 10 往上，碰到她的线后再横着读纵轴。",
+            "zh-Hant":"從橫軸的 10 往上，碰到她的線後再橫著讀縱軸。",
+            vi:"Từ số 10 ở trục ngang đi lên tới đường của em ấy, rồi đi ngang sang trục dọc."},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"What is the <span data-v>gradient</span> of Mai's line, in kilometres per minute?",
+              "zh-Hans":"小梅那条线的<span data-v=\"gradient\">斜率</span>是多少（公里／分钟）？",
+              "zh-Hant":"小梅那條線的<span data-v=\"gradient\">斜率</span>是多少（公里／分鐘）？",
+              vi:"<span data-v=\"gradient\">Độ dốc</span> đường của Mai là bao nhiêu (km mỗi phút)?"},
+      inputs:[{ k:"m", answer:0.3, tol:0.005, unit:"km/min",
+                label:{en:"gradient", "zh-Hans":"斜率", "zh-Hant":"斜率", vi:"độ dốc"} }],
+      hint:{en:"Rise over run. She covers 3 km in 10 minutes.",
+            "zh-Hans":"纵向变化 ÷ 横向变化。她 10 分钟走 3 公里。",
+            "zh-Hant":"縱向變化 ÷ 橫向變化。她 10 分鐘走 3 公里。",
+            vi:"Lên chia cho ngang. Em ấy đi 3 km trong 10 phút."},
+      worked:{en:"<p>rise = 3 km, run = 10 min, so m = 3 ÷ 10 = <b>0.3 km/min</b>.</p><p>0.3 × 60 = 18 km/h — the speed the story gave her.</p>",
+              "zh-Hans":"<p>纵向 = 3 公里，横向 = 10 分钟，所以 m = 3 ÷ 10 = <b>0.3 公里/分钟</b>。</p><p>0.3 × 60 = 18 km/h——就是题目给的速度。</p>",
+              "zh-Hant":"<p>縱向 = 3 公里，橫向 = 10 分鐘，所以 m = 3 ÷ 10 = <b>0.3 公里/分鐘</b>。</p><p>0.3 × 60 = 18 km/h——就是題目給的速度。</p>",
+              vi:"<p>lên = 3 km, ngang = 10 phút, nên m = 3 ÷ 10 = <b>0,3 km/phút</b>.</p><p>0,3 × 60 = 18 km/h — đúng tốc độ đề bài cho.</p>"},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"When does Anh's tram reach the <b>shops</b> (3 km)?",
+              "zh-Hans":"阿英的电车什么时候到<b>商店</b>（3 公里）？",
+              "zh-Hant":"阿英的電車什麼時候到<b>商店</b>（3 公里）？",
+              vi:"Khi nào xe điện của Anh tới <b>cửa hàng</b> (3 km)?"},
+      inputs:[{ k:"t", answer:7.5, tol:0.3,
+                unit:{en:"min after 7:30", "zh-Hans":"7:30 之后分钟", "zh-Hant":"7:30 之後分鐘", vi:"phút sau 7:30"},
+                label:{en:"time", "zh-Hans":"时间", "zh-Hant":"時間", vi:"thời gian"} }],
+      hint:{en:"The tram does 0.4 km every minute. 3 ÷ 0.4 = ?",
+            "zh-Hans":"电车每分钟 0.4 公里。3 ÷ 0.4 = ?",
+            "zh-Hant":"電車每分鐘 0.4 公里。3 ÷ 0.4 = ?",
+            vi:"Xe điện đi 0,4 km mỗi phút. 3 ÷ 0,4 = ?"},
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:{en:"The car's line crosses Mai's line. Read off <b>both</b> numbers at that crossing.",
+              "zh-Hans":"汽车的线与小梅的线相交。读出交点的<b>两个</b>数。",
+              "zh-Hant":"汽車的線與小梅的線相交。讀出交點的<b>兩個</b>數。",
+              vi:"Đường của xe cắt đường của Mai. Đọc <b>cả hai</b> số ở giao điểm đó."},
+      inputs:[
+        { k:"t", answer:10, tol:0.4, unit:{en:"min","zh-Hans":"分钟","zh-Hant":"分鐘",vi:"phút"},
+          label:{en:"time", "zh-Hans":"时间", "zh-Hant":"時間", vi:"thời gian"} },
+        { k:"d", answer:3, tol:0.15, unit:"km",
+          label:{en:"distance", "zh-Hans":"距离", "zh-Hant":"距離", vi:"khoảng cách"} }],
+      hint:{en:"The crossing point is where they are at the same place at the same time.",
+            "zh-Hans":"交点就是同一时刻在同一地点。",
+            "zh-Hant":"交點就是同一時刻在同一地點。",
+            vi:"Giao điểm là lúc hai người ở cùng một chỗ vào cùng một thời điểm."},
+      worked:{en:"<p>They meet at <b>10 minutes</b> after 7:30, <b>3 km</b> from home — the shops.</p><p>That crossing is what \"solving simultaneously\" finds, and step 4 will find it without the graph.</p>",
+              "zh-Hans":"<p>他们在 7:30 之后 <b>10 分钟</b>、离家 <b>3 公里</b> 处相遇——就是商店。</p><p>“联立求解”找的就是这个交点，第 4 步会不看图把它算出来。</p>",
+              "zh-Hant":"<p>他們在 7:30 之後 <b>10 分鐘</b>、離家 <b>3 公里</b> 處相遇——就是商店。</p><p>「聯立求解」找的就是這個交點，第 4 步會不看圖把它算出來。</p>",
+              vi:"<p>Họ gặp nhau sau 7:30 <b>10 phút</b>, cách nhà <b>3 km</b> — chỗ cửa hàng.</p><p>Giao điểm đó chính là thứ mà \"giải hệ\" tìm ra, và bước 4 sẽ tìm nó mà không cần đồ thị.</p>"},
+      onDone: tick
     });
   }
 
-  document.getElementById("teacherUnlock").addEventListener("click", function(e){
-    e.preventDefault();
-    if (confirm(tr("confirmT"))){ state.teacher = true; saveState(); renderTabs(); }
-  });
-
-  /* ---------- LEVEL 1 · Watch & wonder ---------- */
-  function renderL1(panel){
-    var flip = tramFlipPoint();
-    var bikeT = bikeJourney().arrive;
-    var startN = SCENARIO.tram.stops;
-    panel.innerHTML =
-      "<div class='card'>" +
-      "<h2 style='margin-top:0'>👀 Level 1 · Watch &amp; wonder</h2>" +
-      "<p>Press play and just watch the <span data-v>motion</span>. " +
-      "Each vehicle draws its own line on the graph. " +
-      "A steeper line means a faster <span data-v>speed</span>; a flat step means the tram is at " +
-      "<span data-v>rest</span> at a stop.</p>" +
-      "<div class='goal'>🎯 Goal: answer the big question below to unlock Level 2.</div>" +
-      "<div id='sim1'></div>" +
-      "</div>" +
-      "<div class='card'>" +
-      "<p><b>The big question:</b> the tram is fast, but every stop costs it " +
-      fmt(SCENARIO.tram.dwellS) + " seconds. " +
-      "<b>What is the biggest number of stops the tram can make and still beat the bike?</b></p>" +
-      "<label for='stopSlider'>Tram stops: <b id='stopN'>" + startN + "</b></label>" +
-      "<input type='range' id='stopSlider' min='0' max='" + SCENARIO.l1.sliderMax +
-        "' step='1' value='" + startN + "' aria-label='Number of tram stops'>" +
-      "<p class='muted'>Drag the slider, run the race, watch who wins. " +
-      "When you think you have found the flip point, lock it in.</p>" +
-      "<div class='ctrl'><button class='go' id='lockBtn'>✅ Lock in: " + startN + " stops</button></div>" +
-      "<div class='fb' id='fb1' aria-live='polite'></div>" +
-      "</div>";
-
-    var sim = makeSim(panel.querySelector("#sim1"), {});
-    activeSim = sim;
-    function scenarioFor(n){ return [tramMover(n, SCENARIO.tram.dwellS), bikeMover(), carMover()]; }
-    sim.setScenario(scenarioFor(startN));
-
-    var slider = panel.querySelector("#stopSlider");
-    var stopN = panel.querySelector("#stopN");
-    var lockBtn = panel.querySelector("#lockBtn");
-    var fb = panel.querySelector("#fb1");
-    slider.addEventListener("input", function(){
-      var n = +slider.value;
-      stopN.textContent = n;
-      lockBtn.textContent = "✅ Lock in: " + n + " stops";
-      sim.setScenario(scenarioFor(n));
-    });
-    lockBtn.addEventListener("click", function(){
-      var n = +slider.value;
-      var tramT = tramJourney(n, SCENARIO.tram.dwellS).arrive;
-      if (n === flip){
-        var overT = tramJourney(n+1, SCENARIO.tram.dwellS).arrive;
-        var flipStory = (overT >= bikeT - 1e-9)
-          ? " One more stop (" + (n+1) + ") makes it " + fmtT(overT) +
-            " and the tram no longer beats the bike."
-          : " That is the most stops the slider allows — and the tram still wins.";
-        fb.className = "party";
-        fb.innerHTML = "🎉 Yes! With <b>" + n + " stops</b> the tram takes " + fmtT(tramT) +
-          " — still ahead of the bike's " + fmtT(bikeT) + "." + flipStory +
-          " You found the flip point — Level 2 is unlocked!";
-        award(1, ["s_ptgraph"], "found the tram flip point: " + flip + " stops");
-      } else if (tramT < bikeT - 1e-9){
-        fb.className = "fb no";
-        fb.textContent = "The tram DOES win with " + n + " stops (" + fmtT(tramT) + " vs " +
-          fmtT(bikeT) + ") — but could it squeeze in even more stops and still win? Try more.";
-      } else if (Math.abs(tramT - bikeT) < 1e-9){
-        fb.className = "fb no";
-        fb.textContent = "With " + n + " stops it is a dead heat — both take " + fmtT(bikeT) +
-          ". A tie is not a win, so the tram has NOT beaten the bike. Try one fewer stop.";
-      } else {
-        fb.className = "fb no";
-        fb.textContent = "With " + n + " stops the tram takes " + fmtT(tramT) +
-          ", but the bike only needs " + fmtT(bikeT) + " — the tram loses. Try fewer stops.";
-      }
-    });
-  }
-
-  /* ---------- LEVEL 2 · Predict & check ---------- */
-  function renderL2(panel){
-    var s = SCENARIO;
-    var bikeT = bikeJourney().arrive;
-    var tramT = tramJourney(s.tram.stops, s.tram.dwellS).arrive;
-    var carJ = carJourney();
-    var pass = firstPass(carJ, bikeJourney());
-    var q3IsPass = !!pass;
-    var q3Answer = q3IsPass ? pass.km : carJ.arrive;
-
-    panel.innerHTML =
-      "<div class='card'>" +
-      "<h2 style='margin-top:0'>🤝 Level 2 · Predict &amp; check</h2>" +
-      "<p>The race is loaded but paused. First <span data-v>predict</span> with maths, " +
-      "then run the race to check yourself. " +
-      "Within ±" + fmt(s.l2.tolMin) + " min (or ±" + fmt(s.l2.tolKm) + " km) counts as correct.</p>" +
-      "<div class='goal'>🎯 Goal: all three predictions correct in one run to unlock Level 3.</div>" +
-      "<div id='sim2'></div>" +
-      "</div>" +
-      "<div class='card'>" +
-      "<div class='qrow'>a) The bike rides the whole " + fmt(D) + " km at " + fmt(s.bike.cruiseKmh) +
-      " km/h. Predict its total time:<br><input type='text' inputmode='decimal' data-k='p1' " +
-      "aria-label='Predicted bike time in minutes'> minutes " +
-      "<button class='hintbtn' data-h='h1'>hint?</button>" +
-      "<div class='worked' id='h1' hidden>💡 time = <span data-v>distance</span> ÷ speed. " +
-      "That gives hours — multiply by 60 for minutes.</div></div>" +
-      "<div class='qrow'>b) The tram cruises at " + fmt(s.tram.cruiseKmh) + " km/h and makes " +
-      s.tram.stops + " stops of " + fmt(s.tram.dwellS) + " s each. Predict its total time:<br>" +
-      "<input type='text' inputmode='decimal' data-k='p2' aria-label='Predicted tram time in minutes'> minutes " +
-      "<button class='hintbtn' data-h='h2'>hint?</button>" +
-      "<div class='worked' id='h2' hidden>💡 Two parts: moving time (distance ÷ speed × 60) " +
-      "PLUS the total stopped time. Change the seconds into minutes.</div></div>" +
-      "<div class='qrow'>c) " + (q3IsPass ?
-        ("The car leaves " + fmt(s.car.leaveLateMin) + " min late, so it starts behind. " +
-         "Predict how far from home it catches the bike:<br>" +
-         "<input type='text' inputmode='decimal' data-k='p3' aria-label='Predicted catch position in km'> km " +
-         "<button class='hintbtn' data-h='h3'>hint?</button>" +
-         "<div class='worked' id='h3' hidden>💡 On the graph this is a " +
-         "<span data-v='intersection'>point of intersection</span> — where the car's line crosses " +
-         "the bike's line. Watch where the two lines meet. Careful: the traffic lights pause the car " +
-         "on the way, so it catches the bike later than a no-stops calculation says.</div>")
-        :
-        ("Predict the car's total time, door to door:<br>" +
-         "<input type='text' inputmode='decimal' data-k='p3' aria-label='Predicted car time in minutes'> minutes " +
-         "<button class='hintbtn' data-h='h3'>hint?</button>" +
-         "<div class='worked' id='h3' hidden>💡 Moving time + light waits + the late start + parking.</div>")) +
-      "</div>" +
-      "<div class='ctrl'><button class='go' id='runBtn'>" + esc(tr("run")) + "</button></div>" +
-      "<div class='fb' id='fb2' aria-live='polite'></div>" +
-      "<div id='reveal2'></div>" +
-      "</div>";
-
-    var sim = makeSim(panel.querySelector("#sim2"), {
-      controls: false,                    /* paused until they predict + RUN */
-      onFinish: function(){ checkL2(); }
-    });
-    activeSim = sim;
-    sim.setScenario([tramMover(s.tram.stops, s.tram.dwellS), bikeMover(), carMover()]);
-
-    panel.querySelectorAll(".hintbtn").forEach(function(b){
-      b.addEventListener("click", function(){
-        var el = panel.querySelector("#" + b.getAttribute("data-h"));
-        el.hidden = !el.hidden;
-      });
-    });
-
-    var fb = panel.querySelector("#fb2");
-    function inp(k){ return panel.querySelector("[data-k='" + k + "']"); }
-    panel.querySelector("#runBtn").addEventListener("click", function(){
-      if ([inp("p1"),inp("p2"),inp("p3")].some(function(i){ return isNaN(num(i.value)); })){
-        fb.className = "fb no";
-        fb.textContent = "Type all three predictions first (numbers only).";
-        return;
-      }
-      fb.className = "fb"; fb.textContent = "Racing… watch the lines.";
-      panel.querySelector("#reveal2").innerHTML = "";
-      sim.playFromStart();
-    });
-
-    function checkL2(){
-      var ok1 = near(num(inp("p1").value), bikeT, s.l2.tolMin);
-      var ok2 = near(num(inp("p2").value), tramT, s.l2.tolMin);
-      var ok3 = q3IsPass ? near(num(inp("p3").value), q3Answer, s.l2.tolKm)
-                         : near(num(inp("p3").value), q3Answer, s.l2.tolMin);
-      markInput(inp("p1"), ok1); markInput(inp("p2"), ok2); markInput(inp("p3"), ok3);
-      var reveal =
-        "<div class='worked'><b>The real numbers:</b> bike " + fmtT(bikeT) +
-        " · tram " + fmtT(tramT) +
-        (q3IsPass ? " · the car catches the bike <b>" + fmtKm(pass.km) + "</b> from home (at t = " +
-          fmtT(pass.t) + ") — that crossing on the graph is the point of intersection."
-                  : " · car " + fmtT(carJ.arrive) + " door to door.") +
-        "</div>";
-      panel.querySelector("#reveal2").innerHTML = reveal;
-      if (ok1 && ok2 && ok3){
-        fb.className = "party";
-        fb.textContent = "🎉 Three green predictions — you told the story before it happened. Level 3 unlocked!";
-        award(2, ["s_story"], "all three race predictions within tolerance");
-      } else {
-        fb.className = "fb no";
-        fb.textContent = "Some predictions missed. Read the real numbers, fix your working, and run again.";
-      }
-    }
-  }
-
-  /* ---------- LEVEL 3 · You do the maths ---------- */
-  function renderL3(panel){
-    var s = SCENARIO;
-    var bikeGrad = s.bike.cruiseKmh/60;    /* km per minute */
-    var tramGrad = s.tram.cruiseKmh/60;
-    var flats = s.l3.stops;
-    var dwellAns = dwellExactS();
-    var bikeT = bikeJourney().arrive;
-
-    panel.innerHTML =
-      "<div class='card'>" +
-      "<h2 style='margin-top:0'>✍️ Level 3 · You do the maths</h2>" +
-      "<p>This time the maths comes first — the race stays hidden until you commit. " +
-      "Do the working in your book, then type your answers. " +
-      "Tonight's scenario: <b>the tram makes " + flats + " stops</b>, and races the bike only.</p>" +
-      "<div class='goal'>🎯 Goal: all four answers correct to unlock Level 4. " +
-      "Then the sim runs YOUR dwell time as the checker.</div>" +
-      "<div class='qrow'>a) The bike's line on the position-time graph is one straight line. " +
-      "Its <span data-v>gradient</span> = its <span data-v>velocity</span>. " +
-      "Give it in <b>km per minute</b>:<br>" +
-      "<input type='text' inputmode='decimal' data-k='g1' aria-label='Bike gradient in km per minute'> km/min " +
-      "<span class='muted'>(fractions like 3/10 are fine)</span></div>" +
-      "<div class='qrow'>b) The tram's graph is <span data-v>piecewise</span> — sloped parts and " +
-      "flat parts. With " + flats + " stops, how many <b>flat</b> parts (at <span data-v>rest</span>) " +
-      "does it show before school?<br>" +
-      "<input type='text' inputmode='numeric' data-k='g2' aria-label='Number of flat parts'></div>" +
-      "<div class='qrow'>c) The gradient of the tram's <b>sloped</b> parts, in km per minute:<br>" +
-      "<input type='text' inputmode='decimal' data-k='g3' aria-label='Tram gradient in km per minute'> km/min</div>" +
-      "<div class='qrow'>d) The tie question: what dwell time at each of the " + flats +
-      " stops would make the tram and the bike arrive <b>exactly together</b>?<br>" +
-      "<input type='text' inputmode='decimal' data-k='g4' aria-label='Dwell time in seconds'> seconds per stop</div>" +
-      "<div class='ctrl'><button class='go' id='commitBtn'>✅ Commit — run my scenario</button></div>" +
-      "<div class='fb' id='fb3' aria-live='polite'></div>" +
-      "<div id='worked3'></div>" +
-      "<div id='sim3wrap' hidden><h2>The sim checks your dwell time</h2><div id='sim3'></div>" +
-      "<div class='fb' id='verdict3' aria-live='polite'></div></div>" +
-      "</div>";
-
-    var sim = null, currentVerdict = null;
-    var fb = panel.querySelector("#fb3");
-    function inp(k){ return panel.querySelector("[data-k='" + k + "']"); }
-
-    panel.querySelector("#commitBtn").addEventListener("click", function(){
-      var v1 = num(inp("g1").value), v2 = num(inp("g2").value),
-          v3 = num(inp("g3").value), v4 = num(inp("g4").value);
-      if ([v1,v2,v3,v4].some(isNaN)){
-        fb.className = "fb no"; fb.textContent = "Answer all four first (numbers only).";
-        return;
-      }
-      var ok1 = near(v1, bikeGrad, s.l3.tolGrad);
-      var ok2 = Math.abs(v2 - flats) < 0.5;
-      var ok3 = near(v3, tramGrad, s.l3.tolGrad);
-      var ok4 = near(v4, dwellAns, s.l3.tolDwellS);
-      markInput(inp("g1"), ok1); markInput(inp("g2"), ok2);
-      markInput(inp("g3"), ok3); markInput(inp("g4"), ok4);
-
-      panel.querySelector("#worked3").innerHTML =
-        "<div class='worked'><b>The working:</b> " +
-        "a) bike: " + fmt(s.bike.cruiseKmh) + " km/h ÷ 60 = <b>" + fmt(bikeGrad) + " km/min</b>. " +
-        "b) one flat part per stop = <b>" + flats + "</b>. " +
-        "c) tram: " + fmt(s.tram.cruiseKmh) + " ÷ 60 = <b>" + fmt(tramGrad) + " km/min</b>. " +
-        "d) bike needs " + fmtT(bikeT) + "; the tram moves for " +
-        fmtT(tramJourney(0, 0).arrive) + ", so it can afford " +
-        fmtT(bikeT - tramJourney(0,0).arrive) + " of stopping = " +
-        fmt((bikeT - tramJourney(0,0).arrive)*60) + " s ÷ " + flats + " stops = <b>" +
-        fmt(dwellAns) + " s per stop</b>.</div>";
-
-      /* the sim as the checker: run THEIR dwell time */
-      var wrap = panel.querySelector("#sim3wrap");
-      wrap.hidden = false;
-      var dwellTry = Math.min(120, Math.max(0, v4));   /* cap keeps the checker race short; the true answer is well under this */
-      if (!sim){
-        sim = makeSim(panel.querySelector("#sim3"),
-          { onFinish: function(){ if (currentVerdict) currentVerdict(); } });
-        activeSim = sim;
-      }
-      var tramTry = tramJourney(flats, dwellTry);
-      sim.setScenario([
-        { key:"tram", label:"Tram (" + fmt(dwellTry) + " s stops)", emoji:"🚋",
-          cvarName:"--tram", j:tramTry, stopsKm: evenKm(flats), lightsKm: [] },
-        bikeMover()
-      ]);
-      currentVerdict = verdict;
-      sim.playFromStart();
-
-      function verdict(){
-        var diff = tramTry.arrive - bikeT;
-        var vEl = panel.querySelector("#verdict3");
-        var story = "With " + fmt(dwellTry) + " s stops the tram arrives at " + fmtT(tramTry.arrive) +
-          " and the bike at " + fmtT(bikeT) + " — a gap of " + fmt(Math.abs(diff)*60) + " s.";
-        if (ok4){
-          vEl.className = "party";
-          vEl.textContent = "🤝 " + story + " Close enough to call it a tie — your dwell time is right.";
-        } else {
-          vEl.className = "fb no";
-          vEl.textContent = story + (diff > 0 ?
-            " The tram is too slow — try a shorter dwell time." :
-            " The tram still wins — it could afford a longer dwell time.");
-        }
-      }
-
-      if (ok1 && ok2 && ok3 && ok4){
-        fb.className = "party";
-        fb.textContent = "🎉 All four correct — the sim below is replaying your winning maths. Level 4 unlocked!";
-        award(3, ["k_grad_graph","s_story"],
-          "gradients + piecewise description + tie dwell (" + fmt(dwellAns) + " s) all correct");
-      } else {
-        fb.className = "fb no";
-        fb.textContent = "Check the red boxes against the working, fix them, and commit again.";
-      }
-    });
-  }
-
-  /* ---------- LEVEL 4 · CAT-style challenge ---------- */
-  function buildL4(){
-    /* curated random numbers: every candidate is filtered so ALL answers
-       come out as clean numbers, and the catch-up happens before arrival. */
-    var c = SCENARIO.l4, pool = [];
-    function isHalf(x){ return Math.abs(x*2 - Math.round(x*2)) < 1e-9; }
-    function isTenth(x){ return Math.abs(x*10 - Math.round(x*10)) < 1e-9; }
-    c.distKm.forEach(function(dd){
-      c.walkKmh.forEach(function(w){
-        c.rideKmh.forEach(function(sp){
-          if (sp <= w) return;
-          c.lateMin.forEach(function(T){
-            var tA = dd/w*60, tB = dd/sp*60;
-            var cat = sp*T/(sp-w), dist = w*cat/60;
-            var bArr = T + tB, gap = tA - bArr;
-            if (!Number.isInteger(tA) || tA > 90) return;
-            if (!Number.isInteger(tB)) return;
-            if (!isHalf(cat) || !isTenth(dist)) return;
-            if (cat > tA - 1) return;
-            if (dist > dd - 0.3) return;
-            if (gap < 1 || !isHalf(gap)) return;
-            pool.push({ D:dd, w:w, s:sp, T:T });
+  /* --- A3 PREDICT: say it first, then the sim runs and marks you --- */
+  var A3_CASES = [
+    { vk:30, late:6,  slow:ROAD.bike, slowName:WHO.bike, t:15, x:4.5 },
+    { vk:36, late:5,  slow:ROAD.tram, slowName:WHO.tram, t:15, x:6   },
+    { vk:24, late:2,  slow:ROAD.bike, slowName:WHO.bike, t:8,  x:2.4 }
+  ];
+  function a3(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(SIM.L({en:"The sliders are set for you. Say what will happen BEFORE you run it.",
+                 "zh-Hans":"滑块已经设好。先说出会发生什么，再运行。",
+                 "zh-Hant":"滑桿已經設好。先說出會發生什麼，再執行。",
+                 vi:"Thanh trượt đã được đặt sẵn. Hãy nói trước điều sẽ xảy ra, rồi mới chạy."}))));
+    var done = 0, times = [];
+    A3_CASES.forEach(function(c, i){
+      var v = c.vk / 60;
+      var who = SIM.L(c.slowName.name), col = C(c.slowName.ck);
+      var fig = ctx.el("div"), box = null;
+      var q = SIM.ask(host, {
+        prompt:"<b>" + (i + 1) + ".</b> " + esc(who) + " " +
+          SIM.L({en:"leaves at 7:30. Tom's car does <b>" + c.vk + " km/h</b> and leaves <b>" + c.late +
+                    " minutes</b> later. Where and when does the car catch up?",
+                 "zh-Hans":"7:30 出发。阿汤的车 <b>" + c.vk + " km/h</b>，晚 <b>" + c.late +
+                    " 分钟</b> 出发。汽车在何时何地追上？",
+                 "zh-Hant":"7:30 出發。阿湯的車 <b>" + c.vk + " km/h</b>，晚 <b>" + c.late +
+                    " 分鐘</b> 出發。汽車在何時何地追上？",
+                 vi:"xuất phát lúc 7:30. Xe của Tom chạy <b>" + c.vk + " km/h</b> và xuất phát muộn <b>" +
+                    c.late + " phút</b>. Xe đuổi kịp ở đâu và lúc nào?"}),
+        inputs:[
+          { k:"t", answer:c.t, tol:0.25, unit:{en:"min","zh-Hans":"分钟","zh-Hant":"分鐘",vi:"phút"},
+            label:{en:"time", "zh-Hans":"时间", "zh-Hant":"時間", vi:"thời gian"} },
+          { k:"x", answer:c.x, tol:0.1, unit:"km",
+            label:{en:"distance", "zh-Hans":"距离", "zh-Hant":"距離", vi:"khoảng cách"} }],
+        hint:{en:"Set the two rules equal: " + num(c.slow) + "t = " + num(v) + "(t − " + c.late + ").",
+              "zh-Hans":"把两条规则设为相等：" + num(c.slow) + "t = " + num(v) + "(t − " + c.late + ")。",
+              "zh-Hant":"把兩條規則設為相等：" + num(c.slow) + "t = " + num(v) + "(t − " + c.late + ")。",
+              vi:"Cho hai quy tắc bằng nhau: " + num(c.slow) + "t = " + num(v) + "(t − " + c.late + ")."},
+        onDone: function(ok, info){
+          if (!ok) return;
+          q.el.appendChild(fig);
+          SIM.plot(fig, {
+            xMax: 24, yMax: ROAD.D, xStep: 2, yStep: 1, height: 240,
+            xLabel:{en:"minutes after 7:30","zh-Hans":"7:30 之后的分钟数","zh-Hant":"7:30 之後的分鐘數",vi:"số phút sau 7:30"},
+            yLabel:{en:"km from home","zh-Hans":"离家公里数","zh-Hant":"離家公里數",vi:"km từ nhà"},
+            series:[{ fn: lineA(c.slow, 0), color: col }, { fn: lineA(v, c.late), color: C("b") }],
+            marks:[{ x:c.t, y:c.x, label: num(c.t) + " min, " + num(c.x) + " km", color:C("b") }]
           });
-        });
-      });
-    });
-    if (!pool.length) pool.push({ D:4, w:5, s:15, T:6 });  /* verified fallback */
-    var p = pick(pool);
-    var names = [];
-    while (names.length < 2){
-      var n = pick(c.names);
-      if (names.indexOf(n) < 0) names.push(n);
-    }
-    return {
-      D:p.D, w:p.w, s:p.s, T:p.T, walker:names[0], rider:names[1], place:pick(c.places),
-      tA: p.D/p.w*60, tB: p.D/p.s*60,
-      cat: p.s*p.T/(p.s-p.w), dist: p.w*(p.s*p.T/(p.s-p.w))/60,
-      bArr: p.T + p.D/p.s*60, gap: p.D/p.w*60 - (p.T + p.D/p.s*60)
-    };
-  }
-
-  function renderL4(panel){
-    var cp = projectCp();
-    var P = buildL4();
-
-    function paint(){
-      panel.innerHTML =
-        "<div class='card'>" +
-        "<h2 style='margin-top:0'>🏁 Level 4 · CAT-style challenge</h2>" +
-        "<p class='muted'>No sim. No hints. Just you, the words and the maths — like the real thing. " +
-        (cp ? "The real <b>" + esc(cp.short) + "</b> (" + fmtDate(cp.date) +
-          ") uses trains and different numbers — this practice uses walking and a scooter on purpose." : "") +
-        "</p>" +
-        "<p><b>The problem.</b> " + esc(P.walker) + " walks to the " + esc(P.place) + ", <b>" +
-        fmt(P.D) + " km</b> away, at a <span data-v='uniform'>steady</span> <b>" + fmt(P.w) +
-        " km/h</b>. " + esc(P.rider) + " leaves from the same place <b>" + fmt(P.T) +
-        " minutes later</b> on a scooter at <b>" + fmt(P.s) + " km/h</b> along the same path. " +
-        "Answer in the units asked. Decimals or fractions are fine.</p>" +
-        "<div class='qrow'>a) How many minutes does " + esc(P.walker) + "'s walk take?<br>" +
-        "<input type='text' inputmode='decimal' data-k='c1' aria-label='Walk time in minutes'> min</div>" +
-        "<div class='qrow'>b) How many minutes does " + esc(P.rider) + " spend riding?<br>" +
-        "<input type='text' inputmode='decimal' data-k='c2' aria-label='Riding time in minutes'> min</div>" +
-        "<div class='qrow'>c) How many minutes after " + esc(P.walker) + " leaves does " +
-        esc(P.rider) + " catch up?<br>" +
-        "<input type='text' inputmode='decimal' data-k='c3' aria-label='Catch-up time in minutes'> min</div>" +
-        "<div class='qrow'>d) How far from the start does the catch-up happen?<br>" +
-        "<input type='text' inputmode='decimal' data-k='c4' aria-label='Catch-up distance in km'> km</div>" +
-        "<div class='qrow'>e) How many minutes before " + esc(P.walker) + " does " + esc(P.rider) +
-        " arrive?<br>" +
-        "<input type='text' inputmode='decimal' data-k='c5' aria-label='Arrival gap in minutes'> min</div>" +
-        "<div class='ctrl'><button class='go' id='catBtn'>Submit my answers</button>" +
-        "<button class='go ghost' id='newBtn'>New problem</button></div>" +
-        "<div class='fb' id='fb4' aria-live='polite'></div>" +
-        "<div id='worked4'></div>" +
-        "</div>";
-      if (window.STEMVOCAB) STEMVOCAB.decorate(panel);
-
-      var fb = panel.querySelector("#fb4");
-      function inp(k){ return panel.querySelector("[data-k='" + k + "']"); }
-      var submitted = false;
-
-      panel.querySelector("#newBtn").addEventListener("click", function(){
-        P = buildL4(); paint();
-      });
-      panel.querySelector("#catBtn").addEventListener("click", function(){
-        var tol = SCENARIO.l4.tolMin, tolK = SCENARIO.l4.tolKm;
-        var oks = [
-          near(num(inp("c1").value), P.tA, tol),
-          near(num(inp("c2").value), P.tB, tol),
-          near(num(inp("c3").value), P.cat, tol),
-          near(num(inp("c4").value), P.dist, tolK),
-          near(num(inp("c5").value), P.gap, tol)
-        ];
-        ["c1","c2","c3","c4","c5"].forEach(function(k,i){ markInput(inp(k), oks[i]); });
-        var all = oks.every(function(o){ return o; });
-        var firstTry = !submitted;
-        submitted = true;
-        panel.querySelector("#worked4").innerHTML =
-          "<div class='worked'><b>Full worked solution.</b><br>" +
-          "a) time = distance ÷ speed, then × 60 for minutes: (" + fmt(P.D) + " ÷ " + fmt(P.w) +
-          ") × 60 = <b>" + fmt(P.tA) + " min</b>.<br>" +
-          "b) riding time = (" + fmt(P.D) + " ÷ " + fmt(P.s) + ") × 60 = <b>" + fmt(P.tB) + " min</b>.<br>" +
-          "c) call t the minutes after " + esc(P.walker) + " leaves. " + esc(P.walker) + " is at (" +
-          fmt(P.w) + "/60)×t km; " + esc(P.rider) + " is at (" + fmt(P.s) + "/60)×(t − " + fmt(P.T) +
-          ") km. Set them equal (that is the point of <span data-v='intersection'>intersection</span> " +
-          "of the two lines, and solving the pair together is what <i>simultaneous</i> " +
-          "<span data-v='equation'>equation</span>s means): t = " + fmt(P.s) + "×" + fmt(P.T) + " ÷ (" +
-          fmt(P.s) + " − " + fmt(P.w) + ") = <b>" + fmt(P.cat) + " min</b>.<br>" +
-          "d) distance = (" + fmt(P.w) + "/60) × " + fmt(P.cat) + " = <b>" + fmt(P.dist) + " km</b> — " +
-          "before the " + esc(P.place) + " at " + fmt(P.D) + " km, so the catch-up really happens.<br>" +
-          "e) " + esc(P.walker) + " arrives at " + fmt(P.tA) + " min; " + esc(P.rider) + " at " +
-          fmt(P.T) + " + " + fmt(P.tB) + " = " + fmt(P.bArr) + " min → earlier by <b>" +
-          fmt(P.gap) + " min</b>.</div>";
-        if (window.STEMVOCAB) STEMVOCAB.decorate(panel.querySelector("#worked4"));
-        if (all){
-          fb.className = "party";
-          fb.textContent = "🎉 All five correct" + (firstTry ? " — first submission!" : "!") +
-            " That is exactly the maths the " + (cp ? cp.short : "task") +
-            " wants. ✦ Logged on your progress report.";
-          award(4, ["s_vectors","k_eq"],
-            "CAT-style challenge: all 5 answers correct (" + P.walker + " vs " + P.rider + ")");
-        } else {
-          fb.className = "fb no";
-          fb.textContent = "Compare each red box with the worked solution, then try a NEW problem to prove it.";
+          done++; times.push(info.ms);
+          if (done === A3_CASES.length) ctx.done({ ms: times.reduce(function(a,b){return a+b;},0) });
         }
       });
+      void box;
+    });
+  }
+
+  /* --- A4 SOLVE: no sim until the algebra is done --- */
+  function a4(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("noSim")) + " " + esc(T("engNote"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'>Mai leaves home at 7:30 and rides at a <span data-v='uniform'>steady</span> " +
+      "<b>18 km/h</b>. Tom's car leaves the same house <b>8 minutes</b> later and travels at a steady " +
+      "<b>30 km/h</b> along the same straight road. Let <b>t</b> be the number of minutes after 7:30 and " +
+      "<b>d</b> the <span data-v='distance'>distance</span> from home in kilometres.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 4, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) {
+        var fig = ctx.el("div"); host.appendChild(fig);
+        host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("showSim"))));
+        SIM.plot(fig, {
+          xMax: 26, yMax: ROAD.D, xStep: 2, yStep: 1, height: 280,
+          xLabel:{en:"minutes after 7:30","zh-Hans":"7:30 之后的分钟数","zh-Hant":"7:30 之後的分鐘數",vi:"số phút sau 7:30"},
+          yLabel:{en:"km from home","zh-Hans":"离家公里数","zh-Hant":"離家公里數",vi:"km từ nhà"},
+          series:[{ fn: lineA(0.3, 0), color:C("a") }, { fn: lineA(0.5, 8), color:C("b") }],
+          marks:[{ x:20, y:6, label:"20 min, 6 km", color:C("b") }]
+        });
+        ctx.done({ ms: times.reduce(function(a,b){return a+b;},0), ok: clean, of: of, msList: times });
+      }
     }
-    paint();
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> Write the <span data-v='gradient'>gradient</span> of Mai's rule <b>d = mt</b>, in km per minute.",
+      inputs:[{ k:"m", answer:0.3, tol:0.005, unit:"km/min", label:"m" }],
+      hint:"18 km in an hour is 18 ÷ 60 km in a minute.",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> Tom's rule has the form <b>d = m(t − k)</b>. Write his m and his k.",
+      inputs:[
+        { k:"m", answer:0.5, tol:0.005, unit:"km/min", label:"m" },
+        { k:"k", answer:8, tol:0.01, unit:"min", label:"k" }],
+      hint:"30 ÷ 60 gives the gradient. k is how long the road waits for him.",
+      worked:"<p>30 km/h ÷ 60 = <b>0.5 km/min</b>, and he starts <b>8</b> minutes late, so d = 0.5(t − 8), which expands to d = 0.5t − 4.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> Solve the two rules together. When does Tom's car draw level with Mai, and how far from home are they?",
+      inputs:[
+        { k:"t", answer:20, tol:0.05, unit:"min", label:"t" },
+        { k:"d", answer:6, tol:0.03, unit:"km", label:"d" }],
+      hint:"0.3t = 0.5(t − 8). Expand the bracket first.",
+      worked:"<p>0.3t = 0.5(t − 8)<br>0.3t = 0.5t − 4<br>4 = 0.2t<br><b>t = 20</b> minutes.</p>" +
+             "<p>d = 0.3 × 20 = <b>6 km</b> — which is the school gate. He catches her exactly as she arrives.</p>",
+      onDone: tick
+    });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> At <b>t = 12</b> minutes, who is further from home?",
+      opts:{ list:["Mai, on the bike", "Tom, in the car", "They are level"], a:0 },
+      hint:"Put t = 12 into both rules and compare.",
+      worked:"<p>Mai: 0.3 × 12 = 3.6 km. Tom: 0.5(12 − 8) = 2 km. <b>Mai is ahead</b> — the car has not made up the head start yet.</p>",
+      onDone: tick
+    });
   }
 
-  /* ---------- open a level ---------- */
-  function openLevel(n){
-    if (!unlocked(n)) n = Math.min(n, state.max);
-    state.cur = n; saveState();
-    if (activeSim){ activeSim.destroy(); activeSim = null; }
-    var panel = document.getElementById("levelPanel");
-    panel.innerHTML = "";
-    if (n === 1) renderL1(panel);
-    else if (n === 2) renderL2(panel);
-    else if (n === 3) renderL3(panel);
-    else renderL4(panel);
-    if (window.STEMVOCAB) STEMVOCAB.decorate(panel);
-    renderTabs();
+  /* --- A5 EXAM: dense, timed, nothing but words --- */
+  function a5(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("timed")) + " " + esc(SIM.T("noSim"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'><b>The library.</b> Layla leaves home at 8:00 and walks to the library, " +
+      "<b>4 km</b> away, at a steady <b>6 km/h</b>. Hiro leaves the same house at <b>8:10</b> and rides " +
+      "an e-scooter along the same straight road at a steady <b>12 km/h</b>. Amara also leaves at 8:00 " +
+      "and arrives at the library at the same moment as Hiro. Take <b>t</b> as minutes after 8:00 and " +
+      "<b>d</b> as kilometres from home.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){
+      if (!good) return;
+      ok++; if (!info.assisted) clean++;
+      times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){return a+b;},0), ok: clean, of: of, msList: times });
+    }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> Write Layla's rule as <b>d = mt</b>. What is m, in km per minute?",
+      inputs:[{ k:"m", answer:0.1, tol:0.002, unit:"km/min", label:"m" }], onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> Write Hiro's rule in the form <b>d = mt + c</b>. Give m and c.",
+      inputs:[
+        { k:"m", answer:0.2, tol:0.002, unit:"km/min", label:"m" },
+        { k:"c", answer:-2, tol:0.02, unit:"km", label:"c" }],
+      worked:"<p>12 ÷ 60 = 0.2 km/min, and he starts 10 minutes late: d = 0.2(t − 10) = <b>0.2t − 2</b>.</p>" +
+             "<p>c = −2 does not mean he starts 2 km behind the house. It is where the line would have been at 8:00 if he had been riding all along.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> Solve to find the time and the distance at which Hiro passes Layla.",
+      inputs:[
+        { k:"t", answer:20, tol:0.05, unit:"min after 8:00", label:"t" },
+        { k:"d", answer:2, tol:0.03, unit:"km", label:"d" }],
+      worked:"<p>0.1t = 0.2t − 2 → 2 = 0.1t → <b>t = 20</b> minutes, so 8:20, and d = 0.1 × 20 = <b>2 km</b>.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> How many minutes before Layla does Hiro reach the library?",
+      inputs:[{ k:"g", answer:10, tol:0.05, unit:"min", label:"gap" }],
+      worked:"<p>Layla: 4 ÷ 0.1 = 40 min, arriving 8:40. Hiro: 0.2(t − 10) = 4 → t = 30, arriving 8:30. He is <b>10 minutes</b> ahead.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>e.</b> Amara left at 8:00 and arrived with Hiro. What was her speed, in km/h?",
+      inputs:[{ k:"v", answer:8, tol:0.05, unit:"km/h", label:"speed" }],
+      worked:"<p>She covers 4 km in 30 minutes, which is 0.1333… km/min. × 60 = <b>8 km/h</b>.</p>",
+      onDone: tick });
   }
 
-  /* ---------- boot ---------- */
-  setStatic();
-  renderIntro();
-  renderTabs();
-  openLevel(unlocked(state.cur) ? state.cur : 1);
+  /* ================================================================
+     SET B — THE SAME ROAD, NOW WITH STOPS
+     ================================================================ */
+
+  /* --- B1 PLAY: find the stopping pattern that makes it a dead heat --- */
+  function b1(ctx){
+    var host = ctx.host;
+    var state = { n: 0, s: 30 };
+    var figT = ctx.el("div"), figG = ctx.el("div"), goalBox = ctx.el("p", "sim-goal");
+    SIM.sliders(host, [
+      { k:"n", min:0, max:5, step:1, value:0,
+        label:{en:"Stops the tram makes (one every 1 km)", "zh-Hans":"电车停靠次数（每 1 公里一站）",
+               "zh-Hant":"電車停靠次數（每 1 公里一站）", vi:"Số điểm dừng của xe điện (mỗi 1 km một điểm)"} },
+      { k:"s", min:20, max:90, step:10, value:30, unit:"s",
+        label:{en:"Seconds standing at each stop", "zh-Hans":"每站停留秒数",
+               "zh-Hant":"每站停留秒數", vi:"Số giây dừng ở mỗi điểm"} }
+    ], function(v){ state.n = v.n; state.s = v.s; redraw(); });
+    host.appendChild(figT);
+    var clock = SIM.anim(host, { dur: 26, speed: 3, labelFor: mmss,
+      onFrame: function(t){ drawTrack(t); } });
+    host.appendChild(figG);
+    host.appendChild(keyRow([{c:C("a"),n:WHO.bike.name},{c:C("c"),n:WHO.tram.name}]));
+    host.appendChild(goalBox);
+
+    function stopMarks(n){
+      var m = [PLACES[0]], i;
+      for (i = 1; i <= n; i++) m.push({ x:i, name:{en:"stop "+i, "zh-Hans":"第"+i+"站",
+        "zh-Hant":"第"+i+"站", vi:"điểm "+i} });
+      m.push(PLACES[2]);
+      return m;
+    }
+    function drawTrack(t){
+      var run = tramRun(state.n, state.s);
+      SIM.track(figT, {
+        length: ROAD.D, labels: stopMarks(state.n),
+        movers:[
+          { name:WHO.bike.name, color:C("a"), x: lineA(ROAD.bike, 0)(t) },
+          { name:WHO.tram.name, color:C("c"), x: atSegs(run.segs, t) }
+        ]
+      });
+    }
+    var won = false;
+    function redraw(){
+      var run = tramRun(state.n, state.s);
+      drawTrack(clock.time());
+      SIM.plot(figG, {
+        xMax: 26, yMax: ROAD.D, xStep: 2, yStep: 1, height: 300,
+        xLabel:{en:"minutes after 7:30","zh-Hans":"7:30 之后的分钟数","zh-Hant":"7:30 之後的分鐘數",vi:"số phút sau 7:30"},
+        yLabel:{en:"km from home","zh-Hans":"离家公里数","zh-Hant":"離家公里數",vi:"km từ nhà"},
+        series:[
+          { fn: lineA(ROAD.bike, 0), color:C("a") },
+          { points: segPoints(run.segs), color:C("c") }
+        ]
+      });
+      var dead = Math.abs(run.arrive - ROAD.D / ROAD.bike) < 0.05;
+      var all = state.n === 5;
+      goalBox.innerHTML =
+        "<span>" + (dead ? "✓" : "○") + " " + esc(SIM.L(B1G1)) + "</span><br>" +
+        "<span>" + (all ? "✓" : "○") + " " + esc(SIM.L(B1G2)) + "</span><br>" +
+        "<span class='sim-live'>" + esc(SIM.L(B1LIVE)) + " " + num(run.arrive, 1) + " min · " +
+        esc(SIM.L(B1AVG)) + " " + num(ROAD.D / run.arrive * 60, 1) + " km/h</span>";
+      if (dead && all && !won) {
+        won = true; ctx.done({});
+        goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(SIM.L(B1WIN));
+      }
+    }
+    var B1G1 = {en:"The tram arrives at exactly the same moment as Mai's bike.",
+      "zh-Hans":"电车与小梅的自行车同时到达。","zh-Hant":"電車與小梅的腳踏車同時到達。",
+      vi:"Xe điện tới đúng cùng lúc với xe đạp của Mai."};
+    var B1G2 = {en:"The tram stops at all five stops.", "zh-Hans":"电车五站全停。",
+      "zh-Hant":"電車五站全停。", vi:"Xe điện dừng ở cả năm điểm."};
+    var B1LIVE = {en:"tram arrives", "zh-Hans":"电车到达", "zh-Hant":"電車到達", vi:"xe điện tới"};
+    var B1AVG = {en:"average speed", "zh-Hans":"平均速度", "zh-Hant":"平均速度", vi:"tốc độ trung bình"};
+    var B1WIN = {en:"Five stops, 60 seconds each. The tram never slowed down — its top speed is still 24 km/h — but standing still for five minutes drags its average speed all the way down to the bike's 18 km/h.",
+      "zh-Hans":"五站，每站 60 秒。电车并没有开慢——最高速度仍是 24 km/h——但站着不动五分钟，把平均速度一路拉到和自行车一样的 18 km/h。",
+      "zh-Hant":"五站，每站 60 秒。電車並沒有開慢——最高速度仍是 24 km/h——但站著不動五分鐘，把平均速度一路拉到和腳踏車一樣的 18 km/h。",
+      vi:"Năm điểm dừng, mỗi điểm 60 giây. Xe điện không hề chạy chậm lại — tốc độ tối đa vẫn là 24 km/h — nhưng đứng yên năm phút đã kéo tốc độ trung bình xuống đúng bằng 18 km/h của xe đạp."};
+    redraw();
+  }
+
+  /* --- B2 READ: read the staircase --- */
+  function b2(ctx){
+    var host = ctx.host;
+    var run = tramRun(5, 60);
+    var fig = ctx.el("div"); host.appendChild(fig);
+    SIM.plot(fig, {
+      xMax: 22, yMax: ROAD.D, xStep: 2, yStep: 1, height: 320,
+      xLabel:{en:"minutes after 7:30","zh-Hans":"7:30 之后的分钟数","zh-Hant":"7:30 之後的分鐘數",vi:"số phút sau 7:30"},
+      yLabel:{en:"km from home","zh-Hans":"离家公里数","zh-Hant":"離家公里數",vi:"km từ nhà"},
+      series:[
+        { fn: lineA(ROAD.bike, 0), color:C("a"), dash:"5 4" },
+        { points: segPoints(run.segs), color:C("c") }
+      ]
+    });
+    host.appendChild(keyRow([{c:C("c"),n:WHO.tram.name},{c:C("a"),n:WHO.bike.name}]));
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(SIM.L({en:"Five stops, one minute at each.", "zh-Hans":"五站，每站一分钟。",
+                 "zh-Hant":"五站，每站一分鐘。", vi:"Năm điểm dừng, mỗi điểm một phút."}))));
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, of = 4, times = [];
+    function tick(good, info){ if (good) { ok++; times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){return a+b;},0) }); } }
+    SIM.ask(qs, {
+      prompt:{en:"A flat step on this graph means the tram is doing what?",
+              "zh-Hans":"图上的水平段表示电车在做什么？", "zh-Hant":"圖上的水平段表示電車在做什麼？",
+              vi:"Đoạn nằm ngang trên đồ thị nghĩa là xe điện đang làm gì?"},
+      opts:{ list:[
+        {en:"Going backwards", "zh-Hans":"在倒退", "zh-Hant":"在倒退", vi:"Đi lùi"},
+        {en:"Standing still at a stop", "zh-Hans":"停在站上不动", "zh-Hant":"停在站上不動", vi:"Đứng yên ở điểm dừng"},
+        {en:"Going faster", "zh-Hans":"在加速", "zh-Hant":"在加速", vi:"Chạy nhanh hơn"}], a:1 },
+      hint:{en:"Time keeps going along the bottom. Does the distance change?",
+            "zh-Hans":"横轴的时间一直在走。距离变了吗？",
+            "zh-Hant":"橫軸的時間一直在走。距離變了嗎？",
+            vi:"Thời gian ở trục ngang vẫn trôi. Khoảng cách có đổi không?"},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"How many minutes in total does the tram spend standing still?",
+              "zh-Hans":"电车总共停着不动多少分钟？", "zh-Hant":"電車總共停著不動多少分鐘？",
+              vi:"Tổng cộng xe điện đứng yên bao nhiêu phút?"},
+      inputs:[{ k:"d", answer:5, tol:0.05, unit:{en:"min","zh-Hans":"分钟","zh-Hant":"分鐘",vi:"phút"},
+                label:{en:"standing time","zh-Hans":"停留时间","zh-Hant":"停留時間",vi:"thời gian dừng"} }],
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"Where is the tram at <b>10 minutes</b> past 7:30?",
+              "zh-Hans":"7:30 之后 <b>10 分钟</b> 时，电车在哪里？",
+              "zh-Hant":"7:30 之後 <b>10 分鐘</b> 時，電車在哪裡？",
+              vi:"Vào lúc sau 7:30 <b>10 phút</b>, xe điện đang ở đâu?"},
+      inputs:[{ k:"x", answer:3, tol:0.1, unit:"km",
+                label:{en:"distance from home","zh-Hans":"离家距离","zh-Hant":"離家距離",vi:"khoảng cách từ nhà"} }],
+      hint:{en:"Find 10 on the bottom axis and go up until you hit the staircase.",
+            "zh-Hans":"在横轴找到 10，往上碰到阶梯线。",
+            "zh-Hant":"在橫軸找到 10，往上碰到階梯線。",
+            vi:"Tìm số 10 ở trục ngang rồi đi lên tới đường bậc thang."},
+      worked:{en:"<p>It is standing at the third stop, <b>3 km</b> from home — it arrived there at 9.5 min and leaves at 10.5 min.</p>",
+              "zh-Hans":"<p>它正停在第三站，离家 <b>3 公里</b>——9.5 分钟到站，10.5 分钟开走。</p>",
+              "zh-Hant":"<p>它正停在第三站，離家 <b>3 公里</b>——9.5 分鐘到站，10.5 分鐘開走。</p>",
+              vi:"<p>Nó đang dừng ở điểm thứ ba, cách nhà <b>3 km</b> — tới lúc 9,5 phút và rời lúc 10,5 phút.</p>"},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"Every sloping piece of the tram's graph has the same gradient. What does that tell you?",
+              "zh-Hans":"电车图上每一段斜线的斜率都一样。这说明什么？",
+              "zh-Hant":"電車圖上每一段斜線的斜率都一樣。這說明什麼？",
+              vi:"Mọi đoạn dốc trên đồ thị xe điện đều có cùng độ dốc. Điều đó cho em biết gì?"},
+      opts:{ list:[
+        {en:"It travels at the same speed between every pair of stops", "zh-Hans":"两站之间它的速度都一样",
+         "zh-Hant":"兩站之間它的速度都一樣", vi:"Giữa hai điểm dừng bất kỳ nó chạy cùng một tốc độ"},
+        {en:"It gets faster after each stop", "zh-Hans":"每停一次它就更快", "zh-Hant":"每停一次它就更快",
+         vi:"Sau mỗi điểm dừng nó chạy nhanh hơn"},
+        {en:"Its average speed is 24 km/h", "zh-Hans":"它的平均速度是 24 km/h",
+         "zh-Hant":"它的平均速度是 24 km/h", vi:"Tốc độ trung bình của nó là 24 km/h"}], a:0 },
+      worked:{en:"<p>Same gradient means same speed — 24 km/h every time it is moving. Its <b>average</b> speed is only 18 km/h, because average counts the standing time too.</p>",
+              "zh-Hans":"<p>斜率相同就是速度相同——只要在动就是 24 km/h。而<b>平均</b>速度只有 18 km/h，因为平均把停着的时间也算进去了。</p>",
+              "zh-Hant":"<p>斜率相同就是速度相同——只要在動就是 24 km/h。而<b>平均</b>速度只有 18 km/h，因為平均把停著的時間也算進去了。</p>",
+              vi:"<p>Cùng độ dốc nghĩa là cùng tốc độ — 24 km/h mỗi khi nó chạy. Tốc độ <b>trung bình</b> chỉ 18 km/h, vì trung bình tính cả thời gian đứng yên.</p>"},
+      onDone: tick });
+  }
+
+  /* --- B3 PREDICT: the dwell changes, say what happens --- */
+  function b3(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note",
+      esc(SIM.L({en:"Answer first. The graph appears once you are right.",
+                 "zh-Hans":"先作答。答对后才会出现图。",
+                 "zh-Hant":"先作答。答對後才會出現圖。",
+                 vi:"Trả lời trước. Đồ thị sẽ hiện ra khi em trả lời đúng."}))));
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, of = 3, times = [];
+    function tick(good, info){ if (good) { ok++; times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){return a+b;},0) }); } }
+    SIM.ask(qs, {
+      prompt:{en:"The driver cuts every stop to <b>30 seconds</b>, still stopping five times. What time does the tram now reach school, in minutes after 7:30?",
+              "zh-Hans":"司机把每站缩短到 <b>30 秒</b>，仍然停五站。电车现在几分钟到校（7:30 之后）？",
+              "zh-Hant":"司機把每站縮短到 <b>30 秒</b>，仍然停五站。電車現在幾分鐘到校（7:30 之後）？",
+              vi:"Tài xế rút mỗi điểm dừng xuống <b>30 giây</b>, vẫn dừng năm lần. Bây giờ xe điện tới trường sau 7:30 bao nhiêu phút?"},
+      inputs:[{ k:"t", answer:17.5, tol:0.1, unit:{en:"min","zh-Hans":"分钟","zh-Hant":"分鐘",vi:"phút"},
+                label:{en:"arrival","zh-Hans":"到达","zh-Hant":"到達",vi:"tới nơi"} }],
+      hint:{en:"15 minutes of moving never changes. Only the standing time does.",
+            "zh-Hans":"行驶的 15 分钟不会变，变的只有停留时间。",
+            "zh-Hant":"行駛的 15 分鐘不會變，變的只有停留時間。",
+            vi:"15 phút chạy không bao giờ đổi. Chỉ thời gian dừng thay đổi."},
+      worked:{en:"<p>6 ÷ 0.4 = 15 min moving. Five stops × 30 s = 2.5 min standing. 15 + 2.5 = <b>17.5 minutes</b>.</p>",
+              "zh-Hans":"<p>6 ÷ 0.4 = 行驶 15 分钟。五站 × 30 秒 = 停留 2.5 分钟。15 + 2.5 = <b>17.5 分钟</b>。</p>",
+              "zh-Hant":"<p>6 ÷ 0.4 = 行駛 15 分鐘。五站 × 30 秒 = 停留 2.5 分鐘。15 + 2.5 = <b>17.5 分鐘</b>。</p>",
+              vi:"<p>6 ÷ 0,4 = 15 phút chạy. Năm điểm × 30 giây = 2,5 phút dừng. 15 + 2,5 = <b>17,5 phút</b>.</p>"},
+      onDone: function(good, info){
+        if (good) {
+          var fig = ctx.el("div"); qs.appendChild(fig);
+          var run = tramRun(5, 30);
+          SIM.plot(fig, {
+            xMax: 22, yMax: ROAD.D, xStep: 2, yStep: 1, height: 240,
+            xLabel:{en:"minutes after 7:30","zh-Hans":"7:30 之后的分钟数","zh-Hant":"7:30 之後的分鐘數",vi:"số phút sau 7:30"},
+            yLabel:{en:"km from home","zh-Hans":"离家公里数","zh-Hant":"離家公里數",vi:"km từ nhà"},
+            series:[{ fn: lineA(ROAD.bike, 0), color:C("a"), dash:"5 4" },
+                    { points: segPoints(run.segs), color:C("c") }],
+            marks:[{ x:17.5, y:6, label:"17.5 min", color:C("c") }]
+          });
+        }
+        tick(good, info);
+      } });
+    SIM.ask(qs, {
+      prompt:{en:"With those 30-second stops, what is the tram's <b>average</b> speed for the whole trip, in km/h?",
+              "zh-Hans":"按 30 秒停站计算，电车全程的<b>平均</b>速度是多少 km/h？",
+              "zh-Hant":"按 30 秒停站計算，電車全程的<b>平均</b>速度是多少 km/h？",
+              vi:"Với các điểm dừng 30 giây đó, tốc độ <b>trung bình</b> cả chuyến của xe điện là bao nhiêu km/h?"},
+      inputs:[{ k:"v", answer:20.571, tol:0.15, unit:"km/h",
+                label:{en:"average speed","zh-Hans":"平均速度","zh-Hant":"平均速度",vi:"tốc độ trung bình"} }],
+      hint:{en:"Average speed is the whole distance divided by the whole time — standing time included.",
+            "zh-Hans":"平均速度 = 总距离 ÷ 总时间，停留时间也要算进去。",
+            "zh-Hant":"平均速度 = 總距離 ÷ 總時間，停留時間也要算進去。",
+            vi:"Tốc độ trung bình = tổng quãng đường ÷ tổng thời gian, tính cả thời gian dừng."},
+      worked:{en:"<p>6 km ÷ 17.5 min = 0.3428… km/min. × 60 = <b>20.6 km/h</b> to one decimal place. Still well under the 24 km/h it reaches while moving.</p>",
+              "zh-Hans":"<p>6 公里 ÷ 17.5 分钟 = 0.3428… 公里/分钟。× 60 = <b>20.6 km/h</b>（保留一位小数）。仍然低于行驶时的 24 km/h。</p>",
+              "zh-Hant":"<p>6 公里 ÷ 17.5 分鐘 = 0.3428… 公里/分鐘。× 60 = <b>20.6 km/h</b>（保留一位小數）。仍然低於行駛時的 24 km/h。</p>",
+              vi:"<p>6 km ÷ 17,5 phút = 0,3428… km/phút. × 60 = <b>20,6 km/h</b> (một chữ số thập phân). Vẫn thấp hơn nhiều so với 24 km/h khi đang chạy.</p>"},
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:{en:"Tom's car leaves 5 minutes late at 36 km/h, waits 45 seconds at each of <b>two</b> sets of lights, and needs <b>3 minutes</b> to park and walk in. Does he beat Mai's bike?",
+              "zh-Hans":"阿汤的车晚 5 分钟出发，速度 36 km/h，在<b>两</b>处红绿灯各等 45 秒，停车再走进学校要 <b>3 分钟</b>。他比小梅的自行车快吗？",
+              "zh-Hant":"阿湯的車晚 5 分鐘出發，速度 36 km/h，在<b>兩</b>處紅綠燈各等 45 秒，停車再走進學校要 <b>3 分鐘</b>。他比小梅的腳踏車快嗎？",
+              vi:"Xe của Tom xuất phát muộn 5 phút với 36 km/h, chờ 45 giây ở <b>hai</b> cụm đèn giao thông, và cần <b>3 phút</b> để đỗ xe rồi đi bộ vào. Cậu ấy có nhanh hơn xe đạp của Mai không?"},
+      opts:{ list:[
+        {en:"Yes, by half a minute", "zh-Hans":"是，快半分钟", "zh-Hant":"是，快半分鐘", vi:"Có, nhanh hơn nửa phút"},
+        {en:"No, the bike wins", "zh-Hans":"不，自行车赢", "zh-Hant":"不，腳踏車贏", vi:"Không, xe đạp thắng"},
+        {en:"It is a dead heat", "zh-Hans":"打平", "zh-Hant":"打平", vi:"Hòa"}], a:0 },
+      worked:{en:"<p>5 late + 10 moving + 1.5 at lights + 3 parking = <b>19.5 minutes</b>. Mai takes 6 ÷ 0.3 = 20 minutes. The car wins by <b>30 seconds</b> — after all that speed.</p>",
+              "zh-Hans":"<p>晚 5 + 行驶 10 + 红绿灯 1.5 + 停车 3 = <b>19.5 分钟</b>。小梅需要 6 ÷ 0.3 = 20 分钟。汽车只快 <b>30 秒</b>——费了那么大劲。</p>",
+              "zh-Hant":"<p>晚 5 + 行駛 10 + 紅綠燈 1.5 + 停車 3 = <b>19.5 分鐘</b>。小梅需要 6 ÷ 0.3 = 20 分鐘。汽車只快 <b>30 秒</b>——費了那麼大勁。</p>",
+              vi:"<p>5 muộn + 10 chạy + 1,5 đèn + 3 đỗ xe = <b>19,5 phút</b>. Mai mất 6 ÷ 0,3 = 20 phút. Ô tô chỉ thắng <b>30 giây</b> — sau ngần ấy tốc độ.</p>"},
+      onDone: tick });
+  }
+
+  /* --- B4 SOLVE: the algebra of standing still --- */
+  function b4(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("noSim")) + " " + esc(T("engNote"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'>The tram covers the <b>6 km</b> to school at a top speed of <b>24 km/h</b>. It stops " +
+      "<b>5</b> times on the way and stands still for <b>s</b> seconds at each stop. Mai's bike covers the " +
+      "same 6 km at a steady <b>18 km/h</b> and never stops.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 4, times = [];
+    function tick(good, info){ if (good) { ok++; if (!info.assisted) clean++; times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){return a+b;},0), ok: clean, of: of, msList: times }); } }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> How many minutes does the tram spend <span data-v='motion'>moving</span>?",
+      inputs:[{ k:"t", answer:15, tol:0.05, unit:"min", label:"moving time" }],
+      hint:"6 km at 24 km/h. Convert the speed to km per minute first.",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> Write the tram's total journey time <b>T</b>, in minutes, as a rule in terms of <b>s</b>. Give the two numbers in <b>T = a + b·s</b>.",
+      inputs:[
+        { k:"a", answer:15, tol:0.05, label:"a" },
+        { k:"b", answer:0.08333, tol:0.002, label:"b" }],
+      hint:"Five stops of s seconds is 5s seconds, and 60 seconds make a minute.",
+      worked:"<p>T = 15 + 5s/60 = <b>15 + s/12</b>, so a = 15 and b = 1/12 ≈ 0.0833.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> Mai takes 20 minutes. How long can each stop be if the tram is to arrive <b>before</b> her? Give the largest whole number of seconds.",
+      inputs:[{ k:"s", answer:59, tol:0.5, unit:"s", label:"s" }],
+      hint:"Solve 15 + s/12 < 20.",
+      worked:"<p>15 + s/12 < 20 → s/12 < 5 → s < 60. At exactly 60 seconds it is a dead heat, so the largest whole number that still wins is <b>59 seconds</b>.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> With <b>s = 45</b>, what is the tram's average speed over the whole journey, in km/h? Give it to one decimal place.",
+      inputs:[{ k:"v", answer:19.2, tol:0.06, unit:"km/h", label:"average speed" }],
+      hint:"Total time first, then 6 km divided by that time, then × 60.",
+      worked:"<p>T = 15 + 45/12 = 18.75 min. 6 ÷ 18.75 = 0.32 km/min. × 60 = <b>19.2 km/h</b>.</p>" +
+             "<p>Its top speed never changed. Only the average did.</p>",
+      onDone: tick });
+  }
+
+  /* --- B5 EXAM: the real thing, on trains --- */
+  function b5(ctx){
+    var host = ctx.host;
+    host.appendChild(ctx.el("p", "sim-note", esc(SIM.T("timed")) + " " + esc(SIM.T("noSim"))));
+    var story = ctx.el("div", "sim-q");
+    story.innerHTML =
+      "<p class='qp'><b>Ashwood to Central.</b> The 7:42 train travels the <b>30 km</b> from Ashwood to " +
+      "Central at a top speed of <b>60 km/h</b>. It calls at <b>4</b> stations on the way and stands at " +
+      "each one for <b>2 minutes 30 seconds</b>. A bus leaves Ashwood at <b>7:30</b> and covers the same " +
+      "30 km at an <span data-v='average'>average</span> speed of <b>36 km/h</b> without stopping.</p>";
+    host.appendChild(story);
+    var qs = ctx.el("div"); host.appendChild(qs);
+    var ok = 0, clean = 0, of = 5, times = [];
+    function tick(good, info){ if (good) { ok++; if (!info.assisted) clean++; times.push(info.ms);
+      if (ok === of) ctx.done({ ms: times.reduce(function(a,b){return a+b;},0), ok: clean, of: of, msList: times }); } }
+    SIM.ask(qs, {
+      prompt:"<b>a.</b> For how many minutes is the train actually moving?",
+      inputs:[{ k:"t", answer:30, tol:0.05, unit:"min", label:"moving time" }], onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>b.</b> For how many minutes in total is the train standing at stations?",
+      inputs:[{ k:"t", answer:10, tol:0.05, unit:"min", label:"standing time" }], onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>c.</b> At what time does the train reach Central? Write it as h:mm, for example 8:05.",
+      inputs:[{ k:"t", wide:true, text:["8:22","0822","8.22","08:22"], label:"arrival time" }],
+      worked:"<p>30 + 10 = 40 minutes after 7:42, which is <b>8:22</b>.</p>", onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>d.</b> Which arrives first, and by how many minutes?",
+      inputs:[
+        { k:"who", wide:true, text:["bus","the bus"], label:"which one" },
+        { k:"gap", answer:2, tol:0.05, unit:"min", label:"by how many minutes" }],
+      worked:"<p>The bus takes 30 ÷ 36 h = 50 minutes, so it arrives at 8:20. The train arrives 8:22. <b>The bus wins by 2 minutes</b> — even though its top speed is 24 km/h slower.</p>",
+      onDone: tick });
+    SIM.ask(qs, {
+      prompt:"<b>e.</b> The operator shortens every station stop to <b>90 seconds</b>. How many minutes does the train now beat the bus by?",
+      inputs:[{ k:"g", answer:2, tol:0.05, unit:"min", label:"margin" }],
+      worked:"<p>New standing time: 4 × 1.5 = 6 minutes. Journey = 36 minutes, arriving 8:18. The bus still arrives 8:20, so the train now wins by <b>2 minutes</b>.</p>",
+      onDone: tick });
+  }
+
+  /* ================================================================
+     WIRE IT UP
+     ================================================================ */
+  var STAGES_A = [
+    { id:"a1", kind:"play", tab:{en:"Play","zh-Hans":"先玩","zh-Hant":"先玩",vi:"Chơi thử"},
+      title:{en:"Watch the race and bend it", "zh-Hans":"看这场竞速，然后改变它",
+             "zh-Hant":"看這場競速，然後改變它", vi:"Xem cuộc đua rồi thay đổi nó"},
+      aim:{en:"A steeper line means a faster <span data-v>speed</span>. Where two lines cross, two people are in the same place at the same time.",
+           "zh-Hans":"线越陡，<span data-v=\"speed\">速度</span>越快。两条线相交，就是两个人同一时刻在同一地点。",
+           "zh-Hant":"線越陡，<span data-v=\"speed\">速度</span>越快。兩條線相交，就是兩個人同一時刻在同一地點。",
+           vi:"Đường càng dốc thì <span data-v=\"speed\">tốc độ</span> càng lớn. Nơi hai đường cắt nhau là lúc hai người ở cùng một chỗ cùng một lúc."},
+      goal:{en:"Drag the two sliders until both ticks below turn green.",
+            "zh-Hans":"拖动两个滑块，直到下面两个勾都变绿。",
+            "zh-Hant":"拖動兩個滑桿，直到下面兩個勾都變綠。",
+            vi:"Kéo hai thanh trượt cho đến khi cả hai dấu tích bên dưới chuyển xanh."},
+      build:a1 },
+    { id:"a2", kind:"read", tab:{en:"Read","zh-Hans":"读图","zh-Hant":"讀圖",vi:"Đọc"},
+      title:{en:"Read the numbers off the graph", "zh-Hans":"从图上读出数值",
+             "zh-Hant":"從圖上讀出數值", vi:"Đọc số liệu trên đồ thị"},
+      aim:{en:"Every question a motion graph can ask is answered by going up from the bottom axis and across to the side.",
+           "zh-Hans":"运动图能问的每个问题，都可以从横轴往上、再往侧轴横读来回答。",
+           "zh-Hant":"運動圖能問的每個問題，都可以從橫軸往上、再往側軸橫讀來回答。",
+           vi:"Mọi câu hỏi mà đồ thị chuyển động đặt ra đều trả lời được bằng cách đi lên từ trục ngang rồi sang trục dọc."},
+      goal:{en:"Answer all four.", "zh-Hans":"四题全部答对。", "zh-Hant":"四題全部答對。", vi:"Trả lời cả bốn câu."},
+      build:a2 },
+    { id:"a3", kind:"predict", tab:{en:"Predict","zh-Hans":"预测","zh-Hant":"預測",vi:"Dự đoán"},
+      title:{en:"Say what will happen before it happens", "zh-Hans":"在事情发生前先说出结果",
+             "zh-Hant":"在事情發生前先說出結果", vi:"Nói trước điều sẽ xảy ra"},
+      aim:{en:"Setting the two rules equal finds the crossing point without drawing anything.",
+           "zh-Hans":"把两条规则设为相等，不用画图就能求出交点。",
+           "zh-Hant":"把兩條規則設為相等，不用畫圖就能求出交點。",
+           vi:"Cho hai quy tắc bằng nhau sẽ tìm ra giao điểm mà không cần vẽ gì."},
+      goal:{en:"Get all three predictions right.", "zh-Hans":"三个预测全部答对。",
+            "zh-Hant":"三個預測全部答對。", vi:"Dự đoán đúng cả ba."},
+      build:a3 },
+    { id:"a4", kind:"solve", tab:{en:"Solve","zh-Hans":"自己算","zh-Hant":"自己算",vi:"Tự tính"},
+      title:{en:"Do it with algebra, no graph", "zh-Hans":"用代数做，不看图",
+             "zh-Hant":"用代數做，不看圖", vi:"Làm bằng đại số, không đồ thị"},
+      aim:{en:"Write each traveller as a rule, then solve the two rules together. This is the CAT's core question.",
+           "zh-Hans":"把每个人写成一条规则，再联立求解。这就是 CAT 的核心题型。",
+           "zh-Hant":"把每個人寫成一條規則，再聯立求解。這就是 CAT 的核心題型。",
+           vi:"Viết mỗi người thành một quy tắc, rồi giải hai quy tắc cùng nhau. Đây là dạng câu hỏi cốt lõi của bài CAT."},
+      goal:{en:"All four parts correct. The sim then replays your answer.",
+            "zh-Hans":"四小题全对，模拟会播放你的答案。",
+            "zh-Hant":"四小題全對，模擬會播放你的答案。",
+            vi:"Đúng cả bốn phần. Sau đó mô phỏng sẽ chạy lại đáp án của em."},
+      skills:["k_eq","k_intersect","k_simult"], build:a4 },
+    { id:"a5", kind:"exam", tab:{en:"The real thing","zh-Hans":"正式演练","zh-Hant":"正式演練",vi:"Làm thật"},
+      title:{en:"A whole task, on your own, timed", "zh-Hans":"完整一题，独立完成，计时",
+             "zh-Hant":"完整一題，獨立完成，計時", vi:"Một bài trọn vẹn, tự làm, tính giờ"},
+      aim:{en:"Same mathematics as the Trains task, different words. No sim, no sliders, no hints on the first three parts.",
+           "zh-Hans":"和火车任务同样的数学，不同的文字。没有模拟、没有滑块，前三小题也没有提示。",
+           "zh-Hant":"和火車任務同樣的數學，不同的文字。沒有模擬、沒有滑桿，前三小題也沒有提示。",
+           vi:"Cùng toán như bài Trains, khác lời văn. Không mô phỏng, không thanh trượt, ba phần đầu không gợi ý."},
+      goal:{en:"Five parts, all correct.", "zh-Hans":"五小题全对。", "zh-Hant":"五小題全對。", vi:"Năm phần, đúng hết."},
+      skills:["k_eq","k_intersect","k_simult","s_story"], build:a5 }
+  ];
+  var STAGES_B = [
+    { id:"b1", kind:"play", tab:{en:"Play","zh-Hans":"先玩","zh-Hant":"先玩",vi:"Chơi thử"},
+      title:{en:"Add the stops and watch the average fall", "zh-Hans":"加上停靠，看平均速度掉下来",
+             "zh-Hant":"加上停靠，看平均速度掉下來", vi:"Thêm điểm dừng và xem tốc độ trung bình tụt xuống"},
+      aim:{en:"A flat step is time passing with no distance gained. Top speed and <span data-v=\"average\">average</span> speed are not the same thing.",
+           "zh-Hans":"水平段就是时间在走、距离没变。最高速度和<span data-v=\"average\">平均</span>速度不是一回事。",
+           "zh-Hant":"水平段就是時間在走、距離沒變。最高速度和<span data-v=\"average\">平均</span>速度不是一回事。",
+           vi:"Đoạn nằm ngang là thời gian trôi mà không đi thêm được mét nào. Tốc độ tối đa và tốc độ <span data-v=\"average\">trung bình</span> không phải một."},
+      goal:{en:"Make the tram tie with the bike, using all five stops.",
+            "zh-Hans":"用满五站，让电车与自行车打平。",
+            "zh-Hant":"用滿五站，讓電車與腳踏車打平。",
+            vi:"Dùng đủ năm điểm dừng để xe điện hòa với xe đạp."},
+      build:b1 },
+    { id:"b2", kind:"read", tab:{en:"Read","zh-Hans":"读图","zh-Hant":"讀圖",vi:"Đọc"},
+      title:{en:"Read a staircase graph", "zh-Hans":"读阶梯图", "zh-Hant":"讀階梯圖", vi:"Đọc đồ thị bậc thang"},
+      aim:{en:"Sloping pieces are travel, flat pieces are waiting. The whole graph is still distance against time.",
+           "zh-Hans":"斜的部分是在走，平的部分是在等。整张图仍然是距离对时间。",
+           "zh-Hant":"斜的部分是在走，平的部分是在等。整張圖仍然是距離對時間。",
+           vi:"Đoạn dốc là đang đi, đoạn ngang là đang chờ. Cả đồ thị vẫn là khoảng cách theo thời gian."},
+      goal:{en:"Answer all four.", "zh-Hans":"四题全部答对。", "zh-Hant":"四題全部答對。", vi:"Trả lời cả bốn câu."},
+      build:b2 },
+    { id:"b3", kind:"predict", tab:{en:"Predict","zh-Hans":"预测","zh-Hant":"預測",vi:"Dự đoán"},
+      title:{en:"Change the stops, predict the result", "zh-Hans":"改变停靠，预测结果",
+             "zh-Hant":"改變停靠，預測結果", vi:"Đổi điểm dừng, dự đoán kết quả"},
+      aim:{en:"Moving time never changes. Only the standing time moves the arrival — so the two can be handled separately.",
+           "zh-Hans":"行驶时间从不改变，改变到达时间的只有停留时间——所以两者可以分开处理。",
+           "zh-Hant":"行駛時間從不改變，改變到達時間的只有停留時間——所以兩者可以分開處理。",
+           vi:"Thời gian chạy không bao giờ đổi. Chỉ thời gian dừng làm đổi giờ tới — nên có thể xử lý riêng từng phần."},
+      goal:{en:"Three correct predictions.", "zh-Hans":"三个预测全对。", "zh-Hant":"三個預測全對。", vi:"Ba dự đoán đúng."},
+      build:b3 },
+    { id:"b4", kind:"solve", tab:{en:"Solve","zh-Hans":"自己算","zh-Hant":"自己算",vi:"Tự tính"},
+      title:{en:"Put the stopping time into the algebra", "zh-Hans":"把停留时间写进代数",
+             "zh-Hant":"把停留時間寫進代數", vi:"Đưa thời gian dừng vào đại số"},
+      aim:{en:"Total time = moving time + standing time. Once that is a rule in s, an inequality answers \"how long can each stop be?\".",
+           "zh-Hans":"总时间 = 行驶时间 + 停留时间。写成关于 s 的规则后，用不等式就能回答“每站最多能停多久”。",
+           "zh-Hant":"總時間 = 行駛時間 + 停留時間。寫成關於 s 的規則後，用不等式就能回答「每站最多能停多久」。",
+           vi:"Tổng thời gian = thời gian chạy + thời gian dừng. Khi đã thành quy tắc theo s, một bất phương trình sẽ trả lời \"mỗi điểm dừng được bao lâu?\"."},
+      goal:{en:"All four parts correct.", "zh-Hans":"四小题全对。", "zh-Hant":"四小題全對。", vi:"Đúng cả bốn phần."},
+      skills:["k_eq","s_story","f_convert"], build:b4 },
+    { id:"b5", kind:"exam", tab:{en:"The real thing","zh-Hans":"正式演练","zh-Hant":"正式演練",vi:"Làm thật"},
+      title:{en:"Trains, stations and a bus — timed", "zh-Hans":"火车、车站与公交——计时",
+             "zh-Hant":"火車、車站與公車——計時", vi:"Tàu, ga và xe buýt — tính giờ"},
+      aim:{en:"This is as close to the Trains task as practice gets: a worded journey with stops, two travellers, and a comparison at the end.",
+           "zh-Hans":"这已经是最接近火车任务的练习：带停靠的文字行程、两个出行者，最后做比较。",
+           "zh-Hant":"這已經是最接近火車任務的練習：帶停靠的文字行程、兩個出行者，最後做比較。",
+           vi:"Đây là bài luyện gần bài Trains nhất: một hành trình bằng lời có điểm dừng, hai người đi, và một phép so sánh ở cuối."},
+      goal:{en:"Five parts, all correct.", "zh-Hans":"五小题全对。", "zh-Hant":"五小題全對。", vi:"Năm phần, đúng hết."},
+      skills:["k_eq","k_simult","s_story","f_convert"], build:b5 }
+  ];
+
+  function boot(){
+    document.documentElement.lang = lang() === "en" ? "en" : lang();
+    document.querySelectorAll("[data-i18n]").forEach(function(n){
+      var v = T(n.getAttribute("data-i18n"));
+      if (typeof v === "string") n.innerHTML = v;
+    });
+    var sel = document.querySelector(".language-select");
+    sel.value = lang();
+    sel.addEventListener("change", function(){
+      try { localStorage.setItem("elc_page_language", sel.value); } catch(e){}
+      location.reload();
+    });
+
+    /* the framing line: which task this rehearses */
+    var cp = null;
+    if (S2) S2.UNITS.forEach(function(u){ u.checkpoints.forEach(function(c){ if (c.id === "cp_cat") cp = c; }); });
+    document.getElementById("frameLine").innerHTML =
+      "<b>" + esc(cp ? T("buildsF")(cp.name) : T("buildsAlways")) + "</b>" +
+      "<span class='eng'>" + esc(T("engNote")) + "</span>";
+
+    SIM.mount(document.getElementById("sim"), {
+      id:"commute", cp:"cp_cat", room:"maths",
+      evidenceSrc:"Race to School",
+      skills:["k_eq","k_intersect","k_simult","s_story"],
+      openAll: (function(){ try { return localStorage.getItem("elc_stem_sim_open") === "1"; } catch(e){ return false; } })(),
+      sets:[
+        { id:"a", name:{en:"A · straight road","zh-Hans":"A · 直路","zh-Hant":"A · 直路",vi:"A · đường thẳng"}, stages:STAGES_A },
+        { id:"b", name:{en:"B · with stops","zh-Hans":"B · 有停靠","zh-Hant":"B · 有停靠",vi:"B · có điểm dừng"}, stages:STAGES_B }
+      ]
+    });
+
+    if (window.STEMVOCAB) window.STEMVOCAB.init();
+
+    document.getElementById("teacherUnlock").addEventListener("click", function(e){
+      e.preventDefault();
+      try { localStorage.setItem("elc_stem_sim_open", "1"); } catch(err){}
+      location.reload();
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
 })();
 </script>
 </body>

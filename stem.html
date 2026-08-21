@@ -115,9 +115,8 @@
 (function(){
   "use strict";
   var COPY = {
-    en: { nowTag:"now", openFrom:function(d){ return "from "+d; }, ongoing:"ongoing",
+    en: { nowTag:"now", ongoing:"ongoing",
           skills:function(a,b){ return a+"/"+b+" skills"; },
-          days:function(n){ return n===0 ? "today" : "in "+n+" days"; },
           preview:"open for a look" },
     "zh-Hans": { back:"← ELC 主页", sub:"ELC · 科学与数学一起学",
       entryTag:"今日入门任务", entryText:"乘法表计时——先求准确，再求速度", entryGo:"开始 →",
@@ -125,27 +124,27 @@
       rpTitle:"我的报告", rpText:"要去哪里、走得怎样、接下来做什么——只由你真正完成的学习生成。",
       open:"打开 →", open2:"打开 →",
       privacy:"匿名 · 进度只保存在这个浏览器 · 工作纸在 Compass 和班级 OneNote（需学校账号）。",
-      nowTag:"当前", openFrom:function(d){ return d+" 起"; }, ongoing:"持续进行",
+      nowTag:"当前", ongoing:"持续进行",
       skills:function(a,b){ return a+"/"+b+" 项技能"; },
-      days:function(n){ return n===0 ? "今天" : n+" 天后"; }, preview:"可先浏览" },
+      preview:"可先浏览" },
     "zh-Hant": { back:"← ELC 主頁", sub:"ELC · 科學與數學一起學",
       entryTag:"今日入門任務", entryText:"乘法表計時——先求準確，再求速度", entryGo:"開始 →",
       nbTitle:"我的筆記本", nbText:"你的單字表和詞素詞典——你精熟過的每個單字，來自每個單元。",
       rpTitle:"我的報告", rpText:"要去哪裡、走得如何、接下來做什麼——只由你真正完成的學習產生。",
       open:"打開 →", open2:"打開 →",
       privacy:"匿名 · 進度只儲存在這個瀏覽器 · 學習單在 Compass 和班級 OneNote（需學校帳號）。",
-      nowTag:"目前", openFrom:function(d){ return d+" 起"; }, ongoing:"持續進行",
+      nowTag:"目前", ongoing:"持續進行",
       skills:function(a,b){ return a+"/"+b+" 項技能"; },
-      days:function(n){ return n===0 ? "今天" : n+" 天後"; }, preview:"可先瀏覽" },
+      preview:"可先瀏覽" },
     "vi": { back:"← Trang ELC", sub:"ELC · Khoa học và Toán học cùng nhau",
       entryTag:"NHIỆM VỤ ĐẦU GIỜ", entryText:"Bảng cửu chương, tính giờ — chính xác trước, rồi mới nhanh", entryGo:"Bắt đầu →",
       nbTitle:"Sổ tay của tôi", nbText:"Danh sách từ và từ điển hình vị của bạn — mọi từ bạn đã thành thạo, từ mọi bài học.",
       rpTitle:"Báo cáo của tôi", rpText:"Bạn đang đi đâu, đi thế nào, tiếp theo làm gì — chỉ dựa trên việc bạn thực sự đã làm.",
       open:"Mở →", open2:"Mở →",
       privacy:"Ẩn danh · tiến độ chỉ lưu trong trình duyệt này · phiếu bài tập nằm trên Compass và OneNote của lớp (cần tài khoản trường).",
-      nowTag:"hiện tại", openFrom:function(d){ return "từ "+d; }, ongoing:"luôn mở",
+      nowTag:"hiện tại", ongoing:"luôn mở",
       skills:function(a,b){ return a+"/"+b+" kỹ năng"; },
-      days:function(n){ return n===0 ? "hôm nay" : "còn "+n+" ngày"; }, preview:"xem trước được" }
+      preview:"xem trước được" }
   };
   var sel = document.querySelector(".language-select");
   var lang = "en";
@@ -181,15 +180,14 @@
     STEM2.UNITS.forEach(function(u){
       var counts = STEM2.Mastery.unitCounts(u.id);
       var isNow = u.id === cur.id;
-      var opensLater = u.opensFrom && STEM2.daysUntil(u.opensFrom) > 0;
+      var opensLater = !STEM2.unitOpen(u);
       var cls = "row" + (isNow ? " now" : "") + (opensLater ? " closed" : "");
       var pct = counts.total ? Math.round(100*counts.done/counts.total) : 0;
       var due;
       if (u.always) due = "<span>"+STEM2.esc(T("ongoing"))+"</span>";
-      else if (opensLater) due = "<span>"+STEM2.esc(T("openFrom")(STEM2.fmtDate(u.opensFrom)))+"</span>";
       else {
         var cp = STEM2.nextCheckpoint(u);
-        due = cp ? "<b>"+STEM2.esc(cp.short)+" · "+STEM2.esc(T("days")(Math.max(0,STEM2.daysUntil(cp.date))))+"</b>"
+        due = cp ? "<b>"+STEM2.esc(cp.short)+"</b>"
                  : "<span>—</span>";
       }
       h += "<a class='"+cls+"' href='"+u.page+"' data-cat='STEM' data-title='"+STEM2.esc(u.name)+"'>"+

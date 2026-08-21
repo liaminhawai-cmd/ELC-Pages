@@ -12,7 +12,7 @@
      notebook and the report always agree with this page.
      Three screens per set:
        1 WORDS  every word on one page (+ 18 home languages)
-       2 BUILD  the set's pooled morpheme bank; the word list empties
+       2 BUILD  one shared morpheme bank, every word a row, one check
        3 USE    one apply question per word; 70% first try = used
      Deep links: #set=<setId> · #word=<word> (also &step=build|use).
      ================================================================ -->
@@ -104,7 +104,6 @@
   .chip.suffix { background:var(--suf-soft); color:var(--suf); }
   button.chip { cursor:pointer; min-height:44px; }
   button.chip:hover { outline:1px solid currentColor; outline-offset:-1px; }
-  button.chip.wrong { outline:2px solid var(--alert); outline-offset:-2px; }
   .chips { display:flex; flex-wrap:wrap; gap:6px; margin:7px 0 8px; }
 
   /* ---------- 1 WORDS ---------- */
@@ -128,50 +127,102 @@
   .wtr { font-size:.9rem; color:var(--muted); }
   .wex { font-size:.84rem; color:var(--muted); font-style:italic; }
   .wnote { font-size:.78rem; color:var(--muted); }
+  /* quiet one-liner on a word repeated from an earlier set: where to learn it */
+  .wloc { font-size:.78rem; color:var(--muted); }
+  .wloc a { color:var(--accent); font-weight:600; text-decoration:none; }
+  .wloc a:hover { text-decoration:underline; }
   .notr .tr, .notr .wtr { display:none; }
 
-  /* ---------- 2 BUILD ---------- */
-  .bcount { margin:0 0 14px; font-size:.82rem; color:var(--muted); }
+  /* ---------- 2 BUILD · the board ----------
+     One shared morpheme bank at the top — every piece the set's buildable
+     words need, deduped, grouped by type, plus a few decoys — and under it
+     every unbuilt word as a row: meaning on the left, empty slots on the
+     right. Slots take pieces in any order and nothing is judged until the
+     student presses "check my answers". Dense on purpose: a ten-word set
+     should be about a screen and a half at 1000px, and workable at 360px.
+     The bank is pinned at a fixed height with its own scroll, so it never
+     resizes under the reader. Class names are plain so stem-theme.css can
+     dress them per room. */
+  .blead { margin:10px 0 6px; padding:0 0 0 17px; font-size:.78rem; line-height:1.45;
+    color:var(--muted); max-width:78ch; }
+  .blead li { margin:0 0 1px; }
+  .bcount { margin:0 0 0 auto; font-size:.78rem; color:var(--muted); }
   .bcount b { color:var(--accent); }
-  .buildgrid { display:grid; gap:26px; }
-  .btitle { font-size:.68rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
-    color:var(--muted); margin:0 0 8px; }
-  .target { border-top:1px solid var(--hair); padding-top:12px; }
-  .tempty { margin:0; font-size:.85rem; color:var(--muted); max-width:44ch; }
-  .tword { font-family:Georgia,"Times New Roman",serif; font-size:1.5rem; }
-  .tmean { margin:2px 0 0; font-size:.82rem; color:var(--muted); max-width:52ch; }
-  .slots { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:12px 0 4px; }
-  .slot { width:62px; height:44px; border:1px dashed var(--faint); border-radius:8px; }
-  .tmsg { margin:6px 0 0; font-size:.8rem; min-height:1.3em; color:var(--muted); }
-  .tmsg.bad { color:var(--alert); }
-  .tmsg.good { color:var(--accent); font-weight:600; }
+
+  .bbank { position:sticky; top:0; z-index:6; background:var(--paper);
+    border-top:1px solid var(--ink); padding-top:8px; }
+  .bgroups { max-height:38vh; overflow-y:auto; overscroll-behavior:contain; padding-bottom:6px; }
+  .bgroup { margin-bottom:7px; }
+  .bgroup:last-child { margin-bottom:0; }
+  /* A tile takes the whole touch (touch-action:none) so a finger can drag it,
+     which means the group labels are the strips a finger can scroll the bank
+     by — full width, and given real height for that. */
+  .glabel { margin:0; padding:3px 0 4px; font-size:.63rem; font-weight:700;
+    letter-spacing:.08em; text-transform:uppercase; }
+  .glabel.prefix { color:var(--pre); }
+  .glabel.root { color:var(--root); }
+  .glabel.suffix { color:var(--suf); }
+  .btiles { display:flex; flex-wrap:wrap; gap:5px; }
+  .btiles .chip { max-width:12rem; padding:4px 9px; cursor:grab;
+    touch-action:none; user-select:none; -webkit-user-select:none; }
+  .btiles .chip b { font-size:.85rem; }
+  .btiles .chip small { font-size:.64rem; }
+  .btiles .chip.sel { outline:2px solid currentColor; outline-offset:-2px; }
+  .btiles .chip.dragging { opacity:.3; }
+  .ghost { position:fixed; z-index:9000; pointer-events:none; transform:translate(-50%,-50%);
+    max-width:12rem; padding:4px 9px; box-shadow:0 6px 18px rgba(0,0,0,.28); }
+  .ghost b { font-size:.85rem; }
+  .ghost small { font-size:.64rem; }
+
+  .bactions { display:flex; flex-wrap:wrap; gap:5px 14px; align-items:center;
+    padding:6px 0 7px; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+  .bcheck { border:1px solid var(--accent); border-radius:8px; background:var(--accent); color:var(--on-accent);
+    font:inherit; font-size:.84rem; font-weight:600; padding:8px 15px; min-height:44px; cursor:pointer; }
+  .bcheck:hover { border-color:var(--ink); }
+  .bcheck[disabled] { opacity:.45; cursor:default; }
+  .bsum { font-size:.78rem; color:var(--muted); }
+  .bsum .ok { color:var(--accent); font-weight:600; }
+  .bsum .no { color:var(--alert); font-weight:600; }
+
+  .board { margin-top:2px; }
+  .brow { display:flex; flex-wrap:wrap; align-items:center; gap:5px 12px; padding:6px 0;
+    border-bottom:1px solid var(--hair); transition:opacity .28s ease, transform .28s ease; }
+  .brow.bad { border-bottom-color:var(--alert); animation:bshake .26s ease; }
+  .brow.done { border-bottom-color:var(--accent); }
+  .brow.gone { opacity:0; transform:translateX(26px); }
+  .bmean { flex:1 1 16rem; min-width:0; font-size:.82rem; line-height:1.35; color:var(--ink); }
+  .bmean .rw { font-size:1rem; margin-right:7px; }
+  .bslots { display:flex; flex-wrap:wrap; align-items:center; gap:4px; }
+  .bjoin { color:var(--faint); font-size:.8rem; }
+  .bslot { min-width:58px; min-height:44px; padding:3px 8px; border:1px dashed var(--faint); border-radius:8px;
+    background:var(--paper); color:var(--muted); font:inherit; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; }
+  .bslot .ph { font-size:.6rem; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); }
+  .bslot b { font-size:.85rem; font-weight:600; }
+  .bslot.over { border-style:solid; border-color:var(--ink); }
+  .bslot.filled { border-style:solid; }
+  .bslot.filled.prefix { border-color:var(--pre); background:var(--pre-soft); color:var(--pre); }
+  .bslot.filled.root { border-color:var(--root); background:var(--root-soft); color:var(--root); }
+  .bslot.filled.suffix { border-color:var(--suf); background:var(--suf-soft); color:var(--suf); }
+  .bhint { flex:1 1 100%; margin:0 0 2px; font-size:.75rem; color:var(--alert); }
+  .btick { border:1px solid var(--hair); border-radius:8px; background:var(--paper); color:var(--muted);
+    font:inherit; font-size:.76rem; padding:6px 11px; min-height:44px; cursor:pointer; white-space:nowrap; }
+  .btick:hover { border-color:var(--accent); color:var(--accent); }
+  .bbuilt { display:none; font-size:1.02rem; color:var(--accent); }
+  .brow.done .bslots, .brow.done .btick, .brow.done .bhint { display:none; }
+  .brow.done .bbuilt { display:block; }
+  .balldone { margin:14px 0 0; font-size:.84rem; }
+  @keyframes bshake { 25% { transform:translateX(-4px); } 75% { transform:translateX(4px); } }
+  @media (prefers-reduced-motion:reduce) {
+    .brow { transition:none; } .brow.bad { animation:none; } .brow.gone { transform:none; }
+  }
+  /* on a phone the pinned bank gives up height so more of the board is workable */
+  @media (max-width:600px) { .bgroups { max-height:30vh; } }
+
+  /* shared with 3 USE */
   .linkbtn { border:0; background:none; color:var(--accent); font:inherit; font-size:.84rem;
     font-weight:600; cursor:pointer; padding:9px 0; min-height:40px; }
   .linkbtn:hover { text-decoration:underline; }
-  .linkbtn.sec { color:var(--muted); font-weight:400; font-size:.8rem; }
-  .bank { border-top:1px solid var(--hair); padding-top:12px; }
-  .bankchips { display:flex; flex-wrap:wrap; gap:8px; }
-  .blist { border-top:1px solid var(--hair); padding-top:12px; }
-  .brow { display:flex; width:100%; justify-content:space-between; align-items:center; gap:10px;
-    min-height:44px; padding:6px 0; border:0; border-bottom:1px solid var(--hair);
-    background:none; color:inherit; font:inherit; text-align:left; cursor:pointer; }
-  .brow .bw { font-family:Georgia,"Times New Roman",serif; font-size:1.02rem; }
-  .brow .bp { font-size:.7rem; color:var(--muted); white-space:nowrap; }
-  .brow:hover .bw { color:var(--accent); }
-  .brow.active .bw { color:var(--accent); font-weight:600; }
-  .brow.done { opacity:.45; }
-  .brow.done .bw { text-decoration:line-through; }
-  .brow.done .bp { color:var(--accent); }
-  .balldone { margin:14px 0 0; font-size:.84rem; }
-  .tacts { display:flex; gap:18px; flex-wrap:wrap; align-items:center; }
-  /* on a phone the word list steps aside while you are building one word */
-  @media (max-width:759px) { .buildgrid.picking .blist { display:none; } }
-  @media (min-width:760px) {
-    .buildgrid { grid-template-columns:minmax(0,1fr) 246px; gap:24px 30px;
-      grid-template-rows:auto 1fr; grid-template-areas:"target list" "bank list"; align-items:start; }
-    .target { grid-area:target; } .bank { grid-area:bank; } .blist { grid-area:list; }
-    .blist { position:sticky; top:16px; max-height:calc(100vh - 32px); overflow-y:auto; }
-  }
 
   /* ---------- 3 USE ---------- */
   .qmeta { margin:0; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
@@ -205,8 +256,9 @@
     .wctl select { max-width:170px; }
   }
 </style>
+<link rel="stylesheet" href="stem-theme.css?v=20260821-3">
 </head>
-<body>
+<body data-room="vocab">
 <div class="wrap">
   <div class="top">
     <a href="stem.html" data-i18n="back">← STEM</a>
@@ -272,27 +324,34 @@
       backAll:"← all word sets",
       revision:"revision",
       /* the one quiet line under a set title: the task these words are for */
-      wordsForF: function(name,when){ return "These words are the language of the "+name+" — "+when; },
+      wordsForF: function(name){ return "These words are the language of the "+name+"."; },
       wordsDoneF: function(name){ return "These words were the language of the "+name+" — later tasks still use them."; },
-      wordsNextF: function(name,when){ return "You need these words for this unit's tasks — the next one is the "+name+", "+when+"."; },
+      wordsNextF: function(name){ return "You need these words for this unit's tasks — the next one is the "+name+"."; },
       wordsAlways:"These words come up in every task in this unit.",
       countsF: function(b,t,c){ return (b>0 ? "<span class='ok'>"+b+"</span>" : b) + " of "+t+" built · "+c+" used"; },
       stepW:"Words", stepB:"Build", stepU:"Use",
       leadWords:"Every word in this set. The coloured pieces show where the word comes from.",
-      leadBuild:"Choose a word, then tap its pieces in the right order. The list empties as you go.",
+      bStep1:"Drag a piece into a slot — or tap a piece, then tap a slot.",
+      bStep2:"Any order is fine: you can put the ending in first. Tap a filled slot to send its piece back.",
+      bStep3:"Fill in every word you can, then press Check my answers. A few pieces belong to no word here.",
       leadUse:"One question for each word. You get one try — accuracy first.",
       homeLangL:"Home language", homeLangNone:"— none —",
       trOn:"Translations on", trOff:"Translations off",
       mBuilt:"✓ built", mUsed:"✓ used", mNone:"not yet",
+      /* a word repeated from an earlier set (revision sets, a few cross-unit
+         repeats) — one quiet line saying where it's really taught */
+      learnInF: function(u,n){ return "learn it in " + u + " · word list " + n; },
       downToGoF: function(n,m){ return (n>0 ? "<b>"+n+"</b>" : n) + " down, "+m+" to go"; },
-      bankH:"The pieces", listH:"The words",
-      chooseWord:"Choose a word from the list, then tap its pieces in order.",
-      tapWordFirst:"Choose a word from the list first.",
-      notPiece:"Not that piece — read the meanings again.",
-      builtF: function(w){ return "✓ " + w + " — built."; },
-      nextWordL:"next word →", clearL:"← choose another word",
-      piecesF: function(n){ return n + " pieces"; },
-      rememberIt:"remember it ✓", remembered:"✓ remembered", doneMark:"✓ built",
+      gPrefix:"Prefixes · the start", gRoot:"Roots · the heart", gSuffix:"Suffixes · the end",
+      slotPh:"drop", rememberIt:"remember it ✓",
+      slotAriaF: function(i,n){ return "piece " + i + " of " + n; },
+      checkBtn:"Check my answers",
+      checkNothing:"Fill in some slots first, then press Check my answers.",
+      sumOkF: function(n){ return n + " built ✓"; },
+      sumBadF: function(n){ return n + " to fix"; },
+      sumTodoF: function(n){ return n + " not finished"; },
+      hintOrder:"Right pieces, wrong order. Tap a slot to send its piece back.",
+      hintNoMatch:"Not a match yet. Read the meaning again — tap a slot to send its piece back.",
       allBuilt:"Every word in this set is built.",
       goBuild:"2 Build →", goUse:"3 Use →", goWords:"1 Words →",
       qOfF: function(i,n){ return "Question " + i + " of " + n; },
@@ -313,27 +372,32 @@
       privacy:"匿名 · 你的单词只保存在这个浏览器 · 不会发送到任何地方。",
       backAll:"← 所有单词组",
       revision:"复习",
-      wordsForF: function(name,when){ return "这些词就是"+name+"要用的语言 · "+when; },
+      wordsForF: function(name){ return "这些词就是"+name+"要用的语言。"; },
       wordsDoneF: function(name){ return "这些词是"+name+"用过的语言——后面的任务还会用到。"; },
-      wordsNextF: function(name,when){ return "本单元的任务都要用到这些词——下一个任务是"+name+" · "+when+"。"; },
+      wordsNextF: function(name){ return "本单元的任务都要用到这些词——下一个任务是"+name+"。"; },
       wordsAlways:"这些词在本单元的每个任务里都会用到。",
       countsF: function(b,t,c){ return "已拼成 " + (b>0 ? "<span class='ok'>"+b+"</span>" : b) + " / "+t+" · 已使用 "+c; },
       stepW:"认识", stepB:"拼词", stepU:"使用",
       leadWords:"这一组的全部单词。彩色词素显示单词的来源。",
-      leadBuild:"先点一个单词，再按顺序点它的词素。列表会一个一个划掉。",
+      bStep1:"把词素拖进空格——也可以先点词素，再点空格。",
+      bStep2:"顺序随意：先放词尾也可以。点已填的空格，词素就退回去。",
+      bStep3:"能填的词都填上，然后按“检查我的答案”。有几个词素在这里用不到。",
       leadUse:"每个单词一道题，只有一次机会——先求准确。",
       homeLangL:"母语", homeLangNone:"— 不显示 —",
       trOn:"显示翻译", trOff:"隐藏翻译",
       mBuilt:"✓ 已拼成", mUsed:"✓ 已使用", mNone:"未开始",
+      learnInF: function(u,n){ return "在 " + u + " · 单词表 " + n + " 学"; },
       downToGoF: function(n,m){ return "已完成 " + (n>0 ? "<b>"+n+"</b>" : n) + "，还剩 "+m+" 个"; },
-      bankH:"词素", listH:"单词",
-      chooseWord:"先从列表里点一个单词，再按顺序点词素。",
-      tapWordFirst:"请先从列表里选一个单词。",
-      notPiece:"不是这个词素——再看看意思。",
-      builtF: function(w){ return "✓ " + w + " —— 拼成了。"; },
-      nextWordL:"下一个单词 →", clearL:"← 换一个单词",
-      piecesF: function(n){ return n + " 个词素"; },
-      rememberIt:"记住它 ✓", remembered:"✓ 已记住", doneMark:"✓ 已拼成",
+      gPrefix:"前缀 · 词的开头", gRoot:"词根 · 词的核心", gSuffix:"后缀 · 词的结尾",
+      slotPh:"放这里", rememberIt:"记住它 ✓",
+      slotAriaF: function(i,n){ return "第 " + i + " 个词素，共 " + n + " 个"; },
+      checkBtn:"检查我的答案",
+      checkNothing:"先填几个空格，再按“检查我的答案”。",
+      sumOkF: function(n){ return n + " 个拼成了 ✓"; },
+      sumBadF: function(n){ return n + " 个要改"; },
+      sumTodoF: function(n){ return n + " 个还没填完"; },
+      hintOrder:"词素都对，顺序不对。点空格可以把词素退回去。",
+      hintNoMatch:"还不匹配——再读一遍意思。点空格可以把词素退回去。",
       allBuilt:"这一组的单词全部拼成了。",
       goBuild:"2 拼词 →", goUse:"3 使用 →", goWords:"1 认识 →",
       qOfF: function(i,n){ return "第 " + i + " 题，共 " + n + " 题"; },
@@ -354,27 +418,32 @@
       privacy:"匿名 · 你的單字只儲存在這個瀏覽器 · 不會傳送到任何地方。",
       backAll:"← 所有單字組",
       revision:"複習",
-      wordsForF: function(name,when){ return "這些字就是"+name+"要用的語言 · "+when; },
+      wordsForF: function(name){ return "這些字就是"+name+"要用的語言。"; },
       wordsDoneF: function(name){ return "這些字是"+name+"用過的語言——後面的任務還會用到。"; },
-      wordsNextF: function(name,when){ return "本單元的任務都會用到這些字——下一個任務是"+name+" · "+when+"。"; },
+      wordsNextF: function(name){ return "本單元的任務都會用到這些字——下一個任務是"+name+"。"; },
       wordsAlways:"這些字在本單元的每個任務裡都會用到。",
       countsF: function(b,t,c){ return "已拼成 " + (b>0 ? "<span class='ok'>"+b+"</span>" : b) + " / "+t+" · 已使用 "+c; },
       stepW:"認識", stepB:"拼字", stepU:"使用",
       leadWords:"這一組的全部單字。彩色詞素顯示單字的來源。",
-      leadBuild:"先點一個單字，再依順序點它的詞素。清單會一個一個劃掉。",
+      bStep1:"把詞素拖進空格——也可以先點詞素，再點空格。",
+      bStep2:"順序隨意：先放字尾也可以。點已填的空格，詞素就退回去。",
+      bStep3:"能填的字都填上，再按「檢查我的答案」。有幾個詞素在這裡用不到。",
       leadUse:"每個單字一題，只有一次機會——先求正確。",
       homeLangL:"母語", homeLangNone:"— 不顯示 —",
       trOn:"顯示翻譯", trOff:"隱藏翻譯",
       mBuilt:"✓ 已拼成", mUsed:"✓ 已使用", mNone:"尚未開始",
+      learnInF: function(u,n){ return "在 " + u + " · 單字表 " + n + " 學"; },
       downToGoF: function(n,m){ return "已完成 " + (n>0 ? "<b>"+n+"</b>" : n) + "，還剩 "+m+" 個"; },
-      bankH:"詞素", listH:"單字",
-      chooseWord:"先從清單裡點一個單字，再依順序點詞素。",
-      tapWordFirst:"請先從清單裡選一個單字。",
-      notPiece:"不是這個詞素——再看看意思。",
-      builtF: function(w){ return "✓ " + w + " —— 拼成了。"; },
-      nextWordL:"下一個單字 →", clearL:"← 換一個單字",
-      piecesF: function(n){ return n + " 個詞素"; },
-      rememberIt:"記住它 ✓", remembered:"✓ 已記住", doneMark:"✓ 已拼成",
+      gPrefix:"字首 · 詞的開頭", gRoot:"字根 · 詞的核心", gSuffix:"字尾 · 詞的結尾",
+      slotPh:"放這裡", rememberIt:"記住它 ✓",
+      slotAriaF: function(i,n){ return "第 " + i + " 個詞素，共 " + n + " 個"; },
+      checkBtn:"檢查我的答案",
+      checkNothing:"先填幾個空格，再按「檢查我的答案」。",
+      sumOkF: function(n){ return n + " 個拼成了 ✓"; },
+      sumBadF: function(n){ return n + " 個要改"; },
+      sumTodoF: function(n){ return n + " 個還沒填完"; },
+      hintOrder:"詞素都對，順序不對。點空格可以把詞素退回去。",
+      hintNoMatch:"還不相符——再讀一次意思。點空格可以把詞素退回去。",
       allBuilt:"這一組的單字全部拼成了。",
       goBuild:"2 拼字 →", goUse:"3 使用 →", goWords:"1 認識 →",
       qOfF: function(i,n){ return "第 " + i + " 題，共 " + n + " 題"; },
@@ -395,27 +464,32 @@
       privacy:"Ẩn danh · từ vựng của em chỉ lưu trong trình duyệt này · không gửi đi đâu cả.",
       backAll:"← tất cả các nhóm từ",
       revision:"ôn tập",
-      wordsForF: function(name,when){ return "Đây là những từ em sẽ cần cho bài "+name+" — "+when; },
+      wordsForF: function(name){ return "Đây là những từ em sẽ cần cho bài "+name+"."; },
       wordsDoneF: function(name){ return "Đây là những từ bài "+name+" đã dùng — các bài sau vẫn cần đến."; },
-      wordsNextF: function(name,when){ return "Các bài của chuyên đề này đều cần những từ này — bài kế tiếp là "+name+", "+when+"."; },
+      wordsNextF: function(name){ return "Các bài của chuyên đề này đều cần những từ này — bài kế tiếp là "+name+"."; },
       wordsAlways:"Những từ này xuất hiện trong mọi bài của chuyên đề.",
       countsF: function(b,t,c){ return "đã ghép " + (b>0 ? "<span class='ok'>"+b+"</span>" : b) + "/"+t+" · đã dùng "+c; },
       stepW:"Làm quen", stepB:"Ghép từ", stepU:"Dùng từ",
       leadWords:"Tất cả các từ trong nhóm này. Những thành phần có màu cho biết từ này bắt nguồn từ đâu.",
-      leadBuild:"Chọn một từ, rồi bấm các thành phần của nó theo đúng thứ tự. Danh sách sẽ vơi dần.",
+      bStep1:"Kéo một thành phần vào ô trống — hoặc bấm vào thành phần rồi bấm vào ô trống.",
+      bStep2:"Thứ tự nào cũng được: em có thể đặt phần đuôi vào trước. Bấm vào ô đã có thành phần để trả nó về.",
+      bStep3:"Điền hết những từ em làm được, rồi bấm “Kiểm tra bài của em”. Có vài thành phần không dùng đến.",
       leadUse:"Mỗi từ một câu hỏi. Em chỉ có một lượt trả lời — chính xác trước đã.",
       homeLangL:"Tiếng mẹ đẻ", homeLangNone:"— không hiện —",
       trOn:"Hiện bản dịch", trOff:"Ẩn bản dịch",
       mBuilt:"✓ đã ghép", mUsed:"✓ đã dùng", mNone:"chưa bắt đầu",
+      learnInF: function(u,n){ return "học ở " + u + " · danh sách từ " + n; },
       downToGoF: function(n,m){ return "đã xong " + (n>0 ? "<b>"+n+"</b>" : n) + ", còn "+m+" từ nữa"; },
-      bankH:"Các thành phần", listH:"Các từ",
-      chooseWord:"Chọn một từ trong danh sách, rồi bấm các thành phần theo đúng thứ tự.",
-      tapWordFirst:"Em hãy chọn một từ trong danh sách trước đã.",
-      notPiece:"Không phải thành phần này — đọc lại nghĩa một lần nữa nhé.",
-      builtF: function(w){ return "✓ " + w + " — ghép xong."; },
-      nextWordL:"từ tiếp theo →", clearL:"← chọn từ khác",
-      piecesF: function(n){ return n + " thành phần"; },
-      rememberIt:"ghi nhớ từ này ✓", remembered:"✓ đã nhớ", doneMark:"✓ đã ghép",
+      gPrefix:"Tiền tố · phần đầu", gRoot:"Gốc từ · phần lõi", gSuffix:"Hậu tố · phần đuôi",
+      slotPh:"thả vào", rememberIt:"ghi nhớ từ này ✓",
+      slotAriaF: function(i,n){ return "thành phần " + i + " / " + n; },
+      checkBtn:"Kiểm tra bài của em",
+      checkNothing:"Em hãy điền vài ô trước đã, rồi bấm “Kiểm tra bài của em”.",
+      sumOkF: function(n){ return n + " từ đã ghép ✓"; },
+      sumBadF: function(n){ return n + " từ cần sửa"; },
+      sumTodoF: function(n){ return n + " từ chưa xong"; },
+      hintOrder:"Đúng thành phần nhưng sai thứ tự. Bấm vào ô để trả thành phần về.",
+      hintNoMatch:"Chưa khớp — đọc lại nghĩa. Bấm vào ô để trả thành phần về.",
       allBuilt:"Em đã ghép xong mọi từ trong nhóm này.",
       goBuild:"2 Ghép từ →", goUse:"3 Dùng từ →", goWords:"1 Làm quen →",
       qOfF: function(i,n){ return "Câu " + i + " / " + n; },
@@ -584,9 +658,9 @@
   function paintSetFor(setId){
     var p = projectOfSet(setId), txt;
     if (!p) txt = T("wordsAlways");
-    else if (p.cp.status === "done" || S2.daysUntil(p.cp.date) < 0) txt = T("wordsDoneF")(p.cp.short);
-    else if (p.mapped) txt = T("wordsForF")(p.cp.short, S2.fmtDate(p.cp.date));
-    else txt = T("wordsNextF")(p.cp.short, S2.fmtDate(p.cp.date));
+    else if (S2.cpDone(p.cp)) txt = T("wordsDoneF")(p.cp.short);
+    else if (p.mapped) txt = T("wordsForF")(p.cp.short);
+    else txt = T("wordsNextF")(p.cp.short);
     el.setFor.textContent = txt || "";
     el.setFor.hidden = !txt;
   }
@@ -626,6 +700,20 @@
     if (!bits.length) return "<span class='wmarks'><span class='none'>" + esc(T("mNone")) + "</span></span>";
     return "<span class='wmarks'>" + bits.join(" · ") + "</span>";
   }
+  /* a word not yet built, shown here because a revision (or other later) set
+     repeats it — one quiet line pointing back to the earlier set that is
+     really its home, same wording the locked-word popup uses. Silent once
+     the word is built, and silent in the set that IS its home. */
+  function homeNote(w){
+    var st = wState(w.w);
+    if (st && st.built) return "";
+    var home = WORD_HOME[key(w.w)];
+    if (!home || home === cur.set.id) return "";
+    var loc = S2.setLocation(home);
+    if (!loc) return "";
+    return "<p class='wloc'><a href='#set=" + encodeURIComponent(home) + "'>" +
+      esc(T("learnInF")(loc.unitName, loc.index)) + "</a></p>";
+  }
   function renderWords(hlWord){
     var set = cur.set, hl = homeLang();
     var h = "<p class='panelead'>" + esc(T("leadWords")) + "</p>" +
@@ -640,7 +728,8 @@
     set.words.forEach(function(w){
       var parts = w.parts || [];
       h += "<article class='word' id='w-" + esc(slug(w.w)) + "'>" +
-        "<div class='whead'><span class='hw'>" + esc(w.w) + "</span>" + marksFor(w) + "</div>";
+        "<div class='whead'><span class='hw'>" + esc(w.w) + "</span>" + marksFor(w) + "</div>" +
+        homeNote(w);
       if (parts.length) {
         h += "<div class='chips'>";
         parts.forEach(function(p){ h += partChip(p, hl); });
@@ -677,11 +766,23 @@
     setTimeout(function(){ node.classList.remove("hl"); }, 2600);
   }
 
-  /* ---------------- 2 BUILD ---------------- */
+  /* ---------------- 2 BUILD · the board ----------------
+     Every buildable word in the set is on the board at once — meaning on the
+     left, empty slots on the right — over one shared bank of every piece
+     those words need (deduped, grouped by type, a few decoys mixed in).
+     A piece goes into a slot by drag or by tap-piece-then-tap-slot, in any
+     order; tapping a filled slot sends its piece back. Nothing is judged
+     until "check my answers": full rows that are right tick, show the word
+     and leave the board; full rows that are wrong stay and get one of two
+     hints; rows that are not full are simply unfinished, never wrong.
+     A correct build is the only thing that writes markVocab(w,"built") —
+     that mark is what unlocks the word's translation elsewhere. */
+  var TYPE_ORDER = ["prefix", "root", "suffix"];
   var POOL = {};
   function poolFor(set){
     if (POOL[set.id]) return POOL[set.id];
     var banned = {}, seen = {}, pool = [];
+    /* no decoy may be a piece this set uses anywhere, even in a one-piece word */
     set.words.forEach(function(w){ (w.parts || []).forEach(function(p){
       banned[key(p.surface) + "|" + p.type] = 1; }); });
     set.words.forEach(function(w){
@@ -693,7 +794,8 @@
         pool.push({ surface:p.surface, type:p.type, meaning:p.meaning });
       });
     });
-    /* two decoy pieces from words in other sets */
+    /* three decoy pieces from words in other sets — the same three every time,
+       so a set's board looks the same on Tuesday as it did on Monday */
     var others = [];
     D.sets.forEach(function(s){
       if (s.id === set.id) return;
@@ -705,7 +807,7 @@
     });
     var rnd = mulberry32(seedOf(set.id));
     var got = 0;
-    while (got < 2 && others.length) {
+    while (got < 3 && others.length) {
       var i = Math.floor(rnd() * others.length);
       var o = others.splice(i, 1)[0];
       if (banned[o.k]) continue;
@@ -716,150 +818,242 @@
     return POOL[set.id];
   }
 
-  var build = null;
-  function renderBuild(){
-    var set = cur.set;
-    build = { pool: poolFor(set), target: null, placed: [], done: {}, msg: "", msgCls: "" };
-    set.words.forEach(function(w){
-      var st = wState(w.w); if (st && st.built) build.done[key(w.w)] = 1;
-    });
-    var h = "<p class='panelead'>" + esc(T("leadBuild")) + "</p>" +
-      "<p class='bcount' id='bcount'></p>" +
-      "<div class='buildgrid' id='bgrid'>" +
-        "<div class='target' id='target'></div>" +
-        "<div class='bank'><p class='btitle'>" + esc(T("bankH")) + "</p><div class='bankchips' id='bank'></div></div>" +
-        "<div class='blist'><p class='btitle'>" + esc(T("listH")) + "</p><div id='blist'></div>" +
-          "<p class='balldone' id='balldone' hidden></p></div>" +
-      "</div>";
-    el.pb.innerHTML = h;
-    paintBank(); paintList(); paintTarget(); paintCount();
+  var build = null;   /* { pool, done:{word:1}, sel:piece|null } */
 
-    document.getElementById("bank").addEventListener("click", function(ev){
-      var b = ev.target.closest("button[data-i]"); if (b) tapPiece(parseInt(b.getAttribute("data-i"), 10), b);
-    });
-    document.getElementById("blist").addEventListener("click", function(ev){
-      var b = ev.target.closest("button[data-w]"); if (b) pickWord(b.getAttribute("data-w"));
-    });
-    document.getElementById("target").addEventListener("click", function(ev){
-      var s = ev.target.closest("button[data-slot]");
-      if (s) { build.placed = build.placed.slice(0, parseInt(s.getAttribute("data-slot"), 10)); build.msg = ""; paintTarget(); return; }
-      if (ev.target.closest("#nextWord")) { nextWord(); return; }
-      if (ev.target.closest("#pickAnother")) {
-        build.target = null; build.placed = []; build.msg = ""; build.msgCls = "";
-        paintList(); paintTarget();
-        var list = document.getElementById("blist");
-        try { list.scrollIntoView({ behavior:"smooth", block:"nearest" }); } catch(e){}
-      }
-    });
+  /* the row shows the definition, not an essay: long meanings run to their
+     first full stop, which is where the definition always ends in this data */
+  function shortMean(w){
+    var m = String(w.meaning || "");
+    if (m.length <= 110) return m;
+    var stop = m.indexOf(". ");
+    return stop > 30 ? m.slice(0, stop + 1) : m.slice(0, 107).replace(/\s+\S*$/, "") + "…";
   }
   function wordByName(name){
     var found = null;
     cur.set.words.forEach(function(w){ if (key(w.w) === key(name)) found = w; });
     return found;
   }
-  function paintBank(){
-    var h = "";
-    build.pool.forEach(function(p, i){
-      h += "<button class='chip " + esc(p.type) + "' type='button' data-i='" + i + "'>" +
-        "<b>" + esc(p.surface) + "</b><small>" + esc(p.meaning) + "</small></button>";
-    });
-    document.getElementById("bank").innerHTML = h;
+  function pieceHTML(p, i, cls){
+    return "<button class='chip " + esc(p.type) + (cls || "") + "' type='button' data-p='" + i + "'>" +
+      "<b>" + esc(p.surface) + "</b><small>" + esc(p.meaning) + "</small></button>";
   }
-  function paintList(){
+  function bankHTML(){
     var h = "";
-    cur.set.words.forEach(function(w){
-      var parts = w.parts || [], done = !!build.done[key(w.w)], tick = parts.length < 2;
-      var right = done ? (tick ? T("remembered") : T("doneMark"))
-                       : (tick ? T("rememberIt") : T("piecesF")(parts.length));
-      h += "<button class='brow" + (done ? " done" : "") +
-        (build.target && key(build.target.w) === key(w.w) ? " active" : "") +
-        "' type='button' data-w='" + esc(w.w) + "'>" +
-        "<span class='bw'>" + esc(w.w) + "</span><span class='bp'>" + esc(right) + "</span></button>";
+    TYPE_ORDER.forEach(function(type){
+      var group = [];
+      build.pool.forEach(function(p, i){ if (p.type === type) group.push(i); });
+      if (!group.length) return;
+      h += "<div class='bgroup'><p class='glabel " + type + "'>" +
+        esc(T(type === "prefix" ? "gPrefix" : type === "root" ? "gRoot" : "gSuffix")) + "</p>" +
+        "<div class='btiles'>" +
+        group.map(function(i){ return pieceHTML(build.pool[i], i, ""); }).join("") + "</div></div>";
     });
-    document.getElementById("blist").innerHTML = h;
-    var left = cur.set.words.length - Object.keys(build.done).length;
-    var all = document.getElementById("balldone");
-    all.hidden = left > 0;
-    all.innerHTML = esc(T("allBuilt")) + " <a class='plain' href='" + stepHref("use") + "'>" + esc(T("goUse")) + "</a>";
+    return "<div class='bbank' id='bbank'><div class='bgroups'>" + h + "</div>" +
+      "<div class='bactions'><button class='bcheck' type='button' id='checkAll'>" +
+        esc(T("checkBtn")) + "</button>" +
+      "<span class='bsum' id='bsum' aria-live='polite'></span>" +
+      "<span class='bcount' id='bcount'></span></div></div>";
+  }
+  function rowHTML(w){
+    var parts = w.parts || [];
+    if (parts.length < 2) {
+      /* nothing to assemble: the student meets the word and keeps it */
+      return "<div class='brow' data-w='" + esc(w.w) + "' data-rem='1'>" +
+        "<div class='bmean'><span class='hw rw'>" + esc(w.w) + "</span>" + esc(shortMean(w)) + "</div>" +
+        "<button class='btick' type='button' data-tick='" + esc(w.w) + "'>" + esc(T("rememberIt")) + "</button>" +
+        "<div class='bbuilt hw'></div></div>";
+    }
+    var slots = parts.map(function(p, i){
+      return (i ? "<span class='bjoin' aria-hidden='true'>+</span>" : "") +
+        "<button class='bslot' type='button' data-i='" + i + "' aria-label='" +
+        esc(T("slotAriaF")(i + 1, parts.length)) + "'><span class='ph'>" + esc(T("slotPh")) + "</span></button>";
+    }).join("");
+    return "<div class='brow' data-w='" + esc(w.w) + "'>" +
+      "<div class='bmean'>" + esc(shortMean(w)) + "</div>" +
+      "<div class='bslots'>" + slots + "</div>" +
+      "<div class='bbuilt hw'></div></div>";
+  }
+  function renderBuild(){
+    var set = cur.set;
+    build = { pool: poolFor(set), done: {}, sel: null };
+    set.words.forEach(function(w){
+      var st = wState(w.w); if (st && st.built) build.done[key(w.w)] = 1;
+    });
+    var todo = set.words.filter(function(w){ return !build.done[key(w.w)]; });
+    el.pb.innerHTML =
+      "<ul class='blead'><li>" + esc(T("bStep1")) + "</li><li>" + esc(T("bStep2")) +
+        "</li><li>" + esc(T("bStep3")) + "</li></ul>" +
+      bankHTML() +
+      "<div class='board' id='board'>" + todo.map(rowHTML).join("") + "</div>" +
+      "<p class='balldone' id='balldone' hidden></p>";
+    paintCount(); paintLeft();
+    document.getElementById("bbank").addEventListener("pointerdown", function(ev){
+      var t = ev.target.closest(".btiles .chip"); if (t) startDrag(ev, t);
+    });
+    document.getElementById("bbank").addEventListener("keydown", function(ev){
+      var t = ev.target.closest(".btiles .chip"); if (!t) return;
+      if (ev.key !== "Enter" && ev.key !== " " && ev.key !== "Spacebar") return;
+      ev.preventDefault();
+      var p = build.pool[parseInt(t.getAttribute("data-p"), 10)];
+      select(build.sel === p ? null : p);
+    });
+    document.getElementById("checkAll").addEventListener("click", checkAll);
+    document.getElementById("board").addEventListener("click", function(ev){
+      var tick = ev.target.closest("button[data-tick]");
+      if (tick) { var w = wordByName(tick.getAttribute("data-tick"));
+        if (w) markRowDone(tick.closest(".brow"), w); return; }
+      var slot = ev.target.closest("button.bslot");
+      if (!slot) return;
+      if (slot.dataset.piece) { clearSlot(slot); return; }
+      if (build.sel) { var p = build.sel; select(null); fillSlot(slot, p); }
+    });
   }
   function paintCount(){
     var n = Object.keys(build.done).length, total = cur.set.words.length;
     document.getElementById("bcount").innerHTML = T("downToGoF")(n, Math.max(0, total - n));
   }
-  function paintTarget(){
-    var t = build.target, box = document.getElementById("target");
-    var grid = document.getElementById("bgrid");
-    if (grid) grid.classList.toggle("picking", !!t);
-    if (!t) {
-      box.innerHTML = "<p class='tempty'>" + esc(T("chooseWord")) + "</p>" +
-        (build.msg ? "<p class='tmsg " + build.msgCls + "'>" + esc(build.msg) + "</p>" : "");
-      return;
-    }
-    var parts = t.parts || [];
-    var h = "<div class='tword'>" + esc(t.w) + "</div><p class='tmean'>" + esc(t.meaning) + "</p><div class='slots'>";
-    parts.forEach(function(p, i){
-      if (i < build.placed.length) {
-        var c = build.pool[build.placed[i]];
-        h += "<button class='chip " + esc(c.type) + "' type='button' data-slot='" + i + "'><b>" +
-             esc(c.surface) + "</b></button>";
-      } else h += "<span class='slot'></span>";
+  /* nothing left on the board: put the bank away and point at step 3 */
+  function paintLeft(){
+    var left = document.querySelectorAll("#board .brow").length;
+    var all = document.getElementById("balldone"), bank = document.getElementById("bbank");
+    all.hidden = left > 0;
+    all.innerHTML = esc(T("allBuilt")) + " <a class='plain' href='" + stepHref("use") + "'>" + esc(T("goUse")) + "</a>";
+    bank.hidden = left === 0;
+    return left;
+  }
+
+  /* ---- the shared bank: select by tap, or drag a ghost to a slot ---- */
+  function select(p){
+    build.sel = p || null;
+    document.querySelectorAll("#bbank .chip").forEach(function(t){
+      t.classList.toggle("sel", !!p && build.pool[parseInt(t.getAttribute("data-p"), 10)] === p);
     });
-    h += "</div><p class='tmsg " + build.msgCls + "'>" + esc(build.msg) + "</p><div class='tacts'>";
-    if (build.placed.length === parts.length && parts.length)
-      h += "<button class='linkbtn' type='button' id='nextWord'>" + esc(T("nextWordL")) + "</button>";
-    h += "<button class='linkbtn sec' type='button' id='pickAnother'>" + esc(T("clearL")) + "</button></div>";
-    box.innerHTML = h;
   }
-  function pickWord(name){
-    var w = wordByName(name); if (!w) return;
-    var parts = w.parts || [];
-    if (parts.length < 2) { markBuilt(w, true); return; }
-    build.target = w; build.placed = []; build.msg = ""; build.msgCls = "";
-    paintList(); paintTarget();
-    var box = document.getElementById("target");
-    try { box.scrollIntoView({ behavior:"smooth", block:"nearest" }); } catch(e){}
-  }
-  function tapPiece(i, btn){
-    if (!build.target) { build.msg = T("tapWordFirst"); build.msgCls = "bad"; paintTarget(); return; }
-    var parts = build.target.parts || [];
-    if (build.placed.length >= parts.length) return;
-    var want = parts[build.placed.length], got = build.pool[i];
-    if (key(got.surface) === key(want.surface) && got.type === want.type) {
-      build.placed.push(i); build.msg = ""; build.msgCls = "";
-      if (build.placed.length === parts.length) markBuilt(build.target, false);
-      else paintTarget();
-    } else {
-      build.msg = T("notPiece"); build.msgCls = "bad";
-      btn.classList.add("wrong");
-      setTimeout(function(){ btn.classList.remove("wrong"); }, 700);
-      paintTarget();
+  function startDrag(ev, tile){
+    if (ev.button && ev.button !== 0) return;
+    ev.preventDefault();
+    var p = build.pool[parseInt(tile.getAttribute("data-p"), 10)];
+    var sx = ev.clientX, sy = ev.clientY, moved = false, ghost = null;
+    try { tile.setPointerCapture(ev.pointerId); } catch(e){}
+    function stop(){
+      tile.removeEventListener("pointermove", move);
+      tile.removeEventListener("pointerup", up);
+      tile.removeEventListener("pointercancel", cancel);
+      try { tile.releasePointerCapture(ev.pointerId); } catch(e){}
+      tile.classList.remove("dragging");
+      if (ghost) { ghost.remove(); ghost = null; }
+      clearHover();
     }
+    function move(e2){
+      if (!moved && Math.abs(e2.clientX - sx) + Math.abs(e2.clientY - sy) > 6) {
+        moved = true; tile.classList.add("dragging"); ghost = makeGhost(p);
+      }
+      if (!moved) return;
+      ghost.style.left = e2.clientX + "px"; ghost.style.top = e2.clientY + "px";
+      hover(e2);
+      /* the board is taller than the screen: drag near an edge and it follows */
+      var vh = window.innerHeight || 600;
+      if (e2.clientY > vh - 52) window.scrollBy(0, 14);
+      else if (e2.clientY < 52) window.scrollBy(0, -14);
+    }
+    function up(e2){
+      var wasMoved = moved, x = e2.clientX, y = e2.clientY;
+      stop();
+      if (wasMoved) { var s = slotAt(x, y); if (s && !s.dataset.piece) { select(null); fillSlot(s, p); } }
+      else select(build.sel === p ? null : p);
+    }
+    function cancel(){ stop(); }
+    tile.addEventListener("pointermove", move);
+    tile.addEventListener("pointerup", up);
+    tile.addEventListener("pointercancel", cancel);
   }
-  function markBuilt(w, fromTick){
+  function makeGhost(p){
+    var g = document.createElement("div");
+    g.className = "chip ghost no-tap " + p.type;
+    g.innerHTML = "<b>" + esc(p.surface) + "</b><small>" + esc(p.meaning) + "</small>";
+    document.body.appendChild(g);
+    return g;
+  }
+  function slotAt(x, y){
+    var e = document.elementFromPoint(x, y);
+    return e ? e.closest("button.bslot") : null;
+  }
+  function hover(e2){
+    clearHover();
+    var s = slotAt(e2.clientX, e2.clientY);
+    if (s && !s.dataset.piece) s.classList.add("over");
+  }
+  function clearHover(){
+    document.querySelectorAll("#board .bslot.over").forEach(function(s){ s.classList.remove("over"); });
+  }
+
+  /* ---- slots ---- */
+  function fillSlot(slot, p){
+    slot.dataset.piece = p.surface; slot.dataset.type = p.type;
+    slot.className = "bslot filled " + p.type;
+    slot.innerHTML = "<b>" + esc(p.surface) + "</b>";
+    clearRowMark(slot.closest(".brow"));
+  }
+  function clearSlot(slot){
+    delete slot.dataset.piece; delete slot.dataset.type;
+    slot.className = "bslot";
+    slot.innerHTML = "<span class='ph'>" + esc(T("slotPh")) + "</span>";
+    clearRowMark(slot.closest(".brow"));
+  }
+  /* touching a row withdraws last check's verdict on it — it is being redone */
+  function clearRowMark(row){
+    if (!row) return;
+    row.classList.remove("bad");
+    var h = row.querySelector(".bhint"); if (h) h.remove();
+  }
+
+  /* ---- one check for the whole board ---- */
+  function checkAll(){
+    var rows = [].slice.call(document.querySelectorAll("#board .brow:not(.done)"));
+    var ok = 0, bad = 0, todo = 0;
+    rows.forEach(function(row){
+      var w = wordByName(row.getAttribute("data-w"));
+      if (!w || row.getAttribute("data-rem")) { todo++; return; }
+      var slots = [].slice.call(row.querySelectorAll(".bslot"));
+      var full = slots.every(function(s){ return !!s.dataset.piece; });
+      /* an unfinished row is never wrong — it is just not finished */
+      if (!full) { clearRowMark(row); todo++; return; }
+      var placed = slots.map(function(s){ return key(s.dataset.piece) + "|" + s.dataset.type; });
+      var answer = (w.parts || []).map(function(p){ return key(p.surface) + "|" + p.type; });
+      var right = placed.length === answer.length && placed.every(function(v, i){ return v === answer[i]; });
+      if (right) { ok++; markRowDone(row, w); }
+      else { bad++; markRowBad(row, placed.slice().sort().join("~") === answer.slice().sort().join("~")); }
+    });
+    var sum = document.getElementById("bsum"), bits = [];
+    if (!ok && !bad) { sum.textContent = T("checkNothing"); return; }
+    if (ok) bits.push("<span class='ok'>" + esc(T("sumOkF")(ok)) + "</span>");
+    if (bad) bits.push("<span class='no'>" + esc(T("sumBadF")(bad)) + "</span>");
+    if (todo) bits.push(esc(T("sumTodoF")(todo)));
+    sum.innerHTML = bits.join(" · ");
+  }
+  function markRowBad(row, sameSet){
+    row.classList.remove("bad");
+    void row.offsetWidth;                       /* restart the shake */
+    row.classList.add("bad");
+    var h = row.querySelector(".bhint");
+    if (!h) { h = document.createElement("p"); h.className = "bhint"; row.appendChild(h); }
+    h.textContent = T(sameSet ? "hintOrder" : "hintNoMatch");
+  }
+  function markRowDone(row, w){
     var k = key(w.w);
-    /* only the first build writes the mark, so the notebook keeps the first date */
+    /* the first build writes the mark, so the notebook keeps the first date */
     if (!build.done[k]) { Store.markVocab(w.w, "built"); build.done[k] = 1; }
-    build.msg = T("builtF")(w.w); build.msgCls = "good";
-    if (fromTick) build.target = null;
-    paintList(); paintCount(); paintTarget();
-  }
-  function nextWord(){
-    var next = null;
-    cur.set.words.forEach(function(w){
-      if (next) return;
-      if (!build.done[key(w.w)] && (w.parts || []).length >= 2) next = w;
-    });
-    if (next) { pickWord(next.w); return; }
-    /* nothing left to assemble: either everything is done, or only tick rows remain */
-    var left = cur.set.words.length - Object.keys(build.done).length;
-    build.target = null; build.placed = [];
-    build.msg = left > 0 ? "" : T("allBuilt");
-    build.msgCls = left > 0 ? "" : "good";
-    paintList(); paintTarget();
-    if (left > 0) {
-      var list = document.getElementById("blist");
-      try { list.scrollIntoView({ behavior:"smooth", block:"nearest" }); } catch(e){}
-    }
+    clearRowMark(row);
+    row.classList.add("done");
+    row.querySelector(".bbuilt").innerHTML = esc(w.w) + " ✓";
+    paintCount();
+    setTimeout(function(){
+      row.classList.add("gone");
+      setTimeout(function(){
+        row.remove();
+        if (paintLeft() === 0) { var s = document.getElementById("bsum"); if (s) s.textContent = ""; }
+      }, 300);
+    }, 1100);
   }
 
   /* ---------------- 3 USE ---------------- */

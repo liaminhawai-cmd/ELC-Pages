@@ -16,10 +16,9 @@
      rail (WORDS / SKILLS / DO / PROVE), the visible-learning spine,
      the skill-group sections, and the checkpoint arc.
 
-     Genetics has an opensFrom date in stem-shared.js. Before that
-     date the page shows a quiet "opens <date> — you can look around"
-     line and the spine counts down to opening; everything else on the
-     page works normally.
+     Genetics is marked open:false in stem-shared.js. Until a
+     teacher flips that to true the page shows a quiet "opens later —
+     you can look around now" line; everything else works normally.
      ================================================================ -->
 <style>
   :root {
@@ -68,6 +67,7 @@
   .rcount { color:var(--muted); font-size:.75rem; white-space:nowrap; }
   .rcount .ok { color:var(--accent); font-weight:600; }
   .rcount .soon { color:var(--alert); font-weight:600; }
+  .rcount .dimW { color:var(--faint); }
   @media (min-width:760px) {
     .layout { display:grid; grid-template-columns:196px minmax(0,1fr); gap:38px; align-items:start; }
     .rail { display:block; overflow:visible; margin:0; padding:0; border-bottom:0;
@@ -314,7 +314,6 @@
   /* ---------------- i18n (chrome only; body content stays EAL English) ---------------- */
   var COPY = {
     en: {
-      days: function(n){ return n===0 ? "today" : n===1 ? "in 1 day" : "in "+n+" days"; },
       masteredW:"mastered", notStarted:"not started",
       lastRunF: function(a,b){ return a+" of "+b+" last run"; },
       actExample:"example →", actContinue:"continue →", actAgain:"practise again →",
@@ -322,15 +321,16 @@
       bandL:["Working towards","At level","Above"],
       skillsMasteredF: function(a,b){ return a+" of "+b+" skills mastered"; },
       wordsBuiltF: function(a,b){ return a+" of "+b+" words built"; },
-      neededByF: function(name,when){ return "needed by "+name+" · "+when; },
+      neededByF: function(name){ return "needed by the "+name; },
       allMastered:"Everything mastered — revise the unit →",
       arcLink:"the whole arc ↓", reportLink:"full report →",
       schoolMsg:"Your teacher is adding this link. For now, open Compass or the class OneNote and search for the file name.",
       doneW:"done", noCp:"No checkpoints left this term.",
+      nowW:"now", laterW:"later in this unit",
       opensWord:"unit opens", lookAround:"You can look around now.",
-      opensNote: function(d){ return "Opens "+d+" — you can look around now."; },
+      opensNote:"Opens later in the year — you can look around now.",
       startWords:"start with the words →",
-      buildsF: function(name,when){ return "This builds your "+name+" toolkit — "+when; },
+      buildsF: function(name){ return "This builds your "+name+" toolkit."; },
       buildsDoneF: function(name){ return "This built your "+name+" toolkit — later tasks still use it."; },
       buildsAlways:"This keeps your number work sharp for every task.",
       groupFeedsF: function(names){ return "This group is the toolkit for the "+names.join(" and ")+"."; },
@@ -346,7 +346,6 @@
       doH2:"任务", doLead:"在检查点之前完成这些任务。🔒 表示需要学校账号——请打开 Compass 或班级 OneNote。",
       proveH2:"证明", proveLead:"每个单元只保留自己的检查点。这是遗传学的完整安排。",
       privacy:"匿名 · 进度只保存在这个浏览器 · 工作纸在 Compass 和班级 OneNote（需学校账号）。",
-      days: function(n){ return n===0 ? "今天" : n+" 天后"; },
       masteredW:"已掌握", notStarted:"未开始",
       lastRunF: function(a,b){ return "上次 "+a+" / "+b+" 题"; },
       actExample:"看例题 →", actContinue:"继续 →", actAgain:"再练一次 →",
@@ -354,15 +353,16 @@
       bandL:["迈向","达到","超越"],
       skillsMasteredF: function(a,b){ return "已掌握 "+a+" / "+b+" 项技能"; },
       wordsBuiltF: function(a,b){ return "已拼成 "+a+" / "+b+" 个单词"; },
-      neededByF: function(name,when){ return name+" 会用到 · "+when; },
+      neededByF: function(name){ return name+" 会用到"; },
       allMastered:"全部掌握——复习整个单元 →",
       arcLink:"本单元全部检查点 ↓", reportLink:"完整报告 →",
       schoolMsg:"老师正在添加这个链接。现在请打开 Compass（或班级 OneNote）搜索文件名。",
       doneW:"已完成", noCp:"本学期检查点已全部完成。",
+      nowW:"现在", laterW:"本单元稍后",
       opensWord:"单元开放", lookAround:"现在可以先浏览。",
-      opensNote: function(d){ return d+" 开放——现在可以先浏览。"; },
+      opensNote:"本单元稍后开放——现在可以先浏览。",
       startWords:"先从单词开始 →",
-      buildsF: function(name,when){ return "这是在为 "+name+" 做准备 · "+when; },
+      buildsF: function(name){ return "这是在为 "+name+" 做准备。"; },
       buildsDoneF: function(name){ return "这曾为 "+name+" 做准备——后面的任务还会用到。"; },
       buildsAlways:"这让你的数字运算保持熟练，每个任务都用得上。",
       groupFeedsF: function(names){ return "这一组是 "+names.join(" 和 ")+" 的准备。"; },
@@ -378,7 +378,6 @@
       doH2:"任務", doLead:"在檢查點之前完成這些任務。🔒 表示需要學校帳號——請打開 Compass 或班級 OneNote。",
       proveH2:"證明", proveLead:"每個單元只保留自己的檢查點。這是遺傳學的完整安排。",
       privacy:"匿名 · 進度只儲存在這個瀏覽器 · 學習單在 Compass 和班級 OneNote（需學校帳號）。",
-      days: function(n){ return n===0 ? "今天" : n+" 天後"; },
       masteredW:"已精熟", notStarted:"未開始",
       lastRunF: function(a,b){ return "上次 "+a+" / "+b+" 題"; },
       actExample:"看例題 →", actContinue:"繼續 →", actAgain:"再練一次 →",
@@ -386,15 +385,16 @@
       bandL:["邁向","達到","超越"],
       skillsMasteredF: function(a,b){ return "已精熟 "+a+" / "+b+" 項技能"; },
       wordsBuiltF: function(a,b){ return "已拼成 "+a+" / "+b+" 個單字"; },
-      neededByF: function(name,when){ return name+" 會用到 · "+when; },
+      neededByF: function(name){ return name+" 會用到"; },
       allMastered:"全部精熟——複習整個單元 →",
       arcLink:"本單元全部檢查點 ↓", reportLink:"完整報告 →",
       schoolMsg:"老師正在加入這個連結。現在請打開 Compass（或班級 OneNote）搜尋檔案名稱。",
       doneW:"已完成", noCp:"本學期檢查點已全部完成。",
+      nowW:"現在", laterW:"本單元稍後",
       opensWord:"單元開放", lookAround:"現在可以先瀏覽。",
-      opensNote: function(d){ return d+" 開放——現在可以先瀏覽。"; },
+      opensNote:"本單元稍後開放——現在可以先瀏覽。",
       startWords:"先從單字開始 →",
-      buildsF: function(name,when){ return "這是在為 "+name+" 做準備 · "+when; },
+      buildsF: function(name){ return "這是在為 "+name+" 做準備。"; },
       buildsDoneF: function(name){ return "這曾為 "+name+" 做準備——後面的任務還會用到。"; },
       buildsAlways:"這讓你的數字運算保持熟練，每個任務都用得上。",
       groupFeedsF: function(names){ return "這一組是 "+names.join(" 和 ")+" 的準備。"; },
@@ -410,7 +410,6 @@
       doH2:"Việc cần làm", doLead:"Hãy làm xong những việc này trước mốc kiểm tra của chúng. 🔒 nghĩa là cần tài khoản nhà trường — hãy mở Compass hoặc OneNote của lớp.",
       proveH2:"Thể hiện", proveLead:"Mỗi chuyên đề giữ các mốc kiểm tra riêng. Đây là toàn bộ lộ trình của chuyên đề Di truyền.",
       privacy:"Ẩn danh · tiến độ chỉ lưu trong trình duyệt này · phiếu bài tập nằm trên Compass và OneNote của lớp (cần tài khoản nhà trường).",
-      days: function(n){ return n===0 ? "hôm nay" : "còn "+n+" ngày"; },
       masteredW:"đã thành thạo", notStarted:"chưa bắt đầu",
       lastRunF: function(a,b){ return "lượt trước "+a+"/"+b+" câu"; },
       actExample:"xem ví dụ →", actContinue:"làm tiếp →", actAgain:"luyện lại →",
@@ -418,15 +417,16 @@
       bandL:["Đang tiến tới","Đạt chuẩn","Vượt chuẩn"],
       skillsMasteredF: function(a,b){ return "đã thành thạo "+a+"/"+b+" kỹ năng"; },
       wordsBuiltF: function(a,b){ return "đã ghép được "+a+"/"+b+" từ"; },
-      neededByF: function(name,when){ return name+" sẽ cần đến · "+when; },
+      neededByF: function(name){ return "bài "+name+" sẽ cần đến"; },
       allMastered:"Đã thành thạo tất cả — ôn lại cả chuyên đề →",
       arcLink:"toàn bộ lộ trình ↓", reportLink:"báo cáo đầy đủ →",
       schoolMsg:"Thầy cô đang thêm đường dẫn này. Bây giờ em hãy mở Compass (hoặc OneNote của lớp) và tìm theo tên tệp.",
       doneW:"đã xong", noCp:"Học kỳ này không còn mốc kiểm tra nào.",
+      nowW:"bây giờ", laterW:"phần sau của chuyên đề",
       opensWord:"chuyên đề mở", lookAround:"Bây giờ em có thể xem trước.",
-      opensNote: function(d){ return "Mở ngày "+d+" — bây giờ em có thể xem trước."; },
+      opensNote:"Mở ở phần sau của năm học — bây giờ em có thể xem trước.",
       startWords:"bắt đầu từ từ vựng →",
-      buildsF: function(name,when){ return "Đây là phần chuẩn bị cho bài "+name+" — "+when; },
+      buildsF: function(name){ return "Đây là phần chuẩn bị cho bài "+name+"."; },
       buildsDoneF: function(name){ return "Phần này đã chuẩn bị cho bài "+name+" — các bài sau vẫn dùng đến."; },
       buildsAlways:"Phần này giữ cho kỹ năng tính toán của em luôn nhạy, bài nào cũng cần.",
       groupFeedsF: function(names){ return "Nhóm này là phần chuẩn bị cho bài "+names.join(" và ")+"."; },
@@ -456,8 +456,9 @@
   /* ---------------- unit data (from STEM2 — never redefined here) ---------------- */
   var UNIT = STEM2.UNIT_BY_ID[UNIT_ID];
   var CP = {}; UNIT.checkpoints.forEach(function(c){ CP[c.id] = c; });
-  var esc = STEM2.esc, dU = STEM2.daysUntil, fD = STEM2.fmtDate;
-  var opensLater = !!(UNIT.opensFrom && dU(UNIT.opensFrom) > 0);
+  var esc = STEM2.esc, cpDone = STEM2.cpDone, cpNow = STEM2.cpNow;
+  /* the unit is either open or not — no date decides it, the teacher does */
+  var opensLater = !STEM2.unitOpen(UNIT);
 
   function fmtTs(ts){ return new Date(ts).toLocaleDateString(undefined, { day:"numeric", month:"short" }); }
   function skillHref(id, mode){ return "stem-skills.html#skill=" + encodeURIComponent(id) + "&mode=" + mode; }
@@ -484,9 +485,10 @@
         idx++;
         if (STEM2.Mastery.mastered(id)) return;
         var sk = STEM2.SKILLS[id], key = 900000 + idx;
+        /* rank by WHICH TASK needs it (unit order), then by position */
         if (sk.needs && CP[sk.needs] && CP[sk.needs].status !== "done") {
-          var n = dU(CP[sk.needs].date);
-          if (n >= 0) key = n * 1000 + idx;
+          var pos = UNIT.checkpoints.indexOf(CP[sk.needs]);
+          if (pos >= 0) key = pos * 1000 + idx;
         }
         if (key < bestKey) { bestKey = key; best = { id: id, sk: sk }; }
       });
@@ -534,10 +536,10 @@
     h = "";
     var nextSeen = false;
     UNIT.checkpoints.forEach(function(c){
-      var n = dU(c.date), right;
-      if (c.status === "done") right = "<span class='ok'>✓</span>";
-      else if (!nextSeen && n >= 0) { nextSeen = true; right = "<span class='soon'>" + esc(T("days")(n)) + "</span>"; }
-      else right = esc(fD(c.date));
+      var right;
+      if (cpDone(c)) right = "<span class='ok'>✓</span>";
+      else if (!nextSeen) { nextSeen = true; right = "<span class='soon'>" + esc(T("nowW")) + "</span>"; }
+      else right = "<span class='dimW'>" + esc(T("laterW")) + "</span>";
       h += "<a class='ritem' href='#cp-" + c.id + "'>" +
         "<span class='rname'>" + esc(c.short) + "</span>" +
         "<span class='rcount'>" + right + "</span></a>";
@@ -552,14 +554,13 @@
 
     /* WHERE AM I GOING — the next checkpoint + days */
     if (opensLater) {
-      h = "<div class='big'>" + esc(T("opensWord")) + " · " + esc(fD(UNIT.opensFrom)) + "</div>" +
-        "<div class='line'><span class='alert'>" + esc(T("days")(dU(UNIT.opensFrom))) + "</span></div>" +
+      h = "<div class='big'>" + esc(T("opensWord")) + "</div>" +
         "<div class='dim'>" + esc(T("lookAround")) + "</div>";
     } else {
       var cp = STEM2.nextCheckpoint(UNIT);
       if (cp) {
         h = "<div class='big'>" + esc(cp.name) + "</div>" +
-          "<div class='line'>" + esc(fD(cp.date)) + " · <span class='alert'>" + esc(T("days")(dU(cp.date))) + "</span></div>" +
+          "<div class='line'><span class='alert'>" + esc(T(cpDone(cp) ? "doneW" : "nowW")) + "</span></div>" +
           "<div class='dim'>" + esc(cp.desc) + "</div>";
       } else {
         h = "<div class='line'>" + esc(T("noCp")) + "</div>";
@@ -593,9 +594,9 @@
         var mode = st.status === "started" ? "practise" : "teach";
         h = "<a class='act' href='" + skillHref(best.id, mode) + "'>" +
           esc(best.sk.name) + " · " + esc(act) + "</a>";
-        if (best.sk.needs && CP[best.sk.needs] && CP[best.sk.needs].status !== "done" && dU(CP[best.sk.needs].date) >= 0) {
+        if (best.sk.needs && CP[best.sk.needs] && CP[best.sk.needs].status !== "done") {
           var c2 = CP[best.sk.needs];
-          h += "<div class='dim'>" + esc(T("neededByF")(c2.short, T("days")(dU(c2.date)))) + "</div>";
+          h += "<div class='dim'>" + esc(T("neededByF")(c2.short)) + "</div>";
         }
       } else {
         h = "<a class='act' href='stem-skills.html#unit=" + UNIT_ID + "&mode=revise'>" + esc(T("allMastered")) + "</a>";
@@ -611,7 +612,7 @@
   function buildsLine(sk){
     var c = sk.needs ? CP[sk.needs] : null;
     if (!c) return T("buildsAlways");
-    return c.status === "done" ? T("buildsDoneF")(c.short) : T("buildsF")(c.short, fD(c.date));
+    return cpDone(c) ? T("buildsDoneF")(c.short) : T("buildsF")(c.short);
   }
   /* every task this whole group is the toolkit for, in checkpoint order */
   function groupFeeds(g){
@@ -650,7 +651,7 @@
             "<a class='eg' href='" + skillHref(id, "teach") + "'>" + esc(T("egLabel")) + "</a></div>";
         });
         var contBits = esc(sk.cont);
-        if (sk.needs && CP[sk.needs]) contBits += " · " + esc(CP[sk.needs].short) + " · " + esc(fD(CP[sk.needs].date));
+        if (sk.needs && CP[sk.needs]) contBits += " · " + esc(CP[sk.needs].short);
         bands += "<div class='contline'>" + contBits + "</div>";
 
         rows += "<div class='skrow' id='sk-" + id + "'>" +
@@ -696,10 +697,10 @@
   function paintProve(){
     var h = "";
     UNIT.checkpoints.forEach(function(c){
-      var n = dU(c.date), done = c.status === "done", when;
-      if (done) when = esc(fD(c.date)) + " · " + esc(T("doneW"));
-      else if (n >= 0) when = esc(fD(c.date)) + " · <b>" + esc(T("days")(n)) + "</b>";
-      else when = esc(fD(c.date));
+      var done = cpDone(c), when;
+      if (done) when = esc(T("doneW"));
+      else if (cpNow(c)) when = "<b>" + esc(T("nowW")) + "</b>";
+      else when = esc(T("laterW"));
       h += "<div class='cp' id='cp-" + c.id + "'>" +
         "<span class='mark" + (done ? "" : " todo") + "'>" + (done ? "✓" : "○") + "</span>" +
         "<div class='cname'>" + esc(c.name) + "</div>" +
@@ -712,7 +713,7 @@
 
   function paintPreview(){
     var p = document.getElementById("preview");
-    if (opensLater) { p.hidden = false; p.textContent = T("opensNote")(fD(UNIT.opensFrom)); }
+    if (opensLater) { p.hidden = false; p.textContent = T("opensNote"); }
     else p.hidden = true;
   }
 

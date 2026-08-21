@@ -2,8 +2,10 @@
    ELC STEM hub v2 — shared data + stores
    ------------------------------------------------------------
    TEACHERS EDIT HERE:
-   · UNITS — each unit owns its checkpoints (dates live nowhere
-     else), its vocab sets and its skill groups.
+   · UNITS — each unit owns its tasks, its vocab sets and its
+     skill groups. Tasks carry NO dates: their order in the array is
+     their order in the unit, and status ("done" / "now" / "later")
+     is set by hand here. Dates live on Compass, not in this file.
    · SKILLS — one entry per skill: name, rubric bands, the
      checkpoint it is needed by ("needs"), continuum reference.
    Nothing below the data needs touching.
@@ -42,19 +44,19 @@
     { id: "kin", name: "Kinematics", page: "stem-kinematics.html", term: "Term 3",
       blurb: "Motion · linear graphs · data — Race to School inside",
       checkpoints: [
-        { id: "cp_quiz",   date: "2026-08-14", status: "done",
+        { id: "cp_quiz", status: "done",
           name: "Linear Equations Progress Quiz", short: "Progress Quiz",
           desc: "20 minutes, no calculator, bound reference allowed." },
-        { id: "cp_report", date: "2026-09-09", status: "planned",
+        { id: "cp_report", status: "now",
           name: "Ball Drop report", short: "Ball Drop",
           desc: "Collect drop-time data, linearise it in Excel, find g." },
-        { id: "cp_cat",    date: "2026-09-11", status: "planned",
+        { id: "cp_cat", status: "later",
           name: "The Trains task (Motion CAT)", short: "Trains task",
           desc: "Turn a worded journey into graphs and answers, alone." },
-        { id: "cp_test",   date: "2026-09-15", status: "planned",
+        { id: "cp_test", status: "later",
           name: "Linear + Quadratic test", short: "Lin+Quad test",
           desc: "Skills test on linear and quadratic graphs." },
-        { id: "cp_keg",    date: "2026-09-17", status: "planned",
+        { id: "cp_keg", status: "later",
           name: "The Keg Toss task (quadratics)", short: "Keg Toss",
           desc: "Model a thrown keg's flight with a parabola. Opens after the Trains task." }
       ],
@@ -68,19 +70,19 @@
           skills: ["s_variables", "s_lobf", "s_corr", "s_excel"] }
       ] },
     { id: "gen", name: "Genetics", page: "stem-genetics.html", term: "Term 4",
-      opensFrom: "2026-10-05",
+      open: false,
       blurb: "DNA · inheritance · the probability behind it",
       checkpoints: [
-        { id: "cp_probpre", date: "2026-10-06", status: "planned",
+        { id: "cp_probpre", status: "later",
           name: "Probability pre-test", short: "Pre-test",
           desc: "No study needed — it finds your starting point." },
-        { id: "cp_traits",  date: "2026-10-27", status: "planned",
+        { id: "cp_traits", status: "later",
           name: "Traits test", short: "Traits test",
           desc: "Alleles, Punnett squares, genotype and phenotype language." },
-        { id: "cp_biocat",  date: "2026-11-10", status: "planned",
+        { id: "cp_biocat", status: "later",
           name: "Biology + Probability CAT", short: "Bio CAT",
           desc: "30 min biology + 30 min probability. Direct knowledge and skills." },
-        { id: "cp_bones",   date: "2026-11-24", status: "planned",
+        { id: "cp_bones", status: "later",
           name: "Mystery Bones project", short: "Mystery Bones",
           desc: "Measure bones, graph the data, predict height from the best trendline." }
       ],
@@ -91,10 +93,10 @@
         { id: "gg_prob",    name: "Probability", skills: ["b_samplespace", "b_tree"] }
       ] },
     { id: "pan", name: "Pandemic", page: "stem-pandemic.html", term: "Term 4",
-      opensFrom: "2026-11-16",
+      open: false,
       blurb: "Reading the maths inside the news",
       checkpoints: [
-        { id: "cp_pan", date: "2026-11-27", status: "planned",
+        { id: "cp_pan", status: "later",
           name: "Pandemic data task", short: "Data task",
           desc: "Check the maths behind the claims in four opinion articles." }
       ],
@@ -299,8 +301,30 @@
      everything left of a project feeds it. One row per strand.
      cells: {sets:[vocab set ids]} | {skills:[skill ids]} |
             {soon:"label"} (not yet open) | null (quiet empty cell)
-     callback:true marks skills borrowed from an earlier unit.  */
+     Any cell may also carry:
+       label:"lines & graphing"   a name for the cell, shown above its state
+       callback:"from Kinematics" skills borrowed from an earlier unit
+     SUB-ROWS. A cell may instead hold a stack of them, drawn inside the
+     strand's own band (this is how the maths band splits into lanes):
+       maths: { rows: [ { label:"lines & graphing",       skills:[...] },
+                        { label:"intercepts & sketching", skills:[...] } ] }
+     Each row takes the same keys as a cell (label / skills / sets / soon /
+     callback). Both map views draw them: the compact one on the unit pages
+     and the large one on stem-map.html.
+     A stage with no `project` simply has no tall column (Foundations).
+     A map may declare fewer strands than three — only the ones it uses.  */
   var MAPS = {
+    found: {
+      strands: [{ id: "maths", label: "Maths" }],
+      stages: [
+        /* no checkpoint of its own: Foundations is what every other unit runs on */
+        { cols: [
+            { maths: { rows: [
+                { label: "number fluency", skills: ["f_mult", "f_squares"] },
+                { label: "units & symbols", skills: ["f_convert", "f_symbols"] }
+              ] } }
+          ] }
+      ] },
     kin: {
       strands: [{ id: "words", label: "Words" }, { id: "maths", label: "Maths" }, { id: "science", label: "Science" }],
       stages: [
@@ -308,10 +332,11 @@
            `needs` names that project appear in its road */
         { cols: [
             { words: { sets: ["kin1", "kin2", "rev"] },
-              maths: { skills: ["k_coords", "k_table", "k_grad_graph", "k_grad_pts"] },
-              science: null },
-            { words: null,
-              maths: { skills: ["k_yint", "k_eq", "k_sketch", "k_intersect"] },
+              /* the maths band splits into its own lanes inside this one cell */
+              maths: { rows: [
+                { label: "lines & graphing", skills: ["k_coords", "k_table", "k_grad_graph", "k_grad_pts"] },
+                { label: "intercepts & sketching", skills: ["k_yint", "k_eq", "k_sketch", "k_intersect"] }
+              ] },
               science: null }
           ], project: "cp_quiz" },
         { cols: [
@@ -323,10 +348,12 @@
             { words: null, maths: null, science: { skills: ["s_vectors", "s_ptgraph", "s_story"] } }
           ], project: "cp_cat" },
         { cols: [
-            { words: null, maths: { skills: ["k_simult"] }, science: null }
+            { words: null, maths: { label: "two lines meeting", skills: ["k_simult"] }, science: null }
           ], project: "cp_test" },
         { cols: [
-            { words: { soon: "quadratic words" }, maths: { soon: "sketching parabolas" }, science: { soon: "projectile motion" } }
+            { words: { soon: "quadratic words" },
+              maths: { label: "curvy lines", soon: "quadratics — sketching parabolas" },
+              science: { soon: "projectile motion" } }
           ], project: "cp_keg" }
       ] },
     gen: {
@@ -359,28 +386,31 @@
   function safeSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
   function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
     return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
-  /* whole days from TODAY to the target date: 0 on the day itself, 1 tomorrow.
-     (Comparing date-starts, not now-to-end-of-day, which read a day late.) */
-  function daysUntil(d) {
-    var target = new Date(d + "T00:00:00");
-    var now = new Date();
-    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    return Math.round((target - today) / 86400000);
-  }
-  function fmtDate(d) { return new Date(d + "T12:00:00").toLocaleDateString(undefined, { day: "numeric", month: "short" }); }
+  /* NO DATES ANYWHERE. A task is described by its ORDER inside its unit and
+     by its status, which the teacher sets by hand:
+       "done"  the class has sat it — the skills it used stay live for revision
+       "now"   the one the class is working towards right now
+       "later" still ahead, in the order written above
+     Pages ask cpDone()/cpNow() and nextCheckpoint(); nothing counts down. */
+  function cpDone(c) { return !!c && c.status === "done"; }
+  function cpNow(c) { return !!c && c.status === "now"; }
+  /* the word a page prints next to a task: a key, not a date */
+  function cpWhen(c) { return !c ? "later" : c.status === "done" ? "done" : c.status === "now" ? "now" : "later"; }
 
   var UNIT_BY_ID = {}; UNITS.forEach(function (u) { UNIT_BY_ID[u.id] = u; });
 
+  function unitOpen(u) { return !!u && (u.always || u.open !== false); }
   function currentUnit() {
-    var timed = UNITS.filter(function (u) { return !u.always; });
-    var cur = timed[0];
-    timed.forEach(function (u) {
-      if (u.opensFrom && daysUntil(u.opensFrom) <= 0) cur = u;
-    });
-    return cur;
+    var timed = UNITS.filter(function (u) { return !u.always && unitOpen(u); });
+    return timed[timed.length - 1] || UNITS.filter(function (u) { return !u.always; })[0];
   }
+  /* the task the unit is working towards: the one marked "now", else the first
+     one not yet done. Order in the array IS the order of the unit. */
   function nextCheckpoint(unit) {
-    var open = unit.checkpoints.filter(function (c) { return c.status !== "done" && daysUntil(c.date) >= 0; });
+    if (!unit) return null;
+    var now = unit.checkpoints.filter(cpNow)[0];
+    if (now) return now;
+    var open = unit.checkpoints.filter(function (c) { return c.status !== "done"; });
     return open[0] || null;
   }
 
@@ -512,9 +542,9 @@
   window.STEM2 = {
     UNITS: UNITS, UNIT_BY_ID: UNIT_BY_ID, SKILLS: SKILLS, MAPS: MAPS,
     currentUnit: currentUnit, nextCheckpoint: nextCheckpoint, cellState: cellState,
-    setLocation: setLocation, strandOf: strandOf,
+    setLocation: setLocation, strandOf: strandOf, unitOpen: unitOpen,
     Mastery: Mastery, Store: Store, setCounts: setCounts,
-    daysUntil: daysUntil, fmtDate: fmtDate, esc: esc
+    cpDone: cpDone, cpNow: cpNow, cpWhen: cpWhen, esc: esc
   };
 
   /* ---------------- legacy surface (v1 pages still loading this file) ---------------- */
@@ -524,7 +554,7 @@
   window.STEM = {
     CHECKPOINTS: LEGACY_CPS, CP_BY_ID: CP_BY_ID,
     SKILLS: [], AREAS: {}, LEVELS: ["", "", "", ""],
-    Store: Store, daysUntil: daysUntil,
+    Store: Store,
     skillState: function () { return { lv: 0, evidence: false, mastered: false, started: false, timing: "upcoming", checkpoint: null, daysLeft: 999 }; },
     summary: function () { return { ahead: 0, done: 0, dueSoon: 0, behind: 0, upcoming: 0, total: 0 }; }
   };

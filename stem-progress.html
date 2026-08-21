@@ -214,7 +214,7 @@
   /* ---------------- i18n (chrome only; body content stays EAL English) ---------------- */
   var COPY = {
     en: {
-      days: function(n){ return n===0 ? "today" : n===1 ? "in 1 day" : "in "+n+" days"; },
+      nowW:"now", laterW:"later in this unit",
       subF: function(u,t){ return t ? u + " · " + t : u; },
       termL: {},   /* the unit's term label, translated where we have one */
       ownCps:"Each unit keeps its own checkpoints. This report shows this unit only.",
@@ -237,9 +237,9 @@
       revSlowerF: function(s,a,b){ return s + " s a question slower than the run before · accuracy " + a + "% → " + b + "%"; },
       revSameF: function(a,b){ return "Same pace as the run before · accuracy " + a + "% → " + b + "%"; },
       nextLead:"The skills your next checkpoint needs:",
-      neededByF: function(name,when){ return "needed by " + name + " · " + when; },
+      neededByF: function(name){ return "needed by the " + name; },
       /* project framing — every suggested action names the task it feeds */
-      buildsFor: function(name,when){ return "builds your " + name + " toolkit · " + when; },
+      buildsFor: function(name){ return "builds your " + name + " toolkit"; },
       builtFor: function(name){ return "the " + name + " used this — keep it sharp"; },
       buildsAll:"keeps your number work sharp for every task",
       actExample:"example →", actContinue:"continue →",
@@ -265,7 +265,7 @@
       wordsH2:"单词", wordsLead:"在单词组里把词素拼起来算“已拼成”，第一次就答对它的题目算“已使用”。",
       foundH2:"基础", foundLead:"“基础”全年开放，没有检查点——它是其他一切下面的基本功。",
       honest:"匿名 · 这份报告只在这个浏览器里生成，换设备或浏览器就是空的 · 这不是学校的正式成绩单，也不会发送到任何地方。",
-      days: function(n){ return n===0 ? "今天" : n+" 天后"; },
+      nowW:"现在", laterW:"本单元稍后",
       subF: function(u,t){ return t ? u + " · " + t : u; },
       termL: { "Term 3":"第三学期", "Term 4":"第四学期" },
       ownCps:"每个单元只保留自己的检查点。这份报告只显示当前单元。",
@@ -288,8 +288,8 @@
       revSlowerF: function(s,a,b){ return "比上一次每题慢 " + s + " 秒 · 正确率 " + a + "% → " + b + "%"; },
       revSameF: function(a,b){ return "和上一次速度相同 · 正确率 " + a + "% → " + b + "%"; },
       nextLead:"下一个检查点需要的技能：",
-      neededByF: function(name,when){ return name + " 会用到 · " + when; },
-      buildsFor: function(name,when){ return "为“" + name + "”做准备 · " + when; },
+      neededByF: function(name){ return name + " 会用到"; },
+      buildsFor: function(name){ return "为“" + name + "”做准备"; },
       builtFor: function(name){ return "“" + name + "”用过这一项——保持手感"; },
       buildsAll:"让计算又快又稳，每个任务都用得上",
       actExample:"看例题 →", actContinue:"继续 →",
@@ -315,7 +315,7 @@
       wordsH2:"單字", wordsLead:"在單字組裡把詞素拼起來算「已拼成」，第一次就答對它的題目算「已使用」。",
       foundH2:"基礎", foundLead:"「基礎」全年開放，沒有檢查點——它是其他一切下面的基本功。",
       honest:"匿名 · 這份報告只在這個瀏覽器裡產生，換裝置或瀏覽器就是空的 · 這不是學校的正式成績單，也不會傳送到任何地方。",
-      days: function(n){ return n===0 ? "今天" : n+" 天後"; },
+      nowW:"現在", laterW:"本單元稍後",
       subF: function(u,t){ return t ? u + " · " + t : u; },
       termL: { "Term 3":"第三學期", "Term 4":"第四學期" },
       ownCps:"每個單元只保留自己的檢查點。這份報告只顯示目前的單元。",
@@ -338,8 +338,8 @@
       revSlowerF: function(s,a,b){ return "比上一次每題慢 " + s + " 秒 · 正確率 " + a + "% → " + b + "%"; },
       revSameF: function(a,b){ return "和上一次速度相同 · 正確率 " + a + "% → " + b + "%"; },
       nextLead:"下一個檢查點需要的技能：",
-      neededByF: function(name,when){ return name + " 會用到 · " + when; },
-      buildsFor: function(name,when){ return "為「" + name + "」做準備 · " + when; },
+      neededByF: function(name){ return name + " 會用到"; },
+      buildsFor: function(name){ return "為「" + name + "」做準備"; },
       builtFor: function(name){ return "「" + name + "」用過這一項——保持手感"; },
       buildsAll:"讓計算又快又穩，每項任務都用得上",
       actExample:"看例題 →", actContinue:"繼續 →",
@@ -365,7 +365,7 @@
       wordsH2:"Từ vựng", wordsLead:"Một từ được tính là “đã ghép” khi bạn ghép đúng các phần của nó trong bộ từ, và “đã dùng” khi bạn trả lời đúng câu hỏi của nó ngay lần đầu.",
       foundH2:"Nền tảng", foundLead:"“Nền tảng” mở suốt năm và không có mốc kiểm tra — đó là phần cơ bản nằm dưới mọi thứ khác.",
       honest:"Ẩn danh · báo cáo này được tạo ngay trong trình duyệt này từ bài luyện của chính bạn, nên mở bằng máy khác hay trình duyệt khác sẽ thấy trống · đây không phải học bạ chính thức của trường và không có gì được gửi đi đâu cả.",
-      days: function(n){ return n===0 ? "hôm nay" : "còn "+n+" ngày"; },
+      nowW:"bây giờ", laterW:"phần sau của chuyên đề",
       subF: function(u,t){ return t ? u + " · " + t : u; },
       termL: { "Term 3":"Học kỳ 3", "Term 4":"Học kỳ 4" },
       ownCps:"Mỗi bài học giữ mốc kiểm tra riêng. Báo cáo này chỉ hiện bài học hiện tại.",
@@ -388,8 +388,8 @@
       revSlowerF: function(s,a,b){ return "Chậm hơn lượt trước " + s + " giây mỗi câu · độ chính xác " + a + "% → " + b + "%"; },
       revSameF: function(a,b){ return "Tốc độ như lượt trước · độ chính xác " + a + "% → " + b + "%"; },
       nextLead:"Những kỹ năng mà mốc kiểm tra sắp tới cần đến:",
-      neededByF: function(name,when){ return "bài " + name + " cần đến · " + when; },
-      buildsFor: function(name,when){ return "chuẩn bị cho bài " + name + " · " + when; },
+      neededByF: function(name){ return "bài " + name + " cần đến"; },
+      buildsFor: function(name){ return "chuẩn bị cho bài " + name; },
       builtFor: function(name){ return "bài " + name + " đã dùng đến — giữ cho quen tay"; },
       buildsAll:"giữ cho việc tính toán luôn nhanh và chắc, dùng cho mọi bài",
       actExample:"xem ví dụ →", actContinue:"làm tiếp →",
@@ -424,7 +424,7 @@
   }
 
   if (!S2) { setStatic(); return; }
-  var esc = S2.esc, dU = S2.daysUntil, fD = S2.fmtDate, Store = S2.Store, M = S2.Mastery;
+  var esc = S2.esc, cpDone = S2.cpDone, cpNow = S2.cpNow, Store = S2.Store, M = S2.Mastery;
 
   /* ---------------- the unit this report is about ---------------- */
   var UNIT = S2.currentUnit();
@@ -480,15 +480,9 @@
     var sk = S2.SKILLS[id];
     if (!sk || !sk.needs || !CP[sk.needs]) return "";
     var c = CP[sk.needs], cls, txt;
-    if (c.status === "done") { cls = "done"; txt = esc(c.short) + " · " + esc(T("cpDone")); }
-    else {
-      var n = dU(c.date);
-      if (n < 0) { cls = "far"; txt = esc(c.short) + " · " + esc(fD(c.date)); }
-      else {
-        cls = n <= 7 ? "soon" : n <= 21 ? "mid" : "far";
-        txt = esc(c.short) + " · " + esc(T("days")(n));
-      }
-    }
+    if (cpDone(c)) { cls = "done"; txt = esc(c.short) + " · " + esc(T("cpDone")); }
+    else if (cpNow(c)) { cls = "soon"; txt = esc(c.short) + " · " + esc(T("nowW")); }
+    else { cls = "far"; txt = esc(c.short) + " · " + esc(T("laterW")); }
     return "<span class='pill " + cls + "'>" + txt + "</span>";
   }
 
@@ -498,20 +492,19 @@
     var next = S2.nextCheckpoint(UNIT);
     if (next) {
       h += "<div class='big'>" + esc(next.name) + "</div>" +
-        "<div class='line'>" + esc(fD(next.date)) + " · <span class='alert'>" +
-          esc(T("days")(Math.max(0, dU(next.date)))) + "</span></div>" +
+        "<div class='line'><span class='alert'>" + esc(T("nowW")) + "</span></div>" +
         "<div class='dim'>" + esc(next.desc) + "</div>";
     } else {
       h += "<div class='line'>" + esc(T("noCp")) + "</div>";
     }
-    /* the rest of THIS unit's arc — no other unit's dates ever appear here */
+    /* the rest of THIS unit's arc, in unit order — no other unit ever appears here */
     var rest = UNIT.checkpoints.filter(function(c){
-      return c.status !== "done" && (!next || c.id !== next.id) && dU(c.date) >= 0;
+      return c.status !== "done" && (!next || c.id !== next.id);
     });
     if (rest.length) {
       h += "<div class='rest'><div class='subh'>" + esc(T("restH")) + "</div>";
       rest.forEach(function(c){
-        h += "<div>" + esc(c.short) + " · " + esc(fD(c.date)) + "</div>";
+        h += "<div>" + esc(c.short) + " · " + esc(T("laterW")) + "</div>";
       });
       h += "</div>";
     }
@@ -625,8 +618,8 @@
         var sk = S2.SKILLS[id]; if (!sk) return;
         var key = 900000 + idx;
         if (sk.needs && CP[sk.needs] && CP[sk.needs].status !== "done") {
-          var d = dU(CP[sk.needs].date);
-          if (d >= 0) key = d * 1000 + idx;
+          var pos = UNIT.checkpoints.indexOf(CP[sk.needs]);
+          if (pos >= 0) key = pos * 1000 + idx;
         }
         list.push({ id: id, sk: sk, key: key });
       });
@@ -639,9 +632,8 @@
     var sk = S2.SKILLS[id]; if (!sk) return "";
     if (!sk.needs) return T("buildsAll");
     var c = CP[sk.needs]; if (!c) return "";
-    var d = dU(c.date);
-    if (c.status === "done" || d < 0) return T("builtFor")(c.short);
-    return T("buildsFor")(c.short, T("days")(d));
+    if (cpDone(c)) return T("builtFor")(c.short);
+    return T("buildsFor")(c.short);
   }
   function paintNext(){
     var acts = nextActions(3), h = "";

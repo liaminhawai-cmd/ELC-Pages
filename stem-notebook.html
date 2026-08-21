@@ -126,8 +126,9 @@
     .mrow { grid-template-columns:minmax(0,1fr); }
   }
 </style>
+<link rel="stylesheet" href="stem-theme.css?v=20260821-3">
 </head>
-<body>
+<body data-room="vocab">
 <div class="wrap">
   <div class="top">
     <a href="stem.html" data-i18n="back">← STEM</a>
@@ -183,6 +184,8 @@
       emptyWords:"Nothing here yet — words arrive when you build them.",
       emptyPieces:"No pieces yet — a piece arrives when you build its first word.",
       emptyGo:"Open the word sets →",
+      /* the empty state names the first set with anything left to build */
+      startAtF: function(u,n){ return "Start at " + u + " · word list " + n + " →"; },
       noMatchF: function(q){ return "Nothing matches “" + q + "”."; },
       mBuilt:"✓ built", mUsed:"✓ used", revision:"revision",
       typeL: { prefix:"prefix", root:"root", suffix:"suffix" },
@@ -202,6 +205,7 @@
       emptyWords:"这里还是空的——拼出单词，它们就会到这里来。",
       emptyPieces:"还没有词素——拼出第一个含有它的单词，它就会出现。",
       emptyGo:"打开单词组 →",
+      startAtF: function(u,n){ return "从 " + u + " · 单词表 " + n + " 开始 →"; },
       noMatchF: function(q){ return "没有匹配“" + q + "”的内容。"; },
       mBuilt:"✓ 已拼成", mUsed:"✓ 已使用", revision:"复习",
       typeL: { prefix:"前缀", root:"词根", suffix:"后缀" },

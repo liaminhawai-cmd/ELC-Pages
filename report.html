@@ -124,7 +124,8 @@ const stemBox=document.getElementById("stem");
     if (!sk.needs) return;
     const unit = STEM2.UNIT_BY_ID[sk.unit];
     const cp = unit && unit.checkpoints.filter(c => c.id === sk.needs)[0];
-    if (cp && STEM2.daysUntil(cp.date) < 0) behindNames.push(sk.name);
+    /* behind = a task the class has already sat still has an unmastered skill */
+    if (cp && STEM2.cpDone(cp)) behindNames.push(sk.name);
   });
 
   const box=document.createElement("div");

@@ -198,8 +198,9 @@
   .note { margin-top:22px; color:var(--muted); font-size:.85rem; }
   footer { margin-top:24px; color:var(--muted); font-size:.85rem; }
 </style>
+<link rel="stylesheet" href="stem-theme.css?v=20260821-3">
 </head>
-<body>
+<body data-room="vocab">
 <div class="wrap">
   <div class="top">
     <a href="stem-kinematics.html" data-i18n="back">← Kinematics</a>
@@ -530,7 +531,7 @@
       mgSuffix:"Suffixes — the part at the end",
       ptypeNames:{ prefix:"prefix", root:"root", suffix:"suffix" },
       noParts:function(list){ return "No Latin parts to cut: " + list + ". Learn these two as whole words."; },
-      buildsF:function(name,when){ return "These words build your " + name + " toolkit — " + when; },
+      buildsF:function(name){ return "These words build your " + name + " toolkit."; },
       buildsAlways:"These words come back in every task in this unit."
     },
     "zh-Hans": {
@@ -588,7 +589,7 @@
       mgSuffix:"后缀——放在最后面的部件",
       ptypeNames:{ prefix:"前缀", root:"词根", suffix:"后缀" },
       noParts:function(list){ return "没有拉丁部件可以拆：" + list + "。这两个词要整个记下来。"; },
-      buildsF:function(name,when){ return "这些词是在为 " + name + " 做准备 · " + when; },
+      buildsF:function(name){ return "这些词是在为 " + name + " 做准备。"; },
       buildsAlways:"这些词在本单元的每个任务里都会再出现。"
     },
     "zh-Hant": {
@@ -646,7 +647,7 @@
       mgSuffix:"字尾——放在最後面的部件",
       ptypeNames:{ prefix:"字首", root:"字根", suffix:"字尾" },
       noParts:function(list){ return "沒有拉丁部件可以拆：" + list + "。這兩個字要整個記下來。"; },
-      buildsF:function(name,when){ return "這些字是在為 " + name + " 做準備 · " + when; },
+      buildsF:function(name){ return "這些字是在為 " + name + " 做準備。"; },
       buildsAlways:"這些字在本單元的每個任務裡都會再出現。"
     },
     vi: {
@@ -706,7 +707,7 @@
       mgSuffix:"Hậu tố — bộ phận đứng cuối",
       ptypeNames:{ prefix:"tiền tố", root:"gốc từ", suffix:"hậu tố" },
       noParts:function(list){ return "Không tách được thành bộ phận La-tinh: " + list + ". Những từ này em hãy học nguyên cả từ."; },
-      buildsF:function(name,when){ return "Những từ này chuẩn bị cho bài " + name + " — " + when; },
+      buildsF:function(name){ return "Những từ này chuẩn bị cho bài " + name + "."; },
       buildsAlways:"Những từ này sẽ quay lại trong mọi bài của chuyên đề này."
     }
   };
@@ -751,8 +752,8 @@
           var sk = S2.SKILLS[id];
           if (!sk || !sk.needs) return;
           unit.checkpoints.forEach(function(c){
-            if (c.id !== sk.needs || c.status === "done" || S2.daysUntil(c.date) < 0) return;
-            if (!best || c.date < best.date) best = c;
+            if (c.id !== sk.needs || c.status === "done") return;
+            if (!best) best = c;
           });
         });
       });
@@ -762,7 +763,7 @@
   function paintProjectLine(){
     var cp = projectCp();
     byId("projectLine").textContent =
-      cp ? tf("buildsF")(cp.short, window.STEM2.fmtDate(cp.date)) : tr("buildsAlways");
+      cp ? tf("buildsF")(cp.short) : tr("buildsAlways");
   }
 
   /* ---------- lesson state (this browser only) ---------- */

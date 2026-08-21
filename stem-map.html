@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The map — ELC STEM</title>
+<!-- ================================================================
+     THE MAP (STEM hub v3) — the big "where am I in this whole unit"
+     view. It is the same renderer the unit pages use inline
+     (stem-map.js), asked for at size:"large": rows are the strands,
+     columns are the goal cells, and the tall merged columns are the
+     integrated tasks. Nothing is edited here — the road itself lives
+     in STEM2.MAPS in stem-shared.js.
+     ================================================================ -->
+<style>
+  :root {
+    --paper:#fcfcfa; --ink:#212427; --muted:#5c6166; --faint:#6b7075;
+    --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f; --on-accent:#ffffff;
+    --card:#fcfcfa; --line:#e6e7e3;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#878d92;
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517;
+            --card:#121517; --line:#2c3134; }
+  }
+  * { box-sizing:border-box; }
+  html, body { max-width:100%; overflow-x:hidden; }
+  body { margin:0; background:var(--paper); color:var(--ink);
+         font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:1180px; margin:0 auto; padding:34px 22px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px;
+         flex-wrap:wrap; margin-bottom:26px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
+           display:inline-flex; align-items:center; min-height:44px; }
+  .top a:hover { text-decoration:underline; }
+  select.language-select { font:inherit; font-size:.85rem; border:1px solid var(--hair); border-radius:8px;
+    background:var(--paper); color:var(--ink); padding:5px 8px; min-height:44px; }
+  .masthead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+  h1 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:2.1rem; font-weight:500; letter-spacing:-.01em; }
+  .sub { color:var(--muted); font-size:.8rem; }
+  .lead { margin:14px 0 0; font-size:.92rem; max-width:70ch; color:var(--muted); }
+
+  /* ---- the unit switcher ---- */
+  .switch { margin:26px 0 6px; border-top:1px solid var(--ink); padding-top:12px; }
+  .switch h2 { margin:0 0 9px; font-size:.68rem; font-weight:700; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--muted); }
+  .tabs { display:flex; flex-wrap:wrap; gap:8px; }
+  .tab { font:inherit; font-size:.92rem; font-family:Georgia,"Times New Roman",serif;
+    border:1px solid var(--hair); border-radius:9px; background:var(--paper); color:var(--ink);
+    padding:8px 15px; min-height:44px; cursor:pointer; display:inline-flex; align-items:center; gap:8px; }
+  .tab:hover { border-color:var(--accent); }
+  .tab .tt { font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    font-size:.7rem; color:var(--faint); }
+  .tab[aria-current="true"] { border-color:var(--accent); background:var(--accent-soft); font-weight:600; }
+  .tab[aria-current="true"] .tt { color:var(--accent); }
+
+  /* ---- the unit line above the grid ---- */
+  .unitline { display:flex; align-items:baseline; justify-content:space-between; gap:14px;
+    flex-wrap:wrap; margin:22px 0 4px; }
+  .unitline h2 { margin:0; font-family:Georgia,"Times New Roman",serif; font-size:1.5rem; font-weight:500; }
+  .unitline .state { font-size:.82rem; color:var(--muted); }
+  .unitline .state b { color:var(--alert); font-weight:600; }
+  .closednote { margin:6px 0 0; padding:9px 14px; background:var(--accent-soft); border-radius:10px;
+    font-size:.85rem; display:inline-block; }
+  .closednote[hidden] { display:none; }
+
+  #map { margin-top:14px; }
+
+  /* ---- how to read it ---- */
+  .key { margin-top:34px; border-top:1px solid var(--hair); padding-top:14px; }
+  .key h2 { margin:0 0 10px; font-size:.68rem; font-weight:700; letter-spacing:.09em;
+    text-transform:uppercase; color:var(--muted); }
+  .key ul { margin:0; padding:0; list-style:none; display:grid; gap:9px;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); }
+  .key li { font-size:.82rem; color:var(--muted); border-left:1px solid var(--hair); padding:2px 0 2px 12px; }
+
+  .outs { margin-top:26px; display:flex; flex-wrap:wrap; gap:20px; }
+  .outs a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.88rem;
+    display:inline-flex; align-items:center; min-height:44px; }
+  .outs a:hover { text-decoration:underline; }
+
+  .note { margin-top:26px; font-size:.72rem; color:var(--faint); }
+  footer { margin-top:8px; color:var(--faint); font-size:.75rem; }
+
+  @media (max-width:680px) {
+    .wrap { padding:22px 14px 60px; }
+    h1 { font-size:1.7rem; }
+    .tab { font-size:.86rem; padding:7px 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="stem.html" data-i18n="back">← STEM</a>
+    <span id="tw-slot"></span>
+    <select class="language-select" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+      <option value="vi">Tiếng Việt</option>
+    </select>
+  </div>
+
+  <div class="masthead">
+    <h1 data-i18n="title">The map</h1>
+    <div class="sub" data-i18n="sub">The whole unit on one page</div>
+  </div>
+  <p class="lead" data-i18n="lead">Every unit is a road. The rows are the strands — words, maths, science.
+    The columns run left to right, and everything to the left of a tall column is what that task needs.
+    Tap any cell to go straight to the work.</p>
+
+  <section class="switch" aria-label="Unit switcher">
+    <h2 data-i18n="unitsH">Which unit?</h2>
+    <div class="tabs" id="tabs"></div>
+  </section>
+
+  <div class="unitline">
+    <h2 id="unitName"></h2>
+    <div class="state" id="unitState"></div>
+  </div>
+  <p class="closednote" id="closednote" hidden></p>
+
+  <div id="map"></div>
+
+  <section class="key">
+    <h2 data-i18n="keyH">How to read the map</h2>
+    <ul>
+      <li data-i18n="key1">Rows are the strands — words, maths and science side by side, so you can see what
+        one task pulls together.</li>
+      <li data-i18n="key2">A tall column is a task you will actually do. Everything to its left feeds it.</li>
+      <li data-i18n="key3">✓ means every skill or word in that cell is finished. 3/4 means three of its four are done.</li>
+      <li data-i18n="key4">A cell can split into lanes — the maths band stacks lines &amp; graphing above
+        intercepts &amp; sketching.</li>
+      <li data-i18n="key5">Dashed and grey means not open yet.</li>
+    </ul>
+  </section>
+
+  <div class="outs">
+    <a id="unitLink" href="stem-kinematics.html"></a>
+    <a href="stem-progress.html" data-i18n="reportLink">My report →</a>
+    <a href="stem-skills.html" data-i18n="skillsLink">Practise a skill →</a>
+  </div>
+
+  <p class="note" data-i18n="privacy">Anonymous · progress stays in this browser only · worksheets live on
+    Compass and the class OneNote (school login).</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+</div>
+
+<script src="stem-vocab-data.js?v=20260821-2"></script>
+<script src="stem-shared.js?v=20260821-2"></script>
+<script src="stem-map.js?v=20260821-4"></script>
+<script src="stem-gloss.js?v=20260821-3"></script>
+<script src="stem-translate.js?v=20260821-3"></script>
+<script>
+(function(){
+  "use strict";
+  var S2 = window.STEM2;
+  if (!S2) return;
+
+  /* ---------------- i18n (chrome only; unit, skill and lane names stay
+     EAL English, exactly as they do on every other page) ---------------- */
+  var COPY = {
+    en: {
+      termL: {},
+      nextF: function(name){ return "Working towards: " + name; },
+      allDoneW: "Every task in this unit is done.",
+      alwaysOpen: "Open all year — no tasks of its own.",
+      openUnitF: function(name){ return name + " page →"; }
+    },
+    "zh-Hans": {
+      back:"← STEM", title:"地图", sub:"整个单元，一页看完",
+      lead:"每个单元都是一条路。横排是三条线——单词、数学、科学。竖列从左往右走，高柱左边的一切，都是那个任务需要的。点任意一格，就直接去做那部分。",
+      unitsH:"看哪个单元？",
+      keyH:"怎么看这张地图",
+      key1:"横排是三条线——单词、数学、科学并排放，让你看清一个任务把哪些东西拼在一起。",
+      key2:"高柱是你真正要做的任务。它左边的一切都在为它做准备。",
+      key3:"✓ 表示那一格里的技能或单词全部完成。3/4 表示四项里完成了三项。",
+      key4:"一格可以分成几条小排——数学那条把「直线与作图」放在「截距与草图」上面。",
+      key5:"虚线加灰色表示还没开放。",
+      reportLink:"我的报告 →", skillsLink:"去练一项技能 →",
+      privacy:"匿名 · 进度只保存在这个浏览器 · 工作纸在 Compass 和班级 OneNote（需学校账号）。",
+      termL:{ "Term 3":"第三学期", "Term 4":"第四学期" },
+      nextF: function(name){ return "正在准备：" + name; },
+      allDoneW:"这个单元的任务已全部完成。",
+      alwaysOpen:"全年开放，没有自己的检查点。",
+      openUnitF: function(name){ return name + " 单元页 →"; },
+      opensLater:"这个单元今年稍后才开放——现在可以先浏览。"
+    },
+    "zh-Hant": {
+      back:"← STEM", title:"地圖", sub:"整個單元，一頁看完",
+      lead:"每個單元都是一條路。橫排是三條線——單字、數學、科學。直欄從左往右走，高柱左邊的一切，都是那個任務需要的。點任一格，就直接去做那部分。",
+      unitsH:"看哪個單元？",
+      keyH:"怎麼看這張地圖",
+      key1:"橫排是三條線——單字、數學、科學並排放，讓你看清一個任務把哪些東西拼在一起。",
+      key2:"高柱是你真正要做的任務。它左邊的一切都在為它做準備。",
+      key3:"✓ 表示那一格裡的技能或單字全部完成。3/4 表示四項裡完成了三項。",
+      key4:"一格可以分成幾條小排——數學那條把「直線與作圖」放在「截距與草圖」上面。",
+      key5:"虛線加灰色表示還沒開放。",
+      reportLink:"我的報告 →", skillsLink:"去練一項技能 →",
+      privacy:"匿名 · 進度只儲存在這個瀏覽器 · 學習單在 Compass 和班級 OneNote（需學校帳號）。",
+      termL:{ "Term 3":"第三學期", "Term 4":"第四學期" },
+      nextF: function(name){ return "正在準備：" + name; },
+      allDoneW:"這個單元的任務已全部完成。",
+      alwaysOpen:"全年開放，沒有自己的檢查點。",
+      openUnitF: function(name){ return name + " 單元頁 →"; },
+      opensLater:"這個單元今年稍後才開放——現在可以先瀏覽。"
+    },
+    vi: {
+      back:"← Trang STEM", title:"Bản đồ", sub:"Cả chuyên đề trên một trang",
+      lead:"Mỗi chuyên đề là một con đường. Các hàng là ba mạch — từ vựng, toán, khoa học. Các cột chạy từ trái sang phải, và mọi thứ bên trái một cột cao chính là những gì bài đó cần. Chạm vào ô nào là đi thẳng tới phần bài đó.",
+      unitsH:"Xem chuyên đề nào?",
+      keyH:"Cách đọc bản đồ",
+      key1:"Các hàng là ba mạch — từ vựng, toán và khoa học đặt cạnh nhau, để em thấy một bài gom những gì lại.",
+      key2:"Cột cao là bài em sẽ thực sự làm. Mọi thứ bên trái nó đều chuẩn bị cho nó.",
+      key3:"✓ nghĩa là mọi kỹ năng hoặc từ trong ô đó đã xong. 3/4 nghĩa là xong ba trong bốn.",
+      key4:"Một ô có thể tách thành nhiều làn — mạch toán xếp “lines & graphing” trên “intercepts & sketching”.",
+      key5:"Nét đứt và màu xám nghĩa là chưa mở.",
+      reportLink:"Báo cáo của tôi →", skillsLink:"Luyện một kỹ năng →",
+      privacy:"Ẩn danh · tiến độ chỉ lưu trong trình duyệt này · phiếu bài tập nằm trên Compass và OneNote của lớp (cần tài khoản trường).",
+      termL:{ "Term 3":"Học kỳ 3", "Term 4":"Học kỳ 4" },
+      nextF: function(name){ return "Đang hướng tới: " + name; },
+      allDoneW:"Mọi bài trong chuyên đề này đã xong.",
+      alwaysOpen:"Mở quanh năm — không có mốc kiểm tra riêng.",
+      openUnitF: function(name){ return "Trang " + name + " →"; },
+      opensLater:"Chuyên đề này mở ở phần sau của năm học — bây giờ em có thể xem trước."
+    }
+  };
+  /* English for the two lines that are only ever built in script */
+  COPY.en.opensLater = "This unit opens later in the year — you can look around now.";
+
+  var sel = document.querySelector(".language-select");
+  var lang = "en";
+  try { lang = localStorage.getItem("elc_page_language") || "en"; } catch(e){}
+  if (!COPY[lang]) lang = "en";
+  sel.value = lang;
+  function T(k){ var v = COPY[lang][k]; return v !== undefined ? v : COPY.en[k]; }
+  function setStatic(){
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var k = el.getAttribute("data-i18n"), v = COPY[lang][k];
+      if (!el._en) el._en = el.textContent;
+      el.textContent = (typeof v === "string") ? v : el._en;
+    });
+    document.documentElement.lang = lang;
+  }
+  sel.addEventListener("change", function(){
+    lang = sel.value;
+    try { localStorage.setItem("elc_page_language", lang); } catch(e){}
+    setStatic(); paint();
+  });
+
+  /* ---------------- which units have a road ---------------- */
+  var MAPPED = S2.UNITS.filter(function(u){ return !!S2.MAPS[u.id]; });
+  function unitFromHash(){
+    var m = /(?:^|[#&])unit=([a-z0-9_]+)/i.exec(location.hash || "");
+    var id = m ? m[1] : null;
+    if (id && S2.MAPS[id] && S2.UNIT_BY_ID[id]) return id;
+    var cur = S2.currentUnit();
+    return (cur && S2.MAPS[cur.id]) ? cur.id : (MAPPED[0] ? MAPPED[0].id : null);
+  }
+  var unitId = unitFromHash();
+
+  function paintTabs(){
+    var h = "";
+    MAPPED.forEach(function(u){
+      var term = u.always ? "" : (u.term || "");
+      var lbl = term ? ((T("termL") || {})[term] || term) : "";
+      h += "<button type='button' class='tab' data-unit='" + S2.esc(u.id) + "'" +
+        (u.id === unitId ? " aria-current='true'" : "") + ">" +
+        "<span>" + S2.esc(u.name) + "</span>" +
+        (lbl ? "<span class='tt'>" + S2.esc(lbl) + "</span>" : "") + "</button>";
+    });
+    document.getElementById("tabs").innerHTML = h;
+  }
+
+  function paintHead(){
+    var u = S2.UNIT_BY_ID[unitId];
+    document.getElementById("unitName").textContent = u.name;
+
+    /* the task the unit is working towards, with its name picked out */
+    var el = document.getElementById("unitState");
+    var cp = u.always ? null : S2.nextCheckpoint(u);
+    if (!cp) el.textContent = u.always ? T("alwaysOpen") : T("allDoneW");
+    else {
+      var full = T("nextF")(cp.short), at = full.lastIndexOf(cp.short);
+      if (at < 0) el.textContent = full;
+      else el.innerHTML = S2.esc(full.slice(0, at)) + "<b>" + S2.esc(cp.short) + "</b>" +
+                          S2.esc(full.slice(at + cp.short.length));
+    }
+
+    var note = document.getElementById("closednote");
+    if (!S2.unitOpen(u)) { note.textContent = T("opensLater"); note.hidden = false; }
+    else note.hidden = true;
+
+    var link = document.getElementById("unitLink");
+    link.href = u.page;
+    link.textContent = T("openUnitF")(u.name);
+  }
+
+  function paint(){
+    paintTabs(); paintHead();
+    if (window.STEMMAP) STEMMAP.render(document.getElementById("map"), unitId, { size:"large", legend:false });
+  }
+
+  document.getElementById("tabs").addEventListener("click", function(e){
+    var b = e.target.closest("button.tab");
+    if (!b) return;
+    unitId = b.getAttribute("data-unit");
+    try { history.replaceState(null, "", "#unit=" + unitId); } catch(err){ location.hash = "unit=" + unitId; }
+    paint();
+  });
+  window.addEventListener("hashchange", function(){
+    var next = unitFromHash();
+    if (next !== unitId) { unitId = next; paint(); }
+  });
+
+  setStatic(); paint();
+})();
+</script>
+</body>
+</html>

@@ -26,10 +26,18 @@
   var GLOSS = (window.STEM_GLOSS || {});
   var DATA = window.STEM_VOCAB_DATA;
 
-  /* target words: everything the Vocab Hub teaches */
+  /* target words: everything the Vocab Hub teaches. A word can live in more
+     than one set (revision sets recap earlier words, and a few words repeat
+     across units) — keep the FIRST one, in the order the sets are authored
+     (unit order, then within-unit order — the same order stem-vocab-hub.html's
+     WORD_HOME uses), so the locked-word popup names, and its build link
+     opens, the earliest place the word is taught. */
   var TARGET = {};
   if (DATA) DATA.sets.forEach(function (set) {
-    set.words.forEach(function (w) { TARGET[w.w.toLowerCase()] = { w: w, set: set }; });
+    set.words.forEach(function (w) {
+      var k = w.w.toLowerCase();
+      if (!TARGET[k]) TARGET[k] = { w: w, set: set };
+    });
   });
 
   function homeLang() { try { return localStorage.getItem(LANG_KEY) || ""; } catch (e) { return ""; } }
@@ -80,19 +88,23 @@
   var UI = {
     en:        { btn: "tap to translate", my: "My language", pick: "choose…", hint: "tap up to two words",
                  first: "Choose your language in the bar below first.",
-                 learn: "This is one of your words to learn — <b>build it</b> and its translation is yours.",
+                 learnAtF: function (u, n) { return "Go to <b>" + u + " · word list " + n + "</b> to learn this word."; },
+                 learnFallback: "Build it to learn this word.",
                  build: "Build it now →", none: "No translation stored for this word yet." },
     "zh-Hans": { btn: "点词翻译", my: "我的语言", pick: "选择…", hint: "最多点两个词",
                  first: "请先在下面选择你的语言。",
-                 learn: "这是你要学的单词——<b>拼出它</b>，翻译就归你了。",
+                 learnAtF: function (u, n) { return "去 <b>" + u + " · 单词表 " + n + "</b> 学这个词。"; },
+                 learnFallback: "拼出它就能学会这个词。",
                  build: "现在去拼 →", none: "这个词还没有翻译。" },
     "zh-Hant": { btn: "點字翻譯", my: "我的語言", pick: "選擇…", hint: "最多點兩個字",
                  first: "請先在下面選擇你的語言。",
-                 learn: "這是你要學的單字——<b>拼出它</b>，翻譯就是你的了。",
+                 learnAtF: function (u, n) { return "去 <b>" + u + " · 單字表 " + n + "</b> 學這個字。"; },
+                 learnFallback: "拼出它就能學會這個字。",
                  build: "現在去拼 →", none: "這個字還沒有翻譯。" },
     vi:        { btn: "chạm để dịch", my: "Tiếng của tôi", pick: "chọn…", hint: "chạm tối đa hai từ",
                  first: "Hãy chọn tiếng của bạn ở thanh bên dưới trước.",
-                 learn: "Đây là một từ bạn cần học — <b>hãy ghép nó</b> thì bản dịch là của bạn.",
+                 learnAtF: function (u, n) { return "Đến <b>" + u + " · danh sách từ " + n + "</b> để học từ này."; },
+                 learnFallback: "Ghép nó để học từ này.",
                  build: "Ghép ngay →", none: "Từ này chưa có bản dịch." }
   };
   function pageLang() {
@@ -173,8 +185,12 @@
         showPop(el, "<div class='w'>" + esc(t.w.w) + "</div><div class='g'>" + esc(tr) + "</div>" +
           "<div class='n'>" + esc((t.w.meaning || "").slice(0, 90)) + "</div>");
       } else {
+        /* say WHERE to learn it: the first set (in unit order) that teaches
+           this word, via the shared STEM2.setLocation() helper. */
+        var loc = STEM2.setLocation(t.set.id);
+        var locMsg = loc ? U("learnAtF")(esc(loc.unitName), loc.index) : U("learnFallback");
         showPop(el, "<div class='w'>" + esc(t.w.w) + "</div>" +
-          "<div class='n'>" + U("learn") + "</div>" +
+          "<div class='n'>" + locMsg + "</div>" +
           "<div style='margin-top:6px'><a href='stem-vocab-hub.html#word=" + encodeURIComponent(t.w.w) + "'>" + esc(U("build")) + "</a></div>");
       }
       return;
