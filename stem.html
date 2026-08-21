@@ -8,15 +8,25 @@
   :root {
     --paper:#fcfcfa; --ink:#212427; --muted:#5c6166; --faint:#6b7075;
     --hair:#e6e7e3; --accent:#0d7a70; --accent-soft:#f4f9f8; --alert:#b0592f; --on-accent:#ffffff;
+    /* One hue per room, taken straight out of stem-theme.css so the colour a
+       lane wears here is the colour of the room it opens:
+         words   — the notebook's warm margin rule   (vocab --alert)
+         maths   — the graph paper's cool grid line  (vocab --room-grid rgb)
+         science — the lab's slate tick              (science --room-tick rgb,
+                   cooled a step so the label never reads as plain grey text)
+       All three clear 4.5:1 on this paper, because the lane LABEL is drawn in
+       them: colour is never the only signal, the word always says which lane. */
+    --lane-vocab:#a2522b; --lane-maths:#28598c; --lane-science:#455e6b;
   }
   @media (prefers-color-scheme:dark) {
     :root { --paper:#121517; --ink:#f2f3f1; --muted:#9aa0a5; --faint:#878d92;
-            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517; }
+            --hair:#2c3134; --accent:#2fb3a5; --accent-soft:#1b2523; --alert:#d98e6a; --on-accent:#121517;
+            --lane-vocab:#d98e6a; --lane-maths:#82afe1; --lane-science:#a6c0cc; }
   }
   * { box-sizing:border-box; }
   body { margin:0; background:var(--paper); color:var(--ink);
          font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-  .wrap { max-width:880px; margin:0 auto; padding:34px 22px 70px; }
+  .wrap { max-width:1040px; margin:0 auto; padding:34px 22px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:26px; }
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
            display:inline-flex; align-items:center; min-height:44px; }
@@ -33,22 +43,54 @@
   .entry .tag { font-size:.72rem; color:var(--accent); font-weight:700; letter-spacing:.05em; white-space:nowrap; }
   .entry a { margin-left:auto; color:var(--accent); font-weight:600; text-decoration:none; font-size:.88rem;
     display:inline-flex; align-items:center; min-height:44px; }
-  /* the shelf */
+  /* the shelf — one block per unit: the name and its state on top, then one
+     lane per strand showing the actual areas inside it.
+     The row is NOT one big link any more: the unit name is a link and every
+     lane label and chip is its own sibling link, so nothing is nested. */
   .shelf { border-top:1px solid var(--ink); }
-  .row { display:grid; grid-template-columns:150px 1fr 165px 110px; gap:16px; align-items:center;
-    padding:17px 0; border-bottom:1px solid var(--hair); text-decoration:none; color:inherit; }
-  .row:hover .uname { color:var(--accent); }
-  .row.now { background:linear-gradient(90deg,var(--accent-soft) 0%,transparent 70%); }
-  .row.closed { pointer-events:auto; }
-  .row.closed .uname, .row.closed .ublurb, .row.closed .meta { color:var(--faint); }
-  .uname { font-family:Georgia,"Times New Roman",serif; font-size:1.22rem; }
-  .uname sup { font-size:.65rem; color:var(--accent); font-family:system-ui,sans-serif; }
-  .ublurb { font-size:.8rem; color:var(--muted); }
-  .meta { font-size:.8rem; color:var(--muted); }
+  .row { padding:15px 0 17px 13px; border-bottom:1px solid var(--hair);
+    border-left:3px solid transparent; }
+  .row.now { border-left-color:var(--accent); }
+  .rhead { display:flex; align-items:baseline; justify-content:space-between; gap:10px 28px; flex-wrap:wrap; }
+  .rmain { display:block; text-decoration:none; color:inherit; min-width:0;
+    min-height:34px; padding:2px 0; }
+  .rmain:hover .uname { color:var(--accent); }
+  .uname { display:block; font-family:Georgia,"Times New Roman",serif; font-size:1.22rem; }
+  .uname sup { font-size:.65rem; color:var(--accent); font-family:system-ui,sans-serif; margin-left:5px; }
+  .ublurb { display:block; font-size:.8rem; color:var(--muted); margin-top:2px; max-width:58ch; }
+  .row.closed .uname, .row.closed .ublurb { color:var(--faint); }
+  .rstat { display:flex; align-items:center; gap:15px; font-size:.8rem; color:var(--muted); white-space:nowrap; }
   .bar { display:inline-block; width:84px; height:4px; background:var(--hair); border-radius:2px; vertical-align:middle; }
   .bar i { display:block; height:4px; background:var(--accent); border-radius:2px; }
-  .due { font-size:.8rem; text-align:right; color:var(--muted); }
-  .due b { color:var(--alert); }
+  .rnext b { color:var(--alert); font-weight:600; }
+  /* on a wide screen the three parts of the state line hold a column each, so
+     the progress bars line up down the shelf and can be read against each other */
+  @media (min-width:761px) {
+    .pcount, .rnext { text-align:right; }
+    .pcount { min-width:6.2em; }
+    .rnext { min-width:11em; }
+  }
+  .nlab { font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--faint); margin-right:5px; }
+
+  /* ---- the lanes: what is actually inside this unit ---- */
+  .lanes { margin-top:11px; display:flex; flex-direction:column; gap:7px; }
+  .lane { display:flex; align-items:flex-start; gap:12px;
+    border-left:2px solid var(--lane); padding-left:11px; }
+  .lane.v { --lane:var(--lane-vocab); }
+  .lane.m { --lane:var(--lane-maths); }
+  .lane.s { --lane:var(--lane-science); }
+  .llab { flex:0 0 84px; display:inline-flex; align-items:center; min-height:34px;
+    font-size:.66rem; font-weight:700; letter-spacing:.07em; text-transform:uppercase;
+    color:var(--lane); text-decoration:none; }
+  .llab:hover { text-decoration:underline; }
+  .chips { display:flex; flex-wrap:wrap; gap:6px; min-width:0; }
+  .chip { display:inline-flex; align-items:center; gap:9px; min-height:34px; padding:4px 10px;
+    border:1px solid var(--hair); border-radius:7px; text-decoration:none;
+    font-size:.78rem; color:var(--ink); }
+  .chip:hover { border-color:var(--lane); }
+  .chip .cc { color:var(--faint); font-size:.74rem; font-variant-numeric:tabular-nums; }
+  .chip.met .cc { color:var(--accent); font-weight:600; }
+  .row.closed .chip { color:var(--muted); }
   /* pocket cards */
   .pocket { display:grid; grid-template-columns:repeat(auto-fit,minmax(226px,1fr)); gap:18px; margin-top:30px; }
   .pcard { border:1px solid var(--hair); border-radius:10px; padding:15px 17px; text-decoration:none; color:inherit; }
@@ -59,11 +101,23 @@
   .pcard p { margin:5px 0 0; font-size:.8rem; color:var(--muted); }
   .note { margin-top:26px; font-size:.72rem; color:var(--faint); }
   footer { margin-top:8px; color:var(--faint); font-size:.75rem; }
-  @media (max-width:680px) {
-    .row { grid-template-columns:1fr 96px; }
+  @media (max-width:760px) {
+    .rhead { display:block; }
     .ublurb { display:none; }
-    .meta .bar { width:56px; }
+    .rstat { gap:11px; margin-top:5px; flex-wrap:wrap; white-space:normal; }
+    .bar { width:56px; }
+  }
+  @media (max-width:680px) {
     .pocket { grid-template-columns:1fr; }
+  }
+  @media (max-width:620px) {
+    /* the lane label moves above its chips so a phone gives the chips the
+       whole width instead of an 84px column of nothing */
+    .lane { flex-direction:column; gap:2px; }
+    .llab { flex:none; }
+  }
+  @media (max-width:420px) {
+    .chip { font-size:.74rem; padding:4px 8px; gap:7px; }
   }
 </style>
 </head>
@@ -120,9 +174,13 @@
 (function(){
   "use strict";
   var COPY = {
-    en: { nowTag:"now", ongoing:"ongoing",
+    en: { nowTag:"now", ongoing:"ongoing", nextLab:"next",
           skills:function(a,b){ return a+"/"+b+" skills"; },
-          preview:"open for a look" },
+          preview:"open for a look",
+          /* the three doors on every unit row */
+          vocabGo:"Words", mathsGo:"Maths skills", sciGo:"Science skills",
+          /* the lane labels — short, because the chips carry the detail */
+          laneV:"Words", laneM:"Maths", laneS:"Science" },
     "zh-Hans": { back:"← ELC 主页", sub:"ELC · 科学与数学一起学",
       entryTag:"今日入门任务", entryText:"乘法表计时——先求准确，再求速度", entryGo:"开始 →",
       mpTitle:"地图", mpText:"整个单元，一页看完——三条线并排，还有它们共同通向的那几根高柱。", open3:"打开 →",
@@ -130,9 +188,11 @@
       rpTitle:"我的报告", rpText:"要去哪里、走得怎样、接下来做什么——只由你真正完成的学习生成。",
       open:"打开 →", open2:"打开 →",
       privacy:"匿名 · 进度只保存在这个浏览器 · 工作纸在 Compass 和班级 OneNote（需学校账号）。",
-      nowTag:"当前", ongoing:"持续进行",
+      nowTag:"当前", ongoing:"持续进行", nextLab:"下一项",
       skills:function(a,b){ return a+"/"+b+" 项技能"; },
-      preview:"可先浏览" },
+      preview:"可先浏览",
+      vocabGo:"词汇", mathsGo:"数学技能", sciGo:"科学技能",
+      laneV:"词汇", laneM:"数学", laneS:"科学" },
     "zh-Hant": { back:"← ELC 主頁", sub:"ELC · 科學與數學一起學",
       entryTag:"今日入門任務", entryText:"乘法表計時——先求準確，再求速度", entryGo:"開始 →",
       mpTitle:"地圖", mpText:"整個單元，一頁看完——三條線並排，還有它們共同通向的那幾根高柱。", open3:"打開 →",
@@ -140,9 +200,11 @@
       rpTitle:"我的報告", rpText:"要去哪裡、走得如何、接下來做什麼——只由你真正完成的學習產生。",
       open:"打開 →", open2:"打開 →",
       privacy:"匿名 · 進度只儲存在這個瀏覽器 · 學習單在 Compass 和班級 OneNote（需學校帳號）。",
-      nowTag:"目前", ongoing:"持續進行",
+      nowTag:"目前", ongoing:"持續進行", nextLab:"下一項",
       skills:function(a,b){ return a+"/"+b+" 項技能"; },
-      preview:"可先瀏覽" },
+      preview:"可先瀏覽",
+      vocabGo:"詞彙", mathsGo:"數學技能", sciGo:"科學技能",
+      laneV:"詞彙", laneM:"數學", laneS:"科學" },
     "vi": { back:"← Trang ELC", sub:"ELC · Khoa học và Toán học cùng nhau",
       entryTag:"NHIỆM VỤ ĐẦU GIỜ", entryText:"Bảng cửu chương, tính giờ — chính xác trước, rồi mới nhanh", entryGo:"Bắt đầu →",
       mpTitle:"Bản đồ", mpText:"Cả chuyên đề trên một trang — ba mạch đặt cạnh nhau, và những cột cao mà tất cả đều dẫn tới.", open3:"Mở →",
@@ -150,9 +212,11 @@
       rpTitle:"Báo cáo của tôi", rpText:"Bạn đang đi đâu, đi thế nào, tiếp theo làm gì — chỉ dựa trên việc bạn thực sự đã làm.",
       open:"Mở →", open2:"Mở →",
       privacy:"Ẩn danh · tiến độ chỉ lưu trong trình duyệt này · phiếu bài tập nằm trên Compass và OneNote của lớp (cần tài khoản trường).",
-      nowTag:"hiện tại", ongoing:"luôn mở",
+      nowTag:"hiện tại", ongoing:"luôn mở", nextLab:"tiếp theo",
       skills:function(a,b){ return a+"/"+b+" kỹ năng"; },
-      preview:"xem trước được" }
+      preview:"xem trước được",
+      vocabGo:"Từ vựng", mathsGo:"Kỹ năng Toán", sciGo:"Kỹ năng Khoa học",
+      laneV:"Từ vựng", laneM:"Toán", laneS:"Khoa học" }
   };
   var sel = document.querySelector(".language-select");
   var lang = "en";
@@ -182,6 +246,91 @@
     return { built: built, total: total };
   }
 
+  /* ---- what is actually inside a unit -------------------------------
+     Everything below is read from the data every time the shelf paints: the
+     word sets a unit owns, and its skill groups sorted by the strand of the
+     skills inside them. No unit, group or set is ever named here, so adding
+     one in stem-shared.js is enough to make it appear. ------------------ */
+  function groupStrand(g){
+    return (g.skills && g.skills.length) ? STEM2.strandOf(g.skills[0]) : "maths";
+  }
+  function groupsIn(u, strand){
+    return (u.skillGroups || []).filter(function(g){ return groupStrand(g) === strand; });
+  }
+  /* the word sets this unit owns that the data file really has */
+  function setsIn(u){
+    var have = (window.STEM_VOCAB_DATA && STEM_VOCAB_DATA.sets) || [];
+    return (u.vocabSets || []).filter(function(id){
+      return have.some(function(s){ return s.id === id; });
+    });
+  }
+  /* short set labels, the same rule the map uses: cut at a dash, then at
+     " & ", then at a comma, then back to whole words. A shelf chip is wider
+     than a map cell, so the budget is longer here — at 16 characters
+     "In the laboratory" collapsed to "In". */
+  var MAXLEN = 22;
+  function shorten(title){
+    var t = String(title || "").replace(/\s*\(revision\)\s*$/i, "").trim();
+    t = t.split(/\s+[—–-]\s+/)[0].trim();
+    if (t.length > MAXLEN) t = t.split(" & ")[0].trim();
+    if (t.length > MAXLEN) t = t.split(",")[0].trim();
+    if (t.length > MAXLEN) {
+      var out = [];
+      t.split(/\s+/).forEach(function(w){
+        if (out.join(" ").length + w.length + (out.length ? 1 : 0) <= MAXLEN) out.push(w);
+      });
+      if (out.length) t = out.join(" ");
+    }
+    t = t.replace(/\s+(?:for|of|in|on|to|with|and|the|a|an|&)$/i, "").trim();
+    /* never let the trimming leave a stub that says nothing */
+    return t.length < 4 ? String(title || "").trim() : t;
+  }
+  function setTitle(id){
+    var have = (window.STEM_VOCAB_DATA && STEM_VOCAB_DATA.sets) || [], t = id;
+    have.forEach(function(s){ if (s.id === id) t = s.title; });
+    return shorten(t) || id;
+  }
+  /* one chip: a name and an honest count, even when the count is 0 */
+  function chip(href, name, done, total, unitName){
+    var met = total > 0 && done >= total;
+    return "<a class='chip" + (met ? " met" : "") + "' href='" + href + "' aria-label='" +
+      STEM2.esc(unitName + " · " + name) + "'>" +
+      "<span class='cn'>" + STEM2.esc(name) + "</span>" +
+      "<span class='cc'>" + done + "/" + total + "</span></a>";
+  }
+  /* one lane: a coloured edge, a label that opens the whole strand, and a
+     chip for every area inside it */
+  function lane(cls, label, aria, href, chips){
+    if (!chips) return "";
+    return "<div class='lane " + cls + "'>" +
+      "<a class='llab' href='" + href + "' aria-label='" + STEM2.esc(aria) + "'>" +
+        STEM2.esc(label) + "</a>" +
+      "<div class='chips'>" + chips + "</div></div>";
+  }
+  function lanesFor(u){
+    var h = "", sets = setsIn(u);
+
+    var vChips = "";
+    sets.forEach(function(id){
+      var c = STEM2.setCounts(id);
+      vChips += chip("stem-vocab-hub.html#set=" + encodeURIComponent(id),
+                     setTitle(id), c.built, c.total, u.name);
+    });
+    h += lane("v", T("laneV"), u.name + " · " + T("vocabGo"),
+              "stem-vocab-hub.html#unit=" + u.id, vChips);
+
+    [["m", "maths", "laneM", "mathsGo"], ["s", "science", "laneS", "sciGo"]].forEach(function(k){
+      var gChips = "", href = "stem-skills.html#unit=" + u.id + "&amp;strand=" + k[1];
+      groupsIn(u, k[1]).forEach(function(g){
+        var done = 0;
+        g.skills.forEach(function(id){ if (STEM2.Mastery.mastered(id)) done++; });
+        gChips += chip(href, g.name, done, g.skills.length, u.name);
+      });
+      h += lane(k[0], T(k[2]), u.name + " · " + T(k[3]), href, gChips);
+    });
+    return h ? "<div class='lanes'>" + h + "</div>" : "";
+  }
+
   function paintShelf(){
     var curIds = STEM2.currentUnits().map(function(u){ return u.id; });
     var h = "";
@@ -193,22 +342,30 @@
       var cls = "row" + (isNow ? " now" : "") + (opensLater ? " closed" : "");
       var pct = counts.total ? Math.round(100*counts.done/counts.total) : 0;
       var due;
-      if (u.always) due = "<span>"+STEM2.esc(T("ongoing"))+"</span>";
+      if (u.always) due = STEM2.esc(T("ongoing"));
       else {
         var cp = STEM2.nextCheckpoint(u);
-        due = cp ? "<b>"+STEM2.esc(cp.short)+"</b>"
-                 : "<span>—</span>";
+        due = cp ? "<span class='nlab'>"+STEM2.esc(T("nextLab"))+"</span><b>"+STEM2.esc(cp.short)+"</b>"
+                 : "—";
       }
-      h += "<a class='"+cls+"' href='"+u.page+"' data-cat='STEM' data-title='"+STEM2.esc(u.name)+"'>"+
-        "<span class='uname'>"+STEM2.esc(u.name)+(isNow?" <sup>"+STEM2.esc(T("nowTag"))+"</sup>":"")+"</span>"+
-        "<span class='ublurb'>"+STEM2.esc(u.blurb)+(opensLater?" · "+STEM2.esc(T("preview")):"")+"</span>"+
-        "<span class='meta'><span class='bar'><i style='width:"+pct+"%'></i></span> "+
-          STEM2.esc(T("skills")(counts.done, counts.total))+"</span>"+
-        "<span class='due'>"+due+"</span></a>";
+      h += "<div class='"+cls+"'>"+
+        "<div class='rhead'>"+
+          "<a class='rmain' href='"+u.page+"' data-cat='STEM' data-title='"+STEM2.esc(u.name)+"'>"+
+            "<span class='uname'>"+STEM2.esc(u.name)+(isNow?"<sup>"+STEM2.esc(T("nowTag"))+"</sup>":"")+"</span>"+
+            "<span class='ublurb'>"+STEM2.esc(u.blurb)+(opensLater?" · "+STEM2.esc(T("preview")):"")+"</span>"+
+          "</a>"+
+          "<span class='rstat'>"+
+            "<span class='bar'><i style='width:"+pct+"%'></i></span>"+
+            "<span class='pcount'>"+STEM2.esc(T("skills")(counts.done, counts.total))+"</span>"+
+            "<span class='rnext'>"+due+"</span>"+
+          "</span>"+
+        "</div>"+
+        lanesFor(u)+
+      "</div>";
     });
     document.getElementById("shelf").innerHTML = h;
     /* visit logging */
-    document.querySelectorAll("a.row, a.pcard").forEach(function(card){
+    document.querySelectorAll("a.rmain, a.pcard").forEach(function(card){
       if (card._wired) return; card._wired = true;
       card.addEventListener("click", function(){
         try {

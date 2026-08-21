@@ -52,6 +52,7 @@
   footer { margin-top:8px; color:var(--faint); font-size:.75rem; }
   a.plain { color:var(--accent); text-decoration:none; font-weight:600; }
   a.plain:hover { text-decoration:underline; }
+  .quiet a.plain { display:inline-flex; align-items:center; min-height:34px; }
   .bar { display:inline-block; width:84px; height:4px; background:var(--hair); border-radius:2px; vertical-align:middle; }
   .bar i { display:block; height:4px; background:var(--accent); border-radius:2px; }
   .bar.wide { display:block; width:100%; max-width:340px; margin:6px 0 12px; }
@@ -59,10 +60,11 @@
   /* ---------- home: unit toggle + set rows ---------- */
   .units { display:flex; gap:24px; margin:22px 0 0; border-top:1px solid var(--ink);
     border-bottom:1px solid var(--hair); overflow-x:auto; -webkit-overflow-scrolling:touch; }
-  .unitbtn { flex:0 0 auto; border:0; background:none; font:inherit; font-size:.88rem; color:var(--muted);
+  .unitbtn { flex:0 0 auto; display:inline-flex; align-items:center; border:0; background:none;
+    font:inherit; font-size:.88rem; color:var(--muted); text-decoration:none;
     cursor:pointer; padding:12px 0; min-height:44px; border-bottom:2px solid transparent; margin-bottom:-1px; }
   .unitbtn:hover { color:var(--accent); }
-  .unitbtn[aria-pressed="true"] { color:var(--ink); font-weight:600; border-bottom-color:var(--accent); }
+  .unitbtn[aria-current="true"] { color:var(--ink); font-weight:600; border-bottom-color:var(--accent); }
   .srow { display:grid; grid-template-columns:minmax(0,1fr) 172px 18px; gap:8px 16px; align-items:center;
     padding:15px 0; border-bottom:1px solid var(--hair); text-decoration:none; color:inherit; }
   .srow:hover .sname { color:var(--accent); }
@@ -283,7 +285,7 @@
       meet the words, build them from their pieces, then use them in real questions.</p>
     <nav class="units" id="units" aria-label="Units"></nav>
     <div id="sets"></div>
-    <p class="quiet"><a class="plain" href="stem-notebook.html" data-i18n="nbLink">📓 My notebook — every word I own →</a></p>
+    <p class="quiet"><a class="plain" href="stem-notebook.html" data-i18n="nbLink">My notebook — every word I own →</a></p>
   </section>
 
   <!-- ===================== ONE SET ===================== -->
@@ -369,7 +371,7 @@
     "zh-Hans": {
       back:"← STEM 主页", title:"单词", sub:"ELC STEM · 认识单词、拼出单词、用起来",
       homeLead:"先选单元，再选一组单词。每一组都有三个步骤：认识单词、用词素拼出单词、在真实问题里使用。",
-      nbLink:"📓 我的笔记本——我掌握的每个单词 →",
+      nbLink:"我的笔记本——我掌握的每个单词 →",
       privacy:"匿名 · 你的单词只保存在这个浏览器 · 不会发送到任何地方。",
       backAll:"← 所有单词组",
       revision:"复习",
@@ -415,7 +417,7 @@
     "zh-Hant": {
       back:"← STEM 主頁", title:"單字", sub:"ELC STEM · 認識單字、拼出單字、用出來",
       homeLead:"先選單元，再選一組單字。每一組都有相同的三個步驟：認識單字、用詞素拼出單字、在真實問題裡使用。",
-      nbLink:"📓 我的筆記本——我精熟的每個單字 →",
+      nbLink:"我的筆記本——我精熟的每個單字 →",
       privacy:"匿名 · 你的單字只儲存在這個瀏覽器 · 不會傳送到任何地方。",
       backAll:"← 所有單字組",
       revision:"複習",
@@ -461,7 +463,7 @@
     vi: {
       back:"← Trang STEM", title:"Từ vựng", sub:"ELC STEM · làm quen với từ, ghép từ, dùng từ",
       homeLead:"Chọn một chuyên đề, rồi chọn một nhóm từ. Nhóm nào cũng đi qua ba bước như nhau: làm quen với từ, ghép từ lại từ các thành phần, rồi dùng chúng trong những câu hỏi thật.",
-      nbLink:"📓 Sổ tay của em — mọi từ em đã nắm được →",
+      nbLink:"Sổ tay của em — mọi từ em đã nắm được →",
       privacy:"Ẩn danh · từ vựng của em chỉ lưu trong trình duyệt này · không gửi đi đâu cả.",
       backAll:"← tất cả các nhóm từ",
       revision:"ôn tập",
@@ -530,7 +532,7 @@
   var SET_BY_ID = {};
   D.sets.forEach(function(s){ SET_BY_ID[s.id] = s; });
   var UNITS = S2.UNITS.filter(function(u){ return u.vocabSets && u.vocabSets.length; });
-  var UNIT_OF_SET = {};
+  var UNIT_OF_SET = {}, UNIT_IDS = UNITS.map(function(u){ return u.id; });
   UNITS.forEach(function(u){ u.vocabSets.forEach(function(id){ if (!UNIT_OF_SET[id]) UNIT_OF_SET[id] = u; }); });
   /* WORD_HOME: where a repeated word is really learned. First-in-file was
      wrong across units — "solution" sent a chemistry student to the maths
@@ -563,6 +565,7 @@
     setName: document.getElementById("setName"), setFocus: document.getElementById("setFocus"),
     setFor: document.getElementById("setFor"),
     crumbUnit: document.getElementById("crumbUnit"), steps: document.getElementById("steps"),
+    backAll: document.getElementById("backAll"),
     pw: document.getElementById("paneWords"), pb: document.getElementById("paneBuild"),
     pu: document.getElementById("paneUse")
   };
@@ -583,6 +586,8 @@
   function setHomeLang(v){ try { localStorage.setItem(HOME_KEY, v); } catch(e){} }
   function wState(w){ var v = Store.vocab()[key(w)]; return v || null; }
   function isRev(set){ return set.id === "rev" || /\(revision\)/i.test(set.title); }
+  /* back to the home list, still showing the unit you were reading */
+  function homeHref(){ return curUnitId ? "#unit=" + encodeURIComponent(curUnitId) : "#"; }
   function setTitle(set){ return set.title.replace(/\s*\(revision\)\s*$/i, ""); }
   function mulberry32(a){ return function(){
     a |= 0; a = a + 0x6D2B79F5 | 0;
@@ -602,11 +607,14 @@
     paintUnits(); paintSets();
     window.scrollTo(0, 0);
   }
+  /* The unit switcher is a set of links, not buttons: the chosen unit lives in
+     the hash (#unit=<id>), so the shelf can point straight at one unit and the
+     Back button still works. */
   function paintUnits(){
     var h = "";
     UNITS.forEach(function(u){
-      h += "<button class='unitbtn' type='button' data-u='" + esc(u.id) + "' aria-pressed='" +
-           (u.id === curUnitId) + "'>" + esc(u.name) + "</button>";
+      h += "<a class='unitbtn' href='#unit=" + encodeURIComponent(u.id) + "'" +
+           (u.id === curUnitId ? " aria-current='true'" : "") + ">" + esc(u.name) + "</a>";
     });
     el.units.innerHTML = h;
   }
@@ -629,11 +637,6 @@
     });
     el.sets.innerHTML = h;
   }
-  el.units.addEventListener("click", function(ev){
-    var b = ev.target.closest("button[data-u]"); if (!b) return;
-    curUnitId = b.getAttribute("data-u");
-    paintUnits(); paintSets();
-  });
 
   /* ---------------- open a set ---------------- */
   function openSet(id, step, hlWord){
@@ -642,6 +645,7 @@
     cur.set = set;
     cur.step = (step === "build" || step === "use") ? step : "words";
     if (UNIT_OF_SET[id]) curUnitId = UNIT_OF_SET[id].id;
+    if (el.backAll) el.backAll.href = homeHref();
     el.home.hidden = true; el.setview.hidden = false;
     el.setName.textContent = setTitle(set) + (isRev(set) ? " · " + T("revision") : "");
     el.setFocus.textContent = set.focus;
@@ -1159,7 +1163,7 @@
     }
     h += "<p class='sacts'><button class='linkbtn' type='button' id='useAgain'>" + esc(T("tryAgain")) + "</button>" +
       "<a class='plain' href='" + stepHref("words") + "'>" + esc(T("goWords")) + "</a>" +
-      "<a class='plain' href='#'>" + esc(T("backAll")) + "</a></p></div>";
+      "<a class='plain' href='" + homeHref() + "'>" + esc(T("backAll")) + "</a></p></div>";
     document.getElementById("qbox").innerHTML = h;
   }
 
@@ -1180,7 +1184,13 @@
     var setId = (o.set && has(SET_BY_ID, o.set)) ? o.set : null;
     var word = o.word || null;
     if (!setId && word && has(WORD_HOME, key(word))) setId = WORD_HOME[key(word)];
-    if (!setId) { showHome(); return; }
+    if (!setId) {
+      /* #unit=<id> opens the home list already showing that unit's sets.
+         An unknown or missing id just leaves the unit where it was. */
+      if (o.unit && UNIT_IDS.indexOf(o.unit) !== -1) curUnitId = o.unit;
+      showHome();
+      return;
+    }
     if (word && !SET_BY_ID[setId].words.some(function(w){ return key(w.w) === key(word); })) word = null;
     openSet(setId, word ? "words" : (o.step || "words"), word);
   }

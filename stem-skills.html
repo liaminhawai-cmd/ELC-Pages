@@ -36,6 +36,17 @@
   .units a.on { color:var(--accent); border-bottom-color:var(--accent); font-weight:600; }
   .units a:hover { color:var(--accent); }
   .preview-note { margin:14px 0 0; font-size:.82rem; color:var(--muted); }
+  /* strand filter — always shows which strand you are in and how to leave it */
+  .filter { display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin-top:16px; }
+  .filter .flab { font-size:.68rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--faint); margin-right:2px; }
+  .filter a { display:inline-flex; align-items:center; min-height:34px; padding:5px 13px;
+    border:1px solid var(--hair); border-radius:7px; font-size:.8rem; color:var(--muted);
+    text-decoration:none; white-space:nowrap; }
+  .filter a:hover { border-color:var(--accent); color:var(--accent); }
+  .filter a[aria-current="true"] { border-color:var(--accent); color:var(--accent);
+    font-weight:600; background:var(--accent-soft); }
+  .filter-note { margin:10px 0 0; font-size:.82rem; color:var(--muted); max-width:62ch; }
 
   /* skill list */
   .ghead { display:flex; justify-content:space-between; align-items:baseline; gap:12px;
@@ -215,6 +226,10 @@
   var COPY = {
     en: {
       previewNote:"opens later in the year — open for a look until then",
+      /* strand filter */
+      showLab:"Show", fAll:"All", fMaths:"Maths", fScience:"Science",
+      sMaths:"maths skills", sScience:"science skills",
+      filtNote: function(n){ return "Showing "+n+" only — choose All for every skill in this unit."; },
       masteredCount: function(a,b){ return a+"/"+b+" mastered"; },
       stMastered: function(d){ return "✓ mastered · "+d; },
       stNof: function(n,of){ return n+" of "+of; },
@@ -277,6 +292,9 @@
       title: "技能", sub: "每项 STEM 技能——学习、练习、复习",
       privacy: "匿名 · 进度只保存在这个浏览器 · 工作纸在 Compass 和班级 OneNote（需学校账号）。",
       previewNote:"稍后开放——现在可以先看看",
+      showLab:"显示", fAll:"全部", fMaths:"数学", fScience:"科学",
+      sMaths:"数学技能", sScience:"科学技能",
+      filtNote: function(n){ return "现在只显示"+n+"——选“全部”就能看到这个单元的所有技能。"; },
       masteredCount: function(a,b){ return a+"/"+b+" 已掌握"; },
       stMastered: function(d){ return "✓ 已掌握 · "+d; },
       stNof: function(n,of){ return n+" / "+of+" 题"; },
@@ -338,6 +356,9 @@
       title: "技能", sub: "每項 STEM 技能——學習、練習、複習",
       privacy: "匿名 · 進度只儲存在這個瀏覽器 · 學習單在 Compass 和班級 OneNote（需學校帳號）。",
       previewNote:"稍後開放——現在可以先看看",
+      showLab:"顯示", fAll:"全部", fMaths:"數學", fScience:"科學",
+      sMaths:"數學技能", sScience:"科學技能",
+      filtNote: function(n){ return "目前只顯示"+n+"——選「全部」就能看到這個單元的所有技能。"; },
       masteredCount: function(a,b){ return a+"/"+b+" 已精熟"; },
       stMastered: function(d){ return "✓ 已精熟 · "+d; },
       stNof: function(n,of){ return n+" / "+of+" 題"; },
@@ -399,6 +420,9 @@
       title: "Kỹ năng", sub: "Mọi kỹ năng STEM — học, luyện tập, ôn tập",
       privacy: "Ẩn danh · tiến độ chỉ lưu trong trình duyệt này · phiếu bài tập nằm trên Compass và OneNote của lớp (cần tài khoản trường).",
       previewNote:"mở ở phần sau của năm học — từ giờ đến đó bạn vẫn xem trước được",
+      showLab:"Hiện", fAll:"Tất cả", fMaths:"Toán", fScience:"Khoa học",
+      sMaths:"kỹ năng Toán", sScience:"kỹ năng Khoa học",
+      filtNote: function(n){ return "Đang chỉ hiện "+n+" — chọn “Tất cả” để xem mọi kỹ năng của chuyên đề này."; },
       masteredCount: function(a,b){ return "đã thành thạo "+a+"/"+b; },
       stMastered: function(d){ return "✓ đã thành thạo · "+d; },
       stNof: function(n,of){ return n+" / "+of+" câu"; },
@@ -495,6 +519,26 @@
     (u.skillGroups || []).forEach(function(gr){ if (gr.id === sk.group) g = gr; });
     return g;
   }
+  /* A group's strand is the strand of the skills inside it, read live from the
+     data — no unit or group is ever named here. A unit that teaches only one
+     strand (Foundations, for one) gets no filter at all. */
+  function groupHasStrand(g, strand){
+    return (g.skills || []).some(function(id){ return STEM2.strandOf(id) === strand; });
+  }
+  function strandsOfUnit(u){
+    var out = [];
+    if (!u) return out;
+    (u.skillGroups || []).forEach(function(g){
+      (g.skills || []).forEach(function(id){
+        var st = STEM2.strandOf(id);
+        if (out.indexOf(st) === -1) out.push(st);
+      });
+    });
+    return out;
+  }
+  function unitHref(uid, strand){
+    return "#unit=" + uid + (strand ? "&strand=" + strand : "");
+  }
 
   /* ---------------- timers ---------------- */
   var timerInt = null, pendingT = null;
@@ -522,9 +566,11 @@
     return o;
   }
   /* which room this page is standing in — see stem-theme.css.
-     A skill takes its strand (maths | science); the unit list, which
+     A skill takes its strand (maths | science); an unfiltered unit list, which
      shows both strands at once, stays on the maths default set in the
-     <body> tag, so there is never an unthemed first paint. */
+     <body> tag, so there is never an unthemed first paint. A unit list
+     filtered to one strand takes that strand's room — the graph paper or the
+     lab bench is itself a sign that the list is filtered. */
   function setRoom(room){
     if (room !== "maths" && room !== "science") room = "maths";
     if (document.body.getAttribute("data-room") !== room) {
@@ -542,9 +588,15 @@
       renderSkill(p.skill, mode);
     } else {
       rubricFor = null;
-      setRoom("maths");
       var uid = (p.unit && STEM2.UNIT_BY_ID[p.unit]) ? p.unit : STEM2.currentUnit().id;
-      renderUnit(uid);
+      /* &strand=maths|science narrows the list. Anything else — a typo, a
+         strand this unit does not teach, nothing at all — shows everything. */
+      var have = strandsOfUnit(STEM2.UNIT_BY_ID[uid]);
+      var strand = (p.strand === "maths" || p.strand === "science") &&
+                   have.indexOf(p.strand) !== -1 ? p.strand : null;
+      /* a unit that teaches one strand only always reads as that room */
+      setRoom(strand || (have.length === 1 ? have[0] : "maths"));
+      renderUnit(uid, strand);
     }
   }
   window.addEventListener("hashchange", function(){ route(); window.scrollTo(0, 0); });
@@ -561,17 +613,44 @@
   }
 
   /* ---------------- unit list view ---------------- */
-  function renderUnit(uid){
+  /* the strand the unit list was last filtered to, so a skill's breadcrumb can
+     put the student back exactly where they came from */
+  var lastStrand = null;
+  function renderUnit(uid, strand){
     var u = STEM2.UNIT_BY_ID[uid];
+    var have = strandsOfUnit(u);
+    if (strand && have.indexOf(strand) === -1) strand = null;
+    lastStrand = strand;
     var h = "<nav class='units'>";
     STEM2.UNITS.forEach(function(u2){
-      h += "<a class='" + (u2.id === uid ? "on" : "") + "' href='#unit=" + u2.id + "'>" + esc(u2.name) + "</a>";
+      /* carry the strand across to another unit only if that unit teaches it */
+      var keep = (strand && strandsOfUnit(u2).indexOf(strand) !== -1) ? strand : null;
+      h += "<a class='" + (u2.id === uid ? "on" : "") + "' href='" + unitHref(u2.id, keep) + "'>" +
+           esc(u2.name) + "</a>";
     });
     h += "</nav>";
+    /* the filter itself: only worth showing when the unit has both strands */
+    if (have.length > 1) {
+      h += "<div class='filter'><span class='flab'>" + esc(T("showLab")) + "</span>" +
+           "<a href='" + unitHref(uid, null) + "'" + (strand ? "" : " aria-current='true'") + ">" +
+           esc(T("fAll")) + "</a>";
+      ["maths", "science"].forEach(function(st){
+        if (have.indexOf(st) === -1) return;
+        h += "<a href='" + unitHref(uid, st) + "'" + (strand === st ? " aria-current='true'" : "") + ">" +
+             esc(T(st === "maths" ? "fMaths" : "fScience")) + "</a>";
+      });
+      h += "</div>";
+      if (strand) {
+        h += "<p class='filter-note'>" +
+             esc(T("filtNote")(T(strand === "maths" ? "sMaths" : "sScience"))) + "</p>";
+      }
+    }
     if (!unitOpen(u)) {
       h += "<p class='preview-note'>" + esc(T("previewNote")) + "</p>";
     }
-    (u.skillGroups || []).forEach(function(g){
+    (u.skillGroups || []).filter(function(g){
+      return !strand || groupHasStrand(g, strand);
+    }).forEach(function(g){
       var done = 0;
       g.skills.forEach(function(id){ if (STEM2.Mastery.mastered(id)) done++; });
       h += "<div class='ghead'><h2>" + esc(g.name) + "</h2><span class='gcount'>" +
@@ -620,7 +699,10 @@
     var labels = T("bandLabels");
     var open = rubricFor === id;
 
-    var h = "<div class='crumb'><a href='#unit=" + u.id + "'>← " + esc(u.name) + "</a>" +
+    /* back to the list you came from: keep the strand filter only when this
+       skill really belongs to it */
+    var backStrand = (lastStrand && lastStrand === STEM2.strandOf(id)) ? lastStrand : null;
+    var h = "<div class='crumb'><a href='" + unitHref(u.id, backStrand) + "'>← " + esc(u.name) + "</a>" +
             (g ? " · " + esc(g.name) : "") + "</div>";
     h += "<div class='skhead'>";
     h += "<h2 class='skname'>" + esc(sk.name) + "</h2>";
