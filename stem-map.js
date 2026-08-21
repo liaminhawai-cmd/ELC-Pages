@@ -89,7 +89,12 @@
       "display:flex;align-items:center;white-space:nowrap;" +
       "margin:-3px -6px -3px 0;padding-right:14px;" +
       "position:sticky;left:0;z-index:2;background:var(--paper,#fcfcfa)}" +
-    ".pm-band{display:grid;grid-auto-rows:1fr;gap:5px;min-width:0}" +
+    ".pm-band{display:grid;grid-auto-rows:auto;align-content:start;gap:5px;min-width:0}" +
+    /* a band holding two skill groups lays them SIDE BY SIDE on the big map —
+       stacking them made that band the tallest cell in its strand row, and a
+       grid row is as tall as its tallest cell, so every other stage in the
+       row inherited hundreds of empty pixels */
+    ".pm-lg .pm-band.multi{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}" +
     ".pm-cell{border:1px solid var(--hair,#e6e7e3);border-radius:8px;padding:7px 9px;min-width:0;" +
       "font-size:.72rem;line-height:1.35;color:var(--ink,#212427);text-decoration:none;display:block;" +
       "background:var(--paper,#fcfcfa)}" +
@@ -133,15 +138,16 @@
     ".pm-lg .pm-cell .cb{font-size:.7rem;margin-top:4px}" +
     ".pm-lg .pm-cell .bar{height:4px;margin-top:8px}" +
     ".pm-lg .pm-cell .bar i{height:4px}" +
-    ".pm-lg .items{margin-top:9px;border-top:1px solid var(--hair,#e6e7e3);padding-top:5px}" +
+    ".pm-lg .items{margin-top:9px;border-top:1px solid var(--hair,#e6e7e3);padding-top:5px;" +
+      "display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:0 16px;align-content:start}" +
     /* TAP TARGETS. Every control in the hub is 44px except these grid rows,
-       which are 34. The map's whole purpose is seeing a unit's road at once,
-       and 25 rows at 44px would add roughly 400px of scroll to the one page
-       that must not need scrolling. 34px clears WCAG 2.5.8 AA (24px) with
-       room to spare, and the rows are separated rather than butted together.
-       If the teacher finds it fiddly on a real phone, raise it here. */
-    ".pm-lg .it{display:flex;gap:8px;align-items:center;min-height:34px;font-size:.76rem;line-height:1.35;" +
-      "color:var(--muted,#767b7f);text-decoration:none;padding:6px 5px;border-radius:6px}" +
+       which are 28. The map's whole purpose is seeing a unit's road at once,
+       and dozens of rows at 44px put most of it below the fold. 28px still
+       clears WCAG 2.5.8 AA (24px), and the rows are separated rather than
+       butted together. If the teacher finds it fiddly on a real phone,
+       raise it here. */
+    ".pm-lg .it{display:flex;gap:8px;align-items:center;min-height:28px;font-size:.76rem;line-height:1.3;" +
+      "color:var(--muted,#767b7f);text-decoration:none;padding:3px 5px;border-radius:6px}" +
     ".pm-lg a.it:hover{background:var(--accent-soft,#f4f9f8);color:var(--ink,#212427)}" +
     ".pm-lg .it .mk{flex:0 0 auto;width:12px;color:var(--faint,#9aa0a5)}" +
     ".pm-lg .it.done{color:var(--ink,#212427)}" +
@@ -280,11 +286,20 @@
       if (!firstOpenProj && p.cp && p.cp.status !== "done") firstOpenProj = p.cp.id;
     });
 
-    var goalW = large ? 250 : 112, projW = large ? 78 : 58, gap = large ? 10 : 6;
+    var goalW = large ? 240 : 112, projW = large ? 68 : 58, gap = large ? 10 : 6;
     var colDefs = ["max-content"], minW = large ? 118 : 74;
     plan.forEach(function (p) {
-      if (p.cp) { colDefs.push(projW + "px"); minW += projW + gap; }
-      else { colDefs.push("minmax(" + goalW + "px,1fr)"); minW += goalW + gap; }
+      if (p.cp) { colDefs.push(projW + "px"); minW += projW + gap; return; }
+      /* a goal whose band stacks two skill groups gets a double-width column,
+         so the groups sit side by side instead of making their whole strand
+         row twice as tall — a grid row is as tall as its tallest cell, and
+         every other stage inherits that height as empty space */
+      var wide = large && strands.some(function (st) {
+        return blocksOf(p.goal ? p.goal[st.id] : null).length > 1;
+      });
+      var w = wide ? goalW * 2 - 20 : goalW;
+      colDefs.push("minmax(" + w + "px," + (wide ? "1.8fr" : "1fr") + ")");
+      minW += w + gap;
     });
 
     var html = "<div class='pm-wrap'><div class='pm" + (large ? " pm-lg" : "") +
@@ -320,7 +335,7 @@
         var pos = "style='grid-column:" + col + ";grid-row:" + (r + 1) + "'";
         var blks = blocksOf(cell);
         if (!blks.length) { html += "<div class='pm-band empty' " + pos + "></div>"; return; }
-        html += "<div class='pm-band' " + pos + ">";
+        html += "<div class='pm-band" + (blks.length > 1 ? " multi" : "") + "' " + pos + ">";
         blks.forEach(function (b) { html += blockHtml(b, unitId, large, live); });
         html += "</div>";
       });

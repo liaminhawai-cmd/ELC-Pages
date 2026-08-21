@@ -27,7 +27,9 @@
   html, body { max-width:100%; overflow-x:hidden; }
   body { margin:0; background:var(--paper); color:var(--ink);
          font:15px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
-  .wrap { max-width:1180px; margin:0 auto; padding:34px 22px 70px; }
+  /* the map is the one page whose content is genuinely wide: the prose keeps
+     a readable measure via its own max-widths, but the road gets the window */
+  .wrap { max-width:1720px; margin:0 auto; padding:34px 22px 70px; }
   .top { display:flex; align-items:center; justify-content:space-between; gap:10px;
          flex-wrap:wrap; margin-bottom:26px; }
   .top a { color:var(--accent); text-decoration:none; font-weight:600; font-size:.9rem;
