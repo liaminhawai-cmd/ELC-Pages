@@ -227,7 +227,8 @@
     turnH: {en:"top of the arc — how high", "zh-Hans":"弧线最高点 — 有多高",
             "zh-Hant":"弧線最高點 — 有多高", vi:"đỉnh vòng cung — cao bao nhiêu"},
     turnD: {en:"top of the arc — how far out", "zh-Hans":"弧线最高点 — 离底线多远",
-            "zh-Hant":"弧線最高點 — 離底線多遠", vi:"đỉnh vòng cung — cách vạch bao xa"}
+            "zh-Hant":"弧線最高點 — 離底線多遠", vi:"đỉnh vòng cung — cách vạch bao xa"},
+    axis:  {en:"axis", "zh-Hans":"对称轴", "zh-Hant":"對稱軸", vi:"trục"}
   };
 
   /* ---------------- figures ---------------- */
@@ -304,6 +305,25 @@
   /* --- A1 PLAY: two sliders, two goals, one answer: 3.6 m high, 4 m out --- */
   function a1(ctx){
     var host = ctx.host;
+    var A1SET = {en:"Mai serves. The ball leaves her racket 3.2 m above the court every time — that part you cannot change. You can only choose where the top of the arc goes.",
+      "zh-Hans":"小梅发球。每次球离开球拍时都在场地上方 3.2 米——这一点不能改。你只能选择弧线最高点的位置。",
+      "zh-Hant":"小梅發球。每次球離開球拍時都在場地上方 3.2 公尺——這一點不能改。你只能選擇弧線最高點的位置。",
+      vi:"Mai giao bóng. Lần nào bóng cũng rời vợt ở độ cao 3,2 m so với mặt sân — phần đó em không đổi được. Em chỉ chọn được vị trí đỉnh vòng cung."};
+    var A1G1 = {en:"The ball crosses the net exactly 2 m above the court.",
+      "zh-Hans":"球正好在场地上方 2 米处越过球网。",
+      "zh-Hant":"球正好在場地上方 2 公尺處越過球網。",
+      vi:"Bóng vượt qua lưới đúng ở độ cao 2 m so với mặt sân."};
+    var A1G2 = {en:"It lands exactly 16 m out, two metres inside the service line.",
+      "zh-Hans":"球正好落在 16 米处，在发球线内两米。",
+      "zh-Hant":"球正好落在 16 公尺處，在發球線內兩公尺。",
+      vi:"Bóng chạm sân đúng ở 16 m, cách vạch giao bóng hai mét về phía trong."};
+    var A1NET = {en:"crosses the net at", "zh-Hans":"过网高度", "zh-Hant":"過網高度", vi:"qua lưới ở"};
+    var A1LAND= {en:"lands at", "zh-Hans":"落点", "zh-Hant":"落點", vi:"chạm sân tại"};
+    var A1WIN = {en:"Top of the arc 3.6 m high, 4 m out — the rule is y = −0.025(x − 4)² + 3.6. The two sliders you dragged ARE the h and the k in that rule. The third number, a = −0.025, was never yours to choose: it was fixed the moment the story said she strikes the ball 3.2 m up.",
+      "zh-Hans":"弧线最高点 3.6 米高、离底线 4 米——规则是 y = −0.025(x − 4)² + 3.6。你拖动的两个滑块就是规则里的 h 和 k。第三个数 a = −0.025 从来不是你能选的：题目一说她在 3.2 米高处击球，它就定下来了。",
+      "zh-Hant":"弧線最高點 3.6 公尺高、離底線 4 公尺——規則是 y = −0.025(x − 4)² + 3.6。你拖動的兩個滑桿就是規則裡的 h 和 k。第三個數 a = −0.025 從來不是你能選的：題目一說她在 3.2 公尺高處擊球，它就定下來了。",
+      vi:"Đỉnh vòng cung cao 3,6 m, cách vạch 4 m — quy tắc là y = −0,025(x − 4)² + 3,6. Hai thanh trượt em vừa kéo chính là h và k trong quy tắc đó. Số thứ ba, a = −0,025, chưa bao giờ do em chọn: nó đã bị cố định ngay khi đề bài nói em ấy đánh bóng ở độ cao 3,2 m."};
+
     var st = { h: 7, k: 4.6 };                 /* a starting arc that misses both goals */
     var live = ctx.el("p", "sim-live");
     var goalBox = ctx.el("p", "sim-goal");
@@ -337,7 +357,7 @@
       drawCourt(clock.time());
       graphFig(figG, p, {
         xMin:-10, xMax:20, xStep:4, yMax:6.4, yStep:0.8, height:280,
-        vlines:[{ x:p.h, label:LX.turnD }]
+        vlines:[{ x:p.h, label:LX.axis }]
       });
       live.textContent = ruleText(p) + "  ·  " + L(A1NET) + " " + num(p.y(COURT.net), 2) + " m" +
         "  ·  " + L(A1LAND) + " " + num(land, 1) + " m";
@@ -355,24 +375,6 @@
         goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(A1WIN));
       }
     }
-    var A1SET = {en:"Mai serves. The ball leaves her racket 3.2 m above the court every time — that part you cannot change. You can only choose where the top of the arc goes.",
-      "zh-Hans":"小梅发球。每次球离开球拍时都在场地上方 3.2 米——这一点不能改。你只能选择弧线最高点的位置。",
-      "zh-Hant":"小梅發球。每次球離開球拍時都在場地上方 3.2 公尺——這一點不能改。你只能選擇弧線最高點的位置。",
-      vi:"Mai giao bóng. Lần nào bóng cũng rời vợt ở độ cao 3,2 m so với mặt sân — phần đó em không đổi được. Em chỉ chọn được vị trí đỉnh vòng cung."};
-    var A1G1 = {en:"The ball crosses the net exactly 2 m above the court.",
-      "zh-Hans":"球正好在场地上方 2 米处越过球网。",
-      "zh-Hant":"球正好在場地上方 2 公尺處越過球網。",
-      vi:"Bóng vượt qua lưới đúng ở độ cao 2 m so với mặt sân."};
-    var A1G2 = {en:"It lands exactly 16 m out, two metres inside the service line.",
-      "zh-Hans":"球正好落在 16 米处，在发球线内两米。",
-      "zh-Hant":"球正好落在 16 公尺處，在發球線內兩公尺。",
-      vi:"Bóng chạm sân đúng ở 16 m, cách vạch giao bóng hai mét về phía trong."};
-    var A1NET = {en:"crosses the net at", "zh-Hans":"过网高度", "zh-Hant":"過網高度", vi:"qua lưới ở"};
-    var A1LAND= {en:"lands at", "zh-Hans":"落点", "zh-Hant":"落點", vi:"chạm sân tại"};
-    var A1WIN = {en:"Top of the arc 3.6 m high, 4 m out — the rule is y = −0.025(x − 4)² + 3.6. The two sliders you dragged ARE the h and the k in that rule. The third number, a = −0.025, was never yours to choose: it was fixed the moment the story said she strikes the ball 3.2 m up.",
-      "zh-Hans":"弧线最高点 3.6 米高、离底线 4 米——规则是 y = −0.025(x − 4)² + 3.6。你拖动的两个滑块就是规则里的 h 和 k。第三个数 a = −0.025 从来不是你能选的：题目一说她在 3.2 米高处击球，它就定下来了。",
-      "zh-Hant":"弧線最高點 3.6 公尺高、離底線 4 公尺——規則是 y = −0.025(x − 4)² + 3.6。你拖動的兩個滑桿就是規則裡的 h 和 k。第三個數 a = −0.025 從來不是你能選的：題目一說她在 3.2 公尺高處擊球，它就定下來了。",
-      vi:"Đỉnh vòng cung cao 3,6 m, cách vạch 4 m — quy tắc là y = −0,025(x − 4)² + 3,6. Hai thanh trượt em vừa kéo chính là h và k trong quy tắc đó. Số thứ ba, a = −0,025, chưa bao giờ do em chọn: nó đã bị cố định ngay khi đề bài nói em ấy đánh bóng ở độ cao 3,2 m."};
     redraw();
   }
 
@@ -628,7 +630,7 @@
       "<b>6 m</b> in front of her. The net is <b>12 m</b> in front of her and the tape along the top of it " +
       "is <b>0.9 m</b> above the court; the service box she is aiming at ends <b>18 m</b> in front of her. " +
       "Take <b>x</b> as the horizontal distance in metres from the point of contact and <b>y</b> as the " +
-      "height in metres above the court, and <span data-v='predict'>model</span> the flight with " +
+      "height in metres above the court, and model the flight with " +
       "<b>y = a(x − h)² + k</b>.</p>";
     host.appendChild(story);
     var qs = ctx.el("div"); host.appendChild(qs);
@@ -660,7 +662,7 @@
               { k:"g", answer:2.3, tol:0.02, unit:"m", label:"clearance" }],
       worked:"<p>y = −0.05(12 − 6)² + 5 = −1.8 + 5 = <b>3.2 m</b>, and 3.2 − 0.9 = <b>2.3 m</b> of clearance.</p>" +
              "<p>Notice 3.2 m is exactly the height she struck it from. The net at 12 m is 6 m past the top of " +
-             "the arc, and she is 6 m before it — <span data-v='curve'>symmetry</span> puts the ball at the same height both times.</p>",
+             "the arc, and she is 6 m before it — symmetry puts the ball at the same height both times.</p>",
       onDone: tick });
     SIM.ask(qs, {
       prompt:"<b>e.</b> The ball is exactly <b>4.2 m</b> above the court at two points of its flight. Find both distances.",
@@ -681,6 +683,29 @@
   /* --- B1 PLAY: now both the net and the box have to be satisfied --- */
   function b1(ctx){
     var host = ctx.host;
+    var B1SET = {en:"A return, not a serve: the ball leaves the racket only 1.6 m above the court. The tape along the top of the net is 0.9 m up, 12 m away. There is not much room.",
+      "zh-Hans":"这次是接发球，不是发球：球离拍时只有 1.6 米高。球网顶端的网带在 12 米外、0.9 米高。余地不多。",
+      "zh-Hant":"這次是接發球，不是發球：球離拍時只有 1.6 公尺高。球網頂端的網帶在 12 公尺外、0.9 公尺高。餘地不多。",
+      vi:"Đây là cú trả giao bóng, không phải giao bóng: bóng rời vợt chỉ ở 1,6 m so với mặt sân. Mép lưới cao 0,9 m, cách 12 m. Chẳng còn mấy khoảng trống."};
+    var B1G1 = {en:"The ball crosses the net exactly 1 m above the court — ten centimetres over the tape.",
+      "zh-Hans":"球正好在场地上方 1 米处过网——比网带高出十厘米。",
+      "zh-Hant":"球正好在場地上方 1 公尺處過網——比網帶高出十公分。",
+      vi:"Bóng qua lưới đúng ở độ cao 1 m so với mặt sân — hơn mép lưới mười xăng-ti-mét."};
+    var B1G2 = {en:"It still lands inside the service box, exactly 16 m out.",
+      "zh-Hans":"而且仍然落在发球区内，正好 16 米处。",
+      "zh-Hant":"而且仍然落在發球區內，正好 16 公尺處。",
+      vi:"Và vẫn rơi trong ô giao bóng, đúng ở 16 m."};
+    var B1OVER= {en:"over the tape by", "zh-Hans":"高出网带", "zh-Hant":"高出網帶", vi:"cao hơn mép lưới"};
+    var B1LAND= {en:"lands at", "zh-Hans":"落点", "zh-Hant":"落點", vi:"chạm sân tại"};
+    var B1OK  = {en:"over the net", "zh-Hans":"过网了", "zh-Hant":"過網了", vi:"qua lưới"};
+    var B1NO  = {en:"into the net", "zh-Hans":"下网了", "zh-Hant":"下網了", vi:"chạm lưới"};
+    var B1IN  = {en:"in the box", "zh-Hans":"落在发球区内", "zh-Hant":"落在發球區內", vi:"trong ô giao bóng"};
+    var B1OUT = {en:"not in the box", "zh-Hans":"没落在发球区内", "zh-Hant":"沒落在發球區內", vi:"không trong ô giao bóng"};
+    var B1WIN = {en:"Top of the arc 1.8 m high, 4 m out: y = −0.0125(x − 4)² + 1.8. Ten centimetres of daylight over the tape and still two metres inside the line. Raise the arc and the ball sails long; flatten it and it hits the tape. In Set A one condition set the shape. Here two do, and they pull against each other.",
+      "zh-Hans":"弧线最高点 1.8 米高、离底线 4 米：y = −0.0125(x − 4)² + 1.8。过网只多出十厘米，落点还在线内两米。把弧线抬高，球就出界；压平，就撞网。A 组里只有一个条件决定形状，这里有两个，而且互相拉扯。",
+      "zh-Hant":"弧線最高點 1.8 公尺高、離底線 4 公尺：y = −0.0125(x − 4)² + 1.8。過網只多出十公分，落點還在線內兩公尺。把弧線抬高，球就出界；壓平，就撞網。A 組裡只有一個條件決定形狀，這裡有兩個，而且互相拉扯。",
+      vi:"Đỉnh vòng cung cao 1,8 m, cách vạch 4 m: y = −0,0125(x − 4)² + 1,8. Chỉ hơn mép lưới mười xăng-ti-mét mà vẫn còn hai mét trong vạch. Nâng vòng cung lên thì bóng ra ngoài; ép phẳng xuống thì chạm lưới. Ở nhóm A chỉ một điều kiện định hình đường bay. Ở đây có hai, và chúng kéo ngược nhau."};
+
     var st = { h: 7, k: 2.6 };
     var live = ctx.el("p", "sim-live");
     var goalBox = ctx.el("p", "sim-goal");
@@ -740,28 +765,6 @@
         goalBox.innerHTML += "<br><b>" + esc(SIM.T("goalMet")) + "</b> " + esc(L(B1WIN));
       }
     }
-    var B1SET = {en:"A return, not a serve: the ball leaves the racket only 1.6 m above the court. The tape along the top of the net is 0.9 m up, 12 m away. There is not much room.",
-      "zh-Hans":"这次是接发球，不是发球：球离拍时只有 1.6 米高。球网顶端的网带在 12 米外、0.9 米高。余地不多。",
-      "zh-Hant":"這次是接發球，不是發球：球離拍時只有 1.6 公尺高。球網頂端的網帶在 12 公尺外、0.9 公尺高。餘地不多。",
-      vi:"Đây là cú trả giao bóng, không phải giao bóng: bóng rời vợt chỉ ở 1,6 m so với mặt sân. Mép lưới cao 0,9 m, cách 12 m. Chẳng còn mấy khoảng trống."};
-    var B1G1 = {en:"The ball crosses the net exactly 1 m above the court — ten centimetres over the tape.",
-      "zh-Hans":"球正好在场地上方 1 米处过网——比网带高出十厘米。",
-      "zh-Hant":"球正好在場地上方 1 公尺處過網——比網帶高出十公分。",
-      vi:"Bóng qua lưới đúng ở độ cao 1 m so với mặt sân — hơn mép lưới mười xăng-ti-mét."};
-    var B1G2 = {en:"It still lands inside the service box, exactly 16 m out.",
-      "zh-Hans":"而且仍然落在发球区内，正好 16 米处。",
-      "zh-Hant":"而且仍然落在發球區內，正好 16 公尺處。",
-      vi:"Và vẫn rơi trong ô giao bóng, đúng ở 16 m."};
-    var B1OVER= {en:"over the tape by", "zh-Hans":"高出网带", "zh-Hant":"高出網帶", vi:"cao hơn mép lưới"};
-    var B1LAND= {en:"lands at", "zh-Hans":"落点", "zh-Hant":"落點", vi:"chạm sân tại"};
-    var B1OK  = {en:"over the net", "zh-Hans":"过网了", "zh-Hant":"過網了", vi:"qua lưới"};
-    var B1NO  = {en:"into the net", "zh-Hans":"下网了", "zh-Hant":"下網了", vi:"chạm lưới"};
-    var B1IN  = {en:"in the box", "zh-Hans":"落在发球区内", "zh-Hant":"落在發球區內", vi:"trong ô giao bóng"};
-    var B1OUT = {en:"not in the box", "zh-Hans":"没落在发球区内", "zh-Hant":"沒落在發球區內", vi:"không trong ô giao bóng"};
-    var B1WIN = {en:"Top of the arc 1.8 m high, 4 m out: y = −0.0125(x − 4)² + 1.8. Ten centimetres of daylight over the tape and still two metres inside the line. Raise the arc and the ball sails long; flatten it and it hits the tape. In Set A one condition set the shape. Here two do, and they pull against each other.",
-      "zh-Hans":"弧线最高点 1.8 米高、离底线 4 米：y = −0.0125(x − 4)² + 1.8。过网只多出十厘米，落点还在线内两米。把弧线抬高，球就出界；压平，就撞网。A 组里只有一个条件决定形状，这里有两个，而且互相拉扯。",
-      "zh-Hant":"弧線最高點 1.8 公尺高、離底線 4 公尺：y = −0.0125(x − 4)² + 1.8。過網只多出十公分，落點還在線內兩公尺。把弧線抬高，球就出界；壓平，就撞網。A 組裡只有一個條件決定形狀，這裡有兩個，而且互相拉扯。",
-      vi:"Đỉnh vòng cung cao 1,8 m, cách vạch 4 m: y = −0,0125(x − 4)² + 1,8. Chỉ hơn mép lưới mười xăng-ti-mét mà vẫn còn hai mét trong vạch. Nâng vòng cung lên thì bóng ra ngoài; ép phẳng xuống thì chạm lưới. Ở nhóm A chỉ một điều kiện định hình đường bay. Ở đây có hai, và chúng kéo ngược nhau."};
     redraw();
   }
 
@@ -876,6 +879,10 @@
   ];
   function b3(ctx){
     var host = ctx.host;
+    var B3NOTE = {en:"Work each one out before you look. The picture only appears once you are right.",
+      "zh-Hans":"每一题都先算再看。答对之后图才会出现。",
+      "zh-Hant":"每一題都先算再看。答對之後圖才會出現。",
+      vi:"Tính từng cú trước khi nhìn. Hình chỉ hiện ra khi em trả lời đúng."};
     host.appendChild(ctx.el("p", "sim-note", esc(L(B3NOTE))));
     var qs = ctx.el("div"); host.appendChild(qs);
     var done = 0, of = 4, times = [];
@@ -969,10 +976,6 @@
               "zh-Hant":"<p>第 2 球第一個條件就沒過：過網 0.72 公尺，低於 0.9 公尺的網帶。第 3 球過了第一個條件卻沒過第二個：過網 1.76 公尺，卻一直飛到 20 公尺，超線兩公尺。</p><p>第 1 球兩個條件都過——過網多 0.12 公尺，落點在線內 3 公尺。建模題問的不是哪個數最大，而是哪一條曲線能<b>同時</b>滿足所有條件。</p>",
               vi:"<p>Cú 2 hỏng ngay điều kiện đầu: 0,72 m ở lưới là dưới mép lưới 0,9 m. Cú 3 đạt điều kiện đầu nhưng hỏng điều kiện sau: cao hơn lưới 1,76 m rồi bay tiếp tới 20 m, quá vạch hai mét.</p><p>Cú 1 đạt cả hai — hơn 0,12 m ở lưới và còn 3 m trong vạch. Bài mô hình hoá không hỏi số nào lớn nhất. Nó hỏi đường cong nào thoả <b>mọi</b> điều kiện cùng một lúc.</p>"},
       onDone: tick });
-    var B3NOTE = {en:"Work each one out before you look. The picture only appears once you are right.",
-      "zh-Hans":"每一题都先算再看。答对之后图才会出现。",
-      "zh-Hant":"每一題都先算再看。答對之後圖才會出現。",
-      vi:"Tính từng cú trước khi nhìn. Hình chỉ hiện ra khi em trả lời đúng."};
   }
 
   /* --- B4 SOLVE: build the rule, then test it against both conditions --- */
