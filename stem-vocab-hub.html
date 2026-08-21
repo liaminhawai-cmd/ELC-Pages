@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>STEM Vocab Hub — ELC</title>
+<style>
+  :root {
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#0d9488; --accent-soft:#ccfbf1; --radius:14px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
+    --good:#2f6a3e; --good-soft:#e5f3e8; --warn:#b45309; --warn-soft:#fef3c7;
+    --bad:#a8432f; --bad-soft:#fde8e4;
+    --mpre:#2c6fa8; --mpre-soft:#e5eef5; --mroot:#9a5518; --mroot-soft:#f5e7d8;
+    --msuf:#3f7a4a; --msuf-soft:#e6f1e8;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#fff; --muted:#c7d0e2; --line:#34405b;
+            --accent:#2dd4bf; --accent-soft:#134e4a; --shadow:0 1px 2px rgba(0,0,0,.4);
+            --good:#93cf9b; --good-soft:#1d3323; --warn:#fbbf24; --warn-soft:#3a2f12;
+            --bad:#e8836f; --bad-soft:#3b201a;
+            --mpre:#9fcbe1; --mpre-soft:#22323c; --mroot:#dda866; --mroot-soft:#34281c;
+            --msuf:#93cf9b; --msuf-soft:#22321f; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:960px; margin:0 auto; padding:16px 16px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; }
+  .top a:hover { text-decoration:underline; }
+  select.language-select { font:inherit; border-radius:10px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); padding:6px 10px; min-height:40px; }
+  .hero { border-radius:18px; padding:20px 22px; color:#fff;
+    background:linear-gradient(135deg,#047857,#0d9488 55%,#2563eb); box-shadow:var(--shadow); }
+  .hero h1 { margin:0 0 .2em; font-family:Georgia,"Times New Roman",serif; font-size:1.6rem; }
+  .hero p { margin:0; font-size:.95rem; max-width:62ch; }
+  h2 { font-size:1.12rem; margin:22px 0 10px; }
+  /* nav tabs */
+  .tabs { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 6px; }
+  .tabs button { font:inherit; font-weight:600; font-size:.9rem; border-radius:999px;
+    border:1px solid var(--line); background:var(--card); color:var(--muted);
+    padding:8px 16px; min-height:40px; cursor:pointer; }
+  .tabs button.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  /* screens */
+  .screen { display:none; }
+  .screen.active { display:block; animation:fadein .18s ease; }
+  @keyframes fadein { from { opacity:.4; } to { opacity:1; } }
+  .subtop { display:flex; align-items:center; justify-content:space-between; gap:10px; margin:14px 0 10px; }
+  .subtop button.lnk { font:inherit; font-weight:600; color:var(--accent); background:none;
+    border:0; cursor:pointer; padding:8px 0; min-height:40px; }
+  .subtop .plabel { font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+  /* segmented area toggle */
+  .seg { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+  .seg button { font:inherit; font-weight:600; font-size:.88rem; border-radius:10px;
+    border:1px solid var(--line); background:var(--card); color:var(--muted);
+    padding:8px 14px; min-height:40px; cursor:pointer; }
+  .seg button.on { border-color:var(--accent); color:var(--accent); background:var(--accent-soft); }
+  /* set cards */
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:12px; }
+  .setcard { display:flex; flex-direction:column; gap:6px; text-align:left; font:inherit;
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px 16px; color:inherit; box-shadow:var(--shadow); cursor:pointer;
+    transition:transform .12s ease, border-color .12s ease; }
+  .setcard:hover { transform:translateY(-2px); border-color:var(--accent); }
+  .setcard .h3 { display:block; font-weight:700; font-family:Georgia,"Times New Roman",serif; font-size:1.05rem; }
+  .setcard .focus { display:block; color:var(--muted); font-size:.85rem; flex:1; }
+  .setcard .stat { display:inline-block; font-size:.8rem; color:var(--muted); }
+  .setcard .stat b { color:var(--ink); }
+  .chip { display:inline-block; border-radius:999px; padding:2px 10px; font-size:.75rem; font-weight:700; }
+  .chip.ok { background:var(--good-soft); color:var(--good); }
+  .chip.now { background:var(--warn-soft); color:var(--warn); }
+  .chip.zero { background:var(--bg); color:var(--muted); }
+  .bar { display:block; height:9px; border-radius:999px; background:var(--bg); border:1px solid var(--line); overflow:hidden; }
+  .bar i { display:block; height:100%; background:var(--accent); transition:width .3s; }
+  .bar i.g { background:var(--good); }
+  /* set home steps */
+  .focusline { color:var(--muted); margin:4px 0 14px; }
+  .steps { display:flex; flex-direction:column; gap:10px; }
+  .step { display:flex; align-items:center; gap:12px; text-align:left; font:inherit;
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:12px 14px; box-shadow:var(--shadow); cursor:pointer; color:inherit; }
+  .step:disabled { opacity:.55; cursor:default; }
+  .step .num { flex:none; width:34px; height:34px; border-radius:50%; display:flex;
+    align-items:center; justify-content:center; font-weight:700;
+    background:var(--accent-soft); color:var(--accent); }
+  .step.done .num { background:var(--good-soft); color:var(--good); }
+  .step .t { font-weight:700; }
+  .step .d { display:block; font-size:.83rem; color:var(--muted); font-weight:400; }
+  .step .tag { margin-left:auto; flex:none; font-size:.75rem; font-weight:700; color:var(--muted); text-align:right; }
+  .step.done .tag { color:var(--good); }
+  /* meet cards */
+  .langrow { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:10px 0 14px;
+    font-size:.9rem; color:var(--muted); }
+  .langrow select { font:inherit; border-radius:10px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); padding:6px 10px; min-height:40px; }
+  .vcard { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px 16px; box-shadow:var(--shadow); margin-bottom:12px; }
+  .vcard .headrow { display:flex; flex-wrap:wrap; align-items:baseline; gap:10px; }
+  .vcard .w { font-family:Georgia,"Times New Roman",serif; font-size:1.35rem; font-weight:700; overflow-wrap:anywhere; }
+  .vtr { font-weight:700; font-size:1.02rem; color:var(--accent); overflow-wrap:anywhere; }
+  .badge { border-radius:999px; padding:1px 9px; font-size:.72rem; font-weight:700; }
+  .badge.built { background:var(--accent-soft); color:var(--accent); }
+  .badge.checked { background:var(--good-soft); color:var(--good); }
+  .mchips { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0; }
+  .mchip { border-radius:999px; padding:4px 12px; font-size:.85rem; font-weight:600; border:1px solid var(--line); }
+  .mchip small { display:block; font-weight:400; font-size:.72rem; opacity:.85; }
+  .mchip.prefix { background:var(--mpre-soft); color:var(--mpre); }
+  .mchip.root { background:var(--mroot-soft); color:var(--mroot); }
+  .mchip.suffix { background:var(--msuf-soft); color:var(--msuf); }
+  .vcard .meaning { margin:6px 0 2px; }
+  .vcard .example { color:var(--muted); font-size:.9rem; margin:4px 0; }
+  .notebox { color:var(--muted); font-size:.88rem; border-left:3px solid var(--line);
+    padding-left:10px; margin:8px 0 2px; }
+  .btnrow { display:flex; flex-wrap:wrap; gap:10px; margin:16px 0; align-items:center; }
+  button.go { font:inherit; font-weight:600; border-radius:999px; padding:10px 20px; min-height:44px;
+    cursor:pointer; border:1px solid var(--accent); background:var(--accent); color:#fff; }
+  button.go.ghost { background:none; color:var(--accent); }
+  /* build */
+  .buildcard { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px; box-shadow:var(--shadow); }
+  .prog { font-size:.8rem; color:var(--muted); margin-bottom:8px; }
+  .prompt { font-size:.95rem; margin:0 0 4px; }
+  .prompt b { font-size:1.05rem; }
+  .slots { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:14px 0; min-height:44px; }
+  .slot { border-bottom:3px solid var(--muted); min-width:60px; min-height:40px; text-align:center;
+    padding:6px 10px; font-weight:700; font-size:1.05rem; }
+  .slot.filled { border-bottom-color:var(--accent); color:var(--accent); }
+  .joiner { color:var(--muted); font-weight:700; }
+  .tiles { display:flex; flex-wrap:wrap; gap:8px; }
+  .tile { font:inherit; text-align:center; border-radius:10px; border:1px solid var(--line);
+    background:var(--card); color:inherit; padding:8px 14px; min-height:44px; cursor:pointer; font-weight:700; }
+  .tile small { display:block; font-weight:400; font-size:.72rem; color:var(--muted); }
+  .tile.prefix { background:var(--mpre-soft); color:var(--mpre); }
+  .tile.root { background:var(--mroot-soft); color:var(--mroot); }
+  .tile.suffix { background:var(--msuf-soft); color:var(--msuf); }
+  .tile.prefix small, .tile.root small, .tile.suffix small { color:inherit; opacity:.8; }
+  .tile:disabled { opacity:.35; cursor:default; }
+  .tile.shake { animation:shake .3s ease; }
+  @keyframes shake { 0%,100% { transform:translateX(0); } 25% { transform:translateX(-6px); }
+    75% { transform:translateX(6px); } }
+  .hint { background:var(--warn-soft); color:var(--warn); border-radius:10px; padding:8px 12px;
+    margin-top:10px; font-size:.9rem; font-weight:600; }
+  .reveal { border-left:4px solid var(--good); background:var(--good-soft); border-radius:0 10px 10px 0;
+    padding:10px 14px; margin-top:12px; font-size:.92rem; }
+  .reveal .rw { font-family:Georgia,"Times New Roman",serif; font-weight:700; font-size:1.1rem; }
+  .fb { font-weight:600; margin-top:10px; color:var(--muted); min-height:1.4em; }
+  /* use */
+  .qtext { font-size:1rem; margin:0 0 6px; }
+  .blank { font-weight:700; border-bottom:2px solid var(--muted); padding:0 12px; }
+  .opts { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+  .opt { text-align:left; font:inherit; border-radius:10px; border:1px solid var(--line);
+    background:var(--card); color:inherit; padding:10px 14px; min-height:44px; cursor:pointer; }
+  .opt.right { border-color:var(--good); background:var(--good-soft); font-weight:700; }
+  .opt.wrong { border-color:var(--bad); background:var(--bad-soft); }
+  .opt:disabled { cursor:default; }
+  .explain { border-left:4px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0;
+    padding:10px 14px; margin-top:12px; font-size:.9rem; }
+  .scorebox { text-align:center; padding:10px 0; }
+  .scorebox .big { font-size:2rem; font-weight:700; }
+  .scorebox .big.ok { color:var(--good); }
+  .scorebox .big.no { color:var(--warn); }
+  /* morpheme table + word list */
+  .tblwrap { overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--card); box-shadow:var(--shadow); margin-bottom:16px; }
+  table.morph { border-collapse:collapse; width:100%; min-width:560px; font-size:.88rem; }
+  table.morph th, table.morph td { border-bottom:1px solid var(--line); padding:8px 10px;
+    text-align:left; vertical-align:top; }
+  table.morph th { font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+  .wordlink { font:inherit; border:0; background:none; color:var(--accent); font-weight:600;
+    cursor:pointer; padding:4px 6px; text-decoration:underline dotted; }
+  .search { width:100%; font:inherit; border-radius:10px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); padding:10px 14px; min-height:44px; margin:8px 0 14px; }
+  .wl-row { background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:10px 14px; box-shadow:var(--shadow); margin-bottom:8px; }
+  .wl-top { display:flex; flex-wrap:wrap; align-items:baseline; gap:8px; }
+  .wl-w { font-family:Georgia,"Times New Roman",serif; font-weight:700; font-size:1.08rem; overflow-wrap:anywhere; }
+  .wl-set { font-size:.7rem; font-weight:700; color:var(--muted); background:var(--bg);
+    border:1px solid var(--line); border-radius:999px; padding:1px 8px; }
+  .wl-m { font-size:.88rem; color:var(--muted); margin-top:2px; }
+  .wl-row .study { margin-left:auto; font-size:.8rem; }
+  .wl-row.hl { border-color:var(--accent); box-shadow:0 0 0 3px var(--accent-soft); }
+  /* report */
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin:12px 0; }
+  .chipbox { background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:10px 14px; box-shadow:var(--shadow); min-width:112px; }
+  .chipbox b { display:block; font-size:1.35rem; }
+  .chipbox span { font-size:.78rem; color:var(--muted); }
+  .chipbox.g b { color:var(--good); }
+  .vrow { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; padding:9px 2px;
+    border-bottom:1px solid var(--line); font-size:.9rem; align-items:center; }
+  .vrow .bars { flex:1; min-width:130px; max-width:230px; display:flex; flex-direction:column; gap:4px; }
+  .vrow .nums { color:var(--muted); font-size:.8rem; }
+  .vrow a { color:var(--accent); font-weight:600; text-decoration:none; }
+  .note { margin-top:22px; color:var(--muted); font-size:.85rem; }
+  footer { margin-top:24px; color:var(--muted); font-size:.85rem; }
+  @media print {
+    .top, .tabs, .subtop, .btnrow, .seg, .search, .noprint, .sv-book, .sv-panel, .sv-scrim { display:none !important; }
+    body { background:#fff; color:#000; }
+    .hero { color:#000; background:none; border:2px solid #000; }
+    .tblwrap { box-shadow:none; overflow:visible; }
+    table.morph { min-width:0; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="stem.html" data-i18n="back">← STEM Hub</a>
+    <select class="language-select" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+    </select>
+  </div>
+
+  <div class="hero">
+    <h1>📓 <span data-i18n="title">STEM Vocab Hub</span></h1>
+    <p data-i18n="sub">Meet each word, build it from its parts, then use it in a question.
+      Every word you build lands in your notebook — and on your progress report.</p>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button data-scr="sets" class="on" data-i18n="tabSets">Sets</button>
+    <button data-scr="morph" data-i18n="tabMorph">Morpheme table</button>
+    <button data-scr="words" data-i18n="tabWords">Word list</button>
+    <button data-scr="report" data-i18n="tabReport">My report</button>
+  </div>
+
+  <div class="screen active" id="scr-sets">
+    <p style="color:var(--muted);font-size:.92rem" data-i18n="setsIntro">Pick a set.
+      Three steps each: meet the words, build them from their parts, then use them.</p>
+    <div class="seg" id="areaseg"></div>
+    <div class="grid" id="setcards"></div>
+  </div>
+
+  <div class="screen" id="scr-set">
+    <div class="subtop">
+      <button class="lnk" id="backToSets" data-i18n="allSets">← All sets</button>
+      <span class="plabel" id="set-label"></span>
+    </div>
+    <div id="set-body"></div>
+  </div>
+
+  <div class="screen" id="scr-meet">
+    <div class="subtop">
+      <button class="lnk" data-goset data-i18n="backSet1">← Back to the set</button>
+      <span class="plabel" id="meet-label"></span>
+    </div>
+    <div id="meet-body"></div>
+  </div>
+
+  <div class="screen" id="scr-build">
+    <div class="subtop">
+      <button class="lnk" data-goset data-i18n="backSet2">← Back to the set</button>
+      <span class="plabel" id="build-label"></span>
+    </div>
+    <div id="build-body"></div>
+  </div>
+
+  <div class="screen" id="scr-use">
+    <div class="subtop">
+      <button class="lnk" data-goset data-i18n="backSet3">← Back to the set</button>
+      <span class="plabel" id="use-label"></span>
+    </div>
+    <div id="use-body"></div>
+  </div>
+
+  <div class="screen" id="scr-morph">
+    <p style="color:var(--muted);font-size:.92rem" data-i18n="morphIntro">Every part, across
+      all the sets. The same parts keep coming back — learn a part once and you can read
+      many words.</p>
+    <div id="morph-body"></div>
+  </div>
+
+  <div class="screen" id="scr-words">
+    <input class="search" id="wsearch" type="search" autocomplete="off">
+    <div id="words-body"></div>
+  </div>
+
+  <div class="screen" id="scr-report">
+    <div id="report-body"></div>
+  </div>
+
+  <p class="note" data-i18n="honest">🔒 Anonymous. Your notebook is stored in this browser
+    only — no accounts, no tracking. It is your own record, not an official assessment.</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+</div>
+
+<script src="stem-vocab-data.js?v=20260821-1"></script>
+<script src="stem-shared.js?v=20260821-1"></script>
+<script src="stem-vocab.js?v=20260821-1"></script>
+<script>
+(function(){
+  "use strict";
+  /* ===== CONTENT — teachers edit here ===== */
+  /* Which vocab sets sit under which toggle button on the Sets screen. */
+  var GROUPS = [
+    { id:"kin", sets:["kin1","kin2","kin3","kin4"],
+      label:{ en:"Kinematics", "zh-Hans":"运动学", "zh-Hant":"運動學" } },
+    { id:"bio", sets:["bio1","bio2","bio3","pan"],
+      label:{ en:"Biology + Pandemic", "zh-Hans":"生物 + 疫情", "zh-Hant":"生物 + 疫情" } },
+    { id:"rev", sets:["rev"],
+      label:{ en:"Revision", "zh-Hans":"复习", "zh-Hant":"複習" } }
+  ];
+  /* Names for the home-language picker. The data file lists the language ids but
+     leaves the names empty, so the names live here. */
+  var LANG_NAMES = {
+    "zh-Hans":"中文（简体）", "zh-Hant":"中文（繁體）", "ja":"日本語", "ko":"한국어",
+    "vi":"Tiếng Việt", "ar":"العربية", "fa":"فارسی", "ur":"اردو", "am":"አማርኛ",
+    "ml":"മലയാളം", "ta":"தமிழ்", "tl":"Filipino (Tagalog)", "ps":"پښتو",
+    "ro":"Română", "ru":"Русский", "fr":"Français", "hi":"हिन्दी", "es":"Español"
+  };
+  var RTL_LANGS = { ar:1, fa:1, ur:1, ps:1 };   /* shown right-to-left */
+  var PASS_FRACTION = 0.7;   /* USE step: this share correct checks the words off */
+  var DECOY_TILES = 2;       /* extra wrong tiles in each build */
+  var HINT_AFTER = 2;        /* wrong taps before the hint appears */
+  /* ======================================== */
+
+  if (!window.STEM_VOCAB_DATA || !window.STEM){
+    document.getElementById("setcards").textContent = "Vocab data did not load. Ask your teacher.";
+    return;
+  }
+  var DATA = window.STEM_VOCAB_DATA;
+  var Store = window.STEM.Store;
+  var HOME_KEY = "elc_stem_home_lang";
+  var PAGE_KEY = "elc_stem_vocabhub";
+
+  if (window.STEMVOCAB) STEMVOCAB.init();
+
+  /* ---------- tiny helpers ---------- */
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function shuffle(a){ a=a.slice(); for (var i=a.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1)); var t=a[i]; a[i]=a[j]; a[j]=t; } return a; }
+  function homeLang(){ try { return localStorage.getItem(HOME_KEY)||""; } catch(e){ return ""; } }
+  function setHomeLang(v){ try { localStorage.setItem(HOME_KEY,v); } catch(e){} }
+  function key(w){ return w.toLowerCase(); }
+
+  /* page-local UI state (meet done, last USE score, chosen area) —
+     the vocab marks themselves live in STEM.Store only */
+  var PS = (function(){ try { return JSON.parse(localStorage.getItem(PAGE_KEY))||{}; }
+    catch(e){ return {}; } })();
+  PS.meet = PS.meet||{}; PS.use = PS.use||{}; PS.area = PS.area||GROUPS[0].id;
+  function savePS(){ try { localStorage.setItem(PAGE_KEY, JSON.stringify(PS)); } catch(e){} }
+
+  /* ---------- data indexes ---------- */
+  var SET_BY_ID = {};
+  DATA.sets.forEach(function(s){ SET_BY_ID[s.id]=s; });
+  /* distinct words: first entry wins, remember every set it lives in */
+  var WORDS = {};                       /* key -> {entry, sets:[]} */
+  DATA.sets.forEach(function(s){
+    s.words.forEach(function(w){
+      var k = key(w.w);
+      if (!WORDS[k]) WORDS[k] = { entry:w, sets:[] };
+      WORDS[k].sets.push(s.id);
+    });
+  });
+  var WORD_KEYS = Object.keys(WORDS).sort();
+  var TOTAL_WORDS = WORD_KEYS.length;
+
+  /* ---------- i18n (chrome only; word content carries its own translations) ---------- */
+  var COPY = {
+    en: {
+      stepMeet:"Meet the words", stepMeetD:"Read each word: its meaning, its parts, and your language.",
+      stepBuild:"Build the words", stepBuildD:"Tap the parts in order. Watch out — two tiles do not belong.",
+      stepUse:"Use the words", stepUseD:"One question per word. Get 70% and the words are checked off.",
+      lockedTag:"LOCKED", doMeetFirst:"do step 1 first", buildAllFirst:"build every word first",
+      readTag:"read ✓", builtTag:function(b,n){ return b+"/"+n+" built"; },
+      bestTag:function(p){ return "best: "+p+"%"; },
+      statBuilt:function(b,n){ return b+"/"+n+" built"; }, statChecked:function(c){ return c+" checked"; },
+      doneChip:"DONE ✓", nowChip:"IN PROGRESS", zeroChip:"not started",
+      langLabel:"Key words in my language:", langNone:"English only",
+      wordsN:function(n){ return n+" words"; },
+      meetTitle:"STEP 1 · MEET", buildTitle:"STEP 2 · BUILD", useTitle:"STEP 3 · USE",
+      startBuild:"I have met the words — start building →",
+      wordOf:function(i,n){ return "Word "+i+" of "+n; },
+      buildPrompt:"Build the word that means:",
+      rememberTitle:"⭐ Remember this word",
+      rememberD:"This word is learned whole — it has no parts to cut.",
+      gotIt:"⭐ Got it — into my notebook →", next:"Next →",
+      wrongPiece:"Not that piece — think about the order.",
+      hint:function(g){ return "Hint: the next piece is the one that means “"+g+"”."; },
+      inNotebook:function(w){ return "✓ "+w+" is in your notebook!"; },
+      allBuilt:function(n){ return "All "+n+" words built!"; },
+      buildAgainNote:"Every word here is already in your notebook. You can build them again for practice.",
+      buildAgain:"Build them again", toUse:"Use the words →", backToSet:"← Back to the set",
+      qOf:function(i,n){ return "Question "+i+" of "+n; },
+      correct:"✓ Correct.", notQuite:"✗ Not quite — the right answer is shown in green.",
+      seeScore:"See my score →",
+      scoreLine:function(g,t){ return "You got "+g+" of "+t+" first try."; },
+      passMsg:"✓ Every word in this quiz is now checked in your notebook.",
+      failMsg:function(p){ return "You need "+p+"% to check the words off. Meet the tricky words again, then retry."; },
+      tryAgain:"Try again", meetAgain:"Meet the words again",
+      colPart:"Part", colMeaning:"Meaning", colLang:"In your language", colWords:"Found in",
+      typePrefix:"Prefixes", typeRoot:"Roots", typeSuffix:"Suffixes",
+      searchPh:"Search words, meanings or translations…",
+      noResults:"No words match your search.",
+      study:"study →", builtBadge:"built ✓", checkedBadge:"checked ✓",
+      repBuilt:"words built", repChecked:"words checked", repTotal:function(n){ return "of "+n+" STEM words"; },
+      repSets:"Set by set", feeds:"Your notebook feeds your main report:",
+      feedsLink:"My STEM Progress →", print:"🖨️ Print / Save",
+      openSet:"open →"
+    },
+    "zh-Hans": {
+      back:"← STEM 主页", title:"STEM 词汇中心",
+      sub:"先认识每个单词，再用词根词缀拼出它，最后用它答题。你构建的每个单词都会进入你的笔记本和进度报告。",
+      tabSets:"词汇集", tabMorph:"词素表", tabWords:"单词表", tabReport:"我的报告",
+      setsIntro:"选择一个词汇集。每集三步：认识单词、构建单词、使用单词。",
+      allSets:"← 所有词汇集", backSet1:"← 返回本集", backSet2:"← 返回本集", backSet3:"← 返回本集",
+      morphIntro:"所有词汇集里的全部词素。同样的词素反复出现——学会一个，就能读懂很多单词。",
+      honest:"🔒 匿名。你的笔记本只保存在这个浏览器中——没有账号，没有追踪。这是你自己的记录，不是正式评估。",
+      stepMeet:"认识单词", stepMeetD:"读每个单词：意思、词素，还有你的语言。",
+      stepBuild:"构建单词", stepBuildD:"按顺序点击词块。小心——有两块是干扰项。",
+      stepUse:"使用单词", stepUseD:"每个单词答一题。答对 70% 就全部打勾。",
+      lockedTag:"已锁定", doMeetFirst:"先完成第 1 步", buildAllFirst:"先构建所有单词",
+      readTag:"已读 ✓", builtTag:function(b,n){ return "已构建 "+b+"/"+n; },
+      bestTag:function(p){ return "最好成绩："+p+"%"; },
+      statBuilt:function(b,n){ return b+"/"+n+" 已构建"; }, statChecked:function(c){ return c+" 已检查"; },
+      doneChip:"完成 ✓", nowChip:"进行中", zeroChip:"未开始",
+      langLabel:"用我的语言看关键词：", langNone:"只看英文",
+      wordsN:function(n){ return n+" 个单词"; },
+      meetTitle:"第 1 步 · 认识", buildTitle:"第 2 步 · 构建", useTitle:"第 3 步 · 使用",
+      startBuild:"我认识这些单词了——开始构建 →",
+      wordOf:function(i,n){ return "第 "+i+" 个，共 "+n+" 个"; },
+      buildPrompt:"拼出意思是这个的单词：",
+      rememberTitle:"⭐ 记住这个单词",
+      rememberD:"这个单词整体记忆——没有可以切分的词素。",
+      gotIt:"⭐ 记住了——放进笔记本 →", next:"下一个 →",
+      wrongPiece:"不是这一块——想想顺序。",
+      hint:function(g){ return "提示：下一块的意思是“"+g+"”。"; },
+      inNotebook:function(w){ return "✓ "+w+" 已进入你的笔记本！"; },
+      allBuilt:function(n){ return "全部 "+n+" 个单词都构建好了！"; },
+      buildAgainNote:"这里的每个单词都已在你的笔记本里。你可以再构建一次来练习。",
+      buildAgain:"再构建一次", toUse:"使用单词 →", backToSet:"← 返回本集",
+      qOf:function(i,n){ return "第 "+i+" 题，共 "+n+" 题"; },
+      correct:"✓ 正确。", notQuite:"✗ 不对——正确答案显示为绿色。",
+      seeScore:"看我的分数 →",
+      scoreLine:function(g,t){ return "第一次作答你答对了 "+g+" 题，共 "+t+" 题。"; },
+      passMsg:"✓ 这次测验里的每个单词都已在笔记本中打勾。",
+      failMsg:function(p){ return "需要答对 "+p+"% 才能打勾。回去再认识一下难的单词，然后重试。"; },
+      tryAgain:"再试一次", meetAgain:"再认识一次单词",
+      colPart:"词素", colMeaning:"意思", colLang:"你的语言", colWords:"出现在",
+      typePrefix:"前缀", typeRoot:"词根", typeSuffix:"后缀",
+      searchPh:"搜索单词、意思或翻译…",
+      noResults:"没有匹配的单词。",
+      study:"学习 →", builtBadge:"已构建 ✓", checkedBadge:"已检查 ✓",
+      repBuilt:"个单词已构建", repChecked:"个单词已检查", repTotal:function(n){ return "共 "+n+" 个 STEM 单词"; },
+      repSets:"逐集进度", feeds:"你的笔记本会汇入主进度报告：",
+      feedsLink:"我的 STEM 进度 →", print:"🖨️ 打印 / 保存",
+      openSet:"打开 →"
+    },
+    "zh-Hant": {
+      back:"← STEM 主頁", title:"STEM 詞彙中心",
+      sub:"先認識每個單字，再用詞素拼出它，最後用它作答。你建立的每個單字都會進入你的筆記本和進度報告。",
+      tabSets:"詞彙集", tabMorph:"詞素表", tabWords:"單字表", tabReport:"我的報告",
+      setsIntro:"選擇一個詞彙集。每集三步：認識單字、建立單字、使用單字。",
+      allSets:"← 所有詞彙集", backSet1:"← 回到本集", backSet2:"← 回到本集", backSet3:"← 回到本集",
+      morphIntro:"所有詞彙集裡的全部詞素。同樣的詞素一再出現——學會一個，就能讀懂很多單字。",
+      honest:"🔒 匿名。你的筆記本只儲存在這個瀏覽器中——沒有帳號、沒有追蹤。這是你自己的紀錄，不是正式評量。",
+      stepMeet:"認識單字", stepMeetD:"讀每個單字：意思、詞素，還有你的語言。",
+      stepBuild:"建立單字", stepBuildD:"按順序點選字塊。小心——有兩塊是干擾項。",
+      stepUse:"使用單字", stepUseD:"每個單字答一題。答對 70% 就全部打勾。",
+      lockedTag:"已鎖定", doMeetFirst:"先完成第 1 步", buildAllFirst:"先建立所有單字",
+      readTag:"已讀 ✓", builtTag:function(b,n){ return "已建立 "+b+"/"+n; },
+      bestTag:function(p){ return "最佳成績："+p+"%"; },
+      statBuilt:function(b,n){ return b+"/"+n+" 已建立"; }, statChecked:function(c){ return c+" 已檢查"; },
+      doneChip:"完成 ✓", nowChip:"進行中", zeroChip:"未開始",
+      langLabel:"用我的語言看關鍵字：", langNone:"只看英文",
+      wordsN:function(n){ return n+" 個單字"; },
+      meetTitle:"第 1 步 · 認識", buildTitle:"第 2 步 · 建立", useTitle:"第 3 步 · 使用",
+      startBuild:"我認識這些單字了——開始建立 →",
+      wordOf:function(i,n){ return "第 "+i+" 個，共 "+n+" 個"; },
+      buildPrompt:"拼出意思是這個的單字：",
+      rememberTitle:"⭐ 記住這個單字",
+      rememberD:"這個單字整個記——沒有可以切分的詞素。",
+      gotIt:"⭐ 記住了——放進筆記本 →", next:"下一個 →",
+      wrongPiece:"不是這一塊——想想順序。",
+      hint:function(g){ return "提示：下一塊的意思是「"+g+"」。"; },
+      inNotebook:function(w){ return "✓ "+w+" 已進入你的筆記本！"; },
+      allBuilt:function(n){ return "全部 "+n+" 個單字都建立好了！"; },
+      buildAgainNote:"這裡的每個單字都已在你的筆記本裡。你可以再建立一次當作練習。",
+      buildAgain:"再建立一次", toUse:"使用單字 →", backToSet:"← 回到本集",
+      qOf:function(i,n){ return "第 "+i+" 題，共 "+n+" 題"; },
+      correct:"✓ 正確。", notQuite:"✗ 不對——正確答案以綠色顯示。",
+      seeScore:"看我的分數 →",
+      scoreLine:function(g,t){ return "第一次作答你答對了 "+g+" 題，共 "+t+" 題。"; },
+      passMsg:"✓ 這次測驗裡的每個單字都已在筆記本中打勾。",
+      failMsg:function(p){ return "需要答對 "+p+"% 才能打勾。回去再認識一下難的單字，然後重試。"; },
+      tryAgain:"再試一次", meetAgain:"再認識一次單字",
+      colPart:"詞素", colMeaning:"意思", colLang:"你的語言", colWords:"出現在",
+      typePrefix:"字首", typeRoot:"字根", typeSuffix:"字尾",
+      searchPh:"搜尋單字、意思或翻譯…",
+      noResults:"沒有符合的單字。",
+      study:"學習 →", builtBadge:"已建立 ✓", checkedBadge:"已檢查 ✓",
+      repBuilt:"個單字已建立", repChecked:"個單字已檢查", repTotal:function(n){ return "共 "+n+" 個 STEM 單字"; },
+      repSets:"逐集進度", feeds:"你的筆記本會匯入主進度報告：",
+      feedsLink:"我的 STEM 進度 →", print:"🖨️ 列印 / 儲存",
+      openSet:"打開 →"
+    }
+  };
+  var sel = document.querySelector(".language-select");
+  var lang = "en";
+  try { lang = localStorage.getItem("elc_page_language")||"en"; } catch(e){}
+  if (!COPY[lang]) lang = "en";
+  sel.value = lang;
+  function tr(k){ var v = COPY[lang][k]; return v !== undefined ? v : COPY.en[k]; }
+  function setStatic(){
+    var dict = COPY[lang];
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var k = el.getAttribute("data-i18n");
+      if (!el._en) el._en = el.textContent;
+      el.textContent = (dict[k] !== undefined && typeof dict[k] === "string") ? dict[k] : el._en;
+    });
+    document.getElementById("wsearch").placeholder = tr("searchPh");
+    document.documentElement.lang = lang === "en" ? "en" : lang;
+  }
+
+  /* ---------- progress lookups (STEM.Store is the single source of truth) ---------- */
+  function wState(w){ return Store.vocab()[key(w)]||null; }
+  function setCounts(set){
+    var built=0, checked=0;
+    set.words.forEach(function(w){
+      var s = wState(w.w);
+      if (s && s.built) built++;
+      if (s && s.checked) checked++;
+    });
+    return { built:built, checked:checked, total:set.words.length };
+  }
+
+  /* ---------- screens ---------- */
+  var cur = { screen:"sets", set:null };
+  function show(id){
+    document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("active"); });
+    document.getElementById("scr-"+id).classList.add("active");
+    cur.screen = id;
+    var group = { sets:"sets", set:"sets", meet:"sets", build:"sets", use:"sets",
+                  morph:"morph", words:"words", report:"report" }[id];
+    document.querySelectorAll(".tabs button").forEach(function(b){
+      b.classList.toggle("on", b.getAttribute("data-scr")===group);
+    });
+    window.scrollTo(0,0);
+  }
+
+  /* ---------- shared bits ---------- */
+  function langRow(onchange){
+    var row = document.createElement("div");
+    row.className = "langrow noprint";
+    var opts = "<option value=''>"+esc(tr("langNone"))+"</option>";
+    (DATA.langs||[]).forEach(function(l){
+      var name = l.name || LANG_NAMES[l.id] || l.id;
+      opts += "<option value='"+esc(l.id)+"'"+(l.id===homeLang()?" selected":"")+">"+esc(name)+"</option>";
+    });
+    row.innerHTML = "<label for='hl-"+(++langRow._n)+"'>"+esc(tr("langLabel"))+"</label>"+
+      "<select id='hl-"+langRow._n+"'>"+opts+"</select>";
+    row.querySelector("select").addEventListener("change", function(e){
+      setHomeLang(e.target.value);
+      if (onchange) onchange();
+    });
+    return row;
+  }
+  langRow._n = 0;
+  function trSpan(entry, cls){
+    var lg = homeLang();
+    if (!lg || !entry.tr || !entry.tr[lg]) return "";
+    return "<span class='"+cls+"'"+(RTL_LANGS[lg]?" dir='rtl'":"")+" lang='"+esc(lg)+"'>"+esc(entry.tr[lg])+"</span>";
+  }
+  function partChip(p){
+    var lg = homeLang(), extra = "";
+    if (lg && p.tr && p.tr[lg]) extra = " · "+esc(p.tr[lg]);
+    return "<span class='mchip "+esc(p.type||"root")+"'>"+esc(p.surface)+
+      "<small>"+esc(p.meaning||"")+extra+"</small></span>";
+  }
+  function badges(w){
+    var s = wState(w), h = "";
+    if (s && s.built) h += " <span class='badge built'>"+esc(tr("builtBadge"))+"</span>";
+    if (s && s.checked) h += " <span class='badge checked'>"+esc(tr("checkedBadge"))+"</span>";
+    return h;
+  }
+
+  /* ---------- SETS screen ---------- */
+  function groupOf(setId){
+    for (var i=0;i<GROUPS.length;i++){ if (GROUPS[i].sets.indexOf(setId)>=0) return GROUPS[i]; }
+    return GROUPS[0];
+  }
+  function renderSets(){
+    var seg = document.getElementById("areaseg");
+    seg.innerHTML = "";
+    GROUPS.forEach(function(g){
+      var b = document.createElement("button");
+      b.textContent = g.label[lang]||g.label.en;
+      b.classList.toggle("on", PS.area===g.id);
+      b.addEventListener("click", function(){ PS.area = g.id; savePS(); renderSets(); });
+      seg.appendChild(b);
+    });
+    var grid = document.getElementById("setcards");
+    grid.innerHTML = "";
+    var g = GROUPS.filter(function(x){ return x.id===PS.area; })[0]||GROUPS[0];
+    g.sets.forEach(function(id){
+      var set = SET_BY_ID[id];
+      if (!set) return;
+      var c = setCounts(set);
+      var pct = Math.round(100*c.built/Math.max(1,c.total));
+      var use = PS.use[id];
+      var chip = (c.built===c.total && use && use.pass)
+        ? "<span class='chip ok'>"+esc(tr("doneChip"))+"</span>"
+        : (c.built>0 || PS.meet[id]) ? "<span class='chip now'>"+esc(tr("nowChip"))+"</span>"
+        : "<span class='chip zero'>"+esc(tr("zeroChip"))+"</span>";
+      var card = document.createElement("button");
+      card.className = "setcard";
+      card.innerHTML = "<span>"+chip+" <span class='stat'>"+esc(tr("wordsN")(c.total))+"</span></span>"+
+        "<span class='h3'>"+esc(set.title)+"</span>"+
+        "<span class='focus'>"+esc(set.focus||"")+"</span>"+
+        "<span class='bar'><i style='width:"+pct+"%'></i></span>"+
+        "<span class='stat'><b>"+esc(tr("statBuilt")(c.built,c.total))+"</b> · "+esc(tr("statChecked")(c.checked))+"</span>";
+      card.addEventListener("click", function(){ openSet(id); });
+      grid.appendChild(card);
+    });
+  }
+
+  /* ---------- SET home ---------- */
+  function openSet(id, keepHash){
+    var set = SET_BY_ID[id];
+    if (!set){ show("sets"); renderSets(); return; }
+    cur.set = id;
+    if (PS.area !== groupOf(id).id){ PS.area = groupOf(id).id; savePS(); renderSets(); }
+    if (!keepHash){ try { history.replaceState(null,"", "#set="+encodeURIComponent(id)); } catch(e){} }
+    document.getElementById("set-label").textContent = tr("wordsN")(set.words.length);
+    var c = setCounts(set);
+    var use = PS.use[id];
+    var meetDone = !!PS.meet[id];
+    var buildUnlocked = meetDone || c.built>0;
+    var useUnlocked = c.built===c.total;
+    var steps = [
+      { t:tr("stepMeet"), d:tr("stepMeetD"), done:meetDone, locked:false,
+        tag:meetDone?tr("readTag"):"", fn:function(){ renderMeet(set); } },
+      { t:tr("stepBuild"), d:tr("stepBuildD"), done:c.built===c.total, locked:!buildUnlocked,
+        tag:!buildUnlocked?tr("doMeetFirst"):tr("builtTag")(c.built,c.total),
+        fn:function(){ renderBuild(set); } },
+      { t:tr("stepUse"), d:tr("stepUseD"), done:!!(use && use.pass), locked:!useUnlocked,
+        tag:!useUnlocked?tr("buildAllFirst"):(use?tr("bestTag")(use.pct):""),
+        fn:function(){ renderUse(set); } }
+    ];
+    var body = document.getElementById("set-body");
+    body.innerHTML = "<h2 style='margin-top:4px'>"+esc(set.title)+"</h2>"+
+      "<p class='focusline'>"+esc(set.focus||"")+"</p><div class='steps'></div>";
+    var wrap = body.querySelector(".steps");
+    steps.forEach(function(stp,i){
+      var b = document.createElement("button");
+      b.className = "step"+(stp.done?" done":"");
+      b.disabled = stp.locked;
+      b.innerHTML = "<span class='num'>"+(stp.done?"✓":(i+1))+"</span>"+
+        "<span><span class='t'>"+esc(stp.t)+"</span><span class='d'>"+esc(stp.d)+"</span></span>"+
+        "<span class='tag'>"+(stp.locked?esc(tr("lockedTag"))+"<br><span style='font-weight:400'>"+esc(stp.tag)+"</span>":esc(stp.tag))+"</span>";
+      b.addEventListener("click", stp.fn);
+      wrap.appendChild(b);
+    });
+    show("set");
+  }
+
+  /* ---------- STEP 1 · MEET ---------- */
+  function renderMeet(set){
+    document.getElementById("meet-label").textContent = tr("meetTitle");
+    var body = document.getElementById("meet-body");
+    body.innerHTML = "";
+    body.appendChild(langRow(function(){ renderMeet(set); }));
+    set.words.forEach(function(w){
+      Store.markVocab(w.w, "seen");
+      var d = document.createElement("div");
+      d.className = "vcard";
+      var h = "<div class='headrow'><span class='w'>"+esc(w.w)+"</span>"+
+        trSpan(w,"vtr")+badges(w.w)+"</div>";
+      if (w.parts && w.parts.length){
+        h += "<div class='mchips'>"+w.parts.map(partChip).join("")+"</div>";
+      }
+      h += "<div class='meaning'>"+esc(w.meaning||"")+"</div>";
+      if (w.example) h += "<div class='example'>“"+esc(w.example)+"”</div>";
+      if (w.note) h += "<div class='notebox'>"+w.note+"</div>";
+      d.innerHTML = h;
+      body.appendChild(d);
+    });
+    var row = document.createElement("div");
+    row.className = "btnrow";
+    row.innerHTML = "<button class='go'>"+esc(tr("startBuild"))+"</button>";
+    row.querySelector("button").addEventListener("click", function(){
+      PS.meet[set.id] = Date.now(); savePS(); renderBuild(set);
+    });
+    body.appendChild(row);
+    show("meet");
+  }
+
+  /* ---------- STEP 2 · BUILD ---------- */
+  function decoysFor(set, word){
+    var mine = {};
+    (word.parts||[]).forEach(function(p){ mine[p.surface.toLowerCase()] = 1; });
+    var pool = [], seen = {};
+    set.words.forEach(function(w2){
+      if (w2 === word) return;
+      (w2.parts||[]).forEach(function(p){
+        var k = p.surface.toLowerCase();
+        if (mine[k] || seen[k]) return;
+        seen[k] = 1; pool.push(p);
+      });
+    });
+    return shuffle(pool).slice(0, DECOY_TILES);
+  }
+  function renderBuild(set){
+    document.getElementById("build-label").textContent = tr("buildTitle");
+    var queue = set.words.filter(function(w){ var s = wState(w.w); return !(s && s.built); });
+    var practice = false;
+    if (!queue.length){ queue = set.words.slice(); practice = true; }
+    var body = document.getElementById("build-body");
+    if (practice){
+      body.innerHTML = "<div class='buildcard'><p style='margin:0 0 10px'>"+esc(tr("allBuilt")(set.words.length))+
+        " <span style='color:var(--muted)'>"+esc(tr("buildAgainNote"))+"</span></p>"+
+        "<div class='btnrow' style='margin:0'>"+
+        "<button class='go ghost' data-a='again'>"+esc(tr("buildAgain"))+"</button>"+
+        "<button class='go' data-a='use'>"+esc(tr("toUse"))+"</button></div></div>";
+      body.querySelector("[data-a='again']").addEventListener("click", function(){
+        buildRun(set, shuffle(set.words.slice()));
+      });
+      body.querySelector("[data-a='use']").addEventListener("click", function(){ renderUse(set); });
+      show("build");
+      return;
+    }
+    buildRun(set, queue);
+  }
+  function buildRun(set, queue){
+    var idx = 0;
+    show("build");
+    stepWord();
+    function stepWord(){
+      window.scrollTo(0,0);
+      if (idx >= queue.length){ buildFinished(set, queue.length); return; }
+      var w = queue[idx];
+      var head = tr("wordOf")(idx+1, queue.length);
+      if ((w.parts||[]).length >= 2) buildOne(set, w, head, nextWord);
+      else rememberOne(w, head, nextWord);
+    }
+    function nextWord(){ idx++; stepWord(); }
+  }
+  function buildFinished(set, n){
+    var body = document.getElementById("build-body");
+    body.innerHTML = "<div class='buildcard scorebox'>"+
+      "<div class='big ok'>✓</div><p><b>"+esc(tr("allBuilt")(n))+"</b></p>"+
+      "<div class='btnrow' style='justify-content:center'>"+
+      "<button class='go' data-a='use'>"+esc(tr("toUse"))+"</button>"+
+      "<button class='go ghost' data-a='set'>"+esc(tr("backToSet"))+"</button></div></div>";
+    body.querySelector("[data-a='use']").addEventListener("click", function(){ renderUse(set); });
+    body.querySelector("[data-a='set']").addEventListener("click", function(){ openSet(set.id, true); });
+  }
+  function buildOne(set, w, head, onDone){
+    var body = document.getElementById("build-body");
+    var target = w.parts.map(function(p){ return p.surface; });
+    var bank = shuffle(w.parts.concat(decoysFor(set, w)));
+    var pos = 0, misses = 0;
+    var slots = target.map(function(){ return "<span class='slot'>&nbsp;</span>"; })
+      .join("<span class='joiner'>+</span>");
+    var h = "<div class='buildcard'><div class='prog'>"+esc(head)+"</div>"+
+      "<p class='prompt'>"+esc(tr("buildPrompt"))+" <b>"+esc(w.meaning)+"</b> "+trSpan(w,"vtr")+"</p>"+
+      "<div class='slots'>"+slots+"</div><div class='tiles'></div>"+
+      "<div class='fb' aria-live='polite'></div><div class='hintbox'></div><div class='revealbox'></div>"+
+      "<div class='btnrow' style='margin-bottom:0'><button class='go' style='display:none'>"+esc(tr("next"))+"</button></div></div>";
+    body.innerHTML = h;
+    var slotEls = body.querySelectorAll(".slot");
+    var tilesEl = body.querySelector(".tiles");
+    var fb = body.querySelector(".fb");
+    var nextBtn = body.querySelector(".btnrow .go");
+    bank.forEach(function(p){
+      var t = document.createElement("button");
+      t.className = "tile "+esc(p.type||"root");
+      t.innerHTML = esc(p.surface)+"<small>"+esc(p.meaning||"")+"</small>";
+      t.addEventListener("click", function(){
+        if (t.disabled || pos >= target.length) return;
+        if (p.surface === target[pos]){
+          slotEls[pos].textContent = p.surface;
+          slotEls[pos].classList.add("filled");
+          t.disabled = true; pos++; misses = 0;
+          fb.textContent = ""; body.querySelector(".hintbox").innerHTML = "";
+          if (pos === target.length) complete();
+        } else {
+          misses++;
+          t.classList.add("shake");
+          setTimeout(function(){ t.classList.remove("shake"); }, 320);
+          fb.textContent = tr("wrongPiece");
+          if (misses >= HINT_AFTER){
+            var gloss = (w.parts[pos] && w.parts[pos].meaning) || "";
+            body.querySelector(".hintbox").innerHTML = "<div class='hint'>"+esc(tr("hint")(gloss))+"</div>";
+          }
+        }
+      });
+      tilesEl.appendChild(t);
+    });
+    function complete(){
+      Store.markVocab(w.w, "built");
+      tilesEl.querySelectorAll(".tile").forEach(function(x){ x.disabled = true; });
+      var r = "<div class='reveal'><span class='rw'>"+esc(w.w)+"</span> "+trSpan(w,"vtr")+
+        " — "+esc(w.meaning)+
+        (w.note ? "<br><span style='color:var(--muted)'>"+w.note+"</span>" : "")+
+        "<br><b>"+esc(tr("inNotebook")(w.w))+"</b></div>";
+      body.querySelector(".revealbox").innerHTML = r;
+      nextBtn.style.display = "inline-block";
+      nextBtn.addEventListener("click", onDone);
+      nextBtn.focus();
+    }
+  }
+  function rememberOne(w, head, onDone){
+    var body = document.getElementById("build-body");
+    var chips = (w.parts && w.parts.length) ? "<div class='mchips'>"+w.parts.map(partChip).join("")+"</div>" : "";
+    body.innerHTML = "<div class='buildcard'><div class='prog'>"+esc(head)+"</div>"+
+      "<p class='prompt'><b>"+esc(tr("rememberTitle"))+"</b></p>"+
+      "<div class='headrow' style='display:flex;flex-wrap:wrap;gap:10px;align-items:baseline'>"+
+      "<span class='w' style='font-family:Georgia,serif;font-size:1.35rem;font-weight:700'>"+esc(w.w)+"</span>"+
+      trSpan(w,"vtr")+"</div>"+chips+
+      "<div class='meaning'>"+esc(w.meaning||"")+"</div>"+
+      (w.example ? "<div class='example' style='color:var(--muted);font-size:.9rem'>“"+esc(w.example)+"”</div>" : "")+
+      (w.note ? "<div class='notebox'>"+w.note+"</div>" : "")+
+      "<p style='color:var(--muted);font-size:.85rem'>"+esc(tr("rememberD"))+"</p>"+
+      "<div class='btnrow' style='margin-bottom:0'><button class='go'>"+esc(tr("gotIt"))+"</button></div></div>";
+    body.querySelector(".go").addEventListener("click", function(){
+      Store.markVocab(w.w, "built");
+      onDone();
+    });
+  }
+
+  /* ---------- STEP 3 · USE ---------- */
+  function renderUse(set){
+    document.getElementById("use-label").textContent = tr("useTitle");
+    /* one random apply question per word that has any */
+    var quiz = shuffle(set.words.filter(function(w){ return w.apply && w.apply.length; }))
+      .map(function(w){ return { w:w, item:w.apply[Math.floor(Math.random()*w.apply.length)] }; });
+    var idx = 0, got = 0;
+    show("use");
+    stepQ();
+    function stepQ(){
+      window.scrollTo(0,0);
+      if (idx >= quiz.length){ finish(); return; }
+      var q = quiz[idx], item = q.item;
+      var body = document.getElementById("use-body");
+      var qh = item.type === "cloze"
+        ? esc(item.before||"")+" <span class='blank'>____</span> "+esc(item.after||"")
+        : esc(item.q||"");
+      body.innerHTML = "<div class='buildcard'><div class='prog'>"+esc(tr("qOf")(idx+1, quiz.length))+"</div>"+
+        "<p class='qtext'>"+qh+"</p><div class='opts'></div>"+
+        "<div class='explainbox'></div>"+
+        "<div class='btnrow' style='margin-bottom:0'><button class='go' style='display:none'>"+
+        esc(idx+1===quiz.length ? tr("seeScore") : tr("next"))+"</button></div></div>";
+      var optsEl = body.querySelector(".opts");
+      var nextBtn = body.querySelector(".btnrow .go");
+      var answered = false;
+      shuffle((item.opts||[]).slice()).forEach(function(o){
+        var b = document.createElement("button");
+        b.className = "opt";
+        b.textContent = o;
+        b.addEventListener("click", function(){
+          if (answered) return;
+          answered = true;
+          var right = String(o) === String(item.a);
+          if (right) got++;
+          optsEl.querySelectorAll(".opt").forEach(function(x){
+            x.disabled = true;
+            if (x.textContent === String(item.a)) x.classList.add("right");
+          });
+          if (!right) b.classList.add("wrong");
+          body.querySelector(".explainbox").innerHTML = "<div class='explain'><b>"+
+            esc(right ? tr("correct") : tr("notQuite"))+"</b> "+(item.explain||"")+"</div>";
+          nextBtn.style.display = "inline-block";
+          nextBtn.focus();
+        });
+        optsEl.appendChild(b);
+      });
+      nextBtn.addEventListener("click", function(){ idx++; stepQ(); });
+    }
+    function finish(){
+      var total = quiz.length;
+      var pass = total > 0 && (got/total) >= PASS_FRACTION - 1e-9;
+      var pct = total ? Math.round(100*got/total) : 0;
+      if (pass){
+        quiz.forEach(function(q){ Store.markVocab(q.w.w, "checked"); });
+      }
+      PS.use[set.id] = { got:got, total:total, pct:pct, pass:pass, ts:Date.now() };
+      savePS();
+      var body = document.getElementById("use-body");
+      body.innerHTML = "<div class='buildcard scorebox'>"+
+        "<div class='big "+(pass?"ok":"no")+"'>"+pct+"%</div>"+
+        "<p>"+esc(tr("scoreLine")(got,total))+"</p>"+
+        "<p style='font-weight:600;color:var(--"+(pass?"good":"warn")+")'>"+
+        esc(pass ? tr("passMsg") : tr("failMsg")(Math.round(PASS_FRACTION*100)))+"</p>"+
+        "<div class='btnrow' style='justify-content:center'>"+
+        (pass ? "" : "<button class='go' data-a='retry'>"+esc(tr("tryAgain"))+"</button>"+
+          "<button class='go ghost' data-a='meet'>"+esc(tr("meetAgain"))+"</button>")+
+        "<button class='go "+(pass?"":"ghost")+"' data-a='set'>"+esc(tr("backToSet"))+"</button></div></div>";
+      var retry = body.querySelector("[data-a='retry']");
+      if (retry) retry.addEventListener("click", function(){ renderUse(set); });
+      var meet = body.querySelector("[data-a='meet']");
+      if (meet) meet.addEventListener("click", function(){ renderMeet(set); });
+      body.querySelector("[data-a='set']").addEventListener("click", function(){ openSet(set.id, true); });
+    }
+  }
+
+  /* ---------- MORPHEME TABLE ---------- */
+  function renderMorph(){
+    var body = document.getElementById("morph-body");
+    body.innerHTML = "";
+    body.appendChild(langRow(renderMorph));
+    /* collect parts: same surface + same gloss = one row */
+    var index = {};
+    DATA.sets.forEach(function(s){
+      s.words.forEach(function(w){
+        (w.parts||[]).forEach(function(p){
+          var k = (p.type||"root")+"|"+p.surface.toLowerCase()+"|"+String(p.meaning||"").toLowerCase();
+          if (!index[k]) index[k] = { surface:p.surface, type:p.type||"root",
+            meaning:p.meaning||"", tr:p.tr||{}, words:[], seen:{} };
+          var wk = key(w.w);
+          if (!index[k].seen[wk]){ index[k].seen[wk] = 1; index[k].words.push(w.w); }
+        });
+      });
+    });
+    var lg = homeLang();
+    var typeOrder = [["prefix",tr("typePrefix")],["root",tr("typeRoot")],["suffix",tr("typeSuffix")]];
+    typeOrder.forEach(function(t){
+      var rows = Object.keys(index).map(function(k){ return index[k]; })
+        .filter(function(r){ return r.type === t[0]; })
+        .sort(function(a,b){ return a.surface.localeCompare(b.surface); });
+      if (!rows.length) return;
+      var h2 = document.createElement("h2");
+      h2.textContent = t[1];
+      body.appendChild(h2);
+      var wrapEl = document.createElement("div");
+      wrapEl.className = "tblwrap";
+      var h = "<table class='morph'><thead><tr><th>"+esc(tr("colPart"))+"</th><th>"+esc(tr("colMeaning"))+"</th>"+
+        (lg ? "<th>"+esc(tr("colLang"))+"</th>" : "")+
+        "<th>"+esc(tr("colWords"))+"</th></tr></thead><tbody>";
+      rows.forEach(function(r){
+        h += "<tr><td><span class='mchip "+esc(r.type)+"'>"+esc(r.surface)+"</span></td>"+
+          "<td>"+esc(r.meaning)+"</td>"+
+          (lg ? "<td"+(RTL_LANGS[lg]?" dir='rtl'":"")+">"+esc(r.tr[lg]||"")+"</td>" : "")+
+          "<td>"+r.words.map(function(w){
+            return "<button class='wordlink' data-w='"+esc(key(w))+"'>"+esc(w)+"</button>";
+          }).join(" ")+"</td></tr>";
+      });
+      h += "</tbody></table>";
+      wrapEl.innerHTML = h;
+      body.appendChild(wrapEl);
+    });
+    body.querySelectorAll(".wordlink").forEach(function(b){
+      b.addEventListener("click", function(){
+        renderWords();
+        show("words");
+        highlightWord(b.getAttribute("data-w"));
+      });
+    });
+  }
+
+  /* ---------- WORD LIST ---------- */
+  var wordRows = {};
+  function renderWords(){
+    var body = document.getElementById("words-body");
+    body.innerHTML = "";
+    wordRows = {};
+    body.appendChild(langRow(function(){ renderWords(); applySearch(); }));
+    var lg = homeLang();
+    WORD_KEYS.forEach(function(k){
+      var rec = WORDS[k], w = rec.entry;
+      var row = document.createElement("div");
+      row.className = "wl-row";
+      var trTxt = (lg && w.tr && w.tr[lg]) ? w.tr[lg] : "";
+      row.innerHTML = "<div class='wl-top'><span class='wl-w'>"+esc(w.w)+"</span>"+
+        (trTxt ? "<span class='vtr'"+(RTL_LANGS[lg]?" dir='rtl'":"")+" lang='"+esc(lg)+"'>"+esc(trTxt)+"</span>" : "")+
+        badges(w.w)+
+        rec.sets.map(function(sid){ return "<span class='wl-set'>"+esc(sid)+"</span>"; }).join("")+
+        "<button class='wordlink study'>"+esc(tr("study"))+"</button></div>"+
+        "<div class='wl-m'>"+esc(w.meaning||"")+"</div>";
+      row._search = (w.w+" "+(w.meaning||"")+" "+trTxt).toLowerCase();
+      row.querySelector(".study").addEventListener("click", function(){ openSet(rec.sets[0]); });
+      wordRows[k] = row;
+      body.appendChild(row);
+    });
+    var none = document.createElement("p");
+    none.id = "wl-none";
+    none.style.cssText = "color:var(--muted);display:none";
+    none.textContent = tr("noResults");
+    body.appendChild(none);
+    applySearch();
+  }
+  function applySearch(){
+    var q = document.getElementById("wsearch").value.trim().toLowerCase();
+    var any = false;
+    Object.keys(wordRows).forEach(function(k){
+      var hit = !q || wordRows[k]._search.indexOf(q) >= 0;
+      wordRows[k].style.display = hit ? "" : "none";
+      if (hit) any = true;
+    });
+    var none = document.getElementById("wl-none");
+    if (none) none.style.display = any ? "none" : "block";
+  }
+  function highlightWord(k){
+    var row = wordRows[k];
+    if (!row) return;
+    document.getElementById("wsearch").value = "";
+    applySearch();
+    Object.keys(wordRows).forEach(function(x){ wordRows[x].classList.remove("hl"); });
+    row.classList.add("hl");
+    setTimeout(function(){ row.scrollIntoView({ behavior:"smooth", block:"center" }); }, 60);
+  }
+
+  /* ---------- MY REPORT ---------- */
+  function renderReport(){
+    var v = Store.vocab(), built = 0, checked = 0;
+    WORD_KEYS.forEach(function(k){
+      if (v[k] && v[k].built) built++;
+      if (v[k] && v[k].checked) checked++;
+    });
+    var h = "<div class='chips'>"+
+      "<div class='chipbox'><b>"+built+"</b><span>"+esc(tr("repBuilt"))+"</span></div>"+
+      "<div class='chipbox g'><b>"+checked+"</b><span>"+esc(tr("repChecked"))+"</span></div>"+
+      "<div class='chipbox'><b>"+TOTAL_WORDS+"</b><span>"+esc(tr("repTotal")(TOTAL_WORDS))+"</span></div></div>"+
+      "<h2>"+esc(tr("repSets"))+"</h2>";
+    DATA.sets.forEach(function(set){
+      var c = setCounts(set);
+      var pb = Math.round(100*c.built/Math.max(1,c.total));
+      var pc = Math.round(100*c.checked/Math.max(1,c.total));
+      h += "<div class='vrow'><span style='min-width:150px'>"+esc(set.title)+"</span>"+
+        "<span class='bars'><span class='bar'><i style='width:"+pb+"%'></i></span>"+
+        "<span class='bar'><i class='g' style='width:"+pc+"%'></i></span></span>"+
+        "<span class='nums'>"+esc(tr("statBuilt")(c.built,c.total))+" · "+esc(tr("statChecked")(c.checked))+"</span>"+
+        "<a href='#set="+encodeURIComponent(set.id)+"' data-set='"+esc(set.id)+"'>"+esc(tr("openSet"))+"</a></div>";
+    });
+    h += "<p style='margin-top:16px'>"+esc(tr("feeds"))+" <a href='stem-progress.html' style='color:var(--accent);font-weight:600'>"+
+      esc(tr("feedsLink"))+"</a></p>"+
+      "<div class='btnrow noprint'><button class='go' id='printBtn'>"+esc(tr("print"))+"</button></div>";
+    var body = document.getElementById("report-body");
+    body.innerHTML = h;
+    body.querySelectorAll("a[data-set]").forEach(function(a){
+      a.addEventListener("click", function(e){ e.preventDefault(); openSet(a.getAttribute("data-set")); });
+    });
+    document.getElementById("printBtn").addEventListener("click", function(){ window.print(); });
+  }
+
+  /* ---------- navigation wiring ---------- */
+  function openTab(id){
+    if (id==="sets"){ renderSets(); }
+    if (id==="morph"){ renderMorph(); }
+    if (id==="words"){ renderWords(); }
+    if (id==="report"){ renderReport(); }
+    show(id);
+    try { history.replaceState(null,"", location.pathname + location.search); } catch(e){}
+  }
+  document.querySelectorAll(".tabs button").forEach(function(b){
+    b.addEventListener("click", function(){ openTab(b.getAttribute("data-scr")); });
+  });
+  document.getElementById("backToSets").addEventListener("click", function(){ openTab("sets"); });
+  document.querySelectorAll("[data-goset]").forEach(function(b){
+    b.addEventListener("click", function(){
+      if (cur.set) openSet(cur.set, true); else openTab("sets");
+    });
+  });
+  document.getElementById("wsearch").addEventListener("input", applySearch);
+
+  sel.addEventListener("change", function(){
+    lang = sel.value;
+    try { localStorage.setItem("elc_page_language", lang); } catch(e){}
+    setStatic();
+    /* repaint the current screen (mid-flow build/use keeps its content) */
+    if (cur.screen==="sets") renderSets();
+    else if (cur.screen==="set" && cur.set) openSet(cur.set, true);
+    else if (cur.screen==="meet" && cur.set) renderMeet(SET_BY_ID[cur.set]);
+    else if (cur.screen==="morph") renderMorph();
+    else if (cur.screen==="words") renderWords();
+    else if (cur.screen==="report") renderReport();
+  });
+
+  /* ---------- deep links: #set=<id> and #word=<w> ---------- */
+  function applyHash(){
+    var h = "";
+    try { h = decodeURIComponent(location.hash.slice(1)); } catch(e){ h = location.hash.slice(1); }
+    var m;
+    if ((m = h.match(/^set=(.+)$/))){
+      var id = m[1];
+      if (SET_BY_ID[id]){ openSet(id, true); return true; }
+    } else if ((m = h.match(/^word=(.+)$/))){
+      var k = key(m[1]);
+      if (WORDS[k]){
+        renderWords();
+        show("words");
+        highlightWord(k);
+        return true;
+      }
+    }
+    return false;
+  }
+  window.addEventListener("hashchange", function(){
+    if (!applyHash()){ openTab("sets"); }
+  });
+
+  /* ---------- go ---------- */
+  setStatic();
+  renderSets();
+  if (!applyHash()) show("sets");
+})();
+</script>
+</body>
+</html>

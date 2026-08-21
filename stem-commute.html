@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Race to School — Linear Motion</title>
+<style>
+  :root {
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#0d9488; --accent-soft:#ccfbf1; --radius:14px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
+    --good:#2f6a3e; --good-soft:#e5f3e8; --warn:#b45309; --warn-soft:#fef3c7;
+    --bad:#a8432f; --bad-soft:#fde8e4;
+    --tram:#0369a1; --bike:#b45309; --car:#7e22ce;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#fff; --muted:#c7d0e2; --line:#34405b;
+            --accent:#2dd4bf; --accent-soft:#134e4a; --shadow:0 1px 2px rgba(0,0,0,.4);
+            --good:#93cf9b; --good-soft:#1d3323; --warn:#fbbf24; --warn-soft:#3a2f12;
+            --bad:#e8836f; --bad-soft:#3b201a;
+            --tram:#38bdf8; --bike:#fbbf24; --car:#c084fc; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:900px; margin:0 auto; padding:16px 16px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; }
+  .top a:hover { text-decoration:underline; }
+  select.language-select { font:inherit; border-radius:10px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); padding:6px 10px; }
+  .hero { border-radius:18px; padding:20px 22px; color:#fff;
+    background:linear-gradient(135deg,#047857,#0d9488 55%,#2563eb); box-shadow:var(--shadow); }
+  .hero h1 { margin:0 0 .2em; font-family:Georgia,"Times New Roman",serif; font-size:1.6rem; }
+  .hero p { margin:0; font-size:.95rem; max-width:62ch; }
+  h2 { font-size:1.12rem; margin:24px 0 10px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px; box-shadow:var(--shadow); margin-bottom:14px; }
+  .muted { color:var(--muted); font-size:.88rem; }
+  /* level picker */
+  .levels { display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 4px; }
+  .ltab { border-radius:12px; border:1px solid var(--line); background:var(--card); color:var(--ink);
+    padding:9px 14px; font:inherit; cursor:pointer; text-align:left; min-height:44px; box-shadow:var(--shadow); }
+  .ltab b { display:block; font-size:.9rem; }
+  .ltab small { color:var(--muted); font-size:.72rem; }
+  .ltab.on { border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent), var(--shadow); }
+  .ltab.on b { color:var(--accent); }
+  .ltab.lock { opacity:.55; cursor:not-allowed; }
+  .ltab .tick { color:var(--good); }
+  .teacherline { font-size:.75rem; color:var(--muted); margin:2px 0 14px; }
+  .teacherline a { color:var(--muted); }
+  /* sim */
+  .simbox canvas { display:block; width:100%; border:1px solid var(--line); border-radius:10px;
+    background:var(--card); margin-bottom:8px; }
+  .legend { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; font-size:.85rem; }
+  .mchip { display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line);
+    border-radius:999px; padding:4px 12px; font-weight:600; background:var(--card); }
+  .mchip .dot { width:12px; height:12px; border-radius:50%; display:inline-block; }
+  .ctrl { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  button.go { font:inherit; font-weight:600; border-radius:999px; padding:9px 18px; cursor:pointer;
+    border:1px solid var(--accent); background:var(--accent); color:#fff; }
+  button.go.ghost { background:none; color:var(--accent); }
+  button.go:disabled { opacity:.5; cursor:default; }
+  .speedp { border-radius:999px; border:1px solid var(--line); background:none; color:var(--muted);
+    padding:8px 13px; font:inherit; font-weight:600; cursor:pointer; font-size:.85rem; }
+  .speedp.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .timer { margin-left:auto; color:var(--muted); font-size:.9rem; font-variant-numeric:tabular-nums; }
+  .podium { margin-top:10px; font-weight:600; font-size:.95rem; }
+  /* questions */
+  .qrow { margin:12px 0; }
+  .lvl input[type=text] { font:inherit; width:96px; padding:8px 10px; border-radius:8px;
+    border:1px solid var(--line); background:var(--bg); color:var(--ink); text-align:center; }
+  .lvl input.wide { width:150px; }
+  .lvl input.right { border-color:var(--good); background:var(--good-soft);
+    box-shadow:0 0 0 3px var(--good-soft); }
+  .lvl input.wrong { border-color:var(--bad); background:var(--bad-soft); }
+  .fb { font-weight:700; margin-top:8px; }
+  .fb.ok { color:var(--good); } .fb.no { color:var(--bad); }
+  .worked { border-left:4px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0;
+    padding:10px 14px; margin-top:10px; font-size:.9rem; }
+  .party { animation:pop .5s ease; color:var(--good); font-weight:700; font-size:1.02rem; margin-top:10px; }
+  @keyframes pop { from { transform:scale(.7); opacity:0; } to { transform:none; opacity:1; } }
+  .goal { font-size:.82rem; color:var(--muted); border:1px dashed var(--line); border-radius:10px;
+    padding:7px 12px; margin:10px 0; }
+  .hintbtn { border:none; background:none; color:var(--accent); font:inherit; font-size:.85rem;
+    cursor:pointer; padding:6px 8px; text-decoration:underline; }
+  /* chunky slider */
+  input[type=range] { -webkit-appearance:none; appearance:none; width:100%; height:34px;
+    background:none; margin:4px 0; }
+  input[type=range]::-webkit-slider-runnable-track { height:8px; border-radius:999px; background:var(--line); }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:26px; height:26px;
+    border-radius:50%; background:var(--accent); margin-top:-9px; border:none; box-shadow:var(--shadow); }
+  input[type=range]::-moz-range-track { height:8px; border-radius:999px; background:var(--line); }
+  input[type=range]::-moz-range-thumb { width:26px; height:26px; border-radius:50%;
+    background:var(--accent); border:none; }
+  .note { margin-top:22px; color:var(--muted); font-size:.85rem; }
+  footer { margin-top:24px; color:var(--muted); font-size:.85rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="stem.html" data-i18n="back">← STEM Hub</a>
+    <select class="language-select" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+    </select>
+  </div>
+
+  <div class="hero">
+    <h1>🚴 <span data-i18n="title">Race to School</span></h1>
+    <p data-i18n="sub">Three ways to school, one straight route. Watch the race, predict it,
+      then do the maths that decides it. Four levels — each one hands more of the work to you.</p>
+  </div>
+
+  <div class="card" id="intro"></div>
+
+  <div class="levels" id="levelTabs"></div>
+  <p class="teacherline"><a href="#" id="teacherUnlock" data-i18n="teacherU">Teacher: unlock all levels</a></p>
+
+  <div id="levelPanel" class="lvl"></div>
+
+  <p class="note" data-i18n="privacy">🔒 Anonymous. Your progress on this page is stored in this
+    browser only — no accounts, no tracking.</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+</div>
+
+<script src="stem-vocab-data.js?v=20260821-1"></script>
+<script src="stem-shared.js?v=20260821-1"></script>
+<script src="stem-vocab.js?v=20260821-1"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ===== CONTENT — teachers edit here =====================================
+     One scenario config drives EVERYTHING: the animation, the graph, every
+     question and every marking check. Change a number here and the whole
+     page (questions, answers, celebrations) recalculates itself.
+     Units: km, km/h, seconds and minutes as named.
+     Note: the Level 3 tie question needs the bike slower than the tram's
+     cruise speed (it always is on the way to school…).                    */
+  var SCENARIO = {
+    routeKm: 6,                       /* home → school distance */
+    tram: { cruiseKmh: 30, stops: 6, dwellS: 40 },   /* stops evenly spaced */
+    bike: { cruiseKmh: 18 },
+    car:  { cruiseKmh: 36, leaveLateMin: 6,          /* leaves home late    */
+            lights: 2, lightsTotalS: 90,             /* wait shared evenly  */
+            parkMin: 3 },                            /* parking at the end  */
+    l1: { sliderMax: 15 },            /* range of the tram-stops slider */
+    l2: { tolMin: 0.5, tolKm: 0.4 },  /* prediction tolerances */
+    l3: { stops: 8, tolGrad: 0.02, tolDwellS: 2 },
+    l4: { names: ["Mai","Anh","Hiro","Amara","Tom","Layla"],
+          places: ["library","sports centre","market","pool"],
+          walkKmh: [4,5,6], rideKmh: [10,12,15,16,18,20],
+          lateMin: [3,4,5,6,8,10,12], distKm: [3,4,5,6],
+          tolMin: 0.5, tolKm: 0.1 }
+  };
+  /* ======================================================================= */
+
+  if (window.STEMVOCAB) STEMVOCAB.init();
+
+  /* ---------- small helpers ---------- */
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function fmt(n){ return String(Math.round(n*100)/100); }
+  function fmtT(n){ return fmt(Math.round(n*10)/10) + " min"; }
+  function fmtKm(n){ return fmt(n) + " km"; }
+  /* parse a number, allowing fractions like "3/10" */
+  function num(str){
+    if (str==null) return NaN;
+    str = String(str).replace(/−/g,"-").replace(/\s+/g,"");
+    if (!str) return NaN;
+    var m = str.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
+    if (m) return parseFloat(m[1])/parseFloat(m[2]);
+    var v = parseFloat(str);
+    return isNaN(v) ? NaN : v;
+  }
+  function near(a,b,tol){ return !isNaN(a) && Math.abs(a-b) <= tol; }
+  function markInput(inp, ok){ inp.classList.remove("right","wrong"); inp.classList.add(ok?"right":"wrong"); }
+  function cvar(name){
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim() || "#888";
+  }
+  function fmtDate(d){
+    return new Date(d+"T12:00:00").toLocaleDateString(undefined,{day:"numeric",month:"short"});
+  }
+
+  /* ---------- the motion model (everything derives from SCENARIO) ----------
+     A journey is a list of straight segments {t0,t1,x0,x1} (minutes, km).
+     Position at any time comes from walking the segments, so the animation,
+     the graph and every answer check all read the SAME numbers.            */
+  var D = SCENARIO.routeKm;
+
+  function journey(vKmh, opts){
+    opts = opts || {};
+    var v = vKmh/60;                          /* km per minute */
+    var segs = [], t = opts.startMin || 0, x = 0;
+    if (t > 0) segs.push({t0:0, t1:t, x0:0, x1:0});
+    var stops = (opts.stops || []).slice().sort(function(a,b){ return a.km-b.km; });
+    stops.forEach(function(s){
+      var dt = (s.km - x)/v;
+      segs.push({t0:t, t1:t+dt, x0:x, x1:s.km}); t += dt; x = s.km;
+      if (s.waitMin > 0){ segs.push({t0:t, t1:t+s.waitMin, x0:x, x1:x}); t += s.waitMin; }
+    });
+    var dt2 = (D - x)/v;
+    segs.push({t0:t, t1:t+dt2, x0:x, x1:D}); t += dt2;
+    var gate = t;                             /* moment it reaches school */
+    if (opts.endWaitMin > 0){ segs.push({t0:t, t1:t+opts.endWaitMin, x0:D, x1:D}); t += opts.endWaitMin; }
+    return { segs:segs, arrive:t, gate:gate };
+  }
+  function posAt(j, t){
+    if (t <= 0) return 0;
+    for (var i=0; i<j.segs.length; i++){
+      var s = j.segs[i];
+      if (t <= s.t1){
+        if (s.t1 - s.t0 <= 1e-9) return s.x1;
+        return s.x0 + (s.x1 - s.x0) * ((t - s.t0)/(s.t1 - s.t0));
+      }
+    }
+    return j.segs.length ? j.segs[j.segs.length-1].x1 : 0;
+  }
+  function evenKm(n){                        /* n points evenly spaced along the route */
+    var a = []; for (var i=1; i<=n; i++) a.push(D*i/(n+1)); return a;
+  }
+  function tramJourney(nStops, dwellS){
+    return journey(SCENARIO.tram.cruiseKmh,
+      { stops: evenKm(nStops).map(function(km){ return {km:km, waitMin:dwellS/60}; }) });
+  }
+  function bikeJourney(){ return journey(SCENARIO.bike.cruiseKmh, {}); }
+  function carJourney(){
+    var n = SCENARIO.car.lights;
+    return journey(SCENARIO.car.cruiseKmh, {
+      startMin: SCENARIO.car.leaveLateMin,
+      stops: evenKm(n).map(function(km){ return {km:km, waitMin: SCENARIO.car.lightsTotalS/60/n}; }),
+      endWaitMin: SCENARIO.car.parkMin });
+  }
+
+  /* L1: the flip point, found NUMERICALLY by racing tram vs bike at every
+     slider value (never hard-coded). With the default numbers:
+     bike = 6/18 h = 20 min; tram = 6/30 h + N×40 s = 12 + N×(2/3) min;
+     tram wins while 12 + 2N/3 < 20  →  N < 12  →  flip point = 11.        */
+  function tramFlipPoint(){
+    var bikeT = bikeJourney().arrive, best = -1;
+    for (var n = 0; n <= SCENARIO.l1.sliderMax; n++){
+      if (tramJourney(n, SCENARIO.tram.dwellS).arrive < bikeT - 1e-9) best = n;
+    }
+    return best;
+  }
+
+  /* L3: dwell time that makes tram and bike arrive together.
+     Algebra (default numbers): bike time = 6/18 h = 1/3 h = 20 min.
+     Tram moving time = 6/30 h = 1/5 h = 12 min. For a tie with 8 stops:
+       12 + totalDwell = 20  →  totalDwell = 8 min = 480 s
+       → 480 ÷ 8 stops = 60 s per stop.
+     The formula below is the same algebra for ANY config:
+       dwell = (D/vBike − D/vTram) hours × 3600 ÷ nStops
+             = (6/18 − 6/30)×3600 ÷ 8 = (0.3333−0.2)×3600 ÷ 8 = 480/8 = 60 ✓ */
+  function dwellExactS(){
+    return (D/SCENARIO.bike.cruiseKmh - D/SCENARIO.tram.cruiseKmh) * 3600 / SCENARIO.l3.stops;
+  }
+
+  /* first time (min) mover A catches mover B after being behind — scans the
+     piecewise model, then interpolates. Returns {t, km} or null.           */
+  function firstPass(jA, jB){
+    var end = Math.max(jA.arrive, jB.arrive), prev = null, step = 0.01;
+    for (var t = 0; t <= end + step; t += step){
+      var d = posAt(jA, t) - posAt(jB, t);
+      if (prev !== null && prev < 0 && d >= 0){
+        var f = prev/(prev - d), tc = t - step + f*step;
+        return { t: tc, km: posAt(jB, tc) };
+      }
+      prev = d;
+    }
+    return null;
+  }
+
+  /* self-check the model (config-independent invariants, console only) */
+  (function verifyModel(){
+    var b = bikeJourney().arrive, flip = tramFlipPoint();
+    if (flip >= 0)
+      console.assert(tramJourney(flip, SCENARIO.tram.dwellS).arrive < b,
+        "L1 flip check: tram should beat the bike at the flip point");
+    if (flip < SCENARIO.l1.sliderMax)
+      console.assert(tramJourney(flip+1, SCENARIO.tram.dwellS).arrive >= b - 1e-9,
+        "L1 flip check: tram should NOT beat the bike past the flip point");
+    console.assert(Math.abs(tramJourney(SCENARIO.l3.stops, dwellExactS()).arrive - b) < 1e-6,
+      "L3 dwell check: exact dwell should make tram and bike tie");
+  })();
+
+  /* ---------- page state ---------- */
+  var K_STATE = "elc_stem_commute";
+  var state = { cur:1, max:1, done:{}, teacher:false };
+  try {
+    var saved = JSON.parse(localStorage.getItem(K_STATE));
+    if (saved && typeof saved === "object"){
+      state.cur = Math.min(4, Math.max(1, saved.cur||1));
+      state.max = Math.min(4, Math.max(1, saved.max||1));
+      state.done = saved.done || {};
+      state.teacher = !!saved.teacher;
+    }
+  } catch(e){}
+  function saveState(){ try { localStorage.setItem(K_STATE, JSON.stringify(state)); } catch(e){} }
+  function unlocked(n){ return state.teacher || n <= state.max; }
+  function award(level, skillIds, detail){
+    if (state.done[level]) return false;
+    state.done[level] = true;
+    if (level < 4) state.max = Math.max(state.max, level+1);
+    saveState();
+    skillIds.forEach(function(id){ STEM.Store.addEvidence(id, "race-to-school", detail); });
+    renderTabs();
+    return true;
+  }
+
+  /* ---------- i18n (chrome only — body stays plain EAL English) ---------- */
+  var COPY = {
+    en: {
+      tabs:["1 · Watch & wonder","2 · Predict & check","3 · You do the maths","4 · CAT challenge"],
+      tabSub:["I show you","We do it together","You do it — the sim checks","You do it alone"],
+      locked:"Finish the level before this one to unlock it.",
+      play:"▶ Play", pause:"⏸ Pause", reset:"↺ Reset", speed:"speed",
+      run:"▶ Run the race",
+      confirmT:"Unlock all four levels? (Meant for teachers.)"
+    },
+    "zh-Hans": {
+      back:"← STEM 主页", title:"上学竞速",
+      sub:"上学的三种方式，同一条直线路线。先看比赛，再预测，最后用数学算出胜负。四个关卡——一关比一关更多由你来做。",
+      teacherU:"教师：解锁全部关卡",
+      privacy:"🔒 匿名。本页进度只保存在这个浏览器中——没有账号，没有追踪。",
+      tabs:["1 · 看一看，想一想","2 · 先预测，再检验","3 · 你来算","4 · CAT 挑战"],
+      tabSub:["老师示范","我们一起做","你来做，模拟检查","你独立完成"],
+      locked:"先完成上一关才能解锁。",
+      play:"▶ 播放", pause:"⏸ 暂停", reset:"↺ 重新开始", speed:"速度",
+      run:"▶ 开始比赛",
+      confirmT:"解锁全部四个关卡？（供教师使用。）"
+    },
+    "zh-Hant": {
+      back:"← STEM 主頁", title:"上學競速",
+      sub:"上學的三種方式，同一條直線路線。先看比賽，再預測，最後用數學算出勝負。四個關卡——一關比一關更多由你來做。",
+      teacherU:"老師：解鎖全部關卡",
+      privacy:"🔒 匿名。本頁進度只儲存在這個瀏覽器中——沒有帳號、沒有追蹤。",
+      tabs:["1 · 看一看，想一想","2 · 先預測，再檢驗","3 · 你來算","4 · CAT 挑戰"],
+      tabSub:["老師示範","我們一起做","你來做，模擬檢查","你獨立完成"],
+      locked:"先完成前一關才能解鎖。",
+      play:"▶ 播放", pause:"⏸ 暫停", reset:"↺ 重新開始", speed:"速度",
+      run:"▶ 開始比賽",
+      confirmT:"要解鎖全部四關嗎？（供老師使用。）"
+    }
+  };
+  var sel = document.querySelector(".language-select");
+  var lang = "en";
+  try { lang = localStorage.getItem("elc_page_language") || "en"; } catch(e){}
+  if (!COPY[lang]) lang = "en";
+  sel.value = lang;
+  function tr(k){ var v = COPY[lang][k]; return v !== undefined ? v : COPY.en[k]; }
+  function setStatic(){
+    var dict = COPY[lang];
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var k = el.getAttribute("data-i18n");
+      if (!el._en) el._en = el.textContent;
+      el.textContent = (typeof dict[k] === "string") ? dict[k] : el._en;
+    });
+    document.documentElement.lang = lang === "en" ? "en" : lang;
+  }
+  sel.addEventListener("change", function(){
+    lang = sel.value;
+    try { localStorage.setItem("elc_page_language", lang); } catch(e){}
+    setStatic(); renderTabs(); openLevel(state.cur);
+  });
+
+  /* ---------- mover builders for the sim ---------- */
+  function tramMover(nStops, dwellS){
+    return { key:"tram", label:"Tram", emoji:"🚋", cvarName:"--tram",
+             j: tramJourney(nStops, dwellS), stopsKm: evenKm(nStops), lightsKm: [] };
+  }
+  function bikeMover(){
+    return { key:"bike", label:"Bike", emoji:"🚲", cvarName:"--bike",
+             j: bikeJourney(), stopsKm: [], lightsKm: [] };
+  }
+  function carMover(){
+    return { key:"car", label:"Car", emoji:"🚗", cvarName:"--car",
+             j: carJourney(), stopsKm: [], lightsKm: evenKm(SCENARIO.car.lights) };
+  }
+
+  /* ---------- the simulation (route view + live position-time graph) ---------- */
+  var activeSim = null;
+  function makeSim(host, opts){
+    opts = opts || {};
+    var movers = [], endT = 1, tMax = 10;
+    var simT = 0, playing = false, speed = opts.speed || 2, raf = 0;
+    var finished = false, podiumShown = false, lastTs = 0;
+
+    var h = "<div class='simbox'>" +
+      "<canvas class='route' aria-label='Route view: the movers travel from home to school'></canvas>" +
+      "<canvas class='pgraph' aria-label='Position-time graph drawing live'></canvas>" +
+      "<div class='legend'></div>";
+    if (opts.controls !== false){
+      h += "<div class='ctrl'><button class='go' data-a='play'>" + esc(tr("play")) + "</button>" +
+        "<button class='go ghost' data-a='reset'>" + esc(tr("reset")) + "</button>" +
+        "<span class='muted'>" + esc(tr("speed")) + ":</span>";
+      [1,2,4].forEach(function(sp){
+        h += "<button class='speedp" + (sp===speed?" on":"") + "' data-sp='" + sp + "'>×" + sp + "</button>";
+      });
+      h += "<span class='timer'>⏱ 0 min</span></div>";
+    }
+    h += "<div class='podium'></div></div>";
+    host.innerHTML = h;
+
+    var routeCv = host.querySelector(".route"), graphCv = host.querySelector(".pgraph");
+    var legendEl = host.querySelector(".legend"), podiumEl = host.querySelector(".podium");
+    var playBtn = host.querySelector("[data-a='play']"), timerEl = host.querySelector(".timer");
+
+    function fit(cv, cssH){
+      var w = cv.clientWidth || host.clientWidth || 320;
+      var dpr = window.devicePixelRatio || 1;
+      cv.width = Math.round(w*dpr); cv.height = Math.round(cssH*dpr);
+      cv.style.height = cssH + "px";
+      var ctx = cv.getContext("2d");
+      ctx.setTransform(dpr,0,0,dpr,0,0);
+      return { ctx:ctx, w:w, h:cssH };
+    }
+    var routeH = 140;
+    function sizeAll(){
+      routeH = 44 + movers.length*36 + 8;
+      route = fit(routeCv, routeH);
+      graph = fit(graphCv, 250);
+    }
+    var route, graph;
+
+    function drawRoute(){
+      var c = route.ctx, w = route.w;
+      c.clearRect(0,0,w,routeH);
+      var xL = 44, xR = w - 40;
+      function px(km){ return xL + (km/D)*(xR-xL); }
+      c.font = "16px system-ui, sans-serif"; c.textAlign = "center"; c.textBaseline = "middle";
+      c.fillText("🏠", xL, 18); c.fillText("🏫", xR, 18);
+      c.font = "10px system-ui, sans-serif"; c.fillStyle = cvar("--muted");
+      c.fillText("0 km", xL, 34); c.fillText(fmt(D) + " km", xR, 34);
+      movers.forEach(function(m, i){
+        var y = 52 + i*36;
+        c.strokeStyle = cvar("--line"); c.lineWidth = 3;
+        c.beginPath(); c.moveTo(xL, y); c.lineTo(xR, y); c.stroke();
+        c.fillStyle = cvar("--muted");
+        m.stopsKm.forEach(function(km){
+          c.beginPath(); c.arc(px(km), y, 3.5, 0, Math.PI*2); c.fill();
+        });
+        c.fillStyle = cvar("--warn");
+        m.lightsKm.forEach(function(km){ c.fillRect(px(km)-3.5, y-3.5, 7, 7); });
+        var pos = posAt(m.j, simT), x = px(pos);
+        /* "at rest" ring while stationary mid-journey (or waiting to leave) */
+        var moving = Math.abs(posAt(m.j, simT+0.02) - posAt(m.j, Math.max(0,simT-0.02))) > 1e-6;
+        if (!moving && simT > 0 && simT < m.j.arrive){
+          c.strokeStyle = cvar("--muted"); c.lineWidth = 1.5; c.setLineDash([3,3]);
+          c.beginPath(); c.arc(x, y-4, 15, 0, Math.PI*2); c.stroke(); c.setLineDash([]);
+        }
+        c.fillStyle = cvar(m.cvarName);
+        c.fillRect(x-9, y+7, 18, 3);
+        c.font = "20px system-ui, sans-serif"; c.fillStyle = cvar("--ink");
+        c.fillText(m.emoji, x, y-4);
+        if (simT >= m.j.arrive - 1e-9){
+          c.font = "11px system-ui, sans-serif"; c.fillStyle = cvar("--good");
+          c.fillText("✓", x+16, y-8);
+        }
+        c.font = "10px system-ui, sans-serif";
+      });
+    }
+
+    function drawGraph(){
+      var c = graph.ctx, w = graph.w, hh = 250;
+      c.clearRect(0,0,w,hh);
+      var L = 46, R = 12, T = 14, B = 36, pw = w-L-R, ph = hh-T-B;
+      function xt(t){ return L + (t/tMax)*pw; }
+      function yk(k){ return T + (1 - k/D)*ph; }
+      var stepT = tMax > 30 ? 5 : 2;
+      var labEvery = (pw/(tMax/stepT) < 30) ? 2 : 1, li = 0;
+      c.font = "10px system-ui, sans-serif";
+      for (var t = 0; t <= tMax + 1e-9; t += stepT){
+        c.strokeStyle = cvar("--line"); c.lineWidth = 1;
+        c.beginPath(); c.moveTo(xt(t), T); c.lineTo(xt(t), T+ph); c.stroke();
+        if (li % labEvery === 0){
+          c.fillStyle = cvar("--muted"); c.textAlign = "center"; c.textBaseline = "top";
+          c.fillText(String(Math.round(t)), xt(t), T+ph+5);
+        }
+        li++;
+      }
+      var stepK = D > 8 ? 2 : 1;
+      for (var k = 0; k <= D + 1e-9; k += stepK){
+        c.strokeStyle = cvar("--line"); c.lineWidth = 1;
+        c.beginPath(); c.moveTo(L, yk(k)); c.lineTo(L+pw, yk(k)); c.stroke();
+        c.fillStyle = cvar("--muted"); c.textAlign = "right"; c.textBaseline = "middle";
+        c.fillText(String(Math.round(k*10)/10), L-6, yk(k));
+      }
+      /* school line (dashed) */
+      c.strokeStyle = cvar("--muted"); c.lineWidth = 1.5; c.setLineDash([5,4]);
+      c.beginPath(); c.moveTo(L, yk(D)); c.lineTo(L+pw, yk(D)); c.stroke(); c.setLineDash([]);
+      c.fillStyle = cvar("--muted"); c.textAlign = "right"; c.textBaseline = "bottom";
+      c.fillText("school", L+pw-2, yk(D)-3);
+      /* axes */
+      c.strokeStyle = cvar("--muted"); c.lineWidth = 2;
+      c.beginPath(); c.moveTo(L, T); c.lineTo(L, T+ph); c.lineTo(L+pw, T+ph); c.stroke();
+      c.fillStyle = cvar("--ink"); c.font = "11px system-ui, sans-serif";
+      c.textAlign = "center"; c.textBaseline = "alphabetic";
+      c.fillText("Time (minutes)", L+pw/2, hh-4);
+      c.save(); c.translate(11, T+ph/2); c.rotate(-Math.PI/2);
+      c.fillText("Position (km)", 0, 0); c.restore();
+      /* journey lines up to simT */
+      movers.forEach(function(m){
+        var col = cvar(m.cvarName);
+        c.strokeStyle = col; c.lineWidth = 2.5;
+        c.lineJoin = "round"; c.lineCap = "round";
+        c.beginPath();
+        var started = false;
+        for (var i=0; i<m.j.segs.length; i++){
+          var s = m.j.segs[i];
+          if (!started){ c.moveTo(xt(s.t0), yk(s.x0)); started = true; }
+          if (s.t1 <= simT){ c.lineTo(xt(s.t1), yk(s.x1)); }
+          else {
+            c.lineTo(xt(simT), yk(posAt(m.j, simT)));
+            break;
+          }
+        }
+        if (started) c.stroke();
+        var cx = xt(Math.min(simT, m.j.arrive)), cy = yk(posAt(m.j, simT));
+        c.fillStyle = col;
+        c.beginPath(); c.arc(cx, cy, 3.5, 0, Math.PI*2); c.fill();
+      });
+    }
+
+    function drawAll(){ drawRoute(); drawGraph(); }
+    function updateTimer(){ if (timerEl) timerEl.textContent = "⏱ " + fmtT(simT); }
+
+    function paintLegend(){
+      legendEl.innerHTML = movers.map(function(m){
+        return "<span class='mchip'><span class='dot' style='background:var(" + m.cvarName + ")'></span>" +
+          m.emoji + " " + esc(m.label) + " · " + esc(fmt(m.vKmh)) + " km/h</span>";
+      }).join("");
+    }
+
+    function showPodium(){
+      podiumShown = true;
+      var order = movers.slice().sort(function(a,b){ return a.j.arrive - b.j.arrive; });
+      var medals = ["🥇","🥈","🥉","4️⃣"];
+      var parts = order.map(function(m, i){
+        var tie = i > 0 && Math.abs(m.j.arrive - order[i-1].j.arrive) < 0.005;
+        return (tie ? "🤝" : medals[i]) + " " + m.emoji + " " + esc(m.label) +
+          " — " + esc(fmtT(m.j.arrive)) + (tie ? " (tie!)" : "");
+      });
+      podiumEl.innerHTML = "Finish order: " + parts.join(" · ");
+      if (opts.onFinish) opts.onFinish();
+    }
+
+    function frame(ts){
+      var dt = lastTs ? (ts - lastTs)/1000 : 0;
+      lastTs = ts;
+      simT += dt * speed;
+      if (simT >= endT){ simT = endT; playing = false; finished = true; }
+      drawAll(); updateTimer();
+      if (playing){ raf = requestAnimationFrame(frame); }
+      else {
+        if (playBtn) playBtn.textContent = tr("play");
+        if (finished && !podiumShown) showPodium();
+      }
+    }
+    function play(){
+      if (finished || simT >= endT){ resetSim(); }
+      playing = true; lastTs = 0;
+      if (playBtn) playBtn.textContent = tr("pause");
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(frame);
+    }
+    function pause(){
+      playing = false; cancelAnimationFrame(raf);
+      if (playBtn) playBtn.textContent = tr("play");
+    }
+    function resetSim(){
+      pause(); simT = 0; finished = false; podiumShown = false;
+      podiumEl.innerHTML = ""; drawAll(); updateTimer();
+    }
+
+    if (playBtn){
+      playBtn.addEventListener("click", function(){ if (playing) pause(); else play(); });
+      host.querySelector("[data-a='reset']").addEventListener("click", resetSim);
+      host.querySelectorAll(".speedp").forEach(function(b){
+        b.addEventListener("click", function(){
+          speed = +b.getAttribute("data-sp");
+          host.querySelectorAll(".speedp").forEach(function(x){ x.classList.remove("on"); });
+          b.classList.add("on");
+        });
+      });
+    }
+
+    function onResize(){ sizeAll(); drawAll(); }
+    window.addEventListener("resize", onResize);
+
+    var api = {
+      setScenario: function(list){
+        pause();
+        movers = list;
+        movers.forEach(function(m){
+          m.vKmh = m.key === "tram" ? SCENARIO.tram.cruiseKmh :
+                   m.key === "bike" ? SCENARIO.bike.cruiseKmh : SCENARIO.car.cruiseKmh;
+        });
+        endT = 1;
+        movers.forEach(function(m){ endT = Math.max(endT, m.j.arrive); });
+        tMax = Math.ceil(endT) + 1;
+        simT = 0; playing = false; finished = false; podiumShown = false;
+        podiumEl.innerHTML = "";
+        sizeAll(); paintLegend(); drawAll(); updateTimer();
+        if (playBtn) playBtn.textContent = tr("play");
+      },
+      playFromStart: function(){ resetSim(); play(); },
+      reset: resetSim,
+      destroy: function(){ pause(); window.removeEventListener("resize", onResize); }
+    };
+    return api;
+  }
+
+  /* ---------- intro card (numbers all read from SCENARIO) ---------- */
+  function renderIntro(){
+    var s = SCENARIO;
+    var catCp = STEM.CP_BY_ID && STEM.CP_BY_ID.cp_cat;
+    document.getElementById("intro").innerHTML =
+      "<p>Every morning, Mai has three ways to travel the same <b>" + fmt(D) + " km</b> to school. " +
+      "Same <span data-v>distance</span> — three very different journeys. " +
+      "(Nobody turns back today, so the distance and the <span data-v>displacement</span> are the same.)</p>" +
+      "<p>🚋 <b style='color:var(--tram)'>Tram</b> — cruises at " + fmt(s.tram.cruiseKmh) + " km/h, " +
+      "but makes " + s.tram.stops + " stops of " + fmt(s.tram.dwellS) + " seconds each.<br>" +
+      "🚲 <b style='color:var(--bike)'>Bike</b> — a <span data-v='uniform'>steady</span> " +
+      fmt(s.bike.cruiseKmh) + " km/h the whole way, no stops.<br>" +
+      "🚗 <b style='color:var(--car)'>Car</b> — the fastest <span data-v>speed</span> (" +
+      fmt(s.car.cruiseKmh) + " km/h), but it leaves " + fmt(s.car.leaveLateMin) + " minutes late, " +
+      "waits " + fmt(s.car.lightsTotalS) + " seconds at traffic lights, and needs " +
+      fmt(s.car.parkMin) + " minutes to park.</p>" +
+      "<p>The bottom picture is a <b>position-time graph</b>: it plots each vehicle's " +
+      "<span data-v>position</span> against <span data-v>time</span>, so every journey becomes a line. " +
+      "The <span data-v>gradient</span> of a line is that vehicle's speed — steep means fast, " +
+      "flat means at <span data-v>rest</span>.</p>" +
+      (catCp ? "<p class='muted'>🎯 This page is practice for the <b>" + esc(catCp.name) +
+        "</b> (" + fmtDate(catCp.date) + ").</p>" : "");
+    if (window.STEMVOCAB) STEMVOCAB.decorate(document.getElementById("intro"));
+  }
+
+  /* ---------- level tabs ---------- */
+  function renderTabs(){
+    var tabs = tr("tabs"), subs = tr("tabSub");
+    var h = "";
+    for (var i=1; i<=4; i++){
+      var cls = "ltab" + (state.cur===i ? " on":"") + (!unlocked(i) ? " lock":"");
+      h += "<button class='" + cls + "' data-lv='" + i + "'" +
+        (!unlocked(i) ? " aria-disabled='true' title='" + esc(tr("locked")) + "'" : "") + ">" +
+        "<b>" + (!unlocked(i) ? "🔒 " : (state.done[i] ? "<span class='tick'>✓</span> " : "")) +
+        esc(tabs[i-1]) + "</b><small>" + esc(subs[i-1]) + "</small></button>";
+    }
+    var el = document.getElementById("levelTabs");
+    el.innerHTML = h;
+    el.querySelectorAll(".ltab").forEach(function(b){
+      b.addEventListener("click", function(){
+        var n = +b.getAttribute("data-lv");
+        if (!unlocked(n)){ alert(tr("locked")); return; }
+        if (n === state.cur) return;   /* don't reset a level mid-play */
+        openLevel(n);
+      });
+    });
+  }
+
+  document.getElementById("teacherUnlock").addEventListener("click", function(e){
+    e.preventDefault();
+    if (confirm(tr("confirmT"))){ state.teacher = true; saveState(); renderTabs(); }
+  });
+
+  /* ---------- LEVEL 1 · Watch & wonder ---------- */
+  function renderL1(panel){
+    var flip = tramFlipPoint();
+    var bikeT = bikeJourney().arrive;
+    var startN = SCENARIO.tram.stops;
+    panel.innerHTML =
+      "<div class='card'>" +
+      "<h2 style='margin-top:0'>👀 Level 1 · Watch &amp; wonder</h2>" +
+      "<p>Press play and just watch the <span data-v>motion</span>. " +
+      "Each vehicle draws its own line on the graph. " +
+      "A steeper line means a faster <span data-v>speed</span>; a flat step means the tram is at " +
+      "<span data-v>rest</span> at a stop.</p>" +
+      "<div class='goal'>🎯 Goal: answer the big question below to unlock Level 2.</div>" +
+      "<div id='sim1'></div>" +
+      "</div>" +
+      "<div class='card'>" +
+      "<p><b>The big question:</b> the tram is fast, but every stop costs it " +
+      fmt(SCENARIO.tram.dwellS) + " seconds. " +
+      "<b>What is the biggest number of stops the tram can make and still beat the bike?</b></p>" +
+      "<label for='stopSlider'>Tram stops: <b id='stopN'>" + startN + "</b></label>" +
+      "<input type='range' id='stopSlider' min='0' max='" + SCENARIO.l1.sliderMax +
+        "' step='1' value='" + startN + "' aria-label='Number of tram stops'>" +
+      "<p class='muted'>Drag the slider, run the race, watch who wins. " +
+      "When you think you have found the flip point, lock it in.</p>" +
+      "<div class='ctrl'><button class='go' id='lockBtn'>✅ Lock in: " + startN + " stops</button></div>" +
+      "<div class='fb' id='fb1' aria-live='polite'></div>" +
+      "</div>";
+
+    var sim = makeSim(panel.querySelector("#sim1"), {});
+    activeSim = sim;
+    function scenarioFor(n){ return [tramMover(n, SCENARIO.tram.dwellS), bikeMover(), carMover()]; }
+    sim.setScenario(scenarioFor(startN));
+
+    var slider = panel.querySelector("#stopSlider");
+    var stopN = panel.querySelector("#stopN");
+    var lockBtn = panel.querySelector("#lockBtn");
+    var fb = panel.querySelector("#fb1");
+    slider.addEventListener("input", function(){
+      var n = +slider.value;
+      stopN.textContent = n;
+      lockBtn.textContent = "✅ Lock in: " + n + " stops";
+      sim.setScenario(scenarioFor(n));
+    });
+    lockBtn.addEventListener("click", function(){
+      var n = +slider.value;
+      var tramT = tramJourney(n, SCENARIO.tram.dwellS).arrive;
+      if (n === flip){
+        var overT = tramJourney(n+1, SCENARIO.tram.dwellS).arrive;
+        var flipStory = (overT >= bikeT - 1e-9)
+          ? " One more stop (" + (n+1) + ") makes it " + fmtT(overT) +
+            " and the tram no longer beats the bike."
+          : " That is the most stops the slider allows — and the tram still wins.";
+        fb.className = "party";
+        fb.innerHTML = "🎉 Yes! With <b>" + n + " stops</b> the tram takes " + fmtT(tramT) +
+          " — still ahead of the bike's " + fmtT(bikeT) + "." + flipStory +
+          " You found the flip point — Level 2 is unlocked!";
+        award(1, ["s_ptgraph"], "found the tram flip point: " + flip + " stops");
+      } else if (tramT < bikeT - 1e-9){
+        fb.className = "fb no";
+        fb.textContent = "The tram DOES win with " + n + " stops (" + fmtT(tramT) + " vs " +
+          fmtT(bikeT) + ") — but could it squeeze in even more stops and still win? Try more.";
+      } else {
+        fb.className = "fb no";
+        fb.textContent = "With " + n + " stops the tram takes " + fmtT(tramT) +
+          ", but the bike only needs " + fmtT(bikeT) + " — the tram loses. Try fewer stops.";
+      }
+    });
+  }
+
+  /* ---------- LEVEL 2 · Predict & check ---------- */
+  function renderL2(panel){
+    var s = SCENARIO;
+    var bikeT = bikeJourney().arrive;
+    var tramT = tramJourney(s.tram.stops, s.tram.dwellS).arrive;
+    var carJ = carJourney();
+    var pass = firstPass(carJ, bikeJourney());
+    var q3IsPass = !!pass;
+    var q3Answer = q3IsPass ? pass.km : carJ.arrive;
+
+    panel.innerHTML =
+      "<div class='card'>" +
+      "<h2 style='margin-top:0'>🤝 Level 2 · Predict &amp; check</h2>" +
+      "<p>The race is loaded but paused. First <span data-v>predict</span> with maths, " +
+      "then run the race to check yourself. " +
+      "Within ±" + fmt(s.l2.tolMin) + " min (or ±" + fmt(s.l2.tolKm) + " km) counts as correct.</p>" +
+      "<div class='goal'>🎯 Goal: all three predictions correct in one run to unlock Level 3.</div>" +
+      "<div id='sim2'></div>" +
+      "</div>" +
+      "<div class='card'>" +
+      "<div class='qrow'>a) The bike rides the whole " + fmt(D) + " km at " + fmt(s.bike.cruiseKmh) +
+      " km/h. Predict its total time:<br><input type='text' inputmode='decimal' data-k='p1' " +
+      "aria-label='Predicted bike time in minutes'> minutes " +
+      "<button class='hintbtn' data-h='h1'>hint?</button>" +
+      "<div class='worked' id='h1' hidden>💡 time = <span data-v>distance</span> ÷ speed. " +
+      "That gives hours — multiply by 60 for minutes.</div></div>" +
+      "<div class='qrow'>b) The tram cruises at " + fmt(s.tram.cruiseKmh) + " km/h and makes " +
+      s.tram.stops + " stops of " + fmt(s.tram.dwellS) + " s each. Predict its total time:<br>" +
+      "<input type='text' inputmode='decimal' data-k='p2' aria-label='Predicted tram time in minutes'> minutes " +
+      "<button class='hintbtn' data-h='h2'>hint?</button>" +
+      "<div class='worked' id='h2' hidden>💡 Two parts: moving time (distance ÷ speed × 60) " +
+      "PLUS the total stopped time. Change the seconds into minutes.</div></div>" +
+      "<div class='qrow'>c) " + (q3IsPass ?
+        ("The car leaves " + fmt(s.car.leaveLateMin) + " min late, so it starts behind. " +
+         "Predict how far from home it catches the bike:<br>" +
+         "<input type='text' inputmode='decimal' data-k='p3' aria-label='Predicted catch position in km'> km " +
+         "<button class='hintbtn' data-h='h3'>hint?</button>" +
+         "<div class='worked' id='h3' hidden>💡 On the graph this is a " +
+         "<span data-v='intersection'>point of intersection</span> — where the car's line crosses " +
+         "the bike's line. Watch where the two lines meet.</div>")
+        :
+        ("Predict the car's total time, door to door:<br>" +
+         "<input type='text' inputmode='decimal' data-k='p3' aria-label='Predicted car time in minutes'> minutes " +
+         "<button class='hintbtn' data-h='h3'>hint?</button>" +
+         "<div class='worked' id='h3' hidden>💡 Moving time + light waits + the late start + parking.</div>")) +
+      "</div>" +
+      "<div class='ctrl'><button class='go' id='runBtn'>" + esc(tr("run")) + "</button></div>" +
+      "<div class='fb' id='fb2' aria-live='polite'></div>" +
+      "<div id='reveal2'></div>" +
+      "</div>";
+
+    var sim = makeSim(panel.querySelector("#sim2"), {
+      controls: false,                    /* paused until they predict + RUN */
+      onFinish: function(){ checkL2(); }
+    });
+    activeSim = sim;
+    sim.setScenario([tramMover(s.tram.stops, s.tram.dwellS), bikeMover(), carMover()]);
+
+    panel.querySelectorAll(".hintbtn").forEach(function(b){
+      b.addEventListener("click", function(){
+        var el = panel.querySelector("#" + b.getAttribute("data-h"));
+        el.hidden = !el.hidden;
+      });
+    });
+
+    var fb = panel.querySelector("#fb2");
+    function inp(k){ return panel.querySelector("[data-k='" + k + "']"); }
+    panel.querySelector("#runBtn").addEventListener("click", function(){
+      if ([inp("p1"),inp("p2"),inp("p3")].some(function(i){ return isNaN(num(i.value)); })){
+        fb.className = "fb no";
+        fb.textContent = "Type all three predictions first (numbers only).";
+        return;
+      }
+      fb.className = "fb"; fb.textContent = "Racing… watch the lines.";
+      panel.querySelector("#reveal2").innerHTML = "";
+      sim.playFromStart();
+    });
+
+    function checkL2(){
+      var ok1 = near(num(inp("p1").value), bikeT, s.l2.tolMin);
+      var ok2 = near(num(inp("p2").value), tramT, s.l2.tolMin);
+      var ok3 = q3IsPass ? near(num(inp("p3").value), q3Answer, s.l2.tolKm)
+                         : near(num(inp("p3").value), q3Answer, s.l2.tolMin);
+      markInput(inp("p1"), ok1); markInput(inp("p2"), ok2); markInput(inp("p3"), ok3);
+      var reveal =
+        "<div class='worked'><b>The real numbers:</b> bike " + fmtT(bikeT) +
+        " · tram " + fmtT(tramT) +
+        (q3IsPass ? " · the car catches the bike <b>" + fmtKm(pass.km) + "</b> from home (at t = " +
+          fmtT(pass.t) + ") — that crossing on the graph is the point of intersection."
+                  : " · car " + fmtT(carJ.arrive) + " door to door.") +
+        "</div>";
+      panel.querySelector("#reveal2").innerHTML = reveal;
+      if (ok1 && ok2 && ok3){
+        fb.className = "party";
+        fb.textContent = "🎉 Three green predictions — you told the story before it happened. Level 3 unlocked!";
+        award(2, ["s_story"], "all three race predictions within tolerance");
+      } else {
+        fb.className = "fb no";
+        fb.textContent = "Some predictions missed. Read the real numbers, fix your working, and run again.";
+      }
+    }
+  }
+
+  /* ---------- LEVEL 3 · You do the maths ---------- */
+  function renderL3(panel){
+    var s = SCENARIO;
+    var bikeGrad = s.bike.cruiseKmh/60;    /* km per minute */
+    var tramGrad = s.tram.cruiseKmh/60;
+    var flats = s.l3.stops;
+    var dwellAns = dwellExactS();
+    var bikeT = bikeJourney().arrive;
+
+    panel.innerHTML =
+      "<div class='card'>" +
+      "<h2 style='margin-top:0'>✍️ Level 3 · You do the maths</h2>" +
+      "<p>This time the maths comes first — the race stays hidden until you commit. " +
+      "Do the working in your book, then type your answers. " +
+      "Tonight's scenario: <b>the tram makes " + flats + " stops</b>, and races the bike only.</p>" +
+      "<div class='goal'>🎯 Goal: all four answers correct to unlock Level 4. " +
+      "Then the sim runs YOUR dwell time as the checker.</div>" +
+      "<div class='qrow'>a) The bike's line on the position-time graph is one straight line. " +
+      "Its <span data-v>gradient</span> = its <span data-v>velocity</span>. " +
+      "Give it in <b>km per minute</b>:<br>" +
+      "<input type='text' inputmode='decimal' data-k='g1' aria-label='Bike gradient in km per minute'> km/min " +
+      "<span class='muted'>(fractions like 3/10 are fine)</span></div>" +
+      "<div class='qrow'>b) The tram's graph is <span data-v>piecewise</span> — sloped parts and " +
+      "flat parts. With " + flats + " stops, how many <b>flat</b> parts (at <span data-v>rest</span>) " +
+      "does it show before school?<br>" +
+      "<input type='text' inputmode='numeric' data-k='g2' aria-label='Number of flat parts'></div>" +
+      "<div class='qrow'>c) The gradient of the tram's <b>sloped</b> parts, in km per minute:<br>" +
+      "<input type='text' inputmode='decimal' data-k='g3' aria-label='Tram gradient in km per minute'> km/min</div>" +
+      "<div class='qrow'>d) The tie question: what dwell time at each of the " + flats +
+      " stops would make the tram and the bike arrive <b>exactly together</b>?<br>" +
+      "<input type='text' inputmode='decimal' data-k='g4' aria-label='Dwell time in seconds'> seconds per stop</div>" +
+      "<div class='ctrl'><button class='go' id='commitBtn'>✅ Commit — run my scenario</button></div>" +
+      "<div class='fb' id='fb3' aria-live='polite'></div>" +
+      "<div id='worked3'></div>" +
+      "<div id='sim3wrap' hidden><h2>The sim checks your dwell time</h2><div id='sim3'></div>" +
+      "<div class='fb' id='verdict3' aria-live='polite'></div></div>" +
+      "</div>";
+
+    var sim = null, currentVerdict = null;
+    var fb = panel.querySelector("#fb3");
+    function inp(k){ return panel.querySelector("[data-k='" + k + "']"); }
+
+    panel.querySelector("#commitBtn").addEventListener("click", function(){
+      var v1 = num(inp("g1").value), v2 = num(inp("g2").value),
+          v3 = num(inp("g3").value), v4 = num(inp("g4").value);
+      if ([v1,v2,v3,v4].some(isNaN)){
+        fb.className = "fb no"; fb.textContent = "Answer all four first (numbers only).";
+        return;
+      }
+      var ok1 = near(v1, bikeGrad, s.l3.tolGrad);
+      var ok2 = Math.abs(v2 - flats) < 0.5;
+      var ok3 = near(v3, tramGrad, s.l3.tolGrad);
+      var ok4 = near(v4, dwellAns, s.l3.tolDwellS);
+      markInput(inp("g1"), ok1); markInput(inp("g2"), ok2);
+      markInput(inp("g3"), ok3); markInput(inp("g4"), ok4);
+
+      panel.querySelector("#worked3").innerHTML =
+        "<div class='worked'><b>The working:</b> " +
+        "a) bike: " + fmt(s.bike.cruiseKmh) + " km/h ÷ 60 = <b>" + fmt(bikeGrad) + " km/min</b>. " +
+        "b) one flat part per stop = <b>" + flats + "</b>. " +
+        "c) tram: " + fmt(s.tram.cruiseKmh) + " ÷ 60 = <b>" + fmt(tramGrad) + " km/min</b>. " +
+        "d) bike needs " + fmtT(bikeT) + "; the tram moves for " +
+        fmtT(tramJourney(0, 0).arrive) + ", so it can afford " +
+        fmtT(bikeT - tramJourney(0,0).arrive) + " of stopping = " +
+        fmt((bikeT - tramJourney(0,0).arrive)*60) + " s ÷ " + flats + " stops = <b>" +
+        fmt(dwellAns) + " s per stop</b>.</div>";
+
+      /* the sim as the checker: run THEIR dwell time */
+      var wrap = panel.querySelector("#sim3wrap");
+      wrap.hidden = false;
+      var dwellTry = Math.min(300, Math.max(0, v4));
+      if (!sim){
+        sim = makeSim(panel.querySelector("#sim3"),
+          { onFinish: function(){ if (currentVerdict) currentVerdict(); } });
+        activeSim = sim;
+      }
+      var tramTry = tramJourney(flats, dwellTry);
+      sim.setScenario([
+        { key:"tram", label:"Tram (" + fmt(dwellTry) + " s stops)", emoji:"🚋",
+          cvarName:"--tram", j:tramTry, stopsKm: evenKm(flats), lightsKm: [] },
+        bikeMover()
+      ]);
+      currentVerdict = verdict;
+      sim.playFromStart();
+
+      function verdict(){
+        var diff = tramTry.arrive - bikeT;
+        var vEl = panel.querySelector("#verdict3");
+        var story = "With " + fmt(dwellTry) + " s stops the tram arrives at " + fmtT(tramTry.arrive) +
+          " and the bike at " + fmtT(bikeT) + " — a gap of " + fmt(Math.abs(diff)*60) + " s.";
+        if (ok4){
+          vEl.className = "party";
+          vEl.textContent = "🤝 " + story + " Close enough to call it a tie — your dwell time is right.";
+        } else {
+          vEl.className = "fb no";
+          vEl.textContent = story + (diff > 0 ?
+            " The tram is too slow — try a shorter dwell time." :
+            " The tram still wins — it could afford a longer dwell time.");
+        }
+      }
+
+      if (ok1 && ok2 && ok3 && ok4){
+        fb.className = "party";
+        fb.textContent = "🎉 All four correct — the sim below is replaying your winning maths. Level 4 unlocked!";
+        award(3, ["k_grad_graph","s_story"],
+          "gradients + piecewise description + tie dwell (" + fmt(dwellAns) + " s) all correct");
+      } else {
+        fb.className = "fb no";
+        fb.textContent = "Check the red boxes against the working, fix them, and commit again.";
+      }
+    });
+  }
+
+  /* ---------- LEVEL 4 · CAT-style challenge ---------- */
+  function buildL4(){
+    /* curated random numbers: every candidate is filtered so ALL answers
+       come out as clean numbers, and the catch-up happens before arrival. */
+    var c = SCENARIO.l4, pool = [];
+    function isHalf(x){ return Math.abs(x*2 - Math.round(x*2)) < 1e-9; }
+    function isTenth(x){ return Math.abs(x*10 - Math.round(x*10)) < 1e-9; }
+    c.distKm.forEach(function(dd){
+      c.walkKmh.forEach(function(w){
+        c.rideKmh.forEach(function(sp){
+          if (sp <= w) return;
+          c.lateMin.forEach(function(T){
+            var tA = dd/w*60, tB = dd/sp*60;
+            var cat = sp*T/(sp-w), dist = w*cat/60;
+            var bArr = T + tB, gap = tA - bArr;
+            if (!Number.isInteger(tA) || tA > 90) return;
+            if (!Number.isInteger(tB)) return;
+            if (!isHalf(cat) || !isTenth(dist)) return;
+            if (cat > tA - 1) return;
+            if (dist > dd - 0.3) return;
+            if (gap < 1 || !isHalf(gap)) return;
+            pool.push({ D:dd, w:w, s:sp, T:T });
+          });
+        });
+      });
+    });
+    if (!pool.length) pool.push({ D:4, w:5, s:15, T:6 });  /* verified fallback */
+    var p = pick(pool);
+    var names = [];
+    while (names.length < 2){
+      var n = pick(c.names);
+      if (names.indexOf(n) < 0) names.push(n);
+    }
+    return {
+      D:p.D, w:p.w, s:p.s, T:p.T, walker:names[0], rider:names[1], place:pick(c.places),
+      tA: p.D/p.w*60, tB: p.D/p.s*60,
+      cat: p.s*p.T/(p.s-p.w), dist: p.w*(p.s*p.T/(p.s-p.w))/60,
+      bArr: p.T + p.D/p.s*60, gap: p.D/p.w*60 - (p.T + p.D/p.s*60)
+    };
+  }
+
+  function renderL4(panel){
+    var catCp = STEM.CP_BY_ID && STEM.CP_BY_ID.cp_cat;
+    var P = buildL4();
+
+    function paint(){
+      panel.innerHTML =
+        "<div class='card'>" +
+        "<h2 style='margin-top:0'>🏁 Level 4 · CAT-style challenge</h2>" +
+        "<p class='muted'>No sim. No hints. Just you, the words and the maths — like the real thing. " +
+        (catCp ? "The real <b>" + esc(catCp.name) + "</b> (" + fmtDate(catCp.date) +
+          ") is a train problem with different numbers — this practice uses walking and a scooter on purpose." : "") +
+        "</p>" +
+        "<p><b>The problem.</b> " + esc(P.walker) + " walks to the " + esc(P.place) + ", <b>" +
+        fmt(P.D) + " km</b> away, at a <span data-v='uniform'>steady</span> <b>" + fmt(P.w) +
+        " km/h</b>. " + esc(P.rider) + " leaves from the same place <b>" + fmt(P.T) +
+        " minutes later</b> on a scooter at <b>" + fmt(P.s) + " km/h</b> along the same path. " +
+        "Answer in the units asked. Decimals or fractions are fine.</p>" +
+        "<div class='qrow'>a) How many minutes does " + esc(P.walker) + "'s walk take?<br>" +
+        "<input type='text' inputmode='decimal' data-k='c1' aria-label='Walk time in minutes'> min</div>" +
+        "<div class='qrow'>b) How many minutes does " + esc(P.rider) + " spend riding?<br>" +
+        "<input type='text' inputmode='decimal' data-k='c2' aria-label='Riding time in minutes'> min</div>" +
+        "<div class='qrow'>c) How many minutes after " + esc(P.walker) + " leaves does " +
+        esc(P.rider) + " catch up?<br>" +
+        "<input type='text' inputmode='decimal' data-k='c3' aria-label='Catch-up time in minutes'> min</div>" +
+        "<div class='qrow'>d) How far from the start does the catch-up happen?<br>" +
+        "<input type='text' inputmode='decimal' data-k='c4' aria-label='Catch-up distance in km'> km</div>" +
+        "<div class='qrow'>e) How many minutes before " + esc(P.walker) + " does " + esc(P.rider) +
+        " arrive?<br>" +
+        "<input type='text' inputmode='decimal' data-k='c5' aria-label='Arrival gap in minutes'> min</div>" +
+        "<div class='ctrl'><button class='go' id='catBtn'>Submit my answers</button>" +
+        "<button class='go ghost' id='newBtn'>New problem</button></div>" +
+        "<div class='fb' id='fb4' aria-live='polite'></div>" +
+        "<div id='worked4'></div>" +
+        "</div>";
+      if (window.STEMVOCAB) STEMVOCAB.decorate(panel);
+
+      var fb = panel.querySelector("#fb4");
+      function inp(k){ return panel.querySelector("[data-k='" + k + "']"); }
+      var submitted = false;
+
+      panel.querySelector("#newBtn").addEventListener("click", function(){
+        P = buildL4(); paint();
+      });
+      panel.querySelector("#catBtn").addEventListener("click", function(){
+        var tol = SCENARIO.l4.tolMin, tolK = SCENARIO.l4.tolKm;
+        var oks = [
+          near(num(inp("c1").value), P.tA, tol),
+          near(num(inp("c2").value), P.tB, tol),
+          near(num(inp("c3").value), P.cat, tol),
+          near(num(inp("c4").value), P.dist, tolK),
+          near(num(inp("c5").value), P.gap, tol)
+        ];
+        ["c1","c2","c3","c4","c5"].forEach(function(k,i){ markInput(inp(k), oks[i]); });
+        var all = oks.every(function(o){ return o; });
+        var firstTry = !submitted;
+        submitted = true;
+        panel.querySelector("#worked4").innerHTML =
+          "<div class='worked'><b>Full worked solution.</b><br>" +
+          "a) time = distance ÷ speed, then × 60 for minutes: (" + fmt(P.D) + " ÷ " + fmt(P.w) +
+          ") × 60 = <b>" + fmt(P.tA) + " min</b>.<br>" +
+          "b) riding time = (" + fmt(P.D) + " ÷ " + fmt(P.s) + ") × 60 = <b>" + fmt(P.tB) + " min</b>.<br>" +
+          "c) call t the minutes after " + esc(P.walker) + " leaves. " + esc(P.walker) + " is at (" +
+          fmt(P.w) + "/60)×t km; " + esc(P.rider) + " is at (" + fmt(P.s) + "/60)×(t − " + fmt(P.T) +
+          ") km. Set them equal (that is the point of <span data-v='intersection'>intersection</span> " +
+          "of the two lines, and solving the pair together is what <i>simultaneous</i> " +
+          "<span data-v='equation'>equation</span>s means): t = " + fmt(P.s) + "×" + fmt(P.T) + " ÷ (" +
+          fmt(P.s) + " − " + fmt(P.w) + ") = <b>" + fmt(P.cat) + " min</b>.<br>" +
+          "d) distance = (" + fmt(P.w) + "/60) × " + fmt(P.cat) + " = <b>" + fmt(P.dist) + " km</b> — " +
+          "before the " + esc(P.place) + " at " + fmt(P.D) + " km, so the catch-up really happens.<br>" +
+          "e) " + esc(P.walker) + " arrives at " + fmt(P.tA) + " min; " + esc(P.rider) + " at " +
+          fmt(P.T) + " + " + fmt(P.tB) + " = " + fmt(P.bArr) + " min → earlier by <b>" +
+          fmt(P.gap) + " min</b>.</div>";
+        if (window.STEMVOCAB) STEMVOCAB.decorate(panel.querySelector("#worked4"));
+        if (all){
+          fb.className = "party";
+          fb.textContent = "🎉 All five correct" + (firstTry ? " — first submission!" : "!") +
+            " That is exactly the maths the CAT wants. ✦ Logged on your progress report.";
+          award(4, ["s_vectors","k_eq"],
+            "CAT-style challenge: all 5 answers correct (" + P.walker + " vs " + P.rider + ")");
+        } else {
+          fb.className = "fb no";
+          fb.textContent = "Compare each red box with the worked solution, then try a NEW problem to prove it.";
+        }
+      });
+    }
+    paint();
+  }
+
+  /* ---------- open a level ---------- */
+  function openLevel(n){
+    if (!unlocked(n)) n = Math.min(n, state.max);
+    state.cur = n; saveState();
+    if (activeSim){ activeSim.destroy(); activeSim = null; }
+    var panel = document.getElementById("levelPanel");
+    panel.innerHTML = "";
+    if (n === 1) renderL1(panel);
+    else if (n === 2) renderL2(panel);
+    else if (n === 3) renderL3(panel);
+    else renderL4(panel);
+    if (window.STEMVOCAB) STEMVOCAB.decorate(panel);
+    renderTabs();
+  }
+
+  /* ---------- boot ---------- */
+  setStatic();
+  renderIntro();
+  renderTabs();
+  openLevel(unlocked(state.cur) ? state.cur : 1);
+})();
+</script>
+</body>
+</html>

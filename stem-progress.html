@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My STEM Progress — ELC</title>
+<style>
+  :root {
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#0d9488; --accent-soft:#ccfbf1; --radius:14px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
+    --good:#2f6a3e; --good-soft:#e5f3e8; --warn:#b45309; --warn-soft:#fef3c7;
+    --bad:#a8432f; --bad-soft:#fde8e4;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#fff; --muted:#c7d0e2; --line:#34405b;
+            --accent:#2dd4bf; --accent-soft:#134e4a; --shadow:0 1px 2px rgba(0,0,0,.4);
+            --good:#93cf9b; --good-soft:#1d3323; --warn:#fbbf24; --warn-soft:#3a2f12;
+            --bad:#e8836f; --bad-soft:#3b201a; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:1080px; margin:0 auto; padding:16px 16px 60px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; }
+  select.language-select { font:inherit; border-radius:10px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); padding:6px 10px; }
+  .hero { border-radius:18px; padding:20px 22px; color:#fff;
+    background:linear-gradient(135deg,#047857,#0d9488 55%,#2563eb); box-shadow:var(--shadow); }
+  .hero h1 { margin:0 0 .2em; font-family:Georgia,"Times New Roman",serif; font-size:1.6rem; }
+  .hero p { margin:0; font-size:.95rem; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin:14px 0; }
+  .chipbox { background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:10px 14px; box-shadow:var(--shadow); min-width:118px; }
+  .chipbox b { display:block; font-size:1.35rem; }
+  .chipbox span { font-size:.78rem; color:var(--muted); }
+  .chipbox.g b { color:var(--good); } .chipbox.w b { color:var(--warn); }
+  .chipbox.b b { color:var(--bad); }
+  h2 { font-size:1.12rem; margin:24px 0 8px; }
+  /* timeline */
+  .sched { display:flex; gap:10px; overflow-x:auto; padding:4px 2px 10px; }
+  .cp { min-width:158px; background:var(--card); border:1px solid var(--line); border-radius:12px;
+        padding:9px 12px; box-shadow:var(--shadow); position:relative; }
+  .cp .date { font-size:.75rem; color:var(--muted); }
+  .cp .name { font-weight:700; font-size:.85rem; margin:2px 0; }
+  .cp .when { font-size:.78rem; font-weight:600; }
+  .cp.done { opacity:.65; } .cp.done .when { color:var(--good); }
+  .cp.soon .when { color:var(--warn); } .cp.past .when { color:var(--bad); }
+  .cp.today { border-color:var(--accent); border-width:2px; }
+  .cp.today .name { color:var(--accent); }
+  /* grid */
+  .tblwrap { overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--card); box-shadow:var(--shadow); margin-bottom:18px; }
+  table { border-collapse:collapse; width:100%; min-width:760px; font-size:.86rem; }
+  th, td { border-bottom:1px solid var(--line); padding:9px 10px; text-align:left; vertical-align:top; }
+  th { font-size:.75rem; text-transform:uppercase; letter-spacing:.05em; color:var(--muted);
+    position:sticky; top:0; background:var(--card); }
+  td.skill { min-width:180px; font-weight:600; }
+  td.skill .cont { display:block; font-weight:400; font-size:.72rem; color:var(--muted); }
+  td.band { min-width:170px; cursor:pointer; color:var(--muted); position:relative; }
+  td.band:hover { background:var(--accent-soft); color:var(--ink); }
+  td.band.on { background:var(--good-soft); color:var(--ink); font-weight:600;
+    box-shadow:inset 0 0 0 2px var(--good); border-radius:8px; }
+  td.due { white-space:nowrap; font-weight:600; font-size:.8rem; }
+  .due .pill { display:inline-block; border-radius:999px; padding:2px 10px; }
+  .due .g { background:var(--good-soft); color:var(--good); }
+  .due .w { background:var(--warn-soft); color:var(--warn); }
+  .due .b { background:var(--bad-soft); color:var(--bad); }
+  .due .u { background:var(--bg); color:var(--muted); }
+  .ev { color:var(--accent); font-weight:700; cursor:help; }
+  .legend { font-size:.8rem; color:var(--muted); margin:6px 0 14px; }
+  /* next steps */
+  .next { display:flex; flex-direction:column; gap:8px; }
+  .nextrow { background:var(--card); border:1px solid var(--line); border-left:5px solid var(--warn);
+    border-radius:10px; padding:10px 14px; box-shadow:var(--shadow); font-size:.92rem; }
+  .nextrow.behind { border-left-color:var(--bad); }
+  .nextrow a { color:var(--accent); font-weight:600; }
+  /* vocab summary */
+  .vrow { display:flex; justify-content:space-between; gap:10px; padding:8px 2px;
+    border-bottom:1px solid var(--line); font-size:.92rem; align-items:center; }
+  .bar { flex:1; max-width:220px; height:10px; border-radius:999px; background:var(--bg);
+    border:1px solid var(--line); overflow:hidden; }
+  .bar i { display:block; height:100%; background:var(--accent); }
+  .actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:22px; }
+  button.act { font:inherit; font-weight:600; border-radius:999px; padding:9px 18px; cursor:pointer;
+    border:1px solid var(--accent); background:var(--accent); color:#fff; }
+  button.act.ghost { background:none; color:var(--accent); }
+  .note { margin-top:20px; color:var(--muted); font-size:.85rem; }
+  footer { margin-top:26px; color:var(--muted); font-size:.85rem; }
+  @media print {
+    .top, .actions, .noprint { display:none !important; }
+    body { background:#fff; color:#000; }
+    .hero { color:#000; background:none; border:2px solid #000; }
+    .tblwrap { box-shadow:none; overflow:visible; }
+    table { min-width:0; }
+    .sched { flex-wrap:wrap; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="stem.html" data-i18n="back">← STEM Hub</a>
+    <select class="language-select" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+    </select>
+  </div>
+
+  <div class="hero">
+    <h1>🧭 <span data-i18n="title">My STEM Progress</span></h1>
+    <p data-i18n="sub">Tap the band that describes you today. Green pills mean you are on time. Amber and red show where to catch up.</p>
+  </div>
+
+  <div class="chips" id="chips"></div>
+
+  <h2 data-i18n="timeHead">📅 The road ahead</h2>
+  <div class="sched" id="sched"></div>
+
+  <div id="grids"></div>
+
+  <h2 data-i18n="nextHead">⭐ What to do next</h2>
+  <div class="next" id="next"></div>
+
+  <h2 data-i18n="vocabHead">📓 My vocab notebook</h2>
+  <div id="vocab"></div>
+
+  <div class="actions noprint">
+    <button class="act" onclick="window.print()" data-i18n="print">🖨️ Print / Save</button>
+    <button class="act ghost" id="clearBtn" data-i18n="clear">Clear my STEM record</button>
+  </div>
+
+  <p class="note" data-i18n="honest">🔒 Anonymous and stored in this browser only. This report shows your own
+    self-check and your practice on this device — it is not an official assessment.</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+</div>
+
+<script src="stem-vocab-data.js?v=20260821-1"></script>
+<script src="stem-shared.js?v=20260821-1"></script>
+<script>
+(function(){
+  "use strict";
+  var COPY = {
+    en: { bandsHead:["Working towards","At the standard","Above the standard"],
+          masterBy:"Master by", skillCol:"Skill",
+          mastered:"mastered", dueSoon:"due in 2 weeks", behind:"behind", upcoming:"still to come",
+          wordsBuilt:"words in my notebook",
+          today:"TODAY", done:"done", passed:"passed",
+          inDays: function(n){ return "in "+n+" days"; },
+          doBefore: function(cp,d){ return "Do this before <b>"+cp+"</b> ("+d+")"; },
+          behindMsg: function(cp){ return "This was due before <b>"+cp+"</b> — catch up now"; },
+          practice:"Practise", nothing:"Nothing urgent — you are on track. Keep building ahead!",
+          built:" built", checked:" checked", openSet:"open →",
+          evTitle:"Evidence from an interactive: ",
+          confirmClear:"Clear ALL your STEM progress on this device? This cannot be undone." },
+    "zh-Hans": { back:"← STEM 主页", title:"我的 STEM 进度",
+          sub:"点选今天最符合你的水平格。绿色表示按时，琥珀色和红色表示需要追赶。",
+          timeHead:"📅 前方的路", nextHead:"⭐ 接下来做什么", vocabHead:"📓 我的词汇笔记本",
+          print:"🖨️ 打印 / 保存", clear:"清除我的 STEM 记录",
+          honest:"🔒 匿名，只保存在这个浏览器中。这份报告显示你自己的自评和练习——不是正式评估。",
+          bandsHead:["努力达标中","达到标准","超越标准"], masterBy:"截止", skillCol:"技能",
+          mastered:"已掌握", dueSoon:"两周内到期", behind:"落后", upcoming:"待学",
+          wordsBuilt:"个单词已入笔记本", today:"今天", done:"完成", passed:"已过",
+          inDays:function(n){ return n+" 天后"; },
+          doBefore:function(cp,d){ return "在 <b>"+cp+"</b>（"+d+"）之前完成"; },
+          behindMsg:function(cp){ return "在 <b>"+cp+"</b> 之前就该掌握——现在赶上"; },
+          practice:"练习", nothing:"没有紧急任务——进度正常，继续前进！",
+          built:" 已构建", checked:" 已检查", openSet:"打开 →",
+          evTitle:"来自互动练习的证据：",
+          confirmClear:"清除此设备上所有 STEM 进度？此操作无法撤销。" },
+    "zh-Hant": { back:"← STEM 主頁", title:"我的 STEM 進度",
+          sub:"點選今天最符合你的等級格。綠色表示準時，琥珀色和紅色表示需要趕上。",
+          timeHead:"📅 前方的路", nextHead:"⭐ 接下來做什麼", vocabHead:"📓 我的詞彙筆記本",
+          print:"🖨️ 列印 / 儲存", clear:"清除我的 STEM 紀錄",
+          honest:"🔒 匿名，只儲存在這個瀏覽器中。這份報告顯示你自己的自評和練習——不是正式評量。",
+          bandsHead:["努力達標中","達到標準","超越標準"], masterBy:"截止", skillCol:"技能",
+          mastered:"已精熟", dueSoon:"兩週內到期", behind:"落後", upcoming:"待學",
+          wordsBuilt:"個單字已入筆記本", today:"今天", done:"完成", passed:"已過",
+          inDays:function(n){ return n+" 天後"; },
+          doBefore:function(cp,d){ return "在 <b>"+cp+"</b>（"+d+"）之前完成"; },
+          behindMsg:function(cp){ return "在 <b>"+cp+"</b> 之前就該精熟——現在趕上"; },
+          practice:"練習", nothing:"沒有緊急任務——進度正常，繼續前進！",
+          built:" 已建立", checked:" 已檢查", openSet:"打開 →",
+          evTitle:"來自互動練習的證據：",
+          confirmClear:"清除此裝置上所有 STEM 進度？此操作無法復原。" }
+  };
+  var sel = document.querySelector(".language-select");
+  var lang = "en";
+  try { lang = localStorage.getItem("elc_page_language") || "en"; } catch(e){}
+  if (!COPY[lang]) lang = "en";
+  sel.value = lang;
+  function T(){ return COPY[lang]; }
+  function tEn(k){ return COPY.en[k]; }
+  function tr(k){ var v = T()[k]; return v !== undefined ? v : tEn(k); }
+
+  function setStatic(){
+    var dict = T();
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var k = el.getAttribute("data-i18n");
+      if (!el._en) el._en = el.textContent;
+      el.textContent = (dict[k] !== undefined && typeof dict[k] === "string") ? dict[k] : el._en;
+    });
+    document.documentElement.lang = lang === "en" ? "en" : lang;
+  }
+  sel.addEventListener("change", function(){
+    lang = sel.value;
+    try { localStorage.setItem("elc_page_language", lang); } catch(e){}
+    setStatic(); paintAll();
+  });
+
+  var PRACTICE = {
+    k_coords:[["Vocab Hub — quiz words","stem-vocab-hub.html#set=rev"]],
+    k_table:[["Quiz words revision","stem-vocab-revision.html"]],
+    k_grad_graph:[["Race to School","stem-commute.html"],["Gradient (Maths is Fun)","https://www.mathsisfun.com/gradient.html"]],
+    k_grad_pts:[["Equation of a line (Maths is Fun)","https://www.mathsisfun.com/equation_of_line.html"]],
+    k_yint:[["Equation of a line (Maths is Fun)","https://www.mathsisfun.com/equation_of_line.html"]],
+    k_eq:[["Race to School","stem-commute.html"],["Equation of a line","https://www.mathsisfun.com/equation_of_line.html"]],
+    k_sketch:[["GeoGebra graphing","https://www.geogebra.org/m/S8QhwdX6"]],
+    k_intersect:[["Race to School","stem-commute.html"]],
+    k_simult:[["GeoGebra graphing","https://www.geogebra.org/m/S8QhwdX6"]],
+    k_convert:[["Converting units (Transum)","https://www.transum.org/maths/activity/units/Default.asp?Level=1"]],
+    k_squares:[["Vocab Hub","stem-vocab-hub.html"]],
+    k_mult:[["Multiplication — timed practice","https://liaminhawai-cmd.github.io/Multiplication-tables/"]],
+    s_vectors:[["Race to School","stem-commute.html"],["Vocab Hub — motion words","stem-vocab-hub.html#set=kin1"]],
+    s_ptgraph:[["Race to School","stem-commute.html"]],
+    s_story:[["Race to School","stem-commute.html"]],
+    s_variables:[["Variables (ABS)","https://www.abs.gov.au/statistics/understanding-statistics/statistical-terms-and-concepts/variables"]],
+    s_lobf:[["Correlation (Maths is Fun)","https://www.mathsisfun.com/data/correlation.html"]],
+    s_excel:[["Correlation (Maths is Fun)","https://www.mathsisfun.com/data/correlation.html"]],
+    s_corr:[["Correlation (Maths is Fun)","https://www.mathsisfun.com/data/correlation.html"]],
+    s_report:[["Kinematics page — tasks","stem-kinematics.html"]],
+    b_dna:[["DNA basics (Learn.Genetics)","https://learn.genetics.utah.edu/content/basics/"]],
+    b_genlang:[["Vocab Hub — inheritance","stem-vocab-hub.html#set=bio2"]],
+    b_punnett:[["Learn.Genetics","https://learn.genetics.utah.edu/content/basics/"]],
+    b_pedigree:[["Biology page — tasks","stem-biology.html"]],
+    b_samplespace:[["Vocab Hub — probability","stem-vocab-hub.html#set=bio3"]],
+    b_tree:[["Biology page — tasks","stem-biology.html"]],
+    p_percent:[["Biology page — pandemic unit","stem-biology.html"]],
+    p_exp:[["Biology page — pandemic unit","stem-biology.html"]],
+    p_claims:[["Biology page — pandemic unit","stem-biology.html"]]
+  };
+
+  function fmtDate(d){
+    return new Date(d+"T12:00:00").toLocaleDateString(undefined,{day:"numeric",month:"short"});
+  }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+
+  function paintChips(){
+    var s = STEM.summary();
+    var v = STEM.Store.vocab(), words = 0;
+    Object.keys(v).forEach(function(k){ if (v[k].built || v[k].checked) words++; });
+    document.getElementById("chips").innerHTML =
+      "<div class='chipbox g'><b>"+(s.ahead+s.done)+"</b><span>"+tr("mastered")+"</span></div>"+
+      "<div class='chipbox w'><b>"+s.dueSoon+"</b><span>"+tr("dueSoon")+"</span></div>"+
+      "<div class='chipbox b'><b>"+s.behind+"</b><span>"+tr("behind")+"</span></div>"+
+      "<div class='chipbox'><b>"+s.upcoming+"</b><span>"+tr("upcoming")+"</span></div>"+
+      "<div class='chipbox'><b>"+words+"</b><span>"+tr("wordsBuilt")+"</span></div>";
+  }
+
+  function paintSched(){
+    var h="", todayShown=false;
+    STEM.CHECKPOINTS.forEach(function(c){
+      var days = STEM.daysUntil(c.date), cls, when;
+      if (c.status==="done"){ cls="done"; when="✓ "+tr("done"); }
+      else if (days<0){ cls="past"; when=tr("passed"); }
+      else if (days<=14){ cls="soon"; when="⏳ "+T().inDays(days); }
+      else { cls=""; when=T().inDays(days); }
+      if (!todayShown && c.status!=="done" && days>=0){ cls += " today"; todayShown=true;
+        when = "◀ "+tr("today")+" · "+when; }
+      h += "<div class='cp "+cls+"'><div class='date'>"+fmtDate(c.date)+"</div>"+
+           "<div class='name'>"+esc(c.short)+"</div><div class='when'>"+when+"</div></div>";
+    });
+    document.getElementById("sched").innerHTML = h;
+  }
+
+  function pillFor(st, cp){
+    var cls = st.timing==="ahead"||st.timing==="done" ? "g" :
+              st.timing==="dueSoon" ? "w" : st.timing==="behind" ? "b" : "u";
+    return "<span class='pill "+cls+"'>"+esc(cp.short)+" · "+fmtDate(cp.date)+"</span>";
+  }
+
+  function paintGrids(){
+    var bands = tr("bandsHead");
+    var h = "";
+    Object.keys(STEM.AREAS).forEach(function(areaId){
+      var rows = STEM.SKILLS.filter(function(s){ return s.area===areaId; });
+      if (!rows.length) return;
+      var a = STEM.AREAS[areaId];
+      h += "<h2>"+a.emoji+" "+esc(a.name)+"</h2><div class='tblwrap'><table><thead><tr>"+
+        "<th>"+esc(tr("skillCol"))+"</th><th>"+esc(bands[0])+"</th><th>"+esc(bands[1])+"</th>"+
+        "<th>"+esc(bands[2])+"</th><th>"+esc(tr("masterBy"))+"</th></tr></thead><tbody>";
+      rows.forEach(function(s){
+        var st = STEM.skillState(s);
+        var ev = "";
+        if (st.evidence){
+          var eList = STEM.Store.evidence()[s.id]||[];
+          var last = eList[eList.length-1];
+          ev = " <span class='ev' title='"+esc(tr("evTitle")+(last?last.detail:""))+"'>✦</span>";
+        }
+        h += "<tr data-skill='"+s.id+"'><td class='skill'>"+esc(s.name)+ev+
+             "<span class='cont'>"+esc(s.cont)+"</span></td>";
+        for (var b=0;b<3;b++){
+          var on = st.lv === b+1 ? " on" : "";
+          h += "<td class='band"+on+"' data-lv='"+(b+1)+"' role='button' tabindex='0'>"+esc(s.bands[b])+"</td>";
+        }
+        h += "<td class='due'>"+pillFor(st, st.checkpoint)+"</td></tr>";
+      });
+      h += "</tbody></table></div>";
+    });
+    var el = document.getElementById("grids");
+    el.innerHTML = h;
+    el.querySelectorAll("td.band").forEach(function(td){
+      function toggle(){
+        var id = td.parentNode.getAttribute("data-skill");
+        var lv = +td.getAttribute("data-lv");
+        var cur = (STEM.Store.skills()[id]||{}).lv || 0;
+        STEM.Store.setSkill(id, cur===lv ? 0 : lv);
+        paintAll();
+      }
+      td.addEventListener("click", toggle);
+      td.addEventListener("keydown", function(e){
+        if (e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(); } });
+    });
+  }
+
+  function paintNext(){
+    var items = [];
+    STEM.SKILLS.forEach(function(s){
+      var st = STEM.skillState(s);
+      if (st.timing==="behind" || st.timing==="dueSoon"){
+        items.push({ s:s, st:st, order: st.timing==="behind" ? 0 : 1 });
+      }
+    });
+    items.sort(function(a,b){ return a.order-b.order || a.st.daysLeft-b.st.daysLeft; });
+    var el = document.getElementById("next");
+    if (!items.length){ el.innerHTML = "<div class='nextrow' style='border-left-color:var(--good)'>🎉 "+esc(tr("nothing"))+"</div>"; return; }
+    var h="";
+    items.slice(0,8).forEach(function(it){
+      var cp = it.st.checkpoint;
+      var msg = it.st.timing==="behind" ? T().behindMsg(esc(cp.short))
+                                        : T().doBefore(esc(cp.short), fmtDate(cp.date));
+      var links = (PRACTICE[it.s.id]||[]).map(function(p){
+        var ext = /^http/.test(p[1]) ? " target='_blank' rel='noopener'" : "";
+        return "<a href='"+p[1]+"'"+ext+">"+esc(p[0])+"</a>";
+      }).join(" · ");
+      h += "<div class='nextrow "+(it.st.timing==="behind"?"behind":"")+"'>"+
+        "<b>"+esc(it.s.name)+"</b> — "+msg+
+        (links ? "<br><span style='font-size:.85rem'>"+esc(tr("practice"))+": "+links+"</span>" : "")+"</div>";
+    });
+    el.innerHTML = h;
+  }
+
+  function paintVocab(){
+    var el = document.getElementById("vocab");
+    if (!window.STEM_VOCAB_DATA){ el.innerHTML=""; return; }
+    var v = STEM.Store.vocab(), h="";
+    STEM_VOCAB_DATA.sets.forEach(function(set){
+      var built=0, checked=0;
+      set.words.forEach(function(w){
+        var s = v[w.w.toLowerCase()];
+        if (s && s.built) built++;
+        if (s && s.checked) checked++;
+      });
+      var pct = Math.round(100*built/Math.max(1,set.words.length));
+      h += "<div class='vrow'><span>"+esc(set.title)+"</span>"+
+        "<span class='bar'><i style='width:"+pct+"%'></i></span>"+
+        "<span style='color:var(--muted);font-size:.82rem'>"+built+"/"+set.words.length+tr("built")+" · "+checked+tr("checked")+"</span>"+
+        "<a href='stem-vocab-hub.html#set="+set.id+"' style='color:var(--accent);font-weight:600;text-decoration:none'>"+esc(tr("openSet"))+"</a></div>";
+    });
+    el.innerHTML = h;
+  }
+
+  document.getElementById("clearBtn").addEventListener("click", function(){
+    if (confirm(tr("confirmClear"))){ STEM.Store.clearAll(); paintAll(); }
+  });
+
+  function paintAll(){ paintChips(); paintSched(); paintGrids(); paintNext(); paintVocab(); }
+  setStatic();
+  paintAll();
+})();
+</script>
+</body>
+</html>

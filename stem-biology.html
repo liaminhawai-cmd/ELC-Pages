@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Biology — ELC STEM</title>
+<style>
+  :root {
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#0d9488; --accent-soft:#ccfbf1; --radius:14px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
+    --good:#2f6a3e; --good-soft:#e5f3e8; --warn:#b45309; --warn-soft:#fef3c7;
+    --bad:#a8432f; --bad-soft:#fde8e4;
+    /* solid-button pair — kept readable in both colour schemes */
+    --btn-bg:#0f766e; --btn-ink:#fff;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#fff; --muted:#c7d0e2; --line:#34405b;
+            --accent:#2dd4bf; --accent-soft:#134e4a; --shadow:0 1px 2px rgba(0,0,0,.4);
+            --good:#93cf9b; --good-soft:#1d3323; --warn:#fbbf24; --warn-soft:#3a2f12;
+            --bad:#e8836f; --bad-soft:#3b201a;
+            --btn-bg:#2dd4bf; --btn-ink:#06231f; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); overflow-x:hidden;
+         font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:1020px; margin:0 auto; padding:16px 16px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600;
+           display:inline-flex; align-items:center; min-height:40px; }
+  .top a:hover { text-decoration:underline; }
+  select.language-select { font:inherit; border-radius:10px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); padding:8px 10px; min-height:40px; }
+  .hero { border-radius:18px; padding:20px; color:#fff;
+    background:linear-gradient(135deg,#047857,#0d9488 55%,#2563eb); box-shadow:var(--shadow); }
+  .hero .eyebrow { text-transform:uppercase; letter-spacing:.12em; font-size:.72rem; opacity:.9; }
+  .hero h1 { margin:.2em 0 .25em; font-family:Georgia,"Times New Roman",serif; font-size:1.6rem; }
+  .hero p { margin:0; font-size:.95rem; max-width:62ch; }
+  h2 { font-size:1.15rem; margin:28px 0 6px; }
+  h3 { font-size:1rem; margin:22px 0 6px; }
+  p.lead { margin:0 0 12px; color:var(--muted); font-size:.92rem; max-width:66ch; }
+  p.lead b { color:var(--ink); }
+  /* unit banner */
+  .unit { margin-top:30px; border-radius:16px; border:1px solid var(--line); background:var(--card);
+    box-shadow:var(--shadow); padding:16px 16px 18px; }
+  .unit > h2 { margin-top:0; font-family:Georgia,"Times New Roman",serif; font-size:1.3rem;
+    border-bottom:3px solid var(--accent); padding-bottom:8px; display:inline-block; }
+
+  /* ---- checkpoint strip ---- */
+  .sched { display:flex; gap:10px; overflow-x:auto; padding:4px 2px 10px; }
+  .cp { min-width:168px; background:var(--card); border:1px solid var(--line); border-radius:12px;
+        padding:10px 12px; box-shadow:var(--shadow); }
+  .cp .date { font-size:.78rem; color:var(--muted); }
+  .cp .name { font-weight:700; font-size:.9rem; margin:2px 0; }
+  .cp .when { font-size:.8rem; font-weight:600; }
+  .cp .desc { font-size:.75rem; color:var(--muted); margin-top:4px; }
+  .cp.done { opacity:.7; } .cp.done .when { color:var(--good); }
+  .cp.soon .when { color:var(--warn); }
+  .cp.past .when { color:var(--bad); }
+  .cp.next { border-color:var(--accent); border-width:2px; }
+  .cp.next .name { color:var(--accent); }
+
+  /* ---- vocab set cards ---- */
+  .vgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(228px,1fr)); gap:12px; }
+  .vcard { display:flex; flex-direction:column; gap:6px; background:var(--card); border:1px solid var(--line);
+    border-radius:var(--radius); padding:14px; text-decoration:none; color:inherit; box-shadow:var(--shadow);
+    transition:transform .12s ease, border-color .12s ease; }
+  .vcard:hover { transform:translateY(-2px); border-color:var(--accent); }
+  .vcard h4 { margin:0; font-size:1rem; font-family:Georgia,"Times New Roman",serif; }
+  .vcard .focus { margin:0; color:var(--muted); font-size:.85rem; flex:1; }
+  .vcard .counts { font-size:.78rem; color:var(--muted); }
+  .vcard .open { color:var(--accent); font-weight:600; font-size:.85rem; }
+  .bar { height:9px; border-radius:999px; background:var(--bg); border:1px solid var(--line); overflow:hidden; }
+  .bar i { display:block; height:100%; background:var(--accent); }
+  .bigbtn { display:inline-flex; align-items:center; min-height:44px; margin-top:14px;
+    border-radius:999px; border:1px solid var(--btn-bg); background:var(--btn-bg); color:var(--btn-ink);
+    padding:8px 20px; font-weight:700; text-decoration:none; font-size:.95rem; }
+  .bigbtn:hover { filter:brightness(1.08); }
+
+  /* ---- skill rows ---- */
+  .hubcount { font-size:.85rem; color:var(--muted); margin:0 0 10px; }
+  .srow { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:13px 14px; box-shadow:var(--shadow); margin-bottom:10px; }
+  .srow .head { display:flex; flex-wrap:wrap; gap:8px; align-items:flex-start; }
+  .srow .nm { font-weight:600; flex:1 1 180px; min-width:0; font-size:.95rem; }
+  .srow .cont { display:block; font-weight:400; font-size:.73rem; color:var(--muted); margin-top:2px; }
+  .pill { display:inline-block; border-radius:999px; padding:3px 11px; font-size:.75rem;
+    font-weight:700; white-space:nowrap; }
+  .pill.g { background:var(--good-soft); color:var(--good); }
+  .pill.w { background:var(--warn-soft); color:var(--warn); }
+  .pill.b { background:var(--bad-soft); color:var(--bad); }
+  .pill.u { background:var(--bg); color:var(--muted); border:1px solid var(--line); }
+  .ev { color:var(--accent); font-weight:700; cursor:help; }
+  .seg { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; margin-top:11px; }
+  .seg button { min-height:44px; border-radius:10px; border:1px solid var(--line); background:var(--bg);
+    color:var(--muted); font:inherit; font-size:.82rem; font-weight:600; cursor:pointer; padding:6px 6px; }
+  .seg button:hover { border-color:var(--accent); color:var(--ink); }
+  .seg button.on { background:var(--accent-soft); border-color:var(--accent); color:var(--ink);
+    box-shadow:inset 0 0 0 2px var(--accent); }
+  @media (min-width:620px) { .seg { grid-template-columns:repeat(4,1fr); } }
+  .srow details { margin-top:8px; border-top:1px dashed var(--line); }
+  .srow summary { cursor:pointer; font-size:.85rem; color:var(--accent); font-weight:600;
+    list-style:none; padding:9px 0 7px; min-height:40px; line-height:24px; }
+  .srow summary::-webkit-details-marker { display:none; }
+  .srow summary::before { content:"▸"; margin-right:6px; }
+  .srow details[open] summary::before { content:"▾"; }
+  .bands { display:grid; gap:8px; margin:2px 0 8px; }
+  @media (min-width:720px) { .bands { grid-template-columns:repeat(3,1fr); } }
+  .band { border:1px solid var(--line); border-radius:10px; padding:9px 11px; font-size:.85rem;
+    background:var(--bg); }
+  .band b { display:block; font-size:.7rem; text-transform:uppercase; letter-spacing:.05em;
+    color:var(--muted); margin-bottom:3px; }
+  .band.on { background:var(--good-soft); box-shadow:inset 0 0 0 2px var(--good); }
+  .prac { font-size:.85rem; color:var(--muted); margin:0 0 4px; }
+  .prac a { color:var(--accent); font-weight:600; text-decoration:none;
+    display:inline-block; padding:6px 0; }
+  .prac a:hover { text-decoration:underline; }
+
+  /* ---- worked examples + checks ---- */
+  .wex { background:var(--card); border:1px solid var(--line); border-left:5px solid var(--accent);
+    border-radius:12px; padding:16px; box-shadow:var(--shadow); margin-bottom:14px; }
+  .wex h4 { margin:0 0 8px; font-size:1rem; }
+  .wex p { margin:0 0 8px; font-size:.92rem; }
+  .quote { background:var(--warn-soft); color:var(--ink); border-radius:10px; padding:10px 12px;
+    font-style:italic; margin:8px 0; font-size:.92rem; }
+  .steps { margin:8px 0; padding-left:20px; font-size:.92rem; }
+  .steps li { margin-bottom:4px; }
+  .rule { background:var(--good-soft); color:var(--ink); border-radius:10px; padding:10px 12px;
+    margin:10px 0 0; font-weight:600; font-size:.92rem; }
+  .tblwrap { overflow-x:auto; border:1px solid var(--line); border-radius:10px; margin:10px 0;
+    background:var(--bg); }
+  table.gt { border-collapse:collapse; width:100%; min-width:330px; font-size:.85rem; }
+  table.gt th, table.gt td { border-bottom:1px solid var(--line); border-right:1px solid var(--line);
+    padding:7px 9px; text-align:center; white-space:nowrap; }
+  table.gt th { color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.04em; }
+  table.gt th:first-child, table.gt td:first-child { text-align:left; font-weight:600; }
+  table.gt tr:last-child td { border-bottom:0; }
+  table.gt th:last-child, table.gt td:last-child { border-right:0; }
+
+  .check { margin-top:14px; border-top:1px dashed var(--line); padding-top:12px; }
+  #claimcheck .check { margin-top:0; border-top:0; padding-top:0; }
+  .check h5 { margin:0 0 8px; font-size:.9rem; }
+  .cq { margin-bottom:16px; }
+  .cq p.q { margin:0 0 8px; font-size:.92rem; font-weight:600; }
+  .opts { display:flex; flex-direction:column; gap:8px; }
+  .opt { text-align:left; min-height:44px; border-radius:10px; border:1px solid var(--line);
+    background:var(--bg); color:var(--ink); padding:10px 12px; font:inherit; font-size:.88rem;
+    cursor:pointer; }
+  .opt:hover { border-color:var(--accent); }
+  .opt.right { border-color:var(--good); background:var(--good-soft); }
+  .opt.wrong { border-color:var(--bad); background:var(--bad-soft); }
+  .opt:disabled { cursor:default; opacity:1; color:var(--ink); }
+  .exp { font-size:.85rem; color:var(--muted); margin:8px 0 0; border-left:3px solid var(--line);
+    padding-left:10px; }
+  .exp.hidden { display:none; }
+  .result { margin:8px 0 0; font-weight:700; font-size:.9rem; }
+  .result.win { color:var(--good); }
+  .retry { min-height:40px; border-radius:999px; border:1px solid var(--accent); background:none;
+    color:var(--accent); font:inherit; font-weight:600; padding:6px 16px; cursor:pointer; margin-top:8px; }
+
+  /* ---- tasks ---- */
+  .task { background:var(--card); border:1px solid var(--line); border-left:5px solid var(--accent);
+    border-radius:12px; padding:14px; box-shadow:var(--shadow); margin-bottom:10px; }
+  .task h4 { margin:0 0 4px; font-size:1rem; }
+  .task p.what { margin:0 0 8px; font-size:.9rem; color:var(--muted); }
+  .tagrow { display:flex; flex-wrap:wrap; gap:6px; align-items:center; margin-top:8px; }
+  .tag { border-radius:999px; background:var(--bg); border:1px solid var(--line); padding:3px 10px;
+    font-size:.74rem; color:var(--muted); }
+  .golink { display:inline-flex; align-items:center; min-height:40px; color:var(--accent);
+    font-weight:600; text-decoration:none; font-size:.9rem; }
+  .golink:hover { text-decoration:underline; }
+  .schoolonly { display:inline-flex; align-items:center; min-height:40px; color:var(--muted);
+    font-weight:600; text-decoration:none; border-bottom:1px dotted var(--muted); font-size:.9rem; }
+  .schoolmsg { font-size:.8rem; color:var(--muted); margin:4px 0 0; display:none; }
+  .schoolmsg.show { display:block; }
+  .locknote { font-size:.8rem; color:var(--muted); margin:2px 0 0; }
+
+  .note { margin-top:26px; color:var(--muted); font-size:.85rem; }
+  footer { margin-top:26px; color:var(--muted); font-size:.85rem; }
+  /* small phones: claw back the nested padding so text keeps a sensible width */
+  @media (max-width:520px) {
+    .unit { padding:12px 10px 14px; border-radius:12px; }
+    .wex { padding:13px 12px; }
+    .task { padding:12px; }
+    .srow { padding:12px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="stem.html" data-i18n="back">← STEM Hub</a>
+    <select class="language-select" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+    </select>
+  </div>
+
+  <div class="hero">
+    <div class="eyebrow" data-i18n="eyebrow">Term 4 · Maths and Science together</div>
+    <h1>🧬 <span data-i18n="title">Biology</span></h1>
+    <p data-i18n="sub">Two units, one skill: reading the maths inside the science. Unit 1 is inheritance and
+      the probability behind it. Unit 2 is the pandemic — and checking the numbers behind the news.</p>
+  </div>
+
+  <h2 data-i18n="schedHead">📅 Master by these dates</h2>
+  <p class="lead" data-i18n="schedLead">These are the five checkpoints for Term 4. Every skill and task below
+    shows the date it belongs to.</p>
+  <div class="sched" id="sched"></div>
+
+  <!-- ================= UNIT 1 ================= -->
+  <section class="unit">
+    <h2 data-i18n="u1Head">🧬 Unit 1 · Genetics</h2>
+    <p class="lead">A <span data-v>gene</span> is a short section of <span data-v="dna">DNA</span>, stored on a
+      <span data-v>chromosome</span> inside the <span data-v>nucleus</span> of a <span data-v>cell</span>.
+      You get one copy of most genes from each <span data-v>parent</span>. Different versions of the same gene
+      are called <span data-v>allele</span>s. The pair you carry is your <span data-v>genotype</span>;
+      what you actually show is your <span data-v>phenotype</span>. A
+      <span data-v="Punnett square">Punnett square</span> is a table for listing every possible
+      <span data-v>combination</span> of alleles from two parents, so you can find the
+      <span data-v>probability</span> of each <span data-v>outcome</span>.</p>
+
+    <h3 data-i18n="vocabHead">📓 Vocab hub</h3>
+    <div class="vgrid" id="vsets1"></div>
+    <a class="bigbtn" href="stem-vocab-hub.html" data-i18n="hubBtn">📓 Open the full Vocab Hub →</a>
+
+    <h3 data-i18n="bioSkillsHead">🧪 Genetics skills</h3>
+    <p class="lead"><b data-i18n="selfHintA">Tap the level that is true for you today.</b>
+      <span data-i18n="selfHintB">It saves on this device and shows on your report. Open a row to see what
+      each level looks like, and where to practise.</span></p>
+    <p class="hubcount" id="bioCount"></p>
+    <div id="bioRows"></div>
+
+    <h3 data-i18n="tasks1Head">🎯 Unit 1 tasks</h3>
+    <p class="lead" data-i18n="tasksLead">Finish each task before the date on its chip. 🔒 means you need your
+      school login — open Compass or the class OneNote.</p>
+    <div id="tasks1"></div>
+  </section>
+
+  <!-- ================= UNIT 2 ================= -->
+  <section class="unit">
+    <h2 data-i18n="u2Head">🦠 Unit 2 · Pandemic — data literacy</h2>
+    <p class="lead">A <span data-v>pandemic</span> has spread across many countries. An
+      <span data-v>epidemic</span> is a fast rise in one area. An <span data-v>endemic</span> disease is always
+      there, at a steady level. Behind every headline there is a <span data-v>claim</span>, and behind the claim
+      there should be <span data-v>evidence</span>. Your job is to check the maths. Most
+      <span data-v>misleading</span> claims break one of two rules: how to combine a
+      <span data-v>percentage</span>, and the difference between a steady <span data-v>rate</span> and
+      <span data-v>exponential</span> growth.</p>
+
+    <h3 data-i18n="panVocabHead">📓 Pandemic words</h3>
+    <div class="vgrid" id="vsets2"></div>
+
+    <h3 data-i18n="wexHead">🧮 Two traps in the news</h3>
+
+    <div class="wex" id="percent">
+      <h4>Trap 1 — protection does not add up</h4>
+      <p>An article says:</p>
+      <p class="quote">“Masks stop 50% of infections. The vaccine stops 60%. Together that is 110% protection.”</p>
+      <p>Nothing can be more than 100% protected, so this <span data-v>claim</span> is
+        <span data-v>misleading</span>. Here is the correct working. Do not think about the protection —
+        think about the <b>risk that is left</b>.</p>
+      <ol class="steps">
+        <li>50% protection leaves 0.5 of the risk.</li>
+        <li>60% protection leaves 0.4 of that risk.</li>
+        <li>0.5 × 0.4 = 0.2, so 20% of the risk is left.</li>
+        <li>100% − 20% = <b>80% is stopped</b>.</li>
+      </ol>
+      <p class="rule">Rule: multiply what is left, then take it off 100%. Never add two
+        <span data-v>percentage</span>s of protection.</p>
+      <div class="check" id="checkPercent"></div>
+    </div>
+
+    <div class="wex" id="growth">
+      <h4>Trap 2 — steady growth is not the same as doubling</h4>
+      <p>Two towns report new <span data-v>infection</span>s. Both start with 10 cases on day 1.</p>
+      <div class="tblwrap">
+        <table class="gt">
+          <thead><tr><th>Town</th><th>Day 1</th><th>Day 2</th><th>Day 3</th><th>Day 4</th><th>Day 10</th></tr></thead>
+          <tbody>
+            <tr><td>A: + 10 a day</td><td>10</td><td>20</td><td>30</td><td>40</td><td>100</td></tr>
+            <tr><td>B: × 2 a day</td><td>10</td><td>20</td><td>40</td><td>80</td><td>5120</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p>Town A grows in a <span data-v>linear</span> way — it adds the <b>same number</b> every day.
+        Town B grows in an <span data-v>exponential</span> way — it <b>multiplies</b> by the same number
+        every day. On day 1 and day 2 the two towns look the same. By day 10, Town A has 100 cases and
+        Town B has 5120 — about 51 times as many.</p>
+      <p class="rule">Rule: check whether the numbers go up by <b>+ the same</b> or by <b>× the same</b>.
+        A doubling <span data-v>trend</span> is not a steady <span data-v>rate</span>.</p>
+      <div class="check" id="checkGrowth"></div>
+    </div>
+
+    <h3 data-i18n="claimHead">🕵️ Check a claim</h3>
+    <p class="lead">Four claims of the kind you meet in the articles task. Find what is wrong with each one.
+      Get all four right first time and it goes on your report.</p>
+    <div class="wex" id="claimcheck">
+      <div class="check" id="checkClaims"></div>
+    </div>
+
+    <h3 data-i18n="panSkillsHead">📊 Data-literacy skills</h3>
+    <p class="hubcount" id="panCount"></p>
+    <div id="panRows"></div>
+
+    <h3 data-i18n="tasks2Head">🎯 Unit 2 tasks</h3>
+    <p class="lead" data-i18n="tasksLead">Finish each task before the date on its chip. 🔒 means you need your
+      school login — open Compass or the class OneNote.</p>
+    <div id="tasks2"></div>
+  </section>
+
+  <p class="note" data-i18n="privacy">🔒 Anonymous. Your levels, your words and your practice are stored in
+    this browser only — no accounts, no tracking, nothing sent anywhere. Clearing your browser data clears them.
+    Worksheets and booklets stay on Compass and the class OneNote (school login needed).</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+</div>
+
+<script src="stem-vocab-data.js?v=20260821-1"></script>
+<script src="stem-shared.js?v=20260821-1"></script>
+<script src="stem-vocab.js?v=20260821-1"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ===================================================================
+     ===== CONTENT — teachers edit here ================================
+     ===================================================================
+     1. SCHOOL_LINKS — the school-login files. They are "#" on purpose:
+        paste the real Compass / OneNote link between the quotes and the
+        task card starts working. Anything still "#" shows a 🔒 note.
+     2. CHECKPOINT_IDS / VOCAB_SETS_* — which checkpoints and vocab sets
+        this page shows. Ids come from stem-shared.js and
+        stem-vocab-data.js.
+     3. PRACTICE — the "where do I practise this?" links per skill id.
+     4. TASKS_U1 / TASKS_U2 — the task cards.
+     5. CHECK_* — the practice questions in the pandemic unit. Change the
+        wording freely; keep exactly one option matching "a".
+     Nothing below the "end CONTENT" line needs editing.
+     =================================================================== */
+
+  var SCHOOL_LINKS = {
+    traits:   "#",   /* Traits booklet (Compass) */
+    bones:    "#",   /* Mystery Bones project brief (Compass) */
+    articles: "#"    /* The four articles task (Compass) */
+  };
+
+  var CHECKPOINT_IDS = ["cp_probpre", "cp_traits", "cp_biocat", "cp_bones", "cp_pan"];
+  var VOCAB_SETS_U1  = ["bio1", "bio2", "bio3"];
+  var VOCAB_SETS_U2  = ["pan"];
+
+  var LINK = {
+    genetics: "https://learn.genetics.utah.edu/content/basics/",
+    phet:     "https://phet.colorado.edu/sims/html/natural-selection/latest/natural-selection_all.html",
+    ep:       "https://www.educationperfect.com/",
+    corr:     "https://www.mathsisfun.com/data/correlation.html",
+    abs:      "https://www.abs.gov.au/statistics/understanding-statistics/statistical-terms-and-concepts/variables"
+  };
+
+  var PRACTICE = {
+    b_dna:         [["DNA basics (Learn.Genetics)", LINK.genetics],
+                    ["Vocab Hub — cells & DNA", "stem-vocab-hub.html#set=bio1"]],
+    b_genlang:     [["Vocab Hub — inheritance words", "stem-vocab-hub.html#set=bio2"],
+                    ["Natural selection (PhET)", LINK.phet]],
+    b_punnett:     [["Learn.Genetics basics", LINK.genetics],
+                    ["Vocab Hub — probability words", "stem-vocab-hub.html#set=bio3"]],
+    b_pedigree:    [["Learn.Genetics basics", LINK.genetics],
+                    ["Vocab Hub — inheritance words", "stem-vocab-hub.html#set=bio2"]],
+    b_samplespace: [["Vocab Hub — probability words", "stem-vocab-hub.html#set=bio3"]],
+    b_tree:        [["Vocab Hub — probability words", "stem-vocab-hub.html#set=bio3"]],
+    p_percent:     [["Worked example on this page", "#percent"],
+                    ["Vocab Hub — pandemic words", "stem-vocab-hub.html#set=pan"]],
+    p_exp:         [["Worked example on this page", "#growth"],
+                    ["Vocab Hub — pandemic words", "stem-vocab-hub.html#set=pan"]],
+    p_claims:      [["Check a claim, on this page", "#claimcheck"],
+                    ["Correlation is not causation (Maths is Fun)", LINK.corr],
+                    ["What is a variable? (ABS)", LINK.abs]]
+  };
+
+  var TASKS_U1 = [
+    { emoji:"📕", title:"Traits booklet",
+      what:"The inheritance booklet: alleles, dominant and recessive, genotype and phenotype, Punnett squares. Finish every page, then mark it and fix your mistakes.",
+      skills:["b_genlang","b_punnett","b_dna"], cp:"cp_traits",
+      link:{ label:"Open the booklet on Compass", school:"traits" } },
+
+    { emoji:"💻", title:"Education Perfect tasks",
+      what:"Log in and finish the tasks your teacher has set. Any question you get wrong, do it again until it is right.",
+      skills:["b_dna","b_genlang"], cp:"cp_traits",
+      link:{ label:"Open Education Perfect ↗", href:LINK.ep },
+      note:"🔒 You need your class code — ask your teacher." },
+
+    { emoji:"🧬", title:"Punnett square practice",
+      what:"Read the Genetics basics pages. Then draw five Punnett squares of your own: two parents, one trait each time. Write the genotype ratio AND the phenotype ratio under each square.",
+      skills:["b_punnett","b_samplespace","b_genlang"], cp:"cp_traits",
+      link:{ label:"Open Learn.Genetics ↗", href:LINK.genetics } },
+
+    { emoji:"🦴", title:"Mystery Bones project",
+      what:"Measure the bones, put the numbers in Excel, add a trendline to each scatterplot. Compare the R² values — the graph with R² closest to 1 is the best predictor. Use that one to estimate the height.",
+      skills:["s_lobf","s_excel","s_corr"], cp:"cp_bones",
+      link:{ label:"Open the project brief on Compass", school:"bones" } },
+
+    { emoji:"🐦", title:"Natural selection simulation",
+      what:"Run the simulation. Change ONE thing — the environment, the wolves, or the food — and watch which trait becomes common. Write two sentences: what changed, and which allele won.",
+      skills:["b_genlang","b_dna"], cp:"cp_biocat",
+      link:{ label:"Open the PhET simulation ↗", href:LINK.phet } }
+  ];
+
+  var TASKS_U2 = [
+    { emoji:"📰", title:"The four articles task",
+      what:"Four opinion articles about the pandemic. For each one: find the claim, find the number behind it, redo the maths yourself, then write whether the claim is fair — and why.",
+      skills:["p_claims","p_percent","p_exp"], cp:"cp_pan",
+      link:{ label:"Open the task on Compass", school:"articles" } },
+
+    { emoji:"🕵️", title:"Check a claim — practice",
+      what:"Four claims on this page, in the same style as the articles. Decide what is wrong with each one. All four right first time and this skill goes on your report.",
+      skills:["p_claims"], cp:"cp_pan",
+      link:{ label:"Go to the practice ↑", href:"#claimcheck" } }
+  ];
+
+  /* --- pandemic practice questions. "a" must match one option exactly. --- */
+  var CHECK_PERCENT = {
+    host:"checkPercent", skill:"p_percent", detail:"3/3 — combining percentages",
+    title:"Your turn — three quick ones",
+    qs:[
+      { q:"A mask stops 40% of the risk. A vaccine stops 75% of the risk that is left. What percentage of the risk is still there?",
+        opts:["15%","35%","85%","115%"], a:"15%",
+        explain:"40% protection leaves 0.6 of the risk. 75% protection leaves 0.25 of that. 0.6 × 0.25 = 0.15, so 15% of the risk is left (85% is stopped)." },
+      { q:"Two protections each stop 50% of the risk that is there. How much risk is left after both?",
+        opts:["0%","25%","50%","100%"], a:"25%",
+        explain:"0.5 × 0.5 = 0.25, so 25% of the risk is left and 75% is stopped. Two 50% protections never make 100%." },
+      { q:"An article says: “Handwashing stops 30% of infections and distancing stops 40%, so together they stop 70%.” What is the real figure?",
+        opts:["58%","70%","12%","100%"], a:"58%",
+        explain:"0.7 × 0.6 = 0.42, so 42% of the risk is left. 100% − 42% = 58% stopped, not 70%." }
+    ]
+  };
+
+  var CHECK_GROWTH = {
+    host:"checkGrowth", skill:"p_exp", detail:"3/3 — linear vs exponential growth",
+    title:"Your turn — three quick ones",
+    qs:[
+      { q:"A town records 5, 10, 20 and 40 new cases on four days. Which model fits?",
+        opts:["Exponential: × 2 each day","Linear: + 5 each day","Linear: + 10 each day","No pattern at all"],
+        a:"Exponential: × 2 each day",
+        explain:"Each day is double the day before: 5 × 2 = 10, 10 × 2 = 20, 20 × 2 = 40. Multiplying by the same number is exponential growth." },
+      { q:"Same town, same doubling. Day 4 is 40 cases. How many on day 7?",
+        opts:["320","120","160","640"], a:"320",
+        explain:"Day 5 = 80, day 6 = 160, day 7 = 320. That is three more doublings: 40 × 2 × 2 × 2 = 320." },
+      { q:"Which list shows linear growth?",
+        opts:["3, 6, 9, 12","3, 6, 12, 24","3, 9, 27, 81","3, 5, 9, 17"], a:"3, 6, 9, 12",
+        explain:"Linear growth adds the same number every time: + 3, + 3, + 3. The others multiply (× 2, × 3), or the jump itself keeps doubling (+ 2, + 4, + 8)." }
+    ]
+  };
+
+  var CHECK_CLAIMS = {
+    host:"checkClaims", skill:"p_claims", detail:"4/4 — checking claims against the data",
+    title:"Four claims — what is wrong?",
+    qs:[
+      { q:"“Masks are 50% effective and the vaccine is 60% effective, so together you are 110% protected.” What is wrong?",
+        opts:["You cannot be more than 100% protected. Multiply the risk that is left: 0.5 × 0.4 = 0.2, so 80% is stopped.",
+              "Nothing is wrong — you add the two percentages.",
+              "You should take the average of the two numbers: 55%.",
+              "The mask number is too small to matter."],
+        a:"You cannot be more than 100% protected. Multiply the risk that is left: 0.5 × 0.4 = 0.2, so 80% is stopped.",
+        explain:"Protections do not add. Each one removes part of the risk that is still there. 0.5 × 0.4 = 0.2 → 20% of the risk is left → 80% stopped." },
+      { q:"Cases were 10, 20, 40 and 80 on days 1 to 4. The article says “the rise is steady — about 23 more cases each day.” Is that fair?",
+        opts:["No. The jump gets bigger every day: + 10, then + 20, then + 40. That is exponential, not steady.",
+              "Yes. Going from 10 to 80 in three days is about 23 a day.",
+              "No. The cases were going down.",
+              "You cannot say anything without seeing a graph."],
+        a:"No. The jump gets bigger every day: + 10, then + 20, then + 40. That is exponential, not steady.",
+        explain:"Steady (linear) growth adds the same number each day. Here the number added doubles each day. The average of 23 hides how fast it is really growing." },
+      { q:"“Deaths were 90% lower in vaccinated people, but 60% of the people who died were vaccinated. So the vaccine does not work.” Why can both numbers be true?",
+        opts:["If almost everyone is vaccinated, most people who die will be vaccinated — even when each person's risk is much lower. Compare rates, not raw counts.",
+              "One of the two numbers must be a lie.",
+              "60% is bigger than 90%, so the vaccine failed.",
+              "You should add 90% and 60% together."],
+        a:"If almost everyone is vaccinated, most people who die will be vaccinated — even when each person's risk is much lower. Compare rates, not raw counts.",
+        explain:"This is a baseline problem. If 95 people in every 100 are vaccinated and the vaccine cuts the risk by 90%, you still expect about 65% of the deaths to be in vaccinated people — there are simply far more of them. Compare deaths per 100 000 in each group." },
+      { q:"A graph starts its y-axis at 950 instead of 0. The line looks almost vertical and the headline says “cases explode”. What should you check first?",
+        opts:["Read the numbers on the axis. Cases went 960 → 1000: a rise of about 4%. The steep line comes from the cut axis.",
+              "Nothing — a graph cannot lie.",
+              "The colour of the line.",
+              "Whether the article has photographs."],
+        a:"Read the numbers on the axis. Cases went 960 → 1000: a rise of about 4%. The steep line comes from the cut axis.",
+        explain:"A y-axis that does not start at zero makes a small change look enormous. 40 more cases out of 960 is about 4%. Read the axis before you believe the shape." }
+    ]
+  };
+
+  /* ===== end CONTENT — code below ===================================== */
+
+  if (window.STEMVOCAB) STEMVOCAB.init();
+
+  var PAGE_SRC = "biology";
+
+  /* ---------- i18n (chrome strings only; body text stays plain English) ---------- */
+  var COPY = {
+    en: {
+      bands:["Working towards","At the standard","Above the standard"],
+      levels:["Not yet","Getting there","Got it","I could teach it"],
+      detailsLabel:"What each level looks like · where to practise",
+      practice:"Practise here",
+      masterBy:"Master by", everyLesson:"Every lesson", skillsYours:"you have these skills",
+      built:"built", checked:"checked", openSet:"open the set →",
+      done:"done", passed:"passed", nextUp:"NEXT",
+      inDays:function(n){ return "in " + n + " days"; },
+      countLine:function(a,b){ return a + " of " + b + " skills at 'Got it' or better."; },
+      evTitle:"Proved in a practice activity: ",
+      schoolNote:"School login needed",
+      schoolMsg:"Your teacher is adding this link. For now: open Compass (or the class OneNote) and search for the file name.",
+      tryAgain:"↻ Try these again",
+      resultWin:"✦ All right, first time. This is now on your progress report.",
+      resultDone:"✓ All right. Well done.",
+      resultPartial:function(n,t){ return "You got " + n + " of " + t + " right first time. Try them again to prove this skill."; }
+    },
+    "zh-Hans": {
+      back:"← STEM 主页", eyebrow:"第四学期 · 数学与科学一起学", title:"生物",
+      sub:"两个单元，一项能力：读懂科学里的数学。单元 1 是遗传，以及它背后的概率。单元 2 是疫情——检查新闻背后的数字。",
+      schedHead:"📅 掌握截止日期",
+      schedLead:"这是第四学期的五个检查点。下面每一项技能和任务都会显示它对应的日期。",
+      u1Head:"🧬 单元 1 · 遗传", u2Head:"🦠 单元 2 · 疫情——数据素养",
+      vocabHead:"📓 词汇中心", hubBtn:"📓 打开完整词汇中心 →",
+      bioSkillsHead:"🧪 遗传技能", panSkillsHead:"📊 数据素养技能",
+      panVocabHead:"📓 疫情词汇", wexHead:"🧮 新闻里的两个陷阱", claimHead:"🕵️ 检查一个说法",
+      tasks1Head:"🎯 单元 1 任务", tasks2Head:"🎯 单元 2 任务",
+      selfHintA:"点选今天最符合你的等级。",
+      selfHintB:"它保存在这台设备上，并显示在你的报告里。打开一行可以看到每个等级的样子，以及去哪里练习。",
+      tasksLead:"在标签上的日期之前完成每项任务。🔒 表示需要学校账号登录——请打开 Compass 或班级 OneNote。",
+      privacy:"🔒 匿名。你的等级、单词和练习只保存在这个浏览器中——没有账号，没有追踪，不会发送到任何地方。清除浏览器数据也会清除它们。学习单和小册子在 Compass 和班级 OneNote 上（需要学校账号登录）。",
+      bands:["努力达标中","达到标准","超越标准"],
+      levels:["还不会","快会了","会了","我能教别人"],
+      detailsLabel:"每个等级什么样 · 去哪里练习",
+      practice:"在这里练习",
+      masterBy:"截止", everyLesson:"每节课", skillsYours:"这些技能你已经掌握",
+      built:"已构建", checked:"已检查", openSet:"打开这组 →",
+      done:"完成", passed:"已过去", nextUp:"下一个",
+      inDays:function(n){ return n + " 天后"; },
+      countLine:function(a,b){ return "共 " + b + " 项技能，你有 " + a + " 项达到“会了”或以上。"; },
+      evTitle:"在练习活动中已证明：",
+      schoolNote:"需要学校账号登录",
+      schoolMsg:"老师正在添加这个链接。现在请打开 Compass（或班级 OneNote）搜索文件名。",
+      tryAgain:"↻ 再做一次",
+      resultWin:"✦ 第一次就全对。这已经记入你的进度报告。",
+      resultDone:"✓ 全对，很好。",
+      resultPartial:function(n,t){ return "你第一次做对了 " + n + " / " + t + " 题。再做一次来证明这项技能。"; }
+    },
+    "zh-Hant": {
+      back:"← STEM 主頁", eyebrow:"第四學期 · 數學與科學一起學", title:"生物",
+      sub:"兩個單元，一項能力：讀懂科學裡的數學。單元 1 是遺傳，以及它背後的機率。單元 2 是疫情——檢查新聞背後的數字。",
+      schedHead:"📅 精熟截止日期",
+      schedLead:"這是第四學期的五個檢查點。下面每一項技能和任務都會顯示它對應的日期。",
+      u1Head:"🧬 單元 1 · 遺傳", u2Head:"🦠 單元 2 · 疫情——數據素養",
+      vocabHead:"📓 詞彙中心", hubBtn:"📓 打開完整詞彙中心 →",
+      bioSkillsHead:"🧪 遺傳技能", panSkillsHead:"📊 數據素養技能",
+      panVocabHead:"📓 疫情詞彙", wexHead:"🧮 新聞裡的兩個陷阱", claimHead:"🕵️ 檢查一個說法",
+      tasks1Head:"🎯 單元 1 任務", tasks2Head:"🎯 單元 2 任務",
+      selfHintA:"點選今天最符合你的等級。",
+      selfHintB:"它會存在這台裝置上，也會顯示在你的報告裡。打開一列就能看到每個等級的樣子，以及去哪裡練習。",
+      tasksLead:"在標籤上的日期之前完成每一項任務。🔒 表示需要學校帳號登入——請打開 Compass 或班級 OneNote。",
+      privacy:"🔒 匿名。你的等級、單字和練習只儲存在這個瀏覽器中——沒有帳號、沒有追蹤，不會送到任何地方。清除瀏覽器資料也會一併清除。學習單和小冊子放在 Compass 和班級 OneNote 上（需要學校帳號登入）。",
+      bands:["努力達標中","達到標準","超越標準"],
+      levels:["還不會","快會了","會了","我可以教別人"],
+      detailsLabel:"每個等級長什麼樣 · 去哪裡練習",
+      practice:"在這裡練習",
+      masterBy:"截止", everyLesson:"每節課", skillsYours:"這些技能你已經精熟",
+      built:"已建立", checked:"已檢查", openSet:"打開這組 →",
+      done:"完成", passed:"已過去", nextUp:"下一個",
+      inDays:function(n){ return n + " 天後"; },
+      countLine:function(a,b){ return "共 " + b + " 項技能，你有 " + a + " 項達到「會了」或以上。"; },
+      evTitle:"在練習活動中已證明：",
+      schoolNote:"需要學校帳號登入",
+      schoolMsg:"老師正在加入這個連結。現在請打開 Compass（或班級 OneNote）搜尋檔案名稱。",
+      tryAgain:"↻ 再做一次",
+      resultWin:"✦ 第一次就全對。這已經記入你的進度報告。",
+      resultDone:"✓ 全對，做得好。",
+      resultPartial:function(n,t){ return "你第一次做對了 " + n + " / " + t + " 題。再做一次來證明這項技能。"; }
+    }
+  };
+
+  var sel = document.querySelector(".language-select");
+  var lang = "en";
+  try { lang = localStorage.getItem("elc_page_language") || "en"; } catch(e){}
+  if (!COPY[lang]) lang = "en";
+  sel.value = lang;
+  function T(){ return COPY[lang]; }
+  function tr(k){ var v = T()[k]; return v !== undefined ? v : COPY.en[k]; }
+  function fn(k){ var v = T()[k]; return typeof v === "function" ? v : COPY.en[k]; }
+
+  function setStatic(){
+    var dict = T();
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var k = el.getAttribute("data-i18n");
+      if (!el._en) el._en = el.textContent;
+      el.textContent = (typeof dict[k] === "string") ? dict[k] : el._en;
+    });
+    document.documentElement.lang = lang === "en" ? "en" : lang;
+  }
+  sel.addEventListener("change", function(){
+    lang = sel.value;
+    try { localStorage.setItem("elc_page_language", lang); } catch(e){}
+    setStatic(); paintAll();
+  });
+
+  /* ---------- helpers ---------- */
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function fmtDate(d){
+    return new Date(d + "T12:00:00").toLocaleDateString(undefined, {day:"numeric", month:"short"});
+  }
+  function isExternal(href){ return /^https?:/i.test(href); }
+  function shuffle(a){
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  var SKILL_BY_ID = {};
+  STEM.SKILLS.forEach(function(s){ SKILL_BY_ID[s.id] = s; });
+  var SET_BY_ID = {};
+  if (window.STEM_VOCAB_DATA) {
+    STEM_VOCAB_DATA.sets.forEach(function(s){ SET_BY_ID[s.id] = s; });
+  }
+
+  /* ---------- 1. checkpoint strip ---------- */
+  function paintSched(){
+    var h = "", nextShown = false;
+    CHECKPOINT_IDS.forEach(function(id){
+      var c = STEM.CP_BY_ID[id];
+      if (!c) return;
+      var days = STEM.daysUntil(c.date), cls, when;
+      if (c.status === "done"){ cls = "done"; when = "✓ " + tr("done"); }
+      else if (days < 0){ cls = "past"; when = tr("passed"); }
+      else if (days <= 14){ cls = "soon"; when = "⏳ " + fn("inDays")(days); }
+      else { cls = ""; when = fn("inDays")(days); }
+      if (!nextShown && c.status !== "done" && days >= 0){
+        cls += " next"; nextShown = true; when = "◀ " + tr("nextUp") + " · " + when;
+      }
+      h += "<div class='cp " + cls + "'><div class='date'>" + fmtDate(c.date) + "</div>" +
+           "<div class='name'>" + esc(c.name) + "</div>" +
+           "<div class='when'>" + esc(when) + "</div>" +
+           "<div class='desc'>" + esc(c.desc) + "</div></div>";
+    });
+    document.getElementById("sched").innerHTML = h;
+  }
+
+  /* ---------- 2. vocab set cards ---------- */
+  function paintVocabSets(hostId, ids){
+    var host = document.getElementById(hostId);
+    if (!window.STEM_VOCAB_DATA){ host.innerHTML = ""; return; }
+    var v = STEM.Store.vocab(), h = "";
+    ids.forEach(function(id){
+      var set = SET_BY_ID[id];
+      if (!set) return;
+      var built = 0, checked = 0;
+      set.words.forEach(function(w){
+        var st = v[w.w.toLowerCase()];
+        if (st && st.built) built++;
+        if (st && st.checked) checked++;
+      });
+      var total = set.words.length;
+      var pct = Math.round(100 * built / Math.max(1, total));
+      h += "<a class='vcard' href='stem-vocab-hub.html#set=" + encodeURIComponent(id) + "'>" +
+           "<h4>" + esc(set.title) + "</h4>" +
+           "<p class='focus'>" + esc(set.focus) + "</p>" +
+           "<span class='bar'><i style='width:" + pct + "%'></i></span>" +
+           "<span class='counts'>" + built + "/" + total + " " + esc(tr("built")) +
+           " · " + checked + " " + esc(tr("checked")) + "</span>" +
+           "<span class='open'>" + esc(tr("openSet")) + "</span></a>";
+    });
+    host.innerHTML = h;
+  }
+
+  /* ---------- 3. skill rows ---------- */
+  function timingClass(st){
+    if (st.timing === "ahead" || st.timing === "done") return "g";
+    if (st.timing === "dueSoon") return "w";
+    if (st.timing === "behind") return "b";
+    return "u";
+  }
+  function pillHtml(st){
+    var cp = st.checkpoint;
+    if (!cp) return "";
+    return "<span class='pill " + timingClass(st) + "'>" +
+           esc(cp.short) + " · " + fmtDate(cp.date) + "</span>";
+  }
+  function evHtml(skill, st){
+    if (!st.evidence) return "";
+    var list = STEM.Store.evidence()[skill.id] || [];
+    var last = list[list.length - 1];
+    return " <span class='ev' title='" + esc(tr("evTitle") + (last ? last.detail : "")) + "'>✦</span>";
+  }
+  function rowInner(skill){
+    var st = STEM.skillState(skill);
+    var bandNames = tr("bands"), levelNames = tr("levels");
+    var h = "<div class='head'><div class='nm'>" + esc(skill.name) + evHtml(skill, st) +
+            "<span class='cont'>" + esc(skill.cont) + "</span></div>" + pillHtml(st) + "</div>";
+
+    h += "<div class='seg' role='group' aria-label='" + esc(skill.name) + "'>";
+    for (var lv = 0; lv < 4; lv++){
+      var on = (st.lv === lv) ? " on" : "";
+      h += "<button type='button' class='seg-btn" + on + "' data-lv='" + lv + "'" +
+           " aria-pressed='" + (st.lv === lv ? "true" : "false") + "'>" +
+           esc(levelNames[lv]) + "</button>";
+    }
+    h += "</div>";
+
+    h += "<details><summary>" + esc(tr("detailsLabel")) + "</summary><div class='bands'>";
+    for (var b = 0; b < 3; b++){
+      h += "<div class='band" + (st.lv === b + 1 ? " on" : "") + "'><b>" + esc(bandNames[b]) + "</b>" +
+           esc(skill.bands[b]) + "</div>";
+    }
+    h += "</div>";
+    var links = PRACTICE[skill.id] || [];
+    if (links.length){
+      h += "<p class='prac'>" + esc(tr("practice")) + ": " +
+        links.map(function(p){
+          var ext = isExternal(p[1]) ? " target='_blank' rel='noopener'" : "";
+          return "<a href='" + esc(p[1]) + "'" + ext + ">" + esc(p[0]) + (isExternal(p[1]) ? " ↗" : "") + "</a>";
+        }).join(" · ") + "</p>";
+    }
+    h += "</details>";
+    return h;
+  }
+
+  function paintRows(hostId, areaId, countId){
+    var host = document.getElementById(hostId);
+    var rows = STEM.SKILLS.filter(function(s){ return s.area === areaId; });
+    var h = "";
+    rows.forEach(function(s){
+      h += "<div class='srow' data-skill='" + esc(s.id) + "'>" + rowInner(s) + "</div>";
+    });
+    host.innerHTML = h;
+    paintCount(areaId, countId);
+  }
+
+  function paintCount(areaId, countId){
+    var rows = STEM.SKILLS.filter(function(s){ return s.area === areaId; });
+    var got = 0;
+    rows.forEach(function(s){ if (STEM.skillState(s).mastered) got++; });
+    document.getElementById(countId).textContent = fn("countLine")(got, rows.length);
+  }
+
+  function refreshRow(rowEl){
+    var skill = SKILL_BY_ID[rowEl.getAttribute("data-skill")];
+    if (!skill) return;
+    var det = rowEl.querySelector("details");
+    var wasOpen = det ? det.open : false;
+    rowEl.innerHTML = rowInner(skill);
+    var newDet = rowEl.querySelector("details");
+    if (newDet) newDet.open = wasOpen;
+  }
+
+  /* update one skill wherever it is on the page (used after evidence lands) */
+  function refreshSkill(skillId){
+    var row = document.querySelector(".srow[data-skill='" + skillId + "']");
+    if (row) refreshRow(row);
+    var sk = SKILL_BY_ID[skillId];
+    if (!sk) return;
+    if (sk.area === "bio") paintCount("bio", "bioCount");
+    if (sk.area === "pan") paintCount("pan", "panCount");
+    updateTaskTags();
+  }
+
+  function wireRows(hostId, areaId, countId){
+    var host = document.getElementById(hostId);
+    host.addEventListener("click", function(e){
+      var btn = e.target.closest ? e.target.closest("button.seg-btn") : null;
+      if (!btn || !host.contains(btn)) return;
+      var row = btn.closest(".srow");
+      if (!row) return;
+      STEM.Store.setSkill(row.getAttribute("data-skill"), +btn.getAttribute("data-lv"));
+      refreshRow(row);
+      paintCount(areaId, countId);
+      updateTaskTags();
+    });
+  }
+
+  /* ---------- 4. tasks ---------- */
+  /* the chip is coloured by the date it shows, so colour and words agree */
+  function cpClass(cp){
+    if (cp.status === "done") return "g";
+    var d = STEM.daysUntil(cp.date);
+    if (d < 0) return "b";
+    if (d <= 14) return "w";
+    return "u";
+  }
+  function allMastered(skillIds){
+    var any = false;
+    for (var i = 0; i < skillIds.length; i++){
+      var sk = SKILL_BY_ID[skillIds[i]];
+      if (!sk) continue;
+      any = true;
+      if (!STEM.skillState(sk).mastered) return false;
+    }
+    return any;
+  }
+  function updateTaskTags(){
+    document.querySelectorAll(".task[data-skills]").forEach(function(el){
+      var tag = el.querySelector("[data-role='mastered']");
+      if (!tag) return;
+      var ids = el.getAttribute("data-skills").split(",").filter(Boolean);
+      tag.style.display = allMastered(ids) ? "" : "none";
+    });
+  }
+  function paintTasks(hostId, list){
+    var h = "";
+    list.forEach(function(t){
+      var cp = STEM.CP_BY_ID[t.cp];
+      var pill = "";
+      if (t.every){
+        pill = "<span class='pill u'>" + esc(tr("everyLesson")) + "</span>";
+      } else if (cp){
+        pill = "<span class='pill " + cpClass(cp) + "'>" +
+               esc(tr("masterBy")) + ": " + esc(cp.short) + " · " + fmtDate(cp.date) + "</span>";
+      }
+      pill += "<span class='pill g' data-role='mastered' style='display:none'>✓ " +
+              esc(tr("skillsYours")) + "</span>";
+      var chips = t.skills.map(function(sid){
+        var sk = SKILL_BY_ID[sid];
+        return sk ? "<span class='tag'>" + esc(sk.name) + "</span>" : "";
+      }).join("");
+
+      var linkHtml = "";
+      if (t.link && t.link.school){
+        var href = SCHOOL_LINKS[t.link.school] || "#";
+        var real = href && href !== "#";
+        linkHtml = "<a class='" + (real ? "golink" : "schoolonly") + "' href='" + esc(href) + "'" +
+          (real ? (isExternal(href) ? " target='_blank' rel='noopener'" : "") : " data-locked='1'") +
+          " title='" + esc(tr("schoolNote")) + "'>🔒 " + esc(t.link.label) + "</a>" +
+          (real ? "" : "<p class='schoolmsg'>" + esc(tr("schoolMsg")) + "</p>");
+      } else if (t.link){
+        var ext = isExternal(t.link.href);
+        linkHtml = "<a class='golink' href='" + esc(t.link.href) + "'" +
+          (ext ? " target='_blank' rel='noopener'" : "") + ">" + esc(t.link.label) + "</a>";
+      }
+      if (t.note) linkHtml += "<p class='locknote'>" + esc(t.note) + "</p>";
+
+      h += "<div class='task' data-skills='" + esc(t.skills.join(",")) + "'>" +
+           "<h4>" + t.emoji + " " + esc(t.title) + "</h4>" +
+           "<p class='what'>" + esc(t.what) + "</p>" + linkHtml +
+           "<div class='tagrow'>" + pill + chips + "</div></div>";
+    });
+    var host = document.getElementById(hostId);
+    host.innerHTML = h;
+    host.querySelectorAll("a[data-locked]").forEach(function(a){
+      a.addEventListener("click", function(e){
+        e.preventDefault();
+        var msg = a.parentNode.querySelector(".schoolmsg");
+        if (msg) msg.classList.toggle("show");
+      });
+    });
+  }
+
+  /* ---------- 5. practice checks (pandemic unit) ---------- */
+  /* evidence is written once, and only for all-correct-first-time */
+  function awardOnce(skillId, detail){
+    var list = STEM.Store.evidence()[skillId] || [];
+    for (var i = 0; i < list.length; i++){
+      if (list[i].src === PAGE_SRC && list[i].detail === detail) return false;
+    }
+    STEM.Store.addEvidence(skillId, PAGE_SRC, detail);
+    return true;
+  }
+  var CHECKS = [];
+  function makeCheck(def){
+    var host = document.getElementById(def.host);
+    if (!host) return;
+    var order = [], answered = {}, firstOk = {};
+
+    function render(){
+      var h = "<h5>" + esc(def.title) + "</h5>";
+      def.qs.forEach(function(q, i){
+        h += "<div class='cq' data-q='" + i + "'><p class='q'>" + (i + 1) + ". " + esc(q.q) +
+             "</p><div class='opts'>";
+        order[i].forEach(function(o){
+          h += "<button type='button' class='opt'>" + esc(o) + "</button>";
+        });
+        h += "</div><p class='exp hidden'>" + esc(q.explain) + "</p></div>";
+      });
+      h += "<p class='result'></p>";
+      h += "<button type='button' class='retry' hidden>" + esc(tr("tryAgain")) + "</button>";
+      host.innerHTML = h;
+    }
+
+    function build(){
+      order = def.qs.map(function(q){ return shuffle(q.opts); });
+      answered = {}; firstOk = {};
+      render();
+    }
+
+    function finish(){
+      var total = def.qs.length, allDone = true, right = 0;
+      for (var i = 0; i < total; i++){
+        if (!answered[i]) allDone = false;
+        if (firstOk[i]) right++;
+      }
+      if (!allDone) return;
+      var res = host.querySelector(".result");
+      var retry = host.querySelector(".retry");
+      if (right === total){
+        var fresh = awardOnce(def.skill, def.detail);
+        res.className = "result win";
+        res.textContent = fresh ? tr("resultWin") : tr("resultDone");
+        if (fresh) refreshSkill(def.skill);
+      } else {
+        res.className = "result";
+        res.textContent = fn("resultPartial")(right, total);
+      }
+      if (retry) retry.hidden = false;
+    }
+
+    host.addEventListener("click", function(e){
+      var t = e.target;
+      if (!t || !t.classList) return;
+      if (t.classList.contains("retry")){ build(); return; }
+      if (!t.classList.contains("opt")) return;
+      var cq = t.closest(".cq");
+      if (!cq) return;
+      var i = +cq.getAttribute("data-q");
+      if (answered[i]) return;
+      var ok = (t.textContent === def.qs[i].a);
+      if (firstOk[i] === undefined) firstOk[i] = ok;
+      t.classList.add(ok ? "right" : "wrong");
+      if (ok){
+        answered[i] = true;
+        var exp = cq.querySelector(".exp");
+        if (exp) exp.classList.remove("hidden");
+        cq.querySelectorAll(".opt").forEach(function(b){ b.disabled = true; });
+        finish();
+      }
+    });
+
+    CHECKS.push({ build: build });
+  }
+
+  /* ---------- go ---------- */
+  function paintAll(){
+    paintSched();
+    paintVocabSets("vsets1", VOCAB_SETS_U1);
+    paintVocabSets("vsets2", VOCAB_SETS_U2);
+    paintRows("bioRows", "bio", "bioCount");
+    paintRows("panRows", "pan", "panCount");
+    paintTasks("tasks1", TASKS_U1);
+    paintTasks("tasks2", TASKS_U2);
+    updateTaskTags();
+    CHECKS.forEach(function(c){ c.build(); });
+  }
+
+  makeCheck(CHECK_PERCENT);
+  makeCheck(CHECK_GROWTH);
+  makeCheck(CHECK_CLAIMS);
+
+  setStatic();
+  paintAll();
+  wireRows("bioRows", "bio", "bioCount");
+  wireRows("panRows", "pan", "panCount");
+
+  if (window.STEMVOCAB) STEMVOCAB.decorate(document);
+
+  /* the notebook panel can build/check words while this page is open —
+     keep the set cards honest without a reload */
+  var lastVocabRaw = "";
+  try { lastVocabRaw = localStorage.getItem("elc_stem_vocab") || ""; } catch(e){}
+  function refreshVocabIfChanged(){
+    var now = "";
+    try { now = localStorage.getItem("elc_stem_vocab") || ""; } catch(e){ return; }
+    if (now !== lastVocabRaw){
+      lastVocabRaw = now;
+      paintVocabSets("vsets1", VOCAB_SETS_U1);
+      paintVocabSets("vsets2", VOCAB_SETS_U2);
+    }
+  }
+  setInterval(refreshVocabIfChanged, 2500);
+  document.addEventListener("visibilitychange", refreshVocabIfChanged);
+  window.addEventListener("storage", refreshVocabIfChanged);
+})();
+</script>
+</body>
+</html>

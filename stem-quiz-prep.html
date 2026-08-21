@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quiz Prep — Linear Equations</title>
+<style>
+  :root {
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#0d9488; --accent-soft:#ccfbf1; --radius:14px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
+    --good:#2f6a3e; --good-soft:#e5f3e8; --warn:#b45309; --bad:#a8432f; --bad-soft:#fde8e4;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#fff; --muted:#c7d0e2; --line:#34405b;
+            --accent:#2dd4bf; --accent-soft:#134e4a; --shadow:0 1px 2px rgba(0,0,0,.4);
+            --good:#93cf9b; --good-soft:#1d3323; --warn:#fbbf24; --bad:#e8836f; --bad-soft:#3b201a; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:900px; margin:0 auto; padding:16px 16px 70px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; }
+  .top a { color:var(--accent); text-decoration:none; font-weight:600; }
+  .pilot { font-size:.75rem; color:var(--muted); }
+  .hero { border-radius:18px; padding:20px 22px; color:#fff;
+    background:linear-gradient(135deg,#047857,#0d9488 55%,#2563eb); box-shadow:var(--shadow); }
+  .hero h1 { margin:0 0 .2em; font-family:Georgia,"Times New Roman",serif; font-size:1.55rem; }
+  .hero p { margin:0; font-size:.95rem; max-width:62ch; }
+  h2 { font-size:1.12rem; margin:26px 0 10px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px; box-shadow:var(--shadow); margin-bottom:14px; }
+  /* word lane */
+  .wordlane { display:flex; flex-wrap:wrap; gap:8px; }
+  .wchip { border-radius:999px; border:1px solid var(--line); padding:7px 14px; font-weight:600;
+    background:var(--card); cursor:pointer; font-size:.92rem; }
+  .wchip.done { border-color:var(--good); color:var(--good); }
+  .wchip.done::after { content:" ✓"; }
+  .lanebar { height:10px; border-radius:999px; background:var(--bg); border:1px solid var(--line);
+    overflow:hidden; margin:12px 0 4px; }
+  .lanebar i { display:block; height:100%; background:var(--accent); transition:width .3s; }
+  /* generators */
+  .gen { margin-bottom:18px; }
+  .gen h3 { margin:0 0 4px; font-size:1rem; }
+  .gen .skill { font-size:.78rem; color:var(--muted); margin-bottom:10px; }
+  .modes { display:flex; gap:6px; margin-bottom:12px; flex-wrap:wrap; }
+  .mode { border-radius:999px; border:1px solid var(--line); background:none; color:var(--muted);
+    padding:6px 14px; font:inherit; font-weight:600; cursor:pointer; font-size:.85rem; }
+  .mode.on { background:var(--accent); border-color:var(--accent); color:#fff; }
+  .qarea { font-size:.95rem; }
+  .qarea table { border-collapse:collapse; margin:10px 0; }
+  .qarea th, .qarea td { border:1px solid var(--line); padding:6px 12px; text-align:center; }
+  .qarea input { font:inherit; width:76px; padding:6px 8px; border-radius:8px;
+    border:1px solid var(--line); background:var(--bg); color:var(--ink); text-align:center; }
+  .qarea input.wide { width:150px; }
+  .qarea input.right { border-color:var(--good); background:var(--good-soft); }
+  .qarea input.wrong { border-color:var(--bad); background:var(--bad-soft); }
+  .btnrow { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; align-items:center; }
+  button.go { font:inherit; font-weight:600; border-radius:999px; padding:8px 18px; cursor:pointer;
+    border:1px solid var(--accent); background:var(--accent); color:#fff; }
+  button.go.ghost { background:none; color:var(--accent); }
+  .streak { font-size:.85rem; color:var(--muted); margin-left:auto; }
+  .streak b { color:var(--good); }
+  .worked { border-left:4px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0;
+    padding:10px 14px; margin-top:10px; font-size:.9rem; }
+  .worked.hidden { display:none; }
+  .fb { font-weight:700; margin-top:8px; }
+  .fb.ok { color:var(--good); } .fb.no { color:var(--bad); }
+  svg.graph { width:100%; max-width:340px; height:auto; background:var(--card); border:1px solid var(--line);
+    border-radius:10px; display:block; margin:8px 0; }
+  .minis { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin:10px 0; }
+  .minis button { border:2px solid var(--line); border-radius:10px; background:var(--card); cursor:pointer; padding:4px; }
+  .minis button.right { border-color:var(--good); } .minis button.wrong { border-color:var(--bad); }
+  .evnote { color:var(--good); font-weight:600; font-size:.85rem; }
+  .note { margin-top:22px; color:var(--muted); font-size:.85rem; }
+  footer { margin-top:24px; color:var(--muted); font-size:.85rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="stem.html">← STEM Hub</a>
+    <span class="pilot">pilot page — not linked from the hub yet</span>
+  </div>
+
+  <div class="hero">
+    <h1>🎯 Quiz Prep — Linear Equations</h1>
+    <p>Everything the Progress Quiz tests, in one place: first the <b>words</b>, then the
+    <b>skills</b> — with an example, a guided go, and then you on your own. Five solo answers
+    right in a row proves a skill and it lands on your <a style="color:#ccfbf1" href="stem-progress.html">progress report</a>.</p>
+  </div>
+
+  <h2>1 · The words you need 📓</h2>
+  <div class="card">
+    <p>Tap a word. The notebook opens — read it, <b>build it</b>, <b>check it</b>. Words you own show a ✓.</p>
+    <div class="wordlane" id="wordlane"></div>
+    <div class="lanebar"><i id="lanefill" style="width:0%"></i></div>
+    <div class="pilot" id="lanecount"></div>
+  </div>
+
+  <h2>2 · The skills the quiz tests ✍️</h2>
+  <div id="gens"></div>
+
+  <p class="note">🔒 Anonymous — everything stays in this browser. This page is practice;
+  in the real quiz, show your working on paper. More word practice:
+  <a href="stem-vocab-revision.html">Linear graphs revision sequence</a> ·
+  <a href="stem-vocab-hub.html#set=rev">Vocab Hub</a>.</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+</div>
+
+<script src="stem-vocab-data.js?v=20260821-1"></script>
+<script src="stem-shared.js?v=20260821-1"></script>
+<script src="stem-vocab.js?v=20260821-1"></script>
+<script>
+(function(){
+  "use strict";
+  /* ===== CONTENT — teachers edit here ===== */
+  var REV_SET_ID = "rev";           /* which vocab set is "the quiz words" */
+  var STREAK_TARGET = 5;            /* solo answers needed to prove a skill */
+  /* ======================================== */
+
+  if (window.STEMVOCAB) STEMVOCAB.init();
+
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function ri(a,b){ return a + Math.floor(Math.random()*(b-a+1)); }
+  function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+  function fmt(n){
+    if (Number.isInteger(n)) return String(n);
+    return (Math.round(n*100)/100).toString();
+  }
+  /* format y = mx + c nicely */
+  function eqStr(m,c){
+    var s = "y = ";
+    if (m === 0) return s + fmt(c);
+    if (m === 1) s += "x"; else if (m === -1) s += "−x"; else s += fmt(m)+"x";
+    if (c > 0) s += " + " + fmt(c); else if (c < 0) s += " − " + fmt(Math.abs(c));
+    return s;
+  }
+  function near(a,b,tol){ return Math.abs(a-b) <= (tol===undefined ? 0.02 : tol); }
+  /* parse a number, allowing fractions like "3/4" and "-1/2" */
+  function num(str){
+    if (str==null) return NaN;
+    str = String(str).replace(/−/g,"-").replace(/\s+/g,"").replace(/^\+-/,"-").replace(/^-\+/,"-").replace(/^\+/,"");
+    if (!str) return NaN;
+    var m = str.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
+    if (m) return parseFloat(m[1])/parseFloat(m[2]);
+    /* strict: the WHOLE string must be a number ("2y-1" is not 2) */
+    if (!/^-?\d+(?:\.\d+)?$/.test(str)) return NaN;
+    return parseFloat(str);
+  }
+  /* parse "y=2x-1" style equations -> {m,c} */
+  function parseEq(str){
+    if (!str) return null;
+    var s = String(str).toLowerCase().replace(/−/g,"-").replace(/\s+/g,"");
+    var mm = s.match(/^y=(.*)$/); if (mm) s = mm[1];
+    if (!s) return null;
+    /* split into m-part (with x) and c-part */
+    var m = 0, c = 0, matched = false;
+    var xm = s.match(/^([+-]?(?:\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?)?)x/);
+    if (xm){
+      matched = true;
+      var coef = xm[1];
+      if (coef === "" || coef === "+") m = 1;
+      else if (coef === "-") m = -1;
+      else m = num(coef);
+      s = s.slice(xm[0].length);
+      if (s){
+        if (!/^[+-]/.test(s)) return null;
+        c = num(s);
+      }
+    } else {
+      c = num(s);
+      if (isNaN(c)) return null;
+      matched = true;
+    }
+    if (!matched || isNaN(m) || isNaN(c)) return null;
+    return { m:m, c:c };
+  }
+
+  /* ---------- SVG graph helpers ---------- */
+  var R = 6, STEP = 24, PAD = 18;    /* grid -6..6 */
+  function X(x){ return PAD + (x+R)*STEP; }
+  function Y(y){ return PAD + (R-y)*STEP; }
+  function gridSvg(inner, w){
+    var size = PAD*2 + 2*R*STEP;
+    var g = "<svg class='graph' viewBox='0 0 "+size+" "+size+"' role='img'>";
+    for (var i=-R;i<=R;i++){
+      g += "<line x1='"+X(i)+"' y1='"+Y(-R)+"' x2='"+X(i)+"' y2='"+Y(R)+"' stroke='var(--line)' stroke-width='1'/>";
+      g += "<line x1='"+X(-R)+"' y1='"+Y(i)+"' x2='"+X(R)+"' y2='"+Y(i)+"' stroke='var(--line)' stroke-width='1'/>";
+    }
+    g += "<line x1='"+X(-R)+"' y1='"+Y(0)+"' x2='"+X(R)+"' y2='"+Y(0)+"' stroke='var(--muted)' stroke-width='2'/>";
+    g += "<line x1='"+X(0)+"' y1='"+Y(-R)+"' x2='"+X(0)+"' y2='"+Y(R)+"' stroke='var(--muted)' stroke-width='2'/>";
+    for (var t=-R;t<=R;t+=2){
+      if (t!==0){
+        g += "<text x='"+X(t)+"' y='"+(Y(0)+14)+"' font-size='10' fill='var(--muted)' text-anchor='middle'>"+t+"</text>";
+        g += "<text x='"+(X(0)-6)+"' y='"+(Y(t)+3)+"' font-size='10' fill='var(--muted)' text-anchor='end'>"+t+"</text>";
+      }
+    }
+    g += "<text x='"+(X(R)-4)+"' y='"+(Y(0)-6)+"' font-size='11' fill='var(--muted)' text-anchor='end'>x</text>";
+    g += "<text x='"+(X(0)+8)+"' y='"+(Y(R)+10)+"' font-size='11' fill='var(--muted)'>y</text>";
+    g += inner + "</svg>";
+    return g;
+  }
+  /* draw y=mx+c clipped to the grid box */
+  function lineSvg(m,c,color){
+    var pts = [];
+    /* intersect with box edges */
+    function add(x,y){ if (x>=-R-1e-9 && x<=R+1e-9 && y>=-R-1e-9 && y<=R+1e-9) pts.push([x,y]); }
+    add(-R, m*(-R)+c); add(R, m*R+c);
+    if (m !== 0){ add((-R-c)/m, -R); add((R-c)/m, R); }
+    pts.sort(function(a,b){ return a[0]-b[0]; });
+    if (pts.length < 2) return "";
+    var a = pts[0], b = pts[pts.length-1];
+    return "<line x1='"+X(a[0])+"' y1='"+Y(a[1])+"' x2='"+X(b[0])+"' y2='"+Y(b[1])+"' stroke='"+(color||"var(--accent)")+"' stroke-width='3'/>";
+  }
+  function dot(x,y,color){
+    return "<circle cx='"+X(x)+"' cy='"+Y(y)+"' r='5' fill='"+(color||"var(--accent)")+"'/>";
+  }
+
+  /* ---------- word lane ---------- */
+  function paintLane(){
+    var lane = document.getElementById("wordlane");
+    if (!window.STEM_VOCAB_DATA){ lane.textContent = "Vocab data not loaded."; return; }
+    var set = STEM_VOCAB_DATA.sets.filter(function(s){ return s.id===REV_SET_ID; })[0];
+    if (!set) return;
+    var v = STEM.Store.vocab(), done = 0, h = "";
+    set.words.forEach(function(w){
+      var st = v[w.w.toLowerCase()];
+      var owned = st && (st.built || st.checked);
+      if (owned) done++;
+      h += "<button class='wchip"+(owned?" done":"")+"' data-v='"+esc(w.w)+"'>"+esc(w.w)+"</button>";
+    });
+    lane.innerHTML = h;
+    if (window.STEMVOCAB) STEMVOCAB.decorate(lane);
+    document.getElementById("lanefill").style.width = Math.round(100*done/set.words.length)+"%";
+    document.getElementById("lanecount").textContent = done+" / "+set.words.length+" words in your notebook";
+  }
+  /* repaint the lane when the tab regains focus or panel interactions happen */
+  document.addEventListener("visibilitychange", paintLane);
+  setInterval(paintLane, 4000);
+
+  /* ---------- generator engine ---------- */
+  /* each generator: {id, title, skill (label), skillIds:[], make() -> {qHtml, worked, inputs:[{key,label,check(fn)}], onCheck}} */
+  var streaks = {};
+  function loadStreaks(){
+    try { streaks = JSON.parse(localStorage.getItem("elc_stem_quizprep")||"{}"); } catch(e){ streaks = {}; }
+  }
+  function saveStreaks(){ try { localStorage.setItem("elc_stem_quizprep", JSON.stringify(streaks)); } catch(e){} }
+  loadStreaks();
+
+  function makeGen(def){
+    var card = document.createElement("div");
+    card.className = "card gen";
+    var mode = "example";  /* example | guided | solo */
+    var cur = null;
+    var host = {};
+
+    function render(){
+      cur = def.make();
+      var h = "<h3>"+esc(def.title)+"</h3><div class='skill'>trains: "+esc(def.skill)+"</div>";
+      h += "<div class='modes'>";
+      [["example","👀 Example"],["guided","🤝 Guided"],["solo","💪 Solo"]].forEach(function(m){
+        h += "<button class='mode"+(mode===m[0]?" on":"")+"' data-m='"+m[0]+"'>"+m[1]+"</button>";
+      });
+      h += "</div><div class='qarea'>"+cur.qHtml+"</div>";
+      if (mode==="example"){
+        h += "<div class='worked'>"+cur.worked+"</div>";
+        h += "<div class='btnrow'><button class='go ghost' data-a='new'>Another example</button></div>";
+      } else {
+        if (mode==="guided" && cur.hint) h += "<div class='worked'>💡 "+cur.hint+"</div>";
+        h += "<div class='btnrow'><button class='go' data-a='check'>Check</button>"+
+             "<button class='go ghost' data-a='new'>New question</button>"+
+             "<span class='streak'>solo streak: <b>"+(streaks[def.id]||0)+"</b>/"+STREAK_TARGET+
+             ((streaks[def.id]||0) >= STREAK_TARGET ? " <span class='evnote'>✦ proved!</span>" : "")+"</span></div>";
+        h += "<div class='fb' aria-live='polite'></div><div class='worked hidden'></div>";
+      }
+      card.innerHTML = h;
+      card.querySelectorAll(".mode").forEach(function(b){
+        b.addEventListener("click", function(){ mode = b.getAttribute("data-m"); render(); });
+      });
+      card.querySelectorAll("[data-a]").forEach(function(b){
+        b.addEventListener("click", function(){
+          if (b.getAttribute("data-a")==="new") render();
+          else doCheck();
+        });
+      });
+      if (cur.wire) cur.wire(card);
+    }
+
+    function doCheck(){
+      var allRight = cur.check(card);
+      var fb = card.querySelector(".fb");
+      var workedEl = card.querySelector(".worked.hidden") || card.querySelectorAll(".worked")[mode==="guided"?1:0];
+      if (allRight){
+        fb.textContent = "✓ Correct!";
+        fb.className = "fb ok";
+        if (mode==="solo"){
+          streaks[def.id] = (streaks[def.id]||0)+1;
+          saveStreaks();
+          if (streaks[def.id] === STREAK_TARGET){
+            def.skillIds.forEach(function(sid){
+              STEM.Store.addEvidence(sid, "quiz-prep", STREAK_TARGET+" correct — "+def.title);
+            });
+            fb.textContent = "✓ Correct — skill proved! ✦ It's on your progress report now.";
+          }
+        }
+      } else {
+        fb.textContent = "✗ Not yet — look at the working and try a new question.";
+        fb.className = "fb no";
+        if (mode==="solo"){ streaks[def.id] = 0; saveStreaks(); }
+      }
+      if (workedEl){ workedEl.classList.remove("hidden"); workedEl.innerHTML = cur.worked; }
+      var st = card.querySelector(".streak");
+      if (st) st.innerHTML = "solo streak: <b>"+(streaks[def.id]||0)+"</b>/"+STREAK_TARGET+
+        ((streaks[def.id]||0) >= STREAK_TARGET ? " <span class='evnote'>✦ proved!</span>" : "");
+      return allRight;
+    }
+    render();
+    return card;
+  }
+
+  function markInput(inp, ok){ inp.classList.remove("right","wrong"); inp.classList.add(ok?"right":"wrong"); }
+
+  /* ---------- the six generators ---------- */
+  var GENS = [
+
+  { id:"g1", title:"Q1 · Complete the table of values",
+    skill:"substitution into y = mx + c", skillIds:["k_table"],
+    make: function(){
+      var m = pick([-3,-2,-1,2,3,4]), c = ri(-5,5);
+      var xs = [-2,-1,0,1,2];
+      var q = "<p>Complete the table for <b>"+eqStr(m,c)+"</b>. <span data-v='substitution'>Substitution</span>: put each x into the rule.</p>";
+      q += "<table><tr><th>x</th>";
+      xs.forEach(function(x){ q += "<td>"+x+"</td>"; });
+      q += "</tr><tr><th>y</th>";
+      xs.forEach(function(x,i){ q += "<td><input inputmode='numeric' data-k='y"+i+"' aria-label='y when x is "+x+"'></td>"; });
+      q += "</tr></table>";
+      var worked = "<b>Working (x = "+xs[1]+"):</b> y = "+fmt(m)+" × ("+xs[1]+") "+(c>=0?"+ "+c:"− "+Math.abs(c))+
+        " = "+fmt(m*xs[1])+" "+(c>=0?"+ "+c:"− "+Math.abs(c))+" = <b>"+fmt(m*xs[1]+c)+"</b>. Same steps for every column: "+
+        xs.map(function(x){ return "x="+x+" → y="+fmt(m*x+c); }).join(", ")+".";
+      return {
+        qHtml:q, worked:worked,
+        hint:"y = m × x + c. Multiply first, then add. Watch the negatives: "+fmt(m)+" × (−2) = "+fmt(m*-2)+".",
+        check: function(card){
+          var all = true;
+          xs.forEach(function(x,i){
+            var inp = card.querySelector("[data-k='y"+i+"']");
+            var ok = near(num(inp.value), m*x+c, 0.001);
+            markInput(inp, ok); if (!ok) all = false;
+          });
+          return all;
+        }
+      };
+    } },
+
+  { id:"g2", title:"Q2 · Gradient from a graph",
+    skill:"gradient = rise ÷ run", skillIds:["k_grad_graph"],
+    make: function(){
+      var run = pick([1,2,3,4]), rise = pick([-4,-3,-2,-1,1,2,3,4]);
+      var m = rise/run;
+      var x1 = ri(-3,0), y1 = ri(-3,3);
+      var x2 = x1 + run, y2 = y1 + rise;
+      while (Math.abs(y2) > 6){ y1 = ri(-3,3); y2 = y1 + rise; }
+      var c = y1 - m*x1;
+      var svg = gridSvg(lineSvg(m,c) + dot(x1,y1) + dot(x2,y2));
+      var q = "<p>The line passes through the two marked points. Find the <span data-v='gradient'>gradient</span>.</p>"+svg+
+        "<p>rise = <input inputmode='numeric' data-k='rise'> &nbsp; run = <input inputmode='numeric' data-k='run'> &nbsp; "+
+        "gradient m = <input data-k='m'></p>";
+      var worked = "<b>Working:</b> from ("+x1+", "+fmt(y1)+") to ("+x2+", "+fmt(y2)+"): rise = "+fmt(y2)+" − "+fmt(y1)+" = <b>"+fmt(rise)+"</b>, "+
+        "run = "+x2+" − "+x1+" = <b>"+run+"</b>. m = rise ÷ run = "+fmt(rise)+"/"+run+" = <b>"+fmt(m)+"</b>.";
+      return {
+        qHtml:q, worked:worked,
+        hint:"Pick the two dots. Rise = how far UP between them (negative if the line goes down). Run = how far RIGHT.",
+        check: function(card){
+          var rIn = card.querySelector("[data-k='rise']"), runIn = card.querySelector("[data-k='run']"), mIn = card.querySelector("[data-k='m']");
+          var rv = num(rIn.value), runv = num(runIn.value), mv = num(mIn.value);
+          /* any consistent rise/run pair is fine as long as rise/run = m */
+          var pairOk = !isNaN(rv) && !isNaN(runv) && runv !== 0 && near(rv/runv, m);
+          var mOk = near(mv, m);
+          markInput(rIn, pairOk); markInput(runIn, pairOk); markInput(mIn, mOk);
+          return pairOk && mOk;
+        }
+      };
+    } },
+
+  { id:"g3", title:"Q4 · Line through two points",
+    skill:"m = (y₂−y₁)÷(x₂−x₁), then c by substitution, then the equation", skillIds:["k_grad_pts","k_yint","k_eq"],
+    make: function(){
+      var m = pick([-3,-2,-1,-0.5,0.5,1,2,3]), c = ri(-5,5);
+      var x1 = ri(-4,-1), x2 = ri(1,4);
+      if (m === 0.5 || m === -0.5){ x1 = pick([-4,-2]); x2 = pick([2,4]); }
+      var y1 = m*x1+c, y2 = m*x2+c;
+      var q = "<p>A line joins <b>("+x1+", "+fmt(y1)+")</b> and <b>("+x2+", "+fmt(y2)+")</b>.</p>"+
+        "<p>a) <span data-v='gradient'>gradient</span> m = <input data-k='m'><br>"+
+        "b) <span data-v='y-intercept'>y-intercept</span> c = <input data-k='c'><br>"+
+        "c) <span data-v='equation'>equation</span>: <input class='wide' data-k='eq' placeholder='y = ...'></p>";
+      var worked = "<b>Working:</b> m = ("+fmt(y2)+" − "+fmt(y1)+") ÷ ("+x2+" − "+x1+") = "+fmt(y2-y1)+" ÷ "+fmt(x2-x1)+" = <b>"+fmt(m)+"</b>. "+
+        "Substitute ("+x2+", "+fmt(y2)+") into y = mx + c: "+fmt(y2)+" = "+fmt(m)+" × "+x2+" + c, so c = "+fmt(y2)+" − "+fmt(m*x2)+" = <b>"+fmt(c)+"</b>. "+
+        "Equation: <b>"+eqStr(m,c)+"</b>.";
+      return {
+        qHtml:q, worked:worked,
+        hint:"STEP 1 gradient from the two points. STEP 2 substitute ONE point into y = mx + c and solve for c. STEP 3 write y = mx + c with your m and c.",
+        check: function(card){
+          var mIn = card.querySelector("[data-k='m']"), cIn = card.querySelector("[data-k='c']"), eqIn = card.querySelector("[data-k='eq']");
+          var mOk = near(num(mIn.value), m), cOk = near(num(cIn.value), c);
+          var p = parseEq(eqIn.value);
+          var eqOk = !!p && near(p.m, m) && near(p.c, c);
+          markInput(mIn, mOk); markInput(cIn, cOk); markInput(eqIn, eqOk);
+          return mOk && cOk && eqOk;
+        }
+      };
+    } },
+
+  { id:"g4", title:"Q5 · Equation from a graph",
+    skill:"read m and c straight off the line", skillIds:["k_eq","k_yint"],
+    make: function(){
+      var m = pick([-3,-2,-1,1,2,3]), c = ri(-4,4);
+      var svg = gridSvg(lineSvg(m,c) + dot(0,c,"var(--warn)"));
+      var q = "<p>Find the equation of this line. The orange dot marks where it crosses the y-axis.</p>"+svg+
+        "<p>m = <input data-k='m'> &nbsp; c = <input data-k='c'> &nbsp; equation: <input class='wide' data-k='eq' placeholder='y = ...'></p>";
+      var worked = "<b>Working:</b> the line crosses the y-axis at (0, "+fmt(c)+") so c = <b>"+fmt(c)+"</b> (read it — the physics way). "+
+        "From the y-intercept, go right 1: the line goes "+(m>0?"up":"down")+" "+Math.abs(m)+", so m = <b>"+fmt(m)+"</b>. "+
+        "Equation: <b>"+eqStr(m,c)+"</b>.";
+      return {
+        qHtml:q, worked:worked,
+        hint:"c is where the line catches the y-axis. For m, start at that point, go right 1 square and count how far up or down the line moves.",
+        check: function(card){
+          var mIn = card.querySelector("[data-k='m']"), cIn = card.querySelector("[data-k='c']"), eqIn = card.querySelector("[data-k='eq']");
+          var mOk = near(num(mIn.value), m), cOk = near(num(cIn.value), c);
+          var p = parseEq(eqIn.value);
+          var eqOk = !!p && near(p.m, m) && near(p.c, c);
+          markInput(mIn, mOk); markInput(cIn, cOk); markInput(eqIn, eqOk);
+          return mOk && cOk && eqOk;
+        }
+      };
+    } },
+
+  { id:"g5", title:"Q6 · Point of intersection (from the graph)",
+    skill:"read the crossing point as a coordinate", skillIds:["k_intersect"],
+    make: function(){
+      /* choose intersection point and two different gradients -> lattice-friendly lines */
+      var px = ri(-3,3), py = ri(-3,3);
+      var m1 = pick([-2,-1,1,2]), m2 = pick([-3,-2,-1,1,2,3]);
+      while (m2 === m1) m2 = pick([-3,-2,-1,1,2,3]);
+      var c1 = py - m1*px, c2 = py - m2*px;
+      var svg = gridSvg(lineSvg(m1,c1) + lineSvg(m2,c2,"var(--warn)"));
+      var q = "<p>The two lines cross once. State the <span data-v='point of intersection'>point of intersection</span> as a "+
+        "<span data-v='coordinate'>coordinate</span>.</p>"+svg+
+        "<p>Point: <input class='wide' data-k='pt' placeholder='(x, y)'></p>";
+      var worked = "<b>Working:</b> the lines cross where BOTH rules are true at once — on the graph that is the single crossing point: <b>("+px+", "+py+")</b>. "+
+        "Check by substitution: line 1 gives y = "+fmt(m1)+"×"+px+(c1>=0?" + "+fmt(c1):" − "+fmt(Math.abs(c1)))+" = "+fmt(m1*px+c1)+" ✓.";
+      return {
+        qHtml:q, worked:worked,
+        hint:"Find where the teal line and the orange line touch. Read across for x, up for y. Write it as (x, y).",
+        check: function(card){
+          var inp = card.querySelector("[data-k='pt']");
+          var mm = String(inp.value||"").replace(/−/g,"-").match(/\(?\s*(-?\d+(?:\.\d+)?)\s*[,;]\s*(-?\d+(?:\.\d+)?)\s*\)?/);
+          var ok = !!mm && near(num(mm[1]), px, .01) && near(num(mm[2]), py, .01);
+          markInput(inp, ok);
+          return ok;
+        }
+      };
+    } },
+
+  { id:"g6", title:"Q7 · Which sketch is right?",
+    skill:"match y = mx + c to its graph", skillIds:["k_sketch"],
+    make: function(){
+      var m = pick([-2,-1,1,2]), c = pick([-3,-2,-1,1,2,3]);
+      /* three distractors: wrong sign of m, wrong sign of c, both wrong */
+      var opts = [ {m:m,c:c,ok:true}, {m:-m,c:c}, {m:m,c:-c}, {m:-m,c:-c} ];
+      opts.sort(function(){ return Math.random()-0.5; });
+      var q = "<p><span data-v='sketch'>Sketch</span> check: which graph shows <b>"+eqStr(m,c)+"</b>?</p><div class='minis'>";
+      opts.forEach(function(o,i){
+        q += "<button data-k='opt"+i+"' data-ok='"+(o.ok?1:0)+"' aria-label='graph option "+(i+1)+"'>"+
+             gridSvg(lineSvg(o.m,o.c) + dot(0,o.c,"var(--warn)"))+"</button>";
+      });
+      q += "</div>";
+      var worked = "<b>Working:</b> c = "+fmt(c)+" so the line must catch the y-axis at (0, "+fmt(c)+") — "+
+        (c>0?"ABOVE":"BELOW")+" the origin. m = "+fmt(m)+" so it slopes "+(m>0?"UP to the right ↗":"DOWN to the right ↘")+
+        ". Only one option does both.";
+      var chosen = { ok:false, done:false };
+      return {
+        qHtml:q, worked:worked,
+        hint:"Two checks: where does it cross the y-axis (c)? And does it go up ↗ or down ↘ (sign of m)?",
+        wire: function(card){
+          card.querySelectorAll(".minis button").forEach(function(b){
+            b.addEventListener("click", function(){
+              if (chosen.done) return;
+              chosen.done = true;
+              chosen.ok = b.getAttribute("data-ok")==="1";
+              b.classList.add(chosen.ok ? "right" : "wrong");
+              if (!chosen.ok){
+                card.querySelectorAll(".minis button[data-ok='1']").forEach(function(r){ r.classList.add("right"); });
+              }
+            });
+          });
+        },
+        check: function(){ return chosen.done && chosen.ok; }
+      };
+    } }
+  ];
+
+  var host = document.getElementById("gens");
+  GENS.forEach(function(def){ host.appendChild(makeGen(def)); });
+  paintLane();
+})();
+</script>
+</body>
+</html>

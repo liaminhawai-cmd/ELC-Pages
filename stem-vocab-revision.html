@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Linear Graphs Revision — ELC STEM</title>
+<style>
+  :root {
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#0d9488; --accent-soft:#ccfbf1; --radius:14px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 4px 14px rgba(16,24,40,.06);
+    --good:#2f6a3e; --good-soft:#e5f3e8; --warn:#b45309; --warn-soft:#fef3c7;
+    --bad:#a8432f; --bad-soft:#fde8e4;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#fff; --muted:#c7d0e2; --line:#34405b;
+            --accent:#2dd4bf; --accent-soft:#134e4a; --shadow:0 1px 2px rgba(0,0,0,.4);
+            --good:#93cf9b; --good-soft:#1d3323; --warn:#fbbf24; --warn-soft:#3a2f12;
+            --bad:#e8836f; --bad-soft:#3b201a; }
+  }
+  * { box-sizing:border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink);
+         font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+  .wrap { max-width:900px; margin:0 auto; padding:16px 16px 90px; }
+  .top { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:14px; }
+  /* same chrome as the other STEM pages, with finger-sized tap targets */
+  .top a { color:var(--accent); text-decoration:none; font-weight:600;
+    display:inline-block; padding:9px 2px; }
+  .top a:hover { text-decoration:underline; }
+  select.language-select { font:inherit; border-radius:10px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); padding:6px 10px; min-height:40px; }
+  .hero { border-radius:18px; padding:20px 22px; color:#fff;
+    background:linear-gradient(135deg,#047857,#0d9488 55%,#2563eb); box-shadow:var(--shadow); }
+  .hero .eyebrow { text-transform:uppercase; letter-spacing:.12em; font-size:.72rem; opacity:.9; }
+  .hero h1 { margin:.2em 0 .25em; font-family:Georgia,"Times New Roman",serif; font-size:1.6rem; }
+  .hero p { margin:0; font-size:.95rem; max-width:60ch; }
+  h2 { font-size:1.12rem; margin:26px 0 10px; }
+  h3 { font-size:1rem; margin:0 0 6px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px; box-shadow:var(--shadow); margin-bottom:14px; }
+  .muted { color:var(--muted); font-size:.85rem; }
+  p { margin:0 0 10px; }
+  p:last-child { margin-bottom:0; }
+
+  /* resume banner */
+  .resume { display:flex; flex-wrap:wrap; align-items:center; gap:10px; background:var(--accent-soft);
+    border:1px solid var(--accent); border-radius:var(--radius); padding:12px 16px; margin-top:14px; }
+  .resume[hidden] { display:none; }
+  .resume span { flex:1; min-width:200px; font-weight:600; font-size:.92rem; }
+
+  /* stepper */
+  .stepper { display:flex; gap:8px; overflow-x:auto; padding:6px 2px 12px; }
+  .stepstep { flex:0 0 auto; min-height:40px; display:flex; align-items:center; gap:6px;
+    border-radius:999px; border:1px solid var(--line); background:var(--card); color:var(--muted);
+    padding:8px 14px; font:inherit; font-weight:600; font-size:.85rem; cursor:pointer; }
+  .stepstep.on { border-color:var(--accent); color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent); }
+  .stepstep.fin { color:var(--good); border-color:var(--good); }
+
+  /* learning intention */
+  .li { border-left:5px solid var(--accent); }
+  .litag { text-transform:uppercase; letter-spacing:.08em; font-size:.7rem; color:var(--muted);
+    font-weight:700; margin-top:10px; }
+  .litag:first-child { margin-top:0; }
+  .libig { font-family:Georgia,"Times New Roman",serif; font-size:1.12rem; margin:4px 0 0; }
+  ul.sc { list-style:none; margin:6px 0 0; padding:0; }
+  ul.sc li { margin:0; }
+  .scbtn { display:flex; align-items:flex-start; gap:10px; width:100%; text-align:left; min-height:40px;
+    border:0; background:none; color:inherit; font:inherit; padding:7px 0; cursor:pointer; }
+  .scbtn .box { flex:0 0 auto; width:22px; height:22px; border-radius:6px; border:2px solid var(--line);
+    display:flex; align-items:center; justify-content:center; font-size:14px; margin-top:1px; }
+  .scbtn.on .box { border-color:var(--good); background:var(--good-soft); color:var(--good); }
+  .scbtn.on { color:var(--good); font-weight:600; }
+
+  /* phases */
+  .phase .phasebody { display:block; }
+  .phase.locked .phasebody { display:none; }
+  .lockrow { display:none; }
+  .phase.locked .lockrow { display:block; }
+  .lockrow .card { border-style:dashed; color:var(--muted); }
+
+  /* word lane (engage) */
+  .wordlane { display:flex; flex-wrap:wrap; gap:8px; margin-top:10px; }
+  .wchip { border-radius:999px; border:1px solid var(--line); padding:8px 14px; min-height:40px;
+    font-weight:600; background:var(--card); color:var(--ink); cursor:pointer; font-size:.92rem; }
+  .wchip.done { border-color:var(--good); color:var(--good); }
+  .wchip.done::after { content:" ✓"; }
+  .lanebar { height:10px; border-radius:999px; background:var(--bg); border:1px solid var(--line);
+    overflow:hidden; margin:12px 0 4px; }
+  .lanebar i { display:block; height:100%; background:var(--accent); transition:width .3s; }
+
+  /* morpheme cards */
+  .tblwrap { overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius);
+    background:var(--card); box-shadow:var(--shadow); margin:12px 0; }
+  .mgroup { font-size:.78rem; text-transform:uppercase; letter-spacing:.06em; color:var(--muted);
+    font-weight:700; margin:18px 0 8px; }
+  .mgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:10px; }
+  .mcard { border:1px solid var(--line); border-radius:12px; padding:10px 12px; background:var(--bg); }
+  .msurf { font-family:Georgia,"Times New Roman",serif; font-size:1.15rem; font-weight:700;
+    display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .mmean { font-size:.9rem; margin-top:3px; }
+  .mtr { font-size:.95rem; color:var(--accent); font-weight:600; margin-top:2px; }
+  .ptype { display:inline-block; border-radius:999px; padding:2px 10px; font-size:.72rem; font-weight:700; }
+  .ptype.prefix { background:#e5eef5; color:#2c6fa8; }
+  .ptype.root { background:#f5e7d8; color:#9a5518; }
+  .ptype.suffix { background:#e6f1e8; color:#3f7a4a; }
+  @media (prefers-color-scheme:dark) {
+    .ptype.prefix { background:#22323c; color:#9fcbe1; }
+    .ptype.root { background:#34281c; color:#dda866; }
+    .ptype.suffix { background:#22321f; color:#93cf9b; }
+  }
+  .inwords { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+  .inwords span { display:inline-flex; align-items:center; min-height:40px; border-radius:999px;
+    border:1px solid var(--line); background:var(--card); padding:0 12px; font-size:.82rem; cursor:pointer; }
+  .langrow { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:10px; font-size:.9rem; }
+  .langrow select { font:inherit; border-radius:10px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); padding:7px 10px; min-height:40px; }
+
+  /* tasks */
+  .rail { display:flex; flex-wrap:wrap; gap:6px; margin:0 0 12px; }
+  .dot { width:40px; height:40px; border-radius:50%; border:1px solid var(--line); background:var(--card);
+    color:var(--muted); font:inherit; font-size:.85rem; font-weight:700; cursor:pointer; padding:0; }
+  .dot.on { border-color:var(--accent); color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent); }
+  .dot.fin { background:var(--good-soft); border-color:var(--good); color:var(--good); }
+  .tasknum { font-size:.75rem; text-transform:uppercase; letter-spacing:.07em; color:var(--muted); font-weight:700; }
+  .lead { margin:6px 0 12px; }
+
+  /* build */
+  .slots { display:flex; flex-wrap:wrap; gap:8px; min-height:46px; margin-bottom:12px; align-items:center; }
+  .slot { border-bottom:3px solid var(--muted); min-width:64px; min-height:40px; text-align:center;
+    padding:8px 10px; font-weight:700; font-family:Georgia,"Times New Roman",serif; }
+  .slot.full { border-bottom-color:var(--good); color:var(--good); }
+  .tiles { display:flex; flex-wrap:wrap; gap:8px; }
+  .tile { border-radius:10px; border:1px solid var(--line); background:var(--card); color:var(--ink);
+    padding:9px 14px; min-height:40px; font:inherit; font-weight:700; cursor:pointer; }
+  .tile:disabled { opacity:.3; cursor:default; }
+  .tile.no { animation:shake .3s; border-color:var(--bad); }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 75%{transform:translateX(5px)} }
+
+  /* match */
+  .pairwords { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+  .pw { border-radius:999px; border:2px solid var(--line); background:var(--card); color:var(--ink);
+    padding:8px 14px; min-height:40px; font:inherit; font-weight:700; cursor:pointer; }
+  .pw.sel { border-color:var(--accent); background:var(--accent-soft); }
+  .pw.fin { border-color:var(--good); color:var(--good); opacity:.55; cursor:default; }
+  .meanings { display:flex; flex-direction:column; gap:8px; }
+  .mn { text-align:left; border-radius:10px; border:1px solid var(--line); background:var(--card);
+    color:var(--ink); padding:10px 12px; min-height:40px; font:inherit; cursor:pointer; }
+  .mn.fin { border-color:var(--good); background:var(--good-soft); cursor:default; }
+  .mn.fin b { color:var(--good); }
+  .mn.no { animation:shake .3s; border-color:var(--bad); }
+
+  /* find the words */
+  .sent { border-left:4px solid var(--accent); background:var(--bg); border-radius:0 10px 10px 0;
+    padding:10px 12px; margin:6px 0 10px; font-size:1.02rem; line-height:2.6; }
+  .tok { border:0; background:none; color:inherit; font:inherit; padding:6px 4px; margin:0;
+    border-radius:6px; cursor:pointer; border-bottom:2px dashed var(--muted); min-height:40px;
+    vertical-align:middle; }
+  .tok.fin { border-bottom:2px solid var(--good); background:var(--good-soft); color:var(--good); font-weight:700; }
+  .tok.no { animation:shake .3s; background:var(--bad-soft); }
+  .plain { padding:0 1px; vertical-align:middle; }
+  .findcount { font-size:.85rem; color:var(--muted); font-weight:600; }
+
+  /* shared question bits */
+  .q { font-weight:600; margin:12px 0 8px; }
+  .opts { display:flex; flex-direction:column; gap:8px; }
+  .opt { text-align:left; border-radius:10px; border:1px solid var(--line); background:var(--card);
+    color:var(--ink); padding:10px 12px; min-height:40px; font:inherit; cursor:pointer; }
+  .opt.right { border-color:var(--good); background:var(--good-soft); }
+  .opt.wrong { border-color:var(--bad); background:var(--bad-soft); }
+  .opt:disabled { cursor:default; }
+  .fb { font-weight:700; margin-top:10px; }
+  .fb.ok { color:var(--good); } .fb.no { color:var(--bad); }
+  .worked { border-left:4px solid var(--accent); background:var(--accent-soft); border-radius:0 10px 10px 0;
+    padding:10px 14px; margin-top:10px; font-size:.9rem; }
+  .worked.hidden { display:none; }
+  .qtable { border-collapse:collapse; margin:0; width:100%; min-width:320px; font-size:.9rem; }
+  .qtable th, .qtable td { border:1px solid var(--line); padding:7px 10px; text-align:center; }
+  .qtable th { background:var(--bg); }
+  .qtable td.miss { background:var(--warn-soft); color:var(--warn); font-weight:700; }
+  svg.graph { width:100%; max-width:320px; height:auto; background:var(--card); border:1px solid var(--line);
+    border-radius:10px; display:block; margin:10px 0; }
+
+  /* buttons */
+  .btnrow { display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; align-items:center; }
+  button.btn { font:inherit; font-weight:600; border-radius:999px; padding:9px 18px; min-height:40px;
+    cursor:pointer; border:1px solid var(--accent); background:var(--accent); color:#fff; }
+  button.btn.ghost { background:none; color:var(--accent); }
+  button.btn.quiet { background:none; color:var(--muted); border-color:var(--line); }
+  .ready { border-left:5px solid var(--good); }
+  .ready a { color:var(--accent); font-weight:600; }
+  .note { margin-top:22px; color:var(--muted); font-size:.85rem; }
+  footer { margin-top:24px; color:var(--muted); font-size:.85rem; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <a href="stem.html" data-i18n="back">← STEM Hub</a>
+    <select class="language-select" aria-label="Page language">
+      <option value="en">English</option>
+      <option value="zh-Hans">简体中文（中国）</option>
+      <option value="zh-Hant">繁體中文（台灣）</option>
+    </select>
+  </div>
+
+  <div class="hero">
+    <div class="eyebrow" data-i18n="eyebrow">Revision · the last unit</div>
+    <h1>📈 <span data-i18n="title">Linear Graphs — the quiz words</span></h1>
+    <p data-i18n="heroText">A short lesson in four steps. By the end you will know what every word in the
+      Linear Equations Progress Quiz is asking you to do.</p>
+  </div>
+
+  <div class="resume" id="resume" hidden>
+    <span id="resumeMsg"></span>
+    <button class="btn" id="resumeBtn"></button>
+  </div>
+
+  <div class="stepper" id="stepper"></div>
+
+  <div class="card li">
+    <div class="litag" data-i18n="liTag">Learning intention</div>
+    <p class="libig" data-i18n="liText">We are learning to use the language of linear graphs so the quiz
+      questions make sense.</p>
+    <div class="litag" data-i18n="scTag">Success criteria</div>
+    <ul class="sc" id="scTop"></ul>
+  </div>
+
+  <!-- ============ 1 · ENGAGE ============ -->
+  <section class="phase" id="ph-engage">
+    <h2 data-i18n="engageHead">👀 1 · Engage — which words do you already know?</h2>
+    <div class="lockrow"><div class="card"><p class="lockmsg"></p>
+      <div class="btnrow"><button class="btn ghost" data-unlock="engage"></button></div></div></div>
+    <div class="phasebody">
+      <div class="card">
+        <p>Every word here came up in the last unit. You met <span data-v>gradient</span>,
+          <span data-v>substitution</span>, <span data-v>y-intercept</span> and the
+          <span data-v="intersection">point of intersection</span> in the Progress Quiz. Tap a word to open
+          your notebook: read the meaning, look at the word parts, and read it in your first language.</p>
+        <p class="muted" data-i18n="engageHelp">Which words do you already know? Which parts look
+          familiar? Tap at least three words before you go on.</p>
+        <div class="wordlane" id="wordlane"></div>
+        <div class="lanebar"><i id="lanefill" style="width:0%"></i></div>
+        <div class="muted" id="lanecount"></div>
+        <div class="btnrow">
+          <button class="btn" id="engageNext" data-i18n="engageBtn">I have looked at the words →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 2 · DEVELOP & DISCOVER ============ -->
+  <section class="phase" id="ph-develop">
+    <h2 data-i18n="developHead">🔍 2 · Develop and Discover — the word parts</h2>
+    <div class="lockrow"><div class="card"><p class="lockmsg"></p>
+      <div class="btnrow"><button class="btn ghost" data-unlock="develop"></button></div></div></div>
+    <div class="phasebody">
+      <div class="card">
+        <p>Most of these words are built from Latin parts. Learn the parts once and you can read a word
+          you have never seen before. <span data-v>intersection</span> = <b>inter</b> (between) +
+          <b>sect</b> (cut) + <b>ion</b> (the act of): one line cutting across another. A road intersection
+          is the same idea. <span data-v>substitution</span> = <b>sub</b> (under) + <b>stitut</b> (set up) +
+          <b>ion</b>: a number set up in place of a letter.</p>
+        <p class="muted" data-i18n="developHelp">Read the word parts below. Words that share a part belong to the
+          same family. Then answer the three questions under them.</p>
+        <div class="langrow">
+          <label for="homelang" data-i18n="langLabel">Your first language:</label>
+          <select id="homelang"></select>
+        </div>
+        <div id="morphtable"></div>
+        <p class="muted" id="nopartsline"></p>
+      </div>
+      <div class="card">
+        <h3 data-i18n="mqHead">Quick check — three questions</h3>
+        <div id="morphqs"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 3 · APPLY ============ -->
+  <section class="phase" id="ph-apply">
+    <h2 data-i18n="applyHead">✍️ 3 · Apply — use the words</h2>
+    <div class="lockrow"><div class="card"><p class="lockmsg"></p>
+      <div class="btnrow"><button class="btn ghost" data-unlock="apply"></button></div></div></div>
+    <div class="phasebody">
+      <p class="muted" data-i18n="applyHelp">Ten short tasks: build words from their parts, match words to
+        meanings, and find the maths words inside real quiz questions.</p>
+      <div class="rail" id="rail"></div>
+      <div class="card" id="taskcard"></div>
+    </div>
+  </section>
+
+  <!-- ============ 4 · REVIEW & REFLECT ============ -->
+  <section class="phase" id="ph-review">
+    <h2 data-i18n="reviewHead">🔁 4 · Review and Reflect</h2>
+    <div class="lockrow"><div class="card"><p class="lockmsg"></p>
+      <div class="btnrow"><button class="btn ghost" data-unlock="review"></button></div></div></div>
+    <div class="phasebody">
+      <div class="card">
+        <p class="muted" data-i18n="reviewHelp">Tick what you can do now. Be honest — this is for you.</p>
+        <ul class="sc" id="scBottom"></ul>
+        <p class="muted" id="reviewStats" style="margin-top:12px"></p>
+      </div>
+      <div class="card">
+        <h3 id="practiseHead"></h3>
+        <div class="langrow">
+          <select id="practiseSel"></select>
+          <button class="btn ghost" id="practiseOpen"></button>
+        </div>
+      </div>
+      <div class="card ready">
+        <h3 data-i18n="readyHead">Ready for the retest?</h3>
+        <p>Do the full lesson for these words in the Vocab Hub: every word, its parts, its meaning in your
+          language, and a question for each one.</p>
+        <p><a href="stem-vocab-hub.html#set=rev">📓 Open the revision set in the Vocab Hub →</a><br>
+           <a href="stem-progress.html">🧭 See these words on my progress report →</a></p>
+      </div>
+      <div class="btnrow">
+        <button class="btn quiet" id="restartBtn"></button>
+      </div>
+    </div>
+  </section>
+
+  <p class="note" data-i18n="privacy">🔒 Anonymous. Your place in this lesson and your vocab notebook are
+    stored in this browser only — no accounts, no tracking.</p>
+  <footer>ELC Hub — made by ELC teachers for ELC students.</footer>
+</div>
+
+<script src="stem-vocab-data.js?v=20260821-1"></script>
+<script src="stem-shared.js?v=20260821-1"></script>
+<script src="stem-vocab.js?v=20260821-1"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ===================== CONTENT — teachers edit here ===================== */
+
+  var SET_ID    = "rev";                 /* which vocab set this lesson revises */
+  var STATE_KEY = "elc_stem_revseq";     /* where this lesson saves your place  */
+  var DECOYS    = 2;                     /* extra wrong tiles in a build task   */
+  var HINT_AFTER= 2;                     /* wrong taps before the hint shows    */
+  var ENGAGE_TAPS = 3;                   /* words to open before step 2 unlocks */
+
+  /* Names for the first-language picker (the data file lists ids only). */
+  var LANG_NAMES = {
+    "zh-Hans":"中文（简体）", "zh-Hant":"中文（繁體）", "ja":"日本語", "ko":"한국어",
+    "vi":"Tiếng Việt", "ar":"العربية", "fa":"فارسی", "ur":"اردو", "am":"አማርኛ",
+    "ml":"മലയാളം", "ta":"தமிழ்", "tl":"Filipino (Tagalog)", "ps":"پښتو",
+    "ro":"Română", "ru":"Русский", "fr":"Français", "hi":"हिन्दी", "es":"Español"
+  };
+
+  /* Step 2 quick check — three questions about the word parts. */
+  var MORPH_QS = [
+    { q:"Which part means <b>between</b>?",
+      opts:["inter","sub","co","per"], a:"inter",
+      explain:"<b>inter-</b> = between. <i>Intersection</i> is one line cutting between two others — and a road intersection is where two streets cut across each other." },
+    { q:"Which part means <b>cut</b>?",
+      opts:["sect","stitut","ordin","grad"], a:"sect",
+      explain:"<b>sect</b> = cut. The same part is in <i>section</i> and in <i>insect</i> (a body cut into parts)." },
+    { q:"In <b>substitution</b>, what does <b>sub-</b> mean?",
+      opts:["under","over","between","together"], a:"under",
+      explain:"<b>sub-</b> = under. A substitute player goes on in place of a teammate; in maths a number goes in place of a letter." }
+  ];
+
+  /* Step 3 — the ten tasks. kind: "build" | "match" | "find".
+     The find questions copy the wording style of the Progress Quiz.
+     Every answer below has been checked by hand. */
+  var T3_TABLE =
+    "<div class='tblwrap'><table class='qtable'>" +
+    "<tr><th>x</th><td>−2</td><td>−1</td><td>0</td><td>1</td><td>2</td></tr>" +
+    "<tr><th>y</th><td class='miss'>?</td><td>−5</td><td>−3</td><td>−1</td><td>1</td></tr>" +
+    "</table></div>";
+
+  var TASKS = [
+    { id:"t1", kind:"build", word:"gradient" },
+
+    { id:"t2", kind:"match", pairs:[
+        ["gradient",     "how steep a line is: rise ÷ run"],
+        ["substitution", "putting a number in place of a letter"],
+        ["y-intercept",  "the point where a line crosses the y-axis"],
+        ["origin",       "the point (0, 0) where the two axes cross"]
+      ] },
+
+    { id:"t3", kind:"find",
+      source:"Quiz question · table of values",
+      sentence:"Use substitution to complete the table of values for the equation y = 2x − 3.",
+      targets:[ {tok:"substitution", w:"substitution"}, {tok:"equation", w:"equation"} ],
+      extra:T3_TABLE,
+      q:"What number goes in the empty cell?",
+      opts:["−7","−4","−1","7"], a:"−7",
+      explain:"Substitute −2 for x: y = 2 × (−2) − 3 = −4 − 3 = <b>−7</b>. Multiply first, then subtract. Careful: −4 is only half the job, and −1 is the answer for x = 1." },
+
+    { id:"t4", kind:"build", word:"substitution" },
+
+    { id:"t5", kind:"find",
+      source:"Quiz question · gradient from two points",
+      sentence:"Find the gradient of the line joining the coordinates (4, 4) and (−8, −2).",
+      targets:[ {tok:"gradient", w:"gradient"}, {tok:"coordinates", w:"coordinate"} ],
+      q:"What is the gradient of the line?",
+      opts:["0.5","2","−0.5","6"], a:"0.5",
+      explain:"m = (y₂ − y₁) ÷ (x₂ − x₁) = (4 − (−2)) ÷ (4 − (−8)) = 6 ÷ 12 = <b>0.5</b>. Subtract in the same order top and bottom: the other way round gives (−2 − 4) ÷ (−8 − 4) = −6 ÷ −12 = 0.5 as well." },
+
+    { id:"t6", kind:"build", word:"intersection" },
+
+    { id:"t7", kind:"find",
+      source:"Quiz question · point of intersection",
+      sentence:"State the coordinates of the point of intersection of Line f and Line g.",
+      targets:[ {tok:"coordinates", w:"coordinate"}, {tok:"intersection", w:"intersection"} ],
+      extra:"GRAPH_FG",
+      q:"Where do Line f and Line g cross?",
+      opts:["(2, 3)","(3, 2)","(2, 4)","(1, 4)"], a:"(2, 3)",
+      explain:"Read across for x, then up for y: the lines cross at <b>(2, 3)</b>. Check it: Line f is y = x + 1, and 2 + 1 = 3 ✓. Line g is y = 5 − x, and 5 − 2 = 3 ✓. Always write x first.",
+      extraAfter:"GRAPH_FG_DOT" },
+
+    { id:"t8", kind:"match", pairs:[
+        ["coordinate",   "a pair of numbers (x, y) that fixes one point"],
+        ["intersection", "the point where two lines cross"],
+        ["simultaneous", "two equations that must be true at the same time"],
+        ["sketch",       "a quick graph showing the important features"]
+      ] },
+
+    { id:"t9", kind:"find",
+      source:"Quiz question · equation of a line",
+      sentence:"A line has a gradient of 3 and passes through the coordinate (2, 11). Write the equation of this line in the form y = mx + c.",
+      targets:[ {tok:"gradient", w:"gradient"}, {tok:"coordinate", w:"coordinate"}, {tok:"equation", w:"equation"} ],
+      q:"What is the equation of the line?",
+      opts:["y = 3x + 5","y = 3x + 11","y = 3x − 5","y = 5x + 3"], a:"y = 3x + 5",
+      explain:"Substitute the point into y = mx + c: 11 = 3 × 2 + c, so 11 = 6 + c and c = <b>5</b>. The equation is <b>y = 3x + 5</b>. The 11 is a y-value, not the y-intercept." },
+
+    { id:"t10", kind:"find",
+      source:"Quiz question · sketch a line",
+      sentence:"Sketch the graph of y = 2x − 6. Label the x-intercept and the y-intercept.",
+      targets:[ {tok:"sketch", w:"sketch"}, {tok:"x-intercept", w:"x-intercept"}, {tok:"y-intercept", w:"y-intercept"} ],
+      q:"Which two points should you label?",
+      opts:["(0, −6) and (3, 0)","(−6, 0) and (0, 3)","(0, 6) and (−3, 0)","(0, −6) and (−3, 0)"],
+      a:"(0, −6) and (3, 0)",
+      explain:"For the y-intercept put x = 0: y = 2(0) − 6 = −6, so (0, <b>−6</b>). For the x-intercept put y = 0: 0 = 2x − 6, so 2x = 6 and x = <b>3</b>, giving (3, 0). Two points and a ruler are enough for a sketch." }
+  ];
+
+  /* ===================== end CONTENT ===================== */
+
+  /* ---------- guard ---------- */
+  if (!window.STEM || !window.STEM_VOCAB_DATA) {
+    document.getElementById("taskcard").textContent =
+      "The vocabulary data did not load. Refresh the page, or tell your teacher.";
+    return;
+  }
+  var Store = window.STEM.Store;
+  var SET = null;
+  window.STEM_VOCAB_DATA.sets.forEach(function(s){ if (s.id === SET_ID) SET = s; });
+  if (!SET) {
+    document.getElementById("taskcard").textContent = "The revision word set is missing.";
+    return;
+  }
+  var WORD = {};
+  SET.words.forEach(function(w){ WORD[w.w.toLowerCase()] = w; });
+
+  /* ---------- small helpers ---------- */
+  function esc(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+  function byId(id){ return document.getElementById(id); }
+  function shuffle(a){
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random()*(i+1)), t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+  function homeLang(){ try { return localStorage.getItem("elc_stem_home_lang") || ""; } catch(e){ return ""; } }
+  function setHomeLang(v){ try { localStorage.setItem("elc_stem_home_lang", v); } catch(e){} }
+
+  /* ---------- i18n (page chrome only — the maths stays in English) ---------- */
+  var COPY = {
+    en: {
+      sc:["I can match each word to its meaning.",
+          "I can use the word while I do the maths.",
+          "I can find the words inside a real quiz question."],
+      phaseNames:["Engage","Develop and Discover","Apply","Review and Reflect"],
+      lockMsg:function(n){ return "Finish “" + n + "” first — or open this step anyway."; },
+      openAnyway:"Open this step anyway",
+      resumeMsg:function(n){ return "Welcome back. You stopped in “" + n + "”."; },
+      resumeBtn:"Continue →",
+      taskOf:function(a,b){ return "Task " + a + " of " + b; },
+      found:function(a,b){ return "Words found: " + a + " / " + b; },
+      foundAll:"All the maths words are found. Now the maths:",
+      leadBuild:"Tap the parts in the right order to build the word.",
+      leadMatch:"Tap a word, then tap its meaning.",
+      leadFind:"Tap every maths word in this quiz question.",
+      buildHint:function(g){ return "Hint: the next piece means “" + g + "”."; },
+      buildDone:function(w){ return "✓ " + w + " is in your notebook."; },
+      notThatPiece:"Not that piece next — think about the order.",
+      notTarget:"That is not one of our revision words. Try another one.",
+      pickWordFirst:"Tap a word first, then tap its meaning.",
+      matchWrong:"Not that one. Read the meaning again.",
+      correct:"Correct.",
+      tryAgain:"Not yet — try again.",
+      nextTask:"Next task →",
+      skipTask:"Skip for now →",
+      prevTask:"← Back",
+      allTasksDone:"🎉 All ten tasks done. Well done!",
+      goReview:"Go to Review and Reflect →",
+      wordsLine:function(a,b){ return a + " of " + b + " revision words are in your notebook."; },
+      tasksLine:function(a,b){ return a + " of " + b + " tasks finished."; },
+      practiseHead:"One word to practise tonight",
+      practiseOpen:"Open it in my notebook",
+      chooseWord:"choose a word…",
+      restart:"Start this lesson again",
+      confirmRestart:"Start this lesson again from step 1? Your vocab notebook is kept.",
+      inYourLang:"choose…",
+      mgPrefix:"Prefixes — the part at the front",
+      mgRoot:"Roots — the main meaning",
+      mgSuffix:"Suffixes — the part at the end",
+      ptypeNames:{ prefix:"prefix", root:"root", suffix:"suffix" },
+      noParts:function(list){ return "No Latin parts to cut: " + list + ". Learn these two as whole words."; }
+    },
+    "zh-Hans": {
+      back:"← STEM 主页", eyebrow:"复习 · 上一个单元", title:"直线图像——测验词汇",
+      heroText:"一节四个步骤的短课。学完后，你会明白线性方程进度测验里每个词让你做什么。",
+      liTag:"学习目标", liText:"我们要学会使用直线图像的语言，让测验题目变得看得懂。",
+      scTag:"成功标准",
+      engageHead:"👀 1 · 导入——哪些词你已经会了？",
+      engageHelp:"哪些词你已经认识？哪些词根看起来眼熟？先点开至少三个词再继续。",
+      engageBtn:"我看过这些词了 →",
+      developHead:"🔍 2 · 发展与探索——词根词缀",
+      developHelp:"读下面的词部件。有相同部件的词属于同一个家族。然后回答下面三个问题。",
+      langLabel:"你的第一语言：", mqHead:"快速检查——三个问题",
+      applyHead:"✍️ 3 · 应用——把词用起来",
+      applyHelp:"十个小任务：用词根拼出单词、把词和意思配对、在真实测验题目里找出数学词。",
+      reviewHead:"🔁 4 · 复习与反思",
+      reviewHelp:"勾选你现在做得到的。要诚实——这是给你自己看的。",
+      readyHead:"准备好补考了吗？",
+      privacy:"🔒 匿名。你在这节课的进度和词汇笔记本只保存在这个浏览器中——没有账号，没有追踪。",
+      sc:["我能把每个词和它的意思配起来。",
+          "我能一边做数学一边用这个词。",
+          "我能在真实的测验题目里找出这些词。"],
+      phaseNames:["导入","发展与探索","应用","复习与反思"],
+      lockMsg:function(n){ return "请先完成「" + n + "」——也可以直接打开这一步。"; },
+      openAnyway:"直接打开这一步",
+      resumeMsg:function(n){ return "欢迎回来。你上次停在「" + n + "」。"; },
+      resumeBtn:"继续 →",
+      taskOf:function(a,b){ return "第 " + a + " / " + b + " 个任务"; },
+      found:function(a,b){ return "已找到的词：" + a + " / " + b; },
+      foundAll:"所有数学词都找到了。现在做数学：",
+      leadBuild:"按正确顺序点击词根，把单词拼出来。",
+      leadMatch:"先点一个词，再点它的意思。",
+      leadFind:"点出这道测验题目里的每一个数学词。",
+      buildHint:function(g){ return "提示：下一块部件的意思是「" + g + "」。"; },
+      buildDone:function(w){ return "✓ " + w + " 已进入你的笔记本。"; },
+      notThatPiece:"下一个不是这块——想想顺序。",
+      notTarget:"这不是我们的复习词。再试一个。",
+      pickWordFirst:"先点一个词，再点它的意思。",
+      matchWrong:"不是这个。再读一遍意思。",
+      correct:"正确。",
+      tryAgain:"还不对——再试一次。",
+      nextTask:"下一个任务 →", skipTask:"先跳过 →", prevTask:"← 上一个",
+      allTasksDone:"🎉 十个任务全部完成。做得好！",
+      goReview:"去复习与反思 →",
+      wordsLine:function(a,b){ return "复习词汇中已有 " + a + " / " + b + " 个进入你的笔记本。"; },
+      tasksLine:function(a,b){ return "已完成 " + a + " / " + b + " 个任务。"; },
+      practiseHead:"今晚练一个词",
+      practiseOpen:"在笔记本里打开",
+      chooseWord:"选一个词…",
+      restart:"重新开始这节课",
+      confirmRestart:"从第 1 步重新开始这节课？你的词汇笔记本会保留。",
+      inYourLang:"选择…",
+      mgPrefix:"前缀——放在最前面的部件",
+      mgRoot:"词根——主要的意思",
+      mgSuffix:"后缀——放在最后面的部件",
+      ptypeNames:{ prefix:"前缀", root:"词根", suffix:"后缀" },
+      noParts:function(list){ return "没有拉丁部件可以拆：" + list + "。这两个词要整个记下来。"; }
+    },
+    "zh-Hant": {
+      back:"← STEM 主頁", eyebrow:"複習 · 上一個單元", title:"直線圖形——小考詞彙",
+      heroText:"一節四個步驟的短課。上完之後，你會明白一次方程進度小考裡每個詞要你做什麼。",
+      liTag:"學習目標", liText:"我們要學會使用直線圖形的語言，讓小考題目變得看得懂。",
+      scTag:"成功標準",
+      engageHead:"👀 1 · 引起動機——哪些字你已經會了？",
+      engageHelp:"哪些字你已經認得？哪些字根看起來眼熟？先點開至少三個字再繼續。",
+      engageBtn:"我看過這些字了 →",
+      developHead:"🔍 2 · 發展與探索——字首、字根、字尾",
+      developHelp:"讀下面的字部件。有相同部件的字屬於同一個家族。然後回答下面三個問題。",
+      langLabel:"你的第一語言：", mqHead:"快速檢查——三個問題",
+      applyHead:"✍️ 3 · 應用——把字用出來",
+      applyHelp:"十個小任務：用字根拼出單字、把字和意思配對，並在真實的小考題目裡找出數學用字。",
+      reviewHead:"🔁 4 · 複習與反思",
+      reviewHelp:"勾選你現在做得到的。要誠實——這是給你自己看的。",
+      readyHead:"準備好重考了嗎？",
+      privacy:"🔒 匿名。你在這節課的進度和詞彙筆記本只儲存在這個瀏覽器中——沒有帳號、沒有追蹤。",
+      sc:["我能把每個字和它的意思配起來。",
+          "我能一邊做數學一邊用這個字。",
+          "我能在真實的小考題目裡找出這些字。"],
+      phaseNames:["引起動機","發展與探索","應用","複習與反思"],
+      lockMsg:function(n){ return "請先完成「" + n + "」——也可以直接打開這一步。"; },
+      openAnyway:"直接打開這一步",
+      resumeMsg:function(n){ return "歡迎回來。你上次停在「" + n + "」。"; },
+      resumeBtn:"繼續 →",
+      taskOf:function(a,b){ return "第 " + a + " / " + b + " 個任務"; },
+      found:function(a,b){ return "已找到的字：" + a + " / " + b; },
+      foundAll:"所有數學用字都找到了。現在做數學：",
+      leadBuild:"依正確順序點字根，把單字拼出來。",
+      leadMatch:"先點一個字，再點它的意思。",
+      leadFind:"點出這道小考題目裡的每一個數學用字。",
+      buildHint:function(g){ return "提示：下一塊部件的意思是「" + g + "」。"; },
+      buildDone:function(w){ return "✓ " + w + " 已進入你的筆記本。"; },
+      notThatPiece:"下一塊不是這個——想一想順序。",
+      notTarget:"這不是我們的複習用字。再試一個。",
+      pickWordFirst:"先點一個字，再點它的意思。",
+      matchWrong:"不是這個。再讀一次意思。",
+      correct:"正確。",
+      tryAgain:"還不對——再試一次。",
+      nextTask:"下一個任務 →", skipTask:"先跳過 →", prevTask:"← 上一個",
+      allTasksDone:"🎉 十個任務全部完成。做得很好！",
+      goReview:"前往複習與反思 →",
+      wordsLine:function(a,b){ return "複習詞彙中已有 " + a + " / " + b + " 個進入你的筆記本。"; },
+      tasksLine:function(a,b){ return "已完成 " + a + " / " + b + " 個任務。"; },
+      practiseHead:"今晚練一個字",
+      practiseOpen:"在筆記本裡打開",
+      chooseWord:"選一個字…",
+      restart:"重新開始這節課",
+      confirmRestart:"從第 1 步重新開始這節課？你的詞彙筆記本會保留。",
+      inYourLang:"選擇…",
+      mgPrefix:"字首——放在最前面的部件",
+      mgRoot:"字根——主要的意思",
+      mgSuffix:"字尾——放在最後面的部件",
+      ptypeNames:{ prefix:"字首", root:"字根", suffix:"字尾" },
+      noParts:function(list){ return "沒有拉丁部件可以拆：" + list + "。這兩個字要整個記下來。"; }
+    }
+  };
+
+  var langSel = document.querySelector(".language-select");
+  var lang = "en";
+  try { lang = localStorage.getItem("elc_page_language") || "en"; } catch(e){}
+  if (!COPY[lang]) lang = "en";
+  langSel.value = lang;
+  function T(){ return COPY[lang]; }
+  function tr(k){ var v = T()[k]; return v !== undefined ? v : COPY.en[k]; }
+  function tf(k){ var v = T()[k]; return typeof v === "function" ? v : COPY.en[k]; }
+
+  function setStatic(){
+    var dict = T();
+    document.querySelectorAll("[data-i18n]").forEach(function(el){
+      var k = el.getAttribute("data-i18n");
+      if (!el._en) el._en = el.textContent;
+      el.textContent = (typeof dict[k] === "string") ? dict[k] : el._en;
+    });
+    document.documentElement.lang = (lang === "en") ? "en" : lang;
+  }
+  langSel.addEventListener("change", function(){
+    lang = langSel.value;
+    try { localStorage.setItem("elc_page_language", lang); } catch(e){}
+    setStatic(); paintAll(); renderTask();
+  });
+
+  /* ---------- lesson state (this browser only) ---------- */
+  var S = { v:1, engage:{taps:{}, done:false}, develop:{q:{}, done:false},
+            apply:{cur:0, done:{}}, review:{sc:{}, word:"", done:false} };
+  (function load(){
+    var raw = null;
+    try { raw = JSON.parse(localStorage.getItem(STATE_KEY) || "null"); } catch(e){ raw = null; }
+    if (!raw || typeof raw !== "object") return;
+    if (raw.engage && typeof raw.engage === "object") {
+      S.engage.taps = raw.engage.taps || {};
+      S.engage.done = !!raw.engage.done;
+    }
+    if (raw.develop && typeof raw.develop === "object") {
+      S.develop.q = raw.develop.q || {};
+      S.develop.done = !!raw.develop.done;
+    }
+    if (raw.apply && typeof raw.apply === "object") {
+      S.apply.done = raw.apply.done || {};
+      var c = parseInt(raw.apply.cur, 10);
+      S.apply.cur = (c >= 0 && c < TASKS.length) ? c : 0;
+    }
+    if (raw.review && typeof raw.review === "object") {
+      S.review.sc = raw.review.sc || {};
+      S.review.word = typeof raw.review.word === "string" ? raw.review.word : "";
+      S.review.done = !!raw.review.done;
+    }
+  })();
+  function save(){ try { localStorage.setItem(STATE_KEY, JSON.stringify(S)); } catch(e){} }
+
+  function tasksDone(){
+    var n = 0;
+    TASKS.forEach(function(t){ if (S.apply.done[t.id]) n++; });
+    return n;
+  }
+  function phaseDone(i){
+    if (i === 0) return S.engage.done || Object.keys(S.engage.taps).length >= ENGAGE_TAPS;
+    if (i === 1) return S.develop.done;
+    if (i === 2) return tasksDone() === TASKS.length;
+    return S.review.done;
+  }
+  function firstOpen(){
+    for (var i = 0; i < 4; i++) { if (!phaseDone(i)) return i; }
+    return 3;
+  }
+  var PHASE_IDS = ["engage","develop","apply","review"];
+  var unlocked = {};      /* phases opened by hand this visit */
+
+  /* ---------- graph helpers (grid −6 … 6) ---------- */
+  var R = 6, STEP = 24, PAD = 18;
+  function GX(x){ return PAD + (x + R) * STEP; }
+  function GY(y){ return PAD + (R - y) * STEP; }
+  function gridSvg(inner){
+    var size = PAD * 2 + 2 * R * STEP;   /* 324 */
+    var g = "<svg class='graph' viewBox='0 0 " + size + " " + size + "' role='img' aria-label='Two straight lines on a grid'>";
+    for (var i = -R; i <= R; i++){
+      g += "<line x1='" + GX(i) + "' y1='" + GY(-R) + "' x2='" + GX(i) + "' y2='" + GY(R) + "' stroke='var(--line)' stroke-width='1'/>";
+      g += "<line x1='" + GX(-R) + "' y1='" + GY(i) + "' x2='" + GX(R) + "' y2='" + GY(i) + "' stroke='var(--line)' stroke-width='1'/>";
+    }
+    g += "<line x1='" + GX(-R) + "' y1='" + GY(0) + "' x2='" + GX(R) + "' y2='" + GY(0) + "' stroke='var(--muted)' stroke-width='2'/>";
+    g += "<line x1='" + GX(0) + "' y1='" + GY(-R) + "' x2='" + GX(0) + "' y2='" + GY(R) + "' stroke='var(--muted)' stroke-width='2'/>";
+    for (var t = -R; t <= R; t += 2){
+      if (t === 0) continue;
+      g += "<text x='" + GX(t) + "' y='" + (GY(0) + 14) + "' font-size='10' fill='var(--muted)' text-anchor='middle'>" + t + "</text>";
+      g += "<text x='" + (GX(0) - 6) + "' y='" + (GY(t) + 3) + "' font-size='10' fill='var(--muted)' text-anchor='end'>" + t + "</text>";
+    }
+    g += "<text x='" + (GX(R) - 4) + "' y='" + (GY(0) - 6) + "' font-size='11' fill='var(--muted)' text-anchor='end'>x</text>";
+    g += "<text x='" + (GX(0) + 8) + "' y='" + (GY(R) + 10) + "' font-size='11' fill='var(--muted)'>y</text>";
+    return g + inner + "</svg>";
+  }
+  /* draw y = mx + c, clipped to the grid box */
+  function lineSvg(m, c, color){
+    var pts = [];
+    function add(x, y){
+      if (x >= -R - 1e-9 && x <= R + 1e-9 && y >= -R - 1e-9 && y <= R + 1e-9) pts.push([x, y]);
+    }
+    add(-R, m * (-R) + c); add(R, m * R + c);
+    if (m !== 0){ add((-R - c) / m, -R); add((R - c) / m, R); }
+    pts.sort(function(a, b){ return a[0] - b[0]; });
+    if (pts.length < 2) return "";
+    var a = pts[0], b = pts[pts.length - 1];
+    return "<line x1='" + GX(a[0]) + "' y1='" + GY(a[1]) + "' x2='" + GX(b[0]) + "' y2='" + GY(b[1]) +
+           "' stroke='" + color + "' stroke-width='3'/>";
+  }
+  /* Line f: y = x + 1 (teal).  Line g: y = 5 − x (amber).  They cross at (2, 3). */
+  function graphFG(showPoint){
+    var inner = lineSvg(1, 1, "var(--accent)") + lineSvg(-1, 5, "var(--warn)");
+    /* labels sit in the empty corners so they never cross a line */
+    inner += "<text x='" + GX(6) + "' y='" + GY(4.2) + "' text-anchor='end' font-size='12' font-weight='700' fill='var(--accent)'>Line f</text>";
+    inner += "<text x='" + GX(3.2) + "' y='" + GY(-2.8) + "' font-size='12' font-weight='700' fill='var(--warn)'>Line g</text>";
+    if (showPoint){
+      inner += "<circle cx='" + GX(2) + "' cy='" + GY(3) + "' r='5' fill='var(--ink)'/>";
+      inner += "<text x='" + GX(2.3) + "' y='" + GY(3.4) + "' font-size='12' font-weight='700' fill='var(--ink)'>(2, 3)</text>";
+    }
+    return gridSvg(inner);
+  }
+  function extraHtml(code){
+    if (code === "GRAPH_FG") return graphFG(false);
+    if (code === "GRAPH_FG_DOT") return graphFG(true);
+    return code || "";
+  }
+
+  /* ---------- shared multiple-choice ---------- */
+  function mcq(host, item, onRight, preAnswered){
+    var opts = shuffle(item.opts);
+    var h = "<div class='q'>" + item.q + "</div><div class='opts'>";
+    opts.forEach(function(o){ h += "<button class='opt'>" + esc(o) + "</button>"; });
+    h += "</div><div class='fb' aria-live='polite'></div><div class='worked hidden'></div>";
+    host.innerHTML = h;
+    var tries = 0, finished = false;
+    if (preAnswered){
+      finished = true;
+      host.querySelectorAll(".opt").forEach(function(x){
+        x.disabled = true;
+        if (x.textContent === String(item.a)) x.classList.add("right");
+      });
+      host.querySelector(".fb").textContent = "✓ " + tr("correct");
+      host.querySelector(".fb").className = "fb ok";
+      var w0 = host.querySelector(".worked");
+      w0.classList.remove("hidden");
+      w0.innerHTML = item.explain;
+      return;
+    }
+    host.querySelectorAll(".opt").forEach(function(b){
+      b.addEventListener("click", function(){
+        if (finished) return;
+        tries++;
+        var right = (b.textContent === String(item.a));
+        b.classList.add(right ? "right" : "wrong");
+        var fb = host.querySelector(".fb");
+        if (right){
+          finished = true;
+          host.querySelectorAll(".opt").forEach(function(x){ x.disabled = true; });
+          fb.textContent = "✓ " + tr("correct");
+          fb.className = "fb ok";
+          var w = host.querySelector(".worked");
+          w.classList.remove("hidden");
+          w.innerHTML = item.explain;
+          if (onRight) onRight(tries === 1);
+        } else {
+          b.disabled = true;
+          fb.textContent = "✗ " + tr("tryAgain");
+          fb.className = "fb no";
+        }
+      });
+    });
+  }
+
+  /* ---------- stepper + locks ---------- */
+  function paintStepper(){
+    var open = firstOpen(), h = "";
+    tr("phaseNames").forEach(function(name, i){
+      var cls = phaseDone(i) ? "fin" : (i === open ? "on" : "");
+      var mark = phaseDone(i) ? "✓" : (i + 1);
+      h += "<button class='stepstep " + cls + "' data-step='" + i + "'>" + mark + " " + esc(name) + "</button>";
+    });
+    var st = byId("stepper");
+    st.innerHTML = h;
+    st.querySelectorAll("[data-step]").forEach(function(b){
+      b.addEventListener("click", function(){ goPhase(+b.getAttribute("data-step")); });
+    });
+  }
+  function paintLocks(){
+    var open = firstOpen();
+    PHASE_IDS.forEach(function(pid, i){
+      var sec = byId("ph-" + pid);
+      var locked = (i > open) && !unlocked[pid];
+      sec.classList.toggle("locked", locked);
+      if (locked){
+        sec.querySelector(".lockmsg").textContent = tf("lockMsg")(tr("phaseNames")[i - 1]);
+        sec.querySelector("[data-unlock]").textContent = tr("openAnyway");
+      }
+    });
+  }
+  function goPhase(i){
+    var pid = PHASE_IDS[i];
+    unlocked[pid] = true;
+    paintLocks();
+    byId("ph-" + pid).scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+  document.querySelectorAll("[data-unlock]").forEach(function(b){
+    b.addEventListener("click", function(){
+      unlocked[b.getAttribute("data-unlock")] = true;
+      paintLocks();
+    });
+  });
+
+  /* ---------- resume banner ---------- */
+  function paintResume(){
+    var started = Object.keys(S.engage.taps).length > 0 || tasksDone() > 0 ||
+                  Object.keys(S.develop.q).length > 0;
+    var box = byId("resume");
+    if (!started){ box.hidden = true; return; }
+    var i = firstOpen();
+    box.hidden = false;
+    byId("resumeMsg").textContent = tf("resumeMsg")(tr("phaseNames")[i]);
+    byId("resumeBtn").textContent = tr("resumeBtn");
+  }
+  byId("resumeBtn").addEventListener("click", function(){
+    var i = firstOpen();
+    if (i === 2){
+      var next = 0;
+      for (var k = 0; k < TASKS.length; k++){ if (!S.apply.done[TASKS[k].id]){ next = k; break; } }
+      S.apply.cur = next; save(); renderTask();
+    }
+    goPhase(i);
+  });
+
+  /* ---------- success criteria (top + bottom, kept in step) ---------- */
+  function paintSC(){
+    ["scTop","scBottom"].forEach(function(id){
+      var host = byId(id), h = "";
+      tr("sc").forEach(function(txt, i){
+        var on = S.review.sc[i] ? " on" : "";
+        h += "<li><button class='scbtn" + on + "' data-sc='" + i + "'>" +
+             "<span class='box'>" + (S.review.sc[i] ? "✓" : "") + "</span><span>" + esc(txt) + "</span></button></li>";
+      });
+      host.innerHTML = h;
+      host.querySelectorAll("[data-sc]").forEach(function(b){
+        b.addEventListener("click", function(){
+          var i = b.getAttribute("data-sc");
+          if (S.review.sc[i]) delete S.review.sc[i]; else S.review.sc[i] = 1;
+          S.review.done = Object.keys(S.review.sc).length === tr("sc").length;
+          save(); paintSC(); paintStepper(); paintLocks(); paintResume();
+        });
+      });
+    });
+  }
+
+  /* ---------- 1 · ENGAGE ---------- */
+  function paintLane(){
+    var lane = byId("wordlane");
+    var v = Store.vocab(), done = 0, h = "";
+    SET.words.forEach(function(w){
+      var st = v[w.w.toLowerCase()];
+      var owned = st && (st.built || st.checked);
+      if (owned) done++;
+      h += "<button class='wchip" + (owned ? " done" : "") + "' data-v='" + esc(w.w) + "'>" + esc(w.w) + "</button>";
+    });
+    lane.innerHTML = h;
+    if (window.STEMVOCAB) STEMVOCAB.decorate(lane);
+    lane.querySelectorAll(".wchip").forEach(function(b){
+      b.addEventListener("click", function(){
+        S.engage.taps[b.getAttribute("data-v")] = 1;
+        save(); paintStepper(); paintLocks(); paintResume();
+      });
+    });
+    byId("lanefill").style.width = Math.round(100 * done / SET.words.length) + "%";
+    byId("lanecount").textContent = tf("wordsLine")(done, SET.words.length);
+  }
+  byId("engageNext").addEventListener("click", function(){
+    S.engage.done = true; save();
+    paintStepper(); paintLocks(); paintResume();
+    goPhase(1);
+  });
+
+  /* ---------- 2 · DEVELOP AND DISCOVER ---------- */
+  function paintLangPicker(){
+    var sel = byId("homelang"), cur = homeLang();
+    var h = "<option value=''>" + esc(tr("inYourLang")) + "</option>";
+    (window.STEM_VOCAB_DATA.langs || []).forEach(function(l){
+      var name = l.name || LANG_NAMES[l.id] || l.id;
+      h += "<option value='" + esc(l.id) + "'" + (l.id === cur ? " selected" : "") + ">" + esc(name) + "</option>";
+    });
+    sel.innerHTML = h;
+    sel.value = cur;
+  }
+  byId("homelang").addEventListener("change", function(){
+    setHomeLang(byId("homelang").value);
+    paintMorphTable();
+  });
+
+  function paintMorphTable(){
+    var groups = { prefix:{}, root:{}, suffix:{} }, noParts = [];
+    SET.words.forEach(function(w){
+      if (!w.parts || !w.parts.length){ noParts.push(w.w); return; }
+      w.parts.forEach(function(p){
+        var type = groups[p.type] ? p.type : "root";
+        var key = p.surface + "|" + (p.meaning || "");
+        if (!groups[type][key]) groups[type][key] = { surface:p.surface, meaning:p.meaning || "", tr:p.tr || {}, words:[] };
+        if (groups[type][key].words.indexOf(w.w) < 0) groups[type][key].words.push(w.w);
+      });
+    });
+    var lg = homeLang();
+    var groupHead = { prefix:"mgPrefix", root:"mgRoot", suffix:"mgSuffix" };
+    var h = "";
+    ["prefix","root","suffix"].forEach(function(type){
+      var keys = Object.keys(groups[type]).sort(function(a, b){
+        return groups[type][a].surface.localeCompare(groups[type][b].surface);
+      });
+      if (!keys.length) return;
+      h += "<div class='mgroup'>" + esc(tr(groupHead[type])) + "</div><div class='mgrid'>";
+      keys.forEach(function(k){
+        var g = groups[type][k];
+        h += "<div class='mcard'><div class='msurf'>" + esc(g.surface) +
+             "<span class='ptype " + type + "'>" + esc(tr("ptypeNames")[type]) + "</span></div>" +
+             "<div class='mmean'>" + esc(g.meaning) + "</div>";
+        if (lg && g.tr[lg]) h += "<div class='mtr'>" + esc(g.tr[lg]) + "</div>";
+        h += "<div class='inwords'>";
+        g.words.forEach(function(w){ h += "<span data-v='" + esc(w) + "'>" + esc(w) + "</span>"; });
+        h += "</div></div>";
+      });
+      h += "</div>";
+    });
+    byId("morphtable").innerHTML = h;
+    if (window.STEMVOCAB) STEMVOCAB.decorate(byId("morphtable"));
+    byId("nopartsline").textContent = noParts.length ? tf("noParts")(noParts.join(", ")) : "";
+  }
+
+  function paintMorphQs(){
+    var host = byId("morphqs");
+    host.innerHTML = "";
+    MORPH_QS.forEach(function(item, i){
+      var box = document.createElement("div");
+      box.style.marginBottom = "16px";
+      host.appendChild(box);
+      mcq(box, item, function(){
+        S.develop.q[i] = 1;
+        S.develop.done = Object.keys(S.develop.q).length === MORPH_QS.length;
+        save(); paintStepper(); paintLocks(); paintResume();
+      }, !!S.develop.q[i]);
+    });
+  }
+
+  /* ---------- 3 · APPLY ---------- */
+  function paintRail(){
+    var h = "";
+    TASKS.forEach(function(t, i){
+      var cls = S.apply.done[t.id] ? "fin" : (i === S.apply.cur ? "on" : "");
+      h += "<button class='dot " + cls + "' data-t='" + i + "' aria-label='task " + (i + 1) + "'>" + (i + 1) + "</button>";
+    });
+    var rail = byId("rail");
+    rail.innerHTML = h;
+    rail.querySelectorAll("[data-t]").forEach(function(b){
+      b.addEventListener("click", function(){
+        S.apply.cur = +b.getAttribute("data-t"); save(); renderTask();
+      });
+    });
+  }
+
+  function markDone(task){
+    if (S.apply.done[task.id]) return;
+    S.apply.done[task.id] = 1;
+    save();
+    paintRail(); paintStepper(); paintLocks(); paintResume(); paintReviewStats(); paintLane();
+  }
+
+  function navRow(task){
+    var i = S.apply.cur, done = !!S.apply.done[task.id];
+    var h = "<div class='navwrap'>";
+    if (tasksDone() === TASKS.length) h += "<p class='fb ok'>" + esc(tr("allTasksDone")) + "</p>";
+    h += "<div class='btnrow'>";
+    if (i > 0) h += "<button class='btn quiet' data-nav='prev'>" + esc(tr("prevTask")) + "</button>";
+    if (i < TASKS.length - 1){
+      h += "<button class='btn" + (done ? "" : " ghost") + "' data-nav='next'>" +
+           esc(done ? tr("nextTask") : tr("skipTask")) + "</button>";
+    }
+    if (tasksDone() === TASKS.length){
+      h += "<button class='btn' data-nav='review'>" + esc(tr("goReview")) + "</button>";
+    }
+    return h + "</div></div>";
+  }
+  function wireNav(card){
+    card.querySelectorAll("[data-nav]").forEach(function(b){
+      b.addEventListener("click", function(){
+        var a = b.getAttribute("data-nav");
+        if (a === "prev" && S.apply.cur > 0) S.apply.cur--;
+        else if (a === "next" && S.apply.cur < TASKS.length - 1) S.apply.cur++;
+        else if (a === "review"){ goPhase(3); return; }
+        save(); renderTask();
+        byId("ph-apply").scrollIntoView({ behavior:"smooth", block:"start" });
+      });
+    });
+  }
+  /* swap the nav row for a fresh one (used after a task is finished) */
+  function refreshNav(card, task){
+    var rows = card.querySelectorAll(".navwrap");
+    var row = rows[rows.length - 1];
+    if (!row) return;
+    var tmp = document.createElement("div");
+    tmp.innerHTML = navRow(task);
+    row.parentNode.replaceChild(tmp.firstChild, row);
+    wireNav(card);
+  }
+
+  /* each render function paints, wires its own nav and decorates — do not repeat it here */
+  function renderTask(){
+    var task = TASKS[S.apply.cur];
+    var card = byId("taskcard");
+    if (!task){ card.textContent = ""; return; }
+    paintRail();
+    if (task.kind === "build") renderBuild(card, task);
+    else if (task.kind === "match") renderMatch(card, task);
+    else renderFind(card, task);
+  }
+
+  /* --- build a word from its parts --- */
+  function renderBuild(card, task){
+    var entry = WORD[task.word.toLowerCase()];
+    var target = (entry.parts || []).map(function(p){ return p.surface; });
+    /* decoy tiles borrowed from the other words in this set */
+    var pool = [];
+    SET.words.forEach(function(w){
+      if (w.w === entry.w) return;
+      (w.parts || []).forEach(function(p){
+        if (target.indexOf(p.surface) < 0 && pool.indexOf(p.surface) < 0) pool.push(p.surface);
+      });
+    });
+    var tiles = shuffle(target.concat(shuffle(pool).slice(0, DECOYS)));
+    var placed = [], used = {}, misses = 0;
+    var already = !!S.apply.done[task.id];
+
+    function paint(){
+      var h = "<div class='tasknum'>" + esc(tf("taskOf")(S.apply.cur + 1, TASKS.length)) + " · 🔨 build</div>";
+      h += "<p class='lead'>" + esc(tr("leadBuild")) +
+           " <b data-v='" + esc(entry.w) + "'>" + esc(entry.w) + "</b> — " + esc(entry.meaning || "") + "</p>";
+      h += "<div class='slots'>";
+      for (var i = 0; i < target.length; i++){
+        h += "<span class='slot" + (placed[i] ? " full" : "") + "'>" + (placed[i] ? esc(placed[i]) : "&nbsp;") + "</span>";
+      }
+      h += "</div><div class='tiles'>";
+      var finishedNow = (placed.length === target.length);
+      tiles.forEach(function(t, idx){
+        /* once the word is built, the leftover decoy tiles are dead */
+        h += "<button class='tile' data-i='" + idx + "'" + (used[idx] || finishedNow ? " disabled" : "") + ">" + esc(t) + "</button>";
+      });
+      h += "</div><div class='fb' aria-live='polite'></div>";
+      if (placed.length === target.length){
+        h += "<div class='worked'>" + (entry.note || "") + "</div>";
+      } else if (already){
+        h += "<p class='muted' style='margin-top:10px'>" + esc(tf("buildDone")(entry.w)) + "</p>";
+      }
+      h += navRow(task);
+      card.innerHTML = h;
+      card.querySelectorAll(".tile").forEach(function(b){
+        b.addEventListener("click", function(){
+          var idx = +b.getAttribute("data-i");
+          if (used[idx] || placed.length === target.length) return;
+          if (tiles[idx] === target[placed.length]){
+            placed.push(tiles[idx]); used[idx] = true;
+            var finished = (placed.length === target.length);
+            if (finished){
+              Store.markVocab(entry.w, "built");
+              markDone(task);          /* state first, so the nav row is right */
+              paint();
+              var fb = card.querySelector(".fb");
+              fb.className = "fb ok";
+              fb.textContent = tf("buildDone")(entry.w);
+            } else {
+              paint();
+            }
+          } else {
+            misses++;
+            b.classList.add("no");
+            setTimeout(function(){ b.classList.remove("no"); }, 320);
+            var nextPart = entry.parts[placed.length];
+            var fb2 = card.querySelector(".fb");
+            fb2.className = "fb no";
+            fb2.textContent = tr("notThatPiece") +
+              ((misses >= HINT_AFTER && nextPart) ? " " + tf("buildHint")(nextPart.meaning || "") : "");
+          }
+        });
+      });
+      wireNav(card);
+      if (window.STEMVOCAB) STEMVOCAB.decorate(card);
+    }
+    paint();
+  }
+
+  /* --- match word to meaning --- */
+  function renderMatch(card, task){
+    var pairs = task.pairs;
+    var words = shuffle(pairs.map(function(p){ return p[0]; }));
+    var means = shuffle(pairs.map(function(p){ return p[1]; }));
+    var solved = {}, sel = null;
+
+    function meaningOf(w){
+      var out = "";
+      pairs.forEach(function(p){ if (p[0] === w) out = p[1]; });
+      return out;
+    }
+    function paint(){
+      var h = "<div class='tasknum'>" + esc(tf("taskOf")(S.apply.cur + 1, TASKS.length)) + " · 🔗 match</div>";
+      h += "<p class='lead'>" + esc(tr("leadMatch")) + "</p><div class='pairwords'>";
+      words.forEach(function(w){
+        var cls = solved[w] ? "fin" : (sel === w ? "sel" : "");
+        h += "<button class='pw " + cls + "' data-w='" + esc(w) + "'" + (solved[w] ? " disabled" : "") + ">" + esc(w) + "</button>";
+      });
+      h += "</div><div class='meanings'>";
+      means.forEach(function(m){
+        var owner = "";
+        Object.keys(solved).forEach(function(w){ if (meaningOf(w) === m) owner = w; });
+        h += "<button class='mn" + (owner ? " fin" : "") + "' data-m='" + esc(m) + "'" + (owner ? " disabled" : "") + ">" +
+             (owner ? "<b>" + esc(owner) + "</b> — " : "") + esc(m) + "</button>";
+      });
+      h += "</div><div class='fb' aria-live='polite'></div>";
+      h += navRow(task);
+      card.innerHTML = h;
+      card.querySelectorAll("[data-w]").forEach(function(b){
+        b.addEventListener("click", function(){
+          sel = b.getAttribute("data-w"); paint();
+        });
+      });
+      card.querySelectorAll("[data-m]").forEach(function(b){
+        b.addEventListener("click", function(){
+          var fb = card.querySelector(".fb");
+          if (!sel){ fb.className = "fb no"; fb.textContent = tr("pickWordFirst"); return; }
+          if (meaningOf(sel) === b.getAttribute("data-m")){
+            solved[sel] = 1;
+            Store.markVocab(sel, "checked");
+            sel = null;
+            if (Object.keys(solved).length === pairs.length) markDone(task);
+            paint();
+            var fb2 = card.querySelector(".fb");
+            fb2.className = "fb ok";
+            fb2.textContent = "✓ " + tr("correct");
+          } else {
+            b.classList.add("no");
+            setTimeout(function(){ b.classList.remove("no"); }, 320);
+            fb.className = "fb no"; fb.textContent = tr("matchWrong");
+          }
+        });
+      });
+      wireNav(card);
+      if (window.STEMVOCAB) STEMVOCAB.decorate(card);
+    }
+    paint();
+  }
+
+  /* --- find the maths words inside a quiz question --- */
+  function tokenise(sentence){
+    return sentence.split(/\s+/).map(function(chunk){
+      var core = chunk.replace(/^[^A-Za-z0-9]+/, "").replace(/[^A-Za-z0-9]+$/, "");
+      var letters = core.replace(/[^A-Za-z]/g, "").length;
+      return { raw:chunk, core:core, tappable:(letters >= 4) };
+    });
+  }
+  function renderFind(card, task){
+    var toks = tokenise(task.sentence);
+    var targets = {};
+    task.targets.forEach(function(t){ targets[t.tok.toLowerCase()] = t.w; });
+    var found = {}, answered = false;
+
+    function paint(){
+      var total = task.targets.length, n = Object.keys(found).length;
+      var h = "<div class='tasknum'>" + esc(tf("taskOf")(S.apply.cur + 1, TASKS.length)) + " · 🔎 " + esc(task.source) + "</div>";
+      h += "<p class='lead'>" + esc(tr("leadFind")) + "</p><div class='sent'>";
+      toks.forEach(function(t, i){
+        var key = t.core.toLowerCase();
+        var isTarget = !!targets[key];
+        if (!t.tappable){ h += "<span class='plain'>" + esc(t.raw) + "</span> "; return; }
+        if (isTarget && found[key]){
+          h += "<button class='tok fin' data-v='" + esc(targets[key]) + "' data-i='" + i + "'>" + esc(t.raw) + "</button> ";
+        } else {
+          h += "<button class='tok' data-i='" + i + "'>" + esc(t.raw) + "</button> ";
+        }
+      });
+      h += "</div><div class='findcount'>" + esc(tf("found")(n, total)) + "</div>";
+      h += "<div class='fb' aria-live='polite'></div>";
+      h += "<div id='mathsbox'></div>";
+      h += navRow(task);
+      card.innerHTML = h;
+
+      card.querySelectorAll(".tok").forEach(function(b){
+        b.addEventListener("click", function(){
+          var i = +b.getAttribute("data-i");
+          var key = toks[i].core.toLowerCase();
+          if (targets[key]){
+            if (found[key]) return;         /* already found — the notebook link takes over */
+            found[key] = 1;
+            Store.markVocab(targets[key], "seen");
+            paint();
+          } else {
+            b.classList.add("no");
+            setTimeout(function(){ b.classList.remove("no"); }, 320);
+            var fb = card.querySelector(".fb");
+            fb.className = "fb no";
+            fb.textContent = tr("notTarget");
+          }
+        });
+      });
+
+      if (n === total){
+        var fb2 = card.querySelector(".fb");
+        fb2.className = "fb ok";
+        fb2.textContent = "✓ " + tr("foundAll");
+        var box = byId("mathsbox");
+        box.innerHTML = "<div class='extrahost'></div><div class='qhost'></div>";
+        var ehost = box.querySelector(".extrahost");
+        var qhost = box.querySelector(".qhost");
+        ehost.innerHTML = extraHtml(task.extra);
+        mcq(qhost, task, function(firstTry){
+          if (answered) return;
+          answered = true;
+          if (firstTry){
+            /* the word was used correctly inside the maths — check it off */
+            task.targets.forEach(function(t){ Store.markVocab(t.w, "checked"); });
+          }
+          if (task.extraAfter) ehost.innerHTML = extraHtml(task.extraAfter);
+          markDone(task);
+          refreshNav(card, task);
+        });
+      }
+      wireNav(card);
+      if (window.STEMVOCAB) STEMVOCAB.decorate(card);
+    }
+    paint();
+  }
+
+  /* ---------- 4 · REVIEW AND REFLECT ---------- */
+  function ownedCount(){
+    var v = Store.vocab(), owned = 0;
+    SET.words.forEach(function(w){
+      var st = v[w.w.toLowerCase()];
+      if (st && (st.built || st.checked)) owned++;
+    });
+    return owned;
+  }
+  function paintReviewStats(){
+    byId("reviewStats").textContent =
+      tf("wordsLine")(ownedCount(), SET.words.length) + "  " + tf("tasksLine")(tasksDone(), TASKS.length);
+  }
+  /* the dropdown is only rebuilt on a real change, never on the refresh timer */
+  function paintReviewControls(){
+    byId("practiseHead").textContent = tr("practiseHead");
+    byId("practiseOpen").textContent = tr("practiseOpen");
+    byId("restartBtn").textContent = tr("restart");
+    var sel = byId("practiseSel");
+    var h = "<option value=''>" + esc(tr("chooseWord")) + "</option>";
+    SET.words.forEach(function(w){
+      h += "<option value='" + esc(w.w) + "'>" + esc(w.w) + "</option>";
+    });
+    sel.innerHTML = h;
+    sel.value = S.review.word || "";
+  }
+  byId("practiseSel").addEventListener("change", function(){
+    S.review.word = byId("practiseSel").value; save();
+  });
+  byId("practiseOpen").addEventListener("click", function(){
+    var w = byId("practiseSel").value;
+    if (w && window.STEMVOCAB) STEMVOCAB.openWord(w);
+  });
+  byId("restartBtn").addEventListener("click", function(){
+    if (!confirm(tr("confirmRestart"))) return;
+    S = { v:1, engage:{taps:{}, done:false}, develop:{q:{}, done:false},
+          apply:{cur:0, done:{}}, review:{sc:{}, word:"", done:false} };
+    unlocked = {};
+    save();
+    paintAll(); renderTask();
+    byId("ph-engage").scrollIntoView({ behavior:"smooth", block:"start" });
+  });
+
+  /* ---------- paint everything ---------- */
+  function paintAll(){
+    paintStepper(); paintLocks(); paintResume(); paintSC();
+    paintLane(); paintLangPicker(); paintMorphTable(); paintMorphQs();
+    paintRail(); paintReviewStats(); paintReviewControls();
+  }
+
+  if (window.STEMVOCAB) STEMVOCAB.init();
+  setStatic();
+  paintAll();
+  renderTask();
+
+  /* the notebook panel can mark words from anywhere on the page — keep the counts honest,
+     but only redraw when something actually changed */
+  var lastCount = -1;
+  function refreshCounts(){
+    var n = ownedCount();
+    if (n === lastCount) return;
+    lastCount = n;
+    paintLane(); paintReviewStats();
+  }
+  lastCount = ownedCount();
+  document.addEventListener("visibilitychange", refreshCounts);
+  setInterval(refreshCounts, 4000);
+})();
+</script>
+</body>
+</html>

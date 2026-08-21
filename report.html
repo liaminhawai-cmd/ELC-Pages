@@ -20,6 +20,14 @@
   .goal { margin-top:9px; padding:13px 14px; border:1px solid color-mix(in srgb,var(--green) 45%,var(--line)); border-radius:10px; background:var(--green-soft); }
   .goal p { margin:3px 0; font-size:.9rem; }
   .empty { color:var(--muted); font-size:.9rem; padding:12px 0; }
+  .stem-box { margin-top:9px; padding:13px 14px; border:1px solid var(--line); border-radius:10px; background:var(--bg); }
+  .stem-stats { display:flex; gap:22px; flex-wrap:wrap; margin-bottom:6px; }
+  .stem-stats div b { display:block; font-size:1.3rem; }
+  .stem-stats div span { font-size:.78rem; color:var(--muted); }
+  .stem-box p { margin:6px 0 2px; font-size:.88rem; }
+  ul.stem-behind { margin:2px 0 0; padding-left:18px; font-size:.88rem; }
+  ul.stem-behind li { margin:2px 0; }
+  .stem-box a.more { display:inline-block; margin-top:9px; color:var(--accent); font-weight:700; font-size:.88rem; text-decoration:none; }
   ul.log { list-style:none; padding:0; margin-top:8px; }
   ul.log li { display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); font-size:.92rem; }
   ul.log li .cat { color:var(--muted); font-size:.8rem; text-align:right; }
@@ -46,6 +54,9 @@
     <h2>My learning direction</h2>
     <div id="goal"></div>
 
+    <h2>🧪 STEM progress</h2>
+    <div id="stem"></div>
+
     <h2>Activities opened</h2>
     <ul class="log" id="log"></ul>
     <p class="empty" id="emptyActivities" hidden>Nothing opened yet — return to the hub and choose a tool.</p>
@@ -58,6 +69,7 @@
   </main>
 </div>
 
+<script src="stem-shared.js?v=20260821-1"></script>
 <script>
 const VISITS_KEY="elc_visited", GOAL_KEY="elc_learning_compass_goal";
 document.getElementById("dateLine").textContent=new Date().toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"});
@@ -80,6 +92,57 @@ if(goal){
 } else {
   goalBox.append(text("p","No goal saved yet — use the Learning Compass to choose one.","empty"));
 }
+
+const stemBox=document.getElementById("stem");
+(function(){
+  const hasSTEM = typeof window.STEM !== "undefined";
+  const skills = hasSTEM ? STEM.Store.skills() : {};
+  const vocab = hasSTEM ? STEM.Store.vocab() : {};
+  const evidence = hasSTEM ? STEM.Store.evidence() : {};
+  const anyData = Object.keys(skills).length || Object.keys(vocab).length || Object.keys(evidence).length;
+  if (!hasSTEM || !anyData) {
+    stemBox.append(text("p","No STEM practice recorded yet.","empty"));
+    return;
+  }
+  const summary = STEM.summary();
+  const mastered = summary.ahead + summary.done;
+  let wordsBuilt = 0;
+  Object.keys(vocab).forEach(w => { if (vocab[w].built) wordsBuilt++; });
+  const behindNames = STEM.SKILLS
+    .filter(s => STEM.skillState(s).timing === "behind")
+    .map(s => s.name);
+
+  const box=document.createElement("div");
+  box.className="stem-box";
+
+  const stats=document.createElement("div");
+  stats.className="stem-stats";
+  function stat(n,label){
+    const d=document.createElement("div");
+    d.append(text("b",String(n)));
+    d.append(text("span",label));
+    return d;
+  }
+  stats.append(stat(mastered,"skills mastered"));
+  stats.append(stat(wordsBuilt,"words built"));
+  box.append(stats);
+
+  if (behindNames.length){
+    box.append(text("p","Behind schedule:"));
+    const ul=document.createElement("ul");
+    ul.className="stem-behind";
+    behindNames.slice(0,3).forEach(name => ul.append(text("li",name)));
+    box.append(ul);
+  } else {
+    box.append(text("p","Nothing behind schedule — nice work.","empty"));
+  }
+
+  const link=document.createElement("a");
+  link.className="more"; link.href="stem-progress.html"; link.textContent="See my full STEM report →";
+  box.append(link);
+
+  stemBox.append(box);
+})();
 
 let visits=[];
 try { visits=JSON.parse(localStorage.getItem(VISITS_KEY)||"[]"); } catch(e) {}
