@@ -97,14 +97,14 @@
 
     /* ---- shared bones ---- */
     ".pm-wrap{overflow-x:auto;overflow-y:hidden;max-width:100%;padding-bottom:6px}" +
-    ".pm{display:grid;gap:8px;align-items:stretch}" +
+    ".pm{display:grid;gap:6px;align-items:stretch}" +
     /* packed stage column (big map): cells stack top-to-bottom, no voids */
     ".pm-stage{display:grid;grid-auto-rows:max-content;align-content:start;gap:8px;min-width:0}" +
     /* aligned strand band (compact map): its cells stack inside one grid row,
        so the same strand sits on the same line in every stage */
-    ".pm-band{display:grid;grid-auto-rows:max-content;align-content:start;gap:8px;min-width:0}" +
+    ".pm-band{display:grid;grid-auto-rows:max-content;align-content:start;gap:5px;min-width:0}" +
     ".pm-band.empty{border:0;background:none}" +
-    ".pm-cell{border:1px solid var(--hair,#e6e7e3);border-radius:8px;padding:7px 9px 7px 11px;min-width:0;" +
+    ".pm-cell{border:1px solid var(--hair,#e6e7e3);border-radius:8px;padding:5px 8px 5px 10px;min-width:0;" +
       "font-size:.72rem;line-height:1.35;color:var(--ink,#212427);text-decoration:none;display:block;" +
       "background:var(--paper,#fcfcfa);position:relative}" +
     /* the strand edge: a 2px rule inside the left border, in the strand's hue */
@@ -113,7 +113,7 @@
     ".pm-cell.sm::before{background:var(--pm-maths)}" +
     ".pm-cell.ss::before{background:var(--pm-science)}" +
     ".pm-tag{display:block;font-size:.58rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;" +
-      "margin:0 0 2px}" +
+      "margin:0 0 1px}" +
     ".pm-cell.sw .pm-tag{color:var(--pm-words)}" +
     ".pm-cell.sm .pm-tag{color:var(--pm-maths)}" +
     ".pm-cell.ss .pm-tag{color:var(--pm-science)}" +
@@ -124,7 +124,7 @@
     /* max-width/margin pinned here so a host page's own .bar rule (the spine
        caps bars at 180px) can never squeeze the map's */
     ".pm-cell .bar{display:block;height:3px;background:var(--hair,#e6e7e3);border-radius:2px;" +
-      "margin:5px 0 0;max-width:none}" +
+      "margin:4px 0 0;max-width:none}" +
     ".pm-cell .bar i{display:block;height:3px;background:var(--accent,#0d7a70);border-radius:2px}" +
     ".pm-cell.met{border-color:var(--accent,#0d7a70);background:var(--accent-soft,#f4f9f8)}" +
     ".pm-cell.soon{border-style:dashed;color:var(--faint,#9aa0a5)}" +
