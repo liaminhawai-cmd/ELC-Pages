@@ -188,21 +188,11 @@
     .task .msg { grid-column:1; grid-row:3; }
   }
 
-  /* ---- the map's WORDS row: one box per word set ----
-     Painted by the page (see paintWords below), styled here. The selectors
-     carry the section so they beat stem-map.js's own .pm-cell rules, which
-     land in the document after this block. */
-  .mapsec .pm-cell.wset { display:grid; grid-template-columns:minmax(0,1fr) auto;
-    gap:1px 8px; align-content:center; min-height:44px; }
-  .mapsec .pm-cell.wset .wt { grid-column:1; min-width:0; }
-  .mapsec .pm-cell.wset .wn { grid-column:2; text-align:right; color:var(--muted);
-    font-weight:700; white-space:nowrap; font-variant-numeric:tabular-nums; }
-  .mapsec .pm-cell.wset.met .wn { color:var(--accent); }
+
   /* this page's own .bar (the spine's) is capped at 180px and carries a
      bottom margin; a bar drawn inside the map is its cell's full width and
      closes the cell, so the map's bars opt out of both */
   .mapsec .pm-cell .bar { max-width:none; margin:5px 0 0; }
-  .mapsec .pm-cell.wset .bar { grid-column:1 / -1; margin-top:4px; }
   #projectmap { margin-top:12px; }
 
   /* the only line on the page with no measure of its own: at the old width it
@@ -619,54 +609,6 @@
     if (p) p.hidden = !UNIT.checkpoints.length;
   }
 
-  /* ---------------- the map's WORDS row is the vocab summary ----------------
-     stem-map.js draws the road; the page fills its WORDS row in, because only
-     the page knows how this unit's word sets should read: one box per set,
-     carrying the set's own title, the words built out of its total, and a
-     link into that set in the Vocab Hub. The map lays its bands out column by
-     column and strand by strand, so the words band of column i sits at
-     i * strands + the words row. If the map ever changes shape those numbers
-     stop matching and the row is left exactly as stem-map.js drew it. */
-  var mapEl = document.getElementById("projectmap");
-
-  function wordBox(id){
-    var c = STEM2.setCounts(id);
-    var title = c.title || SET_NAMES[id] || id;
-    var pct = c.total ? Math.round(100 * c.built / c.total) : 0;
-    var met = c.total > 0 && c.built === c.total;
-    /* a set the Vocab Hub has not published yet counts nothing and says so
-       with a dash — never a fake 0/0 */
-    var count = c.total ? c.built + "/" + c.total : "—";
-    return "<a class='pm-cell wset" + (met ? " met" : "") +
-      "' href='stem-vocab-hub.html#set=" + encodeURIComponent(id) + "'>" +
-      "<span class='wt'>" + esc(title) + "</span>" +
-      "<span class='wn'>" + esc(count) + "</span>" +
-      "<span class='bar'><i style='width:" + pct + "%'></i></span></a>";
-  }
-
-  function paintWords(){
-    var map = mapEl ? STEM2.MAPS[UNIT_ID] : null;
-    if (!map || !map.strands) return;
-    var strands = map.strands, wi = -1;
-    strands.forEach(function(s, i){ if (s.id === "words") wi = i; });
-    if (wi < 0) return;
-    var cols = [];
-    map.stages.forEach(function(st){ (st.cols || []).forEach(function(c){ cols.push(c); }); });
-    var bands = mapEl.querySelectorAll(".pm > .pm-band");
-    if (bands.length !== cols.length * strands.length) return;
-    cols.forEach(function(col, i){
-      var cell = col ? col.words : null;
-      if (!cell || !cell.sets || !cell.sets.length) return;
-      var band = bands[i * strands.length + wi];
-      if (band) band.innerHTML = cell.sets.map(wordBox).join("");
-    });
-  }
-
-  /* the map redraws itself when the reader changes the page language, so the
-     WORDS row is filled in again every time the map replaces its contents */
-  if (mapEl && window.MutationObserver) {
-    new MutationObserver(paintWords).observe(mapEl, { childList:true });
-  }
 
   /* ---------------- visible-learning spine ---------------- */
   function paintSpine(){
@@ -836,7 +778,7 @@
     else p.hidden = true;
   }
 
-  function paintAll(){ paintJump(); paintSpine(); paintGroups(); paintDo(); paintProve(); paintPreview(); paintWords(); }
+  function paintAll(){ paintJump(); paintSpine(); paintGroups(); paintDo(); paintProve(); paintPreview(); }
 
   /* fold-outs */
   document.getElementById("groups").addEventListener("click", function(e){

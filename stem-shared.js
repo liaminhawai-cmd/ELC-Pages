@@ -503,14 +503,14 @@
     gen: {
       strands: [{ id: "words", label: "Words" }, { id: "maths", label: "Maths" }, { id: "science", label: "Science" }],
       stages: [
-        { cols: [
-            { words: { sets: ["bio3"] }, maths: { soon: "revise your probability" }, science: null }
-          ], project: "cp_probpre" },
+        /* the pre-test comes FIRST and nothing feeds it: it finds your
+           starting point, so there is nothing to prepare */
+        { cols: [], project: "cp_probpre" },
         { cols: [
             { words: { sets: ["bio1", "bio2"] }, maths: null, science: { skills: ["b_dna", "b_genlang", "b_punnett"] } }
           ], project: "cp_traits" },
         { cols: [
-            { words: null, maths: { skills: ["b_samplespace", "b_tree"] }, science: { skills: ["b_pedigree"] } }
+            { words: { sets: ["bio3"] }, maths: { skills: ["b_samplespace", "b_tree"] }, science: { skills: ["b_pedigree"] } }
           ], project: "cp_biocat" },
         { cols: [
             { words: null, maths: { skills: ["s_lobf", "s_excel", "s_corr"], callback: "from Kinematics" }, science: { soon: "measure & report" } }
