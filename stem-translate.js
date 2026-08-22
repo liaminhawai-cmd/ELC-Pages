@@ -260,6 +260,16 @@
      student typed. */
   var SKIP = { SCRIPT: 1, STYLE: 1, INPUT: 1, TEXTAREA: 1, SELECT: 1, CODE: 1, SVG: 1, OPTION: 1 };
   function decorate(root) {
+    /* the only reason a button's text is fair game to wrap (see the note
+       above) is that translate mode is ON and the button cannot fire while
+       held anyway. Off, wrapping still ran on every external call — sim
+       pages repaint through STEMTAP.decorate() after every stage — so a
+       "Check"/"Next"/"Show the working" button whose own text happened to
+       match a glossary word silently ate its own clicks for every student,
+       translate on or not. Internal callers (redecorate, setEnabled) only
+       ever run this while enabled anyway, so the guard changes nothing for
+       them and fixes every external one in the one place they all share. */
+    if (!enabled) return;
     var walker = document.createTreeWalker(root || document.body, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
         if (!n.nodeValue || !/[A-Za-z]{3}/.test(n.nodeValue)) return NodeFilter.FILTER_REJECT;

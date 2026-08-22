@@ -468,12 +468,23 @@
               science: { skills: ["s_variables", "s_lobf", "s_excel", "s_corr"] } }
           ], project: "cp_report" },
         { cols: [
-            { words: null, maths: null, science: { skills: ["s_vectors", "s_ptgraph", "s_story"] } }
+            /* the same reading-a-graph words the Progress Quiz used are what
+               a worded journey needs turned into a graph — reused, not new */
+            { words: { sets: ["kin2"] }, maths: null,
+              science: { skills: ["s_vectors", "s_ptgraph", "s_story"] } }
           ], project: "cp_cat" },
         { cols: [
-            { words: null, maths: { label: "two lines meeting", skills: ["k_simult"] }, science: null }
+            /* k_parabola and k_quadeq are wired here, not into the Keg Toss
+               stage below, because their own `needs` says cp_test — the
+               test is where they are actually examined */
+            { words: { sets: ["kin5"] },
+              maths: { label: "two lines meeting, and curvy ones",
+                       skills: ["k_simult", "k_parabola", "k_quadeq"] },
+              science: null }
           ], project: "cp_test" },
         { cols: [
+            /* k_parabola/k_quadeq feed cp_test (their own `needs`) but are
+               just as much what this task rehearses, so they show here too */
             { words: { sets: ["kin4", "kin5"] },
               maths: { label: "curvy lines", skills: ["k_parabola", "k_quadeq"] },
               science: { skills: ["k_project"] } }
@@ -487,7 +498,10 @@
               science: { skills: ["sc_safety", "sc_equipment", "sc_bunsen"] } }
           ], project: "cp_bunsen" },
         { cols: [
-            { words: null, maths: { label: "reading a scale", skills: ["sc_measure"] }, science: null }
+            /* lab2 is one set built from two lessons (heating water AND
+               graphing it) — it feeds both checkpoints it actually serves */
+            { words: { sets: ["lab2"] }, maths: { label: "reading a scale", skills: ["sc_measure"] },
+              science: null }
           ], project: "cp_heat" },
         { cols: [
             { words: { sets: ["lab2"] }, maths: { label: "plotting", skills: ["sc_graph"] },
@@ -497,7 +511,8 @@
             { words: { sets: ["lab3"] }, maths: null, science: { skills: ["sc_atom"] } }
           ], project: "cp_atoms" },
         { cols: [
-            { words: null, maths: null, science: { skills: ["sc_bonding"] } }
+            /* lab3 is Atoms & bonding as one set — it feeds this stage too */
+            { words: { sets: ["lab3"] }, maths: null, science: { skills: ["sc_bonding"] } }
           ], project: "cp_bonding" },
         { cols: [
             { words: { sets: ["lab4"] }, maths: null,
