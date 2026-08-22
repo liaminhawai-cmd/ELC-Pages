@@ -312,9 +312,12 @@
       if (cp) plan.push({ cp: cp });
     });
 
+    /* "next" is an explicit teacher call (status:"now"), never a guess
+       from array order. An unconfirmed unit shows every open project the
+       same way — a task waiting, not a task scheduled. */
     var firstOpenProj = null;
     plan.forEach(function (p) {
-      if (!firstOpenProj && p.cp && p.cp.status !== "done") firstOpenProj = p.cp.id;
+      if (!firstOpenProj && p.cp && p.cp.status === "now") firstOpenProj = p.cp.id;
     });
 
     /* widths chosen for the classroom's 1366-wide laptops: Kinematics
@@ -339,9 +342,11 @@
         var isNext = cp.id === firstOpenProj;
         var cls = "pm-proj" + (done ? " done" : (isNext ? " next" : ""));
         var mark = done ? "✓" : (isNext ? "→" : "·");
+        /* no word under an unconfirmed project — "later" still read as a
+           position in a sequence we do not actually know this year */
         var pin = "<span class='pt'>" + mark + "</span>" +
           "<span class='pn'>" + esc(cp.short) + "</span>" +
-          "<span class='pd'>" + esc(done ? "✓" : T(isNext ? "soon" : "later")) + "</span>";
+          (done || isNext ? "<span class='pd'>" + esc(done ? "✓" : T("soon")) + "</span>" : "");
         html += live
           ? "<a class='" + cls + "' style='grid-column:" + col + "' href='" + esc(unit.page) + "#prove' title=\"" +
             esc(cp.name + " — " + cp.desc) + "\">" + pin + "</a>"

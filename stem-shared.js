@@ -47,7 +47,11 @@
         { id: "cp_quiz", status: "done",
           name: "Linear Equations Progress Quiz", short: "Progress Quiz",
           desc: "20 minutes, no calculator, bound reference allowed." },
-        { id: "cp_report", status: "now",
+        /* "now" was last year's calendar position for this task, never
+           confirmed for this year — status stays "later" until a teacher
+           marks a real one "now". The field and every function that reads
+           it are untouched, so flipping this one word is all it takes. */
+        { id: "cp_report", status: "later",
           name: "Ball Drop report", short: "Ball Drop",
           desc: "Collect drop-time data, linearise it in Excel, find g." },
         { id: "cp_cat", status: "later",
@@ -736,4 +740,34 @@
     skillState: function () { return { lv: 0, evidence: false, mastered: false, started: false, timing: "upcoming", checkpoint: null, daysLeft: 999 }; },
     summary: function () { return { ahead: 0, done: 0, dueSoon: 0, behind: 0, upcoming: 0, total: 0 }; }
   };
+
+  /* ---------------- build stamp ----------------
+     So it is obvious at a glance whether a browser (or GitHub Pages)
+     is showing the latest deploy, without opening dev tools. Bump
+     BUILD by one on every commit that changes a stem-* file. Every
+     stem page loads this file, so nothing else needs touching.
+     Lands inside the page's own <footer> — every page has one, it is
+     already the "about this page" line, and being in normal flow
+     there it can never sit on top of real content the way a fixed
+     corner label eventually does on a long page. A page with no
+     footer (there is one: the orphaned old report.html) gets a
+     quiet fixed corner instead, so the stamp always shows somewhere. */
+  var BUILD = 13;
+  function stampBuild() {
+    if (document.getElementById("stem-build")) return;
+    var s = document.createElement("span");
+    s.id = "stem-build";
+    s.textContent = " · build " + BUILD;
+    s.setAttribute("aria-hidden", "true");
+    s.style.cssText = "opacity:.6";
+    var foot = document.querySelector("footer");
+    if (foot) { foot.appendChild(s); return; }
+    s.style.cssText = "position:fixed;left:8px;bottom:6px;z-index:999;" +
+      "font:11px/1 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;" +
+      "color:#767b7f;opacity:.5;pointer-events:none;user-select:none";
+    (document.body || document.documentElement).appendChild(s);
+  }
+  if (document.body) stampBuild();
+  else document.addEventListener("DOMContentLoaded", stampBuild);
+  window.STEM2.BUILD = BUILD;
 })();
