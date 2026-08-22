@@ -258,6 +258,57 @@
     return g + "</svg>";
   }
 
+  /* ---------------- SVG helper · a chart with a REAL scale ----------------
+     arcChart deliberately has no numbers on its axes: a projectile's flight
+     must come from the rule, not from measuring pixels. A velocity-time graph
+     is the opposite — the whole skill is READING a gradient and an area off
+     the picture — so this chart numbers both axes and the generator, not the
+     drawing code, chooses the window. Same frame as motionChart (320 × 220,
+     same padding) so every graph on the page is the same size, and every
+     colour is a custom property so dark mode follows.
+       pts     [[x, y], …]  the plotted line, drawn in the order given
+       xMax/xStep, yMax/yStep   window and tick spacing — pick them so every
+                                plotted value lands ON a tick, or the picture
+                                cannot be read exactly
+       xLab/yLab   axis captions, units included
+       fill        shade between the line and the x-axis (the distance)
+       marks       [[x, y], …] the points the question wants read
+     s_gravity borrows it for h against t and h against t². */
+  function axisChart(cfg) {
+    var W = 320, H = 220, P = 38;   /* P leaves room for the y-axis numbers */
+    function mx(x) { return rd1(P + (W - P - 14) * x / cfg.xMax); }
+    function my(y) { return rd1(H - P - (H - P - 18) * y / cfg.yMax); }
+    var nx = Math.round(cfg.xMax / cfg.xStep), ny = Math.round(cfg.yMax / cfg.yStep), i, v;
+    var g = "<svg class='qb-graph' viewBox='0 0 " + W + " " + H + "' role='img'>";
+    for (i = 0; i <= nx; i++) { v = i * cfg.xStep;
+      g += "<line x1='" + mx(v) + "' y1='" + my(0) + "' x2='" + mx(v) + "' y2='" + my(cfg.yMax) + "' stroke='var(--hair,#e6e7e3)'/>"; }
+    for (i = 0; i <= ny; i++) { v = i * cfg.yStep;
+      g += "<line x1='" + mx(0) + "' y1='" + my(v) + "' x2='" + mx(cfg.xMax) + "' y2='" + my(v) + "' stroke='var(--hair,#e6e7e3)'/>"; }
+    /* the shaded area goes under the axes and the line: it is a wash, not a shape */
+    if (cfg.fill && cfg.pts.length > 1) {
+      var poly = [mx(cfg.pts[0][0]) + "," + my(0)];
+      cfg.pts.forEach(function (p) { poly.push(mx(p[0]) + "," + my(p[1])); });
+      poly.push(mx(cfg.pts[cfg.pts.length - 1][0]) + "," + my(0));
+      g += "<polygon points='" + poly.join(" ") + "' fill='var(--accent-soft,#f4f9f8)'/>";
+    }
+    g += "<line x1='" + mx(0) + "' y1='" + my(0) + "' x2='" + mx(cfg.xMax) + "' y2='" + my(0) + "' stroke='var(--muted,#767b7f)' stroke-width='1.6'/>";
+    g += "<line x1='" + mx(0) + "' y1='" + my(0) + "' x2='" + mx(0) + "' y2='" + my(cfg.yMax) + "' stroke='var(--muted,#767b7f)' stroke-width='1.6'/>";
+    g += "<polyline points='" + cfg.pts.map(function (p) { return mx(p[0]) + "," + my(p[1]); }).join(" ") +
+         "' fill='none' stroke='var(--accent,#0d7a70)' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/>";
+    (cfg.marks || []).forEach(function (p) {   /* ringed, so a dot ON the line still reads */
+      g += "<circle cx='" + mx(p[0]) + "' cy='" + my(p[1]) + "' r='4.5' fill='var(--alert,#b0592f)' stroke='var(--paper,#faf7ef)' stroke-width='1.4'/>";
+    });
+    /* the numbers go on last so nothing is drawn over them. The y-axis skips
+       its own 0 — the origin's 0 on the x-axis already labels that corner. */
+    for (i = 0; i <= nx; i++) { v = i * cfg.xStep;
+      g += "<text x='" + mx(v) + "' y='" + (my(0) + 13) + "' font-size='9' fill='var(--muted,#767b7f)' text-anchor='middle'>" + fmt(v) + "</text>"; }
+    for (i = 1; i <= ny; i++) { v = i * cfg.yStep;
+      g += "<text x='" + (mx(0) - 5) + "' y='" + (my(v) + 3) + "' font-size='9' fill='var(--muted,#767b7f)' text-anchor='end'>" + fmt(v) + "</text>"; }
+    g += "<text x='" + (W - 6) + "' y='" + (my(0) + 26) + "' font-size='9' fill='var(--muted,#767b7f)' text-anchor='end'>" + cfg.xLab + "</text>";
+    g += "<text x='4' y='11' font-size='9' fill='var(--muted,#767b7f)'>" + cfg.yLab + "</text>";
+    return g + "</svg>";
+  }
+
   /* ---------------- turning-point form ----------------
      y = a(x − h)² + k, written and read back. h = 0 loses the bracket
      (y = 2x² + 5) and a = ±1 loses its 1, exactly as a student would write it. */
@@ -332,7 +383,7 @@
                            parseCoord: parseCoord, parseVertex: parseVertex, vertexStr: vertexStr,
                            grid: grid, lineSeg: lineSeg, dot: dot, motionChart: motionChart,
                            quadWindow: quadWindow, quadFits: quadFits, quadGrid: quadGrid, quadPath: quadPath, qdot: qdot,
-                           arcChart: arcChart, numInput: numInput, makeRng: makeRng } };
+                           arcChart: arcChart, axisChart: axisChart, numInput: numInput, makeRng: makeRng } };
 
   /* ============================================================
      FOUNDATIONS
@@ -1013,6 +1064,248 @@
       q += "</div>";
       return { qHTML: q, opts: { list: labels.slice(), a: correct },
         workedHTML: "The story has three pieces: up to " + y1 + " km, FLAT for " + tR + " min (the stop), then back DOWN to zero (home). Only <b>" + correct + "</b> does all three." };
+    }
+  });
+
+  /* ------------------------------------------------------------
+     The two Ball Drop physics skills.
+
+     The Ball Drop report is a gravity experiment: drop a ball from
+     measured heights, time the fall, linearise h against t², read g
+     off the gradient. s_accel supplies the acceleration underneath
+     it; s_gravity supplies the drop itself.
+
+     Both agree with stem-sim-drop.html to the digit — g = 9.8 m/s²,
+     h = ½gt², and the gradient of h against t² is ½g = 4.9 — because
+     the sim is the rehearsal for the same task and a student who
+     meets two different numbers stops trusting either.
+
+     NO AIR RESISTANCE anywhere. That is the model the lesson and the
+     sim teach, and the teach text says so rather than leaving a
+     student to discover the omission in a question.
+
+     Names are fictional and always drawn from this list.
+     ------------------------------------------------------------ */
+  var NAMES = ["Mai", "Anh", "Hiro", "Amara", "Tom", "Layla", "Nadia", "Omar", "Sofia", "Kiet"];
+  var GRAV = 9.8;          /* m/s² — stem-sim-drop.html DROP.g          */
+  var HALF_G = GRAV / 2;   /* 4.9 — the gradient of h against t²        */
+
+  register({
+    id: "s_accel",
+    teach: { what: "Acceleration is how much velocity is gained each second, measured in m/s². On a <b>velocity</b>-time graph the GRADIENT is the acceleration and the AREA under the line is the distance travelled. A falling object gains the same amount of speed every second — 9.8 m/s of it, every second.",
+      how: ["Gradient = change in velocity ÷ time taken. That number IS the acceleration.",
+            "Flat line = steady speed, <b>not</b> stopped. Flat means stopped only on a <i>position</i>-time graph.",
+            "Velocity after t seconds = starting velocity + acceleration × t.",
+            "Distance = area under the line. Triangle: ½ × base × height."] },
+    hint: "Gradient = acceleration. Area underneath = distance. Flat = steady speed.",
+    gen: function (rng) {
+      var who = rng.pick(NAMES);
+      var kind = rng.pick(["grad", "shape", "after", "area"]);
+
+      if (kind === "grad") {
+        /* (u, a, t): starting velocity, acceleration, how long the graph runs.
+           Every gradient is a whole number of m/s² and every velocity lands on
+           a grid line, so the picture is READ, never estimated. The last three
+           slope DOWN — a negative gradient is still an acceleration. */
+        var c = rng.pick([
+          { u: 0, a: 2, t: 4 }, { u: 0, a: 3, t: 4 }, { u: 0, a: 4, t: 3 },
+          { u: 0, a: 5, t: 2 }, { u: 2, a: 2, t: 4 }, { u: 2, a: 3, t: 3 },
+          { u: 4, a: 2, t: 4 }, { u: 4, a: 1, t: 4 }, { u: 6, a: 2, t: 3 },
+          { u: 12, a: -2, t: 4 }, { u: 10, a: -2, t: 3 }, { u: 12, a: -3, t: 3 }
+        ]);
+        var vEnd = c.u + c.a * c.t, dv = c.a * c.t;
+        var vTop = 2 * Math.ceil((Math.max(c.u, vEnd) + 1) / 2);   /* even window, one tick of headroom */
+        var thing = rng.pick(["trolley", "cart", "skateboard", "toy car"]);
+        return { qHTML: "The graph shows the velocity of " + who + "'s " + thing +
+            ". Find its <b>acceleration</b> from the gradient.",
+          svg: axisChart({ pts: [[0, c.u], [c.t, vEnd]], marks: [[0, c.u], [c.t, vEnd]],
+            xMax: c.t + 1, xStep: 1, yMax: vTop, yStep: 2, xLab: "t (s)", yLab: "velocity (m/s)" }),
+          inputs: [numInput("dv", "change in velocity (m/s) =", dv, 0.01),
+                   numInput("a", "acceleration (m/s²) =", c.a, 0.01)],
+          workedHTML: "The line runs from (0, " + c.u + ") to (" + c.t + ", " + vEnd + "). Change in velocity = " +
+            vEnd + " − " + c.u + " = <b>" + fmt(dv) + " m/s</b>, in " + c.t + " s. Acceleration = gradient = " +
+            fmt(dv) + " ÷ " + c.t + " = <b>" + fmt(c.a) + " m/s²</b>. " +
+            (c.a < 0 ? "The line slopes DOWN, so the acceleration is negative — the " + thing + " is slowing down."
+                     : "The line slopes UP, so the " + thing + " gains " + fmt(c.a) + " m/s every second.") };
+      }
+
+      if (kind === "shape") {
+        /* the classic marks-loser: on a POSITION-time graph flat means stopped,
+           on a VELOCITY-time graph it means steady speed. The flat line is never
+           drawn at v = 0, and the down-slope never reaches 0, so exactly one of
+           the four options can ever be true. */
+        var shape = rng.pick(["flat", "up", "down"]);
+        var lvl = rng.pick([4, 6, 8]);
+        var pts, right;
+        if (shape === "flat") { pts = [[0, lvl], [4, lvl]]; right = "moving at a steady speed"; }
+        else if (shape === "up") { pts = [[0, rng.pick([0, 2])], [4, 12]]; right = "speeding up at a steady rate"; }
+        else { pts = [[0, 12], [4, rng.pick([2, 4])]]; right = "slowing down at a steady rate"; }
+        var mover = rng.pick(["skateboard", "tram", "trolley", "drone"]);
+        return { qHTML: "This is a <b>velocity</b>-time graph of " + who + "'s " + mover + ". What is it doing?",
+          svg: axisChart({ pts: pts, xMax: 5, xStep: 1, yMax: 14, yStep: 2,
+            xLab: "t (s)", yLab: "velocity (m/s)" }),
+          opts: { list: ["moving at a steady speed", "speeding up at a steady rate",
+                         "slowing down at a steady rate", "not moving at all"], a: right },
+          workedHTML: (shape === "flat"
+            ? "The line is flat, so the velocity never changes: it stays at " + lvl + " m/s the whole time. The " +
+              mover + " is <b>moving at a steady speed</b> — a flat line means STOPPED only on a <i>position</i>-time graph."
+            : "The line " + (shape === "up" ? "climbs" : "falls") + ", so the velocity is " +
+              (shape === "up" ? "growing" : "shrinking") + " by the same amount every second: <b>" + right + "</b>.") +
+            " On a velocity-time graph the height is the speed and the gradient is the acceleration." };
+      }
+
+      if (kind === "after") {
+        /* the falling case is the bridge into s_gravity: 9.8 m/s gained every
+           second is the same 9.8 that becomes the 4.9 gradient there */
+        if (rng.raw() < 0.45) {
+          var n = rng.pick([1, 2, 3]);
+          return { qHTML: who + " drops a ball from rest. Ignoring air resistance it gains <b>9.8 m/s</b> of speed every second. How fast is it falling after <b>" + n + " s</b>?",
+            inputs: [numInput("v", "velocity after " + n + " s (m/s) =", GRAV * n, 0.05)],
+            workedHTML: "Each second of the fall adds another 9.8 m/s. After " + n + " s: v = 9.8 × " + n +
+              " = <b>" + fmt(GRAV * n) + " m/s</b>. On a velocity-time graph that is a straight line from the origin with gradient 9.8 — and 9.8 m/s² is exactly what g means." };
+        }
+        var u2 = rng.pick([0, 0, 2, 4, 5]), a2 = rng.pick([2, 3, 4]), n2 = rng.pick([2, 3, 4, 5]);
+        return { qHTML: who + "'s cart " + (u2 === 0 ? "starts <b>from rest</b>" : "is already moving at <b>" + u2 + " m/s</b>") +
+            " and accelerates at <b>" + a2 + " m/s²</b> for <b>" + n2 + " s</b>. What is its velocity then?",
+          inputs: [numInput("v", "velocity after " + n2 + " s (m/s) =", u2 + a2 * n2, 0.01)],
+          workedHTML: "It gains " + a2 + " m/s every second for " + n2 + " s, so it gains " + a2 + " × " + n2 +
+            " = " + (a2 * n2) + " m/s. " + (u2 === 0 ? "It started from rest, so that gain is the whole velocity: v = <b>" + (a2 * n2) + " m/s</b>."
+                                                     : "Starting from " + u2 + " m/s: v = " + u2 + " + " + (a2 * n2) + " = <b>" + (u2 + a2 * n2) + " m/s</b>.") };
+      }
+
+      /* area: the distance is the area under the line. Base is even so a
+         triangle's ½ × base × height is always a whole number of metres. */
+      var tA = rng.pick([2, 4, 6]), vA = rng.pick([4, 6, 8, 10, 12]);
+      var dist = tA * vA / 2;
+      var vTopA = 2 * Math.ceil((vA + 1) / 2);
+      return { qHTML: who + " starts from rest and speeds up steadily, as the graph shows. Use the <b>area</b> under the line to find the distance travelled.",
+        svg: axisChart({ pts: [[0, 0], [tA, vA]], fill: true, marks: [[tA, vA]],
+          xMax: tA + 1, xStep: 1, yMax: vTopA, yStep: 2, xLab: "t (s)", yLab: "velocity (m/s)" }),
+        inputs: [numInput("d", "distance (m) =", dist, 0.01)],
+        workedHTML: "The shaded area under a velocity-time line is the distance travelled. It is a triangle: base = " +
+          tA + " s, height = " + vA + " m/s. Area = ½ × " + tA + " × " + vA + " = <b>" + dist +
+          " m</b>. Check the units: m/s × s = m, so an area really is a distance." };
+    }
+  });
+
+  register({
+    id: "s_gravity",
+    teach: { what: "Near the ground everything falls with the same acceleration, <b>g ≈ 9.8 m/s²</b>. Ignore air resistance — as this whole topic does — and a heavy ball and a light one land together, because there is no mass anywhere in the rule. The rule is <b>h = ½gt²</b>, so h against t is a CURVE. Plot h against <b>t²</b> and it straightens out, and the gradient of that line is ½g.",
+      how: ["How far it falls: h = ½ × 9.8 × t² = 4.9t².",
+            "How long it falls: rearrange to t² = h ÷ 4.9, then t = √(h ÷ 4.9).",
+            "Straighten it: square every time and plot h against t². The line runs through the origin.",
+            "Read the gradient m off that line, then <b>g = 2 × m</b>."] },
+    hint: "h = 4.9t². The gradient of h against t² is ½g, so g = 2 × gradient.",
+    gen: function (rng) {
+      var pair = rng.shuffle(NAMES), who = pair[0], other = pair[1];
+      var kind = rng.pick(["hFromT", "tFromH", "line", "why", "grad", "mass"]);
+
+      /* 4.9t² lands on a THIRD decimal at the half-second times (t = 1.5 gives
+         11.025 m), and fmt() rounds to two — which would print 11.03 and make
+         a question disagree with its own answer. These heights get their own
+         formatter; every ANSWER below still lands on one decimal or fewer. */
+      function h3(n) { return String(Math.round(n * 1000) / 1000); }
+      /* "an 800 g ball", not "a 800 g ball" — the only masses below that take
+         "an" are the ones a reader says starting with "eight" */
+      function art(n) { return /^8/.test(String(n)) ? "an" : "a"; }
+
+      if (kind === "hFromT") {
+        /* whole seconds only, so the height is 4.9, 19.6 or 44.1 — one decimal */
+        var t = rng.pick([1, 2, 3]), h = HALF_G * t * t;
+        return { qHTML: who + " drops a ball off a landing and it falls for <b>" + t + ".0 s</b> before it lands. Ignoring air resistance, how far did it fall? Use <b>h = ½gt²</b> with g = 9.8.",
+          inputs: [numInput("h", "h (m) =", h, 0.05)],
+          workedHTML: "h = ½ × 9.8 × " + t + "² = 4.9 × " + (t * t) + " = <b>" + fmt(h) + " m</b>. " +
+            (t === 1 ? "That is the anchor of the whole topic: a one-second fall is exactly 4.9 m."
+                     : "A one-second fall is 4.9 m, and this fall is " + (t * t) +
+                       " times that — not " + t + " times — because t is SQUARED.") };
+      }
+
+      if (kind === "tFromH") {
+        /* every height here is 4.9 × a perfect square, so the time is exact */
+        var d = rng.pick([[0.5, 1.225], [1, 4.9], [1.5, 11.025], [2, 19.6], [2.5, 30.625], [3, 44.1]]);
+        return { qHTML: who + " lets a ball go from a height of <b>" + h3(d[1]) + " m</b>. Ignoring air resistance, how long is it in the air? Use <b>h = 4.9t²</b>.",
+          inputs: [numInput("t", "t (s) =", d[0], 0.02)],
+          workedHTML: "Rearrange h = 4.9t²: t² = h ÷ 4.9 = " + h3(d[1]) + " ÷ 4.9 = " + fmt(d[0] * d[0]) +
+            " s², so t = √" + fmt(d[0] * d[0]) + " = <b>" + fmt(d[0]) + " s</b>. Take the square root LAST — the rule gives you t², not t." };
+      }
+
+      if (kind === "line") {
+        /* the model's own table at the tidy times, which is exactly the family
+           that makes t² whole-ish and the gradient exactly 4.9 */
+        var TS = [0.5, 1, 1.5, 2], HS = [1.225, 4.9, 11.025, 19.6];
+        var tbl = "<table class='qb-table'><tr><th>t (s)</th>";
+        TS.forEach(function (v) { tbl += "<td>" + fmt(v) + "</td>"; });
+        tbl += "</tr><tr><th>t² (s²)</th>";
+        TS.forEach(function (v) { tbl += "<td>" + fmt(v * v) + "</td>"; });
+        tbl += "</tr><tr><th>h (m)</th>";
+        HS.forEach(function (v) { tbl += "<td>" + h3(v) + "</td>"; });
+        tbl += "</tr></table>";
+        /* the two pictures go in the WORKED solution, not the question: showing
+           the straight one first would answer it */
+        var curve = [];
+        for (var i = 0; i <= 40; i++) { var tc = 2 * i / 40; curve.push([tc, HALF_G * tc * tc]); }
+        var minis = "<div class='qb-minis'>" +
+          "<figure><figcaption>h against t</figcaption>" +
+          axisChart({ pts: curve, marks: [[0.5, 1.225], [1, 4.9], [1.5, 11.025], [2, 19.6]],
+            xMax: 2, xStep: 0.5, yMax: 20, yStep: 5, xLab: "t (s)", yLab: "h (m)" }) + "</figure>" +
+          "<figure><figcaption>h against t²</figcaption>" +
+          axisChart({ pts: [[0, 0], [4, 19.6]], marks: [[0.25, 1.225], [1, 4.9], [2.25, 11.025], [4, 19.6]],
+            xMax: 4, xStep: 1, yMax: 20, yStep: 5, xLab: "t² (s²)", yLab: "h (m)" }) + "</figure></div>";
+        return { qHTML: who + " works out what h = 4.9t² predicts for four fall times:" + tbl +
+            "Which plot gives a <b>straight line through the origin</b>?",
+          opts: { list: ["h against t²", "h against t", "t against h", "h against ½t"], a: "h against t²" },
+          workedHTML: "Replace t² with a single letter x and the rule reads h = 4.9x — the shape of a straight line through the origin. So plot <b>h against t²</b>: 0.25 → 1.225, 1 → 4.9, 2.25 → 11.025, 4 → 19.6. Every height is exactly 4.9 × the number under it on the horizontal axis, which is what a straight line through the origin means." +
+            minis + "The three other plots all still have a square in them somewhere, so they all still bend. Swapping t for t² on one axis is called <b>linearising</b>, and it is the step the Ball Drop report is really testing." };
+      }
+
+      if (kind === "why") {
+        return { qHTML: who + " plots fall height h against fall time t and gets a curve, not a straight line. In this model (no air resistance), <b>why</b> does it bend?",
+          opts: { list: ["because t is squared in h = 4.9t²",
+                         "because air resistance slows the ball down",
+                         "because the timer is less accurate on long drops",
+                         "because a heavier ball falls faster"], a: "because t is squared in h = 4.9t²" },
+          workedHTML: "It bends <b>because t is squared in h = 4.9t²</b> — the rule is a quadratic in t, and nothing else is bending it. There is no air resistance in this model at all, and no mass in the rule either, so neither of those can be the reason. Double the time and the height goes up <b>four</b> times, not two: 4.9 m becomes 19.6 m. Square every time, plot h against t², and the same data comes out straight." };
+      }
+
+      if (kind === "grad") {
+        /* gradients kept to two decimals so g = 2m lands on one */
+        var m = rng.pick([HALF_G, 4.85, 5, 4.75, 4.6, 5.1, 4.95]);
+        var g2 = 2 * m;
+        var close = m === HALF_G ? "exactly the accepted value."
+          : "The accepted value is 9.8 m/s², so this run came out " +
+            (g2 > GRAV ? "a little high" : "a little low") + " — normal for hand timing.";
+        if (rng.raw() < 0.5) {
+          return { qHTML: who + "'s trendline on the <b>h against t²</b> plot passes through the origin with gradient <b>" +
+              fmt(m) + "</b>. What value of g does that give?",
+            inputs: [numInput("g", "g (m/s²) =", g2, 0.02)],
+            workedHTML: "The gradient of h against t² is ½g, so g = 2 × gradient = 2 × " + fmt(m) + " = <b>" +
+              fmt(g2) + " m/s²</b>. " + (m === HALF_G ? "That is " + close : close) };
+        }
+        var px = rng.pick([2, 4]), py = m * px;
+        return { qHTML: who + "'s <b>h against t²</b> trendline passes through the origin and through <b>(" +
+            px.toFixed(2) + ", " + py.toFixed(2) + ")</b>. Find its gradient, then g.",
+          inputs: [numInput("m", "gradient (m/s²) =", m, 0.02), numInput("g", "g (m/s²) =", g2, 0.03)],
+          workedHTML: "rise = " + py.toFixed(2) + " − 0 = " + py.toFixed(2) + " m, run = " + px.toFixed(2) +
+            " − 0 = " + px.toFixed(2) + " s², so gradient = " + py.toFixed(2) + " ÷ " + px.toFixed(2) + " = <b>" +
+            fmt(m) + "</b> (units m ÷ s² = m/s²). That gradient is ½g, so g = 2 × " + fmt(m) + " = <b>" +
+            fmt(g2) + " m/s²</b>. " + (m === HALF_G ? "That is " + close : close) };
+      }
+
+      /* mass — the payoff. There is no mass in h = ½gt², so there is none in
+         the gradient either, and none in the answer. */
+      if (rng.raw() < 0.5) {
+        var light = rng.pick([100, 200, 250]), heavy = rng.pick([800, 900, 1000]);
+        return { qHTML: who + " holds " + art(light) + " <b>" + light + " g</b> ball and " + art(heavy) + " <b>" + heavy +
+            " g</b> ball at the same height and lets go of both at the same moment. Ignoring air resistance, which lands first?",
+          opts: { list: ["they land at the same time", "the " + heavy + " g ball", "the " + light + " g ball",
+                         "it depends how high they are dropped from"], a: "they land at the same time" },
+          workedHTML: "Look for mass in <b>h = ½gt²</b>. There isn't any — the only things in the rule are g and t. So both balls fall in exactly the same way: <b>they land at the same time</b>. Dropping them from higher up changes both times together, never just one of them. (In real air a feather would lose, but two solid balls both punch straight through it — and this model has no air resistance in it at all.)" };
+      }
+      return { qHTML: who + "'s <b>h against t²</b> trendline has gradient <b>4.9</b>. " + other +
+          " repeats the whole experiment with a ball <b>four times heavier</b>, dropped from the same heights. What gradient does " + other + " get?",
+        opts: { list: ["4.9", "19.6", "1.225", "9.8"], a: "4.9" },
+        workedHTML: "There is no mass anywhere in h = ½gt², so there is none in the gradient either. The gradient is ½g and nothing else, so " + other +
+          " gets <b>4.9</b> as well. Only two things can move that gradient: the strength of gravity where you are standing, and a mistake in the timing." };
     }
   });
 

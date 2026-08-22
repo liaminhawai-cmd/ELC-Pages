@@ -69,7 +69,7 @@
         { id: "kg_lines",  name: "Linear graphs",
           skills: ["k_coords", "k_table", "k_grad_graph", "k_grad_pts", "k_yint", "k_eq", "k_sketch", "k_intersect", "k_simult"] },
         { id: "kg_motion", name: "Motion & graphs",
-          skills: ["s_vectors", "s_ptgraph", "s_story"] },
+          skills: ["s_vectors", "s_ptgraph", "s_story", "s_accel", "s_gravity"] },
         { id: "kg_data",   name: "Data & trendlines",
           skills: ["s_variables", "s_lobf", "s_corr", "s_excel"] },
         { id: "kg_quad",   name: "Curves & quadratics",
@@ -266,6 +266,24 @@
               "I can graph a journey with stops and speed changes (piecewise), axes correct.",
               "I can solve catch-up problems: who arrives first, when would they meet."],
       vocab: ["piecewise", "uniform", "rest", "motion"] },
+    /* the Ball Drop physics. The report is a GRAVITY experiment, but until
+       these two the only thing feeding it was data-handling — a student could
+       do every skill on its road and still not know what g was. s_accel is
+       the acceleration underneath the drop; s_gravity is the drop itself.
+       Both sit in kg_motion (they are motion, not data) and both are needed
+       by cp_report, so they appear in the Ball Drop road, not the Trains one. */
+    s_accel: { name: "Speeding up: acceleration and velocity-time graphs", unit: "kin", group: "kg_motion",
+      cont: "Science · Physical L9-10", from: ["s_vectors"], needs: "cp_report",
+      bands: ["I can say what a flat and a sloping velocity-time line mean.",
+              "I can find the acceleration from the gradient and the velocity after a given time.",
+              "I can find the distance from the area under the line, and handle a line that slopes down."],
+      vocab: ["acceleration", "velocity", "gradient", "deceleration"] },
+    s_gravity: { name: "Finding g from a drop", unit: "kin", group: "kg_motion",
+      cont: "Science · Physical L9-10", from: ["s_accel", "s_lobf"], needs: "cp_report",
+      bands: ["I can use h = ½gt² to find how far or how long something falls.",
+              "I can explain why h against t curves but h against t² is straight.",
+              "I can get g from the gradient (g = 2m) and say why mass makes no difference."],
+      vocab: ["gravity", "mass", "acceleration", "trendline"] },
 
     /* Kinematics · data & trendlines */
     s_variables: { name: "Identify the variables", unit: "kin", group: "kg_data",
@@ -463,9 +481,15 @@
               science: null }
           ], project: "cp_quiz" },
         { cols: [
+            /* s_vectors is wired here as well as into the Trains stage below —
+               its own `needs` is cp_cat, but distance/displacement and speed/
+               velocity are what a drop experiment measures, so it belongs on
+               this road too. Same pattern as k_parabola/k_quadeq, which feed
+               cp_test and show again under cp_keg. */
             { words: { sets: ["kin3", "prac"] },
               maths: null,
-              science: { skills: ["s_variables", "s_lobf", "s_excel", "s_corr"] } }
+              science: { skills: ["s_vectors", "s_accel", "s_gravity",
+                                  "s_variables", "s_lobf", "s_excel", "s_corr"] } }
           ], project: "cp_report" },
         { cols: [
             /* the same reading-a-graph words the Progress Quiz used are what
