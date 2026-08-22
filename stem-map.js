@@ -97,16 +97,28 @@
 
     /* ---- shared bones ---- */
     ".pm-wrap{overflow-x:auto;overflow-y:hidden;max-width:100%;padding-bottom:6px}" +
-    ".pm{display:grid;gap:6px;align-items:stretch}" +
+    ".pm{display:grid;gap:5px;align-items:stretch}" +
     /* packed stage column (big map): cells stack top-to-bottom, no voids */
     ".pm-stage{display:grid;grid-auto-rows:max-content;align-content:start;gap:8px;min-width:0}" +
     /* aligned strand band (compact map): its cells stack inside one grid row,
        so the same strand sits on the same line in every stage */
-    ".pm-band{display:grid;grid-auto-rows:max-content;align-content:start;gap:5px;min-width:0}" +
+    ".pm-band{display:grid;grid-auto-rows:max-content;align-content:start;gap:4px;min-width:0}" +
     ".pm-band.empty{border:0;background:none}" +
-    ".pm-cell{border:1px solid var(--hair,#e6e7e3);border-radius:8px;padding:5px 8px 5px 10px;min-width:0;" +
-      "font-size:.72rem;line-height:1.35;color:var(--ink,#212427);text-decoration:none;display:block;" +
+    /* the strand label gutter: one label per row, on the left, so the eye
+       can find a strand and read it straight across. It is what makes the
+       alignment legible — without it the rows are just gaps. */
+    ".pm-lbl{font-size:.6rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;" +
+      "display:flex;align-items:flex-start;padding-top:6px;white-space:nowrap;" +
+      "position:sticky;left:0;z-index:2;background:var(--paper,#fcfcfa);padding-right:10px}" +
+    ".pm-lbl.sw{color:var(--pm-words)}.pm-lbl.sm{color:var(--pm-maths)}.pm-lbl.ss{color:var(--pm-science)}" +
+    /* a compact cell is one line: what it is, how far you are. The bar sits
+       ON the bottom edge, absolutely placed, so it costs no height. */
+    ".pm-cell{border:1px solid var(--hair,#e6e7e3);border-radius:7px;padding:4px 7px 5px 9px;min-width:0;" +
+      "font-size:.72rem;line-height:1.25;color:var(--ink,#212427);text-decoration:none;" +
+      "display:flex;align-items:center;gap:4px 7px;min-height:34px;" +
       "background:var(--paper,#fcfcfa);position:relative}" +
+    ".pm-cell .t{flex:1 1 auto;min-width:0;overflow-wrap:anywhere}" +
+    ".pm-cell .n{flex:0 0 auto}" +
     /* the strand edge: a 2px rule inside the left border, in the strand's hue */
     ".pm-cell::before{content:'';position:absolute;left:-1px;top:6px;bottom:6px;width:2px;border-radius:2px}" +
     ".pm-cell.sw::before{background:var(--pm-words)}" +
@@ -123,15 +135,19 @@
     ".pm-cell .n .tick{color:var(--accent,#0d7a70)}" +
     /* max-width/margin pinned here so a host page's own .bar rule (the spine
        caps bars at 180px) can never squeeze the map's */
-    ".pm-cell .bar{display:block;height:3px;background:var(--hair,#e6e7e3);border-radius:2px;" +
-      "margin:4px 0 0;max-width:none}" +
+    ".pm-cell .bar{position:absolute;left:9px;right:7px;bottom:2px;display:block;height:2px;" +
+      "background:var(--hair,#e6e7e3);border-radius:2px;margin:0;max-width:none}" +
     ".pm-cell .bar i{display:block;height:3px;background:var(--accent,#0d7a70);border-radius:2px}" +
     ".pm-cell.met{border-color:var(--accent,#0d7a70);background:var(--accent-soft,#f4f9f8)}" +
     ".pm-cell.soon{border-style:dashed;color:var(--faint,#9aa0a5)}" +
     ".pm-cell.soon .t{color:var(--faint,#9aa0a5)}" +
     ".pm-cell .cb{display:block;font-size:.62rem;color:var(--accent,#0d7a70);margin-top:2px}" +
+    /* no fixed width: the grid track (projW in render) is the one place
+       a project column's width is decided. A hard width here overrode the
+       track and pushed the last column past the edge, so every map
+       scrolled sideways by exactly the difference. */
     ".pm-proj{border:1.5px solid var(--ink,#212427);border-radius:9px;" +
-      "width:54px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;" +
+      "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;" +
       "text-decoration:none;color:var(--ink,#212427);background:var(--paper,#fcfcfa);padding:10px 4px}" +
     ".pm-proj .pn{writing-mode:vertical-rl;transform:rotate(180deg);font-family:Georgia,'Times New Roman',serif;" +
       "font-size:.92rem;letter-spacing:.02em;white-space:nowrap}" +
@@ -146,7 +162,13 @@
     /* ---- large: the whole-unit view on stem-map.html ---- */
     ".pm-lg{gap:9px}" +
     ".pm-lg .pm-stage{gap:9px}" +
-    ".pm-lg .pm-cell{padding:9px 11px 9px 13px;border-radius:10px;font-size:.78rem}" +
+    ".pm-lg .pm-cell{padding:9px 11px 9px 13px;border-radius:10px;font-size:.78rem;" +
+      "display:block;min-height:0}" +
+    /* the compact cell is a real tap target: it is how a student reaches a
+       word set from the unit page, so it meets the hub's 34px bar. The big
+       map's dense item lists keep their documented 26px exception. */ +
+    ".pm-lg .pm-cell .bar{position:static;height:4px;margin:7px 0 0}" +
+    ".pm-lg .pm-lbl{font-size:.7rem;padding-top:11px;padding-right:16px}" +
     ".pm-lg .pm-cell::before{top:8px;bottom:8px}" +
     ".pm-lg .pm-tag{font-size:.6rem;margin-bottom:3px}" +
     ".pm-lg .pm-cell .hd{display:flex;justify-content:space-between;align-items:baseline;gap:10px;" +
@@ -175,7 +197,7 @@
     ".pm-lg .it.done .mk{color:var(--accent,#0d7a70)}" +
     ".pm-lg .it .ct{margin-left:auto;padding-left:7px;font-size:.68rem;color:var(--faint,#9aa0a5);" +
       "white-space:nowrap;font-variant-numeric:tabular-nums}" +
-    ".pm-lg .pm-proj{width:60px;padding:14px 5px;gap:8px;border-radius:11px}" +
+    ".pm-lg .pm-proj{padding:14px 5px;gap:8px;border-radius:11px}" +
     ".pm-lg .pm-proj .pn{font-size:1.06rem}" +
     ".pm-lg .pm-proj .pd{font-size:.68rem}" +
     ".pm-lg .pm-proj .pt{font-size:.88rem}" +
@@ -209,6 +231,12 @@
   /* what the block counts: "3 word sets" is never as clear as the set names */
   function blockCount(blk) {
     if (blk.sets) return blk.sets.map(function (s) { return SET_SHORT[s] || s; }).join(" + ");
+    /* one skill names itself: "1 skill" tells a student nothing, and two
+       different single-skill cells then read as the same cell twice */
+    if (blk.skills && blk.skills.length === 1) {
+      var sk = STEM2.SKILLS[blk.skills[0]];
+      return sk ? sk.name : blk.skills[0];
+    }
     if (blk.skills) return T("skills")(blk.skills.length);
     return "";
   }
@@ -262,7 +290,11 @@
     var scls = " " + strandClass(strand.id);
     /* the coloured edge marks every cell; the label prints once per strand
        per stage, so a stacked pair of maths lanes is not shouted at twice */
-    var tag = tagged ? "<span class='pm-tag'>" + esc(strandName(strand)) + "</span>" : "";
+    /* the aligned map names each strand once, in its left gutter; the
+       packed map has no gutter, so its first cell in a strand carries the
+       tag itself */
+    var tag = (!large || !tagged) ? "" :
+      "<span class='pm-tag'>" + esc(strandName(strand)) + "</span>";
 
     if (blk.soon) {
       var st = "<span class='n' style='font-weight:400'>· " + esc(T("later")) + "</span>";
@@ -324,13 +356,21 @@
       if (!firstOpenProj && p.cp && p.cp.status === "now") firstOpenProj = p.cp.id;
     });
 
-    /* compact maps align their strands into rows; the big map packs
-       (see the note further down for why they differ) */
+    /* COMPACT aligns: its cells are one line each, so holding a strand on
+       its own row costs little and lets the eye read straight across — the
+       label gutter on the left is what makes that legible.
+       LARGE packs: there every cell lists its skills and sets, so aligning
+       would drag ~900px of grid across for ~600px of content. It names its
+       strand inside each cell instead. */
     var aligned = !large, rowCount = Math.max(1, strands.length);
     /* widths chosen for the classroom's 1366-wide laptops: Kinematics
        (5 goal + 5 project columns) must fit a 1300px content box */
-    var goalW = large ? 185 : 110, projW = large ? 60 : 52, gap = large ? 8 : 7;
-    var colDefs = [], minW = 0;
+    /* compact widths solve for the unit page's 1076px content box on a
+       1366-wide laptop: gutter 62 + 5 goals + 5 projects + gaps must fit,
+       so a five-stage unit shows its whole road without dragging */
+    var goalW = large ? 185 : 114, projW = large ? 60 : 44, gap = large ? 9 : 5;
+    /* the aligned map opens with the strand-label gutter */
+    var colDefs = aligned ? ["max-content"] : [], minW = aligned ? 62 : 0;
     plan.forEach(function (p) {
       if (p.cp) { colDefs.push(projW + "px"); minW += projW + gap; return; }
       colDefs.push("minmax(" + goalW + "px,1fr)");
@@ -338,10 +378,20 @@
     });
     minW -= gap;
 
+    /* the gap is written inline from the same variable the min-width sum
+       uses: when the two drifted (CSS 5px, maths 6px) the grid computed a
+       minimum 10px wider than the box and every map scrolled sideways */
     var html = "<div class='pm-wrap'><div class='pm" + (large ? " pm-lg" : "") +
-      "' style='grid-template-columns:" + colDefs.join(" ") + ";min-width:" + minW + "px'>";
+      "' style='gap:" + gap + "px;grid-template-columns:" + colDefs.join(" ") +
+      ";min-width:" + minW + "px'>";
 
-    var col = 1;
+    /* the strand labels, once each, down the left of an aligned map */
+    if (aligned) strands.forEach(function (s, r) {
+      html += "<div class='pm-lbl " + strandClass(s.id) + "' style='grid-column:1;grid-row:" +
+        (r + 1) + "'>" + esc(strandName(s)) + "</div>";
+    });
+
+    var col = aligned ? 2 : 1;
     plan.forEach(function (p) {
       if (p.cp) {
         var cp = p.cp;

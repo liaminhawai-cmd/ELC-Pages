@@ -113,9 +113,14 @@
     margin:4px 0 10px; }
   .bar i { display:block; height:4px; background:var(--accent); border-radius:2px; }
 
-  /* ---- skill rows ---- */
-  .skrow { border-bottom:1px solid var(--hair); }
-  .skmain { display:flex; flex-wrap:wrap; align-items:center; gap:2px 14px; padding:7px 0; min-height:44px; }
+  /* ---- skill rows ----
+     At laptop width a one-per-line list of short skill names wastes half
+     the window and doubles the scroll, so the rows run in two columns.
+     A fold-out opens inside its own column; its neighbour stays put. */
+  .grows { display:grid; gap:0 30px; }
+  @media (min-width:1000px) { .grows { grid-template-columns:1fr 1fr; } }
+  .skrow { border-bottom:1px solid var(--hair); align-self:start; }
+  .skmain { display:flex; flex-wrap:wrap; align-items:center; gap:2px 12px; padding:2px 0; min-height:38px; }
   .skname { flex:1 1 220px; font-size:.9rem; min-width:0; }
   .skstate { font-size:.78rem; color:var(--muted); white-space:nowrap; }
   .skstate.m { color:var(--accent); font-weight:600; }
@@ -124,7 +129,9 @@
     display:inline-flex; align-items:center; min-height:44px; padding:0; margin:-7px 0; }
   .skact:hover { text-decoration:underline; }
   /* the project this skill feeds — one quiet line under the action link */
-  .builds { flex:1 1 100%; font-size:.75rem; color:var(--faint); max-width:60ch; }
+  /* only the rows that feed something other than the group's own task
+     carry this now, so it no longer needs a line to itself */
+  .builds { flex:0 1 auto; font-size:.75rem; color:var(--faint); max-width:60ch; }
   .fold { border:0; background:none; color:var(--muted); font:inherit; font-size:.85rem; cursor:pointer;
     min-width:44px; min-height:44px; margin:-5px -10px -5px -6px; padding:0; }
   .fold:hover { color:var(--accent); }
@@ -140,8 +147,12 @@
   @media (max-width:520px) { .band { grid-template-columns:76px 1fr auto; } }
   .contline { font-size:.72rem; color:var(--faint); margin-top:6px; }
 
-  /* ---- do (task list) ---- */
-  .task { padding:12px 0; border-bottom:1px solid var(--hair); }
+  /* ---- do (task list) ----
+     Same reasoning as the skill rows: two columns on a laptop, one on a
+     phone, so eight tasks are one screen instead of two. */
+  #tasks { display:grid; gap:0 30px; }
+  @media (min-width:1000px) { #tasks { grid-template-columns:1fr 1fr; } }
+  .task { padding:9px 0; border-bottom:1px solid var(--hair); align-self:start; }
   .task:last-child { border-bottom:0; }
   .task .t { font-size:.92rem; font-weight:600; }
   .task .w { margin:3px 0 4px; font-size:.8rem; color:var(--muted); max-width:60ch; }
@@ -152,8 +163,10 @@
   .task.show .msg { display:block; }
 
   /* ---- prove (the unit's own arc) ---- */
+  #cps { display:grid; gap:0 30px; }
+  @media (min-width:1000px) { #cps { grid-template-columns:1fr 1fr; } }
   .cp { display:grid; grid-template-columns:24px minmax(0,1fr) auto; gap:1px 12px;
-    padding:12px 0; border-bottom:1px solid var(--hair); }
+    padding:9px 0; border-bottom:1px solid var(--hair); align-self:start; }
   .cp:last-child { border-bottom:0; }
   .cp .mark { grid-row:1 / span 2; color:var(--accent); font-weight:700; }
   .cp .mark.todo { color:var(--faint); font-weight:400; }
@@ -530,7 +543,12 @@
       var cp = STEM2.nextCheckpoint(UNIT);
       if (cp) {
         h = "<div class='big'>" + esc(cp.name) + "</div>" +
-          "<div class='line'><span class='alert'>" + esc(T(cpDone(cp) ? "doneW" : "nowW")) + "</span></div>" +
+          /* only a task the teacher has actually marked "now" says now —
+             nextCheckpoint() returns the first one not yet done, which is
+             where you are heading, not a date anyone has confirmed */
+          (cpDone(cp) || cpNow(cp)
+            ? "<div class='line'><span class='alert'>" + esc(T(cpDone(cp) ? "doneW" : "nowW")) + "</span></div>"
+            : "") +
           "<div class='dim'>" + esc(cp.desc) + "</div>";
       } else {
         h = "<div class='line'>" + esc(T("noCp")) + "</div>";
@@ -598,6 +616,16 @@
     var h = "";
     UNIT.skillGroups.forEach(function(g){
       var rows = "", done = 0;
+      /* the group header already names every task this group feeds. A row
+         only needs its own line when it feeds something OTHER than the one
+         most of the group feeds — otherwise the same sentence repeats down
+         every row and says nothing new. */
+      var tally = {}, domNeeds = null, domN = 0;
+      g.skills.forEach(function(id){
+        var n = STEM2.SKILLS[id].needs || "";
+        tally[n] = (tally[n] || 0) + 1;
+        if (tally[n] > domN) { domN = tally[n]; domNeeds = n; }
+      });
       g.skills.forEach(function(id){
         var sk = STEM2.SKILLS[id];
         var st = STEM2.Mastery.state(id);
@@ -630,14 +658,16 @@
             stateHTML +
             "<a class='skact' href='" + skillHref(id, mode) + "'>" + esc(act) + "</a>" +
             "<button class='fold' type='button' aria-expanded='false' aria-controls='b-" + id + "'>▾</button>" +
-            "<span class='builds'>" + esc(buildsLine(sk)) + "</span>" +
+            ((sk.needs || "") === domNeeds ? "" :
+              "<span class='builds'>" + esc(buildsLine(sk)) + "</span>") +
           "</div>" +
           "<div class='bands' id='b-" + id + "'>" + bands + "</div></div>";
       });
       h += "<section class='group' id='g-" + g.id + "'>" +
         "<div class='ghead'><h2>" + esc(g.name) + "</h2>" +
         "<span class='gcount'>" + done + "/" + g.skills.length + " ✓</span></div>" +
-        "<p class='lead'>" + esc(groupFeeds(g)) + "</p>" + rows + "</section>";
+        "<p class='lead'>" + esc(groupFeeds(g)) + "</p>" +
+        "<div class='grows'>" + rows + "</div></section>";
     });
     document.getElementById("groups").innerHTML = h;
   }
