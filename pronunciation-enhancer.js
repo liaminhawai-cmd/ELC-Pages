@@ -1,5 +1,5 @@
 (() => {
-  const build = "20260805-anatomy-1";
+  const build = "20260822-closeup-1";
   const parts = [1,2,3,4,5].map(n => `pronunciation-enhancer.part${n}.txt?v=${build}`);
   Promise.all(parts.map(url => fetch(url,{cache:"no-cache"}).then(r => {
     if(!r.ok) throw new Error(`${url}: HTTP ${r.status}`);

@@ -15,7 +15,7 @@
 <div class="loading"><div><b>Loading the Pronunciation Hub…</b><span>Preparing the interactive vocal tract.</span></div></div>
 <script>
 (() => {
-  const build = "20260805-anatomy-1";
+  const build = "20260822-closeup-1";
   fetch(`pronunciation-core.html?v=${build}`, {cache:"no-cache"})
     .then(r => { if(!r.ok) throw new Error(`HTTP ${r.status}`); return r.text(); })
     .then(html => {

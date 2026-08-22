@@ -1,68 +1,190 @@
-    .anatomy-mini[data-voiced="1"][data-active="1"] .an-vocal-folds{animation:anBuzz .12s ease-in-out infinite alternate;transform-origin:64px 91px;transform-box:fill-box}
-    .an-motion-note{font-size:.78rem;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:5px 0 8px}
-    .an-motion-note b{color:var(--ink)}
-    .an-motion-note button{font-size:.72rem;padding:4px 9px}
-    .anatomy-note{display:block;margin-top:5px;color:var(--muted)}
-    .anatomy-note b{color:var(--ink)}
-    .vowel-inner .anatomy-head{opacity:.78}
-    .vowel-inner .an-jaw,.vowel-inner .an-tongue,.vowel-inner .an-lip,.vowel-inner .an-velum{transition:none}
-    @media (max-width:680px){
-      .vowel-inner .an-labels{display:none}
-      .anatomy-head{opacity:.7}
+
+  const chartX = x => 44 + x * .54;
+  const svgX = v => (v * 1.35).toFixed(1);
+
+  function enhancedChartSVG(){
+    return `<svg viewBox="0 0 135 100" preserveAspectRatio="none" aria-hidden="true">
+      <g class="anatomy-head" transform="translate(0,-1) scale(.9)">${anatomyParts({labels:true})}</g>
+      <polygon class="cavity" points="${svgX(chartX(4))},4 ${svgX(chartX(96))},4 ${svgX(chartX(88))},96 ${svgX(chartX(30))},96"/>
+      <polygon class="trap" points="${svgX(chartX(4))},4 ${svgX(chartX(96))},4 ${svgX(chartX(88))},96 ${svgX(chartX(30))},96"/>
+    </svg>
+    <div style="position:absolute;top:-2px;left:2px;font-size:.68rem;color:var(--muted)">close ↑ · front ←</div>
+    <div style="position:absolute;bottom:-2px;right:2px;font-size:.68rem;color:var(--muted)">→ back · ↓ open</div>
+    <div class="mouthlabel" style="left:.5%;top:46%">lips</div>
+    <div class="mouthlabel" style="left:47%;top:7%">tongue high</div>
+    <div class="mouthlabel" style="left:47%;bottom:5%">tongue low</div>`;
+  }
+
+  /* ---- vowels and diphthongs: the whole tract moves, whole head in frame.
+     Untouched by the consonant close-up work. ---- */
+  function enhancedFaceCtl(container){
+    const svg = container.querySelector("svg");
+    if(!svg) return null;
+    const jaw = svg.querySelector(".an-jaw");
+    const tongue = svg.querySelector(".an-tongue");
+    const upperLip = svg.querySelector(".an-upper-lip");
+    const lowerLip = svg.querySelector(".an-lower-lip");
+    const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(!jaw || !tongue || !upperLip || !lowerLip) return null;
+
+    const idle = {x:50,y:42};
+    let cur = {...idle};
+    let target = {...idle};
+    let speaking = false;
+    let raf = 0;
+
+    function rounding(x,y){
+      const back = Math.max(0,Math.min(1,(x-46)/38));
+      const openness = Math.max(0,Math.min(1,(y-55)/45));
+      return back * (1 - Math.pow(openness,.85));
     }
-    @media (prefers-reduced-motion:reduce){
-      .an-air,.an-vocal-folds,.an-place-ring{animation:none!important}
+
+    function draw(){
+      const ease = reduced ? 1 : .25;
+      cur.x += (target.x-cur.x)*ease;
+      cur.y += (target.y-cur.y)*ease;
+
+      const open = Math.max(0,Math.min(1,cur.y/100));
+      const angle = .8 + Math.pow(open,1.12)*10.5;
+      jaw.setAttribute("transform",`rotate(${angle.toFixed(2)} 66 54)`);
+
+      const humpX = 32 + (cur.x/100)*26;
+      const humpY = 34 + (cur.y/100)*27;
+      const width = 6 + open*8;
+      const tipY = 48 + open*2.2;
+      const rootX = 59 + (cur.x-50)*.035;
+      const rootY = 61 + open*6;
+      tongue.setAttribute("d",
+        `M20,${tipY.toFixed(1)} `+
+        `C${(24+open*2).toFixed(1)},${(44+open*4).toFixed(1)} ${(humpX-width).toFixed(1)},${(humpY+1).toFixed(1)} ${humpX.toFixed(1)},${humpY.toFixed(1)} `+
+        `C${(humpX+width).toFixed(1)},${(humpY-1).toFixed(1)} ${rootX.toFixed(1)},${(rootY-8).toFixed(1)} ${rootX.toFixed(1)},${rootY.toFixed(1)} `+
+        `C${rootX.toFixed(1)},${(rootY+10).toFixed(1)} 52,76 43,75 `+
+        `C32,74 23,65 20,56 C19,53 19,51 20,${tipY.toFixed(1)} Z`);
+
+      const round = rounding(cur.x,cur.y);
+      const protrude = 3.2*round;
+      const gap = 3.2 + open*3.1 - round*2.2;
+      upperLip.setAttribute("d",`M8,38 Q${(4.8-protrude).toFixed(1)},${(39.5-round).toFixed(1)} ${(7.8-protrude).toFixed(1)},${(40.5-gap*.16).toFixed(1)} Q12,41.4 16,41`);
+      lowerLip.setAttribute("d",`M8,${(42+gap).toFixed(1)} Q${(4.8-protrude).toFixed(1)},${(43.5+gap*.25).toFixed(1)} ${(8-protrude).toFixed(1)},${(42.3+gap*.35).toFixed(1)} Q12,42.2 16,43.4`);
+
+      svg.classList.toggle("an-speaking",speaking);
+      const moving = Math.abs(target.x-cur.x)+Math.abs(target.y-cur.y)>.25;
+      if(speaking || moving) raf=requestAnimationFrame(draw); else raf=0;
     }
-  `;
-
-  const style = document.createElement("style");
-  style.id = "pronunciation-anatomy-enhancement";
-  style.textContent = STYLE;
-  document.head.appendChild(style);
-
-  const escAttr = value => String(value).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;");
-
-  function anatomyParts({labels=true, place=null}={}){
-    const spots = {
-      "Bilabial":[7.5,41.5], "Labio-dental":[12.5,42.2], "Dental":[18.2,40.2],
-      "Alveolar":[25.6,34.3], "Post-alveolar":[34.5,31.5], "Velar":[56.5,34.5], "Glottal":[64,91]
+    function kick(){ if(!raf) raf=requestAnimationFrame(draw); }
+    draw();
+    return {
+      set(x,y){ target={x,y}; speaking=true; kick(); },
+      idle(){ target={...idle}; speaking=false; kick(); }
     };
-    const marker = place && spots[place] ? `
-      <circle class="an-place-ring" cx="${spots[place][0]}" cy="${spots[place][1]}" r="4.8"/>
-      <circle class="an-place" cx="${spots[place][0]}" cy="${spots[place][1]}" r="2.2"/>` : "";
-    const labelMarkup = labels ? `
-      <g class="an-labels">
-        <line x1="25.5" y1="34" x2="15" y2="26"/><text x="2" y="25">alveolar ridge</text>
-        <line x1="42" y1="26" x2="43" y2="15"/><text x="32" y="13.5">hard palate</text>
-        <line x1="58" y1="33" x2="72" y2="25"/><text x="72" y="24">velum</text>
-        <line x1="64" y1="91" x2="78" y2="88"/><text x="72" y="86">vocal folds</text>
-      </g>` : "";
+  }
 
-    return `
-      <path class="an-tissue" d="M38,2 C22,2 11,9 8,22 C7,26 8,29 3,32 C1,34 2,37 7,38
-        C5,40 5,43 8,45 C6,49 7,54 11,57 C8,63 11,71 18,77 C24,83 29,90 30,108
-        L79,108 C78,96 77,86 79,73 C82,57 87,42 85,26 C83,10 69,2 54,2 Z"/>
-      <path class="an-cavity" d="M7,29 C16,19 29,14 44,15 C53,15 60,18 65,23 C59,24 55,27 52,31
-        C42,29 31,30 23,33 C17,35 12,35 7,34 Z"/>
-      <path class="an-cavity" d="M10,39 C18,35 26,34 36,34 C47,34 57,38 61,46 C64,52 65,61 64,68
-        C60,66 56,63 51,60 C40,56 27,55 16,58 C12,54 10,48 10,39 Z"/>
-      <path class="an-cavity" d="M61,43 C68,44 71,51 70,61 L69,78 C69,84 72,90 72,108 L58,108
-        C58,96 60,88 59,80 C58,71 57,61 58,53 C58,49 59,46 61,43 Z"/>
-      <path class="an-palate" d="M21,35 Q34,25 49,26 Q55,27 59,31"/>
-      <path class="an-outline" d="M8,33 Q14,36 21,35"/>
-      <rect class="an-tooth" x="17" y="34" width="4.2" height="8" rx="1"/>
-      <rect class="an-tooth" x="17.7" y="48" width="4.1" height="7" rx="1" transform="rotate(5 19.7 51.5)"/>
-      <path class="an-lip an-upper-lip" d="M8,38 Q4.8,39.6 7.8,42 Q12,42.4 16,41"/>
-      <path class="an-lip an-lower-lip" d="M8,45 Q4.8,43.5 8,42.2 Q12,42 16,43.4"/>
-      <g class="an-jaw">
-        <path class="an-jawbone" d="M20,52 Q26,69 43,74 Q55,76 66,63"/>
-      </g>
-      <path class="an-tongue" d="M20,49 C25,43 34,41 43,42 C52,43 58,49 59,59
-        C60,68 57,73 50,75 C39,78 26,69 21,59 C19,55 18,52 20,49 Z"/>
-      <path class="an-velum" d="M58,31 Q65,34 63,42"/>
-      <ellipse class="an-uvula" cx="62.3" cy="43.5" rx="1.5" ry="2.6"/>
-      <path class="an-pharynx" d="M68,43 Q71,56 68,72 Q66,80 67,87"/>
-      <path class="an-epiglottis" d="M58,78 Q63,73 66,79 Q62,82 60,87"/>
-      <path class="an-larynx" d="M58,88 Q64,85 71,89 M58,94 L72,94 M58,100 L72,100"/>
-      <g class="an-vocal-folds"><path d="M61,90.5 L65,92.3"/><path d="M68,90.5 L65,92.3"/></g>
-      <path class="an-air an-oral-air" d="M65,101 C65,88 64,75 64,63 C61,54 52,47 43,44 C32,41 20,42 8,42"/>
+  function enhancedMouthDiagram(place){
+    return `<svg class="anatomy-mini" viewBox="0 0 88 110" role="img" aria-label="Side-view vocal tract showing the ${escAttr(place)} place of articulation" data-place="${escAttr(place)}" data-active="1">
+      <title>${escAttr(place)} place of articulation</title>
+      ${anatomyParts({labels:true,place})}
+    </svg>`;
+  }
+
+  const consonants = {
+    "/p/": ["Bilabial","plosive",0], "/b/": ["Bilabial","plosive",1],
+    "/t/": ["Alveolar","plosive",0], "/d/": ["Alveolar","plosive",1],
+    "/k/": ["Velar","plosive",0], "/g/": ["Velar","plosive",1],
+    "/f/": ["Labio-dental","fricative",0], "/v/": ["Labio-dental","fricative",1],
+    "/θ/": ["Dental","fricative",0], "/ð/": ["Dental","fricative",1],
+    "/s/": ["Alveolar","fricative",0], "/z/": ["Alveolar","fricative",1],
+    "/ʃ/": ["Post-alveolar","fricative",0], "/ʒ/": ["Post-alveolar","fricative",1],
+    "/h/": ["Glottal","fricative",0], "/tʃ/": ["Post-alveolar","affricate",0],
+    "/dʒ/": ["Post-alveolar","affricate",1], "/m/": ["Bilabial","nasal",1],
+    "/n/": ["Alveolar","nasal",1], "/ŋ/": ["Velar","nasal",1],
+    "/w/": ["Bilabial","approximant",1], "/l/": ["Alveolar","approximant",1],
+    "/r/": ["Post-alveolar","approximant",1]
+  };
+
+  /* ============================================================
+     CONSONANT CLOSE-UPS
+     ============================================================ */
+
+  const FULL_VB = [0,0,88,110];
+
+  /* Per place: [centre x, centre y, window width]. Height is always
+     width * 1.25 so the cutaway keeps its 88:110 aspect and the diagram
+     never changes shape. Each window is tuned so the anatomy that
+     actually does the work fills the frame:
+       Bilabial / Labio-dental -> lips + front teeth
+       Dental / Alveolar / Post-alveolar -> tongue tip, ridge, teeth
+       Palatal / Velar -> tongue body + hard palate / velum + uvula
+       Glottal -> pharynx, epiglottis, larynx, vocal folds            */
+  const WINDOWS = {
+    "Bilabial":      [14.5, 42.0, 28],
+    "Labio-dental":  [15.0, 41.5, 28],
+    "Dental":        [18.0, 41.5, 29],
+    "Alveolar":      [24.5, 39.5, 30],
+    "Post-alveolar": [31.0, 38.5, 32],
+    "Palatal":       [36.5, 38.5, 34],
+    "Velar":         [50.0, 39.0, 34],
+    "Glottal":       [64.0, 87.5, 30]
+  };
+
+  // [x, y, w, h] of the close-up for a place (the full head if unknown).
+  function windowFor(place){
+    const wv = WINDOWS[place];
+    if(!wv) return FULL_VB.slice();
+    const w = wv[2], h = w * 1.25;
+    return [wv[0]-w/2, wv[1]-h/2, w, h];
+  }
+
+  /* Where the air goes once it is past the constriction. Point lists,
+     mouth-ward; smoothed into a curve and used for the flow line, the
+     stop burst and (reduced motion) the static arrow. */
+  const JETS = {
+    "Bilabial":      [[12,42.0],[8.5,41.8],[5,41.3],[1.4,40.6]],
+    "Labio-dental":  [[18.4,41.4],[14,40.1],[8.5,39.5],[3.4,39.2]],
+    "Dental":        [[20.5,42.4],[16,42.3],[11,42.0],[5.2,41.4]],
+    "Alveolar":      [[27,36.4],[22,38.8],[16,40.7],[9.5,41.6]],
+    "Post-alveolar": [[35,33.6],[28,36.6],[21,39.6],[13,41.3]],
+    "Palatal":       [[42,31.6],[34,34.6],[26,37.8],[18,40.4]],
+    "Velar":         [[57,37.6],[50,38.8],[41,40.1],[30,41.0]],
+    "Glottal":       [[65,100],[64.4,92],[63.4,82],[61,71]]
+  };
+
+  /* /l/: the tip seals the ridge, so the air slips down and around it. */
+  const LATERAL_JET = [[28,37],[25,42.5],[19,47],[12.5,44.5],[8.5,42.4]];
+
+  /* nasals: the velum drops and the whole stream leaves through the nose */
+  const NASAL_JET = [[60,33],[55,27],[45,23.6],[33,24.6],[20,28],[10,30.6],[3.6,30.4]];
+
+  /* the seal, drawn thick and red the moment the articulators meet */
+  const CONTACTS = {
+    "Bilabial":      [[6.0,41.9],[11.0,41.9]],
+    "Labio-dental":  [[13.5,41.0],[19.6,41.9]],
+    "Dental":        [[14.4,43.6],[19.2,42.4]],
+    "Alveolar":      [[23.6,34.6],[28.8,34.6]],
+    "Post-alveolar": [[32.2,32.2],[38.2,32.6]],
+    "Palatal":       [[39.4,29.6],[45.4,30.4]],
+    "Velar":         [[51.5,34.4],[58.2,35.8]]
+  };
+
+  /* The hub's own grid says "Plosive / Stop" and "Approximant"; the phonics
+     data says "stop" and "lateral". Same gesture either way. */
+  const MANNER_KEY = {
+    stop:"stop", plosive:"stop",
+    affricate:"affricate", nasal:"nasal",
+    lateral:"lateral", "lateral approximant":"lateral",
+    approximant:"approximant", glide:"approximant",
+    fricative:"fricative", sibilant:"fricative"
+  };
+  const mannerOf = m => {
+    const raw = String(m||"").toLowerCase().trim();
+    return MANNER_KEY[raw] || MANNER_KEY[raw.split("/")[0].trim()] || "fricative";
+  };
+
+  /* how close the articulators end up, in viewBox units of daylight */
+  const TARGET_GAP = { stop:.15, affricate:.15, nasal:.15, lateral:.2, approximant:2.9, fricative:2.2 };
+  const REST_GAP = { "Alveolar":7.5, "Post-alveolar":7.5, "Palatal":7, "Velar":6 };
+
+  /* one loop, in ms, plus a beat of stillness before it repeats */
+  const BEATS = { stop:1900, affricate:2200, nasal:2100, fricative:2000, lateral:2000, approximant:1900 };
+  const PAUSE = 300;
+  /* the frame a still picture should show: closed / narrowest */
+  const HOLD = { stop:.40, affricate:.60, nasal:.50, fricative:.50, lateral:.50, approximant:.50 };
