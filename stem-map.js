@@ -98,8 +98,12 @@
     /* ---- shared bones ---- */
     ".pm-wrap{overflow-x:auto;overflow-y:hidden;max-width:100%;padding-bottom:6px}" +
     ".pm{display:grid;gap:8px;align-items:stretch}" +
-    /* one packed column per stage: cells stack top-to-bottom, no voids */
+    /* packed stage column (big map): cells stack top-to-bottom, no voids */
     ".pm-stage{display:grid;grid-auto-rows:max-content;align-content:start;gap:8px;min-width:0}" +
+    /* aligned strand band (compact map): its cells stack inside one grid row,
+       so the same strand sits on the same line in every stage */
+    ".pm-band{display:grid;grid-auto-rows:max-content;align-content:start;gap:8px;min-width:0}" +
+    ".pm-band.empty{border:0;background:none}" +
     ".pm-cell{border:1px solid var(--hair,#e6e7e3);border-radius:8px;padding:7px 9px 7px 11px;min-width:0;" +
       "font-size:.72rem;line-height:1.35;color:var(--ink,#212427);text-decoration:none;display:block;" +
       "background:var(--paper,#fcfcfa);position:relative}" +
@@ -320,6 +324,9 @@
       if (!firstOpenProj && p.cp && p.cp.status === "now") firstOpenProj = p.cp.id;
     });
 
+    /* compact maps align their strands into rows; the big map packs
+       (see the note further down for why they differ) */
+    var aligned = !large, rowCount = Math.max(1, strands.length);
     /* widths chosen for the classroom's 1366-wide laptops: Kinematics
        (5 goal + 5 project columns) must fit a 1300px content box */
     var goalW = large ? 185 : 110, projW = large ? 60 : 52, gap = large ? 8 : 7;
@@ -347,19 +354,26 @@
         var pin = "<span class='pt'>" + mark + "</span>" +
           "<span class='pn'>" + esc(cp.short) + "</span>" +
           (done || isNext ? "<span class='pd'>" + esc(done ? "✓" : T("soon")) + "</span>" : "");
+        var ppos = "grid-column:" + col + (aligned ? ";grid-row:1 / span " + rowCount : "");
         html += live
-          ? "<a class='" + cls + "' style='grid-column:" + col + "' href='" + esc(unit.page) + "#prove' title=\"" +
+          ? "<a class='" + cls + "' style='" + ppos + "' href='" + esc(unit.page) + "#prove' title=\"" +
             esc(cp.name + " — " + cp.desc) + "\">" + pin + "</a>"
-          : "<div class='" + cls + "' style='grid-column:" + col + "' title=\"" +
+          : "<div class='" + cls + "' style='" + ppos + "' title=\"" +
             esc(cp.name + " — " + cp.desc) + "\">" + pin + "</div>";
         col++;
         return;
       }
-      /* one packed column: this stage's cells, words → maths → science,
-         each carrying its strand's edge and label. No band alignment,
-         so no stage inherits another stage's height as empty space. */
-      html += "<div class='pm-stage' style='grid-column:" + col + "'>";
-      strands.forEach(function (s) {
+      /* ALIGNED (compact): one band per strand, each pinned to its own grid
+         row, so WORDS lines up with WORDS across every stage and the eye can
+         read a strand straight across. The cost is the empty tail under a
+         short band — small here, because a compact cell is one line and a
+         count.
+         PACKED (large): cells flow top-to-bottom in one column instead. On
+         the big map every cell lists its skills and sets, so a tall band
+         would drag ~1000px of grid across for ~500px of content — there the
+         void is worse than the misalignment. */
+      if (!aligned) html += "<div class='pm-stage' style='grid-column:" + col + "'>";
+      strands.forEach(function (s, r) {
         var cell = p.goal ? p.goal[s.id] : null;
         var blks = [];
         blocksOf(cell).forEach(function (b) {
@@ -370,11 +384,18 @@
             b.sets.forEach(function (sid) { blks.push({ sets: [sid] }); });
           } else blks.push(b);
         });
+        if (aligned) {
+          /* the band still renders when empty: it holds the row open so the
+             strand below it stays on its own line across every stage */
+          html += "<div class='pm-band" + (blks.length ? "" : " empty") +
+            "' style='grid-column:" + col + ";grid-row:" + (r + 1) + "'>";
+        }
         blks.forEach(function (b, i) {
           html += blockHtml(b, unitId, large, live, s, i === 0);
         });
+        if (aligned) html += "</div>";
       });
-      html += "</div>";
+      if (!aligned) html += "</div>";
       col++;
     });
 
