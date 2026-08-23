@@ -6,16 +6,19 @@
   const svgX = v => (v * 1.35).toFixed(1);
 
   function enhancedChartSVG(){
+    /* labels off here — this copy is a soft backdrop behind the vowel chips,
+       not a standalone diagram, and the label text was landing directly under
+       the close-front chips (iː, ʉː) and reading as a jumbled overlap */
     return `<svg viewBox="0 0 135 100" preserveAspectRatio="none" aria-hidden="true">
-      <g class="anatomy-head" transform="translate(0,-1) scale(.9)">${anatomyParts({labels:true})}</g>
+      <g class="anatomy-head" transform="translate(0,-1) scale(.9)">${anatomyParts({labels:false})}</g>
       <polygon class="cavity" points="${svgX(chartX(4))},4 ${svgX(chartX(96))},4 ${svgX(chartX(88))},96 ${svgX(chartX(30))},96"/>
       <polygon class="trap" points="${svgX(chartX(4))},4 ${svgX(chartX(96))},4 ${svgX(chartX(88))},96 ${svgX(chartX(30))},96"/>
     </svg>
     <div style="position:absolute;top:-2px;left:2px;font-size:.68rem;color:var(--muted)">close ↑ · front ←</div>
     <div style="position:absolute;bottom:-2px;right:2px;font-size:.68rem;color:var(--muted)">→ back · ↓ open</div>
     <div class="mouthlabel" style="left:.5%;top:46%">lips</div>
-    <div class="mouthlabel" style="left:47%;top:7%">tongue high</div>
-    <div class="mouthlabel" style="left:47%;bottom:5%">tongue low</div>`;
+    <div class="mouthlabel" style="left:.5%;top:8%">tongue high</div>
+    <div class="mouthlabel" style="left:.5%;bottom:9%">tongue low</div>`;
   }
 
   function enhancedFaceCtl(container){
@@ -81,4 +84,6 @@
   }
 
   function enhancedMouthDiagram(place){
-    return `<svg class="anatomy-mini" viewBox="0 0 88 110" role="img" aria-label="Side-view vocal tract showing the ${escAttr(place)} place of articulation" data-place="${escAttr(place)}" data-active="1">
+    /* a few units of margin on every side so the head doesn't run flush to
+       the card edge — the tight crop was reading as "zoomed in" */
+    return `<svg class="anatomy-mini" viewBox="-7 -8 102 128" role="img" aria-label="Side-view vocal tract showing the ${escAttr(place)} place of articulation" data-place="${escAttr(place)}" data-active="1">

@@ -1,4 +1,4 @@
-    .anatomy-mini[data-voiced="1"][data-active="1"] .an-vocal-folds{animation:anBuzz .12s ease-in-out infinite alternate;transform-origin:64px 91px;transform-box:fill-box}
+    .anatomy-mini[data-voiced="1"][data-active="1"]:not([data-manner="approximant"]) .an-vocal-folds{animation:anBuzz .12s ease-in-out infinite alternate;transform-origin:64px 91px;transform-box:fill-box}
     .an-motion-note{font-size:.78rem;color:var(--muted);display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:5px 0 8px}
     .an-motion-note b{color:var(--ink)}
     .an-motion-note button{font-size:.72rem;padding:4px 9px}

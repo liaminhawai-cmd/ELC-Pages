@@ -44,7 +44,8 @@
     svg.dataset.manner = manner;
     svg.dataset.voiced = String(voiced);
     svg.dataset.active = "1";
-    svg.classList.toggle("an-speaking",!!voiced);
+    // approximants (w/l/r/y) hold their position like a vowel — no continuous airflow/buzz
+    svg.classList.toggle("an-speaking",!!voiced && manner !== "approximant");
 
     const tongue = svg.querySelector(".an-tongue");
     const velum = svg.querySelector(".an-velum");
