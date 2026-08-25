@@ -1,12 +1,177 @@
-    note.querySelector("button").addEventListener("click",()=>{
-      svg.dataset.active="0";
-      requestAnimationFrame(()=>requestAnimationFrame(()=>{ svg.dataset.active="1"; }));
-    });
+
+      /* --- airflow --- */
+      const useNose = manner === "nasal";
+      const flowD = useNose ? noseD : jetD;
+      const shown = useNose ? g.nose : g.flow;
+
+      if(still){
+        // one static arrow: this is where the air goes
+        fx.jet.setAttribute("d",flowD);
+        fx.jet.setAttribute("stroke-dasharray","none");
+        fx.jet.style.opacity = .85;
+        fx.jet2.style.opacity = 0;
+        fx.puff.style.opacity = 0;
+        const a = useNose ? noseTip : tipP, b = useNose ? nosePre : preP;
+        const ah = W*.055;
+        fx.arrow.setAttribute("d",`M0,0 L${f2(-2.1*ah)},${f2(-1.2*ah)} L${f2(-2.1*ah)},${f2(1.2*ah)} Z`);
+        fx.arrow.setAttribute("transform",`translate(${a[0]},${a[1]}) rotate(${f2(ang(b,a))})`);
+        fx.arrow.style.opacity = .9;
+        fx.stream.setAttribute("transform","");
+        fx.buzz.style.opacity = voiced ? 1 : 0;
+        return;
+      }
+
+      fx.arrow.style.opacity = 0;
+      fx.jet.setAttribute("d",flowD);
+      fx.jet2.setAttribute("d",flowD);
+
+      if(g.pop > .01){
+        // the release: short motion lines flying out of the constriction
+        fx.puff.setAttribute("d",puffPath(g.popR));
+        fx.puff.style.opacity = f2(.95*g.pop);
+        fx.jet.setAttribute("stroke-dasharray",`${f2(W*.05)} ${f2(W*.1)}`);
+        fx.jet.setAttribute("stroke-dashoffset",f2(-g.popR*W*.9));
+        fx.jet.style.opacity = f2(.85*g.pop);
+        fx.jet2.style.opacity = 0;
+        fx.stream.setAttribute("transform","");
+      }else if(shown > .01){
+        // sustained flow — broken and jittery for fricatives, smooth for glides
+        const rough = manner === "fricative" || manner === "affricate";
+        const speed = rough ? W*.55 : W*.3;
+        fx.puff.style.opacity = 0;
+        fx.jet.setAttribute("stroke-dasharray",rough ? `${f2(W*.06)} ${f2(W*.075)}` : `${f2(W*.13)} ${f2(W*.1)}`);
+        fx.jet.setAttribute("stroke-dashoffset",f2(-((t*speed)%(W*4))));
+        fx.jet.style.opacity = f2(.92*shown);
+        fx.jet2.setAttribute("stroke-dasharray",rough ? `${f2(W*.04)} ${f2(W*.095)}` : `${f2(W*.1)} ${f2(W*.13)}`);
+        fx.jet2.setAttribute("stroke-dashoffset",f2(-((t*speed*1.35)%(W*4))));
+        fx.jet2.style.opacity = f2(.65*shown);
+        const jitter = rough ? W*.012*Math.sin(t*26) : 0;
+        fx.stream.setAttribute("transform",jitter ? `translate(0,${f2(jitter)})` : "");
+      }else{
+        fx.jet.style.opacity = 0;
+        fx.jet2.style.opacity = 0;
+        fx.puff.style.opacity = 0;
+        fx.stream.setAttribute("transform","");
+      }
+
+      /* --- the throat-buzz badge: on for the whole voiced stretch --- */
+      if(voiced){
+        const pulse = .55+.45*Math.sin(t*42);
+        fx.buzz.style.opacity = f2(.2+.8*g.voice);
+        fx.buzzW1.style.opacity = f2(.4+.6*pulse);
+        fx.buzzW2.style.opacity = f2(.95-.75*pulse);
+        fx.buzzDot.setAttribute("r",f2(1.9+.8*pulse));
+      }
+    }
+
+    el.__anAnim = anim;
+    if(still){
+      paint(null,frozen);
+    }else{
+      // offset each tile so several cutaways breathe instead of pulsing in
+      // lockstep (and a screenshot always catches one mid-gesture)
+      stagger = (stagger+0.37)%1;
+      t0 = (typeof performance !== "undefined" ? performance.now() : Date.now())-stagger*period;
+      live.add(anim);
+      watch(anim);
+      paint(t0);
+      kick();
+    }
+    return anim;
+  }
+
+  // Stop a close-up and hand the cutaway back the whole head.
+  function stopConsonant(el,restore){
+    if(!el || !el.__anAnim) return;
+    el.__anAnim.stop();
+    if(restore){
+      el.classList.remove("an-zoom");
+      el.setAttribute("viewBox",FULL_VB.join(" "));
+      const fx = el.querySelector(".an-fx");
+      if(fx) fx.style.opacity = 0;
+      const ring = el.querySelector(".an-place-ring"), dot = el.querySelector(".an-place");
+      if(ring){ ring.setAttribute("r","4.8"); ring.style.opacity = ""; }
+      if(dot){ dot.setAttribute("r","2.2"); dot.style.opacity = ""; }
+    }
+  }
+
+  /* Put a cutaway into one consonant: zoom to the place, then loop the
+     articulation. opts is optional and additive —
+       {animate:false} freezes it (the pre-close-up behaviour),
+       {zoom:false}    keeps the whole head in frame,
+       {at:0..1}       renders one still frame of the gesture,
+       {voiced:bool}   overrides the svg's data-voiced.                */
+  function poseConsonant(el,place,manner,opts){
+    if(!el) return null;
+    const o = opts || {};
+    if(o.animate === false && o.at == null){
+      stopConsonant(el,o.zoom === false);
+      const q = s => el.querySelector(s);
+      const tongue = q(".an-tongue");
+      if(tongue) tongue.setAttribute("d",consonantTongue(place,manner));
+      const upper = q(".an-upper-lip"), lower = q(".an-lower-lip");
+      if(place === "Bilabial"){
+        if(upper) upper.setAttribute("d","M8,38 Q4,40 7,42 Q11,42 15,41.5");
+        if(lower) lower.setAttribute("d","M8,45 Q4,43.5 7,42.2 Q11,42.1 15,42.5");
+      }else if(place === "Labio-dental"){
+        if(lower) lower.setAttribute("d","M8,46 Q7,42 12.4,39.8 Q14,40.5 16,42.5");
+      }
+      if(mannerOf(manner) === "nasal"){
+        const velum = q(".an-velum"), uvula = q(".an-uvula");
+        if(velum) velum.setAttribute("d","M58,31 Q61,38 59,46");
+        if(uvula){ uvula.setAttribute("cx","58.8"); uvula.setAttribute("cy","47"); }
+      }
+      if(o.zoom !== false && WINDOWS[place]){
+        el.classList.add("an-zoom");
+        el.setAttribute("viewBox",windowFor(place).map(f2).join(" "));
+      }
+      return null;
+    }
+    return animateConsonant(el,{place,manner,zoom:o.zoom,animate:o.animate,at:o.at,voiced:o.voiced});
+  }
+
+  /* ---- the detail panel: zoom the cutaway into the sound on show ---- */
+
+  const MANNER_TEXT = {
+    stop:"The articulators seal, pressure builds, then the air bursts out.",
+    affricate:"It starts as a full seal and opens into a narrow hissing channel.",
+    nasal:"The lips or tongue seal the mouth, the velum drops, and the air leaves through the nose.",
+    lateral:"/l/ is the exception to “never quite touch” — the tip really does seal the ridge, and the air slips down and around the sides.",
+    approximant:"The articulators glide close together without ever touching.",
+    fricative:"The articulators leave a narrow slot and the air scrapes noisily through it."
+  };
+
+  function enhanceConsonantDetail(sym){
+    const info = consonants[sym];
+    const svg = document.querySelector("#detail .anatomy-mini");
+    if(!info || !svg) return;
+    const [place,manner,voiced] = info;
+    svg.dataset.place = place;
+    svg.dataset.manner = manner;
+    svg.dataset.voiced = String(voiced);
+    svg.dataset.active = "1";
+    svg.classList.remove("an-speaking");   // the close-up drives the folds itself
+
+    const start = () => animateConsonant(svg,{place,manner,voiced:!!voiced});
+    start();
+
+    const step = svg.closest(".step");
+    if(!step || step.querySelector(".an-motion-note")) return;
+    const key = mannerOf(manner) === "approximant" && place === "Alveolar" ? "lateral" : mannerOf(manner);
+    const note = document.createElement("div");
+    note.className = "an-motion-note";
+    /* say the honest thing: with reduced motion on, nothing is looping */
+    const lead = REDUCED() ? "Close-up, held still (your device asks for less motion):" : "Close-up, on a loop:";
+    note.innerHTML = `<b>${lead}</b> ${MANNER_TEXT[key]}`+
+      `${voiced?" The red badge is your throat buzzing — feel it with two fingers.":" No badge: the vocal folds stay apart, so there is no buzz."}`+
+      ` <button class="btn" type="button">↻ Replay</button>`;
+    note.querySelector("button").addEventListener("click",start);
     svg.insertAdjacentElement("afterend",note);
   }
 
   function addChartNotes(){
     const notes = [
+      ["#tab-cons .hint","Open a consonant to see the cutaway <b>zoom into the place it is made</b> and play the movement on a loop."],
       ["#tab-vow .hint","The cutaway now moves the <b>tongue body, jaw and lips</b> together as you press or drag."],
       ["#tab-dip .hint","Watch the <b>whole vocal tract change continuously</b> as the sound glides."],
     ];
@@ -20,6 +185,12 @@
     window.chartSVG = enhancedChartSVG;
     window.makeFaceCtl = enhancedFaceCtl;
     window.mouthDiagram = enhancedMouthDiagram;
+    /* shared with Phonics/anatomy.js — same names, same behaviour */
+    window.Anatomy = {
+      parts: anatomyParts, makeCtl: enhancedFaceCtl, mouthDiagram: enhancedMouthDiagram,
+      animateConsonant, stopConsonant, poseConsonant, consonantTongue,
+      windowFor, WINDOWS, SPOTS, mannerOf, reduced: REDUCED
+    };
 
     if(typeof window.showDetail === "function" && !window.showDetail.__anatomyPatched){
       const originalShowDetail = window.showDetail;
