@@ -122,6 +122,9 @@
   .word { padding:16px 0; border-bottom:1px solid var(--hair); max-width:66ch; }
   .word.hl { background:var(--accent-soft); border-radius:8px; padding-left:12px; padding-right:12px; }
   .whead { display:flex; align-items:baseline; justify-content:space-between; gap:12px; }
+  /* the speaker travels with its headword rather than drifting to the
+     middle of the row when space-between spreads the children out */
+  .hwbox { display:inline-flex; align-items:center; gap:0; min-width:0; }
   .hw { font-family:Georgia,"Times New Roman",serif; font-size:1.3rem; }
   .wmarks { font-size:.72rem; color:var(--accent); white-space:nowrap; }
   .wmarks .none { color:var(--faint); }
@@ -312,6 +315,7 @@
 <script src="stem-vocab-data.js?v=v3"></script>
 <script src="stem-shared.js?v=v3"></script>
 <script src="stem-gloss.js?v=v3"></script>
+<script src="stem-speech.js?v=v3"></script>
 <script src="stem-translate.js?v=v3"></script>
 <script>
 (function(){
@@ -319,6 +323,10 @@
   var S2 = window.STEM2, D = window.STEM_VOCAB_DATA;
   if (!S2 || !D) return;
   var Store = S2.Store, esc = S2.esc;
+  /* a speaker button, or "" when the browser has no speech engine */
+  function SAY(t, code, cls) {
+    return window.STEMSPEAK ? window.STEMSPEAK.btn(t, code, cls) : "";
+  }
   var HOME_KEY = "elc_stem_home_lang";
 
   /* ---------------- i18n (chrome only; the words stay English) ---------------- */
@@ -757,7 +765,8 @@
     set.words.forEach(function(w){
       var parts = w.parts || [];
       h += "<article class='word' id='w-" + esc(slug(w.w)) + "'>" +
-        "<div class='whead'><span class='hw'>" + esc(w.w) + "</span>" + marksFor(w) + "</div>" +
+        "<div class='whead'><span class='hwbox'><span class='hw'>" + esc(w.w) + "</span>" +
+          SAY(w.w, "en", "lg") + "</span>" + marksFor(w) + "</div>" +
         homeNote(w);
       if (parts.length) {
         h += "<div class='chips'>";
@@ -765,8 +774,9 @@
         h += "</div>";
       }
       h += "<p class='wmean'>" + esc(w.meaning) + "</p>";
-      if (hl && w.tr && w.tr[hl]) h += "<p class='wtr' lang='" + esc(hl) + "' dir='auto'>" + esc(w.tr[hl]) + "</p>";
-      if (w.example) h += "<p class='wex'>" + esc(w.example) + "</p>";
+      if (hl && w.tr && w.tr[hl]) h += "<p class='wtr' lang='" + esc(hl) + "' dir='auto'>" +
+        esc(w.tr[hl]) + SAY(w.tr[hl], hl, "sm") + "</p>";
+      if (w.example) h += "<p class='wex'>" + esc(w.example) + SAY(w.example, "en", "sm") + "</p>";
       if (w.note) h += "<p class='wnote'>" + w.note + "</p>";
       h += "</article>";
     });

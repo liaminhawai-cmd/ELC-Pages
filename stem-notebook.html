@@ -167,6 +167,7 @@
 <script src="stem-vocab-data.js?v=v3"></script>
 <script src="stem-shared.js?v=v3"></script>
 <script src="stem-gloss.js?v=v3"></script>
+<script src="stem-speech.js?v=v3"></script>
 <script src="stem-translate.js?v=v3"></script>
 <script>
 (function(){
@@ -280,6 +281,10 @@
     return;
   }
   var Store = S2.Store, esc = S2.esc;
+  /* a speaker button, or "" when the browser has no speech engine */
+  function SAY(t, code, cls) {
+    return window.STEMSPEAK ? window.STEMSPEAK.btn(t, code, cls) : "";
+  }
 
   /* ---------------- indexes over the (unchanged) data file ---------------- */
   function key(w){ return String(w).toLowerCase(); }
@@ -445,6 +450,7 @@
     var w = it.w;
     var h = "<article class='nw'><div class='nwhead'>" +
       "<a class='hw' href='stem-vocab-hub.html#word=" + encodeURIComponent(w.w) + "'>" + esc(w.w) + "</a>" +
+      SAY(w.w, "en") +
       "<span class='marks'>" + marksFor(it.st) + "</span></div>" +
       "<p class='mean'>" + esc(w.meaning) + "</p>";
     if (hl && w.tr && w.tr[hl]) {

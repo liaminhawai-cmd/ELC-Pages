@@ -43,6 +43,10 @@
   function homeLang() { try { return localStorage.getItem(LANG_KEY) || ""; } catch (e) { return ""; } }
   function setHomeLang(v) { try { localStorage.setItem(LANG_KEY, v); } catch (e) {} }
   var esc = STEM2.esc;
+  /* "" when the browser cannot speak, so a caller concatenates it freely */
+  function SAY(t, code, cls) {
+    return window.STEMSPEAK ? window.STEMSPEAK.btn(t, code, cls) : "";
+  }
 
   /* ---------- block machine translation of the page ---------- */
   (function blockMT() {
@@ -215,12 +219,13 @@
       if (st && st.built) {
         var lg = homeLang();
         var tr = (t.w.tr || {})[lg] || "";
-        showPop(el, "<div class='w'>" + esc(t.w.w) + "</div><div class='g'>" + esc(tr) + "</div>" +
+        showPop(el, "<div class='w'>" + esc(t.w.w) + SAY(t.w.w, "en") + "</div>" +
+          "<div class='g'>" + esc(tr) + SAY(tr, lg, "sm") + "</div>" +
           "<div class='n'>" + esc((t.w.meaning || "").slice(0, 90)) + "</div>");
       } else {
         var loc = STEM2.setLocation(t.set.id);
         var locMsg = loc ? U("learnAtF")(esc(loc.unitName), loc.index) : U("learnFallback");
-        showPop(el, "<div class='w'>" + esc(t.w.w) + "</div>" +
+        showPop(el, "<div class='w'>" + esc(t.w.w) + SAY(t.w.w, "en") + "</div>" +
           "<div class='n'>" + locMsg + "</div>" +
           "<div style='margin-top:6px'><a href='stem-vocab-hub.html#word=" + encodeURIComponent(t.w.w) + "'>" + esc(U("build")) + "</a></div>");
       }
@@ -229,8 +234,10 @@
 
     /* an ordinary helper word: the gloss, one at a time */
     var g = glossFor(word);
-    if (g) showPop(el, "<div class='w'>" + esc(word) + "</div><div class='g'>" + esc(g) + "</div>");
-    else showPop(el, "<div class='w'>" + esc(word) + "</div><div class='n'>" + esc(U("none")) + "</div>");
+    if (g) showPop(el, "<div class='w'>" + esc(word) + SAY(word, "en") + "</div>" +
+      "<div class='g'>" + esc(g) + SAY(g, homeLang(), "sm") + "</div>");
+    else showPop(el, "<div class='w'>" + esc(word) + SAY(word, "en") + "</div>" +
+      "<div class='n'>" + esc(U("none")) + "</div>");
   }
 
   function select(el) {

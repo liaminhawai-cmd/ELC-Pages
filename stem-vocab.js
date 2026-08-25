@@ -31,6 +31,10 @@
     });
   });
 
+  /* "" when the browser has no speech engine, so it simply is not there */
+  function SAY(t, code, cls) {
+    return window.STEMSPEAK ? window.STEMSPEAK.btn(t, code, cls) : "";
+  }
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
@@ -159,7 +163,9 @@
     if (!entry) return;
     Store.markVocab(entry.w, "seen");
     var st = Store.vocabWord(entry.w) || {};
-    panelTitle.textContent = entry.w;
+    /* the headword gets a speaker: hearing an academic word is half of
+       learning it, and this panel is where a student meets it */
+    panelTitle.innerHTML = esc(entry.w) + SAY(entry.w, "en", "lg");
     var h = "";
 
     if (entry.parts && entry.parts.length) {
@@ -174,7 +180,8 @@
       h += "</div>";
     }
     h += "<p>" + esc(entry.meaning || "") + "</p>";
-    if (entry.example) h += "<p class='sv-muted'>“" + esc(entry.example) + "”</p>";
+    if (entry.example) h += "<p class='sv-muted'>“" + esc(entry.example) + "”" +
+      SAY(entry.example, "en", "sm") + "</p>";
 
     /* the whole-word translation is BUILT-gated, exactly like tap-to-translate:
        assembling the word is what unlocks it. The morpheme translations above
@@ -210,7 +217,9 @@
     function paintTr() {
       if (!st.built) { if (sel) sel.value = homeLang(); return; }
       var lg = homeLang();
-      trword.textContent = (lg && entry.tr && entry.tr[lg]) ? entry.tr[lg] : "";
+      var trTxt = (lg && entry.tr && entry.tr[lg]) ? entry.tr[lg] : "";
+      /* said in the home language, not read out in an English accent */
+      trword.innerHTML = esc(trTxt) + (trTxt ? SAY(trTxt, lg, "sm") : "");
       if (sel) sel.value = lg;
     }
     if (sel) sel.addEventListener("change", function () { setHomeLang(sel.value); openWord(name); });

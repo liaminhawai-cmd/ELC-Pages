@@ -782,7 +782,7 @@
      corner label eventually does on a long page. A page with no
      footer (there is one: the orphaned old report.html) gets a
      quiet fixed corner instead, so the stamp always shows somewhere. */
-  var BUILD = 15;
+  var BUILD = 16;
   function stampBuild() {
     if (document.getElementById("stem-build")) return;
     var s = document.createElement("span");
