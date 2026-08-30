@@ -3,147 +3,153 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Formal debate structure — put in your two team names and see who speaks when, and what each speaker's job is.">
+<meta name="description" content="Formal debate structure — put in the speakers' names, drag them into order, and see what each one says.">
 <title>Debate Structure — ELC Hub</title>
 <style>
   :root {
     --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
     --accent:#7c3aed; --radius:14px;
     --shadow:0 1px 2px rgba(16,24,40,.05),0 5px 16px rgba(16,24,40,.07);
-    /* team colours — same as the Debating tab on the Persuasive Language page */
-    --a:#2563eb; --a-soft:#dbeafe; --a-line:#93c5fd;
-    --b:#c2410c; --b-soft:#ffedd5; --b-line:#fdba74;
-    /* speech-part colours — what the speaker is DOING */
-    --intro:#7c3aed;  --intro-soft:#ede9fe;
-    --outline:#0f766e; --outline-soft:#ccfbf1;
-    --reb:#be123c;    --reb-soft:#ffe4e6;
-    --arg:#15803d;    --arg-soft:#dcfce7;
-    --sum:#a16207;    --sum-soft:#fef3c7;
+    /* team colours — same two the Persuasive Language debating tab uses */
+    --a:#2563eb; --a-soft:#dbeafe; --b:#c2410c; --b-soft:#ffedd5;
+    /* rebuttal is ALWAYS red. Intro and summary get no colour of their own. */
+    --reb:#dc2626; --reb-soft:#fee2e2;
+    --plain:#64748b; --plain-soft:#f1f5f9;
+    /* one colour per argument — kept clear of the team blue/orange */
+    --g1:#15803d; --g1s:#dcfce7;
+    --g2:#7c3aed; --g2s:#ede9fe;
+    --g3:#0f766e; --g3s:#ccfbf1;
+    --g4:#be185d; --g4s:#fce7f3;
+    --g5:#a16207; --g5s:#fef3c7;
+    --g6:#4338ca; --g6s:#e0e7ff;
   }
   @media (prefers-color-scheme:dark) {
     :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
             --accent:#a78bfa; --shadow:0 2px 10px rgba(0,0,0,.4);
-            --a:#7aa5ff; --a-soft:#17284a; --a-line:#2f4f86;
-            --b:#fb923c; --b-soft:#3b2412; --b-line:#7c4a20;
-            --intro:#c4b5fd; --intro-soft:#2a2145;
-            --outline:#5eead4; --outline-soft:#0f3b36;
-            --reb:#fda4af;   --reb-soft:#45151f;
-            --arg:#86efac;   --arg-soft:#123322;
-            --sum:#fcd34d;   --sum-soft:#3d2f0b; }
+            --a:#7aa5ff; --a-soft:#17284a; --b:#fb923c; --b-soft:#3b2412;
+            --reb:#f87171; --reb-soft:#45151f;
+            --plain:#94a3b8; --plain-soft:#1e293b;
+            --g1:#86efac; --g1s:#123322;
+            --g2:#c4b5fd; --g2s:#2a2145;
+            --g3:#5eead4; --g3s:#0f3b36;
+            --g4:#f9a8d4; --g4s:#4a1130;
+            --g5:#fcd34d; --g5s:#3d2f0b;
+            --g6:#a5b4fc; --g6s:#232a5c; }
   }
   * { box-sizing:border-box; margin:0; }
   body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; }
-  .shell { max-width:1080px; margin:auto; padding:12px 16px 28px; }
-  .top { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; flex-wrap:wrap; }
+  .shell { max-width:1120px; margin:auto; padding:12px 16px 30px; }
+  .top { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:9px; flex-wrap:wrap; }
   .back { color:var(--accent); font-weight:800; text-decoration:none; font-size:.9rem; }
   .back:hover { text-decoration:underline; }
-  h1 { font-size:clamp(1.25rem,3.4vw,1.6rem); letter-spacing:-.4px; }
-  .sub { color:var(--muted); font-size:.87rem; margin-top:2px; }
+  h1 { font-size:clamp(1.2rem,3.2vw,1.55rem); letter-spacing:-.4px; }
+  .sub { color:var(--muted); font-size:.85rem; margin-top:2px; }
 
   /* ── controls ─────────────────────────────────────────────── */
   .controls { display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end;
     background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
-    padding:11px 13px; box-shadow:var(--shadow); margin-top:12px; }
+    padding:10px 12px; box-shadow:var(--shadow); margin-top:11px; }
   .field { display:flex; flex-direction:column; gap:3px; }
-  .field label { font-size:.7rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
-  .field input[type=text] { border:2px solid var(--line); border-radius:9px; padding:7px 10px;
-    background:var(--bg); color:var(--ink); font-size:.92rem; font-weight:700; min-width:160px; }
-  #teamA { border-color:var(--a-line); }
-  #teamB { border-color:var(--b-line); }
-  .field input:focus { outline:3px solid color-mix(in srgb,var(--accent) 30%,transparent); }
-  .stepper { display:flex; align-items:center; gap:0; border:2px solid var(--line); border-radius:9px; overflow:hidden; background:var(--bg); }
-  .stepper button { border:0; background:transparent; color:var(--ink); width:34px; height:36px; font-size:1.1rem; font-weight:900; cursor:pointer; }
+  .field label { font-size:.68rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+  .field input[type=text] { border:2px solid var(--line); border-radius:9px; padding:6px 9px;
+    background:var(--bg); color:var(--ink); font-size:.9rem; font-weight:700; min-width:150px; }
+  #teamA { border-color:var(--a); } #teamB { border-color:var(--b); }
+  input:focus, select:focus { outline:3px solid color-mix(in srgb,var(--accent) 30%,transparent); }
+  .stepper { display:flex; align-items:center; border:2px solid var(--line); border-radius:9px; overflow:hidden; background:var(--bg); }
+  .stepper button { border:0; background:transparent; color:var(--ink); width:32px; height:34px; font-size:1.05rem; font-weight:900; cursor:pointer; }
   .stepper button:hover:not(:disabled) { background:var(--line); }
   .stepper button:disabled { opacity:.3; cursor:default; }
-  .stepper span { min-width:34px; text-align:center; font-weight:900; font-size:.95rem; }
-  .toggle { display:flex; align-items:center; gap:7px; font-size:.85rem; cursor:pointer; padding-bottom:6px; }
+  .stepper span { min-width:32px; text-align:center; font-weight:900; font-size:.93rem; }
+  .toggle { display:flex; align-items:center; gap:7px; font-size:.84rem; cursor:pointer; padding-bottom:5px; }
   .toggle input { accent-color:var(--accent); width:16px; height:16px; }
-  .ctl-note { font-size:.76rem; color:var(--muted); margin-left:auto; flex:1 1 210px; min-width:180px; padding-bottom:5px; }
+  .ctl-note { font-size:.75rem; color:var(--muted); margin-left:auto; flex:1 1 200px; min-width:170px; padding-bottom:4px; }
 
-  /* ── the five jobs, explained once ────────────────────────── */
-  .jobref { display:grid; gap:7px; margin-top:11px; grid-template-columns:repeat(auto-fit,minmax(184px,1fr)); }
-  .jobref > div { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:7px 9px; box-shadow:var(--shadow); }
-  .jobref p { font-size:.75rem; color:var(--muted); margin-top:4px; line-height:1.4; }
-  .chip { font-size:.73rem; font-weight:800; padding:3px 9px; border-radius:999px; border:1px solid transparent; white-space:nowrap; }
-  .chip.intro   { background:var(--intro-soft);   color:var(--intro);   border-color:var(--intro); }
-  .chip.outline { background:var(--outline-soft); color:var(--outline); border-color:var(--outline); }
-  .chip.reb     { background:var(--reb-soft);     color:var(--reb);     border-color:var(--reb); }
-  .chip.arg     { background:var(--arg-soft);     color:var(--arg);     border-color:var(--arg); }
-  .chip.sum     { background:var(--sum-soft);     color:var(--sum);     border-color:var(--sum); }
+  /* ── what each speaker says: the sentence frames ──────────── */
+  .frames { display:grid; gap:7px; margin-top:10px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); }
+  .frame { background:var(--card); border:1px solid var(--line); border-radius:11px; padding:8px 10px; box-shadow:var(--shadow); }
+  .frame .say { font-size:.79rem; margin-top:5px; line-height:1.55; }
+  .frame .say u { text-decoration:none; border-bottom:2px solid var(--muted); padding:0 14px; opacity:.55; }
+  .chip { display:inline-block; font-size:.72rem; font-weight:800; padding:3px 9px; border-radius:999px; border:1px solid; }
+  .chip.reb   { background:var(--reb-soft);   color:var(--reb);   border-color:var(--reb); }
+  .chip.plain { background:var(--plain-soft); color:var(--plain); border-color:var(--plain); }
+  .chip.g1{background:var(--g1s);color:var(--g1);border-color:var(--g1)} .chip.g2{background:var(--g2s);color:var(--g2);border-color:var(--g2)}
+  .chip.g3{background:var(--g3s);color:var(--g3);border-color:var(--g3)} .chip.g4{background:var(--g4s);color:var(--g4);border-color:var(--g4)}
+  .chip.g5{background:var(--g5s);color:var(--g5);border-color:var(--g5)} .chip.g6{background:var(--g6s);color:var(--g6);border-color:var(--g6)}
 
-  /* ── the sequence: two lanes with a centre timeline ────────── */
-  .lanes { margin-top:12px; position:relative; }
-  .lane-heads { display:grid; grid-template-columns:1fr 46px 1fr; gap:8px; align-items:center; margin-bottom:8px; }
-  .lane-head { border-radius:11px; padding:7px 12px; font-weight:900; font-size:.95rem; text-align:center;
+  /* ── the sequence ─────────────────────────────────────────── */
+  .lanes { margin-top:12px; }
+  .lane-heads { display:grid; grid-template-columns:1fr 44px 1fr; gap:8px; margin-bottom:7px; }
+  .lane-head { border-radius:10px; padding:6px 11px; font-weight:900; font-size:.92rem; text-align:center;
     border:2px solid; overflow-wrap:anywhere; }
-  .lane-head.a { background:var(--a-soft); color:var(--a); border-color:var(--a-line); }
-  .lane-head.b { background:var(--b-soft); color:var(--b); border-color:var(--b-line); }
-  .lane-head small { display:block; font-size:.68rem; font-weight:800; letter-spacing:.05em;
-    text-transform:uppercase; opacity:.75; }
+  .lane-head.a { background:var(--a-soft); color:var(--a); border-color:var(--a); }
+  .lane-head.b { background:var(--b-soft); color:var(--b); border-color:var(--b); }
+  .lane-head small { display:block; font-size:.66rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase; opacity:.8; }
 
-  .turn { display:grid; grid-template-columns:1fr 46px 1fr; gap:8px; align-items:center; margin-bottom:4px; }
+  .turn { display:grid; grid-template-columns:1fr 44px 1fr; gap:8px; align-items:center; margin-bottom:5px; }
   .slot { min-width:0; }
   .num { display:grid; place-items:center; }
-  .num i { font-style:normal; width:29px; height:29px; border-radius:50%; display:grid; place-items:center;
-    font-size:.78rem; font-weight:900; color:#fff; background:var(--muted); }
+  .num i { font-style:normal; width:27px; height:27px; border-radius:50%; display:grid; place-items:center;
+    font-size:.76rem; font-weight:900; color:#fff; background:var(--muted); }
   .turn.is-a .num i { background:var(--a); }
   .turn.is-b .num i { background:var(--b); }
 
-  .bubble { position:relative; border:2px solid; border-radius:13px; padding:7px 11px; background:var(--card); box-shadow:var(--shadow); }
-  .turn.is-a .bubble { border-color:var(--a-line); background:var(--a-soft); }
-  .turn.is-b .bubble { border-color:var(--b-line); background:var(--b-soft); }
-  /* tails point in toward the centre timeline */
-  .bubble::before, .bubble::after { content:""; position:absolute; top:15px; width:0; height:0;
-    border-top:8px solid transparent; border-bottom:8px solid transparent; }
-  .turn.is-a .bubble::before { right:-10px; border-left:10px solid var(--a-line); }
-  .turn.is-a .bubble::after  { right:-7px;  border-left:10px solid var(--a-soft); }
-  .turn.is-b .bubble::before { left:-10px;  border-right:10px solid var(--b-line); }
-  .turn.is-b .bubble::after  { left:-7px;   border-right:10px solid var(--b-soft); }
+  .bubble { position:relative; background:var(--card); border:1px solid var(--line);
+    border-left:5px solid var(--muted); border-radius:11px; padding:7px 10px; box-shadow:var(--shadow); }
+  .turn.is-a .bubble { border-left-color:var(--a); }
+  .turn.is-b .bubble { border-left-color:var(--b); }
+  .bubble.drag-over { outline:3px dashed var(--accent); outline-offset:2px; }
+  .bubble.dragging { opacity:.45; }
 
-  .who { font-size:.82rem; font-weight:900; }
-  .turn.is-a .who { color:var(--a); } .turn.is-b .who { color:var(--b); }
+  .brow { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .grip { cursor:grab; color:var(--muted); font-size:.95rem; line-height:1; padding:2px 1px; user-select:none; }
+  .grip:active { cursor:grabbing; }
+  .nameIn { flex:1 1 110px; min-width:80px; border:1px dashed var(--line); border-radius:7px;
+    background:transparent; color:var(--ink); font-size:.87rem; font-weight:800; padding:3px 6px; }
+  .turn.is-a .nameIn { color:var(--a); } .turn.is-b .nameIn { color:var(--b); }
+  .nameIn::placeholder { color:var(--muted); font-weight:600; opacity:.75; }
+  .nameIn:hover { border-color:var(--muted); }
+  .pos { font-size:.68rem; font-weight:900; color:var(--muted); white-space:nowrap; }
+  .movers { display:flex; gap:2px; }
+  .movers button { border:1px solid var(--line); background:var(--bg); color:var(--ink);
+    width:22px; height:22px; border-radius:6px; font-size:.7rem; cursor:pointer; line-height:1; }
+  .movers button:disabled { opacity:.28; cursor:default; }
   .jobs { display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
 
-  /* ── the two rules students get wrong ─────────────────────── */
-  .rules { display:grid; gap:9px; margin-top:13px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+  /* ── rules ────────────────────────────────────────────────── */
+  .rules { display:grid; gap:9px; margin-top:13px; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); }
   .rule { background:var(--card); border:1px solid var(--line); border-left:5px solid var(--accent);
-    border-radius:0 var(--radius) var(--radius) 0; padding:10px 13px; box-shadow:var(--shadow); }
-  .rule h3 { font-size:.86rem; }
-  .rule p { font-size:.81rem; color:var(--muted); margin-top:3px; }
+    border-radius:0 var(--radius) var(--radius) 0; padding:9px 12px; box-shadow:var(--shadow); }
+  .rule h3 { font-size:.85rem; }
+  .rule p { font-size:.79rem; color:var(--muted); margin-top:3px; }
   .rule.reb { border-left-color:var(--reb); } .rule.reb h3 { color:var(--reb); }
-  .rule.sum { border-left-color:var(--sum); } .rule.sum h3 { color:var(--sum); }
 
-  .xlink { display:inline-block; margin:14px 12px 0 0; color:var(--accent); font-weight:750; text-decoration:none; font-size:.88rem; }
+  .xlink { display:inline-block; margin:13px 12px 0 0; color:var(--accent); font-weight:750; text-decoration:none; font-size:.87rem; }
   .xlink:hover { text-decoration:underline; }
-  .privacy { margin-top:20px; padding:8px 12px; border-radius:10px; background:var(--card);
-    border:1px solid var(--line); color:var(--muted); font-size:.78rem; text-align:center; }
+  .privacy { margin-top:18px; padding:8px 12px; border-radius:10px; background:var(--card);
+    border:1px solid var(--line); color:var(--muted); font-size:.77rem; text-align:center; }
 
   @media (max-width:640px) {
-    .shell { padding:12px 11px 34px; }
-    .lane-heads, .turn { grid-template-columns:34px 1fr; }
+    .shell { padding:11px 10px 30px; }
+    .lane-heads, .turn { grid-template-columns:32px 1fr; }
     .lane-heads .lane-head.b { display:none; }
     .lane-heads .lane-head.a { grid-column:1/3; }
     .turn .num { order:-1; align-items:start; }
     .turn .slot.empty { display:none; }
     .turn .slot { grid-column:2; }
-    .bubble::before, .bubble::after { display:none; }
-    .ctl-note { margin-left:0; max-width:none; }
+    .ctl-note { margin-left:0; }
   }
   @media print {
     @page { size:A4 portrait; margin:10mm; }
     body { background:#fff; }
-    .controls, .privacy, .xlink, .back { display:none !important; }
-    .bubble, .rule, .lane-head, .jobref > div { box-shadow:none; }
+    .controls, .privacy, .xlink, .back, .sub, .grip, .movers { display:none !important; }
+    .bubble, .rule, .frame, .lane-head { box-shadow:none; }
+    .nameIn { border:0; padding:0; }
     .shell { padding:0; max-width:none; }
-    .turn, .rule, .jobref > div { break-inside:avoid; }
+    .turn, .rule, .frame { break-inside:avoid; }
     h1 { font-size:1.15rem; }
-    .sub { display:none; }              /* on-screen instruction, not needed on paper */
-    .jobref { gap:5px; margin-top:8px; }
-    .jobref p { font-size:.68rem; }
-    .lanes { margin-top:8px; }
-    .turn { margin-bottom:3px; }
-    .rules { margin-top:9px; gap:7px; }
-    .rule p { font-size:.72rem; }
+    .frames { gap:5px; margin-top:8px; } .frame .say { font-size:.7rem; }
+    .lanes { margin-top:8px; } .turn { margin-bottom:3px; }
+    .rules { margin-top:9px; gap:7px; } .rule p { font-size:.71rem; }
   }
 </style>
 </head>
@@ -155,7 +161,7 @@
   </div>
 
   <h1>🎤 How a formal debate runs</h1>
-  <p class="sub">Type your two team names. The order below is the order you speak in, and each bubble says what that speaker's job is.</p>
+  <p class="sub">Type each speaker's name into their bubble. Drag a bubble, or use ↑ ↓, to change the order inside a team. If a team is short, put the same person in twice.</p>
 
   <div class="controls">
     <div class="field">
@@ -167,11 +173,11 @@
       <input type="text" id="teamB" maxlength="28" placeholder="Negative">
     </div>
     <div class="field">
-      <label>Speakers in each team</label>
+      <label>Speaking turns each team</label>
       <div class="stepper">
-        <button type="button" id="minus" aria-label="One fewer speaker per team">−</button>
+        <button type="button" id="minus" aria-label="One fewer turn per team">−</button>
         <span id="sizeOut">3</span>
-        <button type="button" id="plus" aria-label="One more speaker per team">+</button>
+        <button type="button" id="plus" aria-label="One more turn per team">+</button>
       </div>
     </div>
     <label class="toggle"><input type="checkbox" id="summaryOnly" checked>
@@ -179,108 +185,130 @@
     <p class="ctl-note" id="argNote"></p>
   </div>
 
-  <div class="jobref" id="jobRef"></div>
+  <div class="frames" id="frames"></div>
 
   <div class="lanes">
     <div class="lane-heads">
-      <div class="lane-head a" id="headA"><small>Team A · agrees</small><span id="headAName">Affirmative</span></div>
+      <div class="lane-head a"><small>Team A · agrees</small><span id="headAName">Affirmative</span></div>
       <div></div>
-      <div class="lane-head b" id="headB"><small>Team B · disagrees</small><span id="headBName">Negative</span></div>
+      <div class="lane-head b"><small>Team B · disagrees</small><span id="headBName">Negative</span></div>
     </div>
     <div id="seq"></div>
   </div>
 
   <div class="rules">
     <div class="rule reb">
-      <h3>The first speaker of Team A never rebuts</h3>
-      <p>Nobody has spoken yet, so there is nothing to answer. Every speaker after that one starts with a rebuttal.</p>
+      <h3>Team A's first speaker never rebuts</h3>
+      <p>Nobody has spoken yet, so there is nothing to answer. Every speaker after that one starts with a rebuttal — that is why rebuttal is always red.</p>
     </div>
-    <div class="rule sum" id="ruleSum">
+    <div class="rule" id="ruleSum">
       <h3>The last speaker adds no new arguments</h3>
-      <p>Their job is to rebut, then pull the whole team case together. A new argument here is unfair — the other team has no turn left to answer it.</p>
+      <p>Their job is to rebut, then pull the team case together. A new argument here is unfair — the other team has no turn left to answer it.</p>
     </div>
     <div class="rule">
-      <h3>Rebut a detail, not just the topic</h3>
-      <p>Name what they actually said: “The first speaker argued that… however…”. The rubric rewards answering their <em>specific</em> example.</p>
+      <h3>One person can speak twice</h3>
+      <p>If your team is smaller than the other, type the same name into two bubbles. They do both jobs.</p>
     </div>
   </div>
 
   <a class="xlink" href="persuasive.html#debating">📚 Debate rubric, key vocabulary and rebuttal starters →</a>
-  <a class="xlink" href="pronunciation.html">🗣️ Practise stress and intonation →</a>
 
-  <p class="privacy">🔒 No account and no name. Your team names stay in this browser only.</p>
+  <p class="privacy">🔒 No account needed. Names you type stay in this browser only, and are never sent anywhere.</p>
 </main>
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    DATA BLOCK — teachers edit below this line. Nothing here is code.
-   Each job has a colour chip and the line the speaker actually says.
+   Sentence frames use the same fill-in-the-blank style as the persuasive
+   workshop booklet. Write a blank as ___ (three underscores or more).
    ═══════════════════════════════════════════════════════════════════════ */
-const JOBS = {
-  intro:   { cls:"intro",   label:"Introduction",
-             say:"Say the topic, say which side you are on, and say your team's contention." },
-  define:  { cls:"intro",   label:"Introduction + definition",
-             say:"Say the topic and your contention, and say what the key words of the topic mean." },
-  accept:  { cls:"intro",   label:"Introduction + reply to the definition",
-             say:"Say your contention. Accept their definition, or say why it is wrong and give yours." },
-  outline: { cls:"outline", label:"Team outline",
-             say:"Say what each speaker in your team will argue. “I will argue… our second speaker will argue…”" },
-  reb:     { cls:"reb",     label:"Rebuttal",
-             say:"Answer what the other team just said. Name their argument, then say why it is wrong or weak." },
-  arg:     { cls:"arg",     label:"Argument",
-             say:"One reason your side is right — with evidence, and an explanation of why it matters." },
-  sum:     { cls:"sum",     label:"Summary",
-             say:"Pull your whole team's case together. No new arguments — say why your side won." },
-};
 
-/* How many speakers a team can have. 3 is the standard school debate. */
+/* The opening speech does the contention AND lists every argument, so the
+   audience knows the whole team case before argument 1 arrives.
+   {ARGS} becomes "___, ___ and ___" with one blank per argument.
+   {N} becomes the number of arguments in words. */
+const FRAME_OPEN =
+  "Our contention is that ___. We have {N} arguments. They are {ARGS}. My own argument today is that ___.";
+
+const FRAME_REBUT =
+  "The speaker for the other team argued that ___. However, ___. This means their argument does not work because ___.";
+
+const FRAME_ARG =
+  "Our next argument is that ___. For example, ___. This shows that ___.";
+
+const FRAME_SUM =
+  "In conclusion, we believe ___ because ___. The other team said ___, but we showed ___. That is why you should agree with us.";
+
+/* Turns each team can have. 3 is the standard school debate. */
 const MIN_SIZE = 2, MAX_SIZE = 6, DEFAULT_SIZE = 3;
+
+const WORDS = ["zero","one","two","three","four","five","six"];
 
 /* ═══════════════════ END OF DATA BLOCK — code below ═══════════════════ */
 
-const LS = "elc_debate_structure";
+const LS = "elc_debate_structure_v2";
 const $ = id => document.getElementById(id);
 let size = DEFAULT_SIZE;
+let names = [[], []];                  // names[team][slotIndex]
 
-/* Build one speaker's list of jobs. Order matters — it is the order they speak. */
-function jobsFor(teamIdx, speakerNo, n, summaryOnly) {
-  const isA = teamIdx === 0, first = speakerNo === 1, last = speakerNo === n;
+/* What each speaker does, in the order they do it. */
+function jobsFor(team, speakerNo, n, summaryOnly) {
+  const isA = team === 0, first = speakerNo === 1, last = speakerNo === n;
   const jobs = [];
   if (first) {
-    jobs.push(isA ? "define" : "accept");
-    jobs.push("outline");
-    if (!isA) jobs.push("reb");            // B1 has something to answer; A1 does not
+    jobs.push({ kind:"open" });                    // contention + all arguments
+    if (!isA) jobs.push({ kind:"reb" });           // B1 has something to answer; A1 does not
+    jobs.push({ kind:"arg" });
   } else {
-    jobs.push("reb");
+    jobs.push({ kind:"reb" });
+    const summarises = last && n >= 3 && summaryOnly;
+    if (summarises) jobs.push({ kind:"sum" });
+    else { jobs.push({ kind:"arg" }); if (last) jobs.push({ kind:"sum" }); }
   }
-  // The last speaker drops their argument and summarises instead — unless the
-  // team is too small to afford that, or the teacher turns it off.
-  const summarises = last && n >= 3 && summaryOnly;
-  if (summarises) { jobs.push("sum"); }
-  else { jobs.push("arg"); if (last) jobs.push("sum"); }
   return jobs;
 }
-
 function argCount(n, summaryOnly) {
   let c = 0;
-  for (let s = 1; s <= n; s++) if (jobsFor(0, s, n, summaryOnly).includes("arg")) c++;
+  for (let s = 1; s <= n; s++) if (jobsFor(0, s, n, summaryOnly).some(j => j.kind === "arg")) c++;
   return c;
 }
+const argClass = i => "g" + (((i - 1) % 6) + 1);
 
-/* The five jobs, explained once, instead of repeating the same line in every bubble. */
-function renderJobRef() {
-  const ref = $("jobRef");
-  ref.replaceChildren();
-  [["define","intro"],["outline","outline"],["reb","reb"],["arg","arg"],["sum","sum"]].forEach(([key, cls]) => {
-    const j = JOBS[key];
+/* Render a frame string: ___ becomes an underline, {ARGS}/{N} expand. */
+function frameHTML(text, nArgs) {
+  const blanks = Array.from({ length: nArgs }, () => "___");
+  const list = blanks.length > 1
+    ? blanks.slice(0, -1).join(", ") + " and " + blanks[blanks.length - 1]
+    : blanks.join("");
+  const filled = text.replace("{ARGS}", list).replace("{N}", WORDS[nArgs] || nArgs);
+  const frag = document.createDocumentFragment();
+  filled.split(/(_{3,})/).forEach(part => {
+    if (/^_{3,}$/.test(part)) frag.append(document.createElement("u"));
+    else frag.append(document.createTextNode(part));
+  });
+  return frag;
+}
+
+function renderFrames(nArgs, summaryOnly) {
+  const host = $("frames");
+  host.replaceChildren();
+  const items = [
+    ["plain", "Opening — contention + all arguments", FRAME_OPEN],
+    ["reb",   "Rebuttal", FRAME_REBUT],
+    [argClass(1), "Argument", FRAME_ARG],
+  ];
+  if (summaryOnly || size >= 2) items.push(["plain", "Summary", FRAME_SUM]);
+  items.forEach(([cls, label, text]) => {
     const box = document.createElement("div");
+    box.className = "frame";
     const chip = document.createElement("span");
     chip.className = "chip " + cls;
-    chip.textContent = key === "define" ? "Introduction" : j.label;
+    chip.textContent = label;
     const p = document.createElement("p");
-    p.textContent = j.say;
+    p.className = "say";
+    p.append(frameHTML(text, nArgs));
     box.append(chip, p);
-    ref.append(box);
+    host.append(box);
   });
 }
 
@@ -288,7 +316,7 @@ function render() {
   const nameA = $("teamA").value.trim() || "Affirmative";
   const nameB = $("teamB").value.trim() || "Negative";
   const summaryOnly = $("summaryOnly").checked;
-  const names = [nameA, nameB];
+  const teamNames = [nameA, nameB];
 
   $("headAName").textContent = nameA;
   $("headBName").textContent = nameB;
@@ -296,9 +324,12 @@ function render() {
   $("minus").disabled = size <= MIN_SIZE;
   $("plus").disabled = size >= MAX_SIZE;
 
-  const args = argCount(size, summaryOnly);
-  $("argNote").textContent = `Each team shares ${args} argument${args === 1 ? "" : "s"} between ${size} speakers, and speaks ${size * 2} times in total.`;
+  const nArgs = argCount(size, summaryOnly);
+  $("argNote").textContent =
+    `Each team gives ${nArgs} argument${nArgs === 1 ? "" : "s"} across ${size} turns, and the opening speech lists them all.`;
   $("ruleSum").hidden = !(size >= 3 && summaryOnly);
+
+  renderFrames(nArgs, summaryOnly);
 
   const seq = $("seq");
   seq.replaceChildren();
@@ -306,40 +337,72 @@ function render() {
   for (let s = 1; s <= size; s++) {
     for (let team = 0; team < 2; team++) {
       turn++;
+      // which argument number is this team up to?
       let argNo = 0;
-      for (let k = 1; k <= s; k++) if (jobsFor(team, k, size, summaryOnly).includes("arg")) argNo++;
+      for (let k = 1; k <= s; k++) if (jobsFor(team, k, size, summaryOnly).some(j => j.kind === "arg")) argNo++;
 
       const row = document.createElement("div");
       row.className = "turn " + (team === 0 ? "is-a" : "is-b");
 
       const bubble = document.createElement("div");
       bubble.className = "bubble";
-      const who = document.createElement("p");
-      who.className = "who";
-      who.textContent = `${names[team]} · speaker ${s}`;
-      bubble.append(who);
+      bubble.draggable = true;
+      bubble.dataset.team = team;
+      bubble.dataset.slot = s - 1;
+
+      const brow = document.createElement("div");
+      brow.className = "brow";
+
+      const grip = document.createElement("span");
+      grip.className = "grip"; grip.textContent = "⠿"; grip.title = "Drag to reorder within this team";
+      grip.setAttribute("aria-hidden", "true");
+
+      const input = document.createElement("input");
+      input.className = "nameIn"; input.type = "text"; input.maxLength = 24;
+      input.placeholder = "speaker's name";
+      input.value = names[team][s - 1] || "";
+      input.setAttribute("aria-label", `Name of ${teamNames[team]} speaker ${s}`);
+      input.addEventListener("input", () => { names[team][s - 1] = input.value; save(); });
+
+      const pos = document.createElement("span");
+      pos.className = "pos";
+      pos.textContent = `${teamNames[team]} · ${s}`;
+
+      const movers = document.createElement("div");
+      movers.className = "movers";
+      const up = document.createElement("button");
+      up.type = "button"; up.textContent = "↑"; up.disabled = s === 1;
+      up.setAttribute("aria-label", `Move this speaker earlier in ${teamNames[team]}`);
+      up.addEventListener("click", () => swap(team, s - 1, s - 2));
+      const dn = document.createElement("button");
+      dn.type = "button"; dn.textContent = "↓"; dn.disabled = s === size;
+      dn.setAttribute("aria-label", `Move this speaker later in ${teamNames[team]}`);
+      dn.addEventListener("click", () => swap(team, s - 1, s));
+      movers.append(up, dn);
+
+      brow.append(grip, input, pos, movers);
+      bubble.append(brow);
 
       const jobs = document.createElement("div");
       jobs.className = "jobs";
-      const list = jobsFor(team, s, size, summaryOnly);
-      list.forEach(key => {
-        const j = JOBS[key];
+      jobsFor(team, s, size, summaryOnly).forEach(j => {
         const c = document.createElement("span");
-        c.className = "chip " + j.cls;
-        c.textContent = key === "arg" ? `${j.label} ${argNo}` : j.label;
+        if (j.kind === "open") { c.className = "chip plain"; c.textContent = "Contention + all arguments"; }
+        else if (j.kind === "reb") { c.className = "chip reb"; c.textContent = "Rebuttal"; }
+        else if (j.kind === "sum") { c.className = "chip plain"; c.textContent = "Summary"; }
+        else { c.className = "chip " + argClass(argNo); c.textContent = "Argument " + argNo; }
         jobs.append(c);
       });
       bubble.append(jobs);
 
-      const left = document.createElement("div");
-      const right = document.createElement("div");
+      wireDrag(bubble);
+
+      const left = document.createElement("div"), right = document.createElement("div");
       left.className = right.className = "slot";
       const num = document.createElement("div");
       num.className = "num";
-      const i = document.createElement("i");
-      i.textContent = turn;
+      const i = document.createElement("i"); i.textContent = turn;
       num.append(i);
-
       if (team === 0) { left.append(bubble); right.classList.add("empty"); }
       else { right.append(bubble); left.classList.add("empty"); }
       row.append(left, num, right);
@@ -349,11 +412,42 @@ function render() {
   save();
 }
 
+/* Reordering only ever swaps names inside one team — the A/B alternation
+   is the debate format and does not move. */
+function swap(team, from, to) {
+  if (to < 0 || to >= size) return;
+  const arr = names[team];
+  const a = arr[from] || "", b = arr[to] || "";
+  arr[from] = b; arr[to] = a;
+  render();
+}
+
+let dragSrc = null;
+function wireDrag(el) {
+  el.addEventListener("dragstart", e => {
+    dragSrc = el; el.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+    try { e.dataTransfer.setData("text/plain", el.dataset.slot); } catch (err) {}
+  });
+  el.addEventListener("dragend", () => { el.classList.remove("dragging"); dragSrc = null;
+    document.querySelectorAll(".drag-over").forEach(x => x.classList.remove("drag-over")); });
+  el.addEventListener("dragover", e => {
+    if (!dragSrc || dragSrc === el) return;
+    if (dragSrc.dataset.team !== el.dataset.team) return;   // same team only
+    e.preventDefault(); el.classList.add("drag-over");
+  });
+  el.addEventListener("dragleave", () => el.classList.remove("drag-over"));
+  el.addEventListener("drop", e => {
+    e.preventDefault(); el.classList.remove("drag-over");
+    if (!dragSrc || dragSrc.dataset.team !== el.dataset.team) return;
+    swap(+el.dataset.team, +dragSrc.dataset.slot, +el.dataset.slot);
+  });
+}
+
 function save() {
-  try {
-    localStorage.setItem(LS, JSON.stringify({
-      a: $("teamA").value, b: $("teamB").value, size, sum: $("summaryOnly").checked }));
-  } catch (e) {}
+  try { localStorage.setItem(LS, JSON.stringify({
+    a: $("teamA").value, b: $("teamB").value, size,
+    sum: $("summaryOnly").checked, names })); } catch (e) {}
 }
 function load() {
   try {
@@ -362,6 +456,7 @@ function load() {
     if (d.b) $("teamB").value = d.b;
     if (d.size >= MIN_SIZE && d.size <= MAX_SIZE) size = d.size;
     if (d.sum === false) $("summaryOnly").checked = false;
+    if (Array.isArray(d.names) && d.names.length === 2) names = d.names;
   } catch (e) {}
 }
 
@@ -372,10 +467,8 @@ $("minus").addEventListener("click", () => { if (size > MIN_SIZE) { size--; rend
 $("plus").addEventListener("click", () => { if (size < MAX_SIZE) { size++; render(); } });
 
 load();
-renderJobRef();
 render();
 
-/* activity record, same key as the rest of the hub */
 try {
   const K = "elc_visited";
   let v = JSON.parse(localStorage.getItem(K) || "[]");
