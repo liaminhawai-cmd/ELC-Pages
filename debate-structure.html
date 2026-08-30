@@ -7,6 +7,7 @@
 <title>Debate Structure — ELC Hub</title>
 <style>
   :root {
+    --lab:86px;
     --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
     --accent:#7c3aed; --radius:14px;
     --shadow:0 1px 2px rgba(16,24,40,.05),0 5px 16px rgba(16,24,40,.07);
@@ -75,17 +76,29 @@
   .chip.g1{background:var(--g1s);color:var(--g1);border-color:var(--g1)} .chip.g2{background:var(--g2s);color:var(--g2);border-color:var(--g2)}
   .chip.g3{background:var(--g3s);color:var(--g3);border-color:var(--g3)} .chip.g4{background:var(--g4s);color:var(--g4);border-color:var(--g4)}
   .chip.g5{background:var(--g5s);color:var(--g5);border-color:var(--g5)} .chip.g6{background:var(--g6s);color:var(--g6);border-color:var(--g6)}
+  /* a hollow chip = this argument is only NAMED here, not developed */
+  .chip.ghost { background:transparent; border-style:dashed; font-weight:700; }
+  .grouplab { font-size:.66rem; font-weight:900; text-transform:uppercase; letter-spacing:.05em;
+    color:var(--muted); align-self:center; margin-right:1px; }
 
   /* ── the sequence ─────────────────────────────────────────── */
   .lanes { margin-top:12px; }
-  .lane-heads { display:grid; grid-template-columns:1fr 44px 1fr; gap:8px; margin-bottom:7px; }
+  .lane-heads { display:grid; grid-template-columns:var(--lab) 1fr 44px 1fr var(--lab); gap:8px; margin-bottom:7px; }
+  .lane-heads > .lane-head.a { grid-column:1/3; } .lane-heads > .lane-head.b { grid-column:4/6; }
   .lane-head { border-radius:10px; padding:6px 11px; font-weight:900; font-size:.92rem; text-align:center;
     border:2px solid; overflow-wrap:anywhere; }
   .lane-head.a { background:var(--a-soft); color:var(--a); border-color:var(--a); }
   .lane-head.b { background:var(--b-soft); color:var(--b); border-color:var(--b); }
   .lane-head small { display:block; font-size:.66rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase; opacity:.8; }
 
-  .turn { display:grid; grid-template-columns:1fr 44px 1fr; gap:8px; align-items:center; margin-bottom:5px; }
+  .turn { display:grid; grid-template-columns:var(--lab) 1fr 44px 1fr var(--lab); gap:8px; align-items:center; margin-bottom:5px; }
+
+  /* team name + speaker number live in the outer margin, not in the box */
+  .sidelab { font-size:.7rem; font-weight:900; line-height:1.25; overflow-wrap:anywhere; }
+  .sidelab b { display:block; font-size:.78rem; }
+  .turn.is-a .sidelab { color:var(--a); text-align:right; }
+  .turn.is-b .sidelab { color:var(--b); text-align:left; }
+  .sidelab span { font-weight:800; opacity:.75; text-transform:uppercase; letter-spacing:.04em; font-size:.64rem; }
   .slot { min-width:0; }
   .num { display:grid; place-items:center; }
   .num i { font-style:normal; width:27px; height:27px; border-radius:50%; display:grid; place-items:center;
@@ -103,12 +116,11 @@
   .brow { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
   .grip { cursor:grab; color:var(--muted); font-size:.95rem; line-height:1; padding:2px 1px; user-select:none; }
   .grip:active { cursor:grabbing; }
-  .nameIn { flex:1 1 110px; min-width:80px; border:1px dashed var(--line); border-radius:7px;
-    background:transparent; color:var(--ink); font-size:.87rem; font-weight:800; padding:3px 6px; }
+  .nameIn { flex:1 1 120px; min-width:90px; border:1px dashed var(--line); border-radius:7px;
+    background:transparent; color:var(--ink); font-size:.95rem; font-weight:850; padding:3px 7px; }
   .turn.is-a .nameIn { color:var(--a); } .turn.is-b .nameIn { color:var(--b); }
   .nameIn::placeholder { color:var(--muted); font-weight:600; opacity:.75; }
   .nameIn:hover { border-color:var(--muted); }
-  .pos { font-size:.68rem; font-weight:900; color:var(--muted); white-space:nowrap; }
   .movers { display:flex; gap:2px; }
   .movers button { border:1px solid var(--line); background:var(--bg); color:var(--ink);
     width:22px; height:22px; border-radius:6px; font-size:.7rem; cursor:pointer; line-height:1; }
@@ -133,6 +145,8 @@
     .lane-heads, .turn { grid-template-columns:32px 1fr; }
     .lane-heads .lane-head.b { display:none; }
     .lane-heads .lane-head.a { grid-column:1/3; }
+    .turn .sidelab { grid-column:2; text-align:left !important; margin-bottom:-2px; }
+    .turn .sidelab.hide { display:none; }
     .turn .num { order:-1; align-items:start; }
     .turn .slot.empty { display:none; }
     .turn .slot { grid-column:2; }
@@ -150,6 +164,15 @@
     .frames { gap:5px; margin-top:8px; } .frame .say { font-size:.7rem; }
     .lanes { margin-top:8px; } .turn { margin-bottom:3px; }
     .rules { margin-top:9px; gap:7px; } .rule p { font-size:.71rem; }
+    .chip { font-size:.62rem; padding:2px 7px; }
+    .grouplab { font-size:.57rem; }
+    .sidelab { font-size:.62rem; } .sidelab b { font-size:.68rem; }
+    .nameIn { font-size:.82rem; font-weight:900; }
+    .jobs { gap:3px; margin-top:3px; }
+    .bubble { padding:5px 8px; }
+    .lane-head { padding:4px 9px; font-size:.85rem; }
+    .rules { grid-template-columns:repeat(3,1fr); }   /* one row, not two */
+    .frames { grid-template-columns:repeat(4,1fr); }
   }
 </style>
 </head>
@@ -161,7 +184,7 @@
   </div>
 
   <h1>🎤 How a formal debate runs</h1>
-  <p class="sub">Type each speaker's name into their bubble. Drag a bubble, or use ↑ ↓, to change the order inside a team. If a team is short, put the same person in twice.</p>
+  <p class="sub">Type each speaker's name into their bubble. Drag a bubble, or use ↑ ↓, to change the order inside a team. The two teams can have different numbers of turns, and the same person can speak twice.</p>
 
   <div class="controls">
     <div class="field">
@@ -173,11 +196,19 @@
       <input type="text" id="teamB" maxlength="28" placeholder="Negative">
     </div>
     <div class="field">
-      <label>Speaking turns each team</label>
+      <label>Team A turns</label>
       <div class="stepper">
-        <button type="button" id="minus" aria-label="One fewer turn per team">−</button>
-        <span id="sizeOut">3</span>
-        <button type="button" id="plus" aria-label="One more turn per team">+</button>
+        <button type="button" id="minusA" aria-label="One fewer turn for Team A">−</button>
+        <span id="sizeOutA">3</span>
+        <button type="button" id="plusA" aria-label="One more turn for Team A">+</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Team B turns</label>
+      <div class="stepper">
+        <button type="button" id="minusB" aria-label="One fewer turn for Team B">−</button>
+        <span id="sizeOutB">3</span>
+        <button type="button" id="plusB" aria-label="One more turn for Team B">+</button>
       </div>
     </div>
     <label class="toggle"><input type="checkbox" id="summaryOnly" checked>
@@ -206,8 +237,8 @@
       <p>Their job is to rebut, then pull the team case together. A new argument here is unfair — the other team has no turn left to answer it.</p>
     </div>
     <div class="rule">
-      <h3>One person can speak twice</h3>
-      <p>If your team is smaller than the other, type the same name into two bubbles. They do both jobs.</p>
+      <h3>Teams can be different sizes</h3>
+      <p>Set each team's turns separately. Speakers still alternate; when one team runs out, the other team's last speakers follow. One person can also take two turns — type their name twice.</p>
     </div>
   </div>
 
@@ -219,16 +250,17 @@
 <script>
 /* ═══════════════════════════════════════════════════════════════════════
    DATA BLOCK — teachers edit below this line. Nothing here is code.
-   Sentence frames use the same fill-in-the-blank style as the persuasive
-   workshop booklet. Write a blank as ___ (three underscores or more).
+   Frames use the persuasive workshop booklet's style: write a blank as ___
+   (three underscores or more).
+     {N}      → the number of arguments, in words
+     {ARGS}   → "___, ___ and ___", one blank per argument
+     {RECAP}  → "Argument 1 was ___. Argument 2 was ___." for every argument
    ═══════════════════════════════════════════════════════════════════════ */
 
-/* The opening speech does the contention AND lists every argument, so the
-   audience knows the whole team case before argument 1 arrives.
-   {ARGS} becomes "___, ___ and ___" with one blank per argument.
-   {N} becomes the number of arguments in words. */
+/* The opening speech names EVERY argument, but only develops argument 1
+   with evidence — that is what the chips show. */
 const FRAME_OPEN =
-  "Our contention is that ___. We have {N} arguments. They are {ARGS}. My own argument today is that ___.";
+  "Our contention is that ___. We have {N} arguments. They are {ARGS}. Our first argument is that ___. For example, ___. This shows that ___.";
 
 const FRAME_REBUT =
   "The speaker for the other team argued that ___. However, ___. This means their argument does not work because ___.";
@@ -236,33 +268,31 @@ const FRAME_REBUT =
 const FRAME_ARG =
   "Our next argument is that ___. For example, ___. This shows that ___.";
 
+/* The summary brings every argument back — one sentence each. */
 const FRAME_SUM =
-  "In conclusion, we believe ___ because ___. The other team said ___, but we showed ___. That is why you should agree with us.";
+  "In conclusion, we believe ___. {RECAP} The other team said ___, but we showed ___. That is why you should agree with us.";
 
-/* Turns each team can have. 3 is the standard school debate. */
 const MIN_SIZE = 2, MAX_SIZE = 6, DEFAULT_SIZE = 3;
-
 const WORDS = ["zero","one","two","three","four","five","six"];
 
 /* ═══════════════════ END OF DATA BLOCK — code below ═══════════════════ */
 
-const LS = "elc_debate_structure_v2";
+const LS = "elc_debate_structure_v3";
 const $ = id => document.getElementById(id);
-let size = DEFAULT_SIZE;
-let names = [[], []];                  // names[team][slotIndex]
+let sizes = [DEFAULT_SIZE, DEFAULT_SIZE];      // turns per team
+let names = [[], []];
 
-/* What each speaker does, in the order they do it. */
+/* What a speaker does. n is THAT team's number of turns. */
 function jobsFor(team, speakerNo, n, summaryOnly) {
   const isA = team === 0, first = speakerNo === 1, last = speakerNo === n;
   const jobs = [];
   if (first) {
-    jobs.push({ kind:"open" });                    // contention + all arguments
-    if (!isA) jobs.push({ kind:"reb" });           // B1 has something to answer; A1 does not
-    jobs.push({ kind:"arg" });
+    jobs.push({ kind:"open" });                 // contention + outline of every argument
+    if (!isA) jobs.push({ kind:"reb" });        // B's first speaker has something to answer
+    jobs.push({ kind:"arg" });                  // ...and develops argument 1
   } else {
     jobs.push({ kind:"reb" });
-    const summarises = last && n >= 3 && summaryOnly;
-    if (summarises) jobs.push({ kind:"sum" });
+    if (last && n >= 3 && summaryOnly) jobs.push({ kind:"sum" });
     else { jobs.push({ kind:"arg" }); if (last) jobs.push({ kind:"sum" }); }
   }
   return jobs;
@@ -274,13 +304,25 @@ function argCount(n, summaryOnly) {
 }
 const argClass = i => "g" + (((i - 1) % 6) + 1);
 
-/* Render a frame string: ___ becomes an underline, {ARGS}/{N} expand. */
-function frameHTML(text, nArgs) {
+/* Speaking order: alternate while both teams have turns left, then the
+   longer team's remaining speakers follow. */
+function speakingOrder() {
+  const out = []; let ia = 1, ib = 1;
+  while (ia <= sizes[0] || ib <= sizes[1]) {
+    if (ia <= sizes[0]) out.push([0, ia++]);
+    if (ib <= sizes[1]) out.push([1, ib++]);
+  }
+  return out;
+}
+
+function frameNodes(text, nArgs) {
   const blanks = Array.from({ length: nArgs }, () => "___");
   const list = blanks.length > 1
     ? blanks.slice(0, -1).join(", ") + " and " + blanks[blanks.length - 1]
     : blanks.join("");
-  const filled = text.replace("{ARGS}", list).replace("{N}", WORDS[nArgs] || nArgs);
+  const recap = Array.from({ length: nArgs }, (_, i) => `Argument ${i + 1} was ___.`).join(" ");
+  const filled = text.replace("{ARGS}", list).replace("{RECAP}", recap)
+                     .replace("{N}", WORDS[nArgs] || nArgs);
   const frag = document.createDocumentFragment();
   filled.split(/(_{3,})/).forEach(part => {
     if (/^_{3,}$/.test(part)) frag.append(document.createElement("u"));
@@ -289,16 +331,14 @@ function frameHTML(text, nArgs) {
   return frag;
 }
 
-function renderFrames(nArgs, summaryOnly) {
+function renderFrames(nArgs) {
   const host = $("frames");
   host.replaceChildren();
-  const items = [
-    ["plain", "Opening — contention + all arguments", FRAME_OPEN],
-    ["reb",   "Rebuttal", FRAME_REBUT],
-    [argClass(1), "Argument", FRAME_ARG],
-  ];
-  if (summaryOnly || size >= 2) items.push(["plain", "Summary", FRAME_SUM]);
-  items.forEach(([cls, label, text]) => {
+  [["plain", "Opening — contention, outline, then argument 1", FRAME_OPEN],
+   ["reb",   "Rebuttal", FRAME_REBUT],
+   [argClass(1), "Each argument", FRAME_ARG],
+   ["plain", "Summary — every argument comes back", FRAME_SUM],
+  ].forEach(([cls, label, text]) => {
     const box = document.createElement("div");
     box.className = "frame";
     const chip = document.createElement("span");
@@ -306,10 +346,24 @@ function renderFrames(nArgs, summaryOnly) {
     chip.textContent = label;
     const p = document.createElement("p");
     p.className = "say";
-    p.append(frameHTML(text, nArgs));
+    p.append(frameNodes(text, nArgs));
     box.append(chip, p);
     host.append(box);
   });
+}
+
+/* a hollow chip: this argument is named here, not developed here */
+function ghostChip(i, label) {
+  const c = document.createElement("span");
+  c.className = "chip ghost " + argClass(i);
+  c.textContent = label;
+  return c;
+}
+function groupLabel(text) {
+  const l = document.createElement("span");
+  l.className = "grouplab";
+  l.textContent = text;
+  return l;
 }
 
 function render() {
@@ -320,102 +374,114 @@ function render() {
 
   $("headAName").textContent = nameA;
   $("headBName").textContent = nameB;
-  $("sizeOut").textContent = size;
-  $("minus").disabled = size <= MIN_SIZE;
-  $("plus").disabled = size >= MAX_SIZE;
+  [["A", 0], ["B", 1]].forEach(([suffix, t]) => {
+    $("sizeOut" + suffix).textContent = sizes[t];
+    $("minus" + suffix).disabled = sizes[t] <= MIN_SIZE;
+    $("plus" + suffix).disabled = sizes[t] >= MAX_SIZE;
+  });
 
-  const nArgs = argCount(size, summaryOnly);
-  $("argNote").textContent =
-    `Each team gives ${nArgs} argument${nArgs === 1 ? "" : "s"} across ${size} turns, and the opening speech lists them all.`;
-  $("ruleSum").hidden = !(size >= 3 && summaryOnly);
+  const nArgs = [argCount(sizes[0], summaryOnly), argCount(sizes[1], summaryOnly)];
+  $("argNote").textContent = (nArgs[0] === nArgs[1] && sizes[0] === sizes[1])
+    ? `Each team gives ${nArgs[0]} argument${nArgs[0] === 1 ? "" : "s"} across ${sizes[0]} turns. The opening names them all; each one is developed later in its own colour.`
+    : `${nameA}: ${nArgs[0]} argument${nArgs[0] === 1 ? "" : "s"} in ${sizes[0]} turns. ${nameB}: ${nArgs[1]} in ${sizes[1]} turns.`;
+  $("ruleSum").hidden = !((sizes[0] >= 3 || sizes[1] >= 3) && summaryOnly);
 
-  renderFrames(nArgs, summaryOnly);
+  renderFrames(Math.max(nArgs[0], nArgs[1]));
 
   const seq = $("seq");
   seq.replaceChildren();
   let turn = 0;
-  for (let s = 1; s <= size; s++) {
-    for (let team = 0; team < 2; team++) {
-      turn++;
-      // which argument number is this team up to?
-      let argNo = 0;
-      for (let k = 1; k <= s; k++) if (jobsFor(team, k, size, summaryOnly).some(j => j.kind === "arg")) argNo++;
+  speakingOrder().forEach(([team, s]) => {
+    turn++;
+    const n = sizes[team];
+    let argNo = 0;
+    for (let k = 1; k <= s; k++) if (jobsFor(team, k, n, summaryOnly).some(j => j.kind === "arg")) argNo++;
 
-      const row = document.createElement("div");
-      row.className = "turn " + (team === 0 ? "is-a" : "is-b");
+    const row = document.createElement("div");
+    row.className = "turn " + (team === 0 ? "is-a" : "is-b");
 
-      const bubble = document.createElement("div");
-      bubble.className = "bubble";
-      bubble.draggable = true;
-      bubble.dataset.team = team;
-      bubble.dataset.slot = s - 1;
+    /* team name + speaker number: in the outer margin, not in the box */
+    const labA = document.createElement("div"), labB = document.createElement("div");
+    labA.className = "sidelab" + (team === 0 ? "" : " hide");
+    labB.className = "sidelab" + (team === 1 ? "" : " hide");
+    const lab = team === 0 ? labA : labB;
+    const nm = document.createElement("b"); nm.textContent = teamNames[team];
+    const sp = document.createElement("span"); sp.textContent = "Speaker " + s;
+    lab.append(nm, sp);
 
-      const brow = document.createElement("div");
-      brow.className = "brow";
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.draggable = true;
+    bubble.dataset.team = team;
+    bubble.dataset.slot = s - 1;
 
-      const grip = document.createElement("span");
-      grip.className = "grip"; grip.textContent = "⠿"; grip.title = "Drag to reorder within this team";
-      grip.setAttribute("aria-hidden", "true");
+    const brow = document.createElement("div");
+    brow.className = "brow";
+    const grip = document.createElement("span");
+    grip.className = "grip"; grip.textContent = "⠿";
+    grip.title = "Drag to reorder within this team"; grip.setAttribute("aria-hidden", "true");
+    const input = document.createElement("input");
+    input.className = "nameIn"; input.type = "text"; input.maxLength = 24;
+    input.placeholder = "speaker's name";
+    input.value = names[team][s - 1] || "";
+    input.setAttribute("aria-label", `Name of ${teamNames[team]} speaker ${s}`);
+    input.addEventListener("input", () => { names[team][s - 1] = input.value; save(); });
+    const movers = document.createElement("div");
+    movers.className = "movers";
+    const up = document.createElement("button");
+    up.type = "button"; up.textContent = "↑"; up.disabled = s === 1;
+    up.setAttribute("aria-label", `Move earlier in ${teamNames[team]}`);
+    up.addEventListener("click", () => swap(team, s - 1, s - 2));
+    const dn = document.createElement("button");
+    dn.type = "button"; dn.textContent = "↓"; dn.disabled = s === n;
+    dn.setAttribute("aria-label", `Move later in ${teamNames[team]}`);
+    dn.addEventListener("click", () => swap(team, s - 1, s));
+    movers.append(up, dn);
+    brow.append(grip, input, movers);
+    bubble.append(brow);
 
-      const input = document.createElement("input");
-      input.className = "nameIn"; input.type = "text"; input.maxLength = 24;
-      input.placeholder = "speaker's name";
-      input.value = names[team][s - 1] || "";
-      input.setAttribute("aria-label", `Name of ${teamNames[team]} speaker ${s}`);
-      input.addEventListener("input", () => { names[team][s - 1] = input.value; save(); });
-
-      const pos = document.createElement("span");
-      pos.className = "pos";
-      pos.textContent = `${teamNames[team]} · ${s}`;
-
-      const movers = document.createElement("div");
-      movers.className = "movers";
-      const up = document.createElement("button");
-      up.type = "button"; up.textContent = "↑"; up.disabled = s === 1;
-      up.setAttribute("aria-label", `Move this speaker earlier in ${teamNames[team]}`);
-      up.addEventListener("click", () => swap(team, s - 1, s - 2));
-      const dn = document.createElement("button");
-      dn.type = "button"; dn.textContent = "↓"; dn.disabled = s === size;
-      dn.setAttribute("aria-label", `Move this speaker later in ${teamNames[team]}`);
-      dn.addEventListener("click", () => swap(team, s - 1, s));
-      movers.append(up, dn);
-
-      brow.append(grip, input, pos, movers);
-      bubble.append(brow);
-
-      const jobs = document.createElement("div");
-      jobs.className = "jobs";
-      jobsFor(team, s, size, summaryOnly).forEach(j => {
+    const jobs = document.createElement("div");
+    jobs.className = "jobs";
+    jobsFor(team, s, n, summaryOnly).forEach(j => {
+      if (j.kind === "open") {
         const c = document.createElement("span");
-        if (j.kind === "open") { c.className = "chip plain"; c.textContent = "Contention + all arguments"; }
-        else if (j.kind === "reb") { c.className = "chip reb"; c.textContent = "Rebuttal"; }
-        else if (j.kind === "sum") { c.className = "chip plain"; c.textContent = "Summary"; }
-        else { c.className = "chip " + argClass(argNo); c.textContent = "Argument " + argNo; }
+        c.className = "chip plain"; c.textContent = "Contention";
+        jobs.append(c, groupLabel("outlines"));
+        for (let i = 1; i <= nArgs[team]; i++) jobs.append(ghostChip(i, "Argument " + i));
+      } else if (j.kind === "reb") {
+        const c = document.createElement("span");
+        c.className = "chip reb"; c.textContent = "Rebuttal";
         jobs.append(c);
-      });
-      bubble.append(jobs);
+      } else if (j.kind === "sum") {
+        jobs.append(groupLabel("summarises"));
+        for (let i = 1; i <= nArgs[team]; i++) jobs.append(ghostChip(i, "Argument " + i));
+      } else {
+        const c = document.createElement("span");
+        c.className = "chip " + argClass(argNo);
+        c.textContent = `Argument ${argNo} + evidence`;
+        jobs.append(c);
+      }
+    });
+    bubble.append(jobs);
+    wireDrag(bubble);
 
-      wireDrag(bubble);
-
-      const left = document.createElement("div"), right = document.createElement("div");
-      left.className = right.className = "slot";
-      const num = document.createElement("div");
-      num.className = "num";
-      const i = document.createElement("i"); i.textContent = turn;
-      num.append(i);
-      if (team === 0) { left.append(bubble); right.classList.add("empty"); }
-      else { right.append(bubble); left.classList.add("empty"); }
-      row.append(left, num, right);
-      seq.append(row);
-    }
-  }
+    const left = document.createElement("div"), right = document.createElement("div");
+    left.className = right.className = "slot";
+    const num = document.createElement("div");
+    num.className = "num";
+    const i = document.createElement("i"); i.textContent = turn;
+    num.append(i);
+    if (team === 0) { left.append(bubble); right.classList.add("empty"); }
+    else { right.append(bubble); left.classList.add("empty"); }
+    row.append(labA, left, num, right, labB);
+    seq.append(row);
+  });
   save();
 }
 
-/* Reordering only ever swaps names inside one team — the A/B alternation
-   is the debate format and does not move. */
+/* Reordering swaps names inside one team only. */
 function swap(team, from, to) {
-  if (to < 0 || to >= size) return;
+  if (to < 0 || to >= sizes[team]) return;
   const arr = names[team];
   const a = arr[from] || "", b = arr[to] || "";
   arr[from] = b; arr[to] = a;
@@ -432,8 +498,7 @@ function wireDrag(el) {
   el.addEventListener("dragend", () => { el.classList.remove("dragging"); dragSrc = null;
     document.querySelectorAll(".drag-over").forEach(x => x.classList.remove("drag-over")); });
   el.addEventListener("dragover", e => {
-    if (!dragSrc || dragSrc === el) return;
-    if (dragSrc.dataset.team !== el.dataset.team) return;   // same team only
+    if (!dragSrc || dragSrc === el || dragSrc.dataset.team !== el.dataset.team) return;
     e.preventDefault(); el.classList.add("drag-over");
   });
   el.addEventListener("dragleave", () => el.classList.remove("drag-over"));
@@ -446,7 +511,7 @@ function wireDrag(el) {
 
 function save() {
   try { localStorage.setItem(LS, JSON.stringify({
-    a: $("teamA").value, b: $("teamB").value, size,
+    a: $("teamA").value, b: $("teamB").value, sizes,
     sum: $("summaryOnly").checked, names })); } catch (e) {}
 }
 function load() {
@@ -454,7 +519,8 @@ function load() {
     const d = JSON.parse(localStorage.getItem(LS) || "{}");
     if (d.a) $("teamA").value = d.a;
     if (d.b) $("teamB").value = d.b;
-    if (d.size >= MIN_SIZE && d.size <= MAX_SIZE) size = d.size;
+    if (Array.isArray(d.sizes) && d.sizes.length === 2 &&
+        d.sizes.every(x => x >= MIN_SIZE && x <= MAX_SIZE)) sizes = d.sizes;
     if (d.sum === false) $("summaryOnly").checked = false;
     if (Array.isArray(d.names) && d.names.length === 2) names = d.names;
   } catch (e) {}
@@ -463,8 +529,10 @@ function load() {
 $("teamA").addEventListener("input", render);
 $("teamB").addEventListener("input", render);
 $("summaryOnly").addEventListener("change", render);
-$("minus").addEventListener("click", () => { if (size > MIN_SIZE) { size--; render(); } });
-$("plus").addEventListener("click", () => { if (size < MAX_SIZE) { size++; render(); } });
+[["A", 0], ["B", 1]].forEach(([suffix, t]) => {
+  $("minus" + suffix).addEventListener("click", () => { if (sizes[t] > MIN_SIZE) { sizes[t]--; render(); } });
+  $("plus"  + suffix).addEventListener("click", () => { if (sizes[t] < MAX_SIZE) { sizes[t]++; render(); } });
+});
 
 load();
 render();
