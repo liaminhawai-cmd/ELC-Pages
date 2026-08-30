@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Formal debate structure — put in your two team names and see who speaks when, and what each speaker's job is.">
+<title>Debate Structure — ELC Hub</title>
+<style>
+  :root {
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#7c3aed; --radius:14px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 5px 16px rgba(16,24,40,.07);
+    /* team colours — same as the Debating tab on the Persuasive Language page */
+    --a:#2563eb; --a-soft:#dbeafe; --a-line:#93c5fd;
+    --b:#c2410c; --b-soft:#ffedd5; --b-line:#fdba74;
+    /* speech-part colours — what the speaker is DOING */
+    --intro:#7c3aed;  --intro-soft:#ede9fe;
+    --outline:#0f766e; --outline-soft:#ccfbf1;
+    --reb:#be123c;    --reb-soft:#ffe4e6;
+    --arg:#15803d;    --arg-soft:#dcfce7;
+    --sum:#a16207;    --sum-soft:#fef3c7;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
+            --accent:#a78bfa; --shadow:0 2px 10px rgba(0,0,0,.4);
+            --a:#7aa5ff; --a-soft:#17284a; --a-line:#2f4f86;
+            --b:#fb923c; --b-soft:#3b2412; --b-line:#7c4a20;
+            --intro:#c4b5fd; --intro-soft:#2a2145;
+            --outline:#5eead4; --outline-soft:#0f3b36;
+            --reb:#fda4af;   --reb-soft:#45151f;
+            --arg:#86efac;   --arg-soft:#123322;
+            --sum:#fcd34d;   --sum-soft:#3d2f0b; }
+  }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; }
+  .shell { max-width:1080px; margin:auto; padding:12px 16px 28px; }
+  .top { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:10px; flex-wrap:wrap; }
+  .back { color:var(--accent); font-weight:800; text-decoration:none; font-size:.9rem; }
+  .back:hover { text-decoration:underline; }
+  h1 { font-size:clamp(1.25rem,3.4vw,1.6rem); letter-spacing:-.4px; }
+  .sub { color:var(--muted); font-size:.87rem; margin-top:2px; }
+
+  /* ── controls ─────────────────────────────────────────────── */
+  .controls { display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end;
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:11px 13px; box-shadow:var(--shadow); margin-top:12px; }
+  .field { display:flex; flex-direction:column; gap:3px; }
+  .field label { font-size:.7rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+  .field input[type=text] { border:2px solid var(--line); border-radius:9px; padding:7px 10px;
+    background:var(--bg); color:var(--ink); font-size:.92rem; font-weight:700; min-width:160px; }
+  #teamA { border-color:var(--a-line); }
+  #teamB { border-color:var(--b-line); }
+  .field input:focus { outline:3px solid color-mix(in srgb,var(--accent) 30%,transparent); }
+  .stepper { display:flex; align-items:center; gap:0; border:2px solid var(--line); border-radius:9px; overflow:hidden; background:var(--bg); }
+  .stepper button { border:0; background:transparent; color:var(--ink); width:34px; height:36px; font-size:1.1rem; font-weight:900; cursor:pointer; }
+  .stepper button:hover:not(:disabled) { background:var(--line); }
+  .stepper button:disabled { opacity:.3; cursor:default; }
+  .stepper span { min-width:34px; text-align:center; font-weight:900; font-size:.95rem; }
+  .toggle { display:flex; align-items:center; gap:7px; font-size:.85rem; cursor:pointer; padding-bottom:6px; }
+  .toggle input { accent-color:var(--accent); width:16px; height:16px; }
+  .ctl-note { font-size:.76rem; color:var(--muted); margin-left:auto; flex:1 1 210px; min-width:180px; padding-bottom:5px; }
+
+  /* ── the five jobs, explained once ────────────────────────── */
+  .jobref { display:grid; gap:7px; margin-top:11px; grid-template-columns:repeat(auto-fit,minmax(184px,1fr)); }
+  .jobref > div { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:7px 9px; box-shadow:var(--shadow); }
+  .jobref p { font-size:.75rem; color:var(--muted); margin-top:4px; line-height:1.4; }
+  .chip { font-size:.73rem; font-weight:800; padding:3px 9px; border-radius:999px; border:1px solid transparent; white-space:nowrap; }
+  .chip.intro   { background:var(--intro-soft);   color:var(--intro);   border-color:var(--intro); }
+  .chip.outline { background:var(--outline-soft); color:var(--outline); border-color:var(--outline); }
+  .chip.reb     { background:var(--reb-soft);     color:var(--reb);     border-color:var(--reb); }
+  .chip.arg     { background:var(--arg-soft);     color:var(--arg);     border-color:var(--arg); }
+  .chip.sum     { background:var(--sum-soft);     color:var(--sum);     border-color:var(--sum); }
+
+  /* ── the sequence: two lanes with a centre timeline ────────── */
+  .lanes { margin-top:12px; position:relative; }
+  .lane-heads { display:grid; grid-template-columns:1fr 46px 1fr; gap:8px; align-items:center; margin-bottom:8px; }
+  .lane-head { border-radius:11px; padding:7px 12px; font-weight:900; font-size:.95rem; text-align:center;
+    border:2px solid; overflow-wrap:anywhere; }
+  .lane-head.a { background:var(--a-soft); color:var(--a); border-color:var(--a-line); }
+  .lane-head.b { background:var(--b-soft); color:var(--b); border-color:var(--b-line); }
+  .lane-head small { display:block; font-size:.68rem; font-weight:800; letter-spacing:.05em;
+    text-transform:uppercase; opacity:.75; }
+
+  .turn { display:grid; grid-template-columns:1fr 46px 1fr; gap:8px; align-items:center; margin-bottom:4px; }
+  .slot { min-width:0; }
+  .num { display:grid; place-items:center; }
+  .num i { font-style:normal; width:29px; height:29px; border-radius:50%; display:grid; place-items:center;
+    font-size:.78rem; font-weight:900; color:#fff; background:var(--muted); }
+  .turn.is-a .num i { background:var(--a); }
+  .turn.is-b .num i { background:var(--b); }
+
+  .bubble { position:relative; border:2px solid; border-radius:13px; padding:7px 11px; background:var(--card); box-shadow:var(--shadow); }
+  .turn.is-a .bubble { border-color:var(--a-line); background:var(--a-soft); }
+  .turn.is-b .bubble { border-color:var(--b-line); background:var(--b-soft); }
+  /* tails point in toward the centre timeline */
+  .bubble::before, .bubble::after { content:""; position:absolute; top:15px; width:0; height:0;
+    border-top:8px solid transparent; border-bottom:8px solid transparent; }
+  .turn.is-a .bubble::before { right:-10px; border-left:10px solid var(--a-line); }
+  .turn.is-a .bubble::after  { right:-7px;  border-left:10px solid var(--a-soft); }
+  .turn.is-b .bubble::before { left:-10px;  border-right:10px solid var(--b-line); }
+  .turn.is-b .bubble::after  { left:-7px;   border-right:10px solid var(--b-soft); }
+
+  .who { font-size:.82rem; font-weight:900; }
+  .turn.is-a .who { color:var(--a); } .turn.is-b .who { color:var(--b); }
+  .jobs { display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
+
+  /* ── the two rules students get wrong ─────────────────────── */
+  .rules { display:grid; gap:9px; margin-top:13px; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); }
+  .rule { background:var(--card); border:1px solid var(--line); border-left:5px solid var(--accent);
+    border-radius:0 var(--radius) var(--radius) 0; padding:10px 13px; box-shadow:var(--shadow); }
+  .rule h3 { font-size:.86rem; }
+  .rule p { font-size:.81rem; color:var(--muted); margin-top:3px; }
+  .rule.reb { border-left-color:var(--reb); } .rule.reb h3 { color:var(--reb); }
+  .rule.sum { border-left-color:var(--sum); } .rule.sum h3 { color:var(--sum); }
+
+  .xlink { display:inline-block; margin:14px 12px 0 0; color:var(--accent); font-weight:750; text-decoration:none; font-size:.88rem; }
+  .xlink:hover { text-decoration:underline; }
+  .privacy { margin-top:20px; padding:8px 12px; border-radius:10px; background:var(--card);
+    border:1px solid var(--line); color:var(--muted); font-size:.78rem; text-align:center; }
+
+  @media (max-width:640px) {
+    .shell { padding:12px 11px 34px; }
+    .lane-heads, .turn { grid-template-columns:34px 1fr; }
+    .lane-heads .lane-head.b { display:none; }
+    .lane-heads .lane-head.a { grid-column:1/3; }
+    .turn .num { order:-1; align-items:start; }
+    .turn .slot.empty { display:none; }
+    .turn .slot { grid-column:2; }
+    .bubble::before, .bubble::after { display:none; }
+    .ctl-note { margin-left:0; max-width:none; }
+  }
+  @media print {
+    @page { size:A4 portrait; margin:10mm; }
+    body { background:#fff; }
+    .controls, .privacy, .xlink, .back { display:none !important; }
+    .bubble, .rule, .lane-head, .jobref > div { box-shadow:none; }
+    .shell { padding:0; max-width:none; }
+    .turn, .rule, .jobref > div { break-inside:avoid; }
+    h1 { font-size:1.15rem; }
+    .sub { display:none; }              /* on-screen instruction, not needed on paper */
+    .jobref { gap:5px; margin-top:8px; }
+    .jobref p { font-size:.68rem; }
+    .lanes { margin-top:8px; }
+    .turn { margin-bottom:3px; }
+    .rules { margin-top:9px; gap:7px; }
+    .rule p { font-size:.72rem; }
+  }
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="top">
+    <a class="back" href="index.html">← ELC Hub</a>
+    <a class="back" href="persuasive.html#debating">Debating rubric &amp; vocab →</a>
+  </div>
+
+  <h1>🎤 How a formal debate runs</h1>
+  <p class="sub">Type your two team names. The order below is the order you speak in, and each bubble says what that speaker's job is.</p>
+
+  <div class="controls">
+    <div class="field">
+      <label for="teamA">Team A — agrees with the topic</label>
+      <input type="text" id="teamA" maxlength="28" placeholder="Affirmative">
+    </div>
+    <div class="field">
+      <label for="teamB">Team B — disagrees</label>
+      <input type="text" id="teamB" maxlength="28" placeholder="Negative">
+    </div>
+    <div class="field">
+      <label>Speakers in each team</label>
+      <div class="stepper">
+        <button type="button" id="minus" aria-label="One fewer speaker per team">−</button>
+        <span id="sizeOut">3</span>
+        <button type="button" id="plus" aria-label="One more speaker per team">+</button>
+      </div>
+    </div>
+    <label class="toggle"><input type="checkbox" id="summaryOnly" checked>
+      Last speaker summarises only</label>
+    <p class="ctl-note" id="argNote"></p>
+  </div>
+
+  <div class="jobref" id="jobRef"></div>
+
+  <div class="lanes">
+    <div class="lane-heads">
+      <div class="lane-head a" id="headA"><small>Team A · agrees</small><span id="headAName">Affirmative</span></div>
+      <div></div>
+      <div class="lane-head b" id="headB"><small>Team B · disagrees</small><span id="headBName">Negative</span></div>
+    </div>
+    <div id="seq"></div>
+  </div>
+
+  <div class="rules">
+    <div class="rule reb">
+      <h3>The first speaker of Team A never rebuts</h3>
+      <p>Nobody has spoken yet, so there is nothing to answer. Every speaker after that one starts with a rebuttal.</p>
+    </div>
+    <div class="rule sum" id="ruleSum">
+      <h3>The last speaker adds no new arguments</h3>
+      <p>Their job is to rebut, then pull the whole team case together. A new argument here is unfair — the other team has no turn left to answer it.</p>
+    </div>
+    <div class="rule">
+      <h3>Rebut a detail, not just the topic</h3>
+      <p>Name what they actually said: “The first speaker argued that… however…”. The rubric rewards answering their <em>specific</em> example.</p>
+    </div>
+  </div>
+
+  <a class="xlink" href="persuasive.html#debating">📚 Debate rubric, key vocabulary and rebuttal starters →</a>
+  <a class="xlink" href="pronunciation.html">🗣️ Practise stress and intonation →</a>
+
+  <p class="privacy">🔒 No account and no name. Your team names stay in this browser only.</p>
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   DATA BLOCK — teachers edit below this line. Nothing here is code.
+   Each job has a colour chip and the line the speaker actually says.
+   ═══════════════════════════════════════════════════════════════════════ */
+const JOBS = {
+  intro:   { cls:"intro",   label:"Introduction",
+             say:"Say the topic, say which side you are on, and say your team's contention." },
+  define:  { cls:"intro",   label:"Introduction + definition",
+             say:"Say the topic and your contention, and say what the key words of the topic mean." },
+  accept:  { cls:"intro",   label:"Introduction + reply to the definition",
+             say:"Say your contention. Accept their definition, or say why it is wrong and give yours." },
+  outline: { cls:"outline", label:"Team outline",
+             say:"Say what each speaker in your team will argue. “I will argue… our second speaker will argue…”" },
+  reb:     { cls:"reb",     label:"Rebuttal",
+             say:"Answer what the other team just said. Name their argument, then say why it is wrong or weak." },
+  arg:     { cls:"arg",     label:"Argument",
+             say:"One reason your side is right — with evidence, and an explanation of why it matters." },
+  sum:     { cls:"sum",     label:"Summary",
+             say:"Pull your whole team's case together. No new arguments — say why your side won." },
+};
+
+/* How many speakers a team can have. 3 is the standard school debate. */
+const MIN_SIZE = 2, MAX_SIZE = 6, DEFAULT_SIZE = 3;
+
+/* ═══════════════════ END OF DATA BLOCK — code below ═══════════════════ */
+
+const LS = "elc_debate_structure";
+const $ = id => document.getElementById(id);
+let size = DEFAULT_SIZE;
+
+/* Build one speaker's list of jobs. Order matters — it is the order they speak. */
+function jobsFor(teamIdx, speakerNo, n, summaryOnly) {
+  const isA = teamIdx === 0, first = speakerNo === 1, last = speakerNo === n;
+  const jobs = [];
+  if (first) {
+    jobs.push(isA ? "define" : "accept");
+    jobs.push("outline");
+    if (!isA) jobs.push("reb");            // B1 has something to answer; A1 does not
+  } else {
+    jobs.push("reb");
+  }
+  // The last speaker drops their argument and summarises instead — unless the
+  // team is too small to afford that, or the teacher turns it off.
+  const summarises = last && n >= 3 && summaryOnly;
+  if (summarises) { jobs.push("sum"); }
+  else { jobs.push("arg"); if (last) jobs.push("sum"); }
+  return jobs;
+}
+
+function argCount(n, summaryOnly) {
+  let c = 0;
+  for (let s = 1; s <= n; s++) if (jobsFor(0, s, n, summaryOnly).includes("arg")) c++;
+  return c;
+}
+
+/* The five jobs, explained once, instead of repeating the same line in every bubble. */
+function renderJobRef() {
+  const ref = $("jobRef");
+  ref.replaceChildren();
+  [["define","intro"],["outline","outline"],["reb","reb"],["arg","arg"],["sum","sum"]].forEach(([key, cls]) => {
+    const j = JOBS[key];
+    const box = document.createElement("div");
+    const chip = document.createElement("span");
+    chip.className = "chip " + cls;
+    chip.textContent = key === "define" ? "Introduction" : j.label;
+    const p = document.createElement("p");
+    p.textContent = j.say;
+    box.append(chip, p);
+    ref.append(box);
+  });
+}
+
+function render() {
+  const nameA = $("teamA").value.trim() || "Affirmative";
+  const nameB = $("teamB").value.trim() || "Negative";
+  const summaryOnly = $("summaryOnly").checked;
+  const names = [nameA, nameB];
+
+  $("headAName").textContent = nameA;
+  $("headBName").textContent = nameB;
+  $("sizeOut").textContent = size;
+  $("minus").disabled = size <= MIN_SIZE;
+  $("plus").disabled = size >= MAX_SIZE;
+
+  const args = argCount(size, summaryOnly);
+  $("argNote").textContent = `Each team shares ${args} argument${args === 1 ? "" : "s"} between ${size} speakers, and speaks ${size * 2} times in total.`;
+  $("ruleSum").hidden = !(size >= 3 && summaryOnly);
+
+  const seq = $("seq");
+  seq.replaceChildren();
+  let turn = 0;
+  for (let s = 1; s <= size; s++) {
+    for (let team = 0; team < 2; team++) {
+      turn++;
+      let argNo = 0;
+      for (let k = 1; k <= s; k++) if (jobsFor(team, k, size, summaryOnly).includes("arg")) argNo++;
+
+      const row = document.createElement("div");
+      row.className = "turn " + (team === 0 ? "is-a" : "is-b");
+
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      const who = document.createElement("p");
+      who.className = "who";
+      who.textContent = `${names[team]} · speaker ${s}`;
+      bubble.append(who);
+
+      const jobs = document.createElement("div");
+      jobs.className = "jobs";
+      const list = jobsFor(team, s, size, summaryOnly);
+      list.forEach(key => {
+        const j = JOBS[key];
+        const c = document.createElement("span");
+        c.className = "chip " + j.cls;
+        c.textContent = key === "arg" ? `${j.label} ${argNo}` : j.label;
+        jobs.append(c);
+      });
+      bubble.append(jobs);
+
+      const left = document.createElement("div");
+      const right = document.createElement("div");
+      left.className = right.className = "slot";
+      const num = document.createElement("div");
+      num.className = "num";
+      const i = document.createElement("i");
+      i.textContent = turn;
+      num.append(i);
+
+      if (team === 0) { left.append(bubble); right.classList.add("empty"); }
+      else { right.append(bubble); left.classList.add("empty"); }
+      row.append(left, num, right);
+      seq.append(row);
+    }
+  }
+  save();
+}
+
+function save() {
+  try {
+    localStorage.setItem(LS, JSON.stringify({
+      a: $("teamA").value, b: $("teamB").value, size, sum: $("summaryOnly").checked }));
+  } catch (e) {}
+}
+function load() {
+  try {
+    const d = JSON.parse(localStorage.getItem(LS) || "{}");
+    if (d.a) $("teamA").value = d.a;
+    if (d.b) $("teamB").value = d.b;
+    if (d.size >= MIN_SIZE && d.size <= MAX_SIZE) size = d.size;
+    if (d.sum === false) $("summaryOnly").checked = false;
+  } catch (e) {}
+}
+
+$("teamA").addEventListener("input", render);
+$("teamB").addEventListener("input", render);
+$("summaryOnly").addEventListener("change", render);
+$("minus").addEventListener("click", () => { if (size > MIN_SIZE) { size--; render(); } });
+$("plus").addEventListener("click", () => { if (size < MAX_SIZE) { size++; render(); } });
+
+load();
+renderJobRef();
+render();
+
+/* activity record, same key as the rest of the hub */
+try {
+  const K = "elc_visited";
+  let v = JSON.parse(localStorage.getItem(K) || "[]");
+  if (!Array.isArray(v)) v = [];
+  v = v.filter(i => i.title !== "Debate Structure");
+  v.push({ title:"Debate Structure", cat:"ELC tools", ts:Date.now() });
+  localStorage.setItem(K, JSON.stringify(v));
+} catch (e) {}
+</script>
+</body>
+</html>
