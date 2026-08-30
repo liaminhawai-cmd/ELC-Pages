@@ -7,7 +7,7 @@
 <title>Debate Structure — ELC Hub</title>
 <style>
   :root {
-    --lab:86px;
+    --lab:132px;
     --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
     --accent:#7c3aed; --radius:14px;
     --shadow:0 1px 2px rgba(16,24,40,.05),0 5px 16px rgba(16,24,40,.07);
@@ -93,12 +93,21 @@
 
   .turn { display:grid; grid-template-columns:var(--lab) 1fr 44px 1fr var(--lab); gap:8px; align-items:center; margin-bottom:5px; }
 
-  /* team name + speaker number live in the outer margin, not in the box */
-  .sidelab { font-size:.7rem; font-weight:900; line-height:1.25; overflow-wrap:anywhere; }
-  .sidelab b { display:block; font-size:.78rem; }
-  .turn.is-a .sidelab { color:var(--a); text-align:right; }
-  .turn.is-b .sidelab { color:var(--b); text-align:left; }
-  .sidelab span { font-weight:800; opacity:.75; text-transform:uppercase; letter-spacing:.04em; font-size:.64rem; }
+  /* the people live in the outer margin: one editable name box per turn */
+  .sidelab { display:flex; flex-direction:column; gap:1px; }
+  .sidelab.hide { visibility:hidden; }
+  .personRow { display:flex; align-items:center; gap:3px; }
+  .turn.is-b .personRow { flex-direction:row-reverse; }
+  .nameIn { width:100%; min-width:0; border:1px dashed var(--line); border-radius:7px;
+    background:transparent; color:var(--ink); font-size:.84rem; font-weight:850; padding:3px 6px; text-align:center; }
+  .turn.is-a .nameIn { color:var(--a); } .turn.is-b .nameIn { color:var(--b); }
+  .nameIn::placeholder { color:var(--muted); font-weight:600; opacity:.7; font-size:.76rem; }
+  .nameIn:hover { border-color:var(--muted); }
+  .sidemeta { font-size:.62rem; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+  .turn.is-a .sidemeta { text-align:right; } .turn.is-b .sidemeta { text-align:left; }
+  .twice { color:var(--accent); }
+  .sidelab.drag-over .nameIn { outline:3px dashed var(--accent); outline-offset:2px; }
+  .sidelab.dragging { opacity:.45; }
   .slot { min-width:0; }
   .num { display:grid; place-items:center; }
   .num i { font-style:normal; width:27px; height:27px; border-radius:50%; display:grid; place-items:center;
@@ -113,19 +122,13 @@
   .bubble.drag-over { outline:3px dashed var(--accent); outline-offset:2px; }
   .bubble.dragging { opacity:.45; }
 
-  .brow { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
-  .grip { cursor:grab; color:var(--muted); font-size:.95rem; line-height:1; padding:2px 1px; user-select:none; }
+  .grip { cursor:grab; color:var(--muted); font-size:.85rem; line-height:1; user-select:none; flex:none; }
   .grip:active { cursor:grabbing; }
-  .nameIn { flex:1 1 120px; min-width:90px; border:1px dashed var(--line); border-radius:7px;
-    background:transparent; color:var(--ink); font-size:.95rem; font-weight:850; padding:3px 7px; }
-  .turn.is-a .nameIn { color:var(--a); } .turn.is-b .nameIn { color:var(--b); }
-  .nameIn::placeholder { color:var(--muted); font-weight:600; opacity:.75; }
-  .nameIn:hover { border-color:var(--muted); }
-  .movers { display:flex; gap:2px; }
+  .movers { display:flex; flex-direction:column; gap:1px; flex:none; }
   .movers button { border:1px solid var(--line); background:var(--bg); color:var(--ink);
-    width:22px; height:22px; border-radius:6px; font-size:.7rem; cursor:pointer; line-height:1; }
+    width:17px; height:14px; border-radius:4px; font-size:.55rem; cursor:pointer; line-height:1; padding:0; }
   .movers button:disabled { opacity:.28; cursor:default; }
-  .jobs { display:flex; flex-wrap:wrap; gap:4px; margin-top:4px; }
+  .jobs { display:flex; flex-wrap:wrap; gap:4px; }
 
   /* ── rules ────────────────────────────────────────────────── */
   .rules { display:grid; gap:9px; margin-top:13px; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); }
@@ -145,8 +148,9 @@
     .lane-heads, .turn { grid-template-columns:32px 1fr; }
     .lane-heads .lane-head.b { display:none; }
     .lane-heads .lane-head.a { grid-column:1/3; }
-    .turn .sidelab { grid-column:2; text-align:left !important; margin-bottom:-2px; }
+    .turn .sidelab { grid-column:2; margin-bottom:-1px; }
     .turn .sidelab.hide { display:none; }
+    .turn.is-b .personRow { flex-direction:row; }
     .turn .num { order:-1; align-items:start; }
     .turn .slot.empty { display:none; }
     .turn .slot { grid-column:2; }
@@ -156,23 +160,25 @@
     @page { size:A4 portrait; margin:10mm; }
     body { background:#fff; }
     .controls, .privacy, .xlink, .back, .sub, .grip, .movers { display:none !important; }
+    .sidelab.hide { display:none; }
     .bubble, .rule, .frame, .lane-head { box-shadow:none; }
     .nameIn { border:0; padding:0; }
     .shell { padding:0; max-width:none; }
     .turn, .rule, .frame { break-inside:avoid; }
     h1 { font-size:1.15rem; }
-    .frames { gap:5px; margin-top:8px; } .frame .say { font-size:.7rem; }
+    .frames { margin-top:7px; } .frame .say { font-size:.64rem; line-height:1.4; }
     .lanes { margin-top:8px; } .turn { margin-bottom:3px; }
-    .rules { margin-top:9px; gap:7px; } .rule p { font-size:.71rem; }
-    .chip { font-size:.62rem; padding:2px 7px; }
-    .grouplab { font-size:.57rem; }
+    .rules { margin-top:8px; gap:6px; } .rule p { font-size:.67rem; } .rule { padding:6px 9px; } .rule h3 { font-size:.75rem; }
+    .chip { font-size:.57rem; padding:1px 6px; border-radius:8px; }
+    .grouplab { font-size:.53rem; }
     .sidelab { font-size:.62rem; } .sidelab b { font-size:.68rem; }
     .nameIn { font-size:.82rem; font-weight:900; }
-    .jobs { gap:3px; margin-top:3px; }
-    .bubble { padding:5px 8px; }
+    .jobs { gap:2px; }
+    .bubble { padding:4px 7px; }
     .lane-head { padding:4px 9px; font-size:.85rem; }
     .rules { grid-template-columns:repeat(3,1fr); }   /* one row, not two */
-    .frames { grid-template-columns:repeat(4,1fr); }
+    .frames { grid-template-columns:repeat(4,1fr); gap:4px; }
+    .frame { padding:5px 7px; }
   }
 </style>
 </head>
@@ -184,7 +190,7 @@
   </div>
 
   <h1>🎤 How a formal debate runs</h1>
-  <p class="sub">Type each speaker's name into their bubble. Drag a bubble, or use ↑ ↓, to change the order inside a team. The two teams can have different numbers of turns, and the same person can speak twice.</p>
+  <p class="sub">Type your speakers' names down the sides. Drag a name, or use ↑ ↓, to change the order — that changes who opens and who sums up. Both teams always give the same number of arguments, so if a team has fewer people, someone speaks twice.</p>
 
   <div class="controls">
     <div class="field">
@@ -196,19 +202,27 @@
       <input type="text" id="teamB" maxlength="28" placeholder="Negative">
     </div>
     <div class="field">
-      <label>Team A turns</label>
+      <label>Arguments each team</label>
       <div class="stepper">
-        <button type="button" id="minusA" aria-label="One fewer turn for Team A">−</button>
-        <span id="sizeOutA">3</span>
-        <button type="button" id="plusA" aria-label="One more turn for Team A">+</button>
+        <button type="button" id="minusG" aria-label="One fewer argument">−</button>
+        <span id="argsOut">2</span>
+        <button type="button" id="plusG" aria-label="One more argument">+</button>
       </div>
     </div>
     <div class="field">
-      <label>Team B turns</label>
+      <label>People in Team A</label>
       <div class="stepper">
-        <button type="button" id="minusB" aria-label="One fewer turn for Team B">−</button>
+        <button type="button" id="minusA" aria-label="One fewer person in Team A">−</button>
+        <span id="sizeOutA">3</span>
+        <button type="button" id="plusA" aria-label="One more person in Team A">+</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>People in Team B</label>
+      <div class="stepper">
+        <button type="button" id="minusB" aria-label="One fewer person in Team B">−</button>
         <span id="sizeOutB">3</span>
-        <button type="button" id="plusB" aria-label="One more turn for Team B">+</button>
+        <button type="button" id="plusB" aria-label="One more person in Team B">+</button>
       </div>
     </div>
     <label class="toggle"><input type="checkbox" id="summaryOnly" checked>
@@ -238,11 +252,13 @@
     </div>
     <div class="rule">
       <h3>Teams can be different sizes</h3>
-      <p>Set each team's turns separately. Speakers still alternate; when one team runs out, the other team's last speakers follow. One person can also take two turns — type their name twice.</p>
+      <p>Both teams always give the same number of arguments — that is what keeps the debate fair. If a team has fewer people, someone takes two turns, and their name is marked <b>×2</b>.</p>
     </div>
   </div>
 
   <a class="xlink" href="persuasive.html#debating">📚 Debate rubric, key vocabulary and rebuttal starters →</a>
+  <a class="xlink" href="persuasive.html#techniques">🔥 Persuasive techniques to use in your arguments →</a>
+  <a class="xlink" target="_blank" rel="noopener" href="https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/l/elc/humanities">🧱 Word Builder: issue vocabulary (Social Media Ban) →</a>
 
   <p class="privacy">🔒 No account needed. Names you type stay in this browser only, and are never sent anywhere.</p>
 </main>
@@ -272,57 +288,53 @@ const FRAME_ARG =
 const FRAME_SUM =
   "In conclusion, we believe ___. {RECAP} The other team said ___, but we showed ___. That is why you should agree with us.";
 
-const MIN_SIZE = 2, MAX_SIZE = 6, DEFAULT_SIZE = 3;
+const MIN_ARGS = 1, MAX_ARGS = 5, DEFAULT_ARGS = 2;
+const MAX_PEOPLE = 6;
 const WORDS = ["zero","one","two","three","four","five","six"];
 
 /* ═══════════════════ END OF DATA BLOCK — code below ═══════════════════ */
 
-const LS = "elc_debate_structure_v3";
+const LS = "elc_debate_structure_v4";
 const $ = id => document.getElementById(id);
-let sizes = [DEFAULT_SIZE, DEFAULT_SIZE];      // turns per team
-let names = [[], []];
 
-/* What a speaker does. n is THAT team's number of turns. */
-function jobsFor(team, speakerNo, n, summaryOnly) {
-  const isA = team === 0, first = speakerNo === 1, last = speakerNo === n;
+let nArgs  = DEFAULT_ARGS;     // the SAME for both teams — that is what keeps it fair
+let people = [3, 3];           // how many humans each team actually has
+let names  = [[], []];         // names[team] = one entry per person
+
+/* Turns follow from the arguments: every argument needs a turn, and the
+   summary needs one more when the last speaker only sums up. */
+function turnsPerTeam(summaryOnly) { return summaryOnly ? nArgs + 1 : nArgs; }
+
+/* Which person takes turn s — wrapping round if the team is short of people. */
+function personFor(team, s) { return (s - 1) % Math.max(1, people[team]); }
+function turnsForPerson(team, p, turns) {
+  const out = [];
+  for (let s = 1; s <= turns; s++) if (personFor(team, s) === p) out.push(s);
+  return out;
+}
+
+function jobsFor(team, s, turns, summaryOnly) {
+  const isA = team === 0, first = s === 1, last = s === turns;
   const jobs = [];
   if (first) {
-    jobs.push({ kind:"open" });                 // contention + outline of every argument
-    if (!isA) jobs.push({ kind:"reb" });        // B's first speaker has something to answer
-    jobs.push({ kind:"arg" });                  // ...and develops argument 1
+    jobs.push({ kind:"open" });
+    if (!isA) jobs.push({ kind:"reb" });
+    jobs.push({ kind:"arg" });
   } else {
     jobs.push({ kind:"reb" });
-    if (last && n >= 3 && summaryOnly) jobs.push({ kind:"sum" });
+    if (last && summaryOnly) jobs.push({ kind:"sum" });
     else { jobs.push({ kind:"arg" }); if (last) jobs.push({ kind:"sum" }); }
   }
   return jobs;
 }
-function argCount(n, summaryOnly) {
-  let c = 0;
-  for (let s = 1; s <= n; s++) if (jobsFor(0, s, n, summaryOnly).some(j => j.kind === "arg")) c++;
-  return c;
-}
 const argClass = i => "g" + (((i - 1) % 6) + 1);
 
-/* Speaking order: alternate while both teams have turns left, then the
-   longer team's remaining speakers follow. */
-function speakingOrder() {
-  const out = []; let ia = 1, ib = 1;
-  while (ia <= sizes[0] || ib <= sizes[1]) {
-    if (ia <= sizes[0]) out.push([0, ia++]);
-    if (ib <= sizes[1]) out.push([1, ib++]);
-  }
-  return out;
-}
-
-function frameNodes(text, nArgs) {
-  const blanks = Array.from({ length: nArgs }, () => "___");
+function frameNodes(text, n) {
+  const blanks = Array.from({ length: n }, () => "___");
   const list = blanks.length > 1
-    ? blanks.slice(0, -1).join(", ") + " and " + blanks[blanks.length - 1]
-    : blanks.join("");
-  const recap = Array.from({ length: nArgs }, (_, i) => `Argument ${i + 1} was ___.`).join(" ");
-  const filled = text.replace("{ARGS}", list).replace("{RECAP}", recap)
-                     .replace("{N}", WORDS[nArgs] || nArgs);
+    ? blanks.slice(0, -1).join(", ") + " and " + blanks[blanks.length - 1] : blanks.join("");
+  const recap = Array.from({ length: n }, (_, i) => `Argument ${i + 1} was ___.`).join(" ");
+  const filled = text.replace("{ARGS}", list).replace("{RECAP}", recap).replace("{N}", WORDS[n] || n);
   const frag = document.createDocumentFragment();
   filled.split(/(_{3,})/).forEach(part => {
     if (/^_{3,}$/.test(part)) frag.append(document.createElement("u"));
@@ -330,8 +342,7 @@ function frameNodes(text, nArgs) {
   });
   return frag;
 }
-
-function renderFrames(nArgs) {
+function renderFrames(n) {
   const host = $("frames");
   host.replaceChildren();
   [["plain", "Opening — contention, outline, then argument 1", FRAME_OPEN],
@@ -339,31 +350,18 @@ function renderFrames(nArgs) {
    [argClass(1), "Each argument", FRAME_ARG],
    ["plain", "Summary — every argument comes back", FRAME_SUM],
   ].forEach(([cls, label, text]) => {
-    const box = document.createElement("div");
-    box.className = "frame";
-    const chip = document.createElement("span");
-    chip.className = "chip " + cls;
-    chip.textContent = label;
-    const p = document.createElement("p");
-    p.className = "say";
-    p.append(frameNodes(text, nArgs));
-    box.append(chip, p);
-    host.append(box);
+    const box = document.createElement("div"); box.className = "frame";
+    const chip = document.createElement("span"); chip.className = "chip " + cls; chip.textContent = label;
+    const p = document.createElement("p"); p.className = "say"; p.append(frameNodes(text, n));
+    box.append(chip, p); host.append(box);
   });
 }
-
-/* a hollow chip: this argument is named here, not developed here */
 function ghostChip(i, label) {
   const c = document.createElement("span");
-  c.className = "chip ghost " + argClass(i);
-  c.textContent = label;
-  return c;
+  c.className = "chip ghost " + argClass(i); c.textContent = label; return c;
 }
-function groupLabel(text) {
-  const l = document.createElement("span");
-  l.className = "grouplab";
-  l.textContent = text;
-  return l;
+function groupLabel(t) {
+  const l = document.createElement("span"); l.className = "grouplab"; l.textContent = t; return l;
 }
 
 function render() {
@@ -371,117 +369,141 @@ function render() {
   const nameB = $("teamB").value.trim() || "Negative";
   const summaryOnly = $("summaryOnly").checked;
   const teamNames = [nameA, nameB];
+  const turns = turnsPerTeam(summaryOnly);
+
+  // a team can never have more people than there are turns for them
+  people = people.map(p => Math.min(Math.max(1, p), turns));
 
   $("headAName").textContent = nameA;
   $("headBName").textContent = nameB;
-  [["A", 0], ["B", 1]].forEach(([suffix, t]) => {
-    $("sizeOut" + suffix).textContent = sizes[t];
-    $("minus" + suffix).disabled = sizes[t] <= MIN_SIZE;
-    $("plus" + suffix).disabled = sizes[t] >= MAX_SIZE;
+  $("argsOut").textContent = nArgs;
+  $("minusG").disabled = nArgs <= MIN_ARGS;
+  $("plusG").disabled  = nArgs >= MAX_ARGS;
+  [["A", 0], ["B", 1]].forEach(([sfx, t]) => {
+    $("sizeOut" + sfx).textContent = people[t];
+    $("minus" + sfx).disabled = people[t] <= 1;
+    $("plus"  + sfx).disabled = people[t] >= Math.min(MAX_PEOPLE, turns);
   });
 
-  const nArgs = [argCount(sizes[0], summaryOnly), argCount(sizes[1], summaryOnly)];
-  $("argNote").textContent = (nArgs[0] === nArgs[1] && sizes[0] === sizes[1])
-    ? `Each team gives ${nArgs[0]} argument${nArgs[0] === 1 ? "" : "s"} across ${sizes[0]} turns. The opening names them all; each one is developed later in its own colour.`
-    : `${nameA}: ${nArgs[0]} argument${nArgs[0] === 1 ? "" : "s"} in ${sizes[0]} turns. ${nameB}: ${nArgs[1]} in ${sizes[1]} turns.`;
-  $("ruleSum").hidden = !((sizes[0] >= 3 || sizes[1] >= 3) && summaryOnly);
+  const doubling = [0, 1].map(t => turns - people[t]);
+  $("argNote").textContent =
+    `Both teams give ${nArgs} argument${nArgs === 1 ? "" : "s"} across ${turns} turns. ` +
+    ([0,1].every(t => doubling[t] === 0)
+      ? "Every person speaks once."
+      : [0,1].filter(t => doubling[t] > 0)
+             .map(t => `${teamNames[t]} has ${people[t]} for ${turns} turns, so ${doubling[t]} speak${doubling[t] === 1 ? "s" : ""} twice.`)
+             .join(" "));
+  $("ruleSum").hidden = !summaryOnly;
 
-  renderFrames(Math.max(nArgs[0], nArgs[1]));
+  renderFrames(nArgs);
 
   const seq = $("seq");
   seq.replaceChildren();
   let turn = 0;
-  speakingOrder().forEach(([team, s]) => {
-    turn++;
-    const n = sizes[team];
-    let argNo = 0;
-    for (let k = 1; k <= s; k++) if (jobsFor(team, k, n, summaryOnly).some(j => j.kind === "arg")) argNo++;
+  for (let s = 1; s <= turns; s++) {
+    for (let team = 0; team < 2; team++) {
+      turn++;
+      let argNo = 0;
+      for (let k = 1; k <= s; k++) if (jobsFor(team, k, turns, summaryOnly).some(j => j.kind === "arg")) argNo++;
 
-    const row = document.createElement("div");
-    row.className = "turn " + (team === 0 ? "is-a" : "is-b");
+      const row = document.createElement("div");
+      row.className = "turn " + (team === 0 ? "is-a" : "is-b");
 
-    /* team name + speaker number: in the outer margin, not in the box */
-    const labA = document.createElement("div"), labB = document.createElement("div");
-    labA.className = "sidelab" + (team === 0 ? "" : " hide");
-    labB.className = "sidelab" + (team === 1 ? "" : " hide");
-    const lab = team === 0 ? labA : labB;
-    const nm = document.createElement("b"); nm.textContent = teamNames[team];
-    const sp = document.createElement("span"); sp.textContent = "Speaker " + s;
-    lab.append(nm, sp);
+      /* ── the person: an editable box in the outer margin ── */
+      const labA = document.createElement("div"), labB = document.createElement("div");
+      labA.className = "sidelab" + (team === 0 ? "" : " hide");
+      labB.className = "sidelab" + (team === 1 ? "" : " hide");
+      const lab = team === 0 ? labA : labB;
+      const p = personFor(team, s);
+      const mine = turnsForPerson(team, p, turns);
 
-    const bubble = document.createElement("div");
-    bubble.className = "bubble";
-    bubble.draggable = true;
-    bubble.dataset.team = team;
-    bubble.dataset.slot = s - 1;
+      const prow = document.createElement("div");
+      prow.className = "personRow";
+      const grip = document.createElement("span");
+      grip.className = "grip"; grip.textContent = "⠿";
+      grip.title = "Drag to change the order"; grip.setAttribute("aria-hidden", "true");
+      const input = document.createElement("input");
+      input.className = "nameIn"; input.type = "text"; input.maxLength = 20;
+      input.placeholder = "name";
+      input.value = names[team][p] || "";
+      input.setAttribute("aria-label", `Name of ${teamNames[team]} person ${p + 1}`);
+      input.addEventListener("input", () => {
+        names[team][p] = input.value;
+        // the same person may hold more than one turn — keep every box in step
+        document.querySelectorAll(`.nameIn[data-team="${team}"][data-person="${p}"]`)
+          .forEach(o => { if (o !== input) o.value = input.value; });
+        save();
+      });
+      input.dataset.team = team; input.dataset.person = p;
+      const movers = document.createElement("div");
+      movers.className = "movers";
+      const up = document.createElement("button");
+      up.type = "button"; up.textContent = "▲"; up.disabled = p === 0;
+      up.setAttribute("aria-label", `Move this person earlier in ${teamNames[team]}`);
+      up.addEventListener("click", () => swapPeople(team, p, p - 1));
+      const dn = document.createElement("button");
+      dn.type = "button"; dn.textContent = "▼"; dn.disabled = p >= people[team] - 1;
+      dn.setAttribute("aria-label", `Move this person later in ${teamNames[team]}`);
+      dn.addEventListener("click", () => swapPeople(team, p, p + 1));
+      movers.append(up, dn);
+      prow.append(grip, input, movers);
 
-    const brow = document.createElement("div");
-    brow.className = "brow";
-    const grip = document.createElement("span");
-    grip.className = "grip"; grip.textContent = "⠿";
-    grip.title = "Drag to reorder within this team"; grip.setAttribute("aria-hidden", "true");
-    const input = document.createElement("input");
-    input.className = "nameIn"; input.type = "text"; input.maxLength = 24;
-    input.placeholder = "speaker's name";
-    input.value = names[team][s - 1] || "";
-    input.setAttribute("aria-label", `Name of ${teamNames[team]} speaker ${s}`);
-    input.addEventListener("input", () => { names[team][s - 1] = input.value; save(); });
-    const movers = document.createElement("div");
-    movers.className = "movers";
-    const up = document.createElement("button");
-    up.type = "button"; up.textContent = "↑"; up.disabled = s === 1;
-    up.setAttribute("aria-label", `Move earlier in ${teamNames[team]}`);
-    up.addEventListener("click", () => swap(team, s - 1, s - 2));
-    const dn = document.createElement("button");
-    dn.type = "button"; dn.textContent = "↓"; dn.disabled = s === n;
-    dn.setAttribute("aria-label", `Move later in ${teamNames[team]}`);
-    dn.addEventListener("click", () => swap(team, s - 1, s));
-    movers.append(up, dn);
-    brow.append(grip, input, movers);
-    bubble.append(brow);
-
-    const jobs = document.createElement("div");
-    jobs.className = "jobs";
-    jobsFor(team, s, n, summaryOnly).forEach(j => {
-      if (j.kind === "open") {
-        const c = document.createElement("span");
-        c.className = "chip plain"; c.textContent = "Contention";
-        jobs.append(c, groupLabel("outlines"));
-        for (let i = 1; i <= nArgs[team]; i++) jobs.append(ghostChip(i, "Argument " + i));
-      } else if (j.kind === "reb") {
-        const c = document.createElement("span");
-        c.className = "chip reb"; c.textContent = "Rebuttal";
-        jobs.append(c);
-      } else if (j.kind === "sum") {
-        jobs.append(groupLabel("summarises"));
-        for (let i = 1; i <= nArgs[team]; i++) jobs.append(ghostChip(i, "Argument " + i));
-      } else {
-        const c = document.createElement("span");
-        c.className = "chip " + argClass(argNo);
-        c.textContent = `Argument ${argNo} + evidence`;
-        jobs.append(c);
+      const meta = document.createElement("div");
+      meta.className = "sidemeta";
+      meta.textContent = "Speaker " + s;
+      if (mine.length > 1) {
+        const x = document.createElement("span");
+        x.className = "twice"; x.textContent = " ×" + mine.length;
+        x.title = `This person speaks on turns ${mine.join(" and ")}`;
+        meta.append(x);
       }
-    });
-    bubble.append(jobs);
-    wireDrag(bubble);
+      lab.append(prow, meta);
+      lab.dataset.team = team; lab.dataset.person = p;
+      lab.draggable = true;
+      wireDrag(lab);
 
-    const left = document.createElement("div"), right = document.createElement("div");
-    left.className = right.className = "slot";
-    const num = document.createElement("div");
-    num.className = "num";
-    const i = document.createElement("i"); i.textContent = turn;
-    num.append(i);
-    if (team === 0) { left.append(bubble); right.classList.add("empty"); }
-    else { right.append(bubble); left.classList.add("empty"); }
-    row.append(labA, left, num, right, labB);
-    seq.append(row);
-  });
+      /* ── the bubble: the jobs, in colour ── */
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      const jobs = document.createElement("div");
+      jobs.className = "jobs";
+      jobsFor(team, s, turns, summaryOnly).forEach(j => {
+        if (j.kind === "open") {
+          const c = document.createElement("span");
+          c.className = "chip plain"; c.textContent = "Contention";
+          jobs.append(c, groupLabel("outlines"));
+          for (let i = 1; i <= nArgs; i++) jobs.append(ghostChip(i, "Argument " + i));
+        } else if (j.kind === "reb") {
+          const c = document.createElement("span");
+          c.className = "chip reb"; c.textContent = "Rebuttal"; jobs.append(c);
+        } else if (j.kind === "sum") {
+          jobs.append(groupLabel("summarises"));
+          for (let i = 1; i <= nArgs; i++) jobs.append(ghostChip(i, "Argument " + i));
+        } else {
+          const c = document.createElement("span");
+          c.className = "chip " + argClass(argNo);
+          c.textContent = `Argument ${argNo} + evidence`;
+          jobs.append(c);
+        }
+      });
+      bubble.append(jobs);
+
+      const left = document.createElement("div"), right = document.createElement("div");
+      left.className = right.className = "slot";
+      const num = document.createElement("div"); num.className = "num";
+      const i = document.createElement("i"); i.textContent = turn; num.append(i);
+      if (team === 0) { left.append(bubble); right.classList.add("empty"); }
+      else { right.append(bubble); left.classList.add("empty"); }
+      row.append(labA, left, num, right, labB);
+      seq.append(row);
+    }
+  }
   save();
 }
 
-/* Reordering swaps names inside one team only. */
-function swap(team, from, to) {
-  if (to < 0 || to >= sizes[team]) return;
+/* Reordering the PEOPLE changes who opens and who sums up. */
+function swapPeople(team, from, to) {
+  if (to < 0 || to >= people[team]) return;
   const arr = names[team];
   const a = arr[from] || "", b = arr[to] || "";
   arr[from] = b; arr[to] = a;
@@ -493,25 +515,26 @@ function wireDrag(el) {
   el.addEventListener("dragstart", e => {
     dragSrc = el; el.classList.add("dragging");
     e.dataTransfer.effectAllowed = "move";
-    try { e.dataTransfer.setData("text/plain", el.dataset.slot); } catch (err) {}
+    try { e.dataTransfer.setData("text/plain", el.dataset.person); } catch (err) {}
   });
   el.addEventListener("dragend", () => { el.classList.remove("dragging"); dragSrc = null;
     document.querySelectorAll(".drag-over").forEach(x => x.classList.remove("drag-over")); });
   el.addEventListener("dragover", e => {
-    if (!dragSrc || dragSrc === el || dragSrc.dataset.team !== el.dataset.team) return;
+    if (!dragSrc || dragSrc.dataset.team !== el.dataset.team) return;
+    if (dragSrc.dataset.person === el.dataset.person) return;
     e.preventDefault(); el.classList.add("drag-over");
   });
   el.addEventListener("dragleave", () => el.classList.remove("drag-over"));
   el.addEventListener("drop", e => {
     e.preventDefault(); el.classList.remove("drag-over");
     if (!dragSrc || dragSrc.dataset.team !== el.dataset.team) return;
-    swap(+el.dataset.team, +dragSrc.dataset.slot, +el.dataset.slot);
+    swapPeople(+el.dataset.team, +dragSrc.dataset.person, +el.dataset.person);
   });
 }
 
 function save() {
   try { localStorage.setItem(LS, JSON.stringify({
-    a: $("teamA").value, b: $("teamB").value, sizes,
+    a: $("teamA").value, b: $("teamB").value, nArgs, people,
     sum: $("summaryOnly").checked, names })); } catch (e) {}
 }
 function load() {
@@ -519,8 +542,8 @@ function load() {
     const d = JSON.parse(localStorage.getItem(LS) || "{}");
     if (d.a) $("teamA").value = d.a;
     if (d.b) $("teamB").value = d.b;
-    if (Array.isArray(d.sizes) && d.sizes.length === 2 &&
-        d.sizes.every(x => x >= MIN_SIZE && x <= MAX_SIZE)) sizes = d.sizes;
+    if (d.nArgs >= MIN_ARGS && d.nArgs <= MAX_ARGS) nArgs = d.nArgs;
+    if (Array.isArray(d.people) && d.people.length === 2) people = d.people;
     if (d.sum === false) $("summaryOnly").checked = false;
     if (Array.isArray(d.names) && d.names.length === 2) names = d.names;
   } catch (e) {}
@@ -529,9 +552,11 @@ function load() {
 $("teamA").addEventListener("input", render);
 $("teamB").addEventListener("input", render);
 $("summaryOnly").addEventListener("change", render);
-[["A", 0], ["B", 1]].forEach(([suffix, t]) => {
-  $("minus" + suffix).addEventListener("click", () => { if (sizes[t] > MIN_SIZE) { sizes[t]--; render(); } });
-  $("plus"  + suffix).addEventListener("click", () => { if (sizes[t] < MAX_SIZE) { sizes[t]++; render(); } });
+$("minusG").addEventListener("click", () => { if (nArgs > MIN_ARGS) { nArgs--; render(); } });
+$("plusG").addEventListener("click",  () => { if (nArgs < MAX_ARGS) { nArgs++; render(); } });
+[["A", 0], ["B", 1]].forEach(([sfx, t]) => {
+  $("minus" + sfx).addEventListener("click", () => { if (people[t] > 1) { people[t]--; render(); } });
+  $("plus"  + sfx).addEventListener("click", () => { people[t]++; render(); });
 });
 
 load();
