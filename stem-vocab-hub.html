@@ -107,7 +107,6 @@
   .chip.suffix { background:var(--suf-soft); color:var(--suf); }
   button.chip { cursor:pointer; min-height:44px; }
   button.chip:hover { outline:1px solid currentColor; outline-offset:-1px; }
-  .chips { display:flex; flex-wrap:wrap; gap:6px; margin:7px 0 8px; }
 
   /* ---------- morpheme legend + colour-in-the-spelling (WORDS step) ----------
      Same --pre/--root/--suf tokens the chips and the build board already use —
@@ -119,6 +118,22 @@
   .mlegend .mpre { color:var(--pre); } .mlegend .mroot { color:var(--root); } .mlegend .msuf { color:var(--suf); }
   .mlegend .lnote { font-weight:400; color:var(--faint); }
   .hw .mpre { color:var(--pre); } .hw .mroot { color:var(--root); } .hw .msuf { color:var(--suf); }
+
+  /* the morpheme breakdown, purple-lab style: coloured monospace part +
+     italic gloss, joined by " + ", sitting under the meaning behind a dashed
+     rule, with the word's note directly beneath it. Same --pre/--root/--suf
+     tokens as the legend, the headword and the build board. */
+  .morph { font-size:.8rem; color:var(--muted); line-height:1.7; max-width:66ch;
+    border-top:1px dashed var(--hair); padding-top:6px; margin-top:8px; }
+  .morph b, .morph i { color:var(--ink); font-style:normal; }
+  .morph i { font-style:italic; }
+  .morph code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-weight:700; font-size:1rem; }
+  .morph code.mpre { color:var(--pre); }
+  .morph code.mroot { color:var(--root); }
+  .morph code.msuf { color:var(--suf); }
+  .morph .mnote { display:block; margin-top:4px; }
+  .morph .tr { color:var(--muted); }
 
   /* ---------- 1 WORDS ---------- */
   .wctl { display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; padding-bottom:14px;
@@ -757,12 +772,17 @@
     }
     return out + esc(rest);
   }
-  function partChip(p, hl){
+  /* one morpheme of the breakdown, purple-lab style: the part itself as a
+     coloured monospace <code>, its English gloss in italics straight after,
+     and the home-language gloss inside that same italic run so the "hide
+     translations" toggle still reaches it (.notr .tr). Display only — these
+     were never tappable here; the tappable chips live on the build board. */
+  function partMorph(p, hl){
     var trTxt = (hl && p.tr && p.tr[hl]) ? p.tr[hl] : "";
-    return "<span class='chip " + esc(p.type) + "'><b>" + esc(p.surface) + "</b>" +
-      "<small>" + esc(p.meaning) +
+    return "<code class='" + morphClass(p.type) + "'>" + esc(p.surface) + "</code> <i>" +
+      esc(p.meaning) +
       (trTxt ? "<span class='tr'> · <bdi lang='" + esc(hl) + "'>" + esc(trTxt) + "</bdi></span>" : "") +
-      "</small></span>";
+      "</i>";
   }
   function marksFor(w){
     var st = wState(w.w);
@@ -811,16 +831,18 @@
         "<div class='whead'><span class='hwbox'><span class='hw'>" + colourWord(w) + "</span>" +
           SAY(w.w, "en", "lg") + "</span>" + marksFor(w) + "</div>" +
         homeNote(w);
-      if (parts.length) {
-        h += "<div class='chips'>";
-        parts.forEach(function(p){ h += partChip(p, hl); });
-        h += "</div>";
-      }
       h += "<p class='wmean'>" + esc(w.meaning) + "</p>";
       if (hl && w.tr && w.tr[hl]) h += "<p class='wtr' lang='" + esc(hl) + "' dir='auto'>" +
         esc(w.tr[hl]) + SAY(w.tr[hl], hl, "sm") + "</p>";
       if (w.example) h += "<p class='wex'>" + esc(w.example) + SAY(w.example, "en", "sm") + "</p>";
-      if (w.note) h += "<p class='wnote'>" + w.note + "</p>";
+      /* breakdown under the meaning, behind a dashed rule, note beneath it */
+      if (parts.length) {
+        h += "<div class='morph'>" +
+          parts.map(function(p){ return partMorph(p, hl); }).join(" + ") +
+          (w.note ? "<span class='mnote'>" + w.note + "</span>" : "") + "</div>";
+      } else if (w.note) {
+        h += "<p class='wnote'>" + w.note + "</p>";
+      }
       h += "</article>";
     });
     h += "</div><p class='paneend'><a class='plain' href='" +
