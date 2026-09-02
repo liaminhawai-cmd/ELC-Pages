@@ -82,7 +82,7 @@ window.ELCProgress = (() => {
                                                total: a.total + (Number(h.total) || 0) }), { right: 0, total: 0 });
     return {
       id: "grammar", title: "Grammar Hub", icon: "📐",
-      href: "https://liaminhawai-cmd.github.io/Grammar-hub/",
+      href: "https://liaminhawai-cmd.github.io/Grammar-hub/?progress=1",
       stats: [
         { value: totals.total ? totals.right + "/" + totals.total : "—", label: "questions right first try" },
         stat(new Set(history.map((h) => h.skillId)).size, "skill", null, "touched"),
@@ -128,7 +128,7 @@ window.ELCProgress = (() => {
 
     return {
       id: "vocab", title: "Vocabulary", icon: "📘",
-      href: "https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/words",
+      href: "https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/progress",
       stats: [
         stat(items.length, "word", null, "collected"),
         { value: items.filter((i) => i && i.mastered).length, label: "mastered" },
@@ -179,7 +179,7 @@ window.ELCProgress = (() => {
     });
 
     return {
-      id: "stem", title: "STEM", icon: "🧪", href: "stem.html",
+      id: "stem", title: "STEM", icon: "🧪", href: "stem-progress.html",
       stats: [
         stat(mastered, "skill", null, "mastered"),
         stat(runs, "practice run", null, null),
@@ -316,7 +316,7 @@ window.ELCProgress = (() => {
 
     return {
       id: "phonics", title: "Phonics" + (active && active.name ? " · " + active.name : ""), icon: "🔤",
-      href: "https://liaminhawai-cmd.github.io/Phonics/",
+      href: "https://liaminhawai-cmd.github.io/Phonics/report.html",
       stats: [
         stat(mastery.filter((m) => m && m.everMastered).length, "sound", null, "mastered"),
         stat(attempts.length, "attempt", null, null),
