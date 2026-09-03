@@ -6089,7 +6089,33 @@ window.STEM_VOCAB_DATA = {
      "w": "mass",
      "meaning": "the amount of matter in an object, measured in kilograms; it does not change with location.",
      "example": "The mass of the ball was 0.2 kg on the balance.",
-     "parts": [],
+     "parts": [
+      {
+       "surface": "mass",
+       "type": "root",
+       "meaning": "lump/quantity",
+       "tr": {
+        "zh-Hans": "团块；质量",
+        "zh-Hant": "團塊；質量",
+        "ja": "かたまり／質量",
+        "ko": "덩어리／질량",
+        "vi": "khối lượng",
+        "ar": "كتلة",
+        "fa": "توده/جرم",
+        "ur": "تودہ/کمیت",
+        "am": "ብዛት/ክምር",
+        "ml": "പിണ്ഡം",
+        "ta": "திரள்/நிறை",
+        "tl": "buo-buong dami",
+        "ps": "ډله/کتله",
+        "ro": "masă",
+        "ru": "масса",
+        "fr": "masse",
+        "hi": "पिंड/द्रव्यमान",
+        "es": "masa"
+       }
+      }
+     ],
      "tr": {
       "am": "ግዝፈት",
       "ar": "الكتلة",
@@ -14344,7 +14370,33 @@ window.STEM_VOCAB_DATA = {
      "w": "hazard",
      "meaning": "something in the environment that could cause harm.",
      "example": "The open gas tap was a hazard, so we turned it off.",
-     "parts": [],
+     "parts": [
+      {
+       "surface": "hazard",
+       "type": "root",
+       "meaning": "danger",
+       "tr": {
+        "vi": "nguy hiểm",
+        "am": "አደጋ",
+        "ar": "خطر",
+        "es": "peligro",
+        "fa": "خطر",
+        "fr": "danger",
+        "hi": "ख़तरा",
+        "ja": "危険",
+        "ko": "위험",
+        "ml": "അപകടം",
+        "ps": "خطر",
+        "ro": "pericol",
+        "ru": "опасность",
+        "ta": "ஆபத்து",
+        "tl": "panganib",
+        "ur": "خطرہ",
+        "zh-Hans": "危险",
+        "zh-Hant": "危險"
+       }
+      }
+     ],
      "tr": {
       "zh-Hans": "危险源",
       "zh-Hant": "危險源",
@@ -16054,7 +16106,58 @@ window.STEM_VOCAB_DATA = {
      "w": "degrees Celsius",
      "meaning": "the unit used to measure temperature, written °C.",
      "example": "We wrote every reading in degrees Celsius, for example 63 °C.",
-     "parts": [],
+     "parts": [
+      {
+       "surface": "de",
+       "type": "prefix",
+       "meaning": "down/away",
+       "tr": {
+        "am": "ወደ ታች",
+        "ar": "أسفل",
+        "es": "abajo/lejos",
+        "fa": "پایین",
+        "fr": "vers le bas",
+        "hi": "नीचे",
+        "ja": "下方へ",
+        "ko": "아래로",
+        "ml": "താഴേക്ക്",
+        "ps": "ښکته / لرې",
+        "ro": "în jos",
+        "ru": "вниз",
+        "ta": "கீழே",
+        "tl": "pababa",
+        "ur": "نیچے",
+        "vi": "giảm/ra khỏi",
+        "zh-Hans": "向下；去除",
+        "zh-Hant": "向下；去除"
+       }
+      },
+      {
+       "surface": "gree",
+       "type": "root",
+       "meaning": "step/grade",
+       "tr": {
+        "am": "ደረጃ",
+        "ar": "درجة",
+        "es": "paso, grado",
+        "fa": "پله، درجه",
+        "fr": "pas, grade",
+        "hi": "सीढ़ी, श्रेणी",
+        "ja": "段階",
+        "ko": "단계, 등급",
+        "ml": "പടി, ഗ്രേഡ്",
+        "ps": "ګام، درجه",
+        "ro": "treaptă, grad",
+        "ru": "ступень, степень",
+        "ta": "படி, தரம்",
+        "tl": "hakbang, grado",
+        "ur": "قدم، درجہ",
+        "vi": "bước, cấp bậc",
+        "zh-Hans": "级，等级",
+        "zh-Hant": "級，等級"
+       }
+      }
+     ],
      "tr": {
       "zh-Hans": "摄氏度",
       "zh-Hant": "攝氏度",
@@ -16797,7 +16900,33 @@ window.STEM_VOCAB_DATA = {
      "w": "trend",
      "meaning": "the overall pattern shown by data, such as increasing, decreasing or staying the same.",
      "example": "The trend was clear: as time increased, the temperature increased.",
-     "parts": [],
+     "parts": [
+      {
+       "surface": "trend",
+       "type": "root",
+       "meaning": "turn/bend",
+       "tr": {
+        "zh-Hans": "转向/弯曲",
+        "zh-Hant": "轉向/彎曲",
+        "ja": "曲がる",
+        "ko": "돌다/구부러지다",
+        "vi": "rẽ/uốn",
+        "ar": "انعطاف/انحناء",
+        "fa": "چرخیدن/خم شدن",
+        "ur": "مڑنا/جھکنا",
+        "am": "መታጠፍ",
+        "ml": "വളയുക",
+        "ta": "திரும்பு/வளை",
+        "tl": "liko/yumuko",
+        "ps": "ګرځېدل/کږېدل",
+        "ro": "a se întoarce/îndoi",
+        "ru": "поворачивать/изгибаться",
+        "fr": "tourner/plier",
+        "hi": "मुड़ना/झुकना",
+        "es": "girar/doblar"
+       }
+      }
+     ],
      "tr": {
       "am": "አዝማሚያ",
       "ar": "اتجاه",
@@ -17656,7 +17785,33 @@ window.STEM_VOCAB_DATA = {
      "w": "element",
      "meaning": "a pure substance made from only one type of atom.",
      "example": "Copper is an element, because it is made of copper atoms only.",
-     "parts": [],
+     "parts": [
+      {
+       "surface": "element",
+       "type": "root",
+       "meaning": "basic part",
+       "tr": {
+        "am": "መሰረታዊ ክፍል",
+        "ar": "جزء أساسي",
+        "es": "parte básica",
+        "fa": "بخش اصلی",
+        "fr": "partie fondamentale",
+        "hi": "मूल भाग",
+        "ja": "基本的な部分",
+        "ko": "기본 부분",
+        "ml": "അടിസ്ഥാന ഭാഗം",
+        "ps": "بنسټیزه برخه",
+        "ro": "parte de bază",
+        "ru": "основная часть",
+        "ta": "அடிப்படைப் பகுதி",
+        "tl": "pangunahing bahagi",
+        "ur": "بنیادی حصہ",
+        "vi": "phần cơ bản",
+        "zh-Hans": "基本部分",
+        "zh-Hant": "基本部分"
+       }
+      }
+     ],
      "tr": {
       "am": "ንጥረ ነገር",
       "ar": "عنصر",
@@ -18019,7 +18174,8 @@ window.STEM_VOCAB_DATA = {
         "ru": "вместе",
         "fr": "ensemble",
         "hi": "साथ",
-        "es": "juntos"
+        "es": "juntos",
+        "other": "باهم"
        }
       },
       {
@@ -18044,7 +18200,8 @@ window.STEM_VOCAB_DATA = {
         "ru": "сила/ценность",
         "fr": "force/valeur",
         "hi": "शक्ति/मूल्य",
-        "es": "fuerza/valor"
+        "es": "fuerza/valor",
+        "other": "ارزش"
        }
       },
       {
@@ -18069,7 +18226,8 @@ window.STEM_VOCAB_DATA = {
         "ru": "обладающий",
         "fr": "doté de",
         "hi": "युक्त",
-        "es": "que tiene la cualidad de"
+        "es": "que tiene la cualidad de",
+        "other": "بودن"
        }
       }
      ],
@@ -19508,7 +19666,8 @@ window.STEM_VOCAB_DATA = {
         "ru": "не-",
         "fr": "non",
         "hi": "अ-",
-        "es": "no / opuesto"
+        "es": "no / opuesto",
+        "other": "نه"
        }
       },
       {
@@ -19983,7 +20142,7 @@ window.STEM_VOCAB_DATA = {
      "tr": {
       "zh-Hans": "酸碱度（pH值）",
       "zh-Hant": "酸鹼值（pH值）",
-      "ja": "水素イオン指数（pH）",
+      "ja": "水素イオン指数",
       "ko": "수소 이온 농도 지수(pH)",
       "vi": "độ pH",
       "ar": "الأس الهيدروجيني (pH)",
@@ -20058,7 +20217,8 @@ window.STEM_VOCAB_DATA = {
         "ru": "в",
         "fr": "dans",
         "hi": "में",
-        "es": "en / hacia dentro"
+        "es": "en / hacia dentro",
+        "other": "نه"
        }
       },
       {
@@ -20428,7 +20588,8 @@ window.STEM_VOCAB_DATA = {
         "ru": "полностью",
         "fr": "complètement",
         "hi": "पूरी तरह",
-        "es": "completamente"
+        "es": "completamente",
+        "other": "باهم"
        }
       },
       {
