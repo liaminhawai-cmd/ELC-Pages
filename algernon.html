@@ -1,0 +1,1812 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Flowers for Algernon — vocabulary, dictation, comprehension and PEEL analytical writing for EAL students.">
+<title>Flowers for Algernon — Reading &amp; Writing Hub</title>
+<style>
+/* ============================================================
+   ELC · Flowers for Algernon hub
+   Matches the ELC-Pages house style: CSS variables, light/dark
+   via prefers-color-scheme, mobile-first, sized for the 1366×768
+   ThinkPads the students actually use. No CDNs, no web fonts,
+   no build step — one self-contained file, per ELC-Pages/AGENTS.md.
+
+   The accent is ink-blue: this story is told entirely in
+   handwritten progress reports.
+   ============================================================ */
+:root{
+  --bg:#f3f5f9; --paper:#ffffff; --ink:#1b2030; --muted:#5a6379; --faint:#7c8496;
+  --line:#dde2ec; --line-soft:#eaeef5; --accent:#2f4d7a; --accent-soft:#e8eef7;
+  --correct:#2c6b45; --wrong:#a33a34; --okbg:#eaf4ee; --badbg:#faecea;
+  --warnbg:#fdf3e3; --warntx:#835311; --on-accent:#ffffff;
+  /* builder tile roles — colour is metalanguage, never decoration */
+  --p-bg:#dce9f8;  --p-tx:#1d4677;   /* Point     */
+  --e-bg:#fdf0c4;  --e-tx:#7a5a05;   /* Evidence  */
+  --x-bg:#e6f0e2;  --x-tx:#3c6030;   /* Explain   */
+  --l-bg:#f6e5ee;  --l-tx:#8c3560;   /* Link      */
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#11151d; --paper:#191f2a; --ink:#eef1f6; --muted:#a3adc0; --faint:#8c96a8;
+    --line:#2e3646; --line-soft:#242c39; --accent:#8fb3e0; --accent-soft:#1d2839;
+    --correct:#79c295; --wrong:#e08a82; --okbg:#18291f; --badbg:#2c1d1c;
+    --warnbg:#2b2417; --warntx:#e6bd77; --on-accent:#11151d;
+    --p-bg:#22344b; --p-tx:#a8c8ee; --e-bg:#3a3218; --e-tx:#e3c877;
+    --x-bg:#233020; --x-tx:#a8cd9a; --l-bg:#33203a; --l-tx:#e3a3c6;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+     line-height:1.55;display:flex;justify-content:center;padding:14px 10px 48px}
+.container{width:100%;max-width:920px;background:var(--paper);border:1px solid var(--line);
+           border-radius:14px;padding:22px 24px 26px}
+h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif}
+h1{font-size:25px;margin:0 0 4px;letter-spacing:-.2px}
+h2{font-size:19px;margin:0 0 8px}
+h3{font-size:15px;margin:0 0 6px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 14px}
+.eyebrow{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--accent)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.topbar .where{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.linkbtn{background:none;border:none;color:var(--accent);font-weight:600;font-size:13px;cursor:pointer;padding:4px 2px;font-family:inherit}
+.linkbtn:hover{text-decoration:underline}
+a{color:var(--accent)}
+.btn{padding:10px 17px;border:1px solid var(--line);border-radius:9px;font-size:14.5px;font-weight:600;
+     cursor:pointer;background:var(--paper);color:var(--ink);font-family:inherit}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.btn-ghost{background:var(--bg);color:var(--muted)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.panel{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin:0 0 12px}
+p.lead{color:var(--muted);font-size:13.5px;margin:0 0 10px}
+.hr{height:1px;background:var(--line);margin:18px 0 14px;border:0}
+
+/* ---- home ---- */
+.step{display:flex;align-items:center;gap:13px;width:100%;text-align:left;background:var(--paper);
+      border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin-bottom:8px;cursor:pointer;
+      font-family:inherit;font-size:14.5px;color:inherit}
+.step:hover{border-color:var(--accent)}
+.step .num{flex:0 0 29px;height:29px;border-radius:50%;background:var(--bg);border:1px solid var(--line);
+           display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13.5px}
+.step.done .num{background:var(--okbg);border-color:var(--correct);color:var(--correct)}
+.step .t{font-weight:700}
+.step .d{color:var(--muted);font-size:12.5px}
+.step .tag{margin-left:auto;font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+           color:var(--muted);white-space:nowrap;text-align:right}
+.step.done .tag{color:var(--correct)}
+@media (min-width:900px){ .steps2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px} }
+
+/* ---- stimulus / passages ---- */
+.stim{font-family:Georgia,serif;font-size:16.5px;background:var(--bg);border:1px solid var(--line);
+      border-left:4px solid var(--accent);border-radius:9px;padding:13px 15px;margin:0 0 12px}
+.stim .pg{display:block;margin-top:6px;font-family:system-ui,sans-serif;font-size:11px;color:var(--faint)}
+.passage{font-family:Georgia,serif;font-size:16.5px;line-height:1.78;background:var(--bg);border:1px solid var(--line);
+         border-radius:10px;padding:15px 17px;margin:0 0 12px}
+.passage .pg{display:block;margin-top:9px;font-family:system-ui,sans-serif;font-size:11.5px;color:var(--faint);line-height:1.5}
+/* Charlie's own reports are set in a plain hand so the errors read as his, not as typos */
+.report{font-family:"Courier New",Courier,monospace;font-size:15.5px;line-height:1.85}
+.q{font-size:15.5px;font-weight:700;margin:0 0 10px}
+.opts{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opts.chips{flex-direction:row;flex-wrap:wrap}
+.opt{text-align:left;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:var(--paper);
+     font-family:inherit;font-size:14.5px;cursor:pointer;color:inherit;min-height:44px}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt.right{background:var(--okbg);border-color:var(--correct)}
+.opt.wrongpick{background:var(--badbg);border-color:var(--wrong)}
+.feedback{display:none;border-radius:9px;padding:11px 13px;font-size:13.8px;margin:0 0 12px;line-height:1.55}
+.feedback.ok{display:block;background:var(--okbg);color:var(--correct)}
+.feedback.bad{display:block;background:var(--badbg);color:var(--wrong)}
+.feedback.warn{display:block;background:var(--warnbg);color:var(--warntx)}
+.feedback ul{margin:6px 0 0 18px;padding:0}
+.feedback li{margin:0 0 5px}
+.feedback b{color:inherit}
+.requote{font-family:Georgia,serif;background:var(--paper);border:1px solid var(--line);border-radius:6px;
+         padding:8px 10px;margin-top:8px;color:var(--ink);font-size:14.5px}
+.progress-track{height:7px;background:var(--line-soft);border-radius:99px;margin:0 0 15px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .25s ease}
+
+/* ---- speaker ---- */
+.say{border:0;background:transparent;cursor:pointer;padding:0;margin:0 0 0 6px;display:inline-flex;
+     align-items:center;justify-content:center;width:34px;height:34px;min-width:34px;border-radius:8px;
+     color:var(--muted);vertical-align:middle;flex:0 0 auto}
+.say svg{width:15px;height:15px;fill:currentColor;pointer-events:none}
+.say:hover{color:var(--accent);background:var(--accent-soft)}
+.say.lg svg{width:19px;height:19px}
+
+/* ---- vocab builder ---- */
+.tiles{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.tile{border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:14px;cursor:pointer;
+      font-family:inherit;background:var(--paper);color:inherit;text-align:left;min-height:44px}
+.tile:hover{border-color:var(--accent)}
+.tile.used{opacity:.35;pointer-events:none}
+.tile small{display:block;color:var(--muted);font-size:11px;font-weight:400}
+.assembly{min-height:52px;border:2px dashed var(--line);border-radius:10px;background:var(--bg);
+          padding:8px 10px;margin:0 0 12px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.assembly .ph{color:var(--faint);font-size:13px}
+.assembly .placed{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);
+                  border-radius:8px;padding:7px 10px;font-size:14px;cursor:pointer;font-weight:600}
+.assembly .placed:after{content:" ✕";font-size:10px;opacity:.7}
+.wordline{font-family:Georgia,serif;font-size:20px;font-weight:600;margin:0 0 2px}
+.pos{color:var(--faint);font-size:12px;font-style:italic}
+.gapline{font-family:Georgia,serif;font-size:16.5px;line-height:1.8;background:var(--bg);border:1px solid var(--line);
+         border-radius:9px;padding:13px 15px;margin:0 0 12px}
+.gapline .blank{display:inline-block;min-width:110px;border-bottom:2px solid var(--accent);text-align:center;
+                font-weight:700;color:var(--accent)}
+
+/* ---- dictation ---- */
+.dictbox{display:flex;flex-direction:column;gap:9px;margin:0 0 12px}
+.dictbox textarea{width:100%;min-height:74px;padding:11px 13px;border:1px solid var(--line);border-radius:10px;
+                  font-size:16px;font-family:Georgia,serif;background:var(--paper);color:var(--ink);line-height:1.6}
+.marked{font-family:Georgia,serif;font-size:16.5px;line-height:1.9;background:var(--bg);border:1px solid var(--line);
+        border-radius:9px;padding:13px 15px;margin:0 0 12px}
+.marked .w-ok{color:var(--correct)}
+.marked .w-no{background:var(--badbg);color:var(--wrong);border-radius:4px;padding:0 3px;text-decoration:line-through}
+.marked .w-add{background:var(--okbg);color:var(--correct);border-radius:4px;padding:0 3px}
+.speedrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+
+/* ---- evidence ---- */
+.seg{cursor:pointer;border-radius:4px;padding:1px 2px;border-bottom:2px solid transparent}
+.seg:hover{background:var(--line-soft)}
+.seg.picked{background:var(--accent-soft);border-bottom-color:var(--accent)}
+.seg.hit{background:var(--okbg);border-bottom-color:var(--correct)}
+.seg.miss{background:var(--badbg);border-bottom-color:var(--wrong)}
+.idea-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.fchoice{border:1px solid var(--line);background:var(--paper);border-radius:99px;padding:9px 15px;font-family:inherit;
+         font-size:13.5px;font-weight:600;cursor:pointer;color:inherit;min-height:44px}
+.fchoice.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 13px}
+.lcard{border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:var(--paper);font-size:12px;
+       line-height:1.4;cursor:pointer;font-family:inherit;text-align:left;color:inherit}
+.lcard .lv{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);display:block;margin-bottom:3px}
+.lcard.now{border:2px solid var(--accent)}
+.lcard.got{background:var(--okbg);border-color:var(--correct)}
+.lcard.got .lv{color:var(--correct)}
+.ladder-hint{display:none;background:var(--accent-soft);border:1px dashed var(--accent);border-radius:9px;
+             padding:10px 12px;font-size:13px;margin:0 0 12px}
+.ladder-hint.show{display:block}
+@media (max-width:700px){.ladder{grid-template-columns:repeat(2,1fr)}}
+
+/* ---- PEEL builder ---- */
+.slotrow{display:flex;flex-direction:column;gap:8px;margin:0 0 12px}
+.slot{border:2px dashed var(--line);border-radius:10px;min-height:48px;padding:8px 10px;background:var(--paper);
+      display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.slot .slabel{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);flex:0 0 80px}
+.slot .placed{border-radius:8px;padding:7px 10px;font-size:13.5px;cursor:pointer;border:1px solid transparent;font-family:inherit}
+.slot .placed:after{content:" ✕";font-size:10px;opacity:.6}
+.bins{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:0 0 12px}
+@media (max-width:900px){.bins{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.bins{grid-template-columns:1fr}}
+.bin{border:1px solid var(--line);border-radius:10px;background:var(--paper);overflow:hidden}
+.bin h4{margin:0;padding:7px 10px;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--line-soft)}
+.bin .binbody{padding:8px;display:flex;flex-direction:column;gap:6px;max-height:250px;overflow-y:auto}
+.btile{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;text-align:left;
+       cursor:pointer;font-family:inherit;background:var(--paper);color:inherit;line-height:1.45}
+.btile:hover{border-color:var(--accent)}
+.bin.b-p h4,.placed.k-p,.btile.k-p{background:var(--p-bg);color:var(--p-tx)}
+.bin.b-e h4,.placed.k-e,.btile.k-e{background:var(--e-bg);color:var(--e-tx)}
+.bin.b-x h4,.placed.k-x,.btile.k-x{background:var(--x-bg);color:var(--x-tx)}
+.bin.b-l h4,.placed.k-l,.btile.k-l{background:var(--l-bg);color:var(--l-tx)}
+.preview{font-family:Georgia,serif;font-size:16.5px;line-height:1.7;background:var(--bg);border:1px solid var(--line);
+         border-radius:9px;padding:13px 15px;margin:0 0 12px;min-height:56px}
+.preview .ph{color:var(--faint);font-size:13px;font-family:system-ui,sans-serif}
+.wagoll{background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--correct);
+        border-radius:9px;padding:13px 15px;margin:0 0 12px;font-family:Georgia,serif;font-size:15.5px;line-height:1.75}
+.wagoll .tagp{font-family:system-ui,sans-serif;font-size:9.5px;font-weight:800;text-transform:uppercase;
+              letter-spacing:.4px;border-radius:4px;padding:1px 5px;margin-right:4px;vertical-align:2px}
+.wagoll .t-p{background:var(--p-bg);color:var(--p-tx)}
+.wagoll .t-e{background:var(--e-bg);color:var(--e-tx)}
+.wagoll .t-x{background:var(--x-bg);color:var(--x-tx)}
+.wagoll .t-l{background:var(--l-bg);color:var(--l-tx)}
+
+/* ---- report ---- */
+table.rpt{width:100%;border-collapse:collapse;font-size:13.5px;margin:0 0 12px}
+table.rpt th,table.rpt td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+table.rpt th{background:var(--bg);font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+.rowinp{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 12px}
+.rowinp label{font-size:12px;font-weight:700;display:block;margin-bottom:3px}
+.rowinp input{padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:14px;
+              font-family:inherit;background:var(--paper);color:var(--ink)}
+.vcode{font-family:Georgia,serif;font-size:15px;letter-spacing:1px}
+.foot{margin-top:20px;padding-top:12px;border-top:1px solid var(--line);color:var(--faint);font-size:11.5px}
+
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{
+  body{background:#fff;padding:0}
+  .container{border:none;max-width:100%;padding:0}
+  .noprint{display:none!important}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="topbar noprint">
+    <span class="where" id="navWhere"></span>
+    <span>
+      <a class="linkbtn" href="index.html" style="text-decoration:none">← ELC Hub</a>
+      <button class="linkbtn" id="homeBtn" onclick="go('home')" style="display:none">← hub home</button>
+    </span>
+  </div>
+  <div id="body"></div>
+  <div class="foot noprint">
+    Nothing here is sent anywhere. Your answers stay in this browser only (localStorage) — no account, no
+    tracking. Clearing your browser data clears your progress. Passages marked <i>written for this activity</i>
+    are original ELC writing in the style of the story, not extracts from it.
+  </div>
+</div>
+
+<script>
+/* ============================================================================
+   FLOWERS FOR ALGERNON — READING & WRITING HUB
+   ----------------------------------------------------------------------------
+   Daniel Keyes, "Flowers for Algernon" (short story, 1959).
+
+   COPYRIGHT NOTE — this site is public and live.
+   The story is in copyright. This file therefore contains NO reproduced
+   extract. Where a real phrase is quoted it is short — a few words inside
+   original analytical commentary, the same use any published book review
+   makes. Every longer passage is ORIGINAL writing composed for this activity
+   in the manner of the story, and is labelled as such on screen.
+   Do not paste chapters, scans or the story text into this file.
+
+   ----------------------------------------------------------------------------
+   This block is the data spine. The engine below knows nothing about the
+   story; it only runs whatever is in these consts. To add content, copy an
+   entry and follow its shape. Every item needs an `id` and an `explain` that
+   names the trap and points the reader back to the words.
+
+   Scoring: wrong answers are retried until correct (mastery loop), but only
+   the FIRST attempt is scored and reported.
+   ============================================================================ */
+
+const TEXT = {
+  title:"Flowers for Algernon",
+  author:"Daniel Keyes",
+  form:"short story, 1959",
+  blurb:"Charlie Gordon is thirty-two. He wants to be smart. A surgeon offers him an operation that has already worked on a white mouse called Algernon.",
+  /* the one thing an EAL reader must know before page one */
+  hook:"The whole story is written as Charlie's own progress reports. When Charlie changes, his SPELLING changes. The mistakes are not the author's — they are the character."
+};
+
+/* Every remaining story-specific string the engine prints. Kept here so the
+   engine below is genuinely shared with the other ELC text-study hubs — a new
+   text needs a new data spine and nothing else. */
+const COPY = {
+  key:"elc.algernon.hub.v1",
+  nav:"ELC English · novel study 1 · Flowers for Algernon",
+  vocabDone:"These fourteen words are the ones the story leans on. You now know their pieces, which means you can also read words you have never met that share them — every <i>-path-</i> word, every <i>spect</i> word, every <i>-ion</i> noun.",
+  dictDone:"Dictation trains the join between hearing a word and spelling it — the exact join Charlie has not made at the start of the story, which is why he writes what he hears.",
+  qr1Done:"Next quickread: the bakery, weeks after the operation. Watch what happens to the punctuation.",
+  qr2Done:"You have now read Charlie at both ends of the change. The Voice fingerprint activity turns that into something you can name and point at.",
+  extension:"draft a PEEL paragraph on an idea the hub does not cover, such as Miss Kinnian's role",
+  labels:{ qr1:"Quickread: before the operation", qr2:"Quickread: the bakery" },
+  recommend:{
+    qr1:"Reread with a pencil and mark every place Charlie tells you something he does not understand himself.",
+    qr2:"Reread the bakery report and underline the evidence that is an ABSENCE — what does not happen is often the strongest clue.",
+    voice:"Before you write in character, list the fingerprints: spelling, conjunctions, sentence length, whether a name is used.",
+    fig:"Revisit the difference between symbol, motif and irony. Then find one more example of each in your own copy."
+  }
+};
+
+/* ==================== 1 · VOCABULARY PRETEACH ==============================
+   The program's standing routine, digitised: morpheme matrices. Every student
+   meets all fourteen words, but each word arrives as ONE task — assemble it
+   from its morphemes, match its meaning, or complete a sentence. The deal is
+   stored, so a refresh cannot reroll a hard word into an easy one.
+   Words are the class's own unit list (Word Builder: elc/english/flowers-for-algernon).
+   =========================================================================== */
+const VOCAB = [
+{ w:"deterioration", pos:"noun",
+  meaning:"The process of getting worse and worse.",
+  tiles:[["de-","down, away"],["terior","worse"],["-ation","process of"]],
+  decoys:[["re-","again"],["-able","able to be"]],
+  note:"Latin <i>deterior</i> = worse. This is the story's key noun: Keyes even names the effect after it. Watch the decoy — <b>re</b>-deterioration is not a word; the prefix here means <i>downward</i>.",
+  gap:["Charlie charts Algernon's", "and realises the same fall is coming for him."] },
+{ w:"introspective", pos:"adjective",
+  meaning:"Looking inward, examining your own thoughts and feelings.",
+  tiles:[["intro-","inward"],["spect","to look"],["-ive","tending to"]],
+  decoys:[["retro-","backward"],["-or","one who"]],
+  note:"Same <b>spect</b> as inspect, spectator, respect — all looking. <b>Intro-</b> turns the looking inward. Charlie's reports become introspective long before they become clever.",
+  gap:["As he grows more", "his reports stop describing the tests and start describing himself."] },
+{ w:"apperception", pos:"noun",
+  meaning:"Understanding something new by connecting it to what you already know.",
+  tiles:[["ap-","toward"],["per-","through"],["cept","to take"],["-ion","process of"]],
+  decoys:[["ex-","out"],["-ate","to make"]],
+  note:"Two prefixes stacked on one root. Same <b>cept</b> as accept, receive, concept — all taking. Charlie sits a <i>Thematic Apperception Test</i>: he is asked to take meaning from pictures.",
+  gap:["The", "test asks Charlie to invent a story about a picture."] },
+{ w:"cerebral", pos:"adjective",
+  meaning:"To do with the brain; or, of a person, intellectual rather than emotional.",
+  tiles:[["cerebr","brain"],["-al","relating to"]],
+  decoys:[["cardi","heart"],["-ology","study of"]],
+  note:"Latin <i>cerebrum</i> = brain. Note the second meaning: to call a person cerebral can be a criticism — all brain, no heart. That double meaning is the whole story in one word.",
+  gap:["The surgeons operate on Charlie's", "cortex."] },
+{ w:"apathetic", pos:"adjective",
+  meaning:"Not caring; showing no interest or feeling.",
+  tiles:[["a-","without"],["path","feeling"],["-etic","having the quality of"]],
+  decoys:[["anti-","against"],["-ist","a person who"]],
+  note:"Greek <b>path</b> = feeling, as in sympathy and pathetic. <b>A-</b> strips it away. Three words, one root, three different prefixes: apathetic (no feeling), empathetic (feeling inside), sympathetic (feeling with).",
+  gap:["The other workers are", "about Charlie's progress — they simply do not care."] },
+{ w:"empathetic", pos:"adjective",
+  meaning:"Able to understand and share what another person feels.",
+  tiles:[["em-","in, inside"],["path","feeling"],["-etic","having the quality of"]],
+  decoys:[["a-","without"],["-less","without"]],
+  note:"The same root as apathetic with the opposite prefix. Ask this of every character: who in the story is actually empathetic towards Charlie? The list is very short.",
+  gap:["Miss Kinnian is the most", "character in the story."] },
+{ w:"intellect", pos:"noun",
+  meaning:"The power to think, reason and understand.",
+  tiles:[["intel-","between"],["lect","to choose, to read"]],
+  decoys:[["-ual","relating to"],["dis-","apart"]],
+  note:"Latin <i>intellegere</i> — to choose between, i.e. to tell things apart. Same <b>lect</b> as select, collect, lecture. Charlie gains intellect and loses friends; the story asks whether that is a fair trade.",
+  gap:["The operation triples Charlie's", "in a matter of weeks."] },
+{ w:"impaired", pos:"adjective",
+  meaning:"Weakened or damaged, so it works less well than it should.",
+  tiles:[["im-","not"],["pair","equal"],["-ed","having been"]],
+  decoys:[["in-","into"],["-ing","doing"]],
+  note:"From Latin <i>pejorare</i>, to make worse — the <b>pair</b> here is not a couple. Careful: <b>im-</b> means <i>not</i> here, but in <i>import</i> the same letters mean <i>into</i>. The prefix's meaning depends on the word.",
+  gap:["Before the operation Charlie's learning is severely", "."] },
+{ w:"superstitious", pos:"adjective",
+  meaning:"Believing that certain objects or actions bring good or bad luck.",
+  tiles:[["super-","above, over"],["stit","to stand"],["-ious","full of"]],
+  decoys:[["sub-","under"],["-fy","to make"]],
+  note:"Standing over something in awe. Same <b>stit/stat</b> as statue and constitution — all standing. Charlie's rabbit's foot is the story's first sign that he wants control over a world he cannot read.",
+  gap:["Charlie carries a rabbit's foot because he is", "about the tests."] },
+{ w:"inferiority", pos:"noun",
+  meaning:"The feeling or state of being lower or worse than others.",
+  tiles:[["infer","lower"],["-ior","more"],["-ity","state of"]],
+  decoys:[["super","above"],["-ance","act of"]],
+  note:"Latin <i>inferus</i> = below. Its opposite, <b>super</b>iority, is built the same way — swap one morpheme and the meaning flips. The tragedy is that Charlie feels inferior both before the operation and after it.",
+  gap:["The psychologists write that Charlie has an", "complex."] },
+{ w:"dissection", pos:"noun",
+  meaning:"Cutting something apart to examine it.",
+  tiles:[["dis-","apart"],["sect","to cut"],["-ion","process of"]],
+  decoys:[["de-","down"],["-ure","result of"]],
+  note:"Same <b>sect</b> as section, insect (a cut-up body) and intersection. It is used literally of Algernon — and figuratively of what the scientists do to Charlie.",
+  gap:["After Algernon dies, the laboratory performs a", "on the mouse."] },
+{ w:"senility", pos:"noun",
+  meaning:"The loss of memory and thinking ability that can come with old age.",
+  tiles:[["sen","old"],["-ile","tending to be"],["-ity","state of"]],
+  decoys:[["juven","young"],["-ment","result of"]],
+  note:"Latin <i>senex</i> = old man — same root as senior and senate (a council of elders). Charlie is thirty-two. Keyes uses the word for a man in his thirties on purpose: it makes the reader flinch.",
+  gap:["The reports describe a rapid", "in a man of thirty-two."] },
+{ w:"vacuous", pos:"adjective",
+  meaning:"Empty; showing no thought or intelligence.",
+  tiles:[["vacu","empty"],["-ous","full of"]],
+  decoys:[["plen","full"],["-ify","to make"]],
+  note:"Literally 'full of emptiness' — the two morphemes contradict each other, which is why the word stings. Same <b>vacu</b> as vacuum and vacant. It is used of Charlie's smile, by people describing him from the outside.",
+  gap:["They describe the smile on his face as", "."] },
+{ w:"hostile", pos:"adjective",
+  meaning:"Unfriendly; behaving like an enemy.",
+  tiles:[["host","enemy, stranger"],["-ile","tending to be"]],
+  decoys:[["hosp","guest"],["-ance","act of"]],
+  note:"A trap worth knowing: Latin <i>hostis</i> (enemy) gives <b>hostile</b>, but <i>hospes</i> (guest) gives <b>hospital</b> and <b>hospitality</b>. One letter, opposite meanings. The bakery workers turn hostile the moment Charlie becomes cleverer than they are.",
+  gap:["Once Charlie can correct them, his workmates become", "."] }
+];
+
+/* ==================== 2 · DICTATION WARM-UP ================================
+   The program's dictation routine. Hear the sentence, type it, get it marked
+   word by word. Every sentence carries unit vocabulary, so dictation doubles
+   as a spelling test for the words just pretaught.
+   =========================================================================== */
+const DICTATION = [
+{ id:"d1", s:"Charlie works at a bakery and wants to be smart." },
+{ id:"d2", s:"The doctors say his learning is impaired." },
+{ id:"d3", s:"He carries a rabbit's foot because he is superstitious." },
+{ id:"d4", s:"Algernon is a white mouse who can beat him in the maze." },
+{ id:"d5", s:"After the operation his intellect grows very quickly." },
+{ id:"d6", s:"He realises that his workmates were laughing at him." },
+{ id:"d7", s:"His reports become introspective and full of feeling." },
+{ id:"d8", s:"The deterioration begins with the mouse and ends with the man." }
+];
+
+/* ==================== 3–4 · QUICKREADS =====================================
+   Read the report, then it HIDES and the questions run cold. A misread item
+   is retaught at the point of error: the feedback re-quotes the exact line.
+
+   Both passages are ORIGINAL writing composed for this activity in the manner
+   of Charlie's progress reports — see the copyright note above. They are
+   written so the spelling errors are systematic and teachable: phonetic
+   spelling (progris, riport), missing apostrophes, no commas, "no" for "know".
+   =========================================================================== */
+const QUICKREADS = [
+{ id:"qr1", step:"Quickread 1", title:"Before the operation", where:"Progress reports 1–3 · the early voice",
+  intro:"This is Charlie writing before the operation. Read it twice. Do not fix the spelling in your head — the spelling IS the information. When you start the questions the report disappears.",
+  origin:"Written for this activity in the manner of Charlie's early progress reports — not an extract from the story.",
+  passage:`<div class="report">progris riport 1 — martch 5<br><br>
+Dr Strauss says I shud rite down what I think and remembir and evrything that happins to me from now on. I dont no why but he says its importint so they will see if they can use me. I hope they use me.<br><br>
+Miss Kinnian says I lern faster then anybody she ever saw. She is my teacher at the adult center and she is the one who tole them about me. I gess she likes me becaus she is always nice.<br><br>
+They gave me a test today with pictures of ink spillled on cards. I coudnt see any pictures in the ink. I tolld the man I only see ink and he rote something down. I think I faled that test. Im gonna try harder next time so they will pik me.</div>`,
+  items:[
+  { id:"qr1a", q:"Why does Charlie write these reports at all?",
+    opts:["He enjoys writing stories",
+          "A doctor told him to, because the scientists want a record of him",
+          "Miss Kinnian is marking them for his class",
+          "He is writing letters to his family"],
+    a:1, explain:"He is writing because he was instructed to, and because he thinks it will help him be chosen. That matters: the whole story is evidence collected FOR someone else. Charlie never gets to be the audience of his own life.",
+    line:"Dr Strauss says I shud rite down what I think and remembir and evrything that happins to me from now on." },
+  { id:"qr1b", q:"'I hope they use me.' What does this line reveal about Charlie?",
+    opts:["He wants to be useful to other people at any cost",
+          "He is angry at the doctors",
+          "He does not understand what a test is",
+          "He is frightened of the operation"],
+    a:0, explain:"Read the verb: he hopes to be <i>used</i>. Most people would hope to be helped, chosen, or cured. Charlie hopes to be used — and by the end of the story, he has been.",
+    line:"I dont no why but he says its importint so they will see if they can use me. I hope they use me." },
+  { id:"qr1c", q:"'I gess she likes me becaus she is always nice.' What does this show about how Charlie reads people?",
+    opts:["He is suspicious of Miss Kinnian",
+          "He judges feelings from surface behaviour, and assumes nice means friendly",
+          "He knows Miss Kinnian very well",
+          "He does not like his teacher"],
+    a:1, explain:"Charlie reads only the surface. Here it happens to be right — Miss Kinnian does like him. The trap is set for later, when the same method makes him read Joe and Frank's laughter as friendship.",
+    line:"I gess she likes me becaus she is always nice." },
+  { id:"qr1d", q:"The test with 'ink spillled on cards' is a real psychological test. What is it actually asking Charlie to do?",
+    opts:["Copy the shapes accurately",
+          "Say what he imagines in the shapes — there is no right answer",
+          "Count the number of ink spots",
+          "Clean the ink off the cards"],
+    a:1, explain:"It is an inkblot test: the shapes mean nothing, and what you say you see is the data. Charlie says he sees only ink, which is literally true and the one answer the test cannot use.",
+    line:"I coudnt see any pictures in the ink. I tolld the man I only see ink." },
+  { id:"qr1e", q:"'I think I faled that test.' Why is this line quietly sad?",
+    opts:["Charlie really did fail",
+          "The test has no pass or fail, but Charlie has learnt to expect failure",
+          "Charlie is lying to the doctors",
+          "Miss Kinnian will be angry with him"],
+    a:1, explain:"You cannot fail an inkblot test. Charlie assumes failure because failure is what he is used to — that assumption is the inferiority the psychologists will later write about in their notes.",
+    line:"I think I faled that test. Im gonna try harder next time so they will pik me." },
+  { id:"qr1f", q:"Look at the spelling: 'progris riport', 'shud', 'becaus', 'faled'. What kind of mistakes are these?",
+    opts:["Random letters with no pattern",
+          "Charlie writing words the way they SOUND",
+          "Typing errors made by the printer",
+          "American spellings of British words"],
+    a:1, explain:"Every error is phonetic — he spells what he hears. That tells you he can speak the words but has never read them. Naming this pattern is the key to the whole story: when the spelling changes, Charlie has changed.",
+    line:"progris riport 1 — martch 5" },
+  { id:"qr1g", q:"'I dont no why…' — Charlie writes 'no' instead of 'know'. This is best described as:",
+    opts:["A homophone error — two words that sound the same",
+          "A grammar error in the verb tense",
+          "A punctuation error",
+          "A capital letter error"],
+    a:0, explain:"'No' and 'know' sound identical, so a writer spelling by ear cannot tell them apart. Homophone errors are the fingerprint of someone who learnt language through listening — which is exactly Charlie, and exactly many EAL writers.",
+    line:"I dont no why but he says its importint" }
+]},
+{ id:"qr2", step:"Quickread 2", title:"The bakery",
+  where:"The middle reports · after the operation",
+  intro:"Weeks have passed. Read carefully — the writing itself has changed. When you start the questions the report disappears.",
+  origin:"Written for this activity in the manner of Charlie's later progress reports — not an extract from the story.",
+  passage:`<div class="report" style="font-family:Georgia,serif;font-size:16.5px">Progress report 12 — April 30<br><br>
+Today I understood something and I wish I had not.<br><br>
+Joe Carp called me over at lunch and asked me to explain the new mixing machine to Frank. I explained it. I explained it clearly and correctly, and while I was speaking Frank looked at Joe and Joe looked at the floor, and neither of them laughed.<br><br>
+That was what told me. For eleven years they have laughed. I used to think we were friends because they always wanted me at the table and something funny always happened when I was there. Yesterday I would have said that Joe Carp was my best friend in the world.<br><br>
+Now I have to write down the thing I have been avoiding for three days. They were not laughing with me. There was never any joke that I was part of. I was the joke, and I laughed too, because I wanted to be included, and being the joke was the only way in.<br><br>
+I do not know what to do with this. I have gained something and lost something and nobody warned me that they would arrive together.</div>`,
+  items:[
+  { id:"qr2a", q:"What has actually changed at the bakery in this report?",
+    opts:["Joe and Frank have started being cruel to Charlie",
+          "Charlie has become clever enough to understand what was always happening",
+          "Charlie has been given a new job",
+          "Joe and Frank have left the bakery"],
+    a:1, explain:"Nothing changed in their behaviour — the change is entirely in Charlie. The cruelty was always there; only now can he read it. That is what makes the moment a tragedy rather than an argument.",
+    line:"For eleven years they have laughed." },
+  { id:"qr2b", q:"'and neither of them laughed.' Why is the ABSENCE of laughter the clue?",
+    opts:["They were being polite for once",
+          "Charlie explained it correctly, so there was nothing to laugh at — which proves the laughter was always at his mistakes",
+          "They could not hear him",
+          "They were angry with him"],
+    a:1, explain:"This is inference at its sharpest. The silence is evidence. If they laugh when he fails and not when he succeeds, then he was the joke. Charlie works this out from a gap — from something that did not happen.",
+    line:"I explained it clearly and correctly, and while I was speaking Frank looked at Joe and Joe looked at the floor, and neither of them laughed." },
+  { id:"qr2c", q:"'I was the joke, and I laughed too'. What is the most painful part of this admission?",
+    opts:["That Charlie has a bad memory",
+          "That Charlie joined in with his own humiliation, without knowing",
+          "That Joe and Frank were funny",
+          "That Charlie no longer works at the bakery"],
+    a:1, explain:"He was not only mocked; he participated. Keyes puts the cruelty and Charlie's own eagerness in a single sentence, so the reader cannot separate them.",
+    line:"I was the joke, and I laughed too, because I wanted to be included, and being the joke was the only way in." },
+  { id:"qr2d", q:"Compare this report with the first one. What has changed about the WRITING?",
+    opts:["It is shorter",
+          "Correct spelling, full punctuation, and long sentences with several clauses",
+          "It is written by a different character",
+          "It uses more slang"],
+    a:1, explain:"Count the commas. Look at the subordinate clauses ('because I wanted to be included…'). Keyes never tells us Charlie's IQ has risen — he shows it in the sentence structure. The form of the writing is the characterisation.",
+    line:"I was the joke, and I laughed too, because I wanted to be included, and being the joke was the only way in." },
+  { id:"qr2e", q:"'Today I understood something and I wish I had not.' This opening line sets up which of the story's big ideas?",
+    opts:["Intelligence and happiness do not arrive together",
+          "Science is always wrong",
+          "Friendship is impossible",
+          "Bakeries are unpleasant places to work"],
+    a:0, explain:"This is the story's central argument in nine words, and it is worth memorising as your thesis: understanding is not the same as being better off. 'Science is always wrong' overreaches — the operation works exactly as promised.",
+    line:"Today I understood something and I wish I had not." },
+  { id:"qr2f", q:"'I have gained something and lost something and nobody warned me that they would arrive together.' The lack of commas in this sentence is:",
+    opts:["A mistake Charlie has made",
+          "Deliberate — the rush of clauses makes the two events feel simultaneous",
+          "Proof his intelligence is already declining",
+          "Copied from the first report"],
+    a:1, explain:"By now Charlie punctuates perfectly, so a missing comma is a choice, not an error. Running the clauses together makes gain and loss feel like one event. Notice the difference: early Charlie's errors are involuntary; late Charlie's are style.",
+    line:"I have gained something and lost something and nobody warned me that they would arrive together." },
+  { id:"qr2g", q:"Based on this report, what is most likely to happen next at the bakery?",
+    opts:["Joe and Frank will apologise",
+          "Charlie will become the manager",
+          "The workers will want Charlie gone, because he now shows up what they are",
+          "Nothing will change"],
+    a:2, explain:"The best-supported prediction follows from the discomfort in the room: Joe looking at the floor is shame, and shame in a group usually turns outward. In the story the workers do sign a petition to have him removed.",
+    line:"Frank looked at Joe and Joe looked at the floor" }
+]}];
+
+/* ==================== 5 · FIGURATIVE → LITERAL =============================
+   Two steps per item: (1) what does it actually mean, (2) which feature is
+   doing the work. Quotations here are short phrases inside original
+   commentary; the longer example sentences are written for this activity.
+   =========================================================================== */
+const FIG_TECHS = ["Simile — compares using 'like' or 'as'",
+                   "Metaphor — says one thing IS another",
+                   "Symbol — an object that carries a bigger idea",
+                   "Motif — an image that keeps returning",
+                   "Irony — the opposite of what is expected",
+                   "Foreshadowing — an early hint of what is coming"];
+const FIG_ITEMS = [
+{ id:"fig1", quote:"the maze", page:"the racing tests",
+  meaning:{ opts:["A garden puzzle Charlie visits on the weekend",
+                  "The test Algernon runs — and, standing for more than itself, the trap Charlie is also inside",
+                  "A drawing on the wall of the laboratory",
+                  "The corridors of the bakery"],
+    a:1, explain:"Charlie races a mouse through a maze, and later is put through paper versions of the same thing. A maze is a problem built by someone else, with one exit they already know. That is Charlie's whole situation." },
+  tech:{ opts:[0,2,3,4], a:1, explain:"An ordinary object carrying the story's biggest idea is a symbol. Test yourself: if you can swap the object for another and lose meaning, it is a symbol. Swap the maze for a running track and the trap disappears." } },
+{ id:"fig2", quote:"Algernon", page:"throughout",
+  meaning:{ opts:["Simply the laboratory's pet",
+                  "Charlie's rival, then his mirror — whatever happens to the mouse is about to happen to the man",
+                  "A doctor at the university",
+                  "The name of the operation"],
+    a:1, explain:"Algernon starts as competition (the mouse keeps winning), becomes company, and ends as prophecy. When the mouse's behaviour turns erratic, the reader knows Charlie's fate before Charlie does." },
+  tech:{ opts:[0,2,4,5], a:3, explain:"The mouse's decline arrives BEFORE Charlie's — an early hint of what is coming, which is foreshadowing. It is also structural: Keyes gives you a preview so that you read Charlie's last reports already grieving." } },
+{ id:"fig3", quote:"flowers on Algernon's grave", page:"the final report",
+  meaning:{ opts:["Charlie has become a gardener",
+                  "A request for someone to remember a creature the scientists treated as equipment",
+                  "A description of the laboratory garden",
+                  "A joke Charlie makes"],
+    a:1, explain:"The mouse was dissected and discarded. Charlie — who by now can barely write — asks for it to be treated as something that mattered. He is asking, indirectly, for the same for himself." },
+  tech:{ opts:[0,2,4,5], a:1, explain:"Flowers on a grave stand for remembrance and for dignity given to the dead. The object carries far more than itself, which makes it a symbol — and the story is named after it, which tells you Keyes thought so too." } },
+{ id:"fig4", quote:"a vacuous smile", page:"the psychologists' language",
+  meaning:{ opts:["A warm and friendly smile",
+                  "An empty smile — the phrase describes Charlie from the outside, as a specimen",
+                  "A painful smile",
+                  "A smile in a photograph"],
+    a:1, explain:"Watch WHO uses this language. Charlie never calls his own smile empty. The vocabulary belongs to people observing him, and it is doing something cruel while sounding scientific." },
+  tech:{ opts:[0,1,2,4], a:3, explain:"It is ironic: the clinical, educated word is used to dismiss a human being, so the language that claims to be objective is the least humane in the story. Keep this one — it is a strong essay point." } },
+{ id:"fig5", quote:"the Algernon–Gordon Effect", page:"the scientific report Charlie writes",
+  meaning:{ opts:["A new medicine",
+                  "Charlie's own discovery: that artificially raised intelligence collapses in proportion to how far it was raised",
+                  "The name of the university department",
+                  "A maze-running record"],
+    a:1, explain:"At the height of his intelligence Charlie writes the scientific paper that predicts his own destruction — and names it after himself and the mouse. He is author and subject at once." },
+  tech:{ opts:[0,2,4,5], a:2, explain:"Deeply ironic: the gift is what lets him see the gift is temporary. The cleverer he becomes, the more clearly he can measure his own coming loss — a cruelty no less intelligent person could have suffered." } },
+{ id:"fig6", quote:"hands", page:"the reports, repeatedly",
+  meaning:{ opts:["Charlie injures his hand at work",
+                  "Hands keep returning — kneading dough, holding a pen, the surgeon's hands — as the image of what a person is for",
+                  "Charlie learns to play the piano",
+                  "A clock in the laboratory"],
+    a:1, explain:"Charlie's hands do the work the world values him for: mixing, cleaning, carrying. His hands stay skilled while his mind rises and falls, which quietly asks whether his worth ever depended on his intelligence at all." },
+  tech:{ opts:[0,1,3,5], a:2, explain:"A recurring image across a whole text is a motif. A symbol can appear once; a motif has to come back. Track it and you have a paragraph: hands at the bakery, hands on the pen, the surgeon's hands." } },
+{ id:"fig7", quote:"Charlie's spelling", page:"the whole story",
+  meaning:{ opts:["Careless proofreading by the publisher",
+                  "The measuring instrument: the reader tracks Charlie's mind by watching his spelling and punctuation",
+                  "A joke about American English",
+                  "Evidence that Charlie is lazy"],
+    a:1, explain:"Errors climb away and then come back. You never need to be told Charlie's IQ, because you are reading it. This is the single most important craft choice in the story." },
+  tech:{ opts:[1,2,3,5], a:0, explain:"The writing does not resemble his mind — it IS his mind on the page. That direct equivalence is metaphor doing structural work: form becomes character." } },
+{ id:"fig8", quote:"I dont want to be smart no more", page:"the closing reports",
+  meaning:{ opts:["Charlie has decided to leave school",
+                  "The old spelling has returned inside a sentence that shows he can still remember being clever",
+                  "Charlie is angry with Miss Kinnian",
+                  "Charlie has forgotten everything"],
+    a:1, explain:"The double negative and the missing apostrophe are early-Charlie; the self-awareness is late-Charlie. Both are on the page at once, which is why the ending hurts — he is conscious of the loss while losing." },
+  tech:{ opts:[0,2,4,5], a:2, explain:"Bitter irony: to want intelligence is what began the story, and to have enough intelligence left to reject it is the cruellest possible ending. Notice the sentence works because of, not despite, its grammar errors." } }
+];
+
+/* ==================== 6 · VOICE FINGERPRINT ================================
+   Unattributed lines → who is speaking → what gave it away. All lines are
+   written for this activity; each is built around ONE nameable feature, so
+   the student learns to point at the words rather than guess the vibe.
+   =========================================================================== */
+const VOICE_WHO = ["Charlie — before the operation","Charlie — at his cleverest","Charlie — declining",
+                   "Miss Kinnian","Dr Strauss or Professor Nemur","Joe Carp and Frank Reilly"];
+const VOICE_ITEMS = [
+{ id:"vo1", line:"Their going to see if they can use me and I hope they pik me becaus I want to be smart.", page:"early voice", a:0,
+  whoExplain:"Early Charlie. Phonetic spelling ('pik', 'becaus'), the homophone error ('Their' for 'They're'), and one long unpunctuated sentence joined with 'and'.",
+  feat:{ opts:["Phonetic spelling and no punctuation between clauses",
+               "Long subordinate clauses","Formal scientific vocabulary","Sarcastic tone"],
+    a:0, explain:"Spell it aloud and it works — that is the test for phonetic spelling. Add the missing apostrophe in 'Their' and you have the second fingerprint: he writes by ear, not by eye." } },
+{ id:"vo2", line:"The results are not statistically significant, and I would caution against publishing them at this stage.", page:"the laboratory", a:4,
+  whoExplain:"A scientist. Hedged, cautious, technical — 'statistically significant', 'I would caution against'. Nobody else in the story talks in conditional verbs.",
+  feat:{ opts:["Phonetic spelling","Technical vocabulary and hedging verbs ('would caution')",
+               "Short blunt commands","Warm encouragement"],
+    a:1, explain:"Two fingerprints at once: the technical noun phrase, and the hedge. Hedging is how scientists protect themselves from being wrong — worth noticing, because these two men are never protecting Charlie." } },
+{ id:"vo3", line:"You've worked so hard, Charlie. I'm proud of you — I want you to know that, whatever happens next.", page:"the adult centre", a:3,
+  whoExplain:"Miss Kinnian. She uses his name, speaks in the second person about his effort rather than his results, and adds a clause that quietly braces him for bad news.",
+  feat:{ opts:["Direct address by name, praise for effort, and a gentle warning clause",
+               "Scientific hedging","Mockery disguised as friendliness","Phonetic spelling"],
+    a:0, explain:"Praise for EFFORT, not for cleverness, is the giveaway — it is the only kind of praise in the story that would still be true after Charlie declines." } },
+{ id:"vo4", line:"Hey Charlie, do us a favour and go ask the boss for a left-handed dough hook. Go on. He'll know what you mean.", page:"the bakery", a:5,
+  whoExplain:"Joe and Frank. A friendly opening ('do us a favour'), an invented object, and an instruction that sends Charlie away to be laughed at. Cruelty wearing the grammar of friendship.",
+  feat:{ opts:["Formal vocabulary","Friendly framing around an instruction designed to humiliate",
+               "Long subordinate clauses","Phonetic spelling"],
+    a:1, explain:"The trick is in the tone, not the words: nothing here is insulting on its own. This is why Charlie cannot detect it — you have to read intention, not vocabulary. Point at 'Go on.' — the push is the tell." } },
+{ id:"vo5", line:"I find myself increasingly aware that intelligence without the capacity to give or receive affection is a peculiarly barren achievement.", page:"the peak", a:1,
+  whoExplain:"Charlie at his cleverest. Abstract nouns stacked up ('intelligence', 'capacity', 'affection', 'achievement'), and the adverb 'peculiarly' doing precise work.",
+  feat:{ opts:["Abstract nouns and precise adverbs in one long controlled sentence",
+               "Phonetic spelling","Blunt commands","Warm second-person address"],
+    a:0, explain:"Notice what this voice has LOST as well as gained: there is no 'I hope' here, no warmth, no other person named. Charlie writes about affection in the abstract at exactly the point when he has none." } },
+{ id:"vo6", line:"I reread my old riports today. I could of done better. Im sorry I dont rite so good now but I try.", page:"the closing reports", a:2,
+  whoExplain:"Declining Charlie. The errors are back ('riports', 'could of', missing apostrophes) — but so is the apology, which early Charlie never made, because early Charlie never knew there was anything to apologise for.",
+  feat:{ opts:["Returning spelling errors combined with self-awareness",
+               "Technical vocabulary","Mockery","Praise for effort"],
+    a:0, explain:"This is the fingerprint students most often miss. Declining Charlie is NOT the same as early Charlie: the spelling matches, the awareness does not. Naming that difference is a strong essay point." } },
+{ id:"vo7", line:"The subject exhibits a marked deterioration in fine motor coordination and an increasing apathy toward the test protocols.", page:"the laboratory", a:4,
+  whoExplain:"A scientist again — and look at the word 'subject'. Charlie has a name, and this sentence refuses to use it.",
+  feat:{ opts:["Warm direct address","Depersonalising vocabulary: a person described as 'the subject'",
+               "Phonetic spelling","Friendly framing"],
+    a:1, explain:"Grammar as ethics. The passive, nominalised style removes the human being from a report that is entirely about a human being. Compare it with Miss Kinnian saying 'Charlie' — same man, two worlds." } },
+{ id:"vo8", line:"Miss Kinnian says I lern faster then anybody and that made me feel good all day.", page:"early voice", a:0,
+  whoExplain:"Early Charlie. The homophone error 'then' for 'than', the simple coordination with 'and', and the plain report of the feeling: it made him feel good, and that is the whole thought.",
+  feat:{ opts:["Homophone error plus simple 'and' coordination",
+               "Subordinate clauses","Technical vocabulary","Irony"],
+    a:0, explain:"Early Charlie joins ideas with 'and'; late Charlie joins them with 'because', 'although', 'while'. Watching the conjunctions change is a way to measure the character with your finger on the page." } }
+];
+
+/* ==================== 7 · EVIDENCE BUILDER =================================
+   The ELC "Use of evidence" ladder: find it → explain it → embed it → make
+   the sentence explain something.
+   Segment roles: gold = the evidence; ok = supports but weaker; frame =
+   introduces the claim, not evidence; other = evidence for a DIFFERENT
+   question; plain = connecting words. Every segment carries coded feedback.
+   Passages are original writing for this activity (see the copyright note).
+   =========================================================================== */
+const EV_LADDER = [
+ { lv:"Level 1", text:"I can find quotes that relate to an idea",
+   hint:"Ask: which words actually SHOW the idea? Watch the switch-words — 'Joe said…' vs 'But I thought…' tell you whose view you are inside." },
+ { lv:"Level 2", text:"I can explain why a quote is relevant",
+   hint:"Stems: 'This shows… because…' · 'Charlie realises… so this quote gives his reason…' · Beware answers that are TRUE but do not answer THE question." },
+ { lv:"Level 3", text:"I can embed quotes inside my own sentence",
+   hint:"Trim the quote to its key words. Read the whole sentence back — if it does not flow as ONE sentence, re-pick. Stem + “quote” + ending." },
+ { lv:"Level 4", text:"I can build a full PEEL paragraph around the evidence",
+   hint:"Point, Evidence, Explain, Link. The Explain must say what the words DO to the reader; the Link must reach a bigger idea, not just repeat the Point." }
+];
+const EV_ROUNDS = [
+{ id:"r1", mode:"question", title:"Round 1 — whose reason is it?",
+  where:"the bakery, after the operation",
+  origin:"Written for this activity in the manner of the story — not an extract.",
+  question:"According to Charlie, why did the men at the bakery want him gone?",
+  qNote:"Click the part (or parts) of the passage that answer the question, then press Check. Careful — the passage contains TWO explanations, and only one of them is Charlie's.",
+  pageRef:"original passage",
+  segs:[
+  { t:"Gimpy told me it was because I made mistakes with the dough mixer", role:"frame",
+    fb:"That names WHOSE explanation is coming — useful framing, but it is not yet a reason from Charlie. Read on." },
+  { t:"and that the men were only thinking of the bakery.", role:"other",
+    fb:"That is Gimpy's explanation, not Charlie's. The question asks what CHARLIE thinks — watch the switch-words." },
+  { t:"But I have read the petition,", role:"frame",
+    fb:"'But' signals the switch to Charlie's view. Keep going — the reason itself is in the next words." },
+  { t:"and there are eleven names on it, and every one of them is a man who used to buy me a drink.", role:"gold",
+    fb:"That is it — the men who befriended him signed to remove him. Charlie's evidence is the list itself." },
+  { t:"They are not frightened of my mistakes.", role:"gold",
+    fb:"Yes. Charlie directly rejects Gimpy's explanation, which is exactly what the question is asking for." },
+  { t:"They are frightened of me being right.", role:"gold",
+    fb:"The strongest line in the passage — Charlie names the real cause: his competence, not his errors." },
+  { t:"A man can forgive you for being slower than him.", role:"ok",
+    fb:"It supports the answer and it is quotable, but it generalises rather than giving Charlie's specific reason." },
+  { t:"Nobody forgives you for the other thing.", role:"ok",
+    fb:"Powerful, and it belongs in an essay — but on its own it is a conclusion, not the reason. Pair it with the line before it." },
+  { t:"I went back to my station and finished the shift.", role:"plain",
+    fb:"Plot detail closing the scene. It is not evidence for anything on its own." }],
+  l2:{ q:"You found 'They are frightened of me being right.' WHY is this the right evidence for the question?",
+    opts:[
+    { t:"It gives Charlie's own reason: the men resent his new competence, not his old mistakes.", q:"good",
+      fb:"Exactly — and it connects the quote back to the question, which IS the explanation. The connection is the skill." },
+    { t:"It shows the bakery is an unfriendly workplace.", q:"retell",
+      fb:"True, but it does not answer THIS question. The question asks for Charlie's reason, not a description of the bakery. True-but-off-target is the most common evidence mistake." },
+    { t:"It proves that Gimpy was lying to Charlie.", q:"wrong",
+      fb:"Overreach in the wrong direction — Gimpy may believe his own explanation. The passage shows disagreement, not proof of a lie." },
+    { t:"It proves that all workers hate intelligent people.", q:"stretch",
+      fb:"Eleven bakery workers cannot prove anything about all workers. A claim has to stay inside what the evidence can carry." }] },
+  builder:{
+    intro:"Now embed it. Build ONE sentence: a stem, a trimmed quote, and an ending. Read the preview back — it has to flow as a single sentence.",
+    stems:[
+    { id:"st1", t:"Charlie concludes that his workmates resent him because they are", q:"good", accepts:["f1"], fb:"" },
+    { id:"st2", t:"For Charlie, the petition proves the men are", q:"good", accepts:["f1"], fb:"" },
+    { id:"st3", t:"This quote shows that the men are angry because they are", q:"point", accepts:["f1"],
+      fb:"Do not point at the quote ('This quote shows…'). State the idea and let the quote sit inside your sentence." }],
+    frags:[
+    { id:"f1", t:"frightened of me being right", q:"good", fb:"" },
+    { id:"f2", t:"They are not frightened of my mistakes. They are frightened of me being right. A man can forgive you for being slower than him", q:"long",
+      fb:"Three whole sentences cannot sit inside your own sentence. Trim the quote to its key words." },
+    { id:"f3", t:"frightened", q:"short",
+      fb:"One word cannot carry the meaning — the reader needs enough of the quote to see what they are frightened OF." },
+    { id:"f4", t:"eleven names on it", q:"nofit",
+      fb:"Read it back: 'because they are “eleven names on it”' does not flow. The quote has to continue your sentence's grammar." }],
+    tails:[
+    { id:"t1", t:", and the eleven signatures on the petition are all from men who “used to buy me a drink”.", q:"bonus", fb:"" },
+    { id:"t2", t:", which suggests his new competence threatens them more than his old errors ever did.", q:"good", fb:"" },
+    { id:"t3", t:", and that is what the quote proves.", q:"point",
+      fb:"'That is what the quote proves' points at the quote instead of explaining it. Say what it tells us about the men, or about Charlie." },
+    { id:"t4", t:", and then he went back to his station and finished the shift.", q:"retell",
+      fb:"That ending slides into retelling the plot. Stay with the question." }] } },
+
+{ id:"r2", mode:"idea", title:"Round 2 — evidence for an idea",
+  where:"the final reports",
+  origin:"Written for this activity in the manner of Charlie's closing progress reports — not an extract.",
+  question:"Choose one of the story's key ideas, then gather the evidence for it from this passage.",
+  qNote:"Pick your idea first. Then click the part (or parts) of the passage that are evidence for THAT idea. The same passage holds evidence for all three — the skill is matching the right line to the right idea.",
+  pageRef:"original passage",
+  ideas:[ {id:"know", label:"Intelligence is not happiness"},
+          {id:"dign", label:"Dignity and being used"},
+          {id:"mirr", label:"Algernon as Charlie's mirror"} ],
+  segs:[
+  { t:"Algernon died today and I put him in a box and berried him in the back yard.",
+    roles:{know:"other", dign:"gold", mirr:"gold"},
+    fbs:{know:"A burial is about dignity and about the mouse's fate — not directly about intelligence and happiness.",
+         dign:"Yes — the laboratory dissected the mouse; Charlie buries it. He gives the dignity the scientists withheld.",
+         mirr:"Yes — the mouse's death is the reader's warning about Charlie. It arrives first, on purpose."} },
+  { t:"The lab wanted to cut him up some more but I said no.",
+    roles:{know:"other", dign:"gold", mirr:"ok"},
+    fbs:{know:"This is about how a living thing is treated, not about whether cleverness makes you happy.",
+         dign:"The strongest line for this idea — a refusal, from a man who has never refused anyone anything.",
+         mirr:"It supports the mirror reading, but the mirroring is clearest in what the death predicts."} },
+  { t:"I no I was smart for a wile and I no I am not smart now.",
+    roles:{know:"gold", dign:"ok", mirr:"other"},
+    fbs:{know:"Yes — Charlie can measure his own loss. Knowing is exactly what makes it unbearable.",
+         dign:"It touches dignity, but it is really about awareness. There are stronger lines for dignity above.",
+         mirr:"About Charlie alone — the mirror idea needs a line that puts him beside Algernon."} },
+  { t:"Thats the werst part, that I no.",
+    roles:{know:"gold", dign:"other", mirr:"other"},
+    fbs:{know:"The clinching line. Not the losing, but the knowing — that is the story's argument in six words.",
+         dign:"Powerful, but it is about awareness rather than about being treated as a person.",
+         mirr:"No mouse here. Save this one for the intelligence-and-happiness idea."} },
+  { t:"Dr Strauss came to the door but I dint let him in becaus I dont want him to see me like this.",
+    roles:{know:"ok", dign:"gold", mirr:"other"},
+    fbs:{know:"It shows awareness, so it supports the idea — but the feeling driving it is shame, which is dignity.",
+         dign:"Yes — Charlie takes control of who is allowed to look at him. Compare it with the reports where he begged to be used.",
+         mirr:"Strauss is not the mirror; Algernon is."} },
+  { t:"I dont want to be a burdin on anybody.",
+    roles:{know:"other", dign:"ok", mirr:"other"},
+    fbs:{know:"Not about intelligence and happiness — about how he wants to be seen.",
+         dign:"It supports the idea, though 'burden' is his fear rather than an act of dignity. The refusals above are stronger.",
+         mirr:"No connection to the mouse."} },
+  { t:"P.S. please if you get a chanse put some flowrs on Algernons grave.",
+    roles:{know:"other", dign:"gold", mirr:"gold"},
+    fbs:{know:"The famous last line, but it is not about happiness — it is about remembrance.",
+         dign:"Yes. The last thing Charlie does is ask for dignity for someone else. Note the returned spelling errors sitting inside the kindest sentence in the story.",
+         mirr:"Yes — and notice he asks for the mouse, not for himself. The mirror is complete: what he wants for Algernon is what the reader wants for him."} }],
+  l2s:{
+   know:{ q:"You chose 'Thats the werst part, that I no.' WHY is this evidence that intelligence is not happiness?",
+     opts:[
+     { t:"It shows that awareness itself is the source of the pain — the intelligence he gained is what lets him suffer the loss.", q:"good",
+       fb:"Exactly. The quote does not just describe sadness; it locates the cause in knowing. That is the connection the question wanted." },
+     { t:"It shows that Charlie is sad at the end of the story.", q:"retell",
+       fb:"True, but any line could show that. Say WHAT about intelligence makes him sad — otherwise you are summarising, not explaining." },
+     { t:"It proves the operation should never have been attempted.", q:"stretch",
+       fb:"That is your opinion arriving too early. The quote supports it, but it does not prove it — keep the claim inside the evidence." },
+     { t:"It shows Charlie has forgotten how to spell.", q:"wrong",
+       fb:"The spelling is evidence for a different point (the decline). This question asks about intelligence and happiness." }] },
+   dign:{ q:"You chose 'The lab wanted to cut him up some more but I said no.' WHY is this evidence about dignity?",
+     opts:[
+     { t:"Charlie refuses to let a living thing be treated as equipment — and it is the first time in the story he refuses anyone anything.", q:"good",
+       fb:"Exactly — and the comparison with early Charlie ('I hope they use me') is what turns this into analysis rather than description." },
+     { t:"It shows Charlie liked Algernon.", q:"retell",
+       fb:"True but thin. Affection alone is not dignity — the point is the refusal, and who he is refusing." },
+     { t:"It proves the scientists were evil.", q:"stretch",
+       fb:"Overreach. Dissection is standard laboratory practice; the story's criticism is subtler than 'evil', and your claim has to stay inside the evidence." },
+     { t:"It shows Charlie is losing his intelligence.", q:"wrong",
+       fb:"That is a different idea. This question asks about dignity." }] },
+   mirr:{ q:"You chose 'Algernon died today…'. WHY is this evidence that the mouse mirrors Charlie?",
+     opts:[
+     { t:"The mouse's decline and death arrive before Charlie's, so the reader already knows what is coming for him.", q:"good",
+       fb:"Exactly — that is foreshadowing described precisely. Naming the ORDER of events is what makes this an explanation." },
+     { t:"It shows that mice do not live very long.", q:"wrong",
+       fb:"That is a fact about mice, not about the story's structure." },
+     { t:"It shows that Charlie is sad about Algernon.", q:"retell",
+       fb:"True, but it is the mirroring the question asks about — what the mouse's fate tells us about Charlie's." },
+     { t:"It proves that the experiment was a complete failure.", q:"stretch",
+       fb:"The experiment worked exactly as designed; that is the horror. Do not stretch the claim past the evidence." }] } },
+  builders:{
+   know:{ intro:"Embed it. Build ONE sentence about intelligence and happiness.",
+    stems:[{ id:"k1", t:"Keyes locates Charlie's suffering not in his loss but in his awareness of it, since the worst part is", q:"good", accepts:["kf1"], fb:"" },
+           { id:"k2", t:"For Charlie the cruelty of the experiment is that he can still", q:"good", accepts:["kf2"], fb:"" },
+           { id:"k3", t:"This quote shows that Charlie is sad because", q:"point", accepts:["kf1","kf2"],
+             fb:"'This quote shows' points at the quote. Lead with the idea and let the quote sit inside." }],
+    frags:[{ id:"kf1", t:"that I no", q:"good", fb:"" },
+           { id:"kf2", t:"no I was smart for a wile", q:"good", fb:"" },
+           { id:"kf3", t:"I no I was smart for a wile and I no I am not smart now. Thats the werst part, that I no", q:"long",
+             fb:"Two sentences is too much to embed. Trim to the words that carry the idea." },
+           { id:"kf4", t:"werst", q:"short", fb:"A single word cannot carry the idea — the reader cannot see what is worst." }],
+    tails:[{ id:"kt1", t:" — the intelligence he was given is precisely what allows him to measure its loss.", q:"good", fb:"" },
+           { id:"kt2", t:", and the returning spelling errors let the reader watch the decline he is describing.", q:"bonus", fb:"" },
+           { id:"kt3", t:", and that is what the quote proves.", q:"point",
+             fb:"Pointing at the quote again. Say what it reveals about intelligence, or about Charlie." },
+           { id:"kt4", t:", and then he buried Algernon in the back yard.", q:"retell",
+             fb:"Plot creep — that belongs in a different paragraph about a different idea." }] },
+   dign:{ intro:"Embed it. Build ONE sentence about dignity and being used.",
+    stems:[{ id:"d1", t:"Charlie's final act of protection is a refusal, when he tells the laboratory", q:"good", accepts:["df1"], fb:"" },
+           { id:"d2", t:"The man who once hoped to be used ends the story insisting", q:"good", accepts:["df1"], fb:"" },
+           { id:"d3", t:"This quote shows that Charlie is kind because he says", q:"point", accepts:["df1"],
+             fb:"Do not announce the quote. State the idea — kindness is not the point here, refusal is." }],
+    frags:[{ id:"df1", t:"but I said no", q:"good", fb:"" },
+           { id:"df2", t:"The lab wanted to cut him up some more but I said no. I dont want to be a burdin on anybody", q:"long",
+             fb:"Too long, and the second sentence is about a different feeling. Trim it." },
+           { id:"df3", t:"no", q:"short", fb:"One word, and an ambiguous one. The reader cannot tell what is being refused." },
+           { id:"df4", t:"put some flowrs on Algernons grave", q:"nofit",
+             fb:"Read it back: 'he tells the laboratory “put some flowrs on Algernons grave”' does not fit — that line is addressed to the reader, not the lab." }],
+    tails:[{ id:"dt1", t:", a refusal that would have been unthinkable for the man who wrote “I hope they use me”.", q:"bonus", fb:"" },
+           { id:"dt2", t:", which grants Algernon the dignity the experiment denied them both.", q:"good", fb:"" },
+           { id:"dt3", t:", and that is what the quote proves.", q:"point", fb:"Pointing at the quote. Say what the refusal reveals." },
+           { id:"dt4", t:", and after that Dr Strauss came to the door.", q:"retell", fb:"Retelling the next event is not explaining this one." }] },
+   mirr:{ intro:"Embed it. Build ONE sentence about Algernon as Charlie's mirror.",
+    stems:[{ id:"m1", t:"Keyes has the mouse decline first, so that by the time Charlie writes that Algernon", q:"good", accepts:["mf1"], fb:"" },
+           { id:"m2", t:"The reader learns Charlie's fate from the mouse, whose death Charlie records plainly:", q:"good", accepts:["mf1"], fb:"" },
+           { id:"m3", t:"This quote shows that Algernon is important because", q:"point", accepts:["mf1"],
+             fb:"'Important' names nothing. Say what the mouse DOES for the reader's understanding." }],
+    frags:[{ id:"mf1", t:"died today", q:"good", fb:"" },
+           { id:"mf2", t:"Algernon died today and I put him in a box and berried him in the back yard. The lab wanted to cut him up some more", q:"long",
+             fb:"Two sentences. Trim to the words the sentence actually needs." },
+           { id:"mf3", t:"box", q:"short", fb:"One noun carries none of the meaning." },
+           { id:"mf4", t:"Thats the werst part, that I no", q:"nofit",
+             fb:"Read it back — that line is about Charlie's awareness, not about the mouse. Wrong evidence for this idea." }],
+    tails:[{ id:"mt1", t:", the reader already knows exactly what is coming for the man.", q:"good", fb:"" },
+           { id:"mt2", t:", the flat sentence doing the work a scream could not — and the reader, unlike Charlie, has been braced for it since the maze.", q:"bonus", fb:"" },
+           { id:"mt3", t:", and that is what the quote proves.", q:"point", fb:"Pointing at the quote rather than explaining it." },
+           { id:"mt4", t:", and Charlie stopped going to the laboratory.", q:"retell", fb:"Plot, not analysis." }] } } }
+];
+
+/* ==================== 8 · PEEL PARAGRAPH BUILDER (WAGOLL) ==================
+   The program's summative form is the PEEL analytical essay, so the ladder
+   here builds a whole paragraph rather than a single sentence. Each item
+   opens with an annotated WAGOLL (What A Good One Looks Like) so the model
+   is TAUGHT, not merely shown, then the student assembles their own.
+   =========================================================================== */
+const PEEL_PARTS = [
+ { k:"p", label:"Point",    hint:"One sentence answering the question. No quote yet. Name the idea and the technique." },
+ { k:"e", label:"Evidence", hint:"A short quotation, trimmed and embedded so the sentence still flows." },
+ { k:"x", label:"Explain",  hint:"What the WORDS do — to the reader, or to our view of the character. Point at the language." },
+ { k:"l", label:"Link",     hint:"Reach the bigger idea. Do not repeat the Point in different words." }
+];
+const PEEL_ITEMS = [
+{ id:"pe1", focus:"Charlie's spelling as characterisation",
+  question:"How does Keyes show the change in Charlie without ever stating his IQ?",
+  wagoll:`<span class="tagp t-p">P</span>Keyes measures Charlie's mind through the surface of his own writing, so that spelling becomes characterisation.
+   <span class="tagp t-e">E</span>The early reports are spelled by ear — “progris riport” — while the later ones command full punctuation and subordinate clauses.
+   <span class="tagp t-x">X</span>Because the reader decodes the errors before understanding the man, the form of the writing arrives before its content, and we experience Charlie's limitation rather than being told about it.
+   <span class="tagp t-l">L</span>By the closing reports the returning misspellings do the work of an announcement no character is willing to make, which is why the ending needs no explanation to devastate.`,
+  wagollNote:"Read the four moves. The <b>P</b> names idea + technique with no quote. The <b>E</b> embeds a two-word quotation inside the sentence. The <b>X</b> begins with 'Because' and talks about the READER. The <b>L</b> reaches past the paragraph to the ending. Nowhere does it say 'this quote shows'.",
+  bins:{
+   p:[{ t:"Keyes measures Charlie's intelligence through his spelling and punctuation, so the form of the writing becomes the characterisation.", q:"good",
+        fb:"" },
+       { t:"Charlie's spelling changes a lot during the story.", q:"thin",
+        fb:"True, but that is plot. A Point names the IDEA and the TECHNIQUE — what is the spelling doing, and what is it called?" },
+       { t:"In this essay I am going to talk about Charlie's spelling.", q:"meta",
+        fb:"Never announce the essay. Start with the claim itself — the reader can see it is an essay." },
+       { t:"Keyes uses the quote “progris riport” to show Charlie is not clever.", q:"early",
+        fb:"The quotation belongs in the Evidence, not the Point. Keep the Point quote-free so the idea stands alone." }],
+   e:[{ t:"The early reports are spelled by ear — “progris riport” — while the later ones command full punctuation and subordinate clauses.", q:"good",
+        fb:"" },
+       { t:"Charlie writes “progris riport” and later he writes properly.", q:"thin",
+        fb:"The quote is there, but 'writes properly' is vague. Name what changes: punctuation, clause length, conjunctions." },
+       { t:"“progris riport 1 — martch 5. Dr Strauss says I shud rite down what I think and remembir and evrything that happins to me from now on.”", q:"long",
+        fb:"Far too long. Trim a quotation to the few words that carry the point — a long quote makes the marker do your work." },
+       { t:"There are lots of spelling mistakes in the story.", q:"noquote",
+        fb:"No quotation at all. Evidence means the actual words on the page." }],
+   x:[{ t:"Because the reader has to decode the errors before understanding the man, the form arrives before the content, and we experience Charlie's limitation rather than being told about it.", q:"good",
+        fb:"" },
+       { t:"This shows that Charlie is not very intelligent at the start.", q:"thin",
+        fb:"That restates the evidence. Explain what the LANGUAGE does — why show it this way instead of stating an IQ?" },
+       { t:"This quote shows that the author is a very good writer.", q:"meta",
+        fb:"Praising the author is not analysis, and 'this quote shows' points at the quote. Say what the choice achieves." },
+       { t:"Then Charlie has the operation and gets cleverer, and later he goes back to the bakery.", q:"retell",
+        fb:"Retelling the plot. The Explain must stay on the words you just quoted." }],
+   l:[{ t:"By the closing reports the returning misspellings do the work of an announcement no character is willing to make, which is why the ending needs no explanation to devastate.", q:"good",
+        fb:"" },
+       { t:"So that is how Keyes shows Charlie's spelling changing.", q:"repeat",
+        fb:"That repeats the Point in different words. A Link has to REACH — to the ending, to a theme, or to the reader's experience." },
+       { t:"In conclusion, spelling is important in this story.", q:"thin",
+        fb:"'Important' names no idea, and 'in conclusion' belongs at the end of an essay, not a paragraph." },
+       { t:"Algernon the mouse also dies at the end of the story.", q:"retell",
+        fb:"A new plot fact, not a link. Connect the spelling to a bigger idea instead." }] } },
+{ id:"pe2", focus:"The bakery — cruelty disguised as friendship",
+  question:"How does Keyes show that Charlie's workmates were never his friends?",
+  wagoll:`<span class="tagp t-p">P</span>Keyes withholds the cruelty of the bakery until Charlie is clever enough to perceive it, so that the reader discovers it at the same moment he does.
+   <span class="tagp t-e">E</span>The revelation arrives through an absence rather than an event: when Charlie explains the machine correctly, “neither of them laughed”.
+   <span class="tagp t-x">X</span>Because the proof is silence, the reader must infer it exactly as Charlie does, and the shared act of deduction makes his humiliation feel like our own discovery rather than a fact we are given.
+   <span class="tagp t-l">L</span>The scene therefore turns intelligence into a wound: what the operation gives Charlie first is not power but the ability to understand how he has been seen for eleven years.`,
+  wagollNote:"Notice the <b>E</b> quotes only three words, and the <b>X</b> explains why an ABSENCE is stronger evidence than an event. The <b>L</b> moves out to the story's argument about intelligence — it does not repeat the Point.",
+  bins:{
+   p:[{ t:"Keyes withholds the cruelty of the bakery until Charlie can perceive it, so the reader discovers it at the same moment he does.", q:"good", fb:"" },
+       { t:"Joe Carp and Frank Reilly are not nice to Charlie.", q:"thin",
+        fb:"That is a character judgement, not a Point. What is the author DOING, and what technique is he using?" },
+       { t:"This paragraph will explain the bakery scene.", q:"meta",
+        fb:"Do not announce the paragraph. Make the claim." },
+       { t:"When Charlie says “neither of them laughed” we know they were cruel.", q:"early",
+        fb:"The quotation belongs in the Evidence. Keep the Point quote-free." }],
+   e:[{ t:"The revelation arrives through an absence rather than an event: when Charlie explains the machine correctly, “neither of them laughed”.", q:"good", fb:"" },
+       { t:"Charlie says “neither of them laughed”.", q:"thin",
+        fb:"The quotation is right but it is dropped in bare. Give the reader the situation that makes it meaningful." },
+       { t:"“Joe Carp called me over at lunch and asked me to explain the new mixing machine to Frank. I explained it clearly and correctly.”", q:"long",
+        fb:"Too long, and the key words are not in it. Trim to the three words that carry the meaning." },
+       { t:"The men at the bakery used to laugh at Charlie all the time.", q:"noquote",
+        fb:"No quotation. Evidence must be the actual words." }],
+   x:[{ t:"Because the proof is a silence, the reader has to infer it exactly as Charlie does, so his humiliation feels like our own discovery rather than a fact we are handed.", q:"good", fb:"" },
+       { t:"This shows that Joe and Frank were laughing at Charlie, not with him.", q:"thin",
+        fb:"That paraphrases the evidence. Explain the EFFECT — why does Keyes prove it with silence instead of a cruel line of dialogue?" },
+       { t:"This quote shows that bullying is bad and should be stopped.", q:"meta",
+        fb:"A moral judgement about the world, not an analysis of the writing. Stay with what the words do." },
+       { t:"After this the workers sign a petition and Charlie has to leave the bakery.", q:"retell",
+        fb:"Plot. The Explain stays on the quoted words." }],
+   l:[{ t:"The scene turns intelligence into a wound: what the operation first gives Charlie is not power but the ability to understand how he has been seen for eleven years.", q:"good", fb:"" },
+       { t:"This is how Keyes shows the men were not really Charlie's friends.", q:"repeat",
+        fb:"That is the Point again. A Link reaches somewhere new." },
+       { t:"Overall the bakery scene is a very sad part of the story.", q:"thin",
+        fb:"'Very sad' is a review, not analysis. Name the idea the scene serves." },
+       { t:"Miss Kinnian is much kinder to Charlie than Joe and Frank are.", q:"retell",
+        fb:"A comparison with new evidence attached to no claim. Save it for its own paragraph." }] } },
+{ id:"pe3", focus:"Algernon — the mirror and the ending",
+  question:"Why does Keyes end the story with a request about a mouse?",
+  wagoll:`<span class="tagp t-p">P</span>Keyes closes on Algernon rather than Charlie so that the story's final gesture is one of care given rather than pity received.
+   <span class="tagp t-e">E</span>The last line is a postscript, added almost as an afterthought: “put some flowrs on Algernons grave”.
+   <span class="tagp t-x">X</span>Because the misspellings have returned by this point, the sentence performs Charlie's decline and his kindness simultaneously, and the reader is made to feel both in the same breath.
+   <span class="tagp t-l">L</span>What Charlie asks for the mouse is precisely what the story has spent its length asking the reader to grant him, so the title turns out to have been a request all along.`,
+  wagollNote:"The <b>X</b> here does something advanced: it explains the effect of the SPELLING inside the quotation, not just its meaning. The <b>L</b> connects the line to the title — the biggest possible reach without leaving the text.",
+  bins:{
+   p:[{ t:"Keyes closes on Algernon rather than Charlie so the final gesture is care given rather than pity received.", q:"good", fb:"" },
+       { t:"The story ends with Charlie asking for flowers on Algernon's grave.", q:"thin",
+        fb:"That is what happens, not why it matters. A Point makes a claim about the author's choice." },
+       { t:"Now I will explain the ending of the story.", q:"meta",
+        fb:"No announcements. Start with the claim." },
+       { t:"“put some flowrs on Algernons grave” is the saddest line in the story.", q:"early",
+        fb:"The quote belongs in Evidence, and 'saddest' is a review word rather than a claim about technique." }],
+   e:[{ t:"The last line is a postscript, added almost as an afterthought: “put some flowrs on Algernons grave”.", q:"good", fb:"" },
+       { t:"Charlie writes “put some flowrs on Algernons grave”.", q:"thin",
+        fb:"Correct quotation, but tell the reader it is a P.S. — the afterthought form is half the point." },
+       { t:"“P.S. please if you get a chanse put some flowrs on Algernons grave. I dont want to be a burdin on anybody.”", q:"long",
+        fb:"The second sentence is a different idea. Trim to what your paragraph is about." },
+       { t:"At the end Charlie thinks about the mouse.", q:"noquote",
+        fb:"No quotation. This is the one line in the story you should quote exactly." }],
+   x:[{ t:"Because the misspellings have returned by this point, the sentence performs Charlie's decline and his kindness at once, making the reader feel both in the same breath.", q:"good", fb:"" },
+       { t:"This shows that Charlie is a kind person.", q:"thin",
+        fb:"True but thin, and it ignores the spelling. Explain what the ERRORS do inside a sentence this kind." },
+       { t:"This quote shows the author wanted a sad ending.", q:"meta",
+        fb:"Guessing at intention, and pointing at the quote. Describe the effect on the reader instead." },
+       { t:"Charlie had already buried Algernon in the back yard earlier in the report.", q:"retell",
+        fb:"Plot detail. Stay on the words you quoted." }],
+   l:[{ t:"What Charlie asks for the mouse is what the story has spent its length asking the reader to grant him, so the title turns out to have been a request all along.", q:"good", fb:"" },
+       { t:"That is why the story ends with Algernon and not Charlie.", q:"repeat",
+        fb:"That is the Point restated. Reach somewhere the paragraph has not yet been." },
+       { t:"In conclusion, the ending of this story is very effective.", q:"thin",
+        fb:"'Effective' names nothing. Say what it achieves, and for whom." },
+       { t:"Algernon was a white mouse who could run the maze faster than Charlie.", q:"retell",
+        fb:"Plot recap. A Link goes forward to an idea, not backward to events." }] } }
+];
+
+/* ==================== MODULE DIRECTORY ======================================
+   Nothing is ever locked (ELC-Pages house rule: teachers jump around, and a
+   student who wants the writing module first should get it). Order is a
+   suggestion, shown by the numbers.
+   =========================================================================== */
+const MODULES = [
+ { id:"vocab", n:1, t:"Vocabulary preteach", d:"14 unit words, built from their morphemes — before you read", kind:"vocab" },
+ { id:"dict",  n:2, t:"Dictation warm-up",   d:"Hear the sentence, type it, get it marked word by word", kind:"dict" },
+ { id:"qr1",   n:3, t:"Quickread: before the operation", d:"Read it, lose it, prove you understood it", kind:"qr" },
+ { id:"qr2",   n:4, t:"Quickread: the bakery", d:"Inference under pressure — the moment Charlie understands", kind:"qr" },
+ { id:"fig",   n:5, t:"Figurative → literal", d:"Say what it means, then name the technique doing the work", kind:"fig" },
+ { id:"voice", n:6, t:"Voice fingerprint",    d:"Whose line is it? Name the giveaway in the grammar", kind:"voice" },
+ { id:"ev",    n:7, t:"Evidence builder",     d:"Find it, explain it, embed it — the rubric ladder", kind:"ev" },
+ { id:"peel",  n:8, t:"PEEL paragraph builder", d:"An annotated model, then build your own — for the essay", kind:"peel" },
+ { id:"rpt",   n:9, t:"My report",            d:"First-attempt scores. Print it or save as PDF to hand in", kind:"rpt" }
+];
+
+/* ============================================================================
+   ENGINE — knows nothing about the story. State, router, runners, report.
+   Shared shape with the other ELC text-study hubs: change the data above and
+   this all still works.
+   ============================================================================ */
+const KEY=COPY.key;
+function blank(){ return {first:{}, done:{}, evLv:0, deal:{}, name:"", sid:"", startedAt:Date.now()}; }
+let S=blank();
+function load(){ try{ const raw=localStorage.getItem(KEY); if(raw){ const p=JSON.parse(raw); if(p&&typeof p==="object") S=Object.assign(blank(),p);} }catch(e){} }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function resetAll(){ if(confirm("Start again from scratch? This wipes all your saved answers on this device.")){ S=blank(); save(); go("home"); } }
+load();
+
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function recFirst(key, correct){ if(S.first[key]===undefined){ S.first[key]=!!correct; save(); } }
+
+/* ---------- read aloud (the browser's own engine; absent = no buttons) ---------- */
+const SPEAK = {
+  can(){ return typeof window!=="undefined" && "speechSynthesis" in window; },
+  say(text, rate){
+    if(!this.can()||!text) return;
+    const synth=window.speechSynthesis; synth.cancel();
+    const u=new SpeechSynthesisUtterance(String(text));
+    u.lang="en-AU"; u.rate=rate||0.9;
+    const vs=synth.getVoices()||[];
+    const v=vs.find(x=>x.lang&&x.lang.toLowerCase()==="en-au")||vs.find(x=>x.lang&&x.lang.toLowerCase().startsWith("en"));
+    if(v) u.voice=v;
+    try{ synth.speak(u); }catch(e){}
+  },
+  icon:"<svg viewBox='0 0 16 16' aria-hidden='true' focusable='false'>"+
+    "<path d='M7.2 2.6 4.1 5.1H2.2a.7.7 0 0 0-.7.7v4.4c0 .4.3.7.7.7h1.9l3.1 2.5c.45.36 1.1.05 1.1-.53V3.13c0-.58-.65-.89-1.1-.53z'/>"+
+    "<path d='M10.9 5.2a.62.62 0 0 0-.15.87c.38.53.6 1.2.6 1.93s-.22 1.4-.6 1.93a.62.62 0 1 0 1.02.72A4.6 4.6 0 0 0 12.6 8a4.6 4.6 0 0 0-.83-2.65.62.62 0 0 0-.87-.15z'/></svg>",
+  btn(text, cls){
+    if(!this.can()||!text) return "";
+    return "<button type='button' class='say"+(cls?" "+cls:"")+"' data-say=\""+esc(text)+"\" "+
+      "aria-label=\"Listen: "+esc(text).slice(0,60)+"\" title=\"Listen\">"+this.icon+"</button>";
+  }
+};
+document.addEventListener("click",function(e){
+  const b=e.target&&e.target.closest&&e.target.closest(".say");
+  if(!b) return;
+  e.preventDefault(); e.stopPropagation();
+  SPEAK.say(b.getAttribute("data-say"));
+},true);
+
+let screen="home";
+function go(s, arg){
+  screen=s;
+  $("homeBtn").style.display = s==="home" ? "none" : "inline";
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(s==="home") renderHome();
+  else if(s==="vocab") runVocab();
+  else if(s==="dict") runDict();
+  else if(s==="qr") renderQrIntro(arg||"qr1");
+  else if(s==="qr1"||s==="qr2") renderQrIntro(s);
+  else if(s==="fig") runFig();
+  else if(s==="voice") runVoice();
+  else if(s==="ev") renderEv(0);
+  else if(s==="peel") runPeel();
+  else if(s==="rpt") renderReport();
+}
+
+/* ---------- scoring ---------- */
+function keysFor(mod){ return Object.keys(S.first).filter(k=>k.split(".")[0]===mod); }
+function scoreFor(mod){ const ks=keysFor(mod); return {got:ks.filter(k=>S.first[k]).length, total:ks.length}; }
+function plannedTotal(mod){
+  if(mod==="vocab") return VOCAB.length;
+  if(mod==="dict")  return DICTATION.length;
+  if(mod==="qr1")   return QUICKREADS[0].items.length;
+  if(mod==="qr2")   return QUICKREADS[1].items.length;
+  if(mod==="fig")   return FIG_ITEMS.length*2;
+  if(mod==="voice") return VOICE_ITEMS.length*2;
+  if(mod==="ev")    return 6;
+  if(mod==="peel")  return PEEL_ITEMS.length*4;
+  return 0;
+}
+
+/* ---------- HOME ---------- */
+function renderHome(){
+  let h=`<h1>${esc(TEXT.title)}</h1>
+  <p class="sub">${esc(TEXT.author)} · ${esc(TEXT.form)} · ELC English, novel study 1 ${SPEAK.btn(TEXT.title+" by "+TEXT.author)}</p>
+  <div class="panel"><p class="lead" style="margin:0 0 6px">${esc(TEXT.blurb)}</p>
+  <p style="margin:0;font-size:13.5px"><b>The one thing to know before you start:</b> ${esc(TEXT.hook)}</p></div>
+  <p class="lead">Nine activities. Work top to bottom if you like — but nothing is locked, so start
+  wherever your class is. Wrong answers are retried until you get them right;
+  <b>only your first attempt counts on the report</b>.</p>
+  <div class="steps2">`;
+  MODULES.forEach(m=>{
+    const done=!!S.done[m.id], sc=scoreFor(m.id), planned=plannedTotal(m.id);
+    let tag = m.id==="rpt" ? "" :
+      done ? `${sc.got}/${sc.total} first try` :
+      sc.total ? `${sc.total}/${planned} done` : "";
+    h+=`<button class="step ${done?"done":""}" onclick="go('${m.kind}','${m.id}')">
+      <span class="num">${done?"✓":m.n}</span>
+      <span><span class="t">${esc(m.t)}</span><br><span class="d">${esc(m.d)}</span></span>
+      <span class="tag">${esc(tag)}</span></button>`;
+  });
+  h+=`</div><div class="btnrow noprint"><button class="linkbtn" onclick="resetAll()">reset everything on this device</button></div>`;
+  $("body").innerHTML=h;
+}
+const _go=go;
+go=function(s,arg){ if(s==="qr"&&!arg) arg="qr1"; if(s==="qr1"||s==="qr2"){ arg=s; s="qr"; } _go(s,arg); };
+
+/* ---------- GENERIC QUIZ RUNNER ----------
+   cfg: {mod, title, where, items:[{id, stim?, page?, steps:[{key,q,opts,a,explain,requote?}]}]}
+   Mastery loop: a missed item is re-queued; first attempts are recorded once. */
+function runQuizzer(cfg){
+  let queue=cfg.items.slice(), idx=0, stepIdx=0, round=1;
+  function draw(){
+    const item=queue[idx], step=item.steps[stepIdx];
+    const total=cfg.items.reduce((n,it)=>n+it.steps.length,0);
+    const answered=keysFor(cfg.mod).length;
+    let h=`<div class="eyebrow">${esc(cfg.where)}</div><h2>${esc(cfg.title)}</h2>`;
+    h+=`<div class="progress-track"><div class="progress-fill" style="width:${Math.min(100,answered/total*100)}%"></div></div>`;
+    if(round>1) h+=`<p class="lead">Mastery round ${round} — the ones you missed come back until they are right. Your first attempts are already saved.</p>`;
+    if(item.stim) h+=`<div class="stim">${item.stim}${SPEAK.btn(item.sayText||item.stimPlain||"")}${item.page?`<span class="pg">${esc(item.page)}</span>`:""}</div>`;
+    h+=`<p class="q">${esc(step.q)}</p><div class="opts ${step.chips?"chips":""}" id="opts"></div>
+    <div class="feedback" id="fb" aria-live="polite"></div>
+    <button class="btn btn-primary" id="nextBtn" style="display:none"></button>`;
+    $("body").innerHTML=h;
+    const order = step.noShuffle ? step.opts.map((_,i)=>i) : shuffle(step.opts.map((_,i)=>i));
+    order.forEach(oi=>{
+      const b=document.createElement("button");
+      b.className="opt"; b.textContent=step.opts[oi];
+      b.onclick=()=>grade(oi,b);
+      $("opts").appendChild(b);
+    });
+  }
+  function grade(oi,btn){
+    const item=queue[idx], step=item.steps[stepIdx];
+    const correct = oi===step.a;
+    document.querySelectorAll("#opts .opt").forEach(b=>{ b.disabled=true;
+      if(b.textContent===step.opts[step.a]) b.classList.add("right"); });
+    if(!correct) btn.classList.add("wrongpick");
+    recFirst(cfg.mod+"."+item.id+"."+step.key, correct);
+    const fb=$("fb");
+    fb.className="feedback "+(correct?"ok":"bad");
+    fb.innerHTML=(correct?"<b>Correct.</b> ":`<b>Not quite — the answer is “${esc(step.opts[step.a])}”.</b> `)+step.explain
+      +(!correct&&step.requote?`<div class="requote">“${esc(step.requote)}”${SPEAK.btn(step.requote)}</div>`:"");
+    if(!correct) item._requeue=true;
+    const nb=$("nextBtn");
+    nb.style.display="inline-block";
+    nb.textContent = stepIdx<item.steps.length-1 ? "Next part →" : "Next →";
+    nb.onclick=()=>{
+      if(stepIdx<item.steps.length-1){ stepIdx++; draw(); return; }
+      if(item._requeue){ delete item._requeue; queue.push(item); }
+      stepIdx=0; idx++;
+      if(idx>=queue.length){ finish(); }
+      else { if(idx>=cfg.items.length) round=Math.max(round,2); draw(); }
+    };
+  }
+  function finish(){
+    S.done[cfg.mod]=true; save();
+    const sc=scoreFor(cfg.mod), pct=sc.total? sc.got/sc.total : 0;
+    const band = pct>=0.8 ? "Strong reading. Every miss was retaught and retried — the report shows your first-try picture."
+      : pct>=0.6 ? "A good start — here is how to lift it: reread the lines quoted in the feedback, then say out loud WHY the right answer was right."
+      : "Worth a slower second pass. Reread the passage, then come back — the re-quoted lines in the feedback are your map.";
+    $("body").innerHTML=`<h2>${esc(cfg.title)} — done</h2>
+    <div class="panel"><p style="margin:0"><b>${sc.got}/${sc.total} on first attempt.</b> ${band}</p></div>
+    ${cfg.doneNote?`<div class="panel"><p class="lead" style="margin:0">${cfg.doneNote}</p></div>`:""}
+    <div class="btnrow"><button class="btn btn-primary" onclick="go('home')">Back to the hub →</button></div>`;
+  }
+  draw();
+}
+
+/* ---------- 1 · VOCABULARY ----------
+   Each word gets ONE task, dealt once and remembered, so a refresh cannot
+   reroll a build into an easier gap-fill. */
+function dealVocab(){
+  const kinds=["build","mcq","gap"];
+  VOCAB.forEach((v,i)=>{ if(!S.deal[v.w]) S.deal[v.w]=kinds[(i+Math.floor(Math.random()*3))%3]; });
+  save();
+}
+function runVocab(){
+  dealVocab();
+  let queue=VOCAB.slice(), idx=0, round=1;
+  function draw(){
+    if(idx>=queue.length){ finish(); return; }
+    const v=queue[idx], kind=S.deal[v.w];
+    const answered=keysFor("vocab").length;
+    let h=`<div class="eyebrow">Before you read · morpheme matrices</div>
+    <h2>Vocabulary preteach <span style="font-weight:400;color:var(--muted);font-size:14px">(${idx+1}/${queue.length})</span></h2>
+    <div class="progress-track"><div class="progress-fill" style="width:${Math.min(100,answered/VOCAB.length*100)}%"></div></div>`;
+    if(round>1) h+=`<p class="lead">Mastery round ${round} — the words you missed come back until they are right.</p>`;
+    if(kind==="build") h+=drawBuild(v);
+    else if(kind==="mcq") h+=drawMcq(v);
+    else h+=drawGap(v);
+    h+=`<div class="feedback" id="fb" aria-live="polite"></div><div class="btnrow" id="brow"></div>`;
+    $("body").innerHTML=h;
+    if(kind==="build") wireBuild(v);
+    else wireOpts(v,kind);
+  }
+  /* --- assemble the word from its morphemes --- */
+  let picked=[];
+  function drawBuild(v){
+    picked=[];
+    return `<p class="q">Build the word that means: <span style="font-weight:400">${esc(v.meaning)}</span> ${SPEAK.btn(v.meaning)}</p>
+    <p class="lead">Tap the pieces in order. Two of them do not belong to this word.</p>
+    <div class="assembly" id="asm"><span class="ph">Your word appears here.</span></div>
+    <div class="tiles" id="tiles"></div>`;
+  }
+  function wireBuild(v){
+    const all=shuffle(v.tiles.concat(v.decoys));
+    const tl=$("tiles");
+    all.forEach((t,i)=>{
+      const b=document.createElement("button");
+      b.className="tile"; b.dataset.i=i;
+      b.innerHTML=`<b>${esc(t[0])}</b><small>${esc(t[1])}</small>`;
+      b.onclick=()=>{ picked.push({i,t}); b.classList.add("used"); paintAsm(v); };
+      tl.appendChild(b);
+    });
+    $("brow").innerHTML=`<button class="btn btn-primary" onclick="window._vcheck()">Check</button>
+      <button class="btn btn-ghost" onclick="window._vreset()">Clear</button>`;
+    window._vreset=()=>{ picked=[]; document.querySelectorAll("#tiles .tile").forEach(x=>x.classList.remove("used")); paintAsm(v); $("fb").className="feedback"; };
+    window._vcheck=()=>{
+      const want=v.tiles.map(t=>t[0]).join("|");
+      const got=picked.map(p=>p.t[0]).join("|");
+      const ok = want===got;
+      recFirst("vocab."+v.w, ok);
+      const fb=$("fb");
+      if(ok){
+        fb.className="feedback ok";
+        fb.innerHTML=`<b>Correct — ${esc(v.w)}.</b> ${v.note}`;
+        $("brow").innerHTML=`<button class="btn btn-primary" onclick="window._vnext()">Next word →</button>`;
+      } else {
+        v._requeue=true;
+        const extra = picked.some(p=>v.decoys.some(d=>d[0]===p.t[0]))
+          ? "One of your pieces is a decoy — it is a real morpheme, but not one of <i>this</i> word's."
+          : "Right pieces, wrong order — a word is built prefix → root → suffix.";
+        fb.className="feedback bad";
+        fb.innerHTML=`<b>Not yet.</b> ${extra} Clear it and try again.`;
+      }
+    };
+    paintAsm(v);
+  }
+  function paintAsm(v){
+    const asm=$("asm"); if(!asm) return;
+    if(!picked.length){ asm.innerHTML=`<span class="ph">Your word appears here.</span>`; return; }
+    asm.innerHTML="";
+    picked.forEach((p,k)=>{
+      const b=document.createElement("button"); b.className="placed"; b.textContent=p.t[0];
+      b.onclick=()=>{ picked.splice(k,1);
+        const tile=document.querySelector('#tiles .tile[data-i="'+p.i+'"]'); if(tile) tile.classList.remove("used");
+        paintAsm(v); };
+      asm.appendChild(b);
+    });
+  }
+  /* --- meaning → word, and sentence gap --- */
+  function drawMcq(v){
+    return `<p class="q">Which word means: <span style="font-weight:400">${esc(v.meaning)}</span> ${SPEAK.btn(v.meaning)}</p>
+    <div class="opts" id="opts"></div>`;
+  }
+  function drawGap(v){
+    return `<p class="q">Complete the sentence with the right word:</p>
+    <div class="gapline">${esc(v.gap[0])} <span class="blank">?</span> ${esc(v.gap[1])}</div>
+    <div class="opts" id="opts"></div>`;
+  }
+  function wireOpts(v,kind){
+    const others=shuffle(VOCAB.filter(x=>x.w!==v.w)).slice(0,3).map(x=>x.w);
+    const opts=shuffle(others.concat([v.w]));
+    opts.forEach(w=>{
+      const b=document.createElement("button"); b.className="opt"; b.textContent=w;
+      b.onclick=()=>{
+        const ok = w===v.w;
+        recFirst("vocab."+v.w, ok);
+        document.querySelectorAll("#opts .opt").forEach(x=>{ x.disabled=true;
+          if(x.textContent===v.w) x.classList.add("right"); });
+        if(!ok) b.classList.add("wrongpick");
+        const fb=$("fb");
+        fb.className="feedback "+(ok?"ok":"bad");
+        fb.innerHTML=(ok?`<b>Correct — ${esc(v.w)}.</b> `:`<b>Not quite — the word is ${esc(v.w)}.</b> `)
+          +`<div class="requote">${v.tiles.map(t=>"<b>"+esc(t[0])+"</b> "+esc(t[1])).join(" + ")}</div>${v.note}`;
+        if(!ok) v._requeue=true;
+        $("brow").innerHTML=`<button class="btn btn-primary" onclick="window._vnext()">Next word →</button>`;
+      };
+      $("opts").appendChild(b);
+    });
+    $("brow").innerHTML="";
+  }
+  window._vnext=()=>{
+    const v=queue[idx];
+    if(v._requeue){ delete v._requeue; queue.push(v); }
+    idx++;
+    if(idx>=VOCAB.length && idx<queue.length) round=Math.max(round,2);
+    draw();
+  };
+  function finish(){
+    S.done.vocab=true; save();
+    const sc=scoreFor("vocab");
+    $("body").innerHTML=`<h2>Vocabulary preteach — done</h2>
+    <div class="panel"><p style="margin:0"><b>${sc.got}/${sc.total} words correct on first attempt.</b>
+    ${COPY.vocabDone}</p></div>
+    <div class="panel"><p class="lead" style="margin:0">Next: the dictation warm-up uses these same words in
+    sentences, so you meet them again in a different job.</p></div>
+    <div class="btnrow"><button class="btn btn-primary" onclick="go('home')">Back to the hub →</button></div>`;
+  }
+  draw();
+}
+
+/* ---------- 2 · DICTATION ---------- */
+function normWord(w){ return w.toLowerCase().replace(/[^a-z']/g,""); }
+function runDict(){
+  if(!SPEAK.can()){
+    $("body").innerHTML=`<h2>Dictation warm-up</h2>
+    <div class="feedback warn" style="display:block"><b>This browser cannot read text aloud.</b>
+    The dictation needs the browser's own speech engine, which is not available here.
+    Everything else in the hub works — try the vocabulary preteach or a quickread instead.
+    On a school laptop, Edge or Chrome will have a voice.</div>
+    <div class="btnrow"><button class="btn btn-primary" onclick="go('home')">Back to the hub →</button></div>`;
+    return;
+  }
+  let queue=DICTATION.slice(), idx=0, rate=0.85, round=1;
+  function draw(){
+    if(idx>=queue.length){ finish(); return; }
+    const d=queue[idx];
+    const answered=keysFor("dict").length;
+    $("body").innerHTML=`<div class="eyebrow">Warm-up · listening and spelling</div>
+    <h2>Dictation <span style="font-weight:400;color:var(--muted);font-size:14px">(${idx+1}/${queue.length})</span></h2>
+    <div class="progress-track"><div class="progress-fill" style="width:${Math.min(100,answered/DICTATION.length*100)}%"></div></div>
+    ${round>1?`<p class="lead">Mastery round ${round} — the sentences you missed come back.</p>`:""}
+    <p class="lead">Press play, listen, then type exactly what you hear. Capital letters and full stops count.
+    You can replay as many times as you need.</p>
+    <div class="btnrow" style="margin:0 0 12px">
+      <button class="btn btn-primary" id="play">▶ Play the sentence</button>
+      <button class="btn btn-ghost" id="slow">▶ Play slowly</button>
+    </div>
+    <div class="dictbox"><textarea id="ans" placeholder="Type what you hear…" autocomplete="off" spellcheck="false"></textarea></div>
+    <div class="feedback" id="fb" aria-live="polite"></div>
+    <div class="btnrow" id="brow"><button class="btn btn-primary" id="chk">Check</button></div>`;
+    $("play").onclick=()=>SPEAK.say(d.s, rate);
+    $("slow").onclick=()=>SPEAK.say(d.s, 0.6);
+    $("chk").onclick=check;
+    $("ans").focus();
+    $("ans").addEventListener("keydown",ev=>{ if(ev.key==="Enter"&&(ev.ctrlKey||ev.metaKey)) check(); });
+    setTimeout(()=>SPEAK.say(d.s, rate), 350);
+  }
+  function check(){
+    const d=queue[idx];
+    const typed=($("ans").value||"").trim();
+    if(!typed){ const fb=$("fb"); fb.className="feedback bad"; fb.innerHTML="<b>Nothing typed yet.</b> Press play and write what you hear."; return; }
+    const want=d.s.split(/\s+/), got=typed.split(/\s+/);
+    /* word-by-word alignment, so one missing word does not mark the rest wrong */
+    let i=0,j=0,marked="",wrong=0;
+    while(i<want.length||j<got.length){
+      const a=want[i], b=got[j];
+      if(a!==undefined && b!==undefined && normWord(a)===normWord(b)){
+        marked+= (a===b? `<span class="w-ok">${esc(b)}</span> `
+                       : `<span class="w-no">${esc(b)}</span> <span class="w-add">${esc(a)}</span> `);
+        if(a!==b) wrong++;
+        i++; j++;
+      } else if (a!==undefined && got[j+1]!==undefined && normWord(a)===normWord(got[j+1])){
+        marked+=`<span class="w-no">${esc(b)}</span> `; wrong++; j++;
+      } else if (b!==undefined && want[i+1]!==undefined && normWord(b)===normWord(want[i+1])){
+        marked+=`<span class="w-add">${esc(a)}</span> `; wrong++; i++;
+      } else {
+        if(b!==undefined) marked+=`<span class="w-no">${esc(b)}</span> `;
+        if(a!==undefined) marked+=`<span class="w-add">${esc(a)}</span> `;
+        if(a!==undefined||b!==undefined) wrong++;
+        i++; j++;
+      }
+    }
+    const perfect = wrong===0;
+    recFirst("dict."+d.id, perfect);
+    if(!perfect) d._requeue=true;
+    const fb=$("fb");
+    fb.className="feedback "+(perfect?"ok":"warn");
+    fb.innerHTML=(perfect?"<b>Word perfect.</b>":`<b>${wrong} to fix.</b> Struck-through is what you typed; green is what was said.`)
+      +`<div class="marked">${marked}</div>`
+      +(perfect?"":`<div style="margin-top:6px">Play it once more and read the correct sentence along with the voice — that is what fixes the spelling.</div>`);
+    $("brow").innerHTML=`<button class="btn btn-primary" id="nx">Next sentence →</button>
+      <button class="btn btn-ghost" id="again">▶ Replay</button>`;
+    $("again").onclick=()=>SPEAK.say(d.s, 0.6);
+    $("nx").onclick=()=>{
+      if(d._requeue){ delete d._requeue; queue.push(d); }
+      idx++;
+      if(idx>=DICTATION.length && idx<queue.length) round=Math.max(round,2);
+      draw();
+    };
+  }
+  function finish(){
+    S.done.dict=true; save();
+    const sc=scoreFor("dict");
+    $("body").innerHTML=`<h2>Dictation — done</h2>
+    <div class="panel"><p style="margin:0"><b>${sc.got}/${sc.total} word-perfect on first attempt.</b>
+    ${COPY.dictDone}</p></div>
+    <div class="btnrow"><button class="btn btn-primary" onclick="go('home')">Back to the hub →</button></div>`;
+  }
+  draw();
+}
+
+/* ---------- 3–4 · QUICKREADS ---------- */
+function renderQrIntro(id){
+  const qr=QUICKREADS.find(q=>q.id===id) || QUICKREADS[0];
+  $("body").innerHTML=`<div class="eyebrow">${esc(qr.where)} · cold-read comprehension</div>
+  <h2>${esc(qr.title)}</h2>
+  <p class="lead">${esc(qr.intro)}</p>
+  <div class="passage">${qr.passage}<span class="pg">${esc(qr.origin)}</span></div>
+  <div class="btnrow"><button class="btn btn-primary" onclick="startQr('${qr.id}')">I have finished reading — start the questions</button>
+  <button class="btn btn-ghost" onclick="go('home')">← back</button></div>`;
+}
+function startQr(id){
+  const qr=QUICKREADS.find(q=>q.id===id);
+  runQuizzer({
+    mod:qr.id, title:qr.title+" — questions (no looking back)", where:qr.where,
+    items:qr.items.map(it=>({ id:it.id, steps:[{key:"a", q:it.q, opts:it.opts, a:it.a, explain:it.explain, requote:it.line}] })),
+    doneNote: id==="qr1"
+      ? COPY.qr1Done : COPY.qr2Done
+  });
+}
+
+/* ---------- 5 · FIGURATIVE ---------- */
+function runFig(){
+  runFigOrVoice({
+    mod:"fig", title:"Figurative → literal", where:"Theme and language work",
+    items:FIG_ITEMS.map(it=>({ id:it.id, stim:"“"+esc(it.quote)+"”", sayText:it.quote, page:it.page, steps:[
+      { key:"meaning", q:"What does this actually mean in the story?", opts:it.meaning.opts, a:it.meaning.a, explain:it.meaning.explain },
+      { key:"tech", q:"Which feature is doing the work?", opts:it.tech.opts.map(i=>FIG_TECHS[i]), a:it.tech.a, explain:it.tech.explain }
+    ]})),
+    doneNote:"You have practised the two halves of writing about language: SAY what it means, then NAME how it is done. The Evidence builder puts them together."
+  });
+}
+function runVoice(){
+  runFigOrVoice({
+    mod:"voice", title:"Voice fingerprint", where:"Character voice · point at the grammar",
+    items:VOICE_ITEMS.map(it=>({ id:it.id, stim:"“"+esc(it.line)+"”", sayText:it.line, page:it.page, steps:[
+      { key:"who", q:"Whose line is this?", opts:VOICE_WHO, a:it.a, explain:it.whoExplain, chips:true, noShuffle:true },
+      { key:"feat", q:"What gave it away? Name the language feature:", opts:it.feat.opts, a:it.feat.a, explain:it.feat.explain }
+    ]})),
+    doneNote:"Every one of these was decided by grammar, not by vibe — a homophone, a conjunction, a hedging verb, a missing name. That is what 'point at the words' means in an essay."
+  });
+}
+function runFigOrVoice(cfg){ runQuizzer(cfg); }
+
+/* ---------- 7 · EVIDENCE BUILDER ---------- */
+let EV=null;
+function renderEv(roundIdx){
+  const round=EV_ROUNDS[roundIdx];
+  if(!round){ evFinish(); return; }
+  EV={ roundIdx, round, idea:null, picked:new Set(), checked:false, slots:{stem:null,frag:null,tail:null}, builderChecked:false, locked:false };
+  if(round.mode==="idea") renderEvIdea(); else renderEvSelect();
+}
+function evLadderHtml(active){
+  const gotLv=S.evLv||0;
+  let h=`<div class="ladder">`;
+  EV_LADDER.forEach((L,i)=>{
+    const st=(i+1)<=gotLv ? "got" : (i+1)===active ? "now" : "";
+    h+=`<button class="lcard ${st}" onclick="evHint(${i})"><span class="lv">${esc(L.lv)} ${(i+1)<=gotLv?"✓":""}</span>${esc(L.text)}</button>`;
+  });
+  return h+`</div><div class="ladder-hint" id="ladderHint"></div>`;
+}
+function evHint(i){
+  const box=$("ladderHint"); if(!box) return;
+  box.className="ladder-hint show";
+  box.innerHTML="<b>"+esc(EV_LADDER[i].lv)+" scaffold:</b> "+esc(EV_LADDER[i].hint);
+}
+function renderEvIdea(){
+  const r=EV.round;
+  let h=`<div class="eyebrow">${esc(r.where)} · evidence builder</div><h2>${esc(r.title)}</h2>`;
+  h+=evLadderHtml(1);
+  h+=`<p class="q">${esc(r.question)}</p><div class="idea-chips">`;
+  r.ideas.forEach(i=>{ h+=`<button class="fchoice" onclick="evPickIdea('${i.id}')">${esc(i.label)}</button>`; });
+  h+=`</div><p class="lead">Pick the idea you want to prove, then the passage opens for evidence-hunting.</p>
+  <div class="btnrow"><button class="btn btn-ghost" onclick="go('home')">← back to the hub</button></div>`;
+  $("body").innerHTML=h;
+}
+function evPickIdea(id){ EV.idea=id; EV.picked=new Set(); EV.locked=false; EV.checked=false; renderEvSelect(); }
+function renderEvSelect(){
+  const r=EV.round;
+  const ideaLabel = EV.idea ? r.ideas.find(i=>i.id===EV.idea).label : null;
+  let h=`<div class="eyebrow">${esc(r.where)} · evidence builder · level 1</div><h2>${esc(r.title)}</h2>`;
+  h+=evLadderHtml(1);
+  h+=`<p class="q">${esc(r.mode==="idea" ? "Find the evidence for: "+ideaLabel : r.question)}</p>
+  <p class="lead">${esc(r.qNote)}</p><div class="passage" id="pass">`;
+  r.segs.forEach((seg,i)=>{ h+=`<span class="seg" id="seg${i}" onclick="evToggle(${i})">${esc(seg.t)}</span> `; });
+  h+=`<span class="pg">${esc(r.origin)}</span></div>
+  <div class="feedback" id="fb" aria-live="polite"></div>
+  <div class="btnrow"><button class="btn btn-primary" onclick="evCheck()">Check my evidence</button>
+  ${r.mode==="idea"?`<button class="btn btn-ghost" onclick="renderEvIdea()">← different idea</button>`:`<button class="btn btn-ghost" onclick="go('home')">← back</button>`}</div>`;
+  $("body").innerHTML=h;
+}
+function evToggle(i){
+  if(EV.locked) return;
+  const el=$("seg"+i);
+  el.classList.remove("hit","miss");
+  if(EV.picked.has(i)){ EV.picked.delete(i); el.classList.remove("picked"); }
+  else { EV.picked.add(i); el.classList.add("picked"); }
+  $("fb").className="feedback";
+}
+function segRole(seg){ return EV.round.mode==="idea" ? (seg.roles[EV.idea]||"plain") : seg.role; }
+function segFb(seg){ return EV.round.mode==="idea" ? (seg.fbs[EV.idea]||"") : seg.fb; }
+function evCheck(){
+  const r=EV.round, fb=$("fb");
+  if(EV.picked.size===0){ fb.className="feedback bad"; fb.innerHTML="<b>Nothing selected.</b> Click the part of the passage that answers the question, then check."; return; }
+  const picked=[...EV.picked].map(i=>({i,seg:r.segs[i],role:segRole(r.segs[i])}));
+  const gold=picked.filter(p=>p.role==="gold"), okp=picked.filter(p=>p.role==="ok");
+  const bad=picked.filter(p=>["other","plain","frame"].includes(p.role));
+  picked.forEach(p=>{ const el=$("seg"+p.i); el.classList.remove("picked");
+    el.classList.add(p.role==="gold"||p.role==="ok" ? "hit" : "miss"); });
+  const line=p=>"“"+p.seg.t.slice(0,54)+(p.seg.t.length>54?"…”":"”")+" — "+segFb(p.seg);
+  const findings=gold.concat(okp).concat(bad).map(line);
+  const pass = gold.length>=1 && bad.length===0;
+  if(!EV.checked){ recFirst("ev."+r.id+".l1", pass); EV.checked=true; }
+  let head,cls;
+  if(pass){ head="Strong evidence selected."; cls="ok"; }
+  else if(gold.length>=1){ head="A good start — here is how to lift it: your strongest pick is right, but drop the ones that do not belong."; cls="warn"; }
+  else if(okp.length>=1){ head="Close — that supports the answer, but there is a stronger line. Deselect and look again."; cls="warn"; }
+  else { head="Something needs fixing — none of these picks answer the question yet."; cls="bad"; }
+  fb.className="feedback "+cls;
+  fb.innerHTML="<b>"+esc(head)+"</b><ul>"+findings.map(f=>"<li>"+esc(f)+"</li>").join("")+"</ul>";
+  if(pass){
+    EV.locked=true;
+    S.evLv=Math.max(S.evLv||0,1); save();
+    fb.innerHTML+=`<div style="margin-top:8px"><b>Level 1 achieved:</b> ${esc(EV_LADDER[0].text)}.</div>`;
+    document.querySelector(".btnrow").innerHTML=`<button class="btn btn-primary" onclick="renderEvL2()">Level 2: explain the relevance →</button>`;
+  } else {
+    picked.filter(p=>p.role!=="gold"&&p.role!=="ok").forEach(p=>EV.picked.delete(p.i));
+  }
+}
+function renderEvL2(){
+  const r=EV.round;
+  const l2 = r.mode==="idea" ? r.l2s[EV.idea] : r.l2;
+  let h=`<div class="eyebrow">${esc(r.where)} · evidence builder · level 2</div><h2>${esc(r.title)}</h2>`;
+  h+=evLadderHtml(2);
+  h+=`<p class="q">${esc(l2.q)}</p><div class="opts" id="opts"></div>
+  <div class="feedback" id="fb" aria-live="polite"></div><div class="btnrow" id="brow"></div>`;
+  $("body").innerHTML=h;
+  let first=true;
+  shuffle(l2.opts.map((_,i)=>i)).forEach(oi=>{
+    const o=l2.opts[oi];
+    const b=document.createElement("button"); b.className="opt"; b.textContent=o.t;
+    b.onclick=()=>{
+      const good=o.q==="good";
+      if(first){ recFirst("ev."+r.id+".l2", good); first=false; }
+      const fb=$("fb");
+      if(good){
+        document.querySelectorAll("#opts .opt").forEach(x=>x.disabled=true);
+        b.classList.add("right");
+        fb.className="feedback ok"; fb.innerHTML="<b>Correct.</b> "+esc(o.fb)
+          +`<div style="margin-top:8px"><b>Level 2 achieved:</b> ${esc(EV_LADDER[1].text)}.</div>`;
+        S.evLv=Math.max(S.evLv,2); save();
+        $("brow").innerHTML=`<button class="btn btn-primary" onclick="renderEvBuilder()">Level 3: embed the quote →</button>`;
+      } else {
+        b.disabled=true; b.classList.add("wrongpick");
+        fb.className="feedback bad"; fb.innerHTML="<b>Not this one.</b> "+esc(o.fb);
+      }
+    };
+    $("opts").appendChild(b);
+  });
+}
+function renderEvBuilder(){
+  const r=EV.round;
+  const B = r.mode==="idea" ? r.builders[EV.idea] : r.builder;
+  EV.slots={stem:null,frag:null,tail:null}; EV.builderChecked=false;
+  let h=`<div class="eyebrow">${esc(r.where)} · evidence builder · level 3</div><h2>${esc(r.title)}</h2>`;
+  h+=evLadderHtml(3);
+  h+=`<p class="lead">${esc(B.intro)} Tap a tile to place it; tap a placed tile to remove it.
+  <b style="color:var(--p-tx)">Blue = stem</b>, <b style="color:var(--e-tx)">yellow = quote</b>, <b style="color:var(--l-tx)">pink = ending</b>.</p>
+  <div class="slotrow">
+    <div class="slot"><span class="slabel">Stem</span><span id="in-stem"></span></div>
+    <div class="slot"><span class="slabel">Quote</span><span id="in-frag"></span></div>
+    <div class="slot"><span class="slabel">Ending</span><span id="in-tail"></span></div>
+  </div>
+  <div class="preview" id="prev"></div>
+  <div class="bins" style="grid-template-columns:repeat(3,1fr)">
+    <div class="bin b-p"><h4>Sentence stems</h4><div class="binbody" id="bin-stem"></div></div>
+    <div class="bin b-e"><h4>Trimmed quotes</h4><div class="binbody" id="bin-frag"></div></div>
+    <div class="bin b-l"><h4>Endings</h4><div class="binbody" id="bin-tail"></div></div>
+  </div>
+  <div class="feedback" id="fb" aria-live="polite"></div>
+  <div class="btnrow" id="brow"><button class="btn btn-primary" onclick="evBuildCheck()">Check my sentence</button>
+  <button class="btn btn-ghost" onclick="renderEvBuilder()">Reset</button></div>`;
+  $("body").innerHTML=h;
+  const cls={stem:"k-p",frag:"k-e",tail:"k-l"};
+  const fill=(kind,list)=>{
+    const bin=$("bin-"+kind);
+    shuffle(list).forEach(x=>{
+      const b=document.createElement("button"); b.className="btile "+cls[kind];
+      b.textContent=x.t; b.onclick=()=>{ EV.slots[kind]=x; drawEvSlots(); };
+      bin.appendChild(b);
+    });
+  };
+  fill("stem",B.stems); fill("frag",B.frags); fill("tail",B.tails);
+  drawEvSlots();
+}
+function drawEvSlots(){
+  const cls={stem:"k-p",frag:"k-e",tail:"k-l"};
+  ["stem","frag","tail"].forEach(kind=>{
+    const holder=$("in-"+kind); holder.innerHTML="";
+    const x=EV.slots[kind];
+    if(x){ const b=document.createElement("button"); b.className="placed "+cls[kind];
+      b.textContent=x.t; b.onclick=()=>{ EV.slots[kind]=null; drawEvSlots(); }; holder.appendChild(b); }
+  });
+  const {stem,frag,tail}=EV.slots, prev=$("prev");
+  if(stem||frag||tail) prev.textContent=(stem?stem.t:"…")+" "+(frag?"“"+frag.t+"”":"“…”")+(tail?tail.t:" …");
+  else prev.innerHTML=`<span class="ph">Your sentence appears here as you build it.</span>`;
+  const fb=$("fb"); if(fb) fb.className="feedback";
+}
+function evBuildCheck(){
+  const r=EV.round, {stem,frag,tail}=EV.slots, fb=$("fb");
+  if(!stem||!frag||!tail){
+    fb.className="feedback bad";
+    fb.innerHTML="<b>Something needs fixing.</b> The sentence needs all three parts — a stem, a trimmed quote and an ending.";
+    return;
+  }
+  const findings=[];
+  if(stem.q==="point") findings.push({sev:"warn", text:stem.fb});
+  if(frag.q==="long"||frag.q==="short") findings.push({sev:"warn", text:frag.fb});
+  if(frag.q==="nofit" || (stem.accepts && frag.q==="good" && !stem.accepts.includes(frag.id)))
+    findings.push({sev:"err", text: frag.q==="nofit" ? frag.fb :
+      "Read the preview aloud — the quote does not continue the stem's grammar. Swap one of them so it flows as a single sentence."});
+  if(tail.q==="point"||tail.q==="retell") findings.push({sev:"warn", text:tail.fb});
+  const level = findings.some(f=>f.sev==="err") ? "err" : findings.length ? "warn" : "ok";
+  const pass = level==="ok";
+  if(!EV.builderChecked){ recFirst("ev."+r.id+".l3", pass); EV.builderChecked=true; }
+  if(pass){
+    fb.className="feedback ok";
+    let msg="<b>Strong analytical sentence.</b> Stem, embedded quote and an ending that explains. Read it back out loud — that is an essay sentence.";
+    if(tail.q==="bonus") msg+=" <b>You also wove in a second quotation — that is above the standard.</b>";
+    fb.innerHTML=msg+`<div style="margin-top:8px"><b>Level 3 achieved:</b> ${esc(EV_LADDER[2].text)}.</div>`;
+    S.evLv=Math.max(S.evLv, EV.roundIdx===0?3:3); save();
+    const next=EV.roundIdx+1;
+    $("brow").innerHTML = EV_ROUNDS[next]
+      ? `<button class="btn btn-primary" onclick="renderEv(${next})">Round 2: choose your own idea →</button>`
+      : `<button class="btn btn-primary" onclick="evFinish()">Finish the evidence builder →</button>`;
+  } else {
+    fb.className="feedback "+(level==="err"?"bad":"warn");
+    fb.innerHTML="<b>"+(level==="err"?"Something needs fixing.":"A good start — here is how to lift it:")+"</b><ul>"
+      +findings.map(f=>"<li>"+esc(f.text)+"</li>").join("")+"</ul>";
+  }
+}
+function evFinish(){
+  S.done.ev=true; save();
+  const sc=scoreFor("ev");
+  $("body").innerHTML=`<h2>Evidence builder — done</h2>
+  ${evLadderHtml(4)}
+  <div class="panel"><p style="margin:0"><b>${sc.got}/${sc.total} levels passed on the first check.</b>
+  You have climbed three rungs of the assessment ladder: find it → explain it → embed it. The wrong turns you met
+  on the way — retelling, overreaching, pointing at the quote — are the exact traps to avoid in the essay.</p></div>
+  <div class="panel"><p class="lead" style="margin:0">Level 4 is the whole paragraph. That is the
+  <b>PEEL paragraph builder</b> — the last activity, and the one closest to the assessment.</p></div>
+  <div class="btnrow"><button class="btn btn-primary" onclick="go('peel')">Go to the PEEL builder →</button>
+  <button class="btn btn-ghost" onclick="go('home')">Back to the hub</button></div>`;
+}
+
+/* ---------- 8 · PEEL PARAGRAPH BUILDER ---------- */
+let PE=null;
+function runPeel(){ renderPeel(0, true); }
+function renderPeel(i, showModel){
+  const it=PEEL_ITEMS[i];
+  if(!it){ peelFinish(); return; }
+  PE={ i, it, slots:{p:null,e:null,x:null,l:null}, checked:false };
+  if(showModel){
+    $("body").innerHTML=`<div class="eyebrow">Analytical writing · PEEL · ${i+1} of ${PEEL_ITEMS.length}</div>
+    <h2>${esc(it.focus)}</h2>
+    <p class="q">${esc(it.question)}</p>
+    <p class="lead">First, read a good one. This is a <b>WAGOLL</b> — What A Good One Looks Like.
+    Every part is labelled with the job it is doing.</p>
+    <div class="wagoll">${it.wagoll}${SPEAK.btn(it.wagoll.replace(/<[^>]+>/g,""))}</div>
+    <div class="panel"><p style="margin:0;font-size:13.5px"><b>Why it works:</b> ${it.wagollNote}</p></div>
+    <div class="panel"><p class="lead" style="margin:0">
+      <b>P</b> — ${esc(PEEL_PARTS[0].hint)}<br>
+      <b>E</b> — ${esc(PEEL_PARTS[1].hint)}<br>
+      <b>E</b>xplain — ${esc(PEEL_PARTS[2].hint)}<br>
+      <b>L</b> — ${esc(PEEL_PARTS[3].hint)}</p></div>
+    <div class="btnrow"><button class="btn btn-primary" onclick="renderPeel(${i},false)">Now build one →</button>
+    <button class="btn btn-ghost" onclick="go('home')">← back to the hub</button></div>`;
+    return;
+  }
+  let h=`<div class="eyebrow">Analytical writing · PEEL · ${i+1} of ${PEEL_ITEMS.length}</div>
+  <h2>${esc(it.focus)}</h2>
+  <p class="q">${esc(it.question)}</p>
+  <p class="lead">Build the paragraph. One tile per slot — tap a placed tile to remove it.
+  Each bin has one strong option and three that fail in a named way.</p>
+  <div class="slotrow">`;
+  PEEL_PARTS.forEach(pt=>{
+    h+=`<div class="slot"><span class="slabel">${esc(pt.label)}</span><span id="pin-${pt.k}"></span></div>`;
+  });
+  h+=`</div><div class="preview" id="pprev"></div>
+  <div class="bins">`;
+  PEEL_PARTS.forEach(pt=>{
+    h+=`<div class="bin b-${pt.k}"><h4>${esc(pt.label)}</h4><div class="binbody" id="pbin-${pt.k}"></div></div>`;
+  });
+  h+=`</div><div class="feedback" id="fb" aria-live="polite"></div>
+  <div class="btnrow" id="brow"><button class="btn btn-primary" onclick="peelCheck()">Check my paragraph</button>
+  <button class="btn btn-ghost" onclick="renderPeel(${i},true)">See the model again</button></div>`;
+  $("body").innerHTML=h;
+  PEEL_PARTS.forEach(pt=>{
+    const bin=$("pbin-"+pt.k);
+    shuffle(it.bins[pt.k]).forEach(x=>{
+      const b=document.createElement("button"); b.className="btile k-"+pt.k;
+      b.textContent=x.t; b.onclick=()=>{ PE.slots[pt.k]=x; drawPeelSlots(); };
+      bin.appendChild(b);
+    });
+  });
+  drawPeelSlots();
+}
+function drawPeelSlots(){
+  PEEL_PARTS.forEach(pt=>{
+    const holder=$("pin-"+pt.k); holder.innerHTML="";
+    const x=PE.slots[pt.k];
+    if(x){ const b=document.createElement("button"); b.className="placed k-"+pt.k;
+      b.textContent=x.t; b.onclick=()=>{ PE.slots[pt.k]=null; drawPeelSlots(); }; holder.appendChild(b); }
+  });
+  const any=PEEL_PARTS.some(pt=>PE.slots[pt.k]);
+  const prev=$("pprev");
+  if(any) prev.textContent=PEEL_PARTS.map(pt=>PE.slots[pt.k]?PE.slots[pt.k].t:"…").join(" ");
+  else prev.innerHTML=`<span class="ph">Your paragraph appears here as you build it.</span>`;
+  const fb=$("fb"); if(fb) fb.className="feedback";
+}
+function peelCheck(){
+  const it=PE.it, fb=$("fb");
+  const missing=PEEL_PARTS.filter(pt=>!PE.slots[pt.k]);
+  if(missing.length){
+    fb.className="feedback bad";
+    fb.innerHTML="<b>Not finished.</b> A PEEL paragraph needs all four parts. Still empty: "
+      +missing.map(m=>esc(m.label)).join(", ")+".";
+    return;
+  }
+  const findings=[];
+  PEEL_PARTS.forEach(pt=>{
+    const x=PE.slots[pt.k];
+    recFirst("peel."+it.id+"."+pt.k, x.q==="good");
+    if(x.q!=="good") findings.push(esc(pt.label)+" — "+x.fb);
+  });
+  PE.checked=true;
+  if(!findings.length){
+    fb.className="feedback ok";
+    fb.innerHTML=`<b>That is a PEEL paragraph.</b> Point, embedded evidence, an explanation of what the words
+    DO, and a link that reaches past the paragraph. Read it back once out loud — this is the standard for the essay.`;
+    $("brow").innerHTML = PEEL_ITEMS[PE.i+1]
+      ? `<button class="btn btn-primary" onclick="renderPeel(${PE.i+1},true)">Next paragraph →</button>`
+      : `<button class="btn btn-primary" onclick="peelFinish()">Finish →</button>`;
+  } else {
+    fb.className="feedback warn";
+    fb.innerHTML="<b>A good start — here is how to lift it:</b><ul>"
+      +findings.map(f=>"<li>"+f+"</li>").join("")+"</ul>"
+      +"<div style='margin-top:6px'>Swap the parts that are named above and check again.</div>";
+  }
+}
+function peelFinish(){
+  S.done.peel=true; save();
+  const sc=scoreFor("peel");
+  $("body").innerHTML=`<h2>PEEL paragraph builder — done</h2>
+  <div class="panel"><p style="margin:0"><b>${sc.got}/${sc.total} parts chosen correctly first try.</b>
+  The four moves you just practised are the whole engine of a text-response essay: make a claim, prove it with
+  the author's words, explain what those words do, and reach an idea. Every body paragraph you write does this again.</p></div>
+  <div class="panel"><p class="lead" style="margin:0">The traps have names now — <b>thin</b> (true but says nothing),
+  <b>meta</b> (talking about the essay instead of the text), <b>retell</b> (plot instead of analysis) and
+  <b>repeat</b> (a Link that just says the Point again). Mark your own draft against those four.</p></div>
+  <div class="btnrow"><button class="btn btn-primary" onclick="go('rpt')">See my report →</button>
+  <button class="btn btn-ghost" onclick="go('home')">Back to the hub</button></div>`;
+}
+
+/* ---------- 9 · REPORT ---------- */
+function vcode(str){ let h=5381; for(let i=0;i<str.length;i++){ h=((h<<5)+h+str.charCodeAt(i))|0; } return "V-"+Math.abs(h).toString(16).toUpperCase().slice(0,6); }
+const LABELS={vocab:"Vocabulary preteach",dict:"Dictation warm-up",qr1:COPY.labels.qr1,
+  qr2:COPY.labels.qr2,fig:"Figurative → literal",voice:"Voice fingerprint",
+  ev:"Evidence builder",peel:"PEEL paragraph builder"};
+const RECOMMEND={
+ vocab:"Reopen the morpheme matrices — and look the same roots up in the Word Builder, where every piece is translated into your home language.",
+ dict:"Replay each sentence slowly and read it aloud with the voice. Spelling by ear is a skill; it improves fast with daily dictation.",
+ qr1:COPY.recommend.qr1,
+ qr2:COPY.recommend.qr2,
+ fig:COPY.recommend.fig,
+ voice:COPY.recommend.voice,
+ ev:"Practise the three levels on any quotation: find it, say why it answers the question, then embed it in your own sentence.",
+ peel:"Mark your own draft paragraph against the four traps: thin, meta, retell, repeat."};
+function renderReport(){
+  const mods=Object.keys(LABELS);
+  let rows="", worst=null, worstErr=-1, anyDone=false;
+  mods.forEach(m=>{
+    const sc=scoreFor(m); if(!sc.total) return;
+    anyDone=true;
+    const err=1-sc.got/sc.total;
+    if(err>worstErr && sc.total>=3){ worstErr=err; worst=m; }
+    rows+=`<tr><td>${esc(LABELS[m])}</td><td>${sc.got} / ${sc.total}</td><td>${S.done[m]?"finished":"in progress"}</td></tr>`;
+  });
+  const notStarted=mods.filter(m=>!scoreFor(m).total);
+  const scAll=mods.reduce((a,m)=>{const s=scoreFor(m);return{got:a.got+s.got,total:a.total+s.total}},{got:0,total:0});
+  const code=vcode(JSON.stringify(S.first)+(S.name||"")+(S.sid||""));
+  const teach = !anyDone ? "" :
+    `This student worked through the <i>${esc(TEXT.title)}</i> hub. Every wrong answer was retried until correct
+     (mastery loop), but the scores above are <b>first attempts only</b>, so they show independent reading rather than
+     final-state guessing. `
+    + (worst!==null && worstErr>0.34 ? `Clearest next step: <b>${esc(LABELS[worst])}</b> — ${esc(RECOMMEND[worst])}` :
+       worst!==null && worstErr>0 ? `Errors were spread thin; the softest area was <b>${esc(LABELS[worst])}</b>. ${esc(RECOMMEND[worst])}` :
+       `A clean first-attempt run across everything attempted — extension: ${esc(COPY.extension)}.`);
+  $("body").innerHTML=`<div class="eyebrow">My report</div><h2><i>${esc(TEXT.title)}</i> hub — report</h2>
+  <div class="rowinp noprint">
+    <span><label for="nm">Name</label><input id="nm" value="${esc(S.name||"")}" onchange="S.name=this.value;save();renderReport()"></span>
+    <span><label for="sid">Student ID</label><input id="sid" value="${esc(S.sid||"")}" onchange="S.sid=this.value;save();renderReport()"></span>
+  </div>
+  <p class="lead">${esc(S.name||"(no name entered)")}${S.sid?" · "+esc(S.sid):""} · first-attempt scores · overall <b>${scAll.got}/${scAll.total}</b></p>
+  <table class="rpt"><tr><th>Activity</th><th>First attempt</th><th>Status</th></tr>
+    ${rows||`<tr><td colspan="3">Nothing attempted yet — do an activity first.</td></tr>`}</table>
+  ${notStarted.length?`<div class="panel"><b>Not started yet:</b> <span style="color:var(--muted);font-size:13px">${notStarted.map(m=>esc(LABELS[m])).join(" · ")}</span></div>`:""}
+  <div class="panel"><b>What this tells your teacher:</b> ${teach||"Attempt at least one activity to generate the summary."}</div>
+  <p class="lead">Verification code: <span class="vcode">${code}</span> — this changes if the answers change, so a
+  printed report cannot be edited afterwards.</p>
+  <div class="btnrow noprint">
+    <button class="btn btn-primary" onclick="S.done.rpt=true;save();window.print()">Print / save as PDF</button>
+    <button class="btn btn-ghost" onclick="go('home')">← back to the hub</button>
+  </div>`;
+}
+
+document.getElementById("navWhere").textContent = COPY.nav;
+go("home");
+</script>
+</body>
+</html>

@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Of Mice and Men — vocabulary, dictation, comprehension and PEEL analytical writing for EAL students.">
+<title>Of Mice and Men — Reading &amp; Writing Hub</title>
+<style>
+/* ============================================================
+   ELC · Of Mice and Men hub
+   Matches the ELC-Pages house style: CSS variables, light/dark
+   via prefers-color-scheme, mobile-first, sized for the 1366×768
+   ThinkPads the students actually use. No CDNs, no web fonts,
+   no build step — one self-contained file, per ELC-Pages/AGENTS.md.
+
+   The accent is dry-grass ochre: the Salinas valley in the last
+   hot days before the harvest.
+   ============================================================ */
+:root{
+  --bg:#f7f4ec; --paper:#fffdf8; --ink:#241f18; --muted:#6b6153; --faint:#8b8172;
+  --line:#e3ddd0; --line-soft:#efeae0; --accent:#8a5a1e; --accent-soft:#f7f0e3;
+  --correct:#2c6b45; --wrong:#a33a34; --okbg:#eaf4ee; --badbg:#faecea;
+  --warnbg:#fdf3e3; --warntx:#835311; --on-accent:#ffffff;
+  /* builder tile roles — colour is metalanguage, never decoration */
+  --p-bg:#e3e9d8;  --p-tx:#4a5a2c;   /* Point     */
+  --e-bg:#fdf0c4;  --e-tx:#7a5a05;   /* Evidence  */
+  --x-bg:#e6f0e2;  --x-tx:#3c6030;   /* Explain   */
+  --l-bg:#f6e5ee;  --l-tx:#8c3560;   /* Link      */
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#16130f; --paper:#201c17; --ink:#f2eee6; --muted:#b3a996; --faint:#978d7c;
+    --line:#3a332a; --line-soft:#2b261f; --accent:#d9a75f; --accent-soft:#2a2318;
+    --correct:#79c295; --wrong:#e08a82; --okbg:#18291f; --badbg:#2c1d1c;
+    --warnbg:#2b2417; --warntx:#e6bd77; --on-accent:#11151d;
+    --p-bg:#2c3320; --p-tx:#bcca9c; --e-bg:#3a3218; --e-tx:#e3c877;
+    --x-bg:#233020; --x-tx:#a8cd9a; --l-bg:#33203a; --l-tx:#e3a3c6;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+     line-height:1.55;display:flex;justify-content:center;padding:14px 10px 48px}
+.container{width:100%;max-width:920px;background:var(--paper);border:1px solid var(--line);
+           border-radius:14px;padding:22px 24px 26px}
+h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif}
+h1{font-size:25px;margin:0 0 4px;letter-spacing:-.2px}
+h2{font-size:19px;margin:0 0 8px}
+h3{font-size:15px;margin:0 0 6px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 14px}
+.eyebrow{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--accent)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.topbar .where{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.linkbtn{background:none;border:none;color:var(--accent);font-weight:600;font-size:13px;cursor:pointer;padding:4px 2px;font-family:inherit}
+.linkbtn:hover{text-decoration:underline}
+a{color:var(--accent)}
+.btn{padding:10px 17px;border:1px solid var(--line);border-radius:9px;font-size:14.5px;font-weight:600;
+     cursor:pointer;background:var(--paper);color:var(--ink);font-family:inherit}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.btn-ghost{background:var(--bg);color:var(--muted)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.panel{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin:0 0 12px}
+p.lead{color:var(--muted);font-size:13.5px;margin:0 0 10px}
+.hr{height:1px;background:var(--line);margin:18px 0 14px;border:0}
+
+/* ---- home ---- */
+.step{display:flex;align-items:center;gap:13px;width:100%;text-align:left;background:var(--paper);
+      border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin-bottom:8px;cursor:pointer;
+      font-family:inherit;font-size:14.5px;color:inherit}
+.step:hover{border-color:var(--accent)}
+.step .num{flex:0 0 29px;height:29px;border-radius:50%;background:var(--bg);border:1px solid var(--line);
+           display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13.5px}
+.step.done .num{background:var(--okbg);border-color:var(--correct);color:var(--correct)}
+.step .t{font-weight:700}
+.step .d{color:var(--muted);font-size:12.5px}
+.step .tag{margin-left:auto;font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
+           color:var(--muted);white-space:nowrap;text-align:right}
+.step.done .tag{color:var(--correct)}
+@media (min-width:900px){ .steps2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px} }
+
+/* ---- stimulus / passages ---- */
+.stim{font-family:Georgia,serif;font-size:16.5px;background:var(--bg);border:1px solid var(--line);
+      border-left:4px solid var(--accent);border-radius:9px;padding:13px 15px;margin:0 0 12px}
+.stim .pg{display:block;margin-top:6px;font-family:system-ui,sans-serif;font-size:11px;color:var(--faint)}
+.passage{font-family:Georgia,serif;font-size:16.5px;line-height:1.78;background:var(--bg);border:1px solid var(--line);
+         border-radius:10px;padding:15px 17px;margin:0 0 12px}
+.passage .pg{display:block;margin-top:9px;font-family:system-ui,sans-serif;font-size:11.5px;color:var(--faint);line-height:1.5}
+/* dialogue-heavy passages read better with a touch more line height */
+.report{line-height:1.85}
+.q{font-size:15.5px;font-weight:700;margin:0 0 10px}
+.opts{display:flex;flex-direction:column;gap:8px;margin-bottom:12px}
+.opts.chips{flex-direction:row;flex-wrap:wrap}
+.opt{text-align:left;padding:11px 13px;border:1px solid var(--line);border-radius:10px;background:var(--paper);
+     font-family:inherit;font-size:14.5px;cursor:pointer;color:inherit;min-height:44px}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt:disabled{cursor:default}
+.opt.right{background:var(--okbg);border-color:var(--correct)}
+.opt.wrongpick{background:var(--badbg);border-color:var(--wrong)}
+.feedback{display:none;border-radius:9px;padding:11px 13px;font-size:13.8px;margin:0 0 12px;line-height:1.55}
+.feedback.ok{display:block;background:var(--okbg);color:var(--correct)}
+.feedback.bad{display:block;background:var(--badbg);color:var(--wrong)}
+.feedback.warn{display:block;background:var(--warnbg);color:var(--warntx)}
+.feedback ul{margin:6px 0 0 18px;padding:0}
+.feedback li{margin:0 0 5px}
+.feedback b{color:inherit}
+.requote{font-family:Georgia,serif;background:var(--paper);border:1px solid var(--line);border-radius:6px;
+         padding:8px 10px;margin-top:8px;color:var(--ink);font-size:14.5px}
+.progress-track{height:7px;background:var(--line-soft);border-radius:99px;margin:0 0 15px;overflow:hidden}
+.progress-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .25s ease}
+
+/* ---- speaker ---- */
+.say{border:0;background:transparent;cursor:pointer;padding:0;margin:0 0 0 6px;display:inline-flex;
+     align-items:center;justify-content:center;width:34px;height:34px;min-width:34px;border-radius:8px;
+     color:var(--muted);vertical-align:middle;flex:0 0 auto}
+.say svg{width:15px;height:15px;fill:currentColor;pointer-events:none}
+.say:hover{color:var(--accent);background:var(--accent-soft)}
+.say.lg svg{width:19px;height:19px}
+
+/* ---- vocab builder ---- */
+.tiles{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.tile{border:1px solid var(--line);border-radius:9px;padding:8px 11px;font-size:14px;cursor:pointer;
+      font-family:inherit;background:var(--paper);color:inherit;text-align:left;min-height:44px}
+.tile:hover{border-color:var(--accent)}
+.tile.used{opacity:.35;pointer-events:none}
+.tile small{display:block;color:var(--muted);font-size:11px;font-weight:400}
+.assembly{min-height:52px;border:2px dashed var(--line);border-radius:10px;background:var(--bg);
+          padding:8px 10px;margin:0 0 12px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.assembly .ph{color:var(--faint);font-size:13px}
+.assembly .placed{background:var(--accent-soft);color:var(--accent);border:1px solid var(--accent);
+                  border-radius:8px;padding:7px 10px;font-size:14px;cursor:pointer;font-weight:600}
+.assembly .placed:after{content:" ✕";font-size:10px;opacity:.7}
+.wordline{font-family:Georgia,serif;font-size:20px;font-weight:600;margin:0 0 2px}
+.pos{color:var(--faint);font-size:12px;font-style:italic}
+.gapline{font-family:Georgia,serif;font-size:16.5px;line-height:1.8;background:var(--bg);border:1px solid var(--line);
+         border-radius:9px;padding:13px 15px;margin:0 0 12px}
+.gapline .blank{display:inline-block;min-width:110px;border-bottom:2px solid var(--accent);text-align:center;
+                font-weight:700;color:var(--accent)}
+
+/* ---- dictation ---- */
+.dictbox{display:flex;flex-direction:column;gap:9px;margin:0 0 12px}
+.dictbox textarea{width:100%;min-height:74px;padding:11px 13px;border:1px solid var(--line);border-radius:10px;
+                  font-size:16px;font-family:Georgia,serif;background:var(--paper);color:var(--ink);line-height:1.6}
+.marked{font-family:Georgia,serif;font-size:16.5px;line-height:1.9;background:var(--bg);border:1px solid var(--line);
+        border-radius:9px;padding:13px 15px;margin:0 0 12px}
+.marked .w-ok{color:var(--correct)}
+.marked .w-no{background:var(--badbg);color:var(--wrong);border-radius:4px;padding:0 3px;text-decoration:line-through}
+.marked .w-add{background:var(--okbg);color:var(--correct);border-radius:4px;padding:0 3px}
+.speedrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12.5px;color:var(--muted)}
+
+/* ---- evidence ---- */
+.seg{cursor:pointer;border-radius:4px;padding:1px 2px;border-bottom:2px solid transparent}
+.seg:hover{background:var(--line-soft)}
+.seg.picked{background:var(--accent-soft);border-bottom-color:var(--accent)}
+.seg.hit{background:var(--okbg);border-bottom-color:var(--correct)}
+.seg.miss{background:var(--badbg);border-bottom-color:var(--wrong)}
+.idea-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 12px}
+.fchoice{border:1px solid var(--line);background:var(--paper);border-radius:99px;padding:9px 15px;font-family:inherit;
+         font-size:13.5px;font-weight:600;cursor:pointer;color:inherit;min-height:44px}
+.fchoice.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.ladder{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 13px}
+.lcard{border:1px solid var(--line);border-radius:9px;padding:9px 10px;background:var(--paper);font-size:12px;
+       line-height:1.4;cursor:pointer;font-family:inherit;text-align:left;color:inherit}
+.lcard .lv{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);display:block;margin-bottom:3px}
+.lcard.now{border:2px solid var(--accent)}
+.lcard.got{background:var(--okbg);border-color:var(--correct)}
+.lcard.got .lv{color:var(--correct)}
+.ladder-hint{display:none;background:var(--accent-soft);border:1px dashed var(--accent);border-radius:9px;
+             padding:10px 12px;font-size:13px;margin:0 0 12px}
+.ladder-hint.show{display:block}
+@media (max-width:700px){.ladder{grid-template-columns:repeat(2,1fr)}}
+
+/* ---- PEEL builder ---- */
+.slotrow{display:flex;flex-direction:column;gap:8px;margin:0 0 12px}
+.slot{border:2px dashed var(--line);border-radius:10px;min-height:48px;padding:8px 10px;background:var(--paper);
+      display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.slot .slabel{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);flex:0 0 80px}
+.slot .placed{border-radius:8px;padding:7px 10px;font-size:13.5px;cursor:pointer;border:1px solid transparent;font-family:inherit}
+.slot .placed:after{content:" ✕";font-size:10px;opacity:.6}
+.bins{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:0 0 12px}
+@media (max-width:900px){.bins{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.bins{grid-template-columns:1fr}}
+.bin{border:1px solid var(--line);border-radius:10px;background:var(--paper);overflow:hidden}
+.bin h4{margin:0;padding:7px 10px;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--line-soft)}
+.bin .binbody{padding:8px;display:flex;flex-direction:column;gap:6px;max-height:250px;overflow-y:auto}
+.btile{border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:13px;text-align:left;
+       cursor:pointer;font-family:inherit;background:var(--paper);color:inherit;line-height:1.45}
+.btile:hover{border-color:var(--accent)}
+.bin.b-p h4,.placed.k-p,.btile.k-p{background:var(--p-bg);color:var(--p-tx)}
+.bin.b-e h4,.placed.k-e,.btile.k-e{background:var(--e-bg);color:var(--e-tx)}
+.bin.b-x h4,.placed.k-x,.btile.k-x{background:var(--x-bg);color:var(--x-tx)}
+.bin.b-l h4,.placed.k-l,.btile.k-l{background:var(--l-bg);color:var(--l-tx)}
+.preview{font-family:Georgia,serif;font-size:16.5px;line-height:1.7;background:var(--bg);border:1px solid var(--line);
+         border-radius:9px;padding:13px 15px;margin:0 0 12px;min-height:56px}
+.preview .ph{color:var(--faint);font-size:13px;font-family:system-ui,sans-serif}
+.wagoll{background:var(--bg);border:1px solid var(--line);border-left:4px solid var(--correct);
+        border-radius:9px;padding:13px 15px;margin:0 0 12px;font-family:Georgia,serif;font-size:15.5px;line-height:1.75}
+.wagoll .tagp{font-family:system-ui,sans-serif;font-size:9.5px;font-weight:800;text-transform:uppercase;
+              letter-spacing:.4px;border-radius:4px;padding:1px 5px;margin-right:4px;vertical-align:2px}
+.wagoll .t-p{background:var(--p-bg);color:var(--p-tx)}
+.wagoll .t-e{background:var(--e-bg);color:var(--e-tx)}
+.wagoll .t-x{background:var(--x-bg);color:var(--x-tx)}
+.wagoll .t-l{background:var(--l-bg);color:var(--l-tx)}
+
+/* ---- report ---- */
+table.rpt{width:100%;border-collapse:collapse;font-size:13.5px;margin:0 0 12px}
+table.rpt th,table.rpt td{border:1px solid var(--line);padding:7px 10px;text-align:left}
+table.rpt th{background:var(--bg);font-size:11px;text-transform:uppercase;letter-spacing:.4px}
+.rowinp{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 12px}
+.rowinp label{font-size:12px;font-weight:700;display:block;margin-bottom:3px}
+.rowinp input{padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:14px;
+              font-family:inherit;background:var(--paper);color:var(--ink)}
+.vcode{font-family:Georgia,serif;font-size:15px;letter-spacing:1px}
+.foot{margin-top:20px;padding-top:12px;border-top:1px solid var(--line);color:var(--faint);font-size:11.5px}
+
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{
+  body{background:#fff;padding:0}
+  .container{border:none;max-width:100%;padding:0}
+  .noprint{display:none!important}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="topbar noprint">
+    <span class="where" id="navWhere"></span>
+    <span>
+      <a class="linkbtn" href="index.html" style="text-decoration:none">← ELC Hub</a>
+      <button class="linkbtn" id="homeBtn" onclick="go('home')" style="display:none">← hub home</button>
+    </span>
+  </div>
+  <div id="body"></div>
+  <div class="foot noprint">
+    Nothing here is sent anywhere. Your answers stay in this browser only (localStorage) — no account, no
+    tracking. Clearing your browser data clears your progress. Passages marked <i>written for this activity</i>
+    are original ELC writing in the style of the novella, not extracts from it.
+  </div>
+</div>
+
+<script>
+/* ============================================================================
+   OF MICE AND MEN — READING & WRITING HUB
+   ----------------------------------------------------------------------------
+   John Steinbeck, "Of Mice and Men" (novella, 1937).
+
+   COPYRIGHT NOTE — this site is public and live.
+   The novella is in copyright. This file therefore contains NO reproduced
+   extract. Where a real phrase is quoted it is short — a few words inside
+   original analytical commentary, the same use any published book review
+   makes. Every longer passage is ORIGINAL writing composed for this activity
+   in the manner of the novella, and is labelled as such on screen.
+   Do not paste chapters, scans or the novella's text into this file.
+
+   ----------------------------------------------------------------------------
+   This block is the data spine. The engine below knows nothing about the
+   novella; it only runs whatever is in these consts. To add content, copy an
+   entry and follow its shape. Every item needs an `id` and an `explain` that
+   names the trap and points the reader back to the words.
+
+   Scoring: wrong answers are retried until correct (mastery loop), but only
+   the FIRST attempt is scored and reported.
+   ============================================================================ */
+
+const TEXT = {
+  title:"Of Mice and Men",
+  author:"John Steinbeck",
+  form:"novella, 1937",
+  blurb:"George and Lennie walk from ranch to ranch in Depression-era California, carrying their bedrolls and one plan: to buy a small farm and live on it.",
+  hook:"Almost nobody in this book has anybody. George and Lennie are the exception, and the whole novella asks how long two people like that can hold on to each other in a world built to keep men alone."
+};
+
+/* Every remaining story-specific string the engine prints. Kept here so the
+   engine below is genuinely shared with the other ELC text-study hubs — a new
+   text needs a new data spine and nothing else. */
+const COPY = {
+  key:"elc.miceandmen.hub.v1",
+  nav:"ELC English · novel study 2 · Of Mice and Men",
+  vocabDone:"These fourteen words are the ones the novella leans on. You now know their pieces, which means you can also read words you have never met that share them — every <i>-ation</i> noun, every <i>-able</i> adjective, every word built on <i>pend</i> or <i>spir</i>.",
+  dictDone:"Dictation trains the join between hearing a word and spelling it. Steinbeck spells his characters' speech the way it sounds, so hearing before writing is exactly the skill this book asks of you.",
+  qr1Done:"Next quickread: Candy and his dog. Read it knowing what you now know about George and Lennie — Steinbeck wrote the two scenes to be read against each other.",
+  qr2Done:"You have now read the novella's two central pairs. The Voice fingerprint activity turns what you noticed into something you can name and point at.",
+  extension:"draft a PEEL paragraph on an idea the hub does not cover, such as why Curley's wife is never given a name",
+  labels:{ qr1:"Quickread: the bunkhouse", qr2:"Quickread: Candy's dog" },
+  recommend:{
+    qr1:"Reread with a pencil and mark every place George says something unkind and does something kind. The gap between the two is the character.",
+    qr2:"Reread the Candy scene and underline what nobody says out loud. Steinbeck builds pressure through silence and repetition, not argument.",
+    voice:"Before you write in character, list the fingerprints: sentence length, whether the speaker repeats himself, whether he asks or tells, and what he never mentions.",
+    fig:"Revisit the difference between symbol, motif and foreshadowing, then track the hands through the novella and find one more example of each."
+  }
+};
+
+/* ==================== 1 · VOCABULARY PRETEACH ==============================
+   The program's standing routine, digitised: morpheme matrices. Every student
+   meets all fourteen words, but each word arrives as ONE task — assemble it
+   from its morphemes, match its meaning, or complete a sentence. The deal is
+   stored, so a refresh cannot reroll a hard word into an easy one.
+   =========================================================================== */
+const VOCAB = [
+{ w:"migrant", pos:"noun / adjective",
+  meaning:"A person who moves from place to place to find work.",
+  tiles:[["migr","move / travel"],["-ant","one who"]],
+  decoys:[["im-","into"],["-ate","to make"]],
+  note:"Latin <i>migrare</i>, to move. Add the decoy and you get a different word: an <b>im</b>migrant moves INTO a country, an <b>e</b>migrant moves OUT of one, and a migrant just keeps moving. George and Lennie are the third kind.",
+  gap:["George and Lennie are", "workers, walking from one ranch to the next."] },
+{ w:"itinerant", pos:"adjective",
+  meaning:"Travelling from place to place, especially for work.",
+  tiles:[["itiner","journey"],["-ant","one who"]],
+  decoys:[["intern","inside"],["-ary","relating to"]],
+  note:"Same root as <i>itinerary</i> — a plan of a journey. Careful with the decoy: <b>intern</b> looks similar and means the opposite, staying inside one place.",
+  gap:["The bunkhouse is full of", "men who never stay long enough to make a friend."] },
+{ w:"isolation", pos:"noun",
+  meaning:"The state of being alone and separated from others.",
+  tiles:[["isol","alone"],["-ation","act or process"]],
+  decoys:[["in-","not"],["-ify","to make"]],
+  note:"From Latin <i>insula</i>, island — to isolate someone is to make an island of them. Ask it of every character: Candy, Crooks, Curley's wife. Each is an island for a different reason.",
+  gap:["Crooks lives in a room off the barn, and his", "is enforced by other people."] },
+{ w:"companionship", pos:"noun",
+  meaning:"The comfort of having someone with you.",
+  tiles:[["com-","together"],["pan","bread"],["-ion","state of"],["-ship","state / condition"]],
+  decoys:[["contra-","against"],["-ment","result of"]],
+  note:"A companion is literally someone you break <b>bread</b> with — same <b>pan</b> as pantry. Four morphemes, and the middle one is the surprise. This word is the novella's subject.",
+  gap:["What George gives Lennie, and what nobody else on the ranch has, is", "."] },
+{ w:"predatory", pos:"adjective",
+  meaning:"Behaving like a hunter — taking advantage of weaker people.",
+  tiles:[["pred","prey / plunder"],["-atory","relating to"]],
+  decoys:[["pre-","before"],["-ence","state of"]],
+  note:"A trap worth knowing: <b>pred</b> is not <b>pre</b>. A predator hunts; a prediction comes before. Same <b>pred</b> as predator and depredation.",
+  gap:["Curley picks fights with big men, which is", "rather than brave."] },
+{ w:"contemptuous", pos:"adjective",
+  meaning:"Showing that you think someone is worthless.",
+  tiles:[["con-","thoroughly"],["tempt","to scorn"],["-uous","full of"]],
+  decoys:[["trans-","across"],["-ible","able to be"]],
+  note:"To hold someone in contempt is to scorn them completely — the <b>con-</b> is an intensifier, not 'with'. Notice how many characters are contemptuous of Lennie, and how few are cruel to his face.",
+  gap:["Curley is", "of anyone he thinks cannot fight back."] },
+{ w:"apprehensive", pos:"adjective",
+  meaning:"Worried that something bad is about to happen.",
+  tiles:[["ap-","toward"],["prehens","to seize, to grasp"],["-ive","tending to"]],
+  decoys:[["re-","back"],["-ment","result of"]],
+  note:"To apprehend is to seize — with your hands (the police sense) or with your mind (to understand). To be apprehensive is to grasp at a fear before it arrives. Same root as comprehend and prehensile.",
+  gap:["From the first page George is", "about what Lennie might do."] },
+{ w:"disillusioned", pos:"adjective",
+  meaning:"Disappointed after discovering something was not as good as you believed.",
+  tiles:[["dis-","apart"],["illus","to mock, to play a trick"],["-ion","state of"],["-ed","having been"]],
+  decoys:[["mis-","wrongly"],["-able","able to be"]],
+  note:"An illusion plays a trick on you; to be disillusioned is to have the trick taken away. It sounds negative, but the root meaning is closer to <i>waking up</i> — which is what the ranch does to every dream in this book.",
+  gap:["Candy hands over his money, and by the end of the novella he is", "."] },
+{ w:"vulnerable", pos:"adjective",
+  meaning:"Easily hurt, physically or emotionally.",
+  tiles:[["vulner","wound"],["-able","can be"]],
+  decoys:[["in-","not"],["-ous","full of"]],
+  note:"Latin <i>vulnus</i> = wound. Literally 'woundable'. Add the decoy and you get its opposite, <b>in</b>vulnerable. Almost every character in this book is vulnerable in a different way — the interesting question is who admits it.",
+  gap:["Lennie is enormously strong and completely", "at the same time."] },
+{ w:"discrimination", pos:"noun",
+  meaning:"Treating a person worse because of who they are.",
+  tiles:[["dis-","apart"],["crimin","distinguish / judge"],["-ation","process of"]],
+  decoys:[["de-","down"],["-ive","tending to"]],
+  note:"The root means to tell things apart. The word once meant simply 'telling the difference' — it took on its unjust meaning because of how people used it. Crooks is the only Black man on the ranch and is made to sleep alone in the harness room.",
+  gap:["Crooks is kept out of the bunkhouse, which is", "and everyone accepts it."] },
+{ w:"foreshadowing", pos:"noun",
+  meaning:"An early hint of something that will happen later in a story.",
+  tiles:[["fore-","before"],["shadow","shade / dark shape"],["-ing","action / process"]],
+  decoys:[["for-","away, completely"],["-ed","having been"]],
+  note:"A shadow that arrives before the thing itself. Careful with the decoy: <b>fore</b>- (before) and <b>for</b>- (away) are different prefixes — foresee versus forget. This is the technique the whole novella is built on.",
+  gap:["The shooting of Candy's dog is", "for the novella's ending."] },
+{ w:"aspiration", pos:"noun",
+  meaning:"A strong hope or ambition for the future.",
+  tiles:[["a-","to / toward"],["spir","breathe"],["-ation","process of / state of"]],
+  decoys:[["ex-","out"],["-ory","relating to"]],
+  note:"To aspire is to breathe toward something. Same <b>spir</b> as inspire (breathe in), expire (breathe out) and spirit. The farm is an aspiration that the men breathe life into by saying it aloud.",
+  gap:["The little farm is an", "the men keep alive by repeating it."] },
+{ w:"dependent", pos:"adjective",
+  meaning:"Needing someone or something else in order to manage.",
+  tiles:[["depend","rely on"],["-ent","person / quality"]],
+  decoys:[["in-","not"],["-able","able to be"]],
+  note:"Inside <b>depend</b> is Latin <i>pendere</i>, to hang — same root as pendant, pending and suspend. To depend on someone is to hang from them. Add the decoy and you get <b>in</b>dependent, and the honest question the novella raises is which of George and Lennie is really the dependent one.",
+  gap:["Lennie is", "on George, but the need runs both ways."] },
+{ w:"inevitable", pos:"adjective",
+  meaning:"Certain to happen; impossible to avoid.",
+  tiles:[["in-","not"],["evit","to avoid"],["-able","can be"]],
+  decoys:[["e-","out"],["-ity","state of"]],
+  note:"Literally 'not avoidable'. Latin <i>evitare</i>, to shun. Steinbeck's structure makes the ending feel inevitable — and 'feel' is the right word, because the reader is made to see it coming long before the characters do.",
+  gap:["Because of the foreshadowing, the ending feels", "rather than shocking."] }
+];
+
+/* ==================== 2 · DICTATION WARM-UP ================================ */
+const DICTATION = [
+{ id:"d1", s:"George and Lennie are migrant workers looking for a job." },
+{ id:"d2", s:"They carry their blankets and one plan for a small farm." },
+{ id:"d3", s:"Lennie is very strong but he is also vulnerable." },
+{ id:"d4", s:"Crooks sleeps alone in the harness room off the barn." },
+{ id:"d5", s:"Candy is afraid of being sent away when he is too old to work." },
+{ id:"d6", s:"Curley is contemptuous of anyone he thinks cannot fight back." },
+{ id:"d7", s:"The little farm is an aspiration they keep alive by talking about it." },
+{ id:"d8", s:"The death of the old dog is foreshadowing for the ending." }
+];
+
+/* ==================== 3–4 · QUICKREADS =====================================
+   Both passages are ORIGINAL writing composed for this activity in the manner
+   of the novella — see the copyright note above. They are written to carry the
+   features the unit teaches: plain declarative sentences, concrete nouns,
+   dialogue that characterises, and repetition used as ritual.
+   =========================================================================== */
+const QUICKREADS = [
+{ id:"qr1", step:"Quickread 1", title:"The bunkhouse", where:"the first evening on the ranch",
+  intro:"George and Lennie have just arrived. Read it twice. Watch what George SAYS and what George DOES — they are not the same thing. When you start the questions the passage disappears.",
+  origin:"Written for this activity in the manner of the novella — not an extract from it.",
+  passage:`George laid his cards down and looked at the wall. "You remember what you're gonna do if you get in trouble?"<br><br>
+"I'm gonna hide in the brush," Lennie said. "By the river. Where we come from."<br><br>
+"That's right." George picked the cards up again. He set them out slow, one at a time, and did not look over.<br><br>
+"George. Tell about the place."<br><br>
+"You know it. You could tell it yourself."<br><br>
+"You tell it. It ain't the same when I tell it."<br><br>
+George put the cards down again. He said it the way a man says a thing he has said four hundred times, and he said it without hurrying. "Guys like us got no family. They work a month and they blow their stake and they go on to the next ranch. They ain't got nothing to look ahead to." He stopped. "We ain't like that."<br><br>
+"We ain't like that," Lennie said. "Because I got you and—"<br><br>
+"And you got me," George said. "Go on. You tell some."<br><br>
+Lennie sat up. The old man at the end of the bunkhouse had stopped sweeping and was standing very still with the broom in his hands, and neither of them noticed him.`,
+  items:[
+  { id:"qr1a", q:"Why does George ask Lennie what he will do if he gets in trouble?",
+    opts:["He is testing whether Lennie has been listening",
+          "He is planning ahead, because he expects trouble to come",
+          "He wants Lennie to leave the ranch",
+          "He is angry about something Lennie did earlier"],
+    a:1, explain:"This is a rehearsed instruction, not a question — Lennie already knows the answer. That tells you George expects trouble as a matter of routine, which is foreshadowing dressed up as a conversation.",
+    line:"\"You remember what you're gonna do if you get in trouble?\"" },
+  { id:"qr1b", q:"\"You know it. You could tell it yourself.\" What is George really doing here?",
+    opts:["Refusing, because he does not want to tell it",
+          "Pretending it is a chore, when he tells it anyway — the complaint is part of the ritual",
+          "Testing Lennie's memory",
+          "Trying to teach Lennie to read"],
+    a:1, explain:"He complains and then does it, slowly and without hurrying. Watch for this pattern in George everywhere: the words are impatient, the actions are tender. Judge him by the second one.",
+    line:"\"You know it. You could tell it yourself.\"" },
+  { id:"qr1c", q:"\"It ain't the same when I tell it.\" What does this line tell us about the story of the farm?",
+    opts:["Lennie has forgotten some of the details",
+          "Lennie tells it badly",
+          "It matters who says it — the telling is a shared ritual, not just information",
+          "George has made the story up"],
+    a:2, explain:"If it were only information, anyone could deliver it. Lennie needs George's voice, which makes the farm a ritual the two of them perform together. That is why the dream dies when the partnership does.",
+    line:"\"You tell it. It ain't the same when I tell it.\"" },
+  { id:"qr1d", q:"\"He said it the way a man says a thing he has said four hundred times.\" What is the effect of this line?",
+    opts:["It shows George is bored of Lennie",
+          "It shows the speech is a repeated ritual, worn smooth by use",
+          "It shows George is lying",
+          "It shows George has a bad memory"],
+    a:1, explain:"'Four hundred times' is doing two jobs: it makes the speech a ritual, and it tells you these two have been together a long time. Note that he says it 'without hurrying' — boredom would rush.",
+    line:"He said it the way a man says a thing he has said four hundred times, and he said it without hurrying." },
+  { id:"qr1e", q:"\"Guys like us got no family… They ain't got nothing to look ahead to.\" Why does George describe other men before describing themselves?",
+    opts:["He is changing the subject",
+          "He sets up the loneliness of everyone else so that 'We ain't like that' lands harder",
+          "He is talking about Curley",
+          "He has forgotten what he meant to say"],
+    a:1, explain:"The structure is the argument: describe the ordinary fate, pause, then refuse it. 'We ain't like that' only means something because of the sentences before it.",
+    line:"\"They ain't got nothing to look ahead to.\" He stopped. \"We ain't like that.\"" },
+  { id:"qr1f", q:"\"Because I got you and—\" / \"And you got me.\" What does Steinbeck show by having them finish each other's sentence?",
+    opts:["Lennie cannot remember the words",
+          "George is interrupting rudely",
+          "The two halves belong together — the sentence works the way the partnership does",
+          "They are arguing about the farm"],
+    a:2, explain:"One sentence, two speakers, neither able to complete it alone. The form of the dialogue performs the idea. This is a strong quotation for any paragraph about companionship.",
+    line:"\"Because I got you and—\" / \"And you got me,\" George said." },
+  { id:"qr1g", q:"The old man with the broom is standing very still and 'neither of them noticed him'. Why does Steinbeck end the scene this way?",
+    opts:["To show the bunkhouse needs cleaning",
+          "To introduce a listener who wants what they have — and to warn us the dream is no longer private",
+          "To show that the old man is dangerous",
+          "To change the subject"],
+    a:1, explain:"A silent listener at the edge of a scene is never decoration. He has stopped working to hear it, which tells you he wants in — and a dream that spreads to a third person is a dream that has started to move.",
+    line:"The old man at the end of the bunkhouse had stopped sweeping and was standing very still with the broom in his hands." }
+]},
+{ id:"qr2", step:"Quickread 2", title:"Candy's dog", where:"later the same evening",
+  intro:"The same bunkhouse, a few hours later. Read carefully — almost nothing is stated directly. When you start the questions the passage disappears.",
+  origin:"Written for this activity in the manner of the novella — not an extract from it.",
+  passage:`"That dog ain't no good to himself," Carlson said. "I'd shoot him right in the back of the head. He wouldn't feel nothing."<br><br>
+Candy looked down at his hands. "I had him since he was a pup," he said. "I herded sheep with him."<br><br>
+Nobody answered. Somebody turned a page. Carlson took out his cleaning rag and began working on the barrel of his gun, and did not put it away.<br><br>
+"Well, I can't stand him no more," Carlson said. "That stink. I can smell him from here."<br><br>
+Candy said, "Maybe tomorra. Le's wait till tomorra."<br><br>
+"Whyn't you do it tonight?"<br><br>
+Candy did not have an answer for that. He looked around the room, at each man in turn, and every one of them was looking somewhere else. Slim said, quietly, "Candy, you can have one of Lulu's pups if you want." He said it kindly, and it settled the thing.<br><br>
+Candy lay back on his bunk and turned his face to the wall. After a long time he said, to nobody, "I ought to of shot that dog myself. I shouldn't ought to of let no stranger shoot my dog."`,
+  items:[
+  { id:"qr2a", q:"Carlson keeps cleaning his gun and 'did not put it away'. What is this detail doing?",
+    opts:["Showing Carlson is a tidy man",
+          "Applying quiet pressure — the gun stays visible while the argument continues",
+          "Showing Carlson is about to go hunting",
+          "Showing Carlson is afraid of the dog"],
+    a:1, explain:"The object does the arguing. Steinbeck rarely tells you a character is being pressured; he leaves a gun on the table and lets you feel it. Notice the sentence adds 'and did not put it away' — the choice is deliberate.",
+    line:"Carlson took out his cleaning rag and began working on the barrel of his gun, and did not put it away." },
+  { id:"qr2b", q:"\"I had him since he was a pup. I herded sheep with him.\" What is Candy arguing?",
+    opts:["That the dog is still useful",
+          "That the dog's worth is a shared history, not what it can do now",
+          "That he wants to buy a new dog",
+          "That Carlson is wrong about the smell"],
+    a:1, explain:"Carlson argues usefulness; Candy answers with time. They are not having the same conversation — and on this ranch, the usefulness argument always wins. That is why Candy is frightened for himself.",
+    line:"\"I had him since he was a pup,\" he said. \"I herded sheep with him.\"" },
+  { id:"qr2c", q:"'Nobody answered. Somebody turned a page.' Why are these two short sentences powerful?",
+    opts:["They show the men are asleep",
+          "They show nobody is willing to take Candy's side, and the silence does Carlson's work for him",
+          "They show the men cannot hear him",
+          "They show the men are reading"],
+    a:1, explain:"Silence as evidence. The page-turn is the give-away: they heard, and chose the newspaper. Watch how often in this book cruelty happens because nobody objects.",
+    line:"Nobody answered. Somebody turned a page." },
+  { id:"qr2d", q:"'He looked around the room, at each man in turn, and every one of them was looking somewhere else.' What does Candy discover here?",
+    opts:["That the men are tired",
+          "That he is completely alone in the argument",
+          "That Carlson has left",
+          "That the dog has gone"],
+    a:1, explain:"He is counting allies and finding none. This is the isolation theme delivered as an action rather than a statement — and it is the exact reason he later reaches for George and Lennie's farm.",
+    line:"He looked around the room, at each man in turn, and every one of them was looking somewhere else." },
+  { id:"qr2e", q:"Slim's offer of a puppy is described as settling 'the thing'. What does this reveal about Slim?",
+    opts:["Slim owns all the dogs on the ranch",
+          "Slim's word carries authority the others accept — even when he speaks quietly",
+          "Slim is on Carlson's side and wants the dog gone",
+          "Slim dislikes Candy"],
+    a:1, explain:"He speaks 'quietly' and it settles a room. Power in this book is not loudness — compare Curley, who shouts and convinces nobody. Slim's authority is worth a paragraph of its own.",
+    line:"Slim said, quietly, \"Candy, you can have one of Lulu's pups if you want.\" He said it kindly, and it settled the thing." },
+  { id:"qr2f", q:"\"I ought to of shot that dog myself.\" What is Candy's regret really about?",
+    opts:["That the dog died at all",
+          "That he let a stranger do what should have been done by someone who loved the dog",
+            "That he did not sell the dog",
+          "That Carlson used the wrong gun"],
+    a:1, explain:"Read the second sentence: the complaint is not the shooting but the shooter. Candy believes some things must be done by the person closest to you. Hold on to this — the novella ends by testing exactly that belief.",
+    line:"\"I shouldn't ought to of let no stranger shoot my dog.\"" },
+  { id:"qr2g", q:"Steinbeck puts this scene shortly after the bunkhouse scene about the farm. What is the most likely reason?",
+    opts:["To show what happens on a ranch in the evening",
+          "So the reader reads the two pairs against each other — an old man and his dog, a man and his friend",
+          "To introduce Carlson as the villain",
+          "To slow the story down before the next chapter"],
+    a:1, explain:"Placing two pairs side by side invites the comparison, and the comparison is the foreshadowing. By the end, the reader is expected to remember Candy's regret at exactly the right moment.",
+    line:"\"I shouldn't ought to of let no stranger shoot my dog.\"" }
+]}];
+
+/* ==================== 5 · FIGURATIVE → LITERAL ============================= */
+const FIG_TECHS = ["Simile — compares using 'like' or 'as'",
+                   "Metaphor — says one thing IS another",
+                   "Symbol — an object that carries a bigger idea",
+                   "Motif — an image that keeps returning",
+                   "Irony — the opposite of what is expected",
+                   "Foreshadowing — an early hint of what is coming"];
+const FIG_ITEMS = [
+{ id:"fig1", quote:"the little farm", page:"told and retold",
+  meaning:{ opts:["A property George has already put a deposit on",
+                  "The dream the men keep alive by speaking it aloud — a shared idea, not a real place",
+                  "The ranch where they are working",
+                  "Lennie's aunt's house"],
+    a:1, explain:"It is never bought and never seen. Its whole existence is in the telling, which is why it can be joined (Candy, then Crooks) and why it dies the moment the partnership does." },
+  tech:{ opts:[0,2,3,4], a:1, explain:"An object — a few acres, a stove, some rabbits — carrying the novella's biggest idea. That makes it a symbol. Test it: swap the farm for a pay rise and everything meaningful drains out." } },
+{ id:"fig2", quote:"hands", page:"throughout",
+  meaning:{ opts:["The men injure their hands at work",
+                  "Hands keep returning — Lennie's, Candy's missing one, Curley's glove — as the measure of what a man is worth here",
+                  "A card game the men play",
+                  "The name of the ranch"],
+    a:1, explain:"Ranch workers are literally called hands. Lennie's hands are strong and cannot be controlled; Candy has lost one and with it his security; Curley keeps one soft in a glove. Each hand is a character summary." },
+  tech:{ opts:[0,1,3,5], a:2, explain:"A single image returning across the whole book is a motif. A symbol can appear once; a motif has to come back — and this one comes back in almost every chapter." } },
+{ id:"fig3", quote:"Candy's dog", page:"the bunkhouse, evening",
+  meaning:{ opts:["A pet that provides comfort",
+                  "A creature judged useless and quietly removed — the ranch's rule, demonstrated early so we recognise it later",
+                  "A working sheepdog that still earns its keep",
+                  "A gift from Slim"],
+    a:1, explain:"The dog is old, smells, and can no longer work, so it is shot. That is the ranch's whole moral system in one scene — and Candy, old and one-handed, watches it being applied." },
+  tech:{ opts:[0,2,4,5], a:3, explain:"The scene is planted so the ending feels earned rather than sudden — an early hint of what is coming. Note it works twice: it foreshadows the ending AND Candy's own fear for himself." } },
+{ id:"fig4", quote:"the river at the beginning and the end",
+  page:"the opening and closing scenes",
+  meaning:{ opts:["The men go swimming twice",
+                  "The novella starts and finishes in the same quiet place, so the story closes a circle",
+                  "The river floods",
+                  "The river marks the border of the ranch"],
+    a:1, explain:"Steinbeck brings us back to the exact spot where the book began. Nothing has been gained; the men have travelled a long way to arrive nowhere. The shape of the story is part of its argument." },
+  tech:{ opts:[0,2,4,5], a:1, explain:"The repeated setting frames the whole book, so it works as a symbol of return and futility. Structure is a technique too — where an author puts a scene is a choice you can analyse." } },
+{ id:"fig5", quote:"Lennie described like a bear, a horse, a terrier",
+  page:"the descriptions of Lennie",
+  meaning:{ opts:["Lennie owns several animals",
+                  "The animal comparisons build a man who is powerful, loyal and not answerable to human rules",
+                  "Lennie works with animals on the ranch",
+                  "Lennie is frightened of animals"],
+    a:1, explain:"Each animal adds something: a bear's bulk, a horse's obedience, a terrier's eagerness. Together they make Lennie sympathetic and, quietly, prepare the reader to accept that he cannot be judged as other men are." },
+  tech:{ opts:[0,1,2,4], a:0, explain:"Comparisons using 'like' or 'as' are similes. The choice matters: calling him a bear outright (metaphor) would make him a monster. 'Like a bear' keeps him a man who resembles one." } },
+{ id:"fig6", quote:"Curley's glove full of vaseline", page:"the ranch talk",
+  meaning:{ opts:["Curley has injured his hand",
+                  "He keeps one hand soft for his wife — a private thing announced publicly, which shames her",
+                  "He wears it for work",
+                  "It protects him when he fights"],
+    a:1, explain:"The glove is talked about by the men, which is the point: an intimate arrangement made into ranch gossip. It tells you how Curley sees his marriage, and how little privacy his wife is allowed." },
+  tech:{ opts:[0,2,3,4], a:1, explain:"A small object carrying a large idea about ownership and display — a symbol. Notice it belongs to the hands motif too; the best details often serve two techniques at once." } },
+{ id:"fig7", quote:"the rabbits", page:"Lennie asks about them constantly",
+  meaning:{ opts:["Lennie keeps rabbits already",
+                  "Lennie's version of the dream — soft things he will be allowed to touch",
+                  "Pests the ranch is trying to control",
+                  "A meal the men are planning"],
+    a:1, explain:"George dreams of land and independence; Lennie dreams of something soft to hold. The same farm means different things to each man, which is why 'tell about the rabbits' is really 'tell me I am safe'." },
+  tech:{ opts:[0,2,3,5], a:1, explain:"The rabbits stand for Lennie's whole hope, so they are symbolic. They are also a motif — they return every time he is frightened, which is how the reader learns to read his fear." } },
+{ id:"fig8", quote:"Curley's wife has no name", page:"the whole novella",
+  meaning:{ opts:["Steinbeck forgot to name her",
+                  "She is defined only by the man she belongs to — the omission is the characterisation",
+                  "Her name is revealed at the end",
+                  "The men do not know her name"],
+    a:1, explain:"Every other character on the ranch has a name, even the dog. She is 'Curley's wife' in narration as well as dialogue, which means the book itself, not just the men, withholds her identity." },
+  tech:{ opts:[0,2,3,4], a:3, explain:"Deeply ironic: the way to show a person is denied an identity is to deny it in your own writing. The absence does the work. Ask in your essay what it costs the reader to notice this only afterwards." } }
+];
+
+/* ==================== 6 · VOICE FINGERPRINT ================================
+   All lines are written for this activity; each is built around ONE nameable
+   feature, so the student learns to point at the words rather than guess.
+   =========================================================================== */
+const VOICE_WHO = ["George","Lennie","Candy","Crooks","Curley's wife","Slim","The narrator"];
+const VOICE_ITEMS = [
+{ id:"vo1", line:"An' I get to tend the rabbits. George? I get to tend 'em, don't I? You said.", page:"the dream", a:1,
+  whoExplain:"Lennie. He asks the same question twice, checks it against what he was promised, and needs the answer out loud — reassurance, not information.",
+  feat:{ opts:["Repetition and a question he already knows the answer to",
+               "Long subordinate clauses","Formal vocabulary","Third-person narration"],
+    a:0, explain:"Count the repetitions. Lennie's voice is built from asking again — and the tag 'You said' shows he is holding George to a promise, which is the only power he has." } },
+{ id:"vo2", line:"You do that again an' I'll take the whole thing away from you, you hear me? Now eat your beans.",
+  page:"the campsite", a:0,
+  whoExplain:"George. A threat, then an ordinary instruction. He scolds and feeds in the same breath, which is his whole character in two sentences.",
+  feat:{ opts:["Formal vocabulary","A threat immediately followed by an act of care",
+               "Repetition and reassurance","Third-person description"],
+    a:1, explain:"Do not read George's tone as his feeling. The pattern — harsh words, kind action — repeats all through the book, and noticing it is what separates a C2 answer from a C4 one." } },
+{ id:"vo3", line:"They'll can me purty soon. Jus' as soon as I can't swamp out no bunkhouses they'll put me on the county.",
+  page:"the bunkhouse", a:2,
+  whoExplain:"Candy. He is talking about being discarded when he stops being useful — and he says it flatly, as a fact he has already accepted.",
+  feat:{ opts:["A prediction about his own uselessness, stated as certainty",
+               "Repetition and reassurance","Quiet authority","Formal vocabulary"],
+    a:0, explain:"The giveaway is the certainty — no 'maybe', no 'if'. Read it beside the scene with his dog and the connection makes itself: he has just watched the rule applied to something he loved." } },
+{ id:"vo4", line:"You got no right to come in my room. This here's my room. Nobody got any right in here but me.",
+  page:"the harness room", a:3,
+  whoExplain:"Crooks. He is defending the one space he is allowed to have, using the word 'right' three times — a word he is otherwise denied.",
+  feat:{ opts:["Repetition of a single word that he is elsewhere refused",
+               "A threat followed by kindness","Quiet authority","Long flowing description"],
+    a:0, explain:"He repeats 'right' because he has so few. The room is a punishment (he is kept out of the bunkhouse) that he has had to turn into a possession. That contradiction is the character." } },
+{ id:"vo5", line:"I get lonely. You can talk to people, but I can't talk to nobody but Curley. Else he gets mad.",
+  page:"the barn", a:4,
+  whoExplain:"Curley's wife. She names her loneliness directly, and then names the reason — a husband who controls who she speaks to.",
+  feat:{ opts:["Plain statement of loneliness, with the cause named immediately after",
+               "Repetition and reassurance","Formal vocabulary","Third-person narration"],
+    a:0, explain:"The men read her as dangerous; the sentence itself is a plain admission of isolation. Notice how often what a character SAYS and what other characters SAY ABOUT them do not match — that gap is where analysis lives." } },
+{ id:"vo6", line:"A guy on a ranch don't never listen nor he don't ast no questions.", page:"the barn", a:5,
+  whoExplain:"Slim. A short, general statement about how the world works, offered without heat — the tone of a man whose judgements the others accept.",
+  feat:{ opts:["Quiet authority: a general rule stated calmly, not argued for",
+               "Repetition and pleading","A threat","Formal vocabulary"],
+    a:0, explain:"He does not raise his voice or justify himself. Compare it with Curley, who has to threaten to be heard. Steinbeck gives Slim authority by giving him the shortest sentences and the fewest of them." } },
+{ id:"vo7", line:"The evening of a hot day started the little wind to moving among the leaves, and the shade climbed up the hills toward the top.",
+  page:"a chapter opening", a:6,
+  whoExplain:"The narrator. Third person, no dialect, landscape in motion before any person appears.",
+  feat:{ opts:["Dialect spelling","Third-person description of landscape, with no character present",
+               "Repetition and reassurance","A stated rule about people"],
+    a:1, explain:"Steinbeck opens chapters like stage directions — setting first, people after. Notice that the narrator's English is standard while every character's is spelled as spoken; that contrast is a deliberate choice worth writing about." } },
+{ id:"vo8", line:"I ain't got no people. I seen the guys that go around on the ranches alone. That ain't no good.",
+  page:"the campsite", a:0,
+  whoExplain:"George. Two negatives, plain vocabulary, and an argument built from something he has watched rather than something he has been told.",
+  feat:{ opts:["Non-standard negation and evidence drawn from observation",
+               "Repetition of a promise","Quiet authority","Formal vocabulary"],
+    a:0, explain:"'Ain't got no' is double negation — standard in this dialect, not an error. And 'I seen the guys' is how George argues throughout: by what he has witnessed. Point at both when you write about his voice." } }
+];
+
+/* ==================== 7 · EVIDENCE BUILDER ================================= */
+const EV_LADDER = [
+ { lv:"Level 1", text:"I can find quotes that relate to an idea",
+   hint:"Ask: which words actually SHOW the idea? Watch the switch-words — 'Carlson said…' vs 'But Candy…' tell you whose view you are inside." },
+ { lv:"Level 2", text:"I can explain why a quote is relevant",
+   hint:"Stems: 'This shows… because…' · 'Candy regrets… so this quote gives his reason…' · Beware answers that are TRUE but do not answer THE question." },
+ { lv:"Level 3", text:"I can embed quotes inside my own sentence",
+   hint:"Trim the quote to its key words. Read the whole sentence back — if it does not flow as ONE sentence, re-pick. Stem + “quote” + ending." },
+ { lv:"Level 4", text:"I can build a full PEEL paragraph around the evidence",
+   hint:"Point, Evidence, Explain, Link. The Explain must say what the words DO to the reader; the Link must reach a bigger idea, not just repeat the Point." }
+];
+const EV_ROUNDS = [
+{ id:"r1", mode:"question", title:"Round 1 — whose reason is it?",
+  where:"the bunkhouse, after the dog is shot",
+  origin:"Written for this activity in the manner of the novella — not an extract.",
+  question:"According to Candy, why does he regret what happened to his dog?",
+  qNote:"Click the part (or parts) of the passage that answer the question, then press Check. Careful — two men give two different explanations, and only one of them is Candy's.",
+  pageRef:"original passage",
+  segs:[
+  { t:"Carlson said it was because the dog was old and no use to anybody", role:"frame",
+    fb:"That names WHOSE explanation is coming — useful framing, but it is Carlson's, and it is not yet a reason from Candy." },
+  { t:"and that a man does a animal a kindness by not letting it get old.", role:"other",
+    fb:"Still Carlson. The question asks what CANDY regrets — watch the switch-words." },
+  { t:"But Candy was not sorry the dog was dead.", role:"frame",
+    fb:"'But' signals the switch to Candy's view, and it rules out the obvious answer. Keep reading — the reason is next." },
+  { t:"I ought to of shot that dog myself.", role:"gold",
+    fb:"That is it — the regret is about who pulled the trigger, not about the death." },
+  { t:"I shouldn't ought to of let no stranger shoot my dog.", role:"gold",
+    fb:"The clearest line in the passage: 'stranger' is the word carrying the whole regret." },
+  { t:"A man ought to do his own killing when it is his own to do.", role:"ok",
+    fb:"It supports the answer and it is quotable, but it states the rule rather than Candy's own feeling. Pair it with the lines above." },
+  { t:"He had the dog since it was a pup.", role:"other",
+    fb:"Strong evidence for how much the dog meant to him — but that answers a different question. Save it for a paragraph about worth and usefulness." },
+  { t:"He turned his face to the wall and did not say anything else that night.", role:"plain",
+    fb:"Powerful, but it is action closing the scene, not a reason. On its own it is not evidence for the question." }],
+  l2:{ q:"You found 'I shouldn't ought to of let no stranger shoot my dog.' WHY is this the right evidence for the question?",
+    opts:[
+    { t:"It locates the regret in who did it rather than in the death itself — a stranger did what someone who loved the dog should have done.", q:"good",
+      fb:"Exactly — and connecting the quote back to the question IS the explanation. The word 'stranger' is where the whole meaning sits." },
+    { t:"It shows that the ranch is a cruel place to live.", q:"retell",
+      fb:"True, but it does not answer THIS question. True-but-off-target is the most common evidence mistake." },
+    { t:"It proves that Carlson was wrong to shoot the dog.", q:"wrong",
+      fb:"Candy does not say the shooting was wrong — he says the shooter was. Read the sentence again; that distinction is the whole point." },
+    { t:"It proves that all the men on the ranch are heartless.", q:"stretch",
+      fb:"Slim is in the same room, and he is kind. A claim has to stay inside what the evidence can carry." }] },
+  builder:{
+    intro:"Now embed it. Build ONE sentence: a stem, a trimmed quote, and an ending. Read the preview back — it has to flow as a single sentence.",
+    stems:[
+    { id:"st1", t:"Candy's regret is not the death but the shooter, since he believes he", q:"good", accepts:["f1"], fb:"" },
+    { id:"st2", t:"What Candy cannot forgive himself for is that he", q:"good", accepts:["f1"], fb:"" },
+    { id:"st3", t:"This quote shows that Candy is sad because he", q:"point", accepts:["f1"],
+      fb:"Do not point at the quote ('This quote shows…'). State the idea and let the quote sit inside your sentence." }],
+    frags:[
+    { id:"f1", t:"ought to of shot that dog myself", q:"good", fb:"" },
+    { id:"f2", t:"I ought to of shot that dog myself. I shouldn't ought to of let no stranger shoot my dog. A man ought to do his own killing", q:"long",
+      fb:"Three sentences cannot sit inside your own sentence. Trim the quote to its key words." },
+    { id:"f3", t:"stranger", q:"short",
+      fb:"One word cannot carry the meaning, even though it is the right word. The reader needs enough of the quote to see what the stranger did." },
+    { id:"f4", t:"turned his face to the wall", q:"nofit",
+      fb:"Read it back: 'he believes he “turned his face to the wall”' does not flow, and it is action rather than reason." }],
+    tails:[
+    { id:"t1", t:", a belief the novella tests again in its final pages, when George refuses to let anyone else do it.", q:"bonus", fb:"" },
+    { id:"t2", t:", which turns the scene from a kindness to an animal into a lesson about who has the right to act.", q:"good", fb:"" },
+    { id:"t3", t:", and that is what the quote proves.", q:"point",
+      fb:"'That is what the quote proves' points at the quote instead of explaining it. Say what it tells us about Candy." },
+    { id:"t4", t:", and then he turned his face to the wall and went to sleep.", q:"retell",
+      fb:"That ending slides into retelling the plot. Stay with the question." }] } },
+
+{ id:"r2", mode:"idea", title:"Round 2 — evidence for an idea",
+  where:"the harness room",
+  origin:"Written for this activity in the manner of the novella — not an extract.",
+  question:"Choose one of the novella's key ideas, then gather the evidence for it from this passage.",
+  qNote:"Pick your idea first. Then click the part (or parts) of the passage that are evidence for THAT idea. The same passage holds evidence for all three — the skill is matching the right line to the right idea.",
+  pageRef:"original passage",
+  ideas:[ {id:"lone", label:"Loneliness"},
+          {id:"dream", label:"The dream and who is allowed one"},
+          {id:"power", label:"Power and powerlessness"} ],
+  segs:[
+  { t:"Crooks said, A guy needs somebody to be near him.",
+    roles:{lone:"gold", dream:"other", power:"other"},
+    fbs:{lone:"Yes — the idea stated plainly by the man who has least of it. Simple sentence, enormous weight.",
+         dream:"About company, not about the farm. Match the line to the idea.",
+         power:"It is about need, not about who holds power over whom."} },
+  { t:"A guy goes nuts if he ain't got nobody.",
+    roles:{lone:"gold", dream:"other", power:"ok"},
+    fbs:{lone:"Yes — and note he says 'a guy', not 'I'. He generalises because saying it about himself would cost too much.",
+         dream:"Not about the farm.",
+         power:"It touches powerlessness, but the idea driving it is isolation. There are stronger lines below."} },
+  { t:"For a minute he let himself believe in it, and then he took it back.",
+    roles:{lone:"ok", dream:"gold", power:"ok"},
+    fbs:{lone:"It supports the idea — hope is what a lonely man cannot afford — but the line is really about the dream.",
+         dream:"The strongest line for this idea: he joins the dream and withdraws from it inside one sentence.",
+         power:"It hints at why he withdraws, though the power lines are more direct."} },
+  { t:"I could come an' lend a hand, he said. I'd work for nothing, just my keep.",
+    roles:{lone:"ok", dream:"gold", power:"gold"},
+    fbs:{lone:"He is asking to be included, so it supports loneliness — but the offer itself belongs to the dream.",
+         dream:"Yes — the moment the dream spreads to a third man. Notice the price he offers: nothing.",
+         power:"Yes, and it is bleak: the only way in he can imagine is to work for free. That is what powerlessness sounds like."} },
+  { t:"Then she came to the door and told him what she could have done to him with a word,",
+    roles:{lone:"other", dream:"ok", power:"gold"},
+    fbs:{lone:"This is a confrontation, not isolation — though the consequence is isolation.",
+         dream:"It is what destroys the moment, so it is relevant, but the power lines are stronger for this idea.",
+         power:"Yes — one word from her could end him, and both of them know it. Power here is racial and legal, not physical."} },
+  { t:"and Crooks reduced himself to nothing, the way a man does when he has practised it.",
+    roles:{lone:"ok", dream:"other", power:"gold"},
+    fbs:{lone:"It shows the cost of his position, though the idea it proves most directly is power.",
+         dream:"Not about the farm.",
+         power:"Yes — and 'practised' is the word to quote. This has happened to him many times before."} },
+  { t:"I didn't mean it, he said. Forget what I said about coming out there. I wouldn't want to go no place like that.",
+    roles:{lone:"gold", dream:"gold", power:"ok"},
+    fbs:{lone:"Yes — he chooses loneliness rather than risk the humiliation of hoping. That is the saddest line in the passage.",
+         dream:"Yes — he takes back his place in the dream. The dream is available to some men and not others, which is the point of the whole scene.",
+         power:"It supports the idea, but the direct evidence for power is in the confrontation lines above."} }],
+  l2s:{
+   lone:{ q:"You chose 'I didn't mean it… Forget what I said about coming out there.' WHY is this evidence about loneliness?",
+     opts:[
+     { t:"Crooks chooses isolation over the risk of hoping, so his loneliness is shown as self-protection rather than simple bad luck.", q:"good",
+       fb:"Exactly — that is the connection the question wanted. Loneliness here is a decision forced on him, which is far more interesting than 'he is alone'." },
+     { t:"It shows that Crooks is lonely.", q:"retell",
+       fb:"True, but it restates the idea instead of explaining the quote. What does the taking-back tell you about WHY he is alone?" },
+     { t:"It proves that Crooks does not like George and Lennie.", q:"wrong",
+       fb:"He asked to join them a moment earlier. Read the sequence — the withdrawal comes after the threat, not from dislike." },
+     { t:"It proves that no friendship is possible on the ranch.", q:"stretch",
+       fb:"George and Lennie are in the same novella. Keep the claim inside the evidence." }] },
+   dream:{ q:"You chose 'I could come an' lend a hand… I'd work for nothing.' WHY is this evidence about the dream?",
+     opts:[
+     { t:"It is the moment the dream widens to include a third man — and the price Crooks offers shows what being included is worth to him.", q:"good",
+       fb:"Exactly. Naming both things — the widening AND the price — is what makes this an explanation rather than a description." },
+     { t:"It shows that Crooks wants a job.", q:"retell",
+       fb:"He already has a job. Read what he offers: to work for nothing. That is not about employment." },
+     { t:"It proves the farm would definitely have been bought.", q:"stretch",
+       fb:"The opposite, if anything. Do not stretch a claim past what the evidence carries." },
+     { t:"It shows that Crooks is good with horses.", q:"wrong",
+       fb:"Not what the line is about. Reread it." }] },
+   power:{ q:"You chose 'Crooks reduced himself to nothing, the way a man does when he has practised it.' WHY is this evidence about power?",
+     opts:[
+     { t:"The word 'practised' shows this is routine, not a single humiliation — the power over him is a permanent condition, not an event.", q:"good",
+       fb:"Exactly, and pointing at one word is the highest-value move in an essay. 'Practised' does more work than the rest of the sentence." },
+     { t:"It shows that Crooks is a quiet man.", q:"retell",
+       fb:"That describes him rather than analysing the line. What does 'practised' tell you?" },
+     { t:"It proves that Curley's wife is the villain of the novella.", q:"stretch",
+       fb:"She is powerless herself in almost every other scene. That is the difficulty the book wants you to sit with — do not flatten it." },
+     { t:"It shows that Crooks has a bad back.", q:"wrong",
+       fb:"'Reduced himself to nothing' is figurative here, not physical." }] } },
+  builders:{
+   lone:{ intro:"Embed it. Build ONE sentence about loneliness.",
+    stems:[{ id:"l1", t:"Crooks protects himself by withdrawing from the dream, insisting that he", q:"good", accepts:["lf1"], fb:"" },
+           { id:"l2", t:"Rather than risk hoping in front of others, Crooks says he", q:"good", accepts:["lf1"], fb:"" },
+           { id:"l3", t:"This quote shows that Crooks is lonely because he says", q:"point", accepts:["lf1"],
+             fb:"'This quote shows' points at the quote. Lead with the idea." }],
+    frags:[{ id:"lf1", t:"wouldn't want to go no place like that", q:"good", fb:"" },
+           { id:"lf2", t:"I didn't mean it, he said. Forget what I said about coming out there. I wouldn't want to go no place like that", q:"long",
+             fb:"Three sentences. Trim to the words that carry the idea." },
+           { id:"lf3", t:"nothing", q:"short", fb:"One word, and from a different line. The reader cannot see what is meant." },
+           { id:"lf4", t:"a guy needs somebody to be near him", q:"nofit",
+             fb:"Read it back: 'insisting that he “a guy needs somebody”' does not flow. The quote must continue your sentence's grammar." }],
+    tails:[{ id:"lt1", t:", a retraction that costs him more than the offer ever would have.", q:"good", fb:"" },
+           { id:"lt2", t:", withdrawing from an offer he had made moments earlier when he asked to “lend a hand”.", q:"bonus", fb:"" },
+           { id:"lt3", t:", and that is what the quote proves.", q:"point", fb:"Pointing at the quote. Say what the retraction reveals." },
+           { id:"lt4", t:", and then everyone left the harness room.", q:"retell", fb:"Plot creep — that belongs somewhere else." }] },
+   dream:{ intro:"Embed it. Build ONE sentence about the dream and who is allowed one.",
+    stems:[{ id:"m1", t:"Crooks asks to join the farm on terms that reveal its value to him, offering to", q:"good", accepts:["mf1"], fb:"" },
+           { id:"m2", t:"The dream widens to a third man when Crooks offers to", q:"good", accepts:["mf1"], fb:"" },
+           { id:"m3", t:"This quote shows the dream is important because Crooks says", q:"point", accepts:["mf1"],
+             fb:"'Important' names nothing, and do not announce the quote. Say what the offer reveals." }],
+    frags:[{ id:"mf1", t:"work for nothing, just my keep", q:"good", fb:"" },
+           { id:"mf2", t:"I could come an' lend a hand, he said. I'd work for nothing, just my keep", q:"long",
+             fb:"Two sentences with a dialogue tag in the middle. Trim it." },
+           { id:"mf3", t:"nothing", q:"short", fb:"One word cannot carry it — 'nothing' needs 'work for' in front of it to mean anything." },
+           { id:"mf4", t:"reduced himself to nothing", q:"nofit",
+             fb:"Wrong line for this idea, and it will not fit the grammar of your stem. Read the preview back." }],
+    tails:[{ id:"mt1", t:", a price that measures how far outside the ranch's ordinary life he has been placed.", q:"good", fb:"" },
+           { id:"mt2", t:", before taking it back entirely and insisting he “wouldn't want to go no place like that”.", q:"bonus", fb:"" },
+           { id:"mt3", t:", and that is what the quote proves.", q:"point", fb:"Pointing at the quote rather than explaining it." },
+           { id:"mt4", t:", and Candy had already offered his money earlier that evening.", q:"retell", fb:"New plot fact, no analysis." }] },
+   power:{ intro:"Embed it. Build ONE sentence about power and powerlessness.",
+    stems:[{ id:"p1", t:"Steinbeck marks the routine of Crooks's humiliation with a single word, noting that he shrinks", q:"good", accepts:["pf1"], fb:"" },
+           { id:"p2", t:"The threat needs no violence, because Crooks withdraws", q:"good", accepts:["pf1"], fb:"" },
+           { id:"p3", t:"This quote shows that Crooks has no power because he acts", q:"point", accepts:["pf1"],
+             fb:"Do not announce the quote. Make the claim and let the words carry it." }],
+    frags:[{ id:"pf1", t:"the way a man does when he has practised it", q:"good", fb:"" },
+           { id:"pf2", t:"and Crooks reduced himself to nothing, the way a man does when he has practised it", q:"long",
+             fb:"Nearly the whole sentence. Trim to the clause that carries the idea — the one with 'practised' in it." },
+           { id:"pf3", t:"practised", q:"short", fb:"It is the right word, but alone it shows the reader nothing. Keep the clause around it." },
+           { id:"pf4", t:"told him what she could have done to him with a word", q:"nofit",
+             fb:"That is her line, not his, and it will not continue your stem's grammar. Read the preview back." }],
+    tails:[{ id:"pt1", t:", so the reader understands this as a permanent condition rather than a single cruel evening.", q:"good", fb:"" },
+           { id:"pt2", t:", a rehearsal made necessary by a woman who can destroy him “with a word”.", q:"bonus", fb:"" },
+           { id:"pt3", t:", and that is what the quote proves.", q:"point", fb:"Pointing at the quote instead of explaining it." },
+           { id:"pt4", t:", and afterwards the men went back to the bunkhouse.", q:"retell", fb:"Plot, not analysis." }] } } }
+];
+
+/* ==================== 8 · PEEL PARAGRAPH BUILDER (WAGOLL) ================== */
+const PEEL_PARTS = [
+ { k:"p", label:"Point",    hint:"One sentence answering the question. No quote yet. Name the idea and the technique." },
+ { k:"e", label:"Evidence", hint:"A short quotation, trimmed and embedded so the sentence still flows." },
+ { k:"x", label:"Explain",  hint:"What the WORDS do — to the reader, or to our view of the character. Point at the language." },
+ { k:"l", label:"Link",     hint:"Reach the bigger idea. Do not repeat the Point in different words." }
+];
+const PEEL_ITEMS = [
+{ id:"pe1", focus:"Candy's dog as foreshadowing",
+  question:"How does Steinbeck prepare the reader for the ending of the novella?",
+  wagoll:`<span class="tagp t-p">P</span>Steinbeck rehearses his ending in miniature, using the shooting of Candy's dog to establish the rule the novella will later apply to a man.
+   <span class="tagp t-e">E</span>Candy's regret is not the death but the shooter: he wishes he had “shot that dog myself” rather than let a stranger do it.
+   <span class="tagp t-x">X</span>Because the reader is given the principle before the situation that tests it, George's final act arrives already interpreted, and we judge it by a standard the novella taught us to hold.
+   <span class="tagp t-l">L</span>The structure therefore does the arguing: Steinbeck never defends George, because he arranged for us to defend him two chapters early.`,
+  wagollNote:"The <b>P</b> names the idea (preparation for the ending) and the technique (foreshadowing) with no quote. The <b>E</b> quotes four words. The <b>X</b> starts with 'Because' and explains what the ORDER of scenes does to the reader. The <b>L</b> reaches out to the whole book's structure.",
+  bins:{
+   p:[{ t:"Steinbeck rehearses his ending in miniature, using the shooting of Candy's dog to establish the rule the novella will later apply to a man.", q:"good", fb:"" },
+      { t:"Candy's dog gets shot by Carlson in the bunkhouse.", q:"thin",
+        fb:"That is plot. A Point makes a claim about what the AUTHOR is doing and names the technique." },
+      { t:"In this paragraph I will discuss the foreshadowing in the novel.", q:"meta",
+        fb:"Never announce the paragraph. Start with the claim itself." },
+      { t:"Candy says he “ought to of shot that dog myself” which is foreshadowing.", q:"early",
+        fb:"The quotation belongs in the Evidence. Keep the Point quote-free so the idea stands alone." }],
+   e:[{ t:"Candy's regret is not the death but the shooter: he wishes he had “shot that dog myself” rather than let a stranger do it.", q:"good", fb:"" },
+      { t:"Candy says “shot that dog myself”.", q:"thin",
+        fb:"The quotation is right but dropped in bare. Give the reader the situation that makes it mean something." },
+      { t:"“I ought to of shot that dog myself. I shouldn't ought to of let no stranger shoot my dog. A man ought to do his own killing when it is his own to do.”", q:"long",
+        fb:"Three sentences. Trim a quotation to the few words that carry the point." },
+      { t:"Candy is very upset about his dog for the rest of the evening.", q:"noquote",
+        fb:"No quotation at all. Evidence means the author's actual words." }],
+   x:[{ t:"Because the reader is given the principle before the situation that tests it, George's final act arrives already interpreted, and we judge it by a standard the novella taught us to hold.", q:"good", fb:"" },
+      { t:"This shows that Candy was sad about his dog.", q:"thin",
+        fb:"That restates the evidence. Explain what the placement of the scene DOES to the reader." },
+      { t:"This quote shows that Steinbeck is a very skilful writer.", q:"meta",
+        fb:"Praising the author is not analysis, and 'this quote shows' points at the quote. Say what the choice achieves." },
+      { t:"Later George takes Lennie down to the river by himself.", q:"retell",
+        fb:"Plot. The Explain stays on the words you quoted." }],
+   l:[{ t:"The structure therefore does the arguing: Steinbeck never defends George, because he arranged for us to defend him two chapters early.", q:"good", fb:"" },
+      { t:"That is how Steinbeck uses Candy's dog as foreshadowing.", q:"repeat",
+        fb:"That repeats the Point in different words. A Link has to REACH — to the ending, to a theme, to the reader." },
+      { t:"In conclusion, foreshadowing is an important technique.", q:"thin",
+        fb:"'Important' names no idea, and 'in conclusion' belongs at the end of an essay, not a paragraph." },
+      { t:"Slim gives Candy one of Lulu's puppies afterwards.", q:"retell",
+        fb:"A new plot fact, not a link." }] } },
+{ id:"pe2", focus:"The dream and who is allowed one",
+  question:"What does Steinbeck suggest about hope through the character of Crooks?",
+  wagoll:`<span class="tagp t-p">P</span>Steinbeck uses Crooks to show that the dream is not equally available, offering it to him for a single scene and then taking it away.
+   <span class="tagp t-e">E</span>Crooks asks to join on terms that measure his exclusion, offering to “work for nothing, just my keep”, before insisting he “wouldn't want to go no place like that”.
+   <span class="tagp t-x">X</span>Because the retraction follows a threat rather than a change of heart, the reader watches hope being priced out of a man in real time, and understands that his isolation is enforced rather than chosen.
+   <span class="tagp t-l">L</span>The farm is therefore not simply a dream that fails; it is a dream distributed unequally, and Crooks is refused it before the others are.`,
+  wagollNote:"This <b>E</b> weaves in TWO short quotations — the offer and the retraction — which is above the standard. The <b>X</b> explains the sequence (threat, then withdrawal). The <b>L</b> refuses the easy reading ('the dream fails') and says something sharper.",
+  bins:{
+   p:[{ t:"Steinbeck uses Crooks to show that the dream is not equally available, offering it to him for a single scene and then taking it away.", q:"good", fb:"" },
+      { t:"Crooks wants to join George and Lennie on the farm.", q:"thin",
+        fb:"That is plot. What is Steinbeck DOING by having him ask and then withdraw?" },
+      { t:"This paragraph is about Crooks and the dream of the farm.", q:"meta",
+        fb:"Do not announce the paragraph. Make the claim." },
+      { t:"Crooks says he would “work for nothing” which shows he is lonely.", q:"early",
+        fb:"The quotation belongs in the Evidence, and 'lonely' is a different idea from this question." }],
+   e:[{ t:"Crooks asks to join on terms that measure his exclusion, offering to “work for nothing, just my keep”, before insisting he “wouldn't want to go no place like that”.", q:"good", fb:"" },
+      { t:"Crooks says “work for nothing, just my keep”.", q:"thin",
+        fb:"Correct quotation, but bare. The retraction afterwards is half the evidence — this paragraph needs both." },
+      { t:"“I could come an' lend a hand, he said. I'd work for nothing, just my keep. Then she came to the door and told him what she could have done to him with a word.”", q:"long",
+        fb:"Too long, and it mixes two moments without connecting them. Trim and join them yourself." },
+      { t:"Crooks changes his mind about the farm during the scene.", q:"noquote",
+        fb:"No quotation. Evidence means the actual words." }],
+   x:[{ t:"Because the retraction follows a threat rather than a change of heart, the reader watches hope being priced out of a man in real time, and understands his isolation as enforced rather than chosen.", q:"good", fb:"" },
+      { t:"This shows that Crooks does not really want to go to the farm.", q:"thin",
+        fb:"That takes the retraction at face value. Ask WHY he says it — what happened in between?" },
+      { t:"This quote shows that racism is wrong and should be challenged.", q:"meta",
+        fb:"A judgement about the world rather than an analysis of the writing. Stay with what the words do." },
+      { t:"Curley's wife then leaves and the men go back to the bunkhouse.", q:"retell",
+        fb:"Plot. Stay on the quoted words." }],
+   l:[{ t:"The farm is therefore not simply a dream that fails; it is a dream distributed unequally, and Crooks is refused it before the others are.", q:"good", fb:"" },
+      { t:"This is how Steinbeck shows that Crooks cannot join the dream.", q:"repeat",
+        fb:"That is the Point again. Reach somewhere the paragraph has not been." },
+      { t:"Overall this is a very sad scene in the novel.", q:"thin",
+        fb:"'Very sad' is a review, not analysis. Name the idea the scene serves." },
+      { t:"Candy also offers his money towards the farm in an earlier chapter.", q:"retell",
+        fb:"New evidence attached to no claim. Save it for its own paragraph." }] } },
+{ id:"pe3", focus:"Curley's wife and the missing name",
+  question:"How does Steinbeck present Curley's wife, and what does the presentation suggest?",
+  wagoll:`<span class="tagp t-p">P</span>Steinbeck denies Curley's wife a name, so that the novella's own narration enacts the erasure the men perform on her.
+   <span class="tagp t-e">E</span>Every other figure on the ranch is named — Candy, Crooks, Slim, even the dog — while she is defined only by possession, and her one plain admission is that she “can't talk to nobody but Curley”.
+   <span class="tagp t-x">X</span>Because the omission sits in the narration and not merely in the dialogue, the reader cannot dismiss it as the men's prejudice alone, and is made complicit in seeing her as the men do until the moment they notice the absence.
+   <span class="tagp t-l">L</span>Her loneliness is therefore the same loneliness the novella grants its men, withheld from her by a single missing word.`,
+  wagollNote:"The <b>P</b> makes a claim about a technique that is an ABSENCE — the hardest kind to write about. The <b>E</b> proves the absence by listing what IS there. The <b>X</b> distinguishes narration from dialogue, which is the precise move that turns this from observation into analysis.",
+  bins:{
+   p:[{ t:"Steinbeck denies Curley's wife a name, so the novella's own narration enacts the erasure the men perform on her.", q:"good", fb:"" },
+      { t:"Curley's wife is never given a name in the story.", q:"thin",
+        fb:"That is the observation, not the claim. What does the choice DO — and who is doing it?" },
+      { t:"I am going to write about Curley's wife in this paragraph.", q:"meta",
+        fb:"No announcements. Make the claim." },
+      { t:"Curley's wife says she “can't talk to nobody but Curley” which shows she is lonely.", q:"early",
+        fb:"The quotation belongs in Evidence, and the Point should name the technique, not just the feeling." }],
+   e:[{ t:"Every other figure on the ranch is named — Candy, Crooks, Slim, even the dog — while she is defined only by possession, and her one plain admission is that she “can't talk to nobody but Curley”.", q:"good", fb:"" },
+      { t:"She says she “can't talk to nobody but Curley”.", q:"thin",
+        fb:"Good quotation, but this paragraph is about the missing name — you have to prove the absence by showing what is present." },
+      { t:"“I get lonely. You can talk to people, but I can't talk to nobody but Curley. Else he gets mad.”", q:"long",
+        fb:"Three sentences, and none of them evidence the missing name. Trim, and add the proof of the absence." },
+      { t:"She is only ever called Curley's wife by everybody in the book.", q:"noquote",
+        fb:"True and relevant, but there is no quotation. Evidence needs the author's words." }],
+   x:[{ t:"Because the omission sits in the narration and not merely in the dialogue, the reader cannot dismiss it as the men's prejudice alone, and is made complicit in seeing her as they do.", q:"good", fb:"" },
+      { t:"This shows that the men on the ranch do not respect her.", q:"thin",
+        fb:"True but thin, and it misses the sharpest point: it is not only the men. Who else refuses her a name?" },
+      { t:"This quote shows that Steinbeck was writing in the 1930s when attitudes were different.", q:"meta",
+        fb:"Historical context is not analysis of the words, and it explains the choice away rather than examining it." },
+      { t:"She later comes into the barn and talks to Lennie about her life.", q:"retell",
+        fb:"Plot. Stay on the words you quoted." }],
+   l:[{ t:"Her loneliness is therefore the same loneliness the novella grants its men, withheld from her by a single missing word.", q:"good", fb:"" },
+      { t:"That is why Steinbeck never gives Curley's wife a name.", q:"repeat",
+        fb:"That is the Point restated. A Link goes somewhere new." },
+      { t:"In conclusion, Curley's wife is an interesting character.", q:"thin",
+        fb:"'Interesting' names nothing at all." },
+      { t:"Curley wears a glove full of vaseline on one hand.", q:"retell",
+        fb:"A new detail with no claim attached. Save it for a paragraph about Curley." }] } }
+];
+
+/* ==================== MODULE DIRECTORY ======================================
+   Nothing is ever locked (ELC-Pages house rule: teachers jump around, and a
+   student who wants the writing module first should get it). Order is a
+   suggestion, shown by the numbers.
+   =========================================================================== */
+const MODULES = [
+ { id:"vocab", n:1, t:"Vocabulary preteach", d:"14 unit words, built from their morphemes — before you read", kind:"vocab" },
+ { id:"dict",  n:2, t:"Dictation warm-up",   d:"Hear the sentence, type it, get it marked word by word", kind:"dict" },
+ { id:"qr1",   n:3, t:"Quickread: the bunkhouse", d:"Read it, lose it, prove you understood it", kind:"qr" },
+ { id:"qr2",   n:4, t:"Quickread: Candy's dog", d:"Inference under pressure — what nobody says out loud", kind:"qr" },
+ { id:"fig",   n:5, t:"Figurative → literal", d:"Say what it means, then name the technique doing the work", kind:"fig" },
+ { id:"voice", n:6, t:"Voice fingerprint",    d:"Whose line is it? Name the giveaway in the grammar", kind:"voice" },
+ { id:"ev",    n:7, t:"Evidence builder",     d:"Find it, explain it, embed it — the rubric ladder", kind:"ev" },
+ { id:"peel",  n:8, t:"PEEL paragraph builder", d:"An annotated model, then build your own — for the essay", kind:"peel" },
+ { id:"rpt",   n:9, t:"My report",            d:"First-attempt scores. Print it or save as PDF to hand in", kind:"rpt" }
+];
+
+/* ============================================================================
+   ENGINE — knows nothing about the story. State, router, runners, report.
+   Shared shape with the other ELC text-study hubs: change the data above and
+   this all still works.
+   ============================================================================ */
+const KEY=COPY.key;
+function blank(){ return {first:{}, done:{}, evLv:0, deal:{}, name:"", sid:"", startedAt:Date.now()}; }
+let S=blank();
+function load(){ try{ const raw=localStorage.getItem(KEY); if(raw){ const p=JSON.parse(raw); if(p&&typeof p==="object") S=Object.assign(blank(),p);} }catch(e){} }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function resetAll(){ if(confirm("Start again from scratch? This wipes all your saved answers on this device.")){ S=blank(); save(); go("home"); } }
+load();
+
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function recFirst(key, correct){ if(S.first[key]===undefined){ S.first[key]=!!correct; save(); } }
+
+/* ---------- read aloud (the browser's own engine; absent = no buttons) ---------- */
+const SPEAK = {
+  can(){ return typeof window!=="undefined" && "speechSynthesis" in window; },
+  say(text, rate){
+    if(!this.can()||!text) return;
+    const synth=window.speechSynthesis; synth.cancel();
+    const u=new SpeechSynthesisUtterance(String(text));
+    u.lang="en-AU"; u.rate=rate||0.9;
+    const vs=synth.getVoices()||[];
+    const v=vs.find(x=>x.lang&&x.lang.toLowerCase()==="en-au")||vs.find(x=>x.lang&&x.lang.toLowerCase().startsWith("en"));
+    if(v) u.voice=v;
+    try{ synth.speak(u); }catch(e){}
+  },
+  icon:"<svg viewBox='0 0 16 16' aria-hidden='true' focusable='false'>"+
+    "<path d='M7.2 2.6 4.1 5.1H2.2a.7.7 0 0 0-.7.7v4.4c0 .4.3.7.7.7h1.9l3.1 2.5c.45.36 1.1.05 1.1-.53V3.13c0-.58-.65-.89-1.1-.53z'/>"+
+    "<path d='M10.9 5.2a.62.62 0 0 0-.15.87c.38.53.6 1.2.6 1.93s-.22 1.4-.6 1.93a.62.62 0 1 0 1.02.72A4.6 4.6 0 0 0 12.6 8a4.6 4.6 0 0 0-.83-2.65.62.62 0 0 0-.87-.15z'/></svg>",
+  btn(text, cls){
+    if(!this.can()||!text) return "";
+    return "<button type='button' class='say"+(cls?" "+cls:"")+"' data-say=\""+esc(text)+"\" "+
+      "aria-label=\"Listen: "+esc(text).slice(0,60)+"\" title=\"Listen\">"+this.icon+"</button>";
+  }
+};
+document.addEventListener("click",function(e){
+  const b=e.target&&e.target.closest&&e.target.closest(".say");
+  if(!b) return;
+  e.preventDefault(); e.stopPropagation();
+  SPEAK.say(b.getAttribute("data-say"));
+},true);
+
+let screen="home";
+function go(s, arg){
+  screen=s;
+  $("homeBtn").style.display = s==="home" ? "none" : "inline";
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(s==="home") renderHome();
+  else if(s==="vocab") runVocab();
+  else if(s==="dict") runDict();
+  else if(s==="qr") renderQrIntro(arg||"qr1");
+  else if(s==="qr1"||s==="qr2") renderQrIntro(s);
+  else if(s==="fig") runFig();
+  else if(s==="voice") runVoice();
+  else if(s==="ev") renderEv(0);
+  else if(s==="peel") runPeel();
+  else if(s==="rpt") renderReport();
+}
+
+/* ---------- scoring ---------- */
+function keysFor(mod){ return Object.keys(S.first).filter(k=>k.split(".")[0]===mod); }
+function scoreFor(mod){ const ks=keysFor(mod); return {got:ks.filter(k=>S.first[k]).length, total:ks.length}; }
+function plannedTotal(mod){
+  if(mod==="vocab") return VOCAB.length;
+  if(mod==="dict")  return DICTATION.length;
+  if(mod==="qr1")   return QUICKREADS[0].items.length;
+  if(mod==="qr2")   return QUICKREADS[1].items.length;
+  if(mod==="fig")   return FIG_ITEMS.length*2;
+  if(mod==="voice") return VOICE_ITEMS.length*2;
+  if(mod==="ev")    return 6;
+  if(mod==="peel")  return PEEL_ITEMS.length*4;
+  return 0;
+}
+
+/* ---------- HOME ---------- */
+function renderHome(){
+  let h=`<h1>${esc(TEXT.title)}</h1>
+  <p class="sub">${esc(TEXT.author)} · ${esc(TEXT.form)} · ELC English, novel study 1 ${SPEAK.btn(TEXT.title+" by "+TEXT.author)}</p>
+  <div class="panel"><p class="lead" style="margin:0 0 6px">${esc(TEXT.blurb)}</p>
+  <p style="margin:0;font-size:13.5px"><b>The one thing to know before you start:</b> ${esc(TEXT.hook)}</p></div>
+  <p class="lead">Nine activities. Work top to bottom if you like — but nothing is locked, so start
+  wherever your class is. Wrong answers are retried until you get them right;
+  <b>only your first attempt counts on the report</b>.</p>
+  <div class="steps2">`;
+  MODULES.forEach(m=>{
+    const done=!!S.done[m.id], sc=scoreFor(m.id), planned=plannedTotal(m.id);
+    let tag = m.id==="rpt" ? "" :
+      done ? `${sc.got}/${sc.total} first try` :
+      sc.total ? `${sc.total}/${planned} done` : "";
+    h+=`<button class="step ${done?"done":""}" onclick="go('${m.kind}','${m.id}')">
+      <span class="num">${done?"✓":m.n}</span>
+      <span><span class="t">${esc(m.t)}</span><br><span class="d">${esc(m.d)}</span></span>
+      <span class="tag">${esc(tag)}</span></button>`;
+  });
+  h+=`</div><div class="btnrow noprint"><button class="linkbtn" onclick="resetAll()">reset everything on this device</button></div>`;
+  $("body").innerHTML=h;
+}
+const _go=go;
+go=function(s,arg){ if(s==="qr"&&!arg) arg="qr1"; if(s==="qr1"||s==="qr2"){ arg=s; s="qr"; } _go(s,arg); };
+
+/* ---------- GENERIC QUIZ RUNNER ----------
+   cfg: {mod, title, where, items:[{id, stim?, page?, steps:[{key,q,opts,a,explain,requote?}]}]}
+   Mastery loop: a missed item is re-queued; first attempts are recorded once. */
+function runQuizzer(cfg){
+  let queue=cfg.items.slice(), idx=0, stepIdx=0, round=1;
+  function draw(){
+    const item=queue[idx], step=item.steps[stepIdx];
+    const total=cfg.items.reduce((n,it)=>n+it.steps.length,0);
+    const answered=keysFor(cfg.mod).length;
+    let h=`<div class="eyebrow">${esc(cfg.where)}</div><h2>${esc(cfg.title)}</h2>`;
+    h+=`<div class="progress-track"><div class="progress-fill" style="width:${Math.min(100,answered/total*100)}%"></div></div>`;
+    if(round>1) h+=`<p class="lead">Mastery round ${round} — the ones you missed come back until they are right. Your first attempts are already saved.</p>`;
+    if(item.stim) h+=`<div class="stim">${item.stim}${SPEAK.btn(item.sayText||item.stimPlain||"")}${item.page?`<span class="pg">${esc(item.page)}</span>`:""}</div>`;
+    h+=`<p class="q">${esc(step.q)}</p><div class="opts ${step.chips?"chips":""}" id="opts"></div>
+    <div class="feedback" id="fb" aria-live="polite"></div>
+    <button class="btn btn-primary" id="nextBtn" style="display:none"></button>`;
+    $("body").innerHTML=h;
+    const order = step.noShuffle ? step.opts.map((_,i)=>i) : shuffle(step.opts.map((_,i)=>i));
+    order.forEach(oi=>{
+      const b=document.createElement("button");
+      b.className="opt"; b.textContent=step.opts[oi];
+      b.onclick=()=>grade(oi,b);
+      $("opts").appendChild(b);
+    });
+  }
+  function grade(oi,btn){
+    const item=queue[idx], step=item.steps[stepIdx];
+    const correct = oi===step.a;
+    document.querySelectorAll("#opts .opt").forEach(b=>{ b.disabled=true;
+      if(b.textContent===step.opts[step.a]) b.classList.add("right"); });
+    if(!correct) btn.classList.add("wrongpick");
+    recFirst(cfg.mod+"."+item.id+"."+step.key, correct);
+    const fb=$("fb");
+    fb.className="feedback "+(correct?"ok":"bad");
+    fb.innerHTML=(correct?"<b>Correct.</b> ":`<b>Not quite — the answer is “${esc(step.opts[step.a])}”.</b> `)+step.explain
+      +(!correct&&step.requote?`<div class="requote">“${esc(step.requote)}”${SPEAK.btn(step.requote)}</div>`:"");
+    if(!correct) item._requeue=true;
+    const nb=$("nextBtn");
+    nb.style.display="inline-block";
+    nb.textContent = stepIdx<item.steps.length-1 ? "Next part →" : "Next →";
+    nb.onclick=()=>{
+      if(stepIdx<item.steps.length-1){ stepIdx++; draw(); return; }
+      if(item._requeue){ delete item._requeue; queue.push(item); }
+      stepIdx=0; idx++;
+      if(idx>=queue.length){ finish(); }
+      else { if(idx>=cfg.items.length) round=Math.max(round,2); draw(); }
+    };
+  }
+  function finish(){
+    S.done[cfg.mod]=true; save();
+    const sc=scoreFor(cfg.mod), pct=sc.total? sc.got/sc.total : 0;
+    const band = pct>=0.8 ? "Strong reading. Every miss was retaught and retried — the report shows your first-try picture."
+      : pct>=0.6 ? "A good start — here is how to lift it: reread the lines quoted in the feedback, then say out loud WHY the right answer was right."
+      : "Worth a slower second pass. Reread the passage, then come back — the re-quoted lines in the feedback are your map.";
+    $("body").innerHTML=`<h2>${esc(cfg.title)} — done</h2>
+    <div class="panel"><p style="margin:0"><b>${sc.got}/${sc.total} on first attempt.</b> ${band}</p></div>
+    ${cfg.doneNote?`<div class="panel"><p class="lead" style="margin:0">${cfg.doneNote}</p></div>`:""}
+    <div class="btnrow"><button class="btn btn-primary" onclick="go('home')">Back to the hub →</button></div>`;
+  }
+  draw();
+}
+
+/* ---------- 1 · VOCABULARY ----------
+   Each word gets ONE task, dealt once and remembered, so a refresh cannot
+   reroll a build into an easier gap-fill. */
+function dealVocab(){
+  const kinds=["build","mcq","gap"];
+  VOCAB.forEach((v,i)=>{ if(!S.deal[v.w]) S.deal[v.w]=kinds[(i+Math.floor(Math.random()*3))%3]; });
+  save();
+}
+function runVocab(){
+  dealVocab();
+  let queue=VOCAB.slice(), idx=0, round=1;
+  function draw(){
+    if(idx>=queue.length){ finish(); return; }
+    const v=queue[idx], kind=S.deal[v.w];
+    const answered=keysFor("vocab").length;
+    let h=`<div class="eyebrow">Before you read · morpheme matrices</div>
+    <h2>Vocabulary preteach <span style="font-weight:400;color:var(--muted);font-size:14px">(${idx+1}/${queue.length})</span></h2>
+    <div class="progress-track"><div class="progress-fill" style="width:${Math.min(100,answered/VOCAB.length*100)}%"></div></div>`;
+    if(round>1) h+=`<p class="lead">Mastery round ${round} — the words you missed come back until they are right.</p>`;
+    if(kind==="build") h+=drawBuild(v);
+    else if(kind==="mcq") h+=drawMcq(v);
+    else h+=drawGap(v);
+    h+=`<div class="feedback" id="fb" aria-live="polite"></div><div class="btnrow" id="brow"></div>`;
+    $("body").innerHTML=h;
+    if(kind==="build") wireBuild(v);
+    else wireOpts(v,kind);
+  }
+  /* --- assemble the word from its morphemes --- */
+  let picked=[];
+  function drawBuild(v){
+    picked=[];
+    return `<p class="q">Build the word that means: <span style="font-weight:400">${esc(v.meaning)}</span> ${SPEAK.btn(v.meaning)}</p>
+    <p class="lead">Tap the pieces in order. Two of them do not belong to this word.</p>
+    <div class="assembly" id="asm"><span class="ph">Your word appears here.</span></div>
+    <div class="tiles" id="tiles"></div>`;
+  }
+  function wireBuild(v){
+    const all=shuffle(v.tiles.concat(v.decoys));
+    const tl=$("tiles");
+    all.forEach((t,i)=>{
+      const b=document.createElement("button");
+      b.className="tile"; b.dataset.i=i;
+      b.innerHTML=`<b>${esc(t[0])}</b><small>${esc(t[1])}</small>`;
+      b.onclick=()=>{ picked.push({i,t}); b.classList.add("used"); paintAsm(v); };
+      tl.appendChild(b);
+    });
+    $("brow").innerHTML=`<button class="btn btn-primary" onclick="window._vcheck()">Check</button>
+      <button class="btn btn-ghost" onclick="window._vreset()">Clear</button>`;
+    window._vreset=()=>{ picked=[]; document.querySelectorAll("#tiles .tile").forEach(x=>x.classList.remove("used")); paintAsm(v); $("fb").className="feedback"; };
+    window._vcheck=()=>{
+      const want=v.tiles.map(t=>t[0]).join("|");
+      const got=picked.map(p=>p.t[0]).join("|");
+      const ok = want===got;
+      recFirst("vocab."+v.w, ok);
+      const fb=$("fb");
+      if(ok){
+        fb.className="feedback ok";
+        fb.innerHTML=`<b>Correct — ${esc(v.w)}.</b> ${v.note}`;
+        $("brow").innerHTML=`<button class="btn btn-primary" onclick="window._vnext()">Next word →</button>`;
+      } else {
+        v._requeue=true;
+        const extra = picked.some(p=>v.decoys.some(d=>d[0]===p.t[0]))
+          ? "One of your pieces is a decoy — it is a real morpheme, but not one of <i>this</i> word's."
+          : "Right pieces, wrong order — a word is built prefix → root → suffix.";
+        fb.className="feedback bad";
+        fb.innerHTML=`<b>Not yet.</b> ${extra} Clear it and try again.`;
+      }
+    };
+    paintAsm(v);
+  }
+  function paintAsm(v){
+    const asm=$("asm"); if(!asm) return;
+    if(!picked.length){ asm.innerHTML=`<span class="ph">Your word appears here.</span>`; return; }
+    asm.innerHTML="";
+    picked.forEach((p,k)=>{
+      const b=document.createElement("button"); b.className="placed"; b.textContent=p.t[0];
+      b.onclick=()=>{ picked.splice(k,1);
+        const tile=document.querySelector('#tiles .tile[data-i="'+p.i+'"]'); if(tile) tile.classList.remove("used");
+        paintAsm(v); };
+      asm.appendChild(b);
+    });
+  }
+  /* --- meaning → word, and sentence gap --- */
+  function drawMcq(v){
+    return `<p class="q">Which word means: <span style="font-weight:400">${esc(v.meaning)}</span> ${SPEAK.btn(v.meaning)}</p>
+    <div class="opts" id="opts"></div>`;
+  }
+  function drawGap(v){
+    return `<p class="q">Complete the sentence with the right word:</p>
+    <div class="gapline">${esc(v.gap[0])} <span class="blank">?</span> ${esc(v.gap[1])}</div>
+    <div class="opts" id="opts"></div>`;
+  }
+  function wireOpts(v,kind){
+    const others=shuffle(VOCAB.filter(x=>x.w!==v.w)).slice(0,3).map(x=>x.w);
+    const opts=shuffle(others.concat([v.w]));
+    opts.forEach(w=>{
+      const b=document.createElement("button"); b.className="opt"; b.textContent=w;
+      b.onclick=()=>{
+        const ok = w===v.w;
+        recFirst("vocab."+v.w, ok);
+        document.querySelectorAll("#opts .opt").forEach(x=>{ x.disabled=true;
+          if(x.textContent===v.w) x.classList.add("right"); });
+        if(!ok) b.classList.add("wrongpick");
+        const fb=$("fb");
+        fb.className="feedback "+(ok?"ok":"bad");
+        fb.innerHTML=(ok?`<b>Correct — ${esc(v.w)}.</b> `:`<b>Not quite — the word is ${esc(v.w)}.</b> `)
+          +`<div class="requote">${v.tiles.map(t=>"<b>"+esc(t[0])+"</b> "+esc(t[1])).join(" + ")}</div>${v.note}`;
+        if(!ok) v._requeue=true;
+        $("brow").innerHTML=`<button class="btn btn-primary" onclick="window._vnext()">Next word →</button>`;
+      };
+      $("opts").appendChild(b);
+    });
+    $("brow").innerHTML="";
+  }
+  window._vnext=()=>{
+    const v=queue[idx];
+    if(v._requeue){ delete v._requeue; queue.push(v); }
+    idx++;
+    if(idx>=VOCAB.length && idx<queue.length) round=Math.max(round,2);
+    draw();
+  };
+  function finish(){
+    S.done.vocab=true; save();
+    const sc=scoreFor("vocab");
+    $("body").innerHTML=`<h2>Vocabulary preteach — done</h2>
+    <div class="panel"><p style="margin:0"><b>${sc.got}/${sc.total} words correct on first attempt.</b>
+    ${COPY.vocabDone}</p></div>
+    <div class="panel"><p class="lead" style="margin:0">Next: the dictation warm-up uses these same words in
+    sentences, so you meet them again in a different job.</p></div>
+    <div class="btnrow"><button class="btn btn-primary" onclick="go('home')">Back to the hub →</button></div>`;
+  }
+  draw();
+}
+
+/* ---------- 2 · DICTATION ---------- */
+function normWord(w){ return w.toLowerCase().replace(/[^a-z']/g,""); }
+function runDict(){
+  if(!SPEAK.can()){
+    $("body").innerHTML=`<h2>Dictation warm-up</h2>
+    <div class="feedback warn" style="display:block"><b>This browser cannot read text aloud.</b>
+    The dictation needs the browser's own speech engine, which is not available here.
+    Everything else in the hub works — try the vocabulary preteach or a quickread instead.
+    On a school laptop, Edge or Chrome will have a voice.</div>
+    <div class="btnrow"><button class="btn btn-primary" onclick="go('home')">Back to the hub →</button></div>`;
+    return;
+  }
+  let queue=DICTATION.slice(), idx=0, rate=0.85, round=1;
+  function draw(){
+    if(idx>=queue.length){ finish(); return; }
+    const d=queue[idx];
+    const answered=keysFor("dict").length;
+    $("body").innerHTML=`<div class="eyebrow">Warm-up · listening and spelling</div>
+    <h2>Dictation <span style="font-weight:400;color:var(--muted);font-size:14px">(${idx+1}/${queue.length})</span></h2>
+    <div class="progress-track"><div class="progress-fill" style="width:${Math.min(100,answered/DICTATION.length*100)}%"></div></div>
+    ${round>1?`<p class="lead">Mastery round ${round} — the sentences you missed come back.</p>`:""}
+    <p class="lead">Press play, listen, then type exactly what you hear. Capital letters and full stops count.
+    You can replay as many times as you need.</p>
+    <div class="btnrow" style="margin:0 0 12px">
+      <button class="btn btn-primary" id="play">▶ Play the sentence</button>
+      <button class="btn btn-ghost" id="slow">▶ Play slowly</button>
+    </div>
+    <div class="dictbox"><textarea id="ans" placeholder="Type what you hear…" autocomplete="off" spellcheck="false"></textarea></div>
+    <div class="feedback" id="fb" aria-live="polite"></div>
+    <div class="btnrow" id="brow"><button class="btn btn-primary" id="chk">Check</button></div>`;
+    $("play").onclick=()=>SPEAK.say(d.s, rate);
+    $("slow").onclick=()=>SPEAK.say(d.s, 0.6);
+    $("chk").onclick=check;
+    $("ans").focus();
+    $("ans").addEventListener("keydown",ev=>{ if(ev.key==="Enter"&&(ev.ctrlKey||ev.metaKey)) check(); });
+    setTimeout(()=>SPEAK.say(d.s, rate), 350);
+  }
+  function check(){
+    const d=queue[idx];
+    const typed=($("ans").value||"").trim();
+    if(!typed){ const fb=$("fb"); fb.className="feedback bad"; fb.innerHTML="<b>Nothing typed yet.</b> Press play and write what you hear."; return; }
+    const want=d.s.split(/\s+/), got=typed.split(/\s+/);
+    /* word-by-word alignment, so one missing word does not mark the rest wrong */
+    let i=0,j=0,marked="",wrong=0;
+    while(i<want.length||j<got.length){
+      const a=want[i], b=got[j];
+      if(a!==undefined && b!==undefined && normWord(a)===normWord(b)){
+        marked+= (a===b? `<span class="w-ok">${esc(b)}</span> `
+                       : `<span class="w-no">${esc(b)}</span> <span class="w-add">${esc(a)}</span> `);
+        if(a!==b) wrong++;
+        i++; j++;
+      } else if (a!==undefined && got[j+1]!==undefined && normWord(a)===normWord(got[j+1])){
+        marked+=`<span class="w-no">${esc(b)}</span> `; wrong++; j++;
+      } else if (b!==undefined && want[i+1]!==undefined && normWord(b)===normWord(want[i+1])){
+        marked+=`<span class="w-add">${esc(a)}</span> `; wrong++; i++;
+      } else {
+        if(b!==undefined) marked+=`<span class="w-no">${esc(b)}</span> `;
+        if(a!==undefined) marked+=`<span class="w-add">${esc(a)}</span> `;
+        if(a!==undefined||b!==undefined) wrong++;
+        i++; j++;
+      }
+    }
+    const perfect = wrong===0;
+    recFirst("dict."+d.id, perfect);
+    if(!perfect) d._requeue=true;
+    const fb=$("fb");
+    fb.className="feedback "+(perfect?"ok":"warn");
+    fb.innerHTML=(perfect?"<b>Word perfect.</b>":`<b>${wrong} to fix.</b> Struck-through is what you typed; green is what was said.`)
+      +`<div class="marked">${marked}</div>`
+      +(perfect?"":`<div style="margin-top:6px">Play it once more and read the correct sentence along with the voice — that is what fixes the spelling.</div>`);
+    $("brow").innerHTML=`<button class="btn btn-primary" id="nx">Next sentence →</button>
+      <button class="btn btn-ghost" id="again">▶ Replay</button>`;
+    $("again").onclick=()=>SPEAK.say(d.s, 0.6);
+    $("nx").onclick=()=>{
+      if(d._requeue){ delete d._requeue; queue.push(d); }
+      idx++;
+      if(idx>=DICTATION.length && idx<queue.length) round=Math.max(round,2);
+      draw();
+    };
+  }
+  function finish(){
+    S.done.dict=true; save();
+    const sc=scoreFor("dict");
+    $("body").innerHTML=`<h2>Dictation — done</h2>
+    <div class="panel"><p style="margin:0"><b>${sc.got}/${sc.total} word-perfect on first attempt.</b>
+    ${COPY.dictDone}</p></div>
+    <div class="btnrow"><button class="btn btn-primary" onclick="go('home')">Back to the hub →</button></div>`;
+  }
+  draw();
+}
+
+/* ---------- 3–4 · QUICKREADS ---------- */
+function renderQrIntro(id){
+  const qr=QUICKREADS.find(q=>q.id===id) || QUICKREADS[0];
+  $("body").innerHTML=`<div class="eyebrow">${esc(qr.where)} · cold-read comprehension</div>
+  <h2>${esc(qr.title)}</h2>
+  <p class="lead">${esc(qr.intro)}</p>
+  <div class="passage">${qr.passage}<span class="pg">${esc(qr.origin)}</span></div>
+  <div class="btnrow"><button class="btn btn-primary" onclick="startQr('${qr.id}')">I have finished reading — start the questions</button>
+  <button class="btn btn-ghost" onclick="go('home')">← back</button></div>`;
+}
+function startQr(id){
+  const qr=QUICKREADS.find(q=>q.id===id);
+  runQuizzer({
+    mod:qr.id, title:qr.title+" — questions (no looking back)", where:qr.where,
+    items:qr.items.map(it=>({ id:it.id, steps:[{key:"a", q:it.q, opts:it.opts, a:it.a, explain:it.explain, requote:it.line}] })),
+    doneNote: id==="qr1"
+      ? COPY.qr1Done : COPY.qr2Done
+  });
+}
+
+/* ---------- 5 · FIGURATIVE ---------- */
+function runFig(){
+  runFigOrVoice({
+    mod:"fig", title:"Figurative → literal", where:"Theme and language work",
+    items:FIG_ITEMS.map(it=>({ id:it.id, stim:"“"+esc(it.quote)+"”", sayText:it.quote, page:it.page, steps:[
+      { key:"meaning", q:"What does this actually mean in the story?", opts:it.meaning.opts, a:it.meaning.a, explain:it.meaning.explain },
+      { key:"tech", q:"Which feature is doing the work?", opts:it.tech.opts.map(i=>FIG_TECHS[i]), a:it.tech.a, explain:it.tech.explain }
+    ]})),
+    doneNote:"You have practised the two halves of writing about language: SAY what it means, then NAME how it is done. The Evidence builder puts them together."
+  });
+}
+function runVoice(){
+  runFigOrVoice({
+    mod:"voice", title:"Voice fingerprint", where:"Character voice · point at the grammar",
+    items:VOICE_ITEMS.map(it=>({ id:it.id, stim:"“"+esc(it.line)+"”", sayText:it.line, page:it.page, steps:[
+      { key:"who", q:"Whose line is this?", opts:VOICE_WHO, a:it.a, explain:it.whoExplain, chips:true, noShuffle:true },
+      { key:"feat", q:"What gave it away? Name the language feature:", opts:it.feat.opts, a:it.feat.a, explain:it.feat.explain }
+    ]})),
+    doneNote:"Every one of these was decided by grammar, not by vibe — a homophone, a conjunction, a hedging verb, a missing name. That is what 'point at the words' means in an essay."
+  });
+}
+function runFigOrVoice(cfg){ runQuizzer(cfg); }
+
+/* ---------- 7 · EVIDENCE BUILDER ---------- */
+let EV=null;
+function renderEv(roundIdx){
+  const round=EV_ROUNDS[roundIdx];
+  if(!round){ evFinish(); return; }
+  EV={ roundIdx, round, idea:null, picked:new Set(), checked:false, slots:{stem:null,frag:null,tail:null}, builderChecked:false, locked:false };
+  if(round.mode==="idea") renderEvIdea(); else renderEvSelect();
+}
+function evLadderHtml(active){
+  const gotLv=S.evLv||0;
+  let h=`<div class="ladder">`;
+  EV_LADDER.forEach((L,i)=>{
+    const st=(i+1)<=gotLv ? "got" : (i+1)===active ? "now" : "";
+    h+=`<button class="lcard ${st}" onclick="evHint(${i})"><span class="lv">${esc(L.lv)} ${(i+1)<=gotLv?"✓":""}</span>${esc(L.text)}</button>`;
+  });
+  return h+`</div><div class="ladder-hint" id="ladderHint"></div>`;
+}
+function evHint(i){
+  const box=$("ladderHint"); if(!box) return;
+  box.className="ladder-hint show";
+  box.innerHTML="<b>"+esc(EV_LADDER[i].lv)+" scaffold:</b> "+esc(EV_LADDER[i].hint);
+}
+function renderEvIdea(){
+  const r=EV.round;
+  let h=`<div class="eyebrow">${esc(r.where)} · evidence builder</div><h2>${esc(r.title)}</h2>`;
+  h+=evLadderHtml(1);
+  h+=`<p class="q">${esc(r.question)}</p><div class="idea-chips">`;
+  r.ideas.forEach(i=>{ h+=`<button class="fchoice" onclick="evPickIdea('${i.id}')">${esc(i.label)}</button>`; });
+  h+=`</div><p class="lead">Pick the idea you want to prove, then the passage opens for evidence-hunting.</p>
+  <div class="btnrow"><button class="btn btn-ghost" onclick="go('home')">← back to the hub</button></div>`;
+  $("body").innerHTML=h;
+}
+function evPickIdea(id){ EV.idea=id; EV.picked=new Set(); EV.locked=false; EV.checked=false; renderEvSelect(); }
+function renderEvSelect(){
+  const r=EV.round;
+  const ideaLabel = EV.idea ? r.ideas.find(i=>i.id===EV.idea).label : null;
+  let h=`<div class="eyebrow">${esc(r.where)} · evidence builder · level 1</div><h2>${esc(r.title)}</h2>`;
+  h+=evLadderHtml(1);
+  h+=`<p class="q">${esc(r.mode==="idea" ? "Find the evidence for: "+ideaLabel : r.question)}</p>
+  <p class="lead">${esc(r.qNote)}</p><div class="passage" id="pass">`;
+  r.segs.forEach((seg,i)=>{ h+=`<span class="seg" id="seg${i}" onclick="evToggle(${i})">${esc(seg.t)}</span> `; });
+  h+=`<span class="pg">${esc(r.origin)}</span></div>
+  <div class="feedback" id="fb" aria-live="polite"></div>
+  <div class="btnrow"><button class="btn btn-primary" onclick="evCheck()">Check my evidence</button>
+  ${r.mode==="idea"?`<button class="btn btn-ghost" onclick="renderEvIdea()">← different idea</button>`:`<button class="btn btn-ghost" onclick="go('home')">← back</button>`}</div>`;
+  $("body").innerHTML=h;
+}
+function evToggle(i){
+  if(EV.locked) return;
+  const el=$("seg"+i);
+  el.classList.remove("hit","miss");
+  if(EV.picked.has(i)){ EV.picked.delete(i); el.classList.remove("picked"); }
+  else { EV.picked.add(i); el.classList.add("picked"); }
+  $("fb").className="feedback";
+}
+function segRole(seg){ return EV.round.mode==="idea" ? (seg.roles[EV.idea]||"plain") : seg.role; }
+function segFb(seg){ return EV.round.mode==="idea" ? (seg.fbs[EV.idea]||"") : seg.fb; }
+function evCheck(){
+  const r=EV.round, fb=$("fb");
+  if(EV.picked.size===0){ fb.className="feedback bad"; fb.innerHTML="<b>Nothing selected.</b> Click the part of the passage that answers the question, then check."; return; }
+  const picked=[...EV.picked].map(i=>({i,seg:r.segs[i],role:segRole(r.segs[i])}));
+  const gold=picked.filter(p=>p.role==="gold"), okp=picked.filter(p=>p.role==="ok");
+  const bad=picked.filter(p=>["other","plain","frame"].includes(p.role));
+  picked.forEach(p=>{ const el=$("seg"+p.i); el.classList.remove("picked");
+    el.classList.add(p.role==="gold"||p.role==="ok" ? "hit" : "miss"); });
+  const line=p=>"“"+p.seg.t.slice(0,54)+(p.seg.t.length>54?"…”":"”")+" — "+segFb(p.seg);
+  const findings=gold.concat(okp).concat(bad).map(line);
+  const pass = gold.length>=1 && bad.length===0;
+  if(!EV.checked){ recFirst("ev."+r.id+".l1", pass); EV.checked=true; }
+  let head,cls;
+  if(pass){ head="Strong evidence selected."; cls="ok"; }
+  else if(gold.length>=1){ head="A good start — here is how to lift it: your strongest pick is right, but drop the ones that do not belong."; cls="warn"; }
+  else if(okp.length>=1){ head="Close — that supports the answer, but there is a stronger line. Deselect and look again."; cls="warn"; }
+  else { head="Something needs fixing — none of these picks answer the question yet."; cls="bad"; }
+  fb.className="feedback "+cls;
+  fb.innerHTML="<b>"+esc(head)+"</b><ul>"+findings.map(f=>"<li>"+esc(f)+"</li>").join("")+"</ul>";
+  if(pass){
+    EV.locked=true;
+    S.evLv=Math.max(S.evLv||0,1); save();
+    fb.innerHTML+=`<div style="margin-top:8px"><b>Level 1 achieved:</b> ${esc(EV_LADDER[0].text)}.</div>`;
+    document.querySelector(".btnrow").innerHTML=`<button class="btn btn-primary" onclick="renderEvL2()">Level 2: explain the relevance →</button>`;
+  } else {
+    picked.filter(p=>p.role!=="gold"&&p.role!=="ok").forEach(p=>EV.picked.delete(p.i));
+  }
+}
+function renderEvL2(){
+  const r=EV.round;
+  const l2 = r.mode==="idea" ? r.l2s[EV.idea] : r.l2;
+  let h=`<div class="eyebrow">${esc(r.where)} · evidence builder · level 2</div><h2>${esc(r.title)}</h2>`;
+  h+=evLadderHtml(2);
+  h+=`<p class="q">${esc(l2.q)}</p><div class="opts" id="opts"></div>
+  <div class="feedback" id="fb" aria-live="polite"></div><div class="btnrow" id="brow"></div>`;
+  $("body").innerHTML=h;
+  let first=true;
+  shuffle(l2.opts.map((_,i)=>i)).forEach(oi=>{
+    const o=l2.opts[oi];
+    const b=document.createElement("button"); b.className="opt"; b.textContent=o.t;
+    b.onclick=()=>{
+      const good=o.q==="good";
+      if(first){ recFirst("ev."+r.id+".l2", good); first=false; }
+      const fb=$("fb");
+      if(good){
+        document.querySelectorAll("#opts .opt").forEach(x=>x.disabled=true);
+        b.classList.add("right");
+        fb.className="feedback ok"; fb.innerHTML="<b>Correct.</b> "+esc(o.fb)
+          +`<div style="margin-top:8px"><b>Level 2 achieved:</b> ${esc(EV_LADDER[1].text)}.</div>`;
+        S.evLv=Math.max(S.evLv,2); save();
+        $("brow").innerHTML=`<button class="btn btn-primary" onclick="renderEvBuilder()">Level 3: embed the quote →</button>`;
+      } else {
+        b.disabled=true; b.classList.add("wrongpick");
+        fb.className="feedback bad"; fb.innerHTML="<b>Not this one.</b> "+esc(o.fb);
+      }
+    };
+    $("opts").appendChild(b);
+  });
+}
+function renderEvBuilder(){
+  const r=EV.round;
+  const B = r.mode==="idea" ? r.builders[EV.idea] : r.builder;
+  EV.slots={stem:null,frag:null,tail:null}; EV.builderChecked=false;
+  let h=`<div class="eyebrow">${esc(r.where)} · evidence builder · level 3</div><h2>${esc(r.title)}</h2>`;
+  h+=evLadderHtml(3);
+  h+=`<p class="lead">${esc(B.intro)} Tap a tile to place it; tap a placed tile to remove it.
+  <b style="color:var(--p-tx)">Blue = stem</b>, <b style="color:var(--e-tx)">yellow = quote</b>, <b style="color:var(--l-tx)">pink = ending</b>.</p>
+  <div class="slotrow">
+    <div class="slot"><span class="slabel">Stem</span><span id="in-stem"></span></div>
+    <div class="slot"><span class="slabel">Quote</span><span id="in-frag"></span></div>
+    <div class="slot"><span class="slabel">Ending</span><span id="in-tail"></span></div>
+  </div>
+  <div class="preview" id="prev"></div>
+  <div class="bins" style="grid-template-columns:repeat(3,1fr)">
+    <div class="bin b-p"><h4>Sentence stems</h4><div class="binbody" id="bin-stem"></div></div>
+    <div class="bin b-e"><h4>Trimmed quotes</h4><div class="binbody" id="bin-frag"></div></div>
+    <div class="bin b-l"><h4>Endings</h4><div class="binbody" id="bin-tail"></div></div>
+  </div>
+  <div class="feedback" id="fb" aria-live="polite"></div>
+  <div class="btnrow" id="brow"><button class="btn btn-primary" onclick="evBuildCheck()">Check my sentence</button>
+  <button class="btn btn-ghost" onclick="renderEvBuilder()">Reset</button></div>`;
+  $("body").innerHTML=h;
+  const cls={stem:"k-p",frag:"k-e",tail:"k-l"};
+  const fill=(kind,list)=>{
+    const bin=$("bin-"+kind);
+    shuffle(list).forEach(x=>{
+      const b=document.createElement("button"); b.className="btile "+cls[kind];
+      b.textContent=x.t; b.onclick=()=>{ EV.slots[kind]=x; drawEvSlots(); };
+      bin.appendChild(b);
+    });
+  };
+  fill("stem",B.stems); fill("frag",B.frags); fill("tail",B.tails);
+  drawEvSlots();
+}
+function drawEvSlots(){
+  const cls={stem:"k-p",frag:"k-e",tail:"k-l"};
+  ["stem","frag","tail"].forEach(kind=>{
+    const holder=$("in-"+kind); holder.innerHTML="";
+    const x=EV.slots[kind];
+    if(x){ const b=document.createElement("button"); b.className="placed "+cls[kind];
+      b.textContent=x.t; b.onclick=()=>{ EV.slots[kind]=null; drawEvSlots(); }; holder.appendChild(b); }
+  });
+  const {stem,frag,tail}=EV.slots, prev=$("prev");
+  if(stem||frag||tail) prev.textContent=(stem?stem.t:"…")+" "+(frag?"“"+frag.t+"”":"“…”")+(tail?tail.t:" …");
+  else prev.innerHTML=`<span class="ph">Your sentence appears here as you build it.</span>`;
+  const fb=$("fb"); if(fb) fb.className="feedback";
+}
+function evBuildCheck(){
+  const r=EV.round, {stem,frag,tail}=EV.slots, fb=$("fb");
+  if(!stem||!frag||!tail){
+    fb.className="feedback bad";
+    fb.innerHTML="<b>Something needs fixing.</b> The sentence needs all three parts — a stem, a trimmed quote and an ending.";
+    return;
+  }
+  const findings=[];
+  if(stem.q==="point") findings.push({sev:"warn", text:stem.fb});
+  if(frag.q==="long"||frag.q==="short") findings.push({sev:"warn", text:frag.fb});
+  if(frag.q==="nofit" || (stem.accepts && frag.q==="good" && !stem.accepts.includes(frag.id)))
+    findings.push({sev:"err", text: frag.q==="nofit" ? frag.fb :
+      "Read the preview aloud — the quote does not continue the stem's grammar. Swap one of them so it flows as a single sentence."});
+  if(tail.q==="point"||tail.q==="retell") findings.push({sev:"warn", text:tail.fb});
+  const level = findings.some(f=>f.sev==="err") ? "err" : findings.length ? "warn" : "ok";
+  const pass = level==="ok";
+  if(!EV.builderChecked){ recFirst("ev."+r.id+".l3", pass); EV.builderChecked=true; }
+  if(pass){
+    fb.className="feedback ok";
+    let msg="<b>Strong analytical sentence.</b> Stem, embedded quote and an ending that explains. Read it back out loud — that is an essay sentence.";
+    if(tail.q==="bonus") msg+=" <b>You also wove in a second quotation — that is above the standard.</b>";
+    fb.innerHTML=msg+`<div style="margin-top:8px"><b>Level 3 achieved:</b> ${esc(EV_LADDER[2].text)}.</div>`;
+    S.evLv=Math.max(S.evLv, EV.roundIdx===0?3:3); save();
+    const next=EV.roundIdx+1;
+    $("brow").innerHTML = EV_ROUNDS[next]
+      ? `<button class="btn btn-primary" onclick="renderEv(${next})">Round 2: choose your own idea →</button>`
+      : `<button class="btn btn-primary" onclick="evFinish()">Finish the evidence builder →</button>`;
+  } else {
+    fb.className="feedback "+(level==="err"?"bad":"warn");
+    fb.innerHTML="<b>"+(level==="err"?"Something needs fixing.":"A good start — here is how to lift it:")+"</b><ul>"
+      +findings.map(f=>"<li>"+esc(f.text)+"</li>").join("")+"</ul>";
+  }
+}
+function evFinish(){
+  S.done.ev=true; save();
+  const sc=scoreFor("ev");
+  $("body").innerHTML=`<h2>Evidence builder — done</h2>
+  ${evLadderHtml(4)}
+  <div class="panel"><p style="margin:0"><b>${sc.got}/${sc.total} levels passed on the first check.</b>
+  You have climbed three rungs of the assessment ladder: find it → explain it → embed it. The wrong turns you met
+  on the way — retelling, overreaching, pointing at the quote — are the exact traps to avoid in the essay.</p></div>
+  <div class="panel"><p class="lead" style="margin:0">Level 4 is the whole paragraph. That is the
+  <b>PEEL paragraph builder</b> — the last activity, and the one closest to the assessment.</p></div>
+  <div class="btnrow"><button class="btn btn-primary" onclick="go('peel')">Go to the PEEL builder →</button>
+  <button class="btn btn-ghost" onclick="go('home')">Back to the hub</button></div>`;
+}
+
+/* ---------- 8 · PEEL PARAGRAPH BUILDER ---------- */
+let PE=null;
+function runPeel(){ renderPeel(0, true); }
+function renderPeel(i, showModel){
+  const it=PEEL_ITEMS[i];
+  if(!it){ peelFinish(); return; }
+  PE={ i, it, slots:{p:null,e:null,x:null,l:null}, checked:false };
+  if(showModel){
+    $("body").innerHTML=`<div class="eyebrow">Analytical writing · PEEL · ${i+1} of ${PEEL_ITEMS.length}</div>
+    <h2>${esc(it.focus)}</h2>
+    <p class="q">${esc(it.question)}</p>
+    <p class="lead">First, read a good one. This is a <b>WAGOLL</b> — What A Good One Looks Like.
+    Every part is labelled with the job it is doing.</p>
+    <div class="wagoll">${it.wagoll}${SPEAK.btn(it.wagoll.replace(/<[^>]+>/g,""))}</div>
+    <div class="panel"><p style="margin:0;font-size:13.5px"><b>Why it works:</b> ${it.wagollNote}</p></div>
+    <div class="panel"><p class="lead" style="margin:0">
+      <b>P</b> — ${esc(PEEL_PARTS[0].hint)}<br>
+      <b>E</b> — ${esc(PEEL_PARTS[1].hint)}<br>
+      <b>E</b>xplain — ${esc(PEEL_PARTS[2].hint)}<br>
+      <b>L</b> — ${esc(PEEL_PARTS[3].hint)}</p></div>
+    <div class="btnrow"><button class="btn btn-primary" onclick="renderPeel(${i},false)">Now build one →</button>
+    <button class="btn btn-ghost" onclick="go('home')">← back to the hub</button></div>`;
+    return;
+  }
+  let h=`<div class="eyebrow">Analytical writing · PEEL · ${i+1} of ${PEEL_ITEMS.length}</div>
+  <h2>${esc(it.focus)}</h2>
+  <p class="q">${esc(it.question)}</p>
+  <p class="lead">Build the paragraph. One tile per slot — tap a placed tile to remove it.
+  Each bin has one strong option and three that fail in a named way.</p>
+  <div class="slotrow">`;
+  PEEL_PARTS.forEach(pt=>{
+    h+=`<div class="slot"><span class="slabel">${esc(pt.label)}</span><span id="pin-${pt.k}"></span></div>`;
+  });
+  h+=`</div><div class="preview" id="pprev"></div>
+  <div class="bins">`;
+  PEEL_PARTS.forEach(pt=>{
+    h+=`<div class="bin b-${pt.k}"><h4>${esc(pt.label)}</h4><div class="binbody" id="pbin-${pt.k}"></div></div>`;
+  });
+  h+=`</div><div class="feedback" id="fb" aria-live="polite"></div>
+  <div class="btnrow" id="brow"><button class="btn btn-primary" onclick="peelCheck()">Check my paragraph</button>
+  <button class="btn btn-ghost" onclick="renderPeel(${i},true)">See the model again</button></div>`;
+  $("body").innerHTML=h;
+  PEEL_PARTS.forEach(pt=>{
+    const bin=$("pbin-"+pt.k);
+    shuffle(it.bins[pt.k]).forEach(x=>{
+      const b=document.createElement("button"); b.className="btile k-"+pt.k;
+      b.textContent=x.t; b.onclick=()=>{ PE.slots[pt.k]=x; drawPeelSlots(); };
+      bin.appendChild(b);
+    });
+  });
+  drawPeelSlots();
+}
+function drawPeelSlots(){
+  PEEL_PARTS.forEach(pt=>{
+    const holder=$("pin-"+pt.k); holder.innerHTML="";
+    const x=PE.slots[pt.k];
+    if(x){ const b=document.createElement("button"); b.className="placed k-"+pt.k;
+      b.textContent=x.t; b.onclick=()=>{ PE.slots[pt.k]=null; drawPeelSlots(); }; holder.appendChild(b); }
+  });
+  const any=PEEL_PARTS.some(pt=>PE.slots[pt.k]);
+  const prev=$("pprev");
+  if(any) prev.textContent=PEEL_PARTS.map(pt=>PE.slots[pt.k]?PE.slots[pt.k].t:"…").join(" ");
+  else prev.innerHTML=`<span class="ph">Your paragraph appears here as you build it.</span>`;
+  const fb=$("fb"); if(fb) fb.className="feedback";
+}
+function peelCheck(){
+  const it=PE.it, fb=$("fb");
+  const missing=PEEL_PARTS.filter(pt=>!PE.slots[pt.k]);
+  if(missing.length){
+    fb.className="feedback bad";
+    fb.innerHTML="<b>Not finished.</b> A PEEL paragraph needs all four parts. Still empty: "
+      +missing.map(m=>esc(m.label)).join(", ")+".";
+    return;
+  }
+  const findings=[];
+  PEEL_PARTS.forEach(pt=>{
+    const x=PE.slots[pt.k];
+    recFirst("peel."+it.id+"."+pt.k, x.q==="good");
+    if(x.q!=="good") findings.push(esc(pt.label)+" — "+x.fb);
+  });
+  PE.checked=true;
+  if(!findings.length){
+    fb.className="feedback ok";
+    fb.innerHTML=`<b>That is a PEEL paragraph.</b> Point, embedded evidence, an explanation of what the words
+    DO, and a link that reaches past the paragraph. Read it back once out loud — this is the standard for the essay.`;
+    $("brow").innerHTML = PEEL_ITEMS[PE.i+1]
+      ? `<button class="btn btn-primary" onclick="renderPeel(${PE.i+1},true)">Next paragraph →</button>`
+      : `<button class="btn btn-primary" onclick="peelFinish()">Finish →</button>`;
+  } else {
+    fb.className="feedback warn";
+    fb.innerHTML="<b>A good start — here is how to lift it:</b><ul>"
+      +findings.map(f=>"<li>"+f+"</li>").join("")+"</ul>"
+      +"<div style='margin-top:6px'>Swap the parts that are named above and check again.</div>";
+  }
+}
+function peelFinish(){
+  S.done.peel=true; save();
+  const sc=scoreFor("peel");
+  $("body").innerHTML=`<h2>PEEL paragraph builder — done</h2>
+  <div class="panel"><p style="margin:0"><b>${sc.got}/${sc.total} parts chosen correctly first try.</b>
+  The four moves you just practised are the whole engine of a text-response essay: make a claim, prove it with
+  the author's words, explain what those words do, and reach an idea. Every body paragraph you write does this again.</p></div>
+  <div class="panel"><p class="lead" style="margin:0">The traps have names now — <b>thin</b> (true but says nothing),
+  <b>meta</b> (talking about the essay instead of the text), <b>retell</b> (plot instead of analysis) and
+  <b>repeat</b> (a Link that just says the Point again). Mark your own draft against those four.</p></div>
+  <div class="btnrow"><button class="btn btn-primary" onclick="go('rpt')">See my report →</button>
+  <button class="btn btn-ghost" onclick="go('home')">Back to the hub</button></div>`;
+}
+
+/* ---------- 9 · REPORT ---------- */
+function vcode(str){ let h=5381; for(let i=0;i<str.length;i++){ h=((h<<5)+h+str.charCodeAt(i))|0; } return "V-"+Math.abs(h).toString(16).toUpperCase().slice(0,6); }
+const LABELS={vocab:"Vocabulary preteach",dict:"Dictation warm-up",qr1:COPY.labels.qr1,
+  qr2:COPY.labels.qr2,fig:"Figurative → literal",voice:"Voice fingerprint",
+  ev:"Evidence builder",peel:"PEEL paragraph builder"};
+const RECOMMEND={
+ vocab:"Reopen the morpheme matrices — and look the same roots up in the Word Builder, where every piece is translated into your home language.",
+ dict:"Replay each sentence slowly and read it aloud with the voice. Spelling by ear is a skill; it improves fast with daily dictation.",
+ qr1:COPY.recommend.qr1,
+ qr2:COPY.recommend.qr2,
+ fig:COPY.recommend.fig,
+ voice:COPY.recommend.voice,
+ ev:"Practise the three levels on any quotation: find it, say why it answers the question, then embed it in your own sentence.",
+ peel:"Mark your own draft paragraph against the four traps: thin, meta, retell, repeat."};
+function renderReport(){
+  const mods=Object.keys(LABELS);
+  let rows="", worst=null, worstErr=-1, anyDone=false;
+  mods.forEach(m=>{
+    const sc=scoreFor(m); if(!sc.total) return;
+    anyDone=true;
+    const err=1-sc.got/sc.total;
+    if(err>worstErr && sc.total>=3){ worstErr=err; worst=m; }
+    rows+=`<tr><td>${esc(LABELS[m])}</td><td>${sc.got} / ${sc.total}</td><td>${S.done[m]?"finished":"in progress"}</td></tr>`;
+  });
+  const notStarted=mods.filter(m=>!scoreFor(m).total);
+  const scAll=mods.reduce((a,m)=>{const s=scoreFor(m);return{got:a.got+s.got,total:a.total+s.total}},{got:0,total:0});
+  const code=vcode(JSON.stringify(S.first)+(S.name||"")+(S.sid||""));
+  const teach = !anyDone ? "" :
+    `This student worked through the <i>${esc(TEXT.title)}</i> hub. Every wrong answer was retried until correct
+     (mastery loop), but the scores above are <b>first attempts only</b>, so they show independent reading rather than
+     final-state guessing. `
+    + (worst!==null && worstErr>0.34 ? `Clearest next step: <b>${esc(LABELS[worst])}</b> — ${esc(RECOMMEND[worst])}` :
+       worst!==null && worstErr>0 ? `Errors were spread thin; the softest area was <b>${esc(LABELS[worst])}</b>. ${esc(RECOMMEND[worst])}` :
+       `A clean first-attempt run across everything attempted — extension: ${esc(COPY.extension)}.`);
+  $("body").innerHTML=`<div class="eyebrow">My report</div><h2><i>${esc(TEXT.title)}</i> hub — report</h2>
+  <div class="rowinp noprint">
+    <span><label for="nm">Name</label><input id="nm" value="${esc(S.name||"")}" onchange="S.name=this.value;save();renderReport()"></span>
+    <span><label for="sid">Student ID</label><input id="sid" value="${esc(S.sid||"")}" onchange="S.sid=this.value;save();renderReport()"></span>
+  </div>
+  <p class="lead">${esc(S.name||"(no name entered)")}${S.sid?" · "+esc(S.sid):""} · first-attempt scores · overall <b>${scAll.got}/${scAll.total}</b></p>
+  <table class="rpt"><tr><th>Activity</th><th>First attempt</th><th>Status</th></tr>
+    ${rows||`<tr><td colspan="3">Nothing attempted yet — do an activity first.</td></tr>`}</table>
+  ${notStarted.length?`<div class="panel"><b>Not started yet:</b> <span style="color:var(--muted);font-size:13px">${notStarted.map(m=>esc(LABELS[m])).join(" · ")}</span></div>`:""}
+  <div class="panel"><b>What this tells your teacher:</b> ${teach||"Attempt at least one activity to generate the summary."}</div>
+  <p class="lead">Verification code: <span class="vcode">${code}</span> — this changes if the answers change, so a
+  printed report cannot be edited afterwards.</p>
+  <div class="btnrow noprint">
+    <button class="btn btn-primary" onclick="S.done.rpt=true;save();window.print()">Print / save as PDF</button>
+    <button class="btn btn-ghost" onclick="go('home')">← back to the hub</button>
+  </div>`;
+}
+
+document.getElementById("navWhere").textContent = COPY.nav;
+go("home");
+</script>
+</body>
+</html>
