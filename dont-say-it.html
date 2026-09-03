@@ -101,5 +101,6 @@ $("timerButton").onclick=startPause;$("pass").onclick=pass;$("trash").onclick=tr
 $("reset").onclick=()=>{teams=teams.map(t=>({...t,total:0,rounds:[]}));saveTeams();activeTeam=0;clearRound();renderAll()};
 renderAll();
 </script>
+<script src="report-button.js?v=v1" defer></script>
 </body>
 </html>

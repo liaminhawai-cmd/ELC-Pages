@@ -550,5 +550,6 @@ const boxes=[...document.querySelectorAll('#writeChecklist input')];
 try{ (JSON.parse(localStorage.getItem(CK)||"[]")).forEach((on,i)=>{ if(boxes[i]) boxes[i].checked=on; }); }catch(e){}
 boxes.forEach(b=>b.addEventListener('change',()=>localStorage.setItem(CK, JSON.stringify(boxes.map(x=>x.checked)))));
 </script>
+<script src="report-button.js?v=v1" defer></script>
 </body>
 </html>

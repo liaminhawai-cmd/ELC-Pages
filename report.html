@@ -233,7 +233,7 @@ const stemBox=document.getElementById("stem");
 
     const grid = el("div", "app-cards");
     rec.apps.forEach((a) => {
-      const card = el("div", "app-card");
+      const card = el("div", "app-card"); card.id = "app-" + a.id;
       const h = el("h3");
       const link = el("a"); link.href = a.href; link.textContent = (a.icon ? a.icon + " " : "") + a.title;
       h.append(link); card.append(h);
