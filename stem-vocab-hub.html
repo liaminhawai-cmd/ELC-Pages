@@ -107,7 +107,33 @@
   .chip.suffix { background:var(--suf-soft); color:var(--suf); }
   button.chip { cursor:pointer; min-height:44px; }
   button.chip:hover { outline:1px solid currentColor; outline-offset:-1px; }
-  .chips { display:flex; flex-wrap:wrap; gap:6px; margin:7px 0 8px; }
+
+  /* ---------- morpheme legend + colour-in-the-spelling (WORDS step) ----------
+     Same --pre/--root/--suf tokens the chips and the build board already use —
+     the legend and the headword's own letters just wear them too, so a
+     student learns to see a word's parts before they ever drag a tile. */
+  .mlegend { display:flex; gap:16px; flex-wrap:wrap; align-items:baseline;
+    font-size:.74rem; font-weight:700; margin:16px 0 4px;
+    border:1px solid var(--hair); border-radius:8px; padding:9px 13px; background:var(--paper); }
+  .mlegend .mpre { color:var(--pre); } .mlegend .mroot { color:var(--root); } .mlegend .msuf { color:var(--suf); }
+  .mlegend .lnote { font-weight:400; color:var(--faint); }
+  .hw .mpre { color:var(--pre); } .hw .mroot { color:var(--root); } .hw .msuf { color:var(--suf); }
+
+  /* the morpheme breakdown, purple-lab style: coloured monospace part +
+     italic gloss, joined by " + ", sitting under the meaning behind a dashed
+     rule, with the word's note directly beneath it. Same --pre/--root/--suf
+     tokens as the legend, the headword and the build board. */
+  .morph { font-size:.8rem; color:var(--muted); line-height:1.7; max-width:66ch;
+    border-top:1px dashed var(--hair); padding-top:6px; margin-top:8px; }
+  .morph b, .morph i { color:var(--ink); font-style:normal; }
+  .morph i { font-style:italic; }
+  .morph code { font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-weight:700; font-size:1rem; }
+  .morph code.mpre { color:var(--pre); }
+  .morph code.mroot { color:var(--root); }
+  .morph code.msuf { color:var(--suf); }
+  .morph .mnote { display:block; margin-top:4px; }
+  .morph .tr { color:var(--muted); }
 
   /* ---------- 1 WORDS ---------- */
   .wctl { display:flex; flex-wrap:wrap; gap:10px 18px; align-items:center; padding-bottom:14px;
@@ -354,6 +380,7 @@
       learnInF: function(u,n){ return "learn it in " + u + " · word list " + n; },
       downToGoF: function(n,m){ return (n>0 ? "<b>"+n+"</b>" : n) + " down, "+m+" to go"; },
       gPrefix:"Prefixes · the start", gRoot:"Roots · the heart", gSuffix:"Suffixes · the end",
+      legendNote:"— the same colours mark each word's parts below",
       slotPh:"drop", rememberIt:"remember it ✓",
       slotAriaF: function(i,n){ return "piece " + i + " of " + n; },
       checkBtn:"Check my answers",
@@ -400,6 +427,7 @@
       learnInF: function(u,n){ return "在 " + u + " · 单词表 " + n + " 学"; },
       downToGoF: function(n,m){ return "已完成 " + (n>0 ? "<b>"+n+"</b>" : n) + "，还剩 "+m+" 个"; },
       gPrefix:"前缀 · 词的开头", gRoot:"词根 · 词的核心", gSuffix:"后缀 · 词的结尾",
+      legendNote:"——下面每个单词的对应部分都用同样的颜色标出",
       slotPh:"放这里", rememberIt:"记住它 ✓",
       slotAriaF: function(i,n){ return "第 " + i + " 个词素，共 " + n + " 个"; },
       checkBtn:"检查我的答案",
@@ -446,6 +474,7 @@
       learnInF: function(u,n){ return "在 " + u + " · 單字表 " + n + " 學"; },
       downToGoF: function(n,m){ return "已完成 " + (n>0 ? "<b>"+n+"</b>" : n) + "，還剩 "+m+" 個"; },
       gPrefix:"字首 · 詞的開頭", gRoot:"字根 · 詞的核心", gSuffix:"字尾 · 詞的結尾",
+      legendNote:"——下面每個單字的對應部分都用同樣的顏色標出",
       slotPh:"放這裡", rememberIt:"記住它 ✓",
       slotAriaF: function(i,n){ return "第 " + i + " 個詞素，共 " + n + " 個"; },
       checkBtn:"檢查我的答案",
@@ -492,6 +521,7 @@
       learnInF: function(u,n){ return "học ở " + u + " · danh sách từ " + n; },
       downToGoF: function(n,m){ return "đã xong " + (n>0 ? "<b>"+n+"</b>" : n) + ", còn "+m+" từ nữa"; },
       gPrefix:"Tiền tố · phần đầu", gRoot:"Gốc từ · phần lõi", gSuffix:"Hậu tố · phần đuôi",
+      legendNote:"— màu sắc này cũng đánh dấu từng phần của mỗi từ bên dưới",
       slotPh:"thả vào", rememberIt:"ghi nhớ từ này ✓",
       slotAriaF: function(i,n){ return "thành phần " + i + " / " + n; },
       checkBtn:"Kiểm tra bài của em",
@@ -719,12 +749,40 @@
     });
     return h;
   }
-  function partChip(p, hl){
+  /* colour-in-the-spelling: the headword rebuilt with each morpheme's own
+     letters wrapped in a span carrying its part's colour. Falls back to the
+     plain (escaped) word if a part's surface can't be found inside it — a
+     few entries store a normalised root ("hydr") that isn't a literal
+     substring of the headword, and a silently wrong colouring would be
+     worse than none. */
+  function morphClass(type){
+    return type === "prefix" ? "mpre" : (type === "suffix" ? "msuf" : "mroot");
+  }
+  function colourWord(w){
+    var parts = w.parts || [];
+    if (!parts.length) return esc(w.w);
+    var out = "", rest = w.w;
+    for (var i = 0; i < parts.length; i++) {
+      var piece = String(parts[i].surface || "").replace(/-/g, "");
+      var idx = rest.toLowerCase().indexOf(piece.toLowerCase());
+      if (!piece || idx === -1) return esc(w.w);
+      out += esc(rest.slice(0, idx)) +
+        "<span class='" + morphClass(parts[i].type) + "'>" + esc(rest.slice(idx, idx + piece.length)) + "</span>";
+      rest = rest.slice(idx + piece.length);
+    }
+    return out + esc(rest);
+  }
+  /* one morpheme of the breakdown, purple-lab style: the part itself as a
+     coloured monospace <code>, its English gloss in italics straight after,
+     and the home-language gloss inside that same italic run so the "hide
+     translations" toggle still reaches it (.notr .tr). Display only — these
+     were never tappable here; the tappable chips live on the build board. */
+  function partMorph(p, hl){
     var trTxt = (hl && p.tr && p.tr[hl]) ? p.tr[hl] : "";
-    return "<span class='chip " + esc(p.type) + "'><b>" + esc(p.surface) + "</b>" +
-      "<small>" + esc(p.meaning) +
+    return "<code class='" + morphClass(p.type) + "'>" + esc(p.surface) + "</code> <i>" +
+      esc(p.meaning) +
       (trTxt ? "<span class='tr'> · <bdi lang='" + esc(hl) + "'>" + esc(trTxt) + "</bdi></span>" : "") +
-      "</small></span>";
+      "</i>";
   }
   function marksFor(w){
     var st = wState(w.w);
@@ -760,24 +818,31 @@
         (hl ? "<button class='tgl' type='button' id='trTgl' aria-pressed='" + showTr + "'>" +
               esc(showTr ? T("trOn") : T("trOff")) + "</button>" : "") +
       "</div>" +
+      (set.words.some(function(w){ return (w.parts || []).length; }) ?
+        "<div class='mlegend'><span class='mpre'>" + esc(T("gPrefix")) + "</span>" +
+          "<span class='mroot'>" + esc(T("gRoot")) + "</span>" +
+          "<span class='msuf'>" + esc(T("gSuffix")) + "</span>" +
+          "<span class='lnote'>" + esc(T("legendNote")) + "</span></div>" : "") +
       "<div class='wlist" + (showTr ? "" : " notr") + "' id='wlist'>";
     if (!set.words.length) h += "<p class='panelead'>" + esc(T("emptySet")) + "</p>";
     set.words.forEach(function(w){
       var parts = w.parts || [];
       h += "<article class='word' id='w-" + esc(slug(w.w)) + "'>" +
-        "<div class='whead'><span class='hwbox'><span class='hw'>" + esc(w.w) + "</span>" +
+        "<div class='whead'><span class='hwbox'><span class='hw'>" + colourWord(w) + "</span>" +
           SAY(w.w, "en", "lg") + "</span>" + marksFor(w) + "</div>" +
         homeNote(w);
-      if (parts.length) {
-        h += "<div class='chips'>";
-        parts.forEach(function(p){ h += partChip(p, hl); });
-        h += "</div>";
-      }
       h += "<p class='wmean'>" + esc(w.meaning) + "</p>";
       if (hl && w.tr && w.tr[hl]) h += "<p class='wtr' lang='" + esc(hl) + "' dir='auto'>" +
         esc(w.tr[hl]) + SAY(w.tr[hl], hl, "sm") + "</p>";
       if (w.example) h += "<p class='wex'>" + esc(w.example) + SAY(w.example, "en", "sm") + "</p>";
-      if (w.note) h += "<p class='wnote'>" + w.note + "</p>";
+      /* breakdown under the meaning, behind a dashed rule, note beneath it */
+      if (parts.length) {
+        h += "<div class='morph'>" +
+          parts.map(function(p){ return partMorph(p, hl); }).join(" + ") +
+          (w.note ? "<span class='mnote'>" + w.note + "</span>" : "") + "</div>";
+      } else if (w.note) {
+        h += "<p class='wnote'>" + w.note + "</p>";
+      }
       h += "</article>";
     });
     h += "</div><p class='paneend'><a class='plain' href='" +
@@ -1211,5 +1276,6 @@
   route();
 })();
 </script>
+<script src="report-button.js?v=v1" defer></script>
 </body>
 </html>

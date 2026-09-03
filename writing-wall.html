@@ -50,6 +50,11 @@
   tr.clickable{cursor:pointer}
 
   .types{display:flex;flex-direction:column;gap:9px;margin-top:8px}
+  a.xcard{display:flex;align-items:center;gap:11px;padding:13px 15px;margin-top:9px;border:1px solid var(--line);
+          border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);text-decoration:none;color:inherit}
+  a.xcard .emoji{font-size:1.35rem}
+  a.xcard h3{font-size:1rem} a.xcard .subt{font-size:.82rem;color:var(--muted);margin-top:1px}
+  a.xcard .chev{margin-left:auto;color:var(--muted)}
   .type{border:1px solid var(--line);border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);overflow:hidden}
   .type>button.head{width:100%;display:flex;align-items:center;gap:11px;padding:13px 15px;background:none;border:none;text-align:left;cursor:pointer;font:inherit;color:inherit}
   .type .emoji{font-size:1.35rem}
@@ -210,6 +215,10 @@
       <div id="pAnswer" class="answerbox"></div>
     </div>
   </div>
+
+  <a class="xcard" href="teea-paragraph.html"><span class="emoji">🌳</span>
+    <span><h3>One paragraph, pulled apart</h3><div class="subt">The Giving Tree written as T&middot;E&middot;E&middot;A — the same three colours, sentence by sentence, plus the analytical verbs</div></span>
+    <span class="chev">&rarr;</span></a>
 </main>
 
 <footer>Colours: <span class="b">evidence</span> · <span class="g">purpose</span> · <span class="o">ideas</span></footer>
@@ -560,5 +569,6 @@ if(TEACHER){
   };
 })();
 </script>
+<script src="report-button.js?v=v1" defer></script>
 </body>
 </html>

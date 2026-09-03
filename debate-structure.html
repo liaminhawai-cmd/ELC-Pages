@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Formal debate structure — put in the speakers' names, drag them into order, and see what each one says.">
+<title>Debate Structure — ELC Hub</title>
+<style>
+  :root {
+    --lab:132px;
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#7c3aed; --radius:14px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 5px 16px rgba(16,24,40,.07);
+    /* team colours — same two the Persuasive Language debating tab uses */
+    --a:#2563eb; --a-soft:#dbeafe; --b:#c2410c; --b-soft:#ffedd5;
+    /* rebuttal is ALWAYS red. Intro and summary get no colour of their own. */
+    --reb:#dc2626; --reb-soft:#fee2e2;
+    --plain:#64748b; --plain-soft:#f1f5f9;
+    /* one colour per argument — kept clear of the team blue/orange */
+    --g1:#15803d; --g1s:#dcfce7;
+    --g2:#7c3aed; --g2s:#ede9fe;
+    --g3:#0f766e; --g3s:#ccfbf1;
+    --g4:#be185d; --g4s:#fce7f3;
+    --g5:#a16207; --g5s:#fef3c7;
+    --g6:#4338ca; --g6s:#e0e7ff;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
+            --accent:#a78bfa; --shadow:0 2px 10px rgba(0,0,0,.4);
+            --a:#7aa5ff; --a-soft:#17284a; --b:#fb923c; --b-soft:#3b2412;
+            --reb:#f87171; --reb-soft:#45151f;
+            --plain:#94a3b8; --plain-soft:#1e293b;
+            --g1:#86efac; --g1s:#123322;
+            --g2:#c4b5fd; --g2s:#2a2145;
+            --g3:#5eead4; --g3s:#0f3b36;
+            --g4:#f9a8d4; --g4s:#4a1130;
+            --g5:#fcd34d; --g5s:#3d2f0b;
+            --g6:#a5b4fc; --g6s:#232a5c; }
+  }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; }
+  .shell { max-width:1120px; margin:auto; padding:12px 16px 30px; }
+  .top { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:9px; flex-wrap:wrap; }
+  .back { color:var(--accent); font-weight:800; text-decoration:none; font-size:.9rem; }
+  .back:hover { text-decoration:underline; }
+  h1 { font-size:clamp(1.2rem,3.2vw,1.55rem); letter-spacing:-.4px; }
+  .sub { color:var(--muted); font-size:.85rem; margin-top:2px; }
+
+  /* ── controls ─────────────────────────────────────────────── */
+  .controls { display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end;
+    background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:10px 12px; box-shadow:var(--shadow); margin-top:11px; }
+  .field { display:flex; flex-direction:column; gap:3px; }
+  .field label { font-size:.68rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+  .field input[type=text] { border:2px solid var(--line); border-radius:9px; padding:6px 9px;
+    background:var(--bg); color:var(--ink); font-size:.9rem; font-weight:700; min-width:150px; }
+  #teamA { border-color:var(--a); } #teamB { border-color:var(--b); }
+  input:focus, select:focus { outline:3px solid color-mix(in srgb,var(--accent) 30%,transparent); }
+  .stepper { display:flex; align-items:center; border:2px solid var(--line); border-radius:9px; overflow:hidden; background:var(--bg); }
+  .stepper button { border:0; background:transparent; color:var(--ink); width:32px; height:34px; font-size:1.05rem; font-weight:900; cursor:pointer; }
+  .stepper button:hover:not(:disabled) { background:var(--line); }
+  .stepper button:disabled { opacity:.3; cursor:default; }
+  .stepper span { min-width:32px; text-align:center; font-weight:900; font-size:.93rem; }
+  .toggle { display:flex; align-items:center; gap:7px; font-size:.84rem; cursor:pointer; padding-bottom:5px; }
+  .toggle input { accent-color:var(--accent); width:16px; height:16px; }
+  .ctl-note { font-size:.75rem; color:var(--muted); margin-left:auto; flex:1 1 200px; min-width:170px; padding-bottom:4px; }
+
+  /* ── what each speaker says: the sentence frames ──────────── */
+  .frames { display:grid; gap:7px; margin-top:10px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); }
+  .frame { background:var(--card); border:1px solid var(--line); border-radius:11px; padding:8px 10px; box-shadow:var(--shadow); }
+  .frame .say { font-size:.79rem; margin-top:5px; line-height:1.55; }
+  .frame .say u { text-decoration:none; border-bottom:2px solid var(--muted); padding:0 14px; opacity:.55; }
+  .chip { display:inline-block; font-size:.72rem; font-weight:800; padding:3px 9px; border-radius:999px; border:1px solid; }
+  .chip.reb   { background:var(--reb-soft);   color:var(--reb);   border-color:var(--reb); }
+  .chip.plain { background:var(--plain-soft); color:var(--plain); border-color:var(--plain); }
+  .chip.g1{background:var(--g1s);color:var(--g1);border-color:var(--g1)} .chip.g2{background:var(--g2s);color:var(--g2);border-color:var(--g2)}
+  .chip.g3{background:var(--g3s);color:var(--g3);border-color:var(--g3)} .chip.g4{background:var(--g4s);color:var(--g4);border-color:var(--g4)}
+  .chip.g5{background:var(--g5s);color:var(--g5);border-color:var(--g5)} .chip.g6{background:var(--g6s);color:var(--g6);border-color:var(--g6)}
+  /* a hollow chip = this argument is only NAMED here, not developed */
+  .chip.ghost { background:transparent; border-style:dashed; font-weight:700; }
+  .grouplab { font-size:.66rem; font-weight:900; text-transform:uppercase; letter-spacing:.05em;
+    color:var(--muted); align-self:center; margin-right:1px; }
+
+  /* ── the sequence ─────────────────────────────────────────── */
+  .lanes { margin-top:12px; }
+  .lane-heads { display:grid; grid-template-columns:var(--lab) 1fr 44px 1fr var(--lab); gap:8px; margin-bottom:7px; }
+  .lane-heads > .lane-head.a { grid-column:1/3; } .lane-heads > .lane-head.b { grid-column:4/6; }
+  .lane-head { border-radius:10px; padding:6px 11px; font-weight:900; font-size:.92rem; text-align:center;
+    border:2px solid; overflow-wrap:anywhere; }
+  .lane-head.a { background:var(--a-soft); color:var(--a); border-color:var(--a); }
+  .lane-head.b { background:var(--b-soft); color:var(--b); border-color:var(--b); }
+  .lane-head small { display:block; font-size:.66rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase; opacity:.8; }
+
+  .turn { display:grid; grid-template-columns:var(--lab) 1fr 44px 1fr var(--lab); gap:8px; align-items:center; margin-bottom:5px; }
+
+  /* the people live in the outer margin: one editable name box per turn */
+  .sidelab { display:flex; flex-direction:column; gap:1px; }
+  .sidelab.hide { visibility:hidden; }
+  .personRow { display:flex; align-items:center; gap:3px; }
+  .turn.is-b .personRow { flex-direction:row-reverse; }
+  .nameIn { width:100%; min-width:0; border:1px dashed var(--line); border-radius:7px;
+    background:transparent; color:var(--ink); font-size:.84rem; font-weight:850; padding:3px 6px; text-align:center; }
+  .turn.is-a .nameIn { color:var(--a); } .turn.is-b .nameIn { color:var(--b); }
+  .nameIn::placeholder { color:var(--muted); font-weight:600; opacity:.7; font-size:.76rem; }
+  .nameIn:hover { border-color:var(--muted); }
+  .sidemeta { font-size:.62rem; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+  .turn.is-a .sidemeta { text-align:right; } .turn.is-b .sidemeta { text-align:left; }
+  .twice { color:var(--accent); }
+  .sidelab.drag-over .nameIn { outline:3px dashed var(--accent); outline-offset:2px; }
+  .sidelab.dragging { opacity:.45; }
+  .slot { min-width:0; }
+  .num { display:grid; place-items:center; }
+  .num i { font-style:normal; width:27px; height:27px; border-radius:50%; display:grid; place-items:center;
+    font-size:.76rem; font-weight:900; color:#fff; background:var(--muted); }
+  .turn.is-a .num i { background:var(--a); }
+  .turn.is-b .num i { background:var(--b); }
+
+  .bubble { position:relative; background:var(--card); border:1px solid var(--line);
+    border-left:5px solid var(--muted); border-radius:11px; padding:7px 10px; box-shadow:var(--shadow); }
+  .turn.is-a .bubble { border-left-color:var(--a); }
+  .turn.is-b .bubble { border-left-color:var(--b); }
+  .bubble.drag-over { outline:3px dashed var(--accent); outline-offset:2px; }
+  .bubble.dragging { opacity:.45; }
+
+  .grip { cursor:grab; color:var(--muted); font-size:.85rem; line-height:1; user-select:none; flex:none; }
+  .grip:active { cursor:grabbing; }
+  .movers { display:flex; flex-direction:column; gap:1px; flex:none; }
+  .movers button { border:1px solid var(--line); background:var(--bg); color:var(--ink);
+    width:17px; height:14px; border-radius:4px; font-size:.55rem; cursor:pointer; line-height:1; padding:0; }
+  .movers button:disabled { opacity:.28; cursor:default; }
+  .jobs { display:flex; flex-wrap:wrap; gap:4px; }
+
+  /* ── rules ────────────────────────────────────────────────── */
+  .rules { display:grid; gap:9px; margin-top:13px; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); }
+  .rule { background:var(--card); border:1px solid var(--line); border-left:5px solid var(--accent);
+    border-radius:0 var(--radius) var(--radius) 0; padding:9px 12px; box-shadow:var(--shadow); }
+  .rule h3 { font-size:.85rem; }
+  .rule p { font-size:.79rem; color:var(--muted); margin-top:3px; }
+  .rule.reb { border-left-color:var(--reb); } .rule.reb h3 { color:var(--reb); }
+
+  .xlink { display:inline-block; margin:13px 12px 0 0; color:var(--accent); font-weight:750; text-decoration:none; font-size:.87rem; }
+  .xlink:hover { text-decoration:underline; }
+  .privacy { margin-top:18px; padding:8px 12px; border-radius:10px; background:var(--card);
+    border:1px solid var(--line); color:var(--muted); font-size:.77rem; text-align:center; }
+
+  @media (max-width:640px) {
+    .shell { padding:11px 10px 30px; }
+    .lane-heads, .turn { grid-template-columns:32px 1fr; }
+    .lane-heads .lane-head.b { display:none; }
+    .lane-heads .lane-head.a { grid-column:1/3; }
+    .turn .sidelab { grid-column:2; margin-bottom:-1px; }
+    .turn .sidelab.hide { display:none; }
+    .turn.is-b .personRow { flex-direction:row; }
+    .turn .num { order:-1; align-items:start; }
+    .turn .slot.empty { display:none; }
+    .turn .slot { grid-column:2; }
+    .ctl-note { margin-left:0; }
+  }
+  @media print {
+    @page { size:A4 portrait; margin:10mm; }
+    body { background:#fff; }
+    .controls, .privacy, .xlink, .back, .sub, .grip, .movers { display:none !important; }
+    .sidelab.hide { display:none; }
+    .bubble, .rule, .frame, .lane-head { box-shadow:none; }
+    .nameIn { border:0; padding:0; }
+    .shell { padding:0; max-width:none; }
+    .turn, .rule, .frame { break-inside:avoid; }
+    h1 { font-size:1.15rem; }
+    .frames { margin-top:7px; } .frame .say { font-size:.64rem; line-height:1.4; }
+    .lanes { margin-top:8px; } .turn { margin-bottom:3px; }
+    .rules { margin-top:8px; gap:6px; } .rule p { font-size:.67rem; } .rule { padding:6px 9px; } .rule h3 { font-size:.75rem; }
+    .chip { font-size:.57rem; padding:1px 6px; border-radius:8px; }
+    .grouplab { font-size:.53rem; }
+    .sidelab { font-size:.62rem; } .sidelab b { font-size:.68rem; }
+    .nameIn { font-size:.82rem; font-weight:900; }
+    .jobs { gap:2px; }
+    .bubble { padding:4px 7px; }
+    .lane-head { padding:4px 9px; font-size:.85rem; }
+    .rules { grid-template-columns:repeat(3,1fr); }   /* one row, not two */
+    .frames { grid-template-columns:repeat(4,1fr); gap:4px; }
+    .frame { padding:5px 7px; }
+  }
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="top">
+    <a class="back" href="index.html">← ELC Hub</a>
+    <a class="back" href="persuasive.html#debating">Debating rubric &amp; vocab →</a>
+  </div>
+
+  <h1>🎤 How a formal debate runs</h1>
+  <p class="sub">Type your speakers' names down the sides. Drag a name, or use ↑ ↓, to change the order — that changes who opens and who sums up. Both teams always give the same number of arguments, so if a team has fewer people, someone speaks twice.</p>
+
+  <div class="controls">
+    <div class="field">
+      <label for="teamA">Team A — agrees with the topic</label>
+      <input type="text" id="teamA" maxlength="28" placeholder="Affirmative">
+    </div>
+    <div class="field">
+      <label for="teamB">Team B — disagrees</label>
+      <input type="text" id="teamB" maxlength="28" placeholder="Negative">
+    </div>
+    <div class="field">
+      <label>Arguments each team</label>
+      <div class="stepper">
+        <button type="button" id="minusG" aria-label="One fewer argument">−</button>
+        <span id="argsOut">2</span>
+        <button type="button" id="plusG" aria-label="One more argument">+</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>People in Team A</label>
+      <div class="stepper">
+        <button type="button" id="minusA" aria-label="One fewer person in Team A">−</button>
+        <span id="sizeOutA">3</span>
+        <button type="button" id="plusA" aria-label="One more person in Team A">+</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>People in Team B</label>
+      <div class="stepper">
+        <button type="button" id="minusB" aria-label="One fewer person in Team B">−</button>
+        <span id="sizeOutB">3</span>
+        <button type="button" id="plusB" aria-label="One more person in Team B">+</button>
+      </div>
+    </div>
+    <label class="toggle"><input type="checkbox" id="summaryOnly" checked>
+      Last speaker summarises only</label>
+    <p class="ctl-note" id="argNote"></p>
+  </div>
+
+  <div class="frames" id="frames"></div>
+
+  <div class="lanes">
+    <div class="lane-heads">
+      <div class="lane-head a"><small>Team A · agrees</small><span id="headAName">Affirmative</span></div>
+      <div></div>
+      <div class="lane-head b"><small>Team B · disagrees</small><span id="headBName">Negative</span></div>
+    </div>
+    <div id="seq"></div>
+  </div>
+
+  <div class="rules">
+    <div class="rule reb">
+      <h3>Team A's first speaker never rebuts</h3>
+      <p>Nobody has spoken yet, so there is nothing to answer. Every speaker after that one starts with a rebuttal — that is why rebuttal is always red.</p>
+    </div>
+    <div class="rule" id="ruleSum">
+      <h3>The last speaker adds no new arguments</h3>
+      <p>Their job is to rebut, then pull the team case together. A new argument here is unfair — the other team has no turn left to answer it.</p>
+    </div>
+    <div class="rule">
+      <h3>Teams can be different sizes</h3>
+      <p>Both teams always give the same number of arguments — that is what keeps the debate fair. If a team has fewer people, someone takes two turns, and their name is marked <b>×2</b>.</p>
+    </div>
+  </div>
+
+  <a class="xlink" href="persuasive.html#debating">📚 Debate rubric, key vocabulary and rebuttal starters →</a>
+  <a class="xlink" href="persuasive.html#techniques">🔥 Persuasive techniques to use in your arguments →</a>
+  <a class="xlink" target="_blank" rel="noopener" href="https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/l/elc/humanities">🧱 Word Builder: issue vocabulary (Social Media Ban) →</a>
+
+  <p class="privacy">🔒 No account needed. Names you type stay in this browser only, and are never sent anywhere.</p>
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   DATA BLOCK — teachers edit below this line. Nothing here is code.
+   Frames use the persuasive workshop booklet's style: write a blank as ___
+   (three underscores or more).
+     {N}      → the number of arguments, in words
+     {ARGS}   → "___, ___ and ___", one blank per argument
+     {RECAP}  → "Argument 1 was ___. Argument 2 was ___." for every argument
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* The opening speech names EVERY argument, but only develops argument 1
+   with evidence — that is what the chips show. */
+const FRAME_OPEN =
+  "Our contention is that ___. We have {N} arguments. They are {ARGS}. Our first argument is that ___. For example, ___. This shows that ___.";
+
+const FRAME_REBUT =
+  "The speaker for the other team argued that ___. However, ___. This means their argument does not work because ___.";
+
+const FRAME_ARG =
+  "Our next argument is that ___. For example, ___. This shows that ___.";
+
+/* The summary brings every argument back — one sentence each. */
+const FRAME_SUM =
+  "In conclusion, we believe ___. {RECAP} The other team said ___, but we showed ___. That is why you should agree with us.";
+
+const MIN_ARGS = 1, MAX_ARGS = 5, DEFAULT_ARGS = 2;
+const MAX_PEOPLE = 6;
+const WORDS = ["zero","one","two","three","four","five","six"];
+
+/* ═══════════════════ END OF DATA BLOCK — code below ═══════════════════ */
+
+const LS = "elc_debate_structure_v4";
+const $ = id => document.getElementById(id);
+
+let nArgs  = DEFAULT_ARGS;     // the SAME for both teams — that is what keeps it fair
+let people = [3, 3];           // how many humans each team actually has
+let names  = [[], []];         // names[team] = one entry per person
+
+/* Turns follow from the arguments: every argument needs a turn, and the
+   summary needs one more when the last speaker only sums up. */
+function turnsPerTeam(summaryOnly) { return summaryOnly ? nArgs + 1 : nArgs; }
+
+/* Which person takes turn s — wrapping round if the team is short of people. */
+function personFor(team, s) { return (s - 1) % Math.max(1, people[team]); }
+function turnsForPerson(team, p, turns) {
+  const out = [];
+  for (let s = 1; s <= turns; s++) if (personFor(team, s) === p) out.push(s);
+  return out;
+}
+
+function jobsFor(team, s, turns, summaryOnly) {
+  const isA = team === 0, first = s === 1, last = s === turns;
+  const jobs = [];
+  if (first) {
+    jobs.push({ kind:"open" });
+    if (!isA) jobs.push({ kind:"reb" });
+    jobs.push({ kind:"arg" });
+  } else {
+    jobs.push({ kind:"reb" });
+    if (last && summaryOnly) jobs.push({ kind:"sum" });
+    else { jobs.push({ kind:"arg" }); if (last) jobs.push({ kind:"sum" }); }
+  }
+  return jobs;
+}
+const argClass = i => "g" + (((i - 1) % 6) + 1);
+
+function frameNodes(text, n) {
+  const blanks = Array.from({ length: n }, () => "___");
+  const list = blanks.length > 1
+    ? blanks.slice(0, -1).join(", ") + " and " + blanks[blanks.length - 1] : blanks.join("");
+  const recap = Array.from({ length: n }, (_, i) => `Argument ${i + 1} was ___.`).join(" ");
+  const filled = text.replace("{ARGS}", list).replace("{RECAP}", recap).replace("{N}", WORDS[n] || n);
+  const frag = document.createDocumentFragment();
+  filled.split(/(_{3,})/).forEach(part => {
+    if (/^_{3,}$/.test(part)) frag.append(document.createElement("u"));
+    else frag.append(document.createTextNode(part));
+  });
+  return frag;
+}
+function renderFrames(n) {
+  const host = $("frames");
+  host.replaceChildren();
+  [["plain", "Opening — contention, outline, then argument 1", FRAME_OPEN],
+   ["reb",   "Rebuttal", FRAME_REBUT],
+   [argClass(1), "Each argument", FRAME_ARG],
+   ["plain", "Summary — every argument comes back", FRAME_SUM],
+  ].forEach(([cls, label, text]) => {
+    const box = document.createElement("div"); box.className = "frame";
+    const chip = document.createElement("span"); chip.className = "chip " + cls; chip.textContent = label;
+    const p = document.createElement("p"); p.className = "say"; p.append(frameNodes(text, n));
+    box.append(chip, p); host.append(box);
+  });
+}
+function ghostChip(i, label) {
+  const c = document.createElement("span");
+  c.className = "chip ghost " + argClass(i); c.textContent = label; return c;
+}
+function groupLabel(t) {
+  const l = document.createElement("span"); l.className = "grouplab"; l.textContent = t; return l;
+}
+
+function render() {
+  const nameA = $("teamA").value.trim() || "Affirmative";
+  const nameB = $("teamB").value.trim() || "Negative";
+  const summaryOnly = $("summaryOnly").checked;
+  const teamNames = [nameA, nameB];
+  const turns = turnsPerTeam(summaryOnly);
+
+  // a team can never have more people than there are turns for them
+  people = people.map(p => Math.min(Math.max(1, p), turns));
+
+  $("headAName").textContent = nameA;
+  $("headBName").textContent = nameB;
+  $("argsOut").textContent = nArgs;
+  $("minusG").disabled = nArgs <= MIN_ARGS;
+  $("plusG").disabled  = nArgs >= MAX_ARGS;
+  [["A", 0], ["B", 1]].forEach(([sfx, t]) => {
+    $("sizeOut" + sfx).textContent = people[t];
+    $("minus" + sfx).disabled = people[t] <= 1;
+    $("plus"  + sfx).disabled = people[t] >= Math.min(MAX_PEOPLE, turns);
+  });
+
+  const doubling = [0, 1].map(t => turns - people[t]);
+  $("argNote").textContent =
+    `Both teams give ${nArgs} argument${nArgs === 1 ? "" : "s"} across ${turns} turns. ` +
+    ([0,1].every(t => doubling[t] === 0)
+      ? "Every person speaks once."
+      : [0,1].filter(t => doubling[t] > 0)
+             .map(t => `${teamNames[t]} has ${people[t]} for ${turns} turns, so ${doubling[t]} speak${doubling[t] === 1 ? "s" : ""} twice.`)
+             .join(" "));
+  $("ruleSum").hidden = !summaryOnly;
+
+  renderFrames(nArgs);
+
+  const seq = $("seq");
+  seq.replaceChildren();
+  let turn = 0;
+  for (let s = 1; s <= turns; s++) {
+    for (let team = 0; team < 2; team++) {
+      turn++;
+      let argNo = 0;
+      for (let k = 1; k <= s; k++) if (jobsFor(team, k, turns, summaryOnly).some(j => j.kind === "arg")) argNo++;
+
+      const row = document.createElement("div");
+      row.className = "turn " + (team === 0 ? "is-a" : "is-b");
+
+      /* ── the person: an editable box in the outer margin ── */
+      const labA = document.createElement("div"), labB = document.createElement("div");
+      labA.className = "sidelab" + (team === 0 ? "" : " hide");
+      labB.className = "sidelab" + (team === 1 ? "" : " hide");
+      const lab = team === 0 ? labA : labB;
+      const p = personFor(team, s);
+      const mine = turnsForPerson(team, p, turns);
+
+      const prow = document.createElement("div");
+      prow.className = "personRow";
+      const grip = document.createElement("span");
+      grip.className = "grip"; grip.textContent = "⠿";
+      grip.title = "Drag to change the order"; grip.setAttribute("aria-hidden", "true");
+      const input = document.createElement("input");
+      input.className = "nameIn"; input.type = "text"; input.maxLength = 20;
+      input.placeholder = "name";
+      input.value = names[team][p] || "";
+      input.setAttribute("aria-label", `Name of ${teamNames[team]} person ${p + 1}`);
+      input.addEventListener("input", () => {
+        names[team][p] = input.value;
+        // the same person may hold more than one turn — keep every box in step
+        document.querySelectorAll(`.nameIn[data-team="${team}"][data-person="${p}"]`)
+          .forEach(o => { if (o !== input) o.value = input.value; });
+        save();
+      });
+      input.dataset.team = team; input.dataset.person = p;
+      const movers = document.createElement("div");
+      movers.className = "movers";
+      const up = document.createElement("button");
+      up.type = "button"; up.textContent = "▲"; up.disabled = p === 0;
+      up.setAttribute("aria-label", `Move this person earlier in ${teamNames[team]}`);
+      up.addEventListener("click", () => swapPeople(team, p, p - 1));
+      const dn = document.createElement("button");
+      dn.type = "button"; dn.textContent = "▼"; dn.disabled = p >= people[team] - 1;
+      dn.setAttribute("aria-label", `Move this person later in ${teamNames[team]}`);
+      dn.addEventListener("click", () => swapPeople(team, p, p + 1));
+      movers.append(up, dn);
+      prow.append(grip, input, movers);
+
+      const meta = document.createElement("div");
+      meta.className = "sidemeta";
+      meta.textContent = "Speaker " + s;
+      if (mine.length > 1) {
+        const x = document.createElement("span");
+        x.className = "twice"; x.textContent = " ×" + mine.length;
+        x.title = `This person speaks on turns ${mine.join(" and ")}`;
+        meta.append(x);
+      }
+      lab.append(prow, meta);
+      lab.dataset.team = team; lab.dataset.person = p;
+      lab.draggable = true;
+      wireDrag(lab);
+
+      /* ── the bubble: the jobs, in colour ── */
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      const jobs = document.createElement("div");
+      jobs.className = "jobs";
+      jobsFor(team, s, turns, summaryOnly).forEach(j => {
+        if (j.kind === "open") {
+          const c = document.createElement("span");
+          c.className = "chip plain"; c.textContent = "Contention";
+          jobs.append(c, groupLabel("outlines"));
+          for (let i = 1; i <= nArgs; i++) jobs.append(ghostChip(i, "Argument " + i));
+        } else if (j.kind === "reb") {
+          const c = document.createElement("span");
+          c.className = "chip reb"; c.textContent = "Rebuttal"; jobs.append(c);
+        } else if (j.kind === "sum") {
+          jobs.append(groupLabel("summarises"));
+          for (let i = 1; i <= nArgs; i++) jobs.append(ghostChip(i, "Argument " + i));
+        } else {
+          const c = document.createElement("span");
+          c.className = "chip " + argClass(argNo);
+          c.textContent = `Argument ${argNo} + evidence`;
+          jobs.append(c);
+        }
+      });
+      bubble.append(jobs);
+
+      const left = document.createElement("div"), right = document.createElement("div");
+      left.className = right.className = "slot";
+      const num = document.createElement("div"); num.className = "num";
+      const i = document.createElement("i"); i.textContent = turn; num.append(i);
+      if (team === 0) { left.append(bubble); right.classList.add("empty"); }
+      else { right.append(bubble); left.classList.add("empty"); }
+      row.append(labA, left, num, right, labB);
+      seq.append(row);
+    }
+  }
+  save();
+}
+
+/* Reordering the PEOPLE changes who opens and who sums up. */
+function swapPeople(team, from, to) {
+  if (to < 0 || to >= people[team]) return;
+  const arr = names[team];
+  const a = arr[from] || "", b = arr[to] || "";
+  arr[from] = b; arr[to] = a;
+  render();
+}
+
+let dragSrc = null;
+function wireDrag(el) {
+  el.addEventListener("dragstart", e => {
+    dragSrc = el; el.classList.add("dragging");
+    e.dataTransfer.effectAllowed = "move";
+    try { e.dataTransfer.setData("text/plain", el.dataset.person); } catch (err) {}
+  });
+  el.addEventListener("dragend", () => { el.classList.remove("dragging"); dragSrc = null;
+    document.querySelectorAll(".drag-over").forEach(x => x.classList.remove("drag-over")); });
+  el.addEventListener("dragover", e => {
+    if (!dragSrc || dragSrc.dataset.team !== el.dataset.team) return;
+    if (dragSrc.dataset.person === el.dataset.person) return;
+    e.preventDefault(); el.classList.add("drag-over");
+  });
+  el.addEventListener("dragleave", () => el.classList.remove("drag-over"));
+  el.addEventListener("drop", e => {
+    e.preventDefault(); el.classList.remove("drag-over");
+    if (!dragSrc || dragSrc.dataset.team !== el.dataset.team) return;
+    swapPeople(+el.dataset.team, +dragSrc.dataset.person, +el.dataset.person);
+  });
+}
+
+function save() {
+  try { localStorage.setItem(LS, JSON.stringify({
+    a: $("teamA").value, b: $("teamB").value, nArgs, people,
+    sum: $("summaryOnly").checked, names })); } catch (e) {}
+}
+function load() {
+  try {
+    const d = JSON.parse(localStorage.getItem(LS) || "{}");
+    if (d.a) $("teamA").value = d.a;
+    if (d.b) $("teamB").value = d.b;
+    if (d.nArgs >= MIN_ARGS && d.nArgs <= MAX_ARGS) nArgs = d.nArgs;
+    if (Array.isArray(d.people) && d.people.length === 2) people = d.people;
+    if (d.sum === false) $("summaryOnly").checked = false;
+    if (Array.isArray(d.names) && d.names.length === 2) names = d.names;
+  } catch (e) {}
+}
+
+$("teamA").addEventListener("input", render);
+$("teamB").addEventListener("input", render);
+$("summaryOnly").addEventListener("change", render);
+$("minusG").addEventListener("click", () => { if (nArgs > MIN_ARGS) { nArgs--; render(); } });
+$("plusG").addEventListener("click",  () => { if (nArgs < MAX_ARGS) { nArgs++; render(); } });
+[["A", 0], ["B", 1]].forEach(([sfx, t]) => {
+  $("minus" + sfx).addEventListener("click", () => { if (people[t] > 1) { people[t]--; render(); } });
+  $("plus"  + sfx).addEventListener("click", () => { people[t]++; render(); });
+});
+
+load();
+render();
+
+try {
+  const K = "elc_visited";
+  let v = JSON.parse(localStorage.getItem(K) || "[]");
+  if (!Array.isArray(v)) v = [];
+  v = v.filter(i => i.title !== "Debate Structure");
+  v.push({ title:"Debate Structure", cat:"ELC tools", ts:Date.now() });
+  localStorage.setItem(K, JSON.stringify(v));
+} catch (e) {}
+</script>
+<script src="report-button.js?v=v1" defer></script>
+</body>
+</html>

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="ELC persuasive language — issues, techniques, argument analysis, persuasive writing and debating, with the debate rubric and key vocabulary.">
+<title>Persuasive Language — ELC Hub</title>
+<style>
+  :root {
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#c2410c; --soft:#ffedd5; --radius:14px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 6px 18px rgba(16,24,40,.07);
+    --good:#15803d; --good-soft:#dcfce7;
+    --bad:#b91c1c;  --bad-soft:#fee2e2;
+    --c2:#dbeafe; --c3:#dcfce7; --c4:#fef9c3;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
+            --accent:#fb923c; --soft:#3b2412; --shadow:0 2px 10px rgba(0,0,0,.4);
+            --good:#4ade80; --good-soft:#14331f; --bad:#f87171; --bad-soft:#3d1414;
+            --c2:#1e3a5f; --c3:#14432a; --c4:#4a3f10; }
+  }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.55; }
+  .shell { max-width:1080px; margin:auto; padding:20px 16px 60px; }
+  .top { display:flex; justify-content:flex-start; margin-bottom:14px; }
+  .back { color:var(--accent); font-weight:800; text-decoration:none; }
+  .back:hover { text-decoration:underline; }
+  .hero { padding:22px 24px; border-radius:18px; background:linear-gradient(135deg,#b91c1c,#c2410c 55%,#d97706); color:#fff; box-shadow:var(--shadow); }
+  .eyebrow { margin:0 0 3px; font-size:.72rem; font-weight:900; letter-spacing:.1em; text-transform:uppercase; opacity:.88; }
+  .hero h1 { margin:0; font-size:clamp(1.5rem,4.5vw,2.1rem); letter-spacing:-.5px; }
+  .hero p { max-width:680px; margin:7px 0 0; font-size:.93rem; opacity:.96; }
+
+  .tabs { display:flex; flex-wrap:wrap; gap:6px; margin-top:18px; }
+  .tabs button { font-size:.85rem; padding:8px 14px; border-radius:999px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); cursor:pointer; font-weight:600; }
+  .tabs button[aria-selected="true"] { background:var(--accent); color:#fff; border-color:transparent; font-weight:750; }
+  .panel { display:none; margin-top:18px; }
+  .panel.on { display:block; }
+
+  h2 { font-size:1.2rem; margin-top:26px; }
+  h2:first-child { margin-top:4px; }
+  .blurb { color:var(--muted); font-size:.9rem; margin-top:4px; max-width:760px; }
+  .rule-box { margin-top:12px; padding:13px 15px; border-left:5px solid var(--accent); background:var(--card);
+    border-radius:0 var(--radius) var(--radius) 0; box-shadow:var(--shadow); font-size:.92rem; max-width:760px; }
+  .rule-box b { color:var(--accent); }
+  .note { margin-top:12px; padding:10px 13px; border-radius:10px; background:var(--soft); font-size:.86rem; max-width:760px; }
+
+  .grid { display:grid; gap:12px; margin-top:14px; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); }
+  .cat { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:13px 15px; box-shadow:var(--shadow); }
+  .cat h3 { font-size:.95rem; display:flex; gap:7px; align-items:center; }
+  .cat p { font-size:.84rem; color:var(--muted); margin-top:4px; }
+  .cat .eg { margin-top:7px; font-size:.82rem; }
+  .cat .eg span { display:inline-block; background:var(--bg); border:1px solid var(--line); border-radius:999px; padding:2px 9px; margin:2px 3px 0 0; }
+
+  /* technique cards */
+  .tech { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 16px; box-shadow:var(--shadow); }
+  .tech h3 { font-size:1rem; }
+  .tech .what { font-size:.86rem; color:var(--muted); margin-top:4px; }
+  .tech .why { font-size:.83rem; margin-top:7px; padding:7px 9px; background:var(--soft); border-radius:8px; }
+  .tech .why b { color:var(--accent); }
+  .tech .ex { font-size:.9rem; margin-top:8px; font-style:italic; }
+  .tech .ex mark { background:transparent; color:var(--accent); font-weight:800; font-style:normal; }
+
+  /* quiz shared */
+  .quiz { margin-top:14px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:16px 18px; box-shadow:var(--shadow); max-width:760px; }
+  .quiz .stem { font-size:1.02rem; font-weight:600; min-height:3em; }
+  .quiz .count { font-size:.78rem; color:var(--muted); font-weight:700; }
+  .choices { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
+  .choices button { font-size:.86rem; padding:8px 14px; border-radius:10px; border:1px solid var(--line);
+    background:var(--bg); color:var(--ink); cursor:pointer; }
+  .choices button:hover { border-color:var(--accent); }
+  .choices button:disabled { cursor:default; opacity:.55; }
+  .choices button.right { background:var(--good-soft); border-color:var(--good); color:var(--good); font-weight:800; opacity:1; }
+  .choices button.wrong { background:var(--bad-soft); border-color:var(--bad); color:var(--bad); opacity:1; }
+  .verdict { margin-top:11px; font-size:.87rem; min-height:2.6em; }
+  .verdict b.yes { color:var(--good); } .verdict b.no { color:var(--bad); }
+  .quiz .next-row { display:flex; gap:9px; align-items:center; margin-top:10px; flex-wrap:wrap; }
+  .quiz .next-row button { font-size:.85rem; padding:8px 15px; border-radius:10px; border:1px solid var(--line);
+    background:var(--card); color:var(--ink); cursor:pointer; font-weight:700; }
+  .quiz .score { font-size:.8rem; color:var(--muted); margin-left:auto; }
+
+  /* debate structure */
+  .order { display:grid; gap:9px; margin-top:14px; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); }
+  .speaker { position:relative; background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:12px 14px 12px 46px; box-shadow:var(--shadow); font-size:.85rem; }
+  .speaker .n { position:absolute; left:11px; top:12px; width:26px; height:26px; border-radius:50%;
+    display:grid; place-items:center; font-size:.78rem; font-weight:900; color:#fff; }
+  .speaker.aff .n { background:#2563eb; } .speaker.neg .n { background:#c2410c; }
+  .speaker b { display:block; font-size:.9rem; }
+  .speaker .team { font-size:.7rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; }
+  .speaker.aff .team { color:#2563eb; } .speaker.neg .team { color:var(--accent); }
+  .speaker p { color:var(--muted); margin-top:3px; }
+
+  /* vocab */
+  .vocab { margin-top:14px; border-top:1px solid var(--line); max-width:820px; }
+  .vocab .v { display:grid; grid-template-columns:minmax(120px,190px) 1fr; gap:12px; padding:9px 2px;
+    border-bottom:1px solid var(--line); font-size:.89rem; }
+  .vocab .v b { color:var(--accent); }
+  .vocab .v span { color:var(--muted); }
+  @media (max-width:540px){ .vocab .v { grid-template-columns:1fr; gap:2px; } }
+
+  /* starters */
+  .starters { display:grid; gap:10px; margin-top:14px; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); }
+  .starter { background:var(--card); border:1px solid var(--line); border-radius:11px; padding:11px 14px; box-shadow:var(--shadow); }
+  .starter h4 { font-size:.76rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--accent); }
+  .starter p { font-size:.87rem; margin-top:5px; font-style:italic; }
+
+  /* rubric table (matches rubrics.html) */
+  .scroll { overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow); margin-top:14px; }
+  table.rubric { border-collapse:collapse; width:100%; min-width:720px; }
+  .rubric th, .rubric td { padding:10px 13px; text-align:left; vertical-align:top; font-size:.85rem; border:1px solid var(--line); }
+  .rubric thead th { font-size:.72rem; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); background:var(--bg); white-space:nowrap; }
+  .rubric td.skill { font-weight:700; white-space:nowrap; }
+  .rubric td.b2 { background:var(--c2); } .rubric td.b3 { background:var(--c3); } .rubric td.b4 { background:var(--c4); }
+  .rubric td ul { margin:0; padding-left:16px; }
+  .rubric td li { margin-top:3px; }
+
+  .checklist { margin-top:12px; max-width:640px; }
+  .checklist label { display:flex; gap:9px; align-items:flex-start; padding:7px 2px; font-size:.9rem; cursor:pointer; }
+  .checklist input { margin-top:3px; accent-color:var(--accent); }
+
+  .xlink { display:inline-block; margin:14px 12px 0 0; color:var(--accent); font-weight:750; text-decoration:none; font-size:.9rem; }
+  .xlink:hover { text-decoration:underline; }
+  .privacy { margin-top:30px; padding:9px 13px; border-radius:11px; background:var(--card); border:1px solid var(--line); color:var(--muted); font-size:.8rem; text-align:center; }
+  @media (max-width:620px){ .shell { padding:14px 12px 44px; } .hero { padding:18px; } }
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="top"><a class="back" href="index.html">← ELC Hub</a></div>
+
+  <header class="hero">
+    <p class="eyebrow">Exploring issues · Unit 1</p>
+    <h1>🔥 Persuasive Language</h1>
+    <p>How writers and speakers make you agree with them — and how to do it yourself, on paper and on your feet in a debate.</p>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Persuasive language sections">
+    <button role="tab" aria-selected="true" data-tab="issues">1 · Issues</button>
+    <button role="tab" aria-selected="false" data-tab="techniques">2 · Techniques</button>
+    <button role="tab" aria-selected="false" data-tab="analyse">3 · Analyse</button>
+    <button role="tab" aria-selected="false" data-tab="write">4 · Write</button>
+    <button role="tab" aria-selected="false" data-tab="debating">5 · Debating</button>
+  </div>
+
+  <!-- ══════════ 1 · ISSUES ══════════ -->
+  <section class="panel on" id="panel-issues">
+    <h2>What is an issue?</h2>
+    <div class="rule-box">An <b>issue</b> is a topic people have different opinions about. It often affects people, communities or society in some way. If everyone agrees, it is not an issue.</div>
+
+    <div class="grid">
+      <div class="cat"><h3>🙋 Personal</h3><p>Affects you and people your age directly.</p><div class="eg"><span>homework</span><span>phone use at school</span><span>part-time jobs</span></div></div>
+      <div class="cat"><h3>🏘️ Local / Community</h3><p>Affects your school, suburb or city.</p><div class="eg"><span>school uniforms</span><span>safer streets</span><span>new skate park</span></div></div>
+      <div class="cat"><h3>🇦🇺 National</h3><p>Affects the whole country.</p><div class="eg"><span>social media age limits</span><span>school funding</span></div></div>
+      <div class="cat"><h3>🌏 Global</h3><p>Affects people everywhere.</p><div class="eg"><span>climate change</span><span>AI and jobs</span></div></div>
+    </div>
+
+    <h2>Fact or opinion?</h2>
+    <p class="blurb">Persuasive writers mix the two on purpose. Before you can judge an argument, you have to see which is which.</p>
+    <div class="rule-box">A <b>fact</b> can be checked and proven — it often has numbers, dates or a source. An <b>opinion</b> is what someone believes — look for judgement words like <i>should, best, causes more harm than good</i>.</div>
+
+    <div class="quiz" id="foQuiz">
+      <div class="count" id="foCount"></div>
+      <div class="stem" id="foStem"></div>
+      <div class="choices" id="foChoices"></div>
+      <div class="verdict" id="foVerdict"></div>
+      <div class="next-row"><button type="button" id="foNext" hidden>Next →</button><span class="score" id="foScore"></span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 2 · TECHNIQUES ══════════ -->
+  <section class="panel" id="panel-techniques">
+    <h2>The six persuasive techniques</h2>
+    <p class="blurb">Each card names the technique, shows the trigger words in orange, and says why it works on a reader.</p>
+    <div class="grid" id="techGrid"></div>
+
+    <h2>Sort the phrases</h2>
+    <p class="blurb">Eighteen phrases about teenagers and technology — three of each technique. Which one is this?</p>
+    <div class="quiz" id="sortQuiz">
+      <div class="count" id="sortCount"></div>
+      <div class="stem" id="sortStem"></div>
+      <div class="choices" id="sortChoices"></div>
+      <div class="verdict" id="sortVerdict"></div>
+      <div class="next-row"><button type="button" id="sortNext" hidden>Next →</button><span class="score" id="sortScore"></span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 3 · ANALYSE ══════════ -->
+  <section class="panel" id="panel-analyse">
+    <h2>The four things to find in any persuasive text</h2>
+    <div class="grid">
+      <div class="cat"><h3>❗ Issue</h3><p>The topic people disagree about. Usually named in the first lines.</p></div>
+      <div class="cat"><h3>🎯 Contention</h3><p>The writer's main opinion. Look in the introduction or conclusion for strong opinion language: <i>should, must, need to, should not</i>.</p><div class="eg"><span>Starter: "The writer believes that…"</span></div></div>
+      <div class="cat"><h3>🧱 Arguments &amp; evidence</h3><p>An argument is a <b>reason</b> for the contention. Evidence is what props the reason up — facts, statistics, examples, research.</p></div>
+      <div class="cat"><h3>🎭 Tone</h3><p>The writer's attitude, in one word: <i>positive, concerned, hopeful, serious, critical</i>. You hear it in the word choices.</p></div>
+    </div>
+
+    <h2>Find it in a speech</h2>
+    <p class="blurb">These lines come from a class speech about social media and wellbeing. Name the part each line is doing.</p>
+    <div class="quiz" id="anQuiz">
+      <div class="count" id="anCount"></div>
+      <div class="stem" id="anStem"></div>
+      <div class="choices" id="anChoices"></div>
+      <div class="verdict" id="anVerdict"></div>
+      <div class="next-row"><button type="button" id="anNext" hidden>Next →</button><span class="score" id="anScore"></span></div>
+    </div>
+  </section>
+
+  <!-- ══════════ 4 · WRITE ══════════ -->
+  <section class="panel" id="panel-write">
+    <h2>Your persuasive text</h2>
+    <p class="blurb">Pick one text type: a <b>letter to the editor</b>, an <b>opinion article</b> or a <b>speech</b>. Same skeleton for all three:</p>
+
+    <div class="grid">
+      <div class="cat"><h3>1️⃣ Introduction</h3><p>Introduce the issue. State your contention clearly, and name your arguments.</p></div>
+      <div class="cat"><h3>2️⃣ Body paragraphs ×2–3</h3><p>One argument per paragraph, with evidence, in TEEL: <b>T</b>opic sentence · <b>E</b>xplain · <b>E</b>vidence · <b>L</b>ink.</p></div>
+      <div class="cat"><h3>3️⃣ Conclusion</h3><p>Restate your contention. End with a strong final message or call to action.</p></div>
+    </div>
+
+    <h2>Before you hand it in</h2>
+    <p class="blurb">Every box the assessment looks for. Ticks stay on this device only.</p>
+    <div class="checklist" id="writeChecklist">
+      <label><input type="checkbox"> A clear issue that affects young people</label>
+      <label><input type="checkbox"> A clear contention — "I believe that…"</label>
+      <label><input type="checkbox"> At least three arguments</label>
+      <label><input type="checkbox"> Evidence supporting your arguments</label>
+      <label><input type="checkbox"> A clear tone chosen for your audience (serious, hopeful, concerned…)</label>
+      <label><input type="checkbox"> At least two persuasive techniques from tab 2</label>
+    </div>
+
+    <h2>The writing rubric</h2>
+    <div class="scroll"><table class="rubric">
+      <thead><tr><th>Criteria</th><th>C2</th><th>C3</th><th>C4</th></tr></thead>
+      <tbody id="writeRubric"></tbody>
+    </table></div>
+
+    <a class="xlink" href="https://chatgpt.com/g/g-68e58defc8648191b08060290e0b1f6f-elc-writing-feedback" target="_blank" rel="noopener">✍️ Upload your draft to ELC Writing Feedback →</a>
+    <a class="xlink" href="writing-wall.html">📝 See writing at every band on the Writing Wall →</a>
+    <a class="xlink" href="teea-paragraph.html">🌳 See TEEL/T·E·E·A in a worked paragraph →</a>
+  </section>
+
+  <!-- ══════════ 5 · DEBATING ══════════ -->
+  <section class="panel" id="panel-debating">
+    <h2>How a debate runs</h2>
+    <p class="blurb">Two teams of three. The <b>affirmative</b> agrees with the topic; the <b>negative</b> disagrees. Speakers alternate, and every speech follows the shape the rubric asks for: introduction → numbered arguments → rebuttals → conclusion.</p>
+
+    <p class="blurb" style="margin-top:10px">Put your class's team names into the interactive version — it shows the exact speaking order with each speaker's jobs colour-coded, and adjusts for teams of 2 to 6.</p>
+    <a class="sheet-button" href="debate-structure.html">🎤 Open the debate structure builder →</a>
+
+    <h2>Key vocabulary</h2>
+    <div class="vocab" id="debateVocab"></div>
+
+    <h2>Rebuttal sentence starters</h2>
+    <p class="blurb">A rebuttal answers a <i>specific</i> point the other team made — the rubric rewards naming their exact detail or example, not just disagreeing.</p>
+    <div class="starters">
+      <div class="starter"><h4>Name their point</h4><p>"The first speaker for the affirmative argued that… "</p></div>
+      <div class="starter"><h4>Turn to it</h4><p>"However, this argument ignores… "</p></div>
+      <div class="starter"><h4>Counter with evidence</h4><p>"In fact, the evidence shows that… "</p></div>
+      <div class="starter"><h4>Close it off</h4><p>"So this argument does not stand, because… "</p></div>
+    </div>
+
+    <h2>The debate rubric</h2>
+    <p class="blurb">What each level sounds like on your feet. Same colour code as the writing rubric above.</p>
+    <div class="scroll"><table class="rubric">
+      <thead><tr><th>Skill</th><th>C2</th><th>C3</th><th>C4</th></tr></thead>
+      <tbody id="debateRubric"></tbody>
+    </table></div>
+
+    <a class="xlink" href="rubrics.html">📚 All ELC rubrics →</a>
+    <a class="xlink" href="pronunciation.html">🗣️ Practise sounds and stress in the Pronunciation Hub →</a>
+  </section>
+
+  <p class="privacy">🔒 No account and no name. Quiz scores and ticks stay in this browser only.</p>
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   DATA BLOCK — teachers edit below this line. Nothing here is code.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Fact or opinion (from the class booklet, section 3) ── */
+const FACT_OPINION = [
+  { s:"Social media causes more harm than good for teenagers.", a:"O",
+    why:"“More harm than good” is a judgement — you cannot measure it. Judgement words signal opinion." },
+  { s:"In Australia, over 90% of teenagers use at least one social media platform.", a:"F",
+    why:"A percentage that could be checked against a survey. Numbers with a source are facts." },
+  { s:"A 2022 study found that teenagers who use screens late at night sleep fewer hours.", a:"F",
+    why:"It names a study and a year — checkable, so it is a fact (even if you'd want to see the study)." },
+  { s:"Young people should spend less time on social media.", a:"O",
+    why:"“Should” is the classic opinion word — it tells people what to do, it doesn't describe what is." },
+  { s:"Social media is the best way for teenagers to communicate.", a:"O",
+    why:"“The best” is a judgement. There is no measurement of “best” to check." },
+  { s:"Research from health organisations shows a link between heavy social media use and poor sleep.", a:"F",
+    why:"It points at checkable research. A fact can still be used persuasively — that's why writers love this one." }
+];
+
+/* ── The six techniques ── */
+const TECHNIQUES = [
+  { id:"emotive", name:"Emotive language", emoji:"❤️",
+    what:"Strong words chosen to make the reader feel anger, pity, fear or hope.",
+    why:"A reader who <b>feels</b> something is already halfway to agreeing.",
+    ex:'The <mark>heartbreaking</mark> reality is that many teens feel <mark>alone</mark> online.' },
+  { id:"facts", name:"Facts & statistics", emoji:"📊",
+    what:"Numbers or true information used to add weight to an argument.",
+    why:"Numbers sound <b>objective</b> — hard to argue with, even chosen selectively.",
+    ex:'<mark>82%</mark> of teenagers say they feel tired after using phones late at night.' },
+  { id:"bias", name:"Bias language", emoji:"⚖️",
+    what:"Loaded words that paint something as good or bad before any argument is made.",
+    why:"The judgement is <b>smuggled inside the description</b>, so you accept it without noticing.",
+    ex:'<mark>Lazy</mark> students rely on <mark>dangerous</mark> technology instead of thinking.' },
+  { id:"expert", name:"Expert opinion", emoji:"🎓",
+    what:"Quoting doctors, psychologists, teachers — people with authority on the topic.",
+    why:"We are trained to <b>trust experts</b>, so their opinion borrows their authority.",
+    ex:'<mark>Psychologists warn</mark> that social media can increase anxiety in young people.' },
+  { id:"inclusive", name:"Inclusive language", emoji:"👥",
+    what:"Words like we, us, our that make the reader part of the writer's team.",
+    why:"Refusing feels like <b>letting your own team down</b>.",
+    ex:'<mark>We</mark> must protect <mark>our</mark> future from careless decisions.' },
+  { id:"rhetorical", name:"Rhetorical question", emoji:"❓",
+    what:"A question with only one sensible answer — asked so you answer it yourself.",
+    why:"A conclusion you <b>reach yourself</b> feels like your own idea, not the writer's.",
+    ex:'<mark>Do we really want</mark> students staring at screens all day<mark>?</mark>' }
+];
+
+/* ── Sort activity: 18 phrases, 3 per technique (class handout set) ── */
+const SORT_PHRASES = [
+  { s:"We must protect our future from careless decisions.", a:"inclusive" },
+  { s:"Do we really want students staring at screens all day?", a:"rhetorical" },
+  { s:"82% of teenagers say they feel tired after using phones late at night.", a:"facts" },
+  { s:"Psychologists warn that social media can increase anxiety in young people.", a:"expert" },
+  { s:"This cruel system is failing vulnerable students.", a:"emotive" },
+  { s:"Our community deserves safer online spaces.", a:"inclusive" },
+  { s:"Lazy students rely on AI instead of thinking for themselves.", a:"bias" },
+  { s:"Studies show that students who sleep well perform better in school.", a:"facts" },
+  { s:"How much longer will we ignore this serious problem?", a:"rhetorical" },
+  { s:"Teachers report that phones are the biggest distraction in classrooms.", a:"expert" },
+  { s:"Innocent children are being exposed to harmful content online.", a:"emotive" },
+  { s:"Responsible parents monitor their children's online activity.", a:"bias" },
+  { s:"We all want young people to feel safe and supported.", a:"inclusive" },
+  { s:"The heartbreaking reality is that many teens feel alone online.", a:"emotive" },
+  { s:"In 2023, over 90% of Australian teens owned a smartphone.", a:"facts" },
+  { s:"Isn't it time for schools to take stronger action?", a:"rhetorical" },
+  { s:"Doctors recommend limiting screen time before bed.", a:"expert" },
+  { s:"Dangerous technology is invading our classrooms.", a:"bias" }
+];
+
+/* ── Find-the-part: lines from the class speech ── */
+const ANALYSE_PARTS = [
+  { s:"“We must ask ourselves an important question: is social media supporting young people, or is it slowly harming their wellbeing?”",
+    a:"Rhetorical question", opts:["Contention","Rhetorical question","Evidence","Call to action"],
+    why:"The speaker asks it so the audience answers it themselves — and only one answer is on offer." },
+  { s:"“Research has shown that heavy social media use is linked to sleep problems and poor concentration.”",
+    a:"Evidence", opts:["Contention","Tone","Evidence","Rebuttal"],
+    why:"It points at research to prop up an argument. Evidence supports; it isn't the opinion itself." },
+  { s:"“We need to take responsibility. Schools should teach students how to use social media safely.”",
+    a:"Contention", opts:["Contention","Evidence","Rhetorical question","Fact"],
+    why:"“We need to… schools should…” — strong opinion language stating the speaker's main position." },
+  { s:"“Perfect photos, filtered faces, and carefully edited lives can make ordinary young people feel that they are not good enough.”",
+    a:"Emotive language", opts:["Statistics","Emotive language","Expert opinion","Rebuttal"],
+    why:"“Not good enough” aims straight at the audience's feelings — that's emotive language doing argument work." },
+  { s:"“Let us work together to ensure that social media becomes a tool for connection, not a source of harm.”",
+    a:"Call to action", opts:["Call to action","Evidence","Issue","Tone word"],
+    why:"The closing move: it tells the audience what to do next. Conclusions in persuasive texts usually end here." },
+  { s:"“This does not mean that social media must be banned.”",
+    a:"Answering the other side", opts:["Evidence","Statistics","Answering the other side","Contention"],
+    why:"The speaker names the opposing view and pushes it away — in a debate this same move is called a rebuttal." }
+];
+
+/* ── Writing rubric (assessment task, C2–C4) ── */
+const WRITE_RUBRIC = [
+  ["Grammar",
+   "Uses mostly correct simple sentences. Meaning is clear, but errors are frequent.",
+   "Uses some varied sentence structures and tenses. Errors do not affect meaning.",
+   "Uses a range of sentence structures and tenses accurately and confidently."],
+  ["Vocabulary & word choice",
+   "Uses simple vocabulary; some attempt at descriptive or persuasive words.",
+   "Uses a range of topic vocabulary and some persuasive word choices.",
+   "Uses precise, varied, and effective vocabulary that strengthens persuasion."],
+  ["Structure",
+   "Includes a basic introduction, body, and conclusion. Some paragraphing.",
+   "Clear introduction, body paragraphs, and conclusion. Ideas mostly well organised.",
+   "Very clear and effective structure that strengthens the overall argument."],
+  ["Persuasive techniques",
+   "Uses at least one persuasive technique (e.g. emotive word, rhetorical question).",
+   "Uses at least two persuasive techniques appropriately.",
+   "Uses several persuasive techniques effectively and purposefully."],
+  ["Arguments & evidence",
+   "Ideas are present but not clearly developed.",
+   "Uses clear arguments with some supporting examples or ideas.",
+   "Uses strong, well-developed arguments supported with convincing evidence."],
+  ["Contention",
+   "Opinion is present but unclear or inconsistent.",
+   "Contention is clear and mostly consistent.",
+   "Contention is clear, strong, and sustained throughout the text."]
+];
+
+/* ── Debate rubric (ELC debate rubric, C2–C4) ── */
+const DEBATE_RUBRIC = [
+  ["Speech sounds, intonation & stress",
+   ["I can speak clearly using some variation in intonation, pronunciation, stress, and eye contact."],
+   ["I can control rhythm, stress, non-verbal cues, and intonation when speaking."],
+   ["I can pronounce most sounds correctly.","I can manipulate rhythm and intonation to make subtle changes in meaning."]],
+  ["Arguments",
+   ["I can follow the debate structure, with an introduction, numbered arguments, rebuttals, and a conclusion."],
+   ["I can apply persuasive techniques such as rhetorical questions, emotive language, statistics and data, and anecdotes."],
+   ["I can carefully sequence an argument to include a topic sentence, explanation and elaboration, and a concluding sentence.","I can apply a wide range of persuasive techniques effectively."]],
+  ["Rebuttals",
+   ["I can identify my opponents' key arguments."],
+   ["I can address details or examples from my opponents' arguments in my rebuttal."],
+   ["I can address specific details or examples from my opponents' arguments in my rebuttal.","I can identify connotations and implied meanings from my opponent's speech."]],
+  ["Grammar",
+   ["I can use a variety of common sentence patterns.","I can use basic connectives to show relationships between ideas."],
+   ["I can speak with consistent accuracy in one perspective.","I can use some complex grammatical features with accuracy.","I can use question types, time signals, and conjunctions effectively when speaking to link ideas and events."],
+   ["I can accurately switch between 1st, 2nd and 3rd person perspectives.","I can accurately apply complex grammatical features such as modal verbs, passive voice, and varied tenses.","I can use complex, detailed sentences to express myself."]]
+];
+
+/* ── Debate vocabulary (plain-English definitions, class style) ── */
+const DEBATE_VOCAB = [
+  ["topic", "the statement the two teams argue about, e.g. “Homework should be banned”"],
+  ["affirmative team", "the team that agrees with the topic"],
+  ["negative team", "the team that disagrees with the topic"],
+  ["contention", "your team's main opinion — what you want the audience to believe"],
+  ["definition", "what the first speaker says the key words of the topic mean, so both teams argue about the same thing"],
+  ["argument", "one reason your team gives to support your contention"],
+  ["evidence", "the facts, statistics, examples or expert opinions that support an argument"],
+  ["rebuttal", "answering a specific argument the other team made, and saying why it is wrong or weak"],
+  ["summary", "the third speaker's job — pulling the whole team case together, with no new arguments"],
+  ["palm cards", "small cards with your notes in dot points — glance at them, don't read from them"],
+  ["chairperson", "runs the debate: introduces speakers and keeps order"],
+  ["timekeeper", "signals how long a speaker has been talking, usually with a bell or knock"],
+  ["adjudicator", "the judge — decides which team argued better and gives feedback"],
+  ["make public our position", "tell everyone what we think or believe"],
+  ["so-called", "people call it that, but it might not be true — a bias-language favourite"]
+];
+
+/* ═══════════════ END OF DATA BLOCK — code below ═══════════════ */
+
+const VISITS_KEY = "elc_visited";
+function recordVisit(title){
+  let v=[]; try{ v=JSON.parse(localStorage.getItem(VISITS_KEY)||"[]"); }catch(e){}
+  if(!Array.isArray(v)) v=[];
+  v=v.filter(i=>i.title!==title);
+  v.push({title, cat:"Persuasive Language", ts:Date.now()});
+  localStorage.setItem(VISITS_KEY, JSON.stringify(v));
+}
+recordVisit("Persuasive Language");
+
+/* tabs, deep-linkable */
+const tabs=[...document.querySelectorAll('.tabs button')];
+function showTab(id, push){
+  tabs.forEach(b=>b.setAttribute('aria-selected', String(b.dataset.tab===id)));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('on', p.id==='panel-'+id));
+  if(push) history.replaceState(null,'','#'+id);
+}
+tabs.forEach(b=>b.addEventListener('click',()=>showTab(b.dataset.tab,true)));
+const hash=location.hash.replace('#','');
+if(tabs.some(b=>b.dataset.tab===hash)) showTab(hash,false);
+
+/* technique cards */
+document.getElementById('techGrid').innerHTML = TECHNIQUES.map(t=>`
+  <div class="tech">
+    <h3>${t.emoji} ${t.name}</h3>
+    <p class="what">${t.what}</p>
+    <p class="why"><b>Why it works:</b> ${t.why}</p>
+    <p class="ex">${t.ex}</p>
+  </div>`).join('');
+
+/* generic one-at-a-time quiz */
+function quiz({items, stemEl, choicesEl, verdictEl, nextEl, countEl, scoreEl, choicesFor, answerFor, whyFor, rightLabel}){
+  let i=0, score=0, done=0;
+  function render(){
+    const it=items[i];
+    countEl.textContent = `${i+1} of ${items.length}`;
+    stemEl.textContent = typeof it.s==="string" ? it.s : it.s;
+    verdictEl.innerHTML=""; nextEl.hidden=true;
+    choicesEl.innerHTML="";
+    choicesFor(it).forEach(c=>{
+      const b=document.createElement('button'); b.type="button"; b.textContent=c.label;
+      b.addEventListener('click',()=>{
+        [...choicesEl.children].forEach(x=>x.disabled=true);
+        const correct = c.value===answerFor(it);
+        done++;
+        if(correct){ score++; b.classList.add('right');
+          verdictEl.innerHTML=`<b class="yes">✓ ${rightLabel||"Correct."}</b> ${whyFor(it)}`;
+        } else {
+          b.classList.add('wrong');
+          [...choicesEl.children].find(x=>x.dataset.v===answerFor(it))?.classList.add('right');
+          verdictEl.innerHTML=`<b class="no">✗ Not this one.</b> ${whyFor(it)}`;
+        }
+        scoreEl.textContent=`Score: ${score}/${done}`;
+        nextEl.hidden = i>=items.length-1;
+        if(i>=items.length-1) verdictEl.innerHTML += `<br><b>Finished — ${score} of ${items.length}.</b> Reload the page to try again.`;
+      });
+      b.dataset.v=c.value;
+      choicesEl.appendChild(b);
+    });
+  }
+  nextEl.addEventListener('click',()=>{ i++; render(); });
+  render();
+}
+
+/* fact or opinion */
+quiz({
+  items:FACT_OPINION,
+  stemEl:document.getElementById('foStem'), choicesEl:document.getElementById('foChoices'),
+  verdictEl:document.getElementById('foVerdict'), nextEl:document.getElementById('foNext'),
+  countEl:document.getElementById('foCount'), scoreEl:document.getElementById('foScore'),
+  choicesFor:()=>[{label:"Fact",value:"F"},{label:"Opinion",value:"O"}],
+  answerFor:it=>it.a, whyFor:it=>it.why
+});
+
+/* technique sort */
+quiz({
+  items:SORT_PHRASES,
+  stemEl:document.getElementById('sortStem'), choicesEl:document.getElementById('sortChoices'),
+  verdictEl:document.getElementById('sortVerdict'), nextEl:document.getElementById('sortNext'),
+  countEl:document.getElementById('sortCount'), scoreEl:document.getElementById('sortScore'),
+  choicesFor:()=>TECHNIQUES.map(t=>({label:t.name,value:t.id})),
+  answerFor:it=>it.a,
+  whyFor:it=>{ const t=TECHNIQUES.find(t=>t.id===it.a); return `This is <b>${t.name.toLowerCase()}</b> — ${t.what.charAt(0).toLowerCase()+t.what.slice(1)}`; }
+});
+
+/* analyse the speech */
+quiz({
+  items:ANALYSE_PARTS,
+  stemEl:document.getElementById('anStem'), choicesEl:document.getElementById('anChoices'),
+  verdictEl:document.getElementById('anVerdict'), nextEl:document.getElementById('anNext'),
+  countEl:document.getElementById('anCount'), scoreEl:document.getElementById('anScore'),
+  choicesFor:it=>it.opts.map(o=>({label:o,value:o})),
+  answerFor:it=>it.a, whyFor:it=>it.why
+});
+
+/* rubric tables */
+document.getElementById('writeRubric').innerHTML = WRITE_RUBRIC.map(r=>`
+  <tr><td class="skill">${r[0]}</td><td class="b2">${r[1]}</td><td class="b3">${r[2]}</td><td class="b4">${r[3]}</td></tr>`).join('');
+
+const li = a => a.length>1 ? `<ul>${a.map(x=>`<li>${x}</li>`).join('')}</ul>` : a[0];
+document.getElementById('debateRubric').innerHTML = DEBATE_RUBRIC.map(r=>`
+  <tr><td class="skill">${r[0]}</td><td class="b2">${li(r[1])}</td><td class="b3">${li(r[2])}</td><td class="b4">${li(r[3])}</td></tr>`).join('');
+
+/* vocab */
+document.getElementById('debateVocab').innerHTML = DEBATE_VOCAB.map(v=>`
+  <div class="v"><b>${v[0]}</b><span>${v[1]}</span></div>`).join('');
+
+/* checklist persists on-device */
+const CK="elc_persuasive_checklist";
+const boxes=[...document.querySelectorAll('#writeChecklist input')];
+try{ (JSON.parse(localStorage.getItem(CK)||"[]")).forEach((on,i)=>{ if(boxes[i]) boxes[i].checked=on; }); }catch(e){}
+boxes.forEach(b=>b.addEventListener('change',()=>localStorage.setItem(CK, JSON.stringify(boxes.map(x=>x.checked)))));
+</script>
+<script src="report-button.js?v=v1" defer></script>
+</body>
+</html>

@@ -4,6 +4,10 @@
 `liaminhawai-cmd.github.io/ELC-Pages/` within a minute or two of pushing.
 Students will use these pages.
 
+Read `STYLE_GUIDE.md` first — the portable build principles for every teaching
+resource across these repos. "Core principles" below is this repo's own
+sharpened version of it; keep both aligned.
+
 This is the student hub for an intensive English Language Centre. The private
 context library — source materials, house style, the roadmap, and the full AI
 brief — is the `ELC` repo. **Read `ELC/AGENTS.md` and `ELC/ROADMAP.md` before

@@ -28,6 +28,23 @@
   .stem-box p { margin:6px 0 2px; font-size:.88rem; }
   ul.stem-behind { margin:2px 0 0; padding-left:18px; font-size:.88rem; }
   ul.stem-behind li { margin:2px 0; }
+  /* cross-app progress */
+  .app-cards { display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); margin-top:9px; }
+  .app-card { border:1px solid var(--line); border-radius:10px; background:var(--bg); padding:12px 13px; }
+  .app-card h3 { font-size:.95rem; margin:0 0 1px; }
+  .app-card h3 a { color:inherit; text-decoration:none; }
+  .app-card h3 a:hover { text-decoration:underline; }
+  .app-card .last { font-size:.76rem; color:var(--muted); }
+  .app-card dl { display:grid; grid-template-columns:auto 1fr; gap:1px 8px; margin:8px 0 0; font-size:.84rem; }
+  .app-card dt { font-weight:700; }
+  .app-card dd { color:var(--muted); margin:0; }
+  .day { margin-top:12px; }
+  .day > .date { font-size:.86rem; font-weight:700; padding-bottom:4px; border-bottom:1px solid var(--line); }
+  .day ul { list-style:none; margin:6px 0 0; padding:0; }
+  .day li { display:flex; gap:8px; align-items:baseline; font-size:.88rem; padding:3px 0; }
+  .day li .tag { font-size:.72rem; color:var(--muted); white-space:nowrap; }
+  .day li .detail { color:var(--muted); font-size:.82rem; }
+  .more { font-size:.82rem; color:var(--muted); margin-top:10px; }
   .stem-box a.more { display:inline-block; margin-top:9px; color:var(--accent); font-weight:700; font-size:.88rem; text-decoration:none; }
   ul.log { list-style:none; padding:0; margin-top:8px; }
   ul.log li { display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); font-size:.92rem; }
@@ -55,6 +72,13 @@
     <h2>My learning direction</h2>
     <div id="goal"></div>
 
+    <h2>Progress across the apps</h2>
+    <p class="privacy noprint">Collected from the phonics trainer, vocabulary, grammar hub, pronunciation hub and STEM — but only from work done <b>in this browser</b>. Work done on another device or in a different browser is saved there, not here.</p>
+    <div id="appCards"></div>
+
+    <h2>Day by day</h2>
+    <div id="timeline"></div>
+
     <h2>🧪 STEM progress</h2>
     <div id="stem"></div>
 
@@ -71,6 +95,7 @@
 </div>
 
 <script src="stem-shared.js?v=v3"></script>
+<script src="progress-sources.js?v=v1"></script>
 <script>
 const VISITS_KEY="elc_visited", GOAL_KEY="elc_learning_compass_goal";
 document.getElementById("dateLine").textContent=new Date().toLocaleDateString(undefined,{day:"numeric",month:"long",year:"numeric"});
@@ -159,6 +184,103 @@ const stemBox=document.getElementById("stem");
   box.append(link);
 
   stemBox.append(box);
+})();
+
+/* ---- progress across the apps (progress-sources.js) ----
+   Every ELC app is a GitHub Pages site on the same origin, so their
+   saved records are all readable from here without a server or an
+   account. Rendered async because the phonics trainer keeps its
+   attempts in IndexedDB. */
+(function () {
+  const cards = document.getElementById("appCards");
+  const timeline = document.getElementById("timeline");
+  if (!cards || !timeline || !window.ELCProgress) return;
+
+  // Same idea as text() above, but built empty so children can be appended.
+  // Everything below sets textContent, never innerHTML: a student's own
+  // saved words go through here, so nothing gets a chance to be markup.
+  function el(tag, className) {
+    const n = document.createElement(tag);
+    if (className) n.className = className;
+    return n;
+  }
+
+  const DAY_FMT = { weekday: "long", day: "numeric", month: "long", year: "numeric" };
+  function niceDay(day) {
+    // day is a local "YYYY-MM-DD" key — split it rather than letting
+    // Date parse it, since a bare ISO date string is read as UTC and
+    // can render as the day before in Melbourne.
+    const p = day.split("-").map(Number);
+    const d = new Date(p[0], p[1] - 1, p[2]);
+    if (isNaN(d)) return day;
+    const today = new Date(), yest = new Date(Date.now() - 86400000);
+    const same = (a, b) => a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+    if (same(d, today)) return "Today";
+    if (same(d, yest)) return "Yesterday";
+    return d.toLocaleDateString(undefined, DAY_FMT);
+  }
+
+  function empty(msg) {
+    const p = el("p", "empty"); p.textContent = msg; return p;
+  }
+
+  ELCProgress.all().then((rec) => {
+    if (!rec.apps.length) {
+      cards.append(empty("No app progress saved on this device yet. Open the phonics trainer, vocabulary, grammar hub, pronunciation hub or STEM and your work will show up here."));
+      timeline.append(empty("Nothing dated yet."));
+      return;
+    }
+
+    const grid = el("div", "app-cards");
+    rec.apps.forEach((a) => {
+      const card = el("div", "app-card"); card.id = "app-" + a.id;
+      const h = el("h3");
+      const link = el("a"); link.href = a.href; link.textContent = (a.icon ? a.icon + " " : "") + a.title;
+      h.append(link); card.append(h);
+      const last = el("div", "last");
+      last.textContent = a.lastDay ? "Last worked on " + niceDay(a.lastDay) : "No dated activity yet";
+      card.append(last);
+      const dl = el("dl");
+      (a.stats || []).forEach((st) => {
+        const dt = el("dt"); dt.textContent = st.value;
+        const dd = el("dd"); dd.textContent = st.label;
+        dl.append(dt, dd);
+      });
+      card.append(dl);
+      grid.append(card);
+    });
+    cards.append(grid);
+
+    // A long record is for reading, not scrolling — show the recent run
+    // and say plainly how much is behind it rather than silently cutting.
+    const SHOW = 30;
+    const shown = rec.days.slice(0, SHOW);
+    if (!shown.length) { timeline.append(empty("Nothing dated yet.")); return; }
+    shown.forEach((d) => {
+      const wrap = el("div", "day");
+      const date = el("div", "date"); date.textContent = niceDay(d.day); wrap.append(date);
+      const ul = el("ul");
+      d.events.forEach((e) => {
+        const li = el("li");
+        const tag = el("span", "tag"); tag.textContent = (e.icon ? e.icon + " " : "") + e.appTitle;
+        const label = el("span"); label.textContent = e.label;
+        li.append(tag, label);
+        if (e.detail) { const det = el("span", "detail"); det.textContent = e.detail; li.append(det); }
+        ul.append(li);
+      });
+      wrap.append(ul);
+      timeline.append(wrap);
+    });
+    if (rec.days.length > SHOW) {
+      const more = el("p", "more");
+      const n = rec.days.length - SHOW;
+      more.textContent = n + (n === 1 ? " earlier day" : " earlier days") + " not shown.";
+      timeline.append(more);
+    }
+  }).catch((err) => {
+    console.warn("progress record:", err);
+    cards.append(empty("Could not read the saved progress on this device."));
+  });
 })();
 
 let visits=[];
