@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Reframe the argument — the other team's arguments in boxes; rebut inside their frame, then step outside it and redraw the border.">
+<meta name="description" content="Reframe the argument — the other team's arguments in boxes; rebut inside their frame, then step outside it and redraw the border. Prints one argument per A4 page.">
 <title>Reframe the Argument — ELC Hub</title>
 <style>
   :root {
@@ -24,6 +24,8 @@
     --f-whose:#4338ca;    --f-whose-s:#e0e7ff;
     --f-money:#0369a1;    --f-money-s:#e0f2fe;
     --f-fair:#57534e;     --f-fair-s:#f5f5f4;
+    /* persuasive devices are one colour: they are a different axis from frames */
+    --dev:#9a3412; --dev-s:#ffedd5;
   }
   @media (prefers-color-scheme:dark) {
     :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
@@ -38,7 +40,8 @@
             --f-works:#fcd34d;    --f-works-s:#3d2f0b;
             --f-whose:#a5b4fc;    --f-whose-s:#232a5c;
             --f-money:#7dd3fc;    --f-money-s:#0c2f42;
-            --f-fair:#d6d3d1;     --f-fair-s:#2b2927; }
+            --f-fair:#d6d3d1;     --f-fair-s:#2b2927;
+            --dev:#fdba74; --dev-s:#3b2412; }
   }
   * { box-sizing:border-box; margin:0; }
   body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; }
@@ -59,6 +62,14 @@
   .fchip.sel { outline:3px solid color-mix(in srgb,var(--fc) 35%,transparent); }
   button.fchip { cursor:pointer; font-family:inherit; }
   button.fchip:hover { filter:brightness(.95); }
+
+  /* ── persuasive devices: underlined in the argument, named in a tag ── */
+  .dev { text-decoration:underline; text-decoration-color:var(--dev); text-decoration-thickness:2px; text-underline-offset:2px; }
+  .dtag { display:inline-block; font-size:.6rem; font-weight:900; letter-spacing:.04em; text-transform:uppercase;
+    color:var(--dev); background:var(--dev-s); border:1px solid var(--dev); border-radius:6px; padding:0 5px; margin-left:3px; vertical-align:2px; white-space:nowrap; }
+  .devkey { display:flex; flex-wrap:wrap; gap:5px; margin-top:6px; }
+  .devkey .dtag { margin:0; font-size:.66rem; padding:1px 7px; }
+  .devkey .dtag small { font-weight:600; text-transform:none; letter-spacing:0; }
 
   /* ── the worked model — one reframe, its moves named ── */
   .model { margin-top:10px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
@@ -86,41 +97,57 @@
   .btn.danger:hover { border-color:var(--reb); color:var(--reb); }
   .spacer { flex:1; }
 
-  /* ── the argument boxes ── */
-  .grid { display:grid; gap:12px; margin-top:10px; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); }
-  .arg { background:var(--card); border:3px solid var(--fc); border-radius:var(--radius); box-shadow:var(--shadow);
-    padding:10px 12px; display:flex; flex-direction:column; gap:8px; position:relative; }
-  .arg .head { display:flex; align-items:flex-start; gap:8px; flex-wrap:wrap; }
-  .arg .side { font-size:.66rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:999px; }
-  .arg .side.A { background:var(--a-soft); color:var(--a); } .arg .side.B { background:var(--b-soft); color:var(--b); }
-  .arg .frameName { font-size:.66rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--fc);
-    background:var(--fs); padding:2px 8px; border-radius:999px; }
-  .arg .said { font-size:.92rem; font-weight:700; }
-  .arg .said i { display:block; font-weight:500; color:var(--muted); font-size:.82rem; margin-top:2px; }
-  .arg .q { font-size:.78rem; color:var(--fc); font-weight:700; }
-  .arg .del { position:absolute; top:6px; right:8px; border:0; background:transparent; color:var(--muted); cursor:pointer; font-size:1rem; }
-  .arg .del:hover { color:var(--reb); }
+  /* ── the argument: a box inside a box ─────────────────────────────
+     .arg   = the OUTER box. Dashed and grey until a new frame is chosen,
+              then solid in the new frame's colour: the redrawn border.
+     .inner = THEIR box, solid in their frame's colour. The argument and
+              the inside-the-frame rebuttal both live in here.
+     .out   = the space between the two borders: the outside rebuttal. */
+  .grid { display:grid; gap:14px; margin-top:10px; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); }
+  .arg { background:var(--card); border:3px dashed var(--nfc,var(--muted)); border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:8px 10px 10px; display:flex; flex-direction:column; gap:8px; position:relative; }
+  .arg.named { border-style:solid; }
+  .outerLab { display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-size:.7rem; font-weight:900; letter-spacing:.05em; text-transform:uppercase; color:var(--nfc,var(--muted)); }
+  .outerLab .newq { font-weight:700; text-transform:none; letter-spacing:0; font-size:.78rem; }
+  .pick { display:flex; flex-wrap:wrap; gap:4px; }
+  .pick .fchip { font-size:.68rem; padding:2px 8px; border-width:1.5px; }
 
-  .box { border:2px solid var(--fc); border-radius:10px; padding:7px 9px; background:var(--bg); }
+  .inner { border:3px solid var(--fc); border-radius:11px; padding:8px 10px; background:var(--fs); display:flex; flex-direction:column; gap:6px; }
+  .inner .head { display:flex; align-items:flex-start; gap:8px; flex-wrap:wrap; }
+  .side { font-size:.66rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:999px; }
+  .side.A { background:var(--a-soft); color:var(--a); } .side.B { background:var(--b-soft); color:var(--b); }
+  .frameName { font-size:.66rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--fc);
+    background:var(--card); border:1px solid var(--fc); padding:2px 8px; border-radius:999px; }
+  .said { font-size:.9rem; line-height:1.6; }
+  .said b { display:block; font-size:.95rem; margin-bottom:2px; }
+  .q { font-size:.78rem; color:var(--fc); font-weight:700; }
+  .del { position:absolute; top:6px; right:8px; border:0; background:transparent; color:var(--muted); cursor:pointer; font-size:1rem; }
+  .del:hover { color:var(--reb); }
+
+  .box { border-radius:10px; padding:7px 9px; background:var(--card); border:2px solid var(--fc); }
   .box label { display:flex; align-items:center; gap:6px; font-size:.7rem; font-weight:900; letter-spacing:.05em; text-transform:uppercase; color:var(--fc); }
-  .box label .rebchip { background:var(--reb-soft); color:var(--reb); border:1px solid var(--reb); font-size:.62rem; padding:1px 7px; border-radius:999px; }
+  .rebchip { background:var(--reb-soft); color:var(--reb); border:1px solid var(--reb); font-size:.62rem; padding:1px 7px; border-radius:999px; }
   .box textarea { width:100%; border:0; background:transparent; color:var(--ink); font:inherit; font-size:.88rem; resize:vertical;
     min-height:64px; margin-top:4px; padding:0; line-height:1.45; }
   .box textarea:focus { outline:none; }
   .box:focus-within { box-shadow:0 0 0 3px color-mix(in srgb,var(--fc) 25%,transparent); }
-  /* the OUTSIDE box: dashed until a new frame is chosen, then solid in the new frame's colour */
-  .box.out { border-style:dashed; border-color:var(--nfc,var(--muted)); }
+  .box.out { border:0; padding:0 2px; background:transparent; }
   .box.out label { color:var(--nfc,var(--muted)); }
-  .box.out.named { border-style:solid; border-width:3px; }
-  .box.out .pick { display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; }
-  .box.out .pick .fchip { font-size:.68rem; padding:2px 8px; border-width:1.5px; }
-  .box.out .newq { font-size:.78rem; font-weight:700; color:var(--nfc,var(--muted)); margin-top:5px; min-height:1.2em; }
+  .box.out textarea { min-height:96px; }
+  /* which devices went into the rebuttal — ticked by the writer, checked by the pair */
+  .used { display:flex; flex-wrap:wrap; gap:3px 10px; margin-top:4px; font-size:.72rem; color:var(--muted); }
+  .used span { font-weight:800; color:var(--dev); font-size:.62rem; letter-spacing:.04em; text-transform:uppercase; align-self:center; }
+  .used label { display:inline-flex; align-items:center; gap:3px; cursor:pointer; text-transform:none; letter-spacing:0; font-weight:600; font-size:.72rem; color:var(--muted); }
+  .used input { accent-color:var(--dev); width:13px; height:13px; margin:0; }
+  /* the outside box has four moves, each its own lines on paper; on screen one textarea with the moves as a reminder */
+  .movesLine { font-size:.7rem; color:var(--nfc,var(--muted)); font-weight:700; }
 
   /* ── phrase banks ── */
   .banks { display:grid; gap:9px; margin-top:12px; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); }
   .bank { background:var(--card); border:1px solid var(--line); border-left:5px solid var(--accent);
     border-radius:0 var(--radius) var(--radius) 0; padding:9px 12px; box-shadow:var(--shadow); }
   .bank.reb { border-left-color:var(--reb); } .bank.reb h3 { color:var(--reb); }
+  .bank.dev { border-left-color:var(--dev); } .bank.dev h3 { color:var(--dev); }
   .bank h3 { font-size:.85rem; }
   .bank ul { margin:4px 0 0 18px; font-size:.8rem; color:var(--muted); }
   .bank li { margin:2px 0; }
@@ -137,30 +164,53 @@
   .xlink:hover { text-decoration:underline; }
   .privacy { margin-top:18px; padding:8px 12px; border-radius:10px; background:var(--card);
     border:1px solid var(--line); color:var(--muted); font-size:.77rem; text-align:center; }
+  .pline, .plines, .pfoot, .mv { display:none; }   /* paper-only pieces */
 
   @media (max-width:640px) { .shell { padding:11px 10px 40px; } .grid { grid-template-columns:1fr; } }
 
-  /* ── print: A4, the boxes become writing space, the outside border is dashed for the pen ── */
+  /* ══ PAPER: page 1 is the key (frames, model, devices, phrase banks);
+     then ONE ARGUMENT PER A4 PAGE — the box inside the box, with lines. ══ */
   @media print {
-    @page { size:A4 portrait; margin:10mm; }
-    body { background:#fff; color:#000; }
-    .controls, .privacy, .xlink, .back, .sub, .add, .del, .pick, #elcReportBtn { display:none !important; }
-    .shell { padding:0; max-width:none; }
-    .model, .arg, .bank, .box { box-shadow:none; break-inside:avoid; }
-    h1 { font-size:1.1rem; } h2 { font-size:.9rem; margin-top:8px; }
-    .legend { gap:4px; margin-top:5px; } .fchip { font-size:.66rem; padding:1px 7px; }
+    @page { size:A4 portrait; margin:9mm 10mm; }
+    html, body { background:#fff; color:#000; }
+    .controls, .privacy, .xlink, .back, .sub.hint, .add, .del, .pick, #elcReportBtn, .movesLine, textarea, .used input { display:none !important; }
+    .shell { padding:0; max-width:none; display:flex; flex-direction:column; }
+    /* page 1, in this order */
+    .top { order:1; } h1 { order:1; } .sub { order:1; } .legend { order:2; } .model { order:3; } .banks { order:4; } .grid { order:5; }
+    h1 { font-size:1.15rem; } h2 { font-size:.9rem; margin-top:6px; }
+    .legend { gap:4px; margin-top:6px; } .fchip { font-size:.66rem; padding:1px 7px; border-width:1.5px; }
+    .model, .bank, .arg, .inner, .box { box-shadow:none; }
     .model { padding:6px 9px; margin-top:6px; } .moves { grid-template-columns:repeat(4,1fr); gap:4px; }
-    .move { padding:4px 6px; font-size:.68rem; } .move .why { font-size:.62rem; }
-    .model .their { font-size:.74rem; padding:4px 8px; margin-bottom:5px; }
-    .grid { grid-template-columns:repeat(2,1fr); gap:7px; margin-top:6px; }
-    .arg { padding:6px 8px; gap:5px; } .arg .said { font-size:.78rem; } .arg .said i { font-size:.68rem; } .arg .q { font-size:.66rem; }
-    .box { padding:4px 7px; min-height:34mm; }
-    .box textarea { min-height:26mm; font-size:.74rem; resize:none; }
-    .box.out { min-height:42mm; }
-    .box.out .newq::after { content:"New frame: ____________________"; display:block; }
-    .box.out.named .newq::after { content:none; }
-    .banks { grid-template-columns:repeat(3,1fr); gap:5px; margin-top:6px; }
-    .bank { padding:5px 8px; } .bank h3 { font-size:.72rem; } .bank ul { font-size:.64rem; margin-left:14px; }
+    .move { padding:3px 6px; font-size:.64rem; line-height:1.4; } .move .why { font-size:.58rem; } .move .tag { font-size:.58rem; }
+    .model .their { font-size:.7rem; padding:3px 8px; margin-bottom:4px; line-height:1.4; }
+    .banks { grid-template-columns:repeat(4,1fr); gap:4px; margin-top:5px; }
+    .bank { padding:4px 7px; break-inside:avoid; border-left-width:3px; } .bank h3 { font-size:.68rem; } .bank ul { font-size:.6rem; margin-left:12px; line-height:1.35; }
+    .devkey { gap:3px; margin-top:3px; } .devkey .dtag { font-size:.58rem; padding:0 5px; }
+
+    /* one page each */
+    .grid { display:block; margin:0; }
+    .arg { break-before:page; break-inside:avoid; height:276mm; border-width:1mm; border-radius:6mm; padding:5mm 6mm;
+      gap:3mm; box-shadow:none; background:#fff; margin:0; }
+    .arg .pfoot { display:flex; justify-content:space-between; font-size:.62rem; color:#555; margin-top:auto; }
+    .outerLab { font-size:.72rem; }
+    .pline { display:inline-block; border-bottom:.4mm solid currentColor; min-width:55mm; height:1.1em; vertical-align:baseline; margin:0 2mm; }
+    .inner { border-width:1mm; padding:4mm 5mm; gap:2mm; }
+    .said { font-size:.86rem; line-height:1.55; } .said b { font-size:.9rem; }
+    .dtag { font-size:.56rem; }
+    .q { font-size:.74rem; }
+    .box { padding:2mm 3mm; }
+    .box label { font-size:.66rem; }
+    /* ruled lines to write on: 8mm apart */
+    .plines { display:block; }
+    .plines .l { height:8mm; border-bottom:.3mm solid #8a8a8a; }
+    .box.out { padding:0; }
+    .box.out .mv { display:grid; grid-template-columns:22mm 1fr; gap:0 3mm; align-items:start; margin-top:1.5mm; }
+    .box.out .mv .mvtag { font-size:.62rem; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:#444; padding-top:1mm; line-height:1.2; }
+    .box.out .mv .mvtag small { display:block; font-weight:600; text-transform:none; letter-spacing:0; color:#666; font-size:.58rem; }
+    .used { margin-top:1.5mm; font-size:.66rem; gap:2px 6px; }
+    .used label { font-size:.66rem; }
+    .used label::before { content:"☐ "; }
+    .pfoot b { font-weight:800; }
   }
 </style>
 </head>
@@ -172,7 +222,7 @@
   </div>
 
   <h1>🔲 Reframe the argument</h1>
-  <p class="sub">Every argument sits inside a frame — the question it wants you to answer. Rebut once inside their frame, then once outside it, and redraw the border.</p>
+  <p class="sub hint">Every argument sits inside a frame — the question it wants you to answer. Rebut once inside their frame, then once outside it, and redraw the border.</p>
   <p class="sub"><b>Topic:</b> <span id="topicLine"></span></p>
 
   <div class="legend" id="legend"></div>
@@ -185,7 +235,7 @@
       <button type="button" class="isB" id="pickB" aria-pressed="false">Rebut the Negative</button>
     </span>
     <span class="spacer"></span>
-    <button type="button" class="btn" id="printBtn">🖨 Print</button>
+    <button type="button" class="btn" id="printBtn">🖨 Print — one argument per page</button>
     <button type="button" class="btn danger" id="clearBtn">Start again</button>
   </div>
 
@@ -194,7 +244,7 @@
   <div class="add">
     <div class="field">
       <label for="addText">An argument the other team actually said</label>
-      <input type="text" id="addText" maxlength="160" placeholder="They argued that…">
+      <input type="text" id="addText" maxlength="240" placeholder="They argued that…">
     </div>
     <div class="field" style="flex:0 1 180px">
       <label for="addFrame">Their frame</label>
@@ -230,36 +280,52 @@ const FRAMES = [
   { id:"fair",     name:"Fairness",     q:"Is everyone being treated the same?" }
 ];
 
+/* The persuasive devices — the six from the Persuasive Language page,
+   plus the two the debate rubric names. Inside an argument, mark a
+   device like this:  [[stat: 82% of teenagers say they feel tired]]
+   The phrase is underlined and the device's name is printed after it. */
+const DEVICES = [
+  { id:"emotive",   name:"Emotive language",    what:"strong words that make you feel anger, pity, fear or hope" },
+  { id:"stat",      name:"Facts & statistics",  what:"numbers or true information that add weight" },
+  { id:"bias",      name:"Bias language",       what:"loaded words that paint something good or bad before any argument" },
+  { id:"expert",    name:"Expert opinion",      what:"doctors, psychologists, teachers — borrowed authority" },
+  { id:"inclusive", name:"Inclusive language",  what:"we, us, our — the audience is on the speaker's team" },
+  { id:"rq",        name:"Rhetorical question", what:"a question with only one sensible answer" },
+  { id:"three",     name:"List of three",       what:"three examples in a row — it sounds complete" },
+  { id:"anecdote",  name:"Anecdote",            what:"one short story about one person" }
+];
+
 /* The topic and the arguments — the ones teams typically give on this
-   topic. Students can add the exact ones their opponents said. */
+   topic, written the way a speaker would say them, devices and all.
+   "claim" is the one-line version; "said" is the speech. */
 const TOPIC = "Social media should be banned for people under 16.";
 const ARGUMENTS = [
   /* side "A" = Affirmative (agrees with the topic), "B" = Negative */
-  { side:"A", frame:"health",   said:"Social media disrupts sleep and causes poor health.",
-    ev:"82% of teenagers say they feel tired after using phones late at night." },
-  { side:"A", frame:"safety",   said:"Cyberbullying on social media damages young people's mental health.",
-    ev:"Psychologists warn that social media can increase anxiety in young people." },
-  { side:"A", frame:"learning", said:"Students are distracted by social media and their grades drop.",
-    ev:"Students check their phones during homework and lose focus." },
-  { side:"A", frame:"safety",   said:"Strangers and predators can contact children online.",
-    ev:"Police receive reports every week of adults contacting children through apps." },
-  { side:"A", frame:"health",   said:"The apps are designed to be addictive, so young people cannot stop.",
-    ev:"Endless scrolling and notifications are built to keep you on the app." },
-  { side:"A", frame:"whose",    said:"Parents cannot control it, so the government has to step in.",
-    ev:"Many parents say they have lost the fight over screen time at home." },
+  { side:"A", frame:"health", claim:"Social media disrupts sleep and causes poor health.",
+    said:"[[stat: 82% of teenagers say they feel tired after using their phones late at night.]] [[expert: Doctors tell us]] that a tired brain cannot learn, cannot concentrate and cannot cope. [[rq: How many more exhausted, anxious, unhealthy young people do we need before we act?]]" },
+  { side:"A", frame:"safety", claim:"Cyberbullying on social media damages young people's mental health.",
+    said:"[[anecdote: Imagine a girl who opens her phone at midnight and finds forty cruel comments about her face.]] She cannot close the door on it — it follows her home, into her bedroom, into her sleep. [[expert: Psychologists warn]] that social media can increase anxiety in young people. [[emotive: We are letting children be tormented]], and calling it freedom." },
+  { side:"A", frame:"learning", claim:"Students are distracted by social media and their grades drop.",
+    said:"[[rq: Have you ever tried to do homework with TikTok open?]] [[three: One notification, one video, one more video]] — and an hour is gone. [[stat: Students who check their phones during study remember far less of what they read.]] A ban gives young people their attention back." },
+  { side:"A", frame:"safety", claim:"Strangers and predators can contact children online.",
+    said:"Every week, [[stat: police receive reports of adults contacting children through apps.]] [[bias: These predators]] do not need to climb through a window any more; they send a friend request. [[inclusive: We lock our front doors at night. Why would we leave this door wide open?]]" },
+  { side:"A", frame:"health", claim:"The apps are designed to be addictive, so young people cannot stop.",
+    said:"[[three: Endless scrolling, autoplay, notifications every few minutes]] — none of this is an accident. [[expert: Former app designers have admitted]] these features are built to keep you on the app. [[emotive: Telling a 14-year-old to just put the phone down is like telling someone to just stop being hungry.]]" },
+  { side:"A", frame:"whose", claim:"Parents cannot control it, so the government has to step in.",
+    said:"[[anecdote: Ask any parent who has tried to take a phone away at dinner time.]] [[stat: Most parents say they have lost the fight over screen time at home.]] When families cannot win on their own, [[inclusive: we as a society]] have a duty to help them. That is what governments are for." },
 
-  { side:"B", frame:"connect",  said:"Social media keeps families and friends connected across the world.",
-    ev:"Many students talk to grandparents overseas only through these apps." },
-  { side:"B", frame:"learning", said:"Young people learn from social media — news, tutorials, languages.",
-    ev:"Study channels and language videos are how many students practise English." },
-  { side:"B", frame:"works",    said:"A ban will not work, because young people will lie about their age.",
-    ev:"Age checks are easy to get around, so the ban only punishes honest users." },
-  { side:"B", frame:"whose",    said:"It is a parent's job to decide, not the government's.",
-    ev:"Every family is different, so one rule for everyone is wrong." },
-  { side:"B", frame:"freedom",  said:"Young people have a right to speak and to be heard.",
-    ev:"Social media is where young people organise, campaign and share their views." },
-  { side:"B", frame:"money",    said:"Young creators and small businesses would lose their income.",
-    ev:"Some teenagers earn money and build skills through their online channels." }
+  { side:"B", frame:"connect", claim:"Social media keeps families and friends connected across the world.",
+    said:"[[anecdote: For many students in this room, a grandmother overseas is one video call away — and that call happens on social media.]] [[rq: Do we really want to cut a 15-year-old off from her family because of an app?]] [[emotive: A ban does not protect these young people. It isolates them.]]" },
+  { side:"B", frame:"learning", claim:"Young people learn from social media — news, tutorials, languages.",
+    said:"[[three: Study channels, language videos, news explained in plain English]] — this is where many students practise English every day. [[stat: A large share of teenagers say they use social media to learn something new each week.]] [[bias: A blanket ban]] throws the library out with the games arcade." },
+  { side:"B", frame:"works", claim:"A ban will not work, because young people will lie about their age.",
+    said:"[[rq: Who here has never seen a 13-year-old with an account that says they are 18?]] Age checks are easy to get around. [[expert: Technology experts have said]] that no age-check system is reliable. So the ban only punishes the honest, and [[emotive: teaches every other child that the first thing you do online is lie.]]" },
+  { side:"B", frame:"whose", claim:"It is a parent's job to decide, not the government's.",
+    said:"[[inclusive: Our families are all different.]] Some parents allow social media at 12, some at 16, some never. [[rq: Since when does a politician in Canberra know your child better than you do?]] [[three: Parents set the bedtimes, parents choose the schools, and parents should choose this.]]" },
+  { side:"B", frame:"freedom", claim:"Young people have a right to speak and to be heard.",
+    said:"Social media is where young people [[three: organise, campaign and share their views.]] [[stat: The school climate strikes were organised almost entirely online.]] [[emotive: Silence a generation]] and do not be surprised when they stop listening to you. [[rq: Is that the kind of country we want?]]" },
+  { side:"B", frame:"money", claim:"Young creators and small businesses would lose their income.",
+    said:"[[anecdote: One 15-year-old edits videos for a local café and earns more than her older brother does stacking shelves.]] [[stat: Thousands of teenagers earn money and build real skills through their online work.]] [[bias: This heavy-handed ban]] takes that away from them overnight." }
 ];
 
 /* The worked model: one reframe, with its four moves named. The frame the
@@ -272,10 +338,10 @@ const MODEL = {
   moves:[
     { tag:"1 · Concede — narrowly",
       say:"Sure. Late-night scrolling can cost you sleep. So can ice cream, a movie on Friday night, a party on Saturday.",
-      why:"Give up the small point. It costs nothing and it makes you sound fair. Notice the list: it starts moving sleep into a bigger group." },
+      why:"Give up the small point. It costs nothing and it makes you sound fair. The list of three starts moving sleep into a bigger group." },
     { tag:"2 · Widen — take their frame to its limit",
       say:"So should we all be forced to live like monks in the name of health? Salad only, two hours of cardio a day, lights out at nine?",
-      why:"Push their question as far as it goes, so the audience can see that health alone cannot decide this." },
+      why:"A rhetorical question. Push their question as far as it goes, so the audience can see that health alone cannot decide this." },
     { tag:"3 · Move — name the real question",
       say:"This debate is not about sleep. It is about <mark>who gets to decide how young people live</mark>.",
       why:"Say the new frame out loud, in one sentence. That is the moment the border is redrawn." },
@@ -286,8 +352,9 @@ const MODEL = {
 };
 
 /* Phrase banks. Inside-the-frame starters come from the Persuasive
-   Language page; these are the ones for stepping OUTSIDE, and for attacking
-   the argument (never the person) with some force. */
+   Language page; these are the ones for stepping OUTSIDE, for attacking
+   the argument (never the person) with some force, and for putting a
+   device into a rebuttal on your feet. */
 const BANKS = [
   { cls:"", title:"Step outside the frame", items:[
     ["Even if that were true,", "the real question is…"],
@@ -304,6 +371,13 @@ const BANKS = [
     ["Their whole case rests on one example.", "Take it away and nothing is left."],
     ["They gave you a feeling.", "We are giving you a reason."]
   ]},
+  { cls:"dev", title:"Put a device in the rebuttal", items:[
+    ["Turn their statistic round:", "“82% feel tired — so 82% of us need a bedtime, not a ban.”"],
+    ["Answer their question with a question:", "“Since when does ___?”"],
+    ["Give them a list of three of your own:", "“___, ___ and ___.”"],
+    ["One person, one story:", "“Think of a student who ___.”"],
+    ["Name their loaded word:", "“They called it ___. Call it what it is: ___.”"]
+  ]},
   { cls:"", title:"Say it with force", items:[
     ["Slow down on the sentence that matters.", "Pause before it. Pause after it."],
     ["Name the speaker and the exact words.", "“The first speaker said ___.”"],
@@ -314,12 +388,13 @@ const BANKS = [
 ];
 /* ═══════════════════ END OF DATA BLOCK — code below ═══════════════════ */
 
-const LS = "elc_debate_reframe_v1";
+const LS = "elc_debate_reframe_v2";
 const $ = id => document.getElementById(id);
 const frameById = id => FRAMES.find(f => f.id === id) || FRAMES[0];
+const devById = id => DEVICES.find(d => d.id === id);
 const varsFor = f => `--fc:var(--f-${f.id});--fs:var(--f-${f.id}-s)`;
 
-let state = { side:"A", custom:[], work:{} };   // work[key] = { inside, outside, frame }
+let state = { side:"A", custom:[], work:{} };   // work[key] = { inside, outside, frame, devIn:{}, devOut:{} }
 function load() { try { const s = JSON.parse(localStorage.getItem(LS) || "null"); if (s && typeof s === "object") state = Object.assign(state, s); } catch (e) {} }
 function save() { try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {} }
 
@@ -331,6 +406,25 @@ function chip(f, opts = {}) {
   el.textContent = f.name;
   if (opts.q) { const s = document.createElement("small"); s.textContent = " — " + f.q; el.append(s); }
   return el;
+}
+
+/* "[[stat: phrase]]" → underlined phrase + a device tag. Unknown ids print as plain text. */
+function saidNodes(text) {
+  const frag = document.createDocumentFragment();
+  const re = /\[\[(\w+):\s*([^\]]+)\]\]/g;
+  let last = 0, m;
+  while ((m = re.exec(text))) {
+    if (m.index > last) frag.append(document.createTextNode(text.slice(last, m.index)));
+    const d = devById(m[1]);
+    if (d) {
+      const s = document.createElement("span"); s.className = "dev"; s.textContent = m[2];
+      const t = document.createElement("span"); t.className = "dtag"; t.textContent = d.name;
+      frag.append(s, t);
+    } else frag.append(document.createTextNode(m[2]));
+    last = re.lastIndex;
+  }
+  if (last < text.length) frag.append(document.createTextNode(text.slice(last)));
+  return frag;
 }
 
 function renderLegend() {
@@ -351,7 +445,10 @@ function renderModel() {
     d.innerHTML = `<span class="tag">${m.tag}</span><div class="say">“${m.say}”</div><div class="why">${m.why}</div>`;
     moves.append(d);
   });
-  host.append(h, their, moves);
+  const h2 = document.createElement("h2"); h2.textContent = "The devices, as they are marked in the arguments";
+  const key = document.createElement("div"); key.className = "devkey";
+  DEVICES.forEach(d => { const t = document.createElement("span"); t.className = "dtag"; t.innerHTML = `${d.name} <small>— ${d.what}</small>`; key.append(t); });
+  host.append(h, their, moves, h2, key);
 }
 
 function allArgs() {
@@ -364,61 +461,99 @@ function renderGrid() {
   const rebutting = state.side;                      // the side whose arguments are on the table
   $("pickA").setAttribute("aria-pressed", rebutting === "A");
   $("pickB").setAttribute("aria-pressed", rebutting === "B");
-  allArgs().filter(a => a.side === rebutting).forEach(a => host.append(argCard(a)));
+  let n = 0;
+  allArgs().filter(a => a.side === rebutting).forEach(a => host.append(argCard(a, ++n)));
 }
 
-function argCard(a) {
+/* the tick row under each rebuttal: which devices went in */
+function usedRow(w, field) {
+  const row = document.createElement("div"); row.className = "used";
+  const s = document.createElement("span"); s.textContent = "Devices in this rebuttal"; row.append(s);
+  w[field] = w[field] || {};
+  DEVICES.forEach(d => {
+    const l = document.createElement("label");
+    const c = document.createElement("input"); c.type = "checkbox"; c.checked = !!w[field][d.id];
+    c.addEventListener("change", () => { w[field][d.id] = c.checked; save(); });
+    l.append(c, document.createTextNode(d.name)); row.append(l);
+  });
+  return row;
+}
+function pline() { const s = document.createElement("span"); s.className = "pline"; return s; }
+function plines(n) { const d = document.createElement("div"); d.className = "plines";
+  for (let i = 0; i < n; i++) d.append(Object.assign(document.createElement("div"), { className:"l" })); return d; }
+
+function argCard(a, n) {
   const f = frameById(a.frame);
   const w = state.work[a.key] || (state.work[a.key] = { inside:"", outside:"", frame:"" });
   const card = document.createElement("article"); card.className = "arg"; card.style.cssText = varsFor(f);
 
-  const head = document.createElement("div"); head.className = "head";
-  const side = document.createElement("span"); side.className = "side " + a.side;
-  side.textContent = a.side === "A" ? "Affirmative said" : "Negative said";
-  const fn = document.createElement("span"); fn.className = "frameName"; fn.textContent = f.name + " frame";
-  head.append(side, fn);
-
-  const said = document.createElement("p"); said.className = "said"; said.textContent = "“" + a.said + "”";
-  if (a.ev) { const i = document.createElement("i"); i.textContent = a.ev; said.append(i); }
-  const q = document.createElement("p"); q.className = "q"; q.textContent = "Their question: " + f.q;
-
-  /* box 1 — inside their frame */
-  const inBox = document.createElement("div"); inBox.className = "box";
-  const inLab = document.createElement("label");
-  inLab.innerHTML = `<span class="rebchip">Rebuttal</span> Inside their frame — answer their question`;
-  const inTa = document.createElement("textarea"); inTa.value = w.inside; inTa.rows = 3;
-  inTa.setAttribute("aria-label", "Rebuttal inside the " + f.name + " frame");
-  inTa.addEventListener("input", () => { w.inside = inTa.value; save(); });
-  inBox.append(inLab, inTa);
-
-  /* box 2 — outside: pick a new frame, the border redraws in that colour */
-  const outBox = document.createElement("div"); outBox.className = "box out";
-  const outLab = document.createElement("label");
-  outLab.innerHTML = `<span class="rebchip">Rebuttal</span> Outside — concede, widen, move, land`;
-  const outTa = document.createElement("textarea"); outTa.value = w.outside; outTa.rows = 4;
-  outTa.setAttribute("aria-label", "Rebuttal outside the " + f.name + " frame");
-  outTa.addEventListener("input", () => { w.outside = outTa.value; save(); });
-  const pickLab = document.createElement("div"); pickLab.className = "newq";
+  /* ── the OUTER border: the new frame ── */
+  const outerLab = document.createElement("div"); outerLab.className = "outerLab";
+  const outerWord = document.createElement("span"); outerWord.textContent = "New frame:";
+  const line = pline();
+  const newq = document.createElement("span"); newq.className = "newq";
   const pick = document.createElement("div"); pick.className = "pick";
+  outerLab.append(outerWord, line, newq, pick);
   const paint = () => {
     const nf = w.frame ? frameById(w.frame) : null;
-    outBox.classList.toggle("named", !!nf);
-    outBox.style.setProperty("--nfc", nf ? `var(--f-${nf.id})` : "var(--muted)");
-    pickLab.textContent = nf ? `New frame: ${nf.name} — ${nf.q}` : "";
+    card.classList.toggle("named", !!nf);
+    card.style.setProperty("--nfc", nf ? `var(--f-${nf.id})` : "var(--muted)");
+    newq.textContent = nf ? `${nf.name} — ${nf.q}` : "";
+    line.style.display = nf ? "none" : "";
     [...pick.children].forEach(c => c.classList.toggle("sel", !!nf && c.dataset.id === nf.id));
   };
   FRAMES.forEach(nf => {
     const c = chip(nf, { button:true }); c.dataset.id = nf.id;
     c.setAttribute("aria-label", "Redraw the border as the " + nf.name + " frame");
-    /* choosing the same frame they used is allowed — the page judges nothing,
-       the pair check does. It just stays their colour. */
+    /* choosing the frame they used is allowed — the page judges nothing, the pair check does */
     c.addEventListener("click", () => { w.frame = w.frame === nf.id ? "" : nf.id; save(); paint(); });
     pick.append(c);
   });
-  outBox.append(outLab, outTa, pickLab, pick);
-  paint();
 
-  card.append(head, said, q, inBox, outBox);
+  /* ── THEIR box: the argument, then the inside-the-frame rebuttal ── */
+  const inner = document.createElement("div"); inner.className = "inner";
+  const head = document.createElement("div"); head.className = "head";
+  const side = document.createElement("span"); side.className = "side " + a.side;
+  side.textContent = a.side === "A" ? "Affirmative said" : "Negative said";
+  const fn = document.createElement("span"); fn.className = "frameName"; fn.textContent = f.name + " frame";
+  head.append(side, fn);
+  const said = document.createElement("p"); said.className = "said";
+  if (a.claim) { const b = document.createElement("b"); b.textContent = a.claim; said.append(b); }
+  said.append(saidNodes(a.said || ""));
+  const q = document.createElement("p"); q.className = "q"; q.textContent = "Their question: " + f.q;
+
+  const inBox = document.createElement("div"); inBox.className = "box in";
+  const inLab = document.createElement("label");
+  inLab.innerHTML = `<span class="rebchip">Rebuttal 1</span> Inside their frame — answer their question`;
+  const inTa = document.createElement("textarea"); inTa.value = w.inside; inTa.rows = 3;
+  inTa.setAttribute("aria-label", "Rebuttal inside the " + f.name + " frame");
+  inTa.addEventListener("input", () => { w.inside = inTa.value; save(); });
+  inBox.append(inLab, inTa, plines(6), usedRow(w, "devIn"));
+  inner.append(head, said, q, inBox);
+
+  /* ── between the borders: the outside rebuttal, four moves ── */
+  const outBox = document.createElement("div"); outBox.className = "box out";
+  const outLab = document.createElement("label");
+  outLab.innerHTML = `<span class="rebchip">Rebuttal 2</span> Outside their frame`;
+  const ml = document.createElement("div"); ml.className = "movesLine";
+  ml.textContent = "Concede narrowly → widen their frame to its limit → move: name the real question → land inside your frame";
+  const outTa = document.createElement("textarea"); outTa.value = w.outside; outTa.rows = 5;
+  outTa.setAttribute("aria-label", "Rebuttal outside the " + f.name + " frame");
+  outTa.addEventListener("input", () => { w.outside = outTa.value; save(); });
+  outBox.append(outLab, ml, outTa);
+  [["1 Concede", "narrowly — give up the small point"], ["2 Widen", "take their question to its limit"],
+   ["3 Move", "name the real question"], ["4 Land", "argue inside your frame"]].forEach(([t, s]) => {
+    const mv = document.createElement("div"); mv.className = "mv";
+    const tag = document.createElement("div"); tag.className = "mvtag"; tag.innerHTML = `${t}<small>${s}</small>`;
+    mv.append(tag, plines(3)); outBox.append(mv);
+  });
+  outBox.append(usedRow(w, "devOut"));
+
+  const foot = document.createElement("div"); foot.className = "pfoot";
+  foot.innerHTML = `<span><b>Reframe the argument</b> · ${TOPIC}</span><span>Argument ${n} · rebutting the ${a.side === "A" ? "Affirmative" : "Negative"}</span>`;
+
+  card.append(outerLab, inner, outBox, foot);
+  paint();
 
   if (a.custom) {
     const del = document.createElement("button"); del.className = "del"; del.type = "button";
@@ -461,8 +596,8 @@ $("addBtn").addEventListener("click", () => {
 });
 
 load();
-renderLegend(); renderModel(); renderAddFrames(); renderBanks(); renderGrid();
 $("topicLine").textContent = TOPIC;
+renderLegend(); renderModel(); renderAddFrames(); renderBanks(); renderGrid();
 
 try {
   const K = "elc_visited";
