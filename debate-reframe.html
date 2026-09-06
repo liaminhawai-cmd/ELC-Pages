@@ -161,6 +161,9 @@
   .add input:focus, .add select:focus { outline:3px solid color-mix(in srgb,var(--accent) 30%,transparent); }
 
   .xlink { display:inline-block; margin:13px 12px 0 0; color:var(--accent); font-weight:750; text-decoration:none; font-size:.87rem; }
+  .vlink { display:inline-block; margin-top:6px; color:var(--accent); font-weight:750; text-decoration:none; font-size:.8rem; }
+  .vlink:hover, .xlink:hover { text-decoration:underline; }
+  .controls .vlink { margin:0; }
   .xlink:hover { text-decoration:underline; }
   .privacy { margin-top:18px; padding:8px 12px; border-radius:10px; background:var(--card);
     border:1px solid var(--line); color:var(--muted); font-size:.77rem; text-align:center; }
@@ -234,6 +237,7 @@
       <button type="button" class="isA" id="pickA" aria-pressed="true">Rebut the Affirmative</button>
       <button type="button" class="isB" id="pickB" aria-pressed="false">Rebut the Negative</button>
     </span>
+    <span id="sideVocab"></span>
     <span class="spacer"></span>
     <button type="button" class="btn" id="printBtn">🖨 Print — one argument per page</button>
     <button type="button" class="btn danger" id="clearBtn">Start again</button>
@@ -257,7 +261,7 @@
 
   <a class="xlink" href="persuasive.html#debating">📚 Debate rubric, key vocabulary and rebuttal starters →</a>
   <a class="xlink" href="persuasive.html#techniques">🔥 Persuasive techniques →</a>
-  <a class="xlink" target="_blank" rel="noopener" href="https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/l/elc/english/f/elc-en-reframe">🧱 Word Builder: the words in these arguments →</a>
+  <a class="xlink" target="_blank" rel="noopener" href="https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/l/elc/english/f/elc-en-reframe">🧱 Word Builder: all four Reframe the Argument sets →</a>
   <p class="privacy">🔒 No account needed. What you write stays in this browser only, and is never sent anywhere.</p>
 </main>
 
@@ -300,6 +304,15 @@ const DEVICES = [
    topic, written the way a speaker would say them, devices and all.
    "claim" is the one-line version; "said" is the speech. */
 const TOPIC = "Social media should be banned for people under 16.";
+
+/* Word Builder sets for this page — one per part of the page. */
+const VOCAB_BASE = "https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/learn/elc/english/";
+const VOCAB = {
+  moves:   { id:"reframe-moves",     label:"the moves — frame, concede, widen, pivot…" },
+  devices: { id:"reframe-devices",   label:"the devices — anecdote, expert opinion, loaded…" },
+  A:       { id:"reframe-words-aff", label:"the words inside the affirmative's arguments" },
+  B:       { id:"reframe-words-neg", label:"the words inside the negative's arguments" }
+};
 const ARGUMENTS = [
   /* side "A" = Affirmative (agrees with the topic), "B" = Negative */
   { side:"A", frame:"health", claim:"Social media disrupts sleep and causes poor health.",
@@ -428,6 +441,12 @@ function saidNodes(text) {
   return frag;
 }
 
+function vocabLink(key) {
+  const a = document.createElement("a"); a.className = "vlink"; a.target = "_blank"; a.rel = "noopener";
+  a.href = VOCAB_BASE + VOCAB[key].id; a.textContent = "🧱 Word Builder: " + VOCAB[key].label + " →";
+  return a;
+}
+
 function renderLegend() {
   const host = $("legend"); host.replaceChildren();
   FRAMES.forEach(f => host.append(chip(f, { q:true })));
@@ -449,7 +468,7 @@ function renderModel() {
   const h2 = document.createElement("h2"); h2.textContent = "The devices, as they are marked in the arguments";
   const key = document.createElement("div"); key.className = "devkey";
   DEVICES.forEach(d => { const t = document.createElement("span"); t.className = "dtag"; t.innerHTML = `${d.name} <small>— ${d.what}</small>`; key.append(t); });
-  host.append(h, their, moves, h2, key);
+  host.append(h, their, moves, vocabLink("moves"), h2, key, vocabLink("devices"));
 }
 
 function allArgs() {
@@ -462,6 +481,7 @@ function renderGrid() {
   const rebutting = state.side;                      // the side whose arguments are on the table
   $("pickA").setAttribute("aria-pressed", rebutting === "A");
   $("pickB").setAttribute("aria-pressed", rebutting === "B");
+  $("sideVocab").replaceChildren(vocabLink(rebutting));
   let n = 0;
   allArgs().filter(a => a.side === rebutting).forEach(a => host.append(argCard(a, ++n)));
 }
