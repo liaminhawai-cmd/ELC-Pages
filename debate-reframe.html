@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Reframe the argument — the other team's arguments in boxes; rebut inside their frame, then step outside it and redraw the border.">
+<title>Reframe the Argument — ELC Hub</title>
+<style>
+  :root {
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#7c3aed; --radius:14px;
+    --shadow:0 1px 2px rgba(16,24,40,.05),0 5px 16px rgba(16,24,40,.07);
+    /* team colours — the same two as the Debate Structure page */
+    --a:#2563eb; --a-soft:#dbeafe; --b:#c2410c; --b-soft:#ffedd5;
+    /* rebuttal is ALWAYS red, as on the Debate Structure page */
+    --reb:#dc2626; --reb-soft:#fee2e2;
+    /* one colour per FRAME — set from the data block, see FRAMES */
+    --f-health:#15803d;   --f-health-s:#dcfce7;
+    --f-safety:#b91c1c;   --f-safety-s:#fee2e2;
+    --f-freedom:#7c3aed;  --f-freedom-s:#ede9fe;
+    --f-learning:#0f766e; --f-learning-s:#ccfbf1;
+    --f-connect:#be185d;  --f-connect-s:#fce7f3;
+    --f-works:#a16207;    --f-works-s:#fef3c7;
+    --f-whose:#4338ca;    --f-whose-s:#e0e7ff;
+    --f-money:#0369a1;    --f-money-s:#e0f2fe;
+    --f-fair:#57534e;     --f-fair-s:#f5f5f4;
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#e8ecf5; --muted:#9aa4b8; --line:#263048;
+            --accent:#a78bfa; --shadow:0 2px 10px rgba(0,0,0,.4);
+            --a:#7aa5ff; --a-soft:#17284a; --b:#fb923c; --b-soft:#3b2412;
+            --reb:#f87171; --reb-soft:#45151f;
+            --f-health:#86efac;   --f-health-s:#123322;
+            --f-safety:#fca5a5;   --f-safety-s:#45151f;
+            --f-freedom:#c4b5fd;  --f-freedom-s:#2a2145;
+            --f-learning:#5eead4; --f-learning-s:#0f3b36;
+            --f-connect:#f9a8d4;  --f-connect-s:#4a1130;
+            --f-works:#fcd34d;    --f-works-s:#3d2f0b;
+            --f-whose:#a5b4fc;    --f-whose-s:#232a5c;
+            --f-money:#7dd3fc;    --f-money-s:#0c2f42;
+            --f-fair:#d6d3d1;     --f-fair-s:#2b2927; }
+  }
+  * { box-sizing:border-box; margin:0; }
+  body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; }
+  .shell { max-width:1120px; margin:auto; padding:12px 16px 40px; }
+  .top { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:9px; flex-wrap:wrap; }
+  .back { color:var(--accent); font-weight:800; text-decoration:none; font-size:.9rem; }
+  .back:hover { text-decoration:underline; }
+  h1 { font-size:clamp(1.2rem,3.2vw,1.55rem); letter-spacing:-.4px; }
+  h2 { font-size:1rem; margin-top:18px; }
+  .sub { color:var(--muted); font-size:.85rem; margin-top:2px; }
+
+  /* ── the frames: colour is a taxonomy, so the legend is always on screen ── */
+  .legend { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .fchip { display:inline-flex; align-items:center; gap:6px; font-size:.76rem; font-weight:800;
+    padding:3px 10px; border-radius:999px; border:2px solid var(--fc,var(--muted));
+    background:var(--fs,transparent); color:var(--fc,var(--ink)); }
+  .fchip small { font-weight:600; opacity:.85; }
+  .fchip.sel { outline:3px solid color-mix(in srgb,var(--fc) 35%,transparent); }
+  button.fchip { cursor:pointer; font-family:inherit; }
+  button.fchip:hover { filter:brightness(.95); }
+
+  /* ── the worked model — one reframe, its moves named ── */
+  .model { margin-top:10px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius);
+    padding:10px 12px; box-shadow:var(--shadow); }
+  .model .their { border-left:5px solid var(--fc); background:var(--fs); border-radius:0 9px 9px 0;
+    padding:6px 10px; font-size:.86rem; margin-bottom:8px; }
+  .model .their b { color:var(--fc); }
+  .moves { display:grid; gap:6px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
+  .move { border:1px solid var(--line); border-radius:9px; padding:7px 9px; font-size:.83rem; background:var(--bg); }
+  .move .tag { display:inline-block; font-size:.66rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--accent); margin-bottom:2px; }
+  .move .say { font-style:italic; }
+  .move .why { color:var(--muted); font-size:.76rem; margin-top:3px; }
+  .move mark { background:var(--fs); color:var(--fc); font-weight:800; padding:0 2px; border-radius:3px; }
+
+  /* ── controls ── */
+  .controls { display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:12px; }
+  .seg { display:inline-flex; border:2px solid var(--line); border-radius:10px; overflow:hidden; background:var(--card); }
+  .seg button { border:0; background:transparent; color:var(--muted); font-weight:800; font-size:.85rem; padding:6px 12px; cursor:pointer; font-family:inherit; }
+  .seg button[aria-pressed=true].isA { background:var(--a-soft); color:var(--a); }
+  .seg button[aria-pressed=true].isB { background:var(--b-soft); color:var(--b); }
+  .btn { border:2px solid var(--line); background:var(--card); color:var(--ink); border-radius:10px;
+    padding:6px 12px; font-weight:800; font-size:.85rem; cursor:pointer; font-family:inherit; }
+  .btn:hover { border-color:var(--accent); }
+  .btn.danger:hover { border-color:var(--reb); color:var(--reb); }
+  .spacer { flex:1; }
+
+  /* ── the argument boxes ── */
+  .grid { display:grid; gap:12px; margin-top:10px; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); }
+  .arg { background:var(--card); border:3px solid var(--fc); border-radius:var(--radius); box-shadow:var(--shadow);
+    padding:10px 12px; display:flex; flex-direction:column; gap:8px; position:relative; }
+  .arg .head { display:flex; align-items:flex-start; gap:8px; flex-wrap:wrap; }
+  .arg .side { font-size:.66rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; padding:2px 8px; border-radius:999px; }
+  .arg .side.A { background:var(--a-soft); color:var(--a); } .arg .side.B { background:var(--b-soft); color:var(--b); }
+  .arg .frameName { font-size:.66rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--fc);
+    background:var(--fs); padding:2px 8px; border-radius:999px; }
+  .arg .said { font-size:.92rem; font-weight:700; }
+  .arg .said i { display:block; font-weight:500; color:var(--muted); font-size:.82rem; margin-top:2px; }
+  .arg .q { font-size:.78rem; color:var(--fc); font-weight:700; }
+  .arg .del { position:absolute; top:6px; right:8px; border:0; background:transparent; color:var(--muted); cursor:pointer; font-size:1rem; }
+  .arg .del:hover { color:var(--reb); }
+
+  .box { border:2px solid var(--fc); border-radius:10px; padding:7px 9px; background:var(--bg); }
+  .box label { display:flex; align-items:center; gap:6px; font-size:.7rem; font-weight:900; letter-spacing:.05em; text-transform:uppercase; color:var(--fc); }
+  .box label .rebchip { background:var(--reb-soft); color:var(--reb); border:1px solid var(--reb); font-size:.62rem; padding:1px 7px; border-radius:999px; }
+  .box textarea { width:100%; border:0; background:transparent; color:var(--ink); font:inherit; font-size:.88rem; resize:vertical;
+    min-height:64px; margin-top:4px; padding:0; line-height:1.45; }
+  .box textarea:focus { outline:none; }
+  .box:focus-within { box-shadow:0 0 0 3px color-mix(in srgb,var(--fc) 25%,transparent); }
+  /* the OUTSIDE box: dashed until a new frame is chosen, then solid in the new frame's colour */
+  .box.out { border-style:dashed; border-color:var(--nfc,var(--muted)); }
+  .box.out label { color:var(--nfc,var(--muted)); }
+  .box.out.named { border-style:solid; border-width:3px; }
+  .box.out .pick { display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; }
+  .box.out .pick .fchip { font-size:.68rem; padding:2px 8px; border-width:1.5px; }
+  .box.out .newq { font-size:.78rem; font-weight:700; color:var(--nfc,var(--muted)); margin-top:5px; min-height:1.2em; }
+
+  /* ── phrase banks ── */
+  .banks { display:grid; gap:9px; margin-top:12px; grid-template-columns:repeat(auto-fit,minmax(255px,1fr)); }
+  .bank { background:var(--card); border:1px solid var(--line); border-left:5px solid var(--accent);
+    border-radius:0 var(--radius) var(--radius) 0; padding:9px 12px; box-shadow:var(--shadow); }
+  .bank.reb { border-left-color:var(--reb); } .bank.reb h3 { color:var(--reb); }
+  .bank h3 { font-size:.85rem; }
+  .bank ul { margin:4px 0 0 18px; font-size:.8rem; color:var(--muted); }
+  .bank li { margin:2px 0; }
+  .bank li b { color:var(--ink); }
+
+  /* ── add your own argument ── */
+  .add { margin-top:12px; background:var(--card); border:1px dashed var(--line); border-radius:var(--radius); padding:10px 12px; display:flex; flex-wrap:wrap; gap:8px; align-items:flex-end; }
+  .add .field { display:flex; flex-direction:column; gap:3px; flex:1 1 220px; }
+  .add label { font-size:.68rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+  .add input, .add select { border:2px solid var(--line); border-radius:9px; padding:6px 9px; background:var(--bg); color:var(--ink); font:inherit; font-size:.88rem; }
+  .add input:focus, .add select:focus { outline:3px solid color-mix(in srgb,var(--accent) 30%,transparent); }
+
+  .xlink { display:inline-block; margin:13px 12px 0 0; color:var(--accent); font-weight:750; text-decoration:none; font-size:.87rem; }
+  .xlink:hover { text-decoration:underline; }
+  .privacy { margin-top:18px; padding:8px 12px; border-radius:10px; background:var(--card);
+    border:1px solid var(--line); color:var(--muted); font-size:.77rem; text-align:center; }
+
+  @media (max-width:640px) { .shell { padding:11px 10px 40px; } .grid { grid-template-columns:1fr; } }
+
+  /* ── print: A4, the boxes become writing space, the outside border is dashed for the pen ── */
+  @media print {
+    @page { size:A4 portrait; margin:10mm; }
+    body { background:#fff; color:#000; }
+    .controls, .privacy, .xlink, .back, .sub, .add, .del, .pick, #elcReportBtn { display:none !important; }
+    .shell { padding:0; max-width:none; }
+    .model, .arg, .bank, .box { box-shadow:none; break-inside:avoid; }
+    h1 { font-size:1.1rem; } h2 { font-size:.9rem; margin-top:8px; }
+    .legend { gap:4px; margin-top:5px; } .fchip { font-size:.66rem; padding:1px 7px; }
+    .model { padding:6px 9px; margin-top:6px; } .moves { grid-template-columns:repeat(4,1fr); gap:4px; }
+    .move { padding:4px 6px; font-size:.68rem; } .move .why { font-size:.62rem; }
+    .model .their { font-size:.74rem; padding:4px 8px; margin-bottom:5px; }
+    .grid { grid-template-columns:repeat(2,1fr); gap:7px; margin-top:6px; }
+    .arg { padding:6px 8px; gap:5px; } .arg .said { font-size:.78rem; } .arg .said i { font-size:.68rem; } .arg .q { font-size:.66rem; }
+    .box { padding:4px 7px; min-height:34mm; }
+    .box textarea { min-height:26mm; font-size:.74rem; resize:none; }
+    .box.out { min-height:42mm; }
+    .box.out .newq::after { content:"New frame: ____________________"; display:block; }
+    .box.out.named .newq::after { content:none; }
+    .banks { grid-template-columns:repeat(3,1fr); gap:5px; margin-top:6px; }
+    .bank { padding:5px 8px; } .bank h3 { font-size:.72rem; } .bank ul { font-size:.64rem; margin-left:14px; }
+  }
+</style>
+</head>
+<body>
+<main class="shell">
+  <div class="top">
+    <a class="back" href="index.html">← ELC Hub</a>
+    <a class="back" href="debate-structure.html">Debate structure →</a>
+  </div>
+
+  <h1>🔲 Reframe the argument</h1>
+  <p class="sub">Every argument sits inside a frame — the question it wants you to answer. Rebut once inside their frame, then once outside it, and redraw the border.</p>
+  <p class="sub"><b>Topic:</b> <span id="topicLine"></span></p>
+
+  <div class="legend" id="legend"></div>
+
+  <section class="model" id="model"></section>
+
+  <div class="controls">
+    <span class="seg" role="group" aria-label="Which team are you rebutting?">
+      <button type="button" class="isA" id="pickA" aria-pressed="true">Rebut the Affirmative</button>
+      <button type="button" class="isB" id="pickB" aria-pressed="false">Rebut the Negative</button>
+    </span>
+    <span class="spacer"></span>
+    <button type="button" class="btn" id="printBtn">🖨 Print</button>
+    <button type="button" class="btn danger" id="clearBtn">Start again</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="add">
+    <div class="field">
+      <label for="addText">An argument the other team actually said</label>
+      <input type="text" id="addText" maxlength="160" placeholder="They argued that…">
+    </div>
+    <div class="field" style="flex:0 1 180px">
+      <label for="addFrame">Their frame</label>
+      <select id="addFrame"></select>
+    </div>
+    <button type="button" class="btn" id="addBtn">Add box</button>
+  </div>
+
+  <div class="banks" id="banks"></div>
+
+  <a class="xlink" href="persuasive.html#debating">📚 Debate rubric, key vocabulary and rebuttal starters →</a>
+  <a class="xlink" href="persuasive.html#techniques">🔥 Persuasive techniques →</a>
+  <p class="privacy">🔒 No account needed. What you write stays in this browser only, and is never sent anywhere.</p>
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════
+   DATA BLOCK — teachers edit below this line. Nothing here is code.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* The frames. Each one is a QUESTION — the question the argument wants
+   the audience to answer. Colour is the frame's identity everywhere on
+   the page (legend, box border, chips), so keep one colour per frame. */
+const FRAMES = [
+  { id:"health",   name:"Health",       q:"Is it good or bad for our bodies and minds?" },
+  { id:"safety",   name:"Safety",       q:"Who could get hurt?" },
+  { id:"freedom",  name:"Freedom",      q:"Who gets to decide how we live?" },
+  { id:"learning", name:"Learning",     q:"Does it help or hurt learning?" },
+  { id:"connect",  name:"Connection",   q:"Does it bring people together or push them apart?" },
+  { id:"works",    name:"Will it work?", q:"Will the rule actually do what it promises?" },
+  { id:"whose",    name:"Whose job?",   q:"Whose job is this — parents, schools, companies or government?" },
+  { id:"money",    name:"Money",        q:"Who pays, and who profits?" },
+  { id:"fair",     name:"Fairness",     q:"Is everyone being treated the same?" }
+];
+
+/* The topic and the arguments — the ones teams typically give on this
+   topic. Students can add the exact ones their opponents said. */
+const TOPIC = "Social media should be banned for people under 16.";
+const ARGUMENTS = [
+  /* side "A" = Affirmative (agrees with the topic), "B" = Negative */
+  { side:"A", frame:"health",   said:"Social media disrupts sleep and causes poor health.",
+    ev:"82% of teenagers say they feel tired after using phones late at night." },
+  { side:"A", frame:"safety",   said:"Cyberbullying on social media damages young people's mental health.",
+    ev:"Psychologists warn that social media can increase anxiety in young people." },
+  { side:"A", frame:"learning", said:"Students are distracted by social media and their grades drop.",
+    ev:"Students check their phones during homework and lose focus." },
+  { side:"A", frame:"safety",   said:"Strangers and predators can contact children online.",
+    ev:"Police receive reports every week of adults contacting children through apps." },
+  { side:"A", frame:"health",   said:"The apps are designed to be addictive, so young people cannot stop.",
+    ev:"Endless scrolling and notifications are built to keep you on the app." },
+  { side:"A", frame:"whose",    said:"Parents cannot control it, so the government has to step in.",
+    ev:"Many parents say they have lost the fight over screen time at home." },
+
+  { side:"B", frame:"connect",  said:"Social media keeps families and friends connected across the world.",
+    ev:"Many students talk to grandparents overseas only through these apps." },
+  { side:"B", frame:"learning", said:"Young people learn from social media — news, tutorials, languages.",
+    ev:"Study channels and language videos are how many students practise English." },
+  { side:"B", frame:"works",    said:"A ban will not work, because young people will lie about their age.",
+    ev:"Age checks are easy to get around, so the ban only punishes honest users." },
+  { side:"B", frame:"whose",    said:"It is a parent's job to decide, not the government's.",
+    ev:"Every family is different, so one rule for everyone is wrong." },
+  { side:"B", frame:"freedom",  said:"Young people have a right to speak and to be heard.",
+    ev:"Social media is where young people organise, campaign and share their views." },
+  { side:"B", frame:"money",    said:"Young creators and small businesses would lose their income.",
+    ev:"Some teenagers earn money and build skills through their online channels." }
+];
+
+/* The worked model: one reframe, with its four moves named. The frame the
+   opponent chose, and the frame the rebuttal moves to. */
+const MODEL = {
+  theirFrame:"health", theirSaid:"Social media disrupts sleep, so it is bad for young people's health.",
+  weakReply:"But you can find ocean sounds and sleep hypnosis on social media, so it helps you sleep.",
+  weakWhy:"This stays inside the health frame — it accepts that health is the question, and now the debate is about who has better sleep facts.",
+  newFrame:"freedom",
+  moves:[
+    { tag:"1 · Concede — narrowly",
+      say:"Sure. Late-night scrolling can cost you sleep. So can ice cream, a movie on Friday night, a party on Saturday.",
+      why:"Give up the small point. It costs nothing and it makes you sound fair. Notice the list: it starts moving sleep into a bigger group." },
+    { tag:"2 · Widen — take their frame to its limit",
+      say:"So should we all be forced to live like monks in the name of health? Salad only, two hours of cardio a day, lights out at nine?",
+      why:"Push their question as far as it goes, so the audience can see that health alone cannot decide this." },
+    { tag:"3 · Move — name the real question",
+      say:"This debate is not about sleep. It is about <mark>who gets to decide how young people live</mark>.",
+      why:"Say the new frame out loud, in one sentence. That is the moment the border is redrawn." },
+    { tag:"4 · Land — argue inside your frame",
+      say:"A ban throws away a freedom to fix a bedtime. That is a bad trade, and it is not the government's trade to make.",
+      why:"Now your evidence and your emphasis all belong to the new frame. Their sleep statistics answer a question nobody is asking any more." }
+  ]
+};
+
+/* Phrase banks. Inside-the-frame starters come from the Persuasive
+   Language page; these are the ones for stepping OUTSIDE, and for attacking
+   the argument (never the person) with some force. */
+const BANKS = [
+  { cls:"", title:"Step outside the frame", items:[
+    ["Even if that were true,", "the real question is…"],
+    ["Sure, ___ — so is ___, so is ___.", "Should we ban those too?"],
+    ["This debate is not about ___.", "It is about ___."],
+    ["The other side has answered the wrong question.", "The question is not ___, it is ___."],
+    ["Let's take that argument seriously for a moment.", "If health decides everything, then…"]
+  ]},
+  { cls:"reb", title:"Attack the argument, hard", items:[
+    ["The other side wants you to believe that…", "and it is simply not true."],
+    ["Notice what they did not say:", "…"],
+    ["That argument collapses the moment you ask", "…"],
+    ["Conveniently, they ignored", "…"],
+    ["Their whole case rests on one example.", "Take it away and nothing is left."],
+    ["They gave you a feeling.", "We are giving you a reason."]
+  ]},
+  { cls:"", title:"Say it with force", items:[
+    ["Slow down on the sentence that matters.", "Pause before it. Pause after it."],
+    ["Name the speaker and the exact words.", "“The first speaker said ___.”"],
+    ["Look at the audience for the question,", "not at your palm card."],
+    ["Short sentence after a long one.", "“That is a bad trade.”"],
+    ["Attack the argument, never the person.", "“That argument is weak”, not “you are wrong”."]
+  ]}
+];
+/* ═══════════════════ END OF DATA BLOCK — code below ═══════════════════ */
+
+const LS = "elc_debate_reframe_v1";
+const $ = id => document.getElementById(id);
+const frameById = id => FRAMES.find(f => f.id === id) || FRAMES[0];
+const varsFor = f => `--fc:var(--f-${f.id});--fs:var(--f-${f.id}-s)`;
+
+let state = { side:"A", custom:[], work:{} };   // work[key] = { inside, outside, frame }
+function load() { try { const s = JSON.parse(localStorage.getItem(LS) || "null"); if (s && typeof s === "object") state = Object.assign(state, s); } catch (e) {} }
+function save() { try { localStorage.setItem(LS, JSON.stringify(state)); } catch (e) {} }
+
+function chip(f, opts = {}) {
+  const el = document.createElement(opts.button ? "button" : "span");
+  if (opts.button) el.type = "button";
+  el.className = "fchip" + (opts.sel ? " sel" : "");
+  el.style.cssText = varsFor(f);
+  el.textContent = f.name;
+  if (opts.q) { const s = document.createElement("small"); s.textContent = " — " + f.q; el.append(s); }
+  return el;
+}
+
+function renderLegend() {
+  const host = $("legend"); host.replaceChildren();
+  FRAMES.forEach(f => host.append(chip(f, { q:true })));
+}
+
+function renderModel() {
+  const host = $("model"); host.replaceChildren();
+  const tf = frameById(MODEL.theirFrame), nf = frameById(MODEL.newFrame);
+  const h = document.createElement("h2"); h.textContent = "One reframe, move by move"; h.style.marginTop = "0";
+  const their = document.createElement("div"); their.className = "their"; their.style.cssText = varsFor(tf);
+  their.innerHTML = `<b>${tf.name} frame</b> — they said: “${MODEL.theirSaid}”<br>` +
+    `<span style="color:var(--muted)">Inside-the-frame reply: “${MODEL.weakReply}” — ${MODEL.weakWhy}</span>`;
+  const moves = document.createElement("div"); moves.className = "moves"; moves.style.cssText = varsFor(nf);
+  MODEL.moves.forEach(m => {
+    const d = document.createElement("div"); d.className = "move";
+    d.innerHTML = `<span class="tag">${m.tag}</span><div class="say">“${m.say}”</div><div class="why">${m.why}</div>`;
+    moves.append(d);
+  });
+  host.append(h, their, moves);
+}
+
+function allArgs() {
+  return ARGUMENTS.map((a, i) => ({ ...a, key:"d" + i }))
+    .concat(state.custom.map((a, i) => ({ ...a, key:"c" + i, custom:true, ci:i })));
+}
+
+function renderGrid() {
+  const host = $("grid"); host.replaceChildren();
+  const rebutting = state.side;                      // the side whose arguments are on the table
+  $("pickA").setAttribute("aria-pressed", rebutting === "A");
+  $("pickB").setAttribute("aria-pressed", rebutting === "B");
+  allArgs().filter(a => a.side === rebutting).forEach(a => host.append(argCard(a)));
+}
+
+function argCard(a) {
+  const f = frameById(a.frame);
+  const w = state.work[a.key] || (state.work[a.key] = { inside:"", outside:"", frame:"" });
+  const card = document.createElement("article"); card.className = "arg"; card.style.cssText = varsFor(f);
+
+  const head = document.createElement("div"); head.className = "head";
+  const side = document.createElement("span"); side.className = "side " + a.side;
+  side.textContent = a.side === "A" ? "Affirmative said" : "Negative said";
+  const fn = document.createElement("span"); fn.className = "frameName"; fn.textContent = f.name + " frame";
+  head.append(side, fn);
+
+  const said = document.createElement("p"); said.className = "said"; said.textContent = "“" + a.said + "”";
+  if (a.ev) { const i = document.createElement("i"); i.textContent = a.ev; said.append(i); }
+  const q = document.createElement("p"); q.className = "q"; q.textContent = "Their question: " + f.q;
+
+  /* box 1 — inside their frame */
+  const inBox = document.createElement("div"); inBox.className = "box";
+  const inLab = document.createElement("label");
+  inLab.innerHTML = `<span class="rebchip">Rebuttal</span> Inside their frame — answer their question`;
+  const inTa = document.createElement("textarea"); inTa.value = w.inside; inTa.rows = 3;
+  inTa.setAttribute("aria-label", "Rebuttal inside the " + f.name + " frame");
+  inTa.addEventListener("input", () => { w.inside = inTa.value; save(); });
+  inBox.append(inLab, inTa);
+
+  /* box 2 — outside: pick a new frame, the border redraws in that colour */
+  const outBox = document.createElement("div"); outBox.className = "box out";
+  const outLab = document.createElement("label");
+  outLab.innerHTML = `<span class="rebchip">Rebuttal</span> Outside — concede, widen, move, land`;
+  const outTa = document.createElement("textarea"); outTa.value = w.outside; outTa.rows = 4;
+  outTa.setAttribute("aria-label", "Rebuttal outside the " + f.name + " frame");
+  outTa.addEventListener("input", () => { w.outside = outTa.value; save(); });
+  const pickLab = document.createElement("div"); pickLab.className = "newq";
+  const pick = document.createElement("div"); pick.className = "pick";
+  const paint = () => {
+    const nf = w.frame ? frameById(w.frame) : null;
+    outBox.classList.toggle("named", !!nf);
+    outBox.style.setProperty("--nfc", nf ? `var(--f-${nf.id})` : "var(--muted)");
+    pickLab.textContent = nf ? `New frame: ${nf.name} — ${nf.q}` : "";
+    [...pick.children].forEach(c => c.classList.toggle("sel", !!nf && c.dataset.id === nf.id));
+  };
+  FRAMES.forEach(nf => {
+    const c = chip(nf, { button:true }); c.dataset.id = nf.id;
+    c.setAttribute("aria-label", "Redraw the border as the " + nf.name + " frame");
+    /* choosing the same frame they used is allowed — the page judges nothing,
+       the pair check does. It just stays their colour. */
+    c.addEventListener("click", () => { w.frame = w.frame === nf.id ? "" : nf.id; save(); paint(); });
+    pick.append(c);
+  });
+  outBox.append(outLab, outTa, pickLab, pick);
+  paint();
+
+  card.append(head, said, q, inBox, outBox);
+
+  if (a.custom) {
+    const del = document.createElement("button"); del.className = "del"; del.type = "button";
+    del.textContent = "×"; del.setAttribute("aria-label", "Remove this argument");
+    del.addEventListener("click", () => { state.custom.splice(a.ci, 1); delete state.work[a.key]; save(); renderGrid(); });
+    card.append(del);
+  }
+  return card;
+}
+
+function renderBanks() {
+  const host = $("banks"); host.replaceChildren();
+  BANKS.forEach(b => {
+    const d = document.createElement("div"); d.className = "bank " + b.cls;
+    const h = document.createElement("h3"); h.textContent = b.title;
+    const ul = document.createElement("ul");
+    b.items.forEach(([lead, rest]) => { const li = document.createElement("li"); li.innerHTML = `<b>${lead}</b> ${rest}`; ul.append(li); });
+    d.append(h, ul); host.append(d);
+  });
+}
+
+function renderAddFrames() {
+  const sel = $("addFrame"); sel.replaceChildren();
+  FRAMES.forEach(f => { const o = document.createElement("option"); o.value = f.id; o.textContent = f.name + " — " + f.q; sel.append(o); });
+}
+
+$("pickA").addEventListener("click", () => { state.side = "A"; save(); renderGrid(); });
+$("pickB").addEventListener("click", () => { state.side = "B"; save(); renderGrid(); });
+$("printBtn").addEventListener("click", () => window.print());
+$("clearBtn").addEventListener("click", () => {
+  if (!confirm("Clear every rebuttal and every added argument on this device?")) return;
+  state = { side:state.side, custom:[], work:{} }; save(); renderGrid();
+});
+$("addBtn").addEventListener("click", () => {
+  const said = $("addText").value.trim();
+  if (!said) { $("addText").focus(); return; }
+  state.custom.push({ side:state.side, frame:$("addFrame").value, said });
+  $("addText").value = ""; save(); renderGrid();
+  const cards = $("grid").children; if (cards.length) cards[cards.length - 1].scrollIntoView({ block:"nearest" });
+});
+
+load();
+renderLegend(); renderModel(); renderAddFrames(); renderBanks(); renderGrid();
+$("topicLine").textContent = TOPIC;
+
+try {
+  const K = "elc_visited";
+  let v = JSON.parse(localStorage.getItem(K) || "[]");
+  if (!Array.isArray(v)) v = [];
+  v = v.filter(i => i.title !== "Reframe the Argument");
+  v.push({ title:"Reframe the Argument", cat:"ELC tools", ts:Date.now() });
+  localStorage.setItem(K, JSON.stringify(v));
+} catch (e) {}
+</script>
+<script src="report-button.js?v=v1" defer></script>
+</body>
+</html>
