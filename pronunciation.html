@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no" class="notranslate">
 <head>
+<meta name="google" content="notranslate">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pronunciation Hub — ELC Hub</title>
@@ -20,7 +21,8 @@
     .then(r => { if(!r.ok) throw new Error(`HTTP ${r.status}`); return r.text(); })
     .then(html => {
       const enhancer = `<script src="pronunciation-enhancer.js?v=${build}"><\/script>`;
-      html = /<\/body>/i.test(html) ? html.replace(/<\/body>/i, enhancer + "</body>") : html + enhancer;
+      html = /<\/body>/i.test(html) ? html.replace(/<\/body>/i, enhancer + "<script src="word-tap.js?v=v1" defer></script>
+</body>") : html + enhancer;
       document.open();
       document.write(html);
       document.close();

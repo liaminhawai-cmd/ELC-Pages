@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no" class="notranslate">
 <head>
+<meta name="google" content="notranslate">
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="A gradual-release limerick lesson: model, shared choices, guided builder, rhyme workshop and independent writing.">
 <title>Limerick Builder — ELC Hub</title>
@@ -45,4 +46,5 @@ function updatePreview(){const ls=[...document.querySelectorAll('[data-final]')]
 finalCheck.onclick=()=>{const ls=[...document.querySelectorAll('[data-final]')].map(x=>x.value.trim()),ws=ls.map(end);let notes=[];if(ls.some(x=>!x))notes.push('Finish all five lines.');if(!(rhyme(ws[0],ws[1])&&rhyme(ws[0],ws[4])))notes.push('Lines 1, 2 and 5 need the same A rhyme.');if(!rhyme(ws[2],ws[3]))notes.push('Lines 3 and 4 need the same B rhyme.');const short=ls[2].split(/\s+/).length<ls[0].split(/\s+/).length&&ls[3].split(/\s+/).length<ls[1].split(/\s+/).length;if(!short)notes.push('Try making lines 3 and 4 shorter than the A lines.');fb(finalFeedback,notes.length?notes.join(' '):'AABBA works. Now read it aloud and improve the rhythm or punchline.',!notes.length)};
 drawFinal();try{const saved=JSON.parse(localStorage.getItem('elc_limerick_final')||'[]');saved.forEach((v,i)=>{const x=document.querySelector(`[data-final="${i}"]`);if(x)x.value=v});updatePreview()}catch(e){}
 </script>
+<script src="word-tap.js?v=v1" defer></script>
 </body></html>
