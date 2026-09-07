@@ -96,6 +96,26 @@
   .btn:hover { border-color:var(--accent); }
   .btn.danger:hover { border-color:var(--reb); color:var(--reb); }
   .spacer { flex:1; }
+  .btn[aria-pressed=true] { border-color:var(--accent); background:color-mix(in srgb,var(--accent) 12%,var(--card)); }
+  .pager { display:inline-flex; align-items:center; gap:6px; }
+  .pager[hidden] { display:none; }
+  #pagerOut { font-weight:900; min-width:3.2em; text-align:center; }
+  /* ── projector mode: one argument, larger type, nothing else moves ── */
+  body.focus .grid { grid-template-columns:1fr; max-width:980px; margin-left:auto; margin-right:auto; }
+  body.focus .arg:not(.cur) { display:none; }
+  body.focus .arg { padding:14px 18px 16px; gap:12px; }
+  body.focus .inner { padding:14px 16px; gap:10px; }
+  body.focus .said { font-size:1.35rem; line-height:1.7; }
+  body.focus .said b { font-size:1.5rem; margin-bottom:6px; }
+  body.focus .dtag { font-size:.8rem; padding:1px 8px; }
+  body.focus .q { font-size:1.1rem; }
+  body.focus .side, body.focus .frameName { font-size:.85rem; }
+  body.focus .outerLab { font-size:.95rem; } body.focus .outerLab .newq { font-size:1.05rem; }
+  body.focus .pick .fchip { font-size:.9rem; padding:4px 12px; }
+  body.focus .box label { font-size:.9rem; } body.focus .rebchip { font-size:.8rem; }
+  body.focus .box textarea { font-size:1.2rem; min-height:110px; } body.focus .box.out textarea { min-height:150px; }
+  body.focus .movesLine { font-size:.95rem; }
+  body.focus .used, body.focus .used label { font-size:.9rem; } body.focus .used input { width:17px; height:17px; }
 
   /* ── the argument: a box inside a box ─────────────────────────────
      .arg   = the OUTER box. Dashed and grey until a new frame is chosen,
@@ -178,6 +198,9 @@
   .vw .tr { display:block; font-weight:800; color:var(--f-freedom); font-size:.8rem; }
   .vw .tr:empty { display:none; }
   .vw .m { line-height:1.4; }
+  .vw.hit { background:var(--f-freedom-s); outline:2px solid var(--f-freedom); outline-offset:2px; border-radius:6px; }
+  a.gl { color:inherit; text-decoration:none; border-bottom:2px dotted var(--accent); cursor:pointer; }
+  a.gl:hover { background:var(--f-freedom-s); }
   .vocabBar .tick { display:inline-flex; align-items:center; gap:5px; font-size:.8rem; font-weight:700; color:var(--ink); text-transform:none; letter-spacing:0; cursor:pointer; margin-left:6px; }
   .vocabBar .tick input { accent-color:var(--accent); width:15px; height:15px; margin:0; }
   .pt { font-size:.66rem; font-weight:800; padding:1px 6px; border-radius:6px; border:1px solid; }
@@ -201,6 +224,8 @@
     @page { size:A4 portrait; margin:9mm 10mm; }
     html, body { background:#fff; color:#000; }
     .controls, .privacy, .xlink, .back, .sub.hint, .add, .del, .pick, #elcReportBtn, .movesLine, textarea, .used input, .vocab { display:none !important; }
+    body.focus .arg:not(.cur) { display:flex !important; }
+    a.gl { border-bottom:0; }
     .shell { padding:0; max-width:none; display:flex; flex-direction:column; }
     /* page 1, in this order */
     .top { order:1; } h1 { order:1; } .sub { order:1; } .legend { order:2; } .model { order:3; } .banks { order:4; } .grid { order:5; }
@@ -262,6 +287,12 @@
       <button type="button" class="isB" id="pickB" aria-pressed="false">Rebut the Negative</button>
     </span>
     <span class="spacer"></span>
+    <button type="button" class="btn" id="focusBtn" aria-pressed="false">🖥 One at a time</button>
+    <span class="pager" id="pager" hidden>
+      <button type="button" class="btn" id="prevArg" aria-label="Previous argument">◀</button>
+      <span id="pagerOut"></span>
+      <button type="button" class="btn" id="nextArg" aria-label="Next argument">▶</button>
+    </span>
     <button type="button" class="btn" id="printBtn">🖨 Print — one argument per page</button>
     <button type="button" class="btn danger" id="clearBtn">Start again</button>
   </div>
@@ -287,7 +318,7 @@
     <div class="vocabBar">
       <label for="vocabLang">Translate</label>
       <select id="vocabLang"><option value="">English only</option></select>
-      <label class="tick"><input type="checkbox" id="vocabParts"> Show word parts</label>
+      <label class="tick"><input type="checkbox" id="vocabParts" checked> Show word parts</label>
       <span class="plegend" id="plegend" hidden></span>
     </div>
     <div id="vocabSets"></div>
@@ -454,21 +485,62 @@ function chip(f, opts = {}) {
 }
 
 /* "[[stat: phrase]]" → underlined phrase + a device tag. Unknown ids print as plain text. */
+/* Every glossary word, with an id for its entry and a pattern that also
+   catches its common forms (isolate → isolates, admit → admitted). */
+const GLOSS = [];
+VOCAB_SETS.forEach((set, si) => set.words.forEach((w, wi) => {
+  const id = "g-" + si + "-" + wi;
+  const esc = w.w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&").replace(/\s+/g, "\\s+");
+  let stem = esc.replace(/e$/, "");
+  const last = w.w.slice(-1);
+  if (/[bdgmnprt]/.test(last)) stem += "(?:" + last + ")?";   // admit → admitted, step → stepping
+  GLOSS.push({ id, w, re: new RegExp("\\b(" + stem + "(?:e|es|s|ed|d|ing)?)\\b", "i") });
+}));
+GLOSS.sort((a, b) => b.w.w.length - a.w.w.length);   // longest first: "blanket ban" before "ban"
+
+/* plain text → text with each glossary word wrapped in a link to its entry */
+function linkNodes(text) {
+  const frag = document.createDocumentFragment();
+  let rest = text;
+  while (rest.length) {
+    let best = null;
+    for (const g of GLOSS) {
+      const m = g.re.exec(rest);
+      if (m && (!best || m.index < best.m.index)) best = { g, m };
+    }
+    if (!best) { frag.append(document.createTextNode(rest)); break; }
+    if (best.m.index > 0) frag.append(document.createTextNode(rest.slice(0, best.m.index)));
+    const a = document.createElement("a"); a.className = "gl"; a.href = "#" + best.g.id;
+    a.textContent = best.m[1]; a.title = best.g.w.m;
+    a.addEventListener("click", e => { e.preventDefault(); showGloss(best.g.id); });
+    frag.append(a);
+    rest = rest.slice(best.m.index + best.m[1].length);
+  }
+  return frag;
+}
+function showGloss(id) {
+  $("vocab").open = true;
+  const el = document.getElementById(id); if (!el) return;
+  document.querySelectorAll(".vw.hit").forEach(x => x.classList.remove("hit"));
+  el.classList.add("hit");
+  el.scrollIntoView({ block:"center", behavior:"smooth" });
+}
+
 function saidNodes(text) {
   const frag = document.createDocumentFragment();
   const re = /\[\[(\w+):\s*([^\]]+)\]\]/g;
   let last = 0, m;
   while ((m = re.exec(text))) {
-    if (m.index > last) frag.append(document.createTextNode(text.slice(last, m.index)));
+    if (m.index > last) frag.append(linkNodes(text.slice(last, m.index)));
     const d = devById(m[1]);
     if (d) {
-      const s = document.createElement("span"); s.className = "dev"; s.textContent = m[2];
+      const s = document.createElement("span"); s.className = "dev"; s.append(linkNodes(m[2]));
       const t = document.createElement("span"); t.className = "dtag"; t.textContent = d.name;
       frag.append(s, t);
-    } else frag.append(document.createTextNode(m[2]));
+    } else frag.append(linkNodes(m[2]));
     last = re.lastIndex;
   }
-  if (last < text.length) frag.append(document.createTextNode(text.slice(last)));
+  if (last < text.length) frag.append(linkNodes(text.slice(last)));
   return frag;
 }
 
@@ -508,7 +580,31 @@ function renderGrid() {
   $("pickB").setAttribute("aria-pressed", rebutting === "B");
   let n = 0;
   allArgs().filter(a => a.side === rebutting).forEach(a => host.append(argCard(a, ++n)));
+  paintFocus();
 }
+
+/* ── one at a time ── */
+let focusOn = false, focusIdx = 0;
+function paintFocus() {
+  const cards = [...$("grid").children];
+  document.body.classList.toggle("focus", focusOn);
+  $("focusBtn").setAttribute("aria-pressed", focusOn);
+  $("pager").hidden = !focusOn;
+  if (!cards.length) return;
+  focusIdx = Math.max(0, Math.min(focusIdx, cards.length - 1));
+  cards.forEach((c, i) => c.classList.toggle("cur", i === focusIdx));
+  $("pagerOut").textContent = (focusIdx + 1) + " / " + cards.length;
+  $("prevArg").disabled = focusIdx === 0; $("nextArg").disabled = focusIdx >= cards.length - 1;
+}
+function stepFocus(d) { focusIdx += d; paintFocus(); $("grid").scrollIntoView({ block:"start", behavior:"smooth" }); }
+$("focusBtn").addEventListener("click", () => { focusOn = !focusOn; try { localStorage.setItem("elc_debate_reframe_focus", focusOn ? "1" : "0"); } catch (e) {} paintFocus(); });
+$("prevArg").addEventListener("click", () => stepFocus(-1));
+$("nextArg").addEventListener("click", () => stepFocus(1));
+document.addEventListener("keydown", e => {
+  if (!focusOn || /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+  if (e.key === "ArrowRight") stepFocus(1); else if (e.key === "ArrowLeft") stepFocus(-1);
+});
+try { focusOn = localStorage.getItem("elc_debate_reframe_focus") === "1"; } catch (e) {}
 
 /* the tick row under each rebuttal: which devices went in */
 function usedRow(w, field) {
@@ -563,7 +659,7 @@ function argCard(a, n) {
   const fn = document.createElement("span"); fn.className = "frameName"; fn.textContent = f.name + " frame";
   head.append(side, fn);
   const said = document.createElement("p"); said.className = "said";
-  if (a.claim) { const b = document.createElement("b"); b.textContent = a.claim; said.append(b); }
+  if (a.claim) { const b = document.createElement("b"); b.append(linkNodes(a.claim)); said.append(b); }
   said.append(saidNodes(a.said || ""));
   const q = document.createElement("p"); q.className = "q"; q.textContent = "Their question: " + f.q;
 
@@ -629,7 +725,7 @@ function renderVocab() {
     try { sel.value = localStorage.getItem(VOCAB_LS) || ""; } catch (e) {}
     sel.addEventListener("change", () => { try { localStorage.setItem(VOCAB_LS, sel.value); } catch (e) {} renderVocab(); });
     const tick = $("vocabParts");
-    try { tick.checked = localStorage.getItem(VOCAB_PARTS_LS) === "1"; } catch (e) {}
+    try { tick.checked = localStorage.getItem(VOCAB_PARTS_LS) !== "0"; } catch (e) { tick.checked = true; }
     tick.addEventListener("change", () => { try { localStorage.setItem(VOCAB_PARTS_LS, tick.checked ? "1" : "0"); } catch (e) {} renderVocab(); });
     [["prefix", "Prefix"], ["root", "Root"], ["suffix", "Suffix"]].forEach(([c, n]) => { const e = document.createElement("span"); e.className = "pt " + c; e.textContent = n; $("plegend").append(e); });
   }
@@ -641,7 +737,7 @@ function renderVocab() {
     const h = document.createElement("h3"); h.textContent = set.name;
     const g = document.createElement("div"); g.className = "vgrid";
     set.words.forEach(w => {
-      const c = document.createElement("div"); c.className = "vw";
+      const c = document.createElement("div"); c.className = "vw"; c.id = GLOSS.find(g => g.w === w).id;
       const word = document.createElement("div"); word.className = "word"; word.textContent = w.w;
       const tr = document.createElement("span"); tr.className = "tr"; tr.textContent = lang ? (w.tr[lang] || "") : "";
       word.append(tr);
@@ -680,7 +776,7 @@ $("addBtn").addEventListener("click", () => {
 
 load();
 $("topicLine").textContent = TOPIC;
-renderLegend(); renderModel(); renderAddFrames(); renderBanks(); renderGrid(); renderVocab();
+renderLegend(); renderModel(); renderAddFrames(); renderBanks(); renderVocab(); renderGrid();
 
 try {
   const K = "elc_visited";
