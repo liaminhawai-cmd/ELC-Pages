@@ -83,7 +83,10 @@
      matches the answer. It stays strict where strictness is real: a trailing
      unit may not contain a digit, so "5 or 6" and "5 6" are still refused. */
   function unitLike(rest) {
-    return rest === "" || (!/\d/.test(rest) && /^[a-zA-Z°%µΩ\u00b2\u00b3\/\s.,()·⋅^-]*$/.test(rest));
+    if (rest === "") return true;
+    if (!/^[a-zA-Z0-9°%µΩ\u00b2\u00b3\/\s.,()·⋅^-]*$/.test(rest)) return false;
+    /* every digit must be an exponent — glued to a letter, a caret or a minus */
+    return !/(^|[\s(,])[-+]?\d/.test(rest);
   }
   function readDigits(t) {
     t = t.replace(/\s/g, "");
@@ -129,11 +132,86 @@
     if (!m || !unitLike(m[2])) return [];
     return readDigits(m[1]);
   }
-  /* the number field's verdict: right if ANY defensible reading is right */
-  function nearAny(str, answer, tol) {
+  /* whatever the student wrote after the number — the unit, if they wrote one */
+  function tailOf(str) {
+    if (str == null) return "";
+    var s = String(str).replace(/[\u2212\u2013\u2014]/g, "-").replace(/\u00a0/g, " ")
+      .replace(/[≈~]/g, "").replace(/^\s*=\s*/, "").trim();
+    var f = s.match(/^([+-]?[\d.,\s]*\d)\s*\/\s*([+-]?[\d.,\s]*\d)\s*([\s\S]*)$/);
+    if (f && unitLike(f[3])) return f[3].trim();
+    var m = s.match(/^([+-]?[\d.,\s]*\d)\s*([\s\S]*)$/);
+    return m ? m[2].trim() : "";
+  }
+  /* ---------------- units ----------------
+     The unit has to be RIGHT — m/s is not km/h and a student who writes the
+     wrong one has not answered the question. How they SPELL it is not the
+     physics: km/h, km/hr, kmph, kph, kmh and "km per hour" are one unit
+     written six ways, and an EAL class will produce all six. So each unit
+     lists its spellings and any of them counts.
+     Writing no unit at all is fine — the field label already states it. */
+  var UNIT_SPELLINGS = {
+    "km/h":   ["km/h","kmh","kmph","kph","km/hr","km/hour","km per hour","km per hr",
+               "kilometre per hour","kilometres per hour","kilometer per hour",
+               "kilometers per hour","kilometres/hour","kmh-1","kmh^-1","kph."],
+    "m/s":    ["m/s","ms","mps","m/sec","m/second","m per second","metre per second",
+               "metres per second","meter per second","meters per second","ms-1","ms^-1"],
+    "m/s2":   ["m/s2","ms2","m/s/s","m/s^2","ms-2","ms^-2","m/sec2","m per second squared",
+               "metre per second squared","metres per second squared",
+               "metres per second per second","m/s squared","m/ss"],
+    "km/min": ["km/min","kmmin","km/minute","km per min","km per minute",
+               "kilometre per minute","kilometres per minute"],
+    "km":     ["km","kms","kilometre","kilometres","kilometer","kilometers"],
+    "m":      ["m","metre","metres","meter","meters"],
+    "cm":     ["cm","cms","centimetre","centimetres","centimeter","centimeters"],
+    "s":      ["s","sec","secs","second","seconds"],
+    "kj":     ["kj","kilojoule","kilojoules"],
+    "c":      ["°c","c","degc","degreec","degreesc","degreecelsius","degreescelsius","celsius"],
+    "%":      ["%","percent","pc","percentage","percentages"]
+  };
+  var SPELLING_OF = {};   /* built by putting the table through normUnit too */
+  /* one spelling of a unit, flattened: no spaces, no dots, "per" as a slash,
+     superscripts as digits, so kmph / km per hour / KM/H all land together */
+  function normUnit(t) {
+    return String(t == null ? "" : t).toLowerCase()
+      .replace(/\u00b2/g, "2").replace(/\u00b3/g, "3")
+      .replace(/[\u00ba\u02da\u2070]/g, "\u00b0")
+      .replace(/percentages?|percent/g, "%")   /* before "per" becomes a slash */
+      .replace(/squared/g, "2")
+      .replace(/[\s.,()\-^]/g, "")
+      .replace(/per/g, "/");   /* "km per hour" and "kmperhour" alike */
+  }
+  Object.keys(UNIT_SPELLINGS).forEach(function (u) {
+    UNIT_SPELLINGS[u].forEach(function (sp) { SPELLING_OF[normUnit(sp)] = u; });
+  });
+  function unitKey(t) {
+    var n = normUnit(t);
+    if (!n) return "";
+    return SPELLING_OF[n] || SPELLING_OF[n + "s"] || null;   /* null = not a unit we know */
+  }
+  /* which unit does this field want? "(km/h)", "= ? m/s", ", in metres =" */
+  function unitOfLabel(label) {
+    var L = String(label == null ? "" : label);
+    var m = L.match(/\(([^)]{1,24})\)/);
+    if (m && unitKey(m[1])) return unitKey(m[1]);
+    m = L.match(/\?\s*([^\s=?]{1,10})\s*$/);
+    if (m && unitKey(m[1])) return unitKey(m[1]);
+    m = L.match(/\bin\s+([a-z\u00b0²³/]{1,14})\s*=?\s*$/i);
+    if (m && unitKey(m[1])) return unitKey(m[1]);
+    return "";
+  }
+
+  /* the number field's verdict: right if ANY defensible reading is right, and
+     — when the field declares a unit — the student either wrote no unit or
+     wrote that same unit in any of its spellings. */
+  function nearAny(str, answer, tol, expect) {
     var c = numsIn(str);
-    for (var i = 0; i < c.length; i++) if (near(c[i], answer, tol)) return true;
-    return false;
+    var hit = false;
+    for (var i = 0; i < c.length; i++) if (near(c[i], answer, tol)) { hit = true; break; }
+    if (!hit) return false;
+    if (!expect) return true;
+    var typed = normUnit(tailOf(str));
+    if (!typed) return true;                  /* no unit written: the label states it */
+    return unitKey(typed) === expect;
   }
   function anyNum(str) { return numsIn(str).length > 0; }
 
@@ -407,8 +485,9 @@
   }
 
   function numInput(k, label, answer, tol) {
+    var expect = unitOfLabel(label);
     return { k: k, label: label, answer: fmt(answer),
-             check: function (v) { return nearAny(v, answer, tol === undefined ? 0.02 : tol); } };
+             check: function (v) { return nearAny(v, answer, tol === undefined ? 0.02 : tol, expect); } };
   }
 
   /* ---------------- registry ---------------- */
@@ -452,7 +531,8 @@
 
   window.QBANK = { register: register, gen: gen, teach: teach, hint: hint, list: list, audit: audit,
                    util: { fmt: fmt, eqStr: eqStr, near: near, num: num, numsIn: numsIn,
-                           nearAny: nearAny, anyNum: anyNum, parseEq: parseEq,
+                           nearAny: nearAny, anyNum: anyNum, unitKey: unitKey,
+                           unitOfLabel: unitOfLabel, tailOf: tailOf, parseEq: parseEq,
                            parseCoord: parseCoord, parseVertex: parseVertex, vertexStr: vertexStr,
                            grid: grid, lineSeg: lineSeg, dot: dot, motionChart: motionChart,
                            quadWindow: quadWindow, quadFits: quadFits, quadGrid: quadGrid, quadPath: quadPath, qdot: qdot,

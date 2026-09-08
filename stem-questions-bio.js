@@ -52,7 +52,7 @@
   /* percentage answer: accepts 42 or 42% */
   function pctInput(k, label, value) {
     return { k: k, label: label, place: "e.g. 25", answer: fmt(value),
-      check: function (val) { return nearAny(val, value, 0.05); } };
+      check: function (val) { return nearAny(val, value, 0.05, "%"); } };
   }
   /* show the reduction step only when the fraction actually reduces */
   function reduceLine(n, d) {
