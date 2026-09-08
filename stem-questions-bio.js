@@ -29,6 +29,7 @@
   var register = window.QBANK.register;
   var U = window.QBANK.util;
   var num = U.num, near = U.near, fmt = U.fmt, numInput = U.numInput;
+  var nearAny = U.nearAny;   /* the forgiving reader: units, comma decimals, ≈ */
 
   /* ---------------- small shared helpers ---------------- */
   function gcd(a, b) {
@@ -46,14 +47,12 @@
   function fracInput(k, label, n, d) {
     var v = n / d;
     return { k: k, label: label, place: "e.g. 3/4", answer: fracStr(n, d),
-      check: function (val) { return near(num(val), v, 0.005); } };
+      check: function (val) { return nearAny(val, v, 0.005); } };
   }
   /* percentage answer: accepts 42 or 42% */
   function pctInput(k, label, value) {
     return { k: k, label: label, place: "e.g. 25", answer: fmt(value),
-      check: function (val) {
-        return near(num(String(val == null ? "" : val).replace(/%/g, "")), value, 0.05);
-      } };
+      check: function (val) { return nearAny(val, value, 0.05); } };
   }
   /* show the reduction step only when the fraction actually reduces */
   function reduceLine(n, d) {

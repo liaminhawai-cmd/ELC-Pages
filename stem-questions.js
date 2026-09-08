@@ -65,6 +65,78 @@
     return s;
   }
   function near(a, b, tol) { return Math.abs(a - b) <= (tol === undefined ? 0.02 : tol); }
+
+  /* ---------------- reading what a student actually typed ----------------
+     num() below is the strict reader, used when this file parses a
+     STRUCTURE out of an answer (an equation, a coordinate, a vertex) — there
+     the punctuation carries meaning and must not be guessed at.
+
+     numsIn() is the reader for a plain NUMBER field, and it is deliberately
+     forgiving, because the ways a right answer gets typed wrong are not
+     mathematical:
+       "5 km/h"  a unit — we teach them to write one, so they write one
+       "9,05"    a comma decimal — the first language of most of this cohort
+       ".5" "5." a bare decimal point
+       "≈5" "=5" a leading sign copied off the board
+     It returns EVERY reading it can defend rather than picking one, so an
+     ambiguous "1,200" offers both 1200 and 1.2 and the caller keeps whichever
+     matches the answer. It stays strict where strictness is real: a trailing
+     unit may not contain a digit, so "5 or 6" and "5 6" are still refused. */
+  function unitLike(rest) {
+    return rest === "" || (!/\d/.test(rest) && /^[a-zA-Z°%µΩ\u00b2\u00b3\/\s.,()·⋅^-]*$/.test(rest));
+  }
+  function readDigits(t) {
+    t = t.replace(/\s/g, "");
+    var sign = 1;
+    if (t.charAt(0) === "-") { sign = -1; t = t.slice(1); }
+    else if (t.charAt(0) === "+") t = t.slice(1);
+    if (!/^[\d.,]*\d[\d.,]*$/.test(t)) return [];
+    var out = [];
+    function take(str) {
+      if (!/^\d*\.?\d*$/.test(str) || !/\d/.test(str)) return;
+      var v = sign * parseFloat(str);
+      if (isFinite(v) && out.indexOf(v) < 0) out.push(v);
+    }
+    var dot = t.indexOf("."), com = t.indexOf(",");
+    if (dot >= 0 && com >= 0) {
+      /* both present: the LAST one is the decimal point, the other groups digits */
+      if (t.lastIndexOf(",") > t.lastIndexOf(".")) take(t.replace(/\./g, "").replace(/,/g, "."));
+      else take(t.replace(/,/g, ""));
+    } else if (com >= 0) {
+      take(t.replace(/,/g, "."));   /* comma as a decimal point */
+      take(t.replace(/,/g, ""));    /* comma grouping thousands */
+    } else {
+      take(t);
+    }
+    return out;
+  }
+  function numsIn(str) {
+    if (str == null) return [];
+    var s = String(str).replace(/[\u2212\u2013\u2014]/g, "-").replace(/\u00a0/g, " ")
+      .replace(/[≈~]/g, "").replace(/^\s*=\s*/, "").trim();
+    if (!s) return [];
+    var f = s.match(/^([+-]?[\d.,\s]*\d)\s*\/\s*([+-]?[\d.,\s]*\d)\s*([\s\S]*)$/);
+    if (f && unitLike(f[3])) {
+      var out = [];
+      readDigits(f[1]).forEach(function (a) {
+        readDigits(f[2]).forEach(function (b) {
+          if (b !== 0 && out.indexOf(a / b) < 0) out.push(a / b);
+        });
+      });
+      if (out.length) return out;
+    }
+    var m = s.match(/^([+-]?[\d.,\s]*\d)\s*([\s\S]*)$/);
+    if (!m || !unitLike(m[2])) return [];
+    return readDigits(m[1]);
+  }
+  /* the number field's verdict: right if ANY defensible reading is right */
+  function nearAny(str, answer, tol) {
+    var c = numsIn(str);
+    for (var i = 0; i < c.length; i++) if (near(c[i], answer, tol)) return true;
+    return false;
+  }
+  function anyNum(str) { return numsIn(str).length > 0; }
+
   function num(str) {
     if (str == null) return NaN;
     str = String(str).replace(/−/g, "-").replace(/\s+/g, "")
@@ -336,7 +408,7 @@
 
   function numInput(k, label, answer, tol) {
     return { k: k, label: label, answer: fmt(answer),
-             check: function (v) { return near(num(v), answer, tol === undefined ? 0.02 : tol); } };
+             check: function (v) { return nearAny(v, answer, tol === undefined ? 0.02 : tol); } };
   }
 
   /* ---------------- registry ---------------- */
@@ -379,7 +451,8 @@
   }
 
   window.QBANK = { register: register, gen: gen, teach: teach, hint: hint, list: list, audit: audit,
-                   util: { fmt: fmt, eqStr: eqStr, near: near, num: num, parseEq: parseEq,
+                   util: { fmt: fmt, eqStr: eqStr, near: near, num: num, numsIn: numsIn,
+                           nearAny: nearAny, anyNum: anyNum, parseEq: parseEq,
                            parseCoord: parseCoord, parseVertex: parseVertex, vertexStr: vertexStr,
                            grid: grid, lineSeg: lineSeg, dot: dot, motionChart: motionChart,
                            quadWindow: quadWindow, quadFits: quadFits, quadGrid: quadGrid, quadPath: quadPath, qdot: qdot,
@@ -538,13 +611,17 @@
       return { qHTML: "The line passes through the two marked points. Find the gradient.",
         svg: grid(lineSeg(m, c) + dot(x1, y1) + dot(x2, y2)),
         inputs: [
-          { k: "rise", label: "rise =", answer: fmt(rise), check: function (v) { return !isNaN(num(v)); } },
-          { k: "run", label: "run =", answer: fmt(run), check: function (v) { return !isNaN(num(v)) && num(v) !== 0; } },
-          { k: "m", label: "m =", answer: fmt(m), check: function (v) { return near(num(v), m); } }
+          { k: "rise", label: "rise =", answer: fmt(rise), check: function (v) { return anyNum(v); } },
+          { k: "run", label: "run =", answer: fmt(run), check: function (v) { return anyNum(v) && numsIn(v).some(function(x){ return x !== 0; }); } },
+          { k: "m", label: "m =", answer: fmt(m), check: function (v) { return nearAny(v, m); } }
         ],
         crossCheck: function (vals) {  /* any consistent rise/run pair counts */
-          var r = num(vals.rise), rn = num(vals.run), mv = num(vals.m);
-          return !isNaN(r) && !isNaN(rn) && rn !== 0 && near(r / rn, m) && near(mv, m);
+          if (!nearAny(vals.m, m)) return false;
+          var rs = numsIn(vals.rise), rns = numsIn(vals.run);
+          for (var i = 0; i < rs.length; i++)
+            for (var j = 0; j < rns.length; j++)
+              if (rns[j] !== 0 && near(rs[i] / rns[j], m)) return true;
+          return false;
         },
         workedHTML: "From (" + x1 + ", " + fmt(y1) + ") to (" + x2 + ", " + fmt(y2) + "): rise = " + fmt(rise) + ", run = " + run + ". m = " + fmt(rise) + " ÷ " + run + " = <b>" + fmt(m) + "</b>." };
     }
@@ -564,7 +641,7 @@
       var y1 = m * x1 + c, y2 = m * x2 + c;
       var pf = function (n) { return n < 0 ? "(−" + fmt(Math.abs(n)) + ")" : fmt(n); };
       return { qHTML: "A line joins <b>(" + x1 + ", " + fmt(y1) + ")</b> and <b>(" + x2 + ", " + fmt(y2) + ")</b>. Find the gradient.",
-        inputs: [{ k: "m", label: "m =", answer: fmt(m), check: function (v) { return near(num(v), m); } }],
+        inputs: [{ k: "m", label: "m =", answer: fmt(m), check: function (v) { return nearAny(v, m); } }],
         workedHTML: "m = (" + fmt(y2) + " − " + pf(y1) + ") ÷ (" + x2 + " − " + pf(x1) + ") = " + fmt(y2 - y1) + " ÷ " + fmt(x2 - x1) + " = <b>" + fmt(m) + "</b>." };
     }
   });
@@ -607,8 +684,8 @@
       var pf = function (n) { return n < 0 ? "(−" + fmt(Math.abs(n)) + ")" : fmt(n); };
       return { qHTML: "A line joins <b>(" + x1 + ", " + fmt(y1) + ")</b> and <b>(" + x2 + ", " + fmt(y2) + ")</b>. Find its equation.",
         inputs: [
-          { k: "m", label: "m =", answer: fmt(m), check: function (v) { return near(num(v), m); } },
-          { k: "c", label: "c =", answer: fmt(c), check: function (v) { return near(num(v), c); } },
+          { k: "m", label: "m =", answer: fmt(m), check: function (v) { return nearAny(v, m); } },
+          { k: "c", label: "c =", answer: fmt(c), check: function (v) { return nearAny(v, c); } },
           { k: "eq", label: "equation:", place: "y = ...", answer: eqStr(m, c),
             check: function (v) { var p = parseEq(v); return !!p && near(p.m, m) && near(p.c, c); } }
         ],
@@ -781,7 +858,7 @@
       return { qHTML: "Write the equation of the <b>axis of symmetry</b> of this parabola.",
         svg: quadGrid(yLo, curve),
         inputs: [{ k: "ax", label: "axis of symmetry: x =", answer: fmt(h),
-          check: function (v) { return near(num(String(v).replace(/\s+/g, "").replace(/^x=/i, "")), h, 0.01); } }],
+          check: function (v) { return nearAny(String(v).replace(/^\s*x\s*=/i, ""), h, 0.01); } }],
         workedHTML: "The axis of symmetry runs vertically through the turning point (" + h + ", " + fmt(k) +
           "), so its equation is <b>x = " + fmt(h) + "</b>. It also sits halfway between the x-intercepts: (" +
           p + " + " + q + ") ÷ 2 = " + fmt(h) + "." };
@@ -1385,7 +1462,7 @@
       var negSlope = rng.raw() < 0.5;
       var r = (negSlope ? -1 : 1) * p[1];
       return { qHTML: "A trendline has <b>R² = " + p[0] + "</b> and its gradient is <b>" + (negSlope ? "negative" : "positive") + "</b>. What is r?",
-        inputs: [{ k: "r", label: "r =", answer: fmt(r), check: function (v) { return near(num(v), r, 0.01); } }],
+        inputs: [{ k: "r", label: "r =", answer: fmt(r), check: function (v) { return nearAny(v, r, 0.01); } }],
         workedHTML: "√" + p[0] + " = " + p[1] + ". The slope is " + (negSlope ? "negative, so r = <b>−" + p[1] + "</b>" : "positive, so r = <b>" + p[1] + "</b>") + "." };
     }
   });
