@@ -200,18 +200,44 @@
     return "";
   }
 
-  /* the number field's verdict: right if ANY defensible reading is right, and
-     — when the field declares a unit — the student either wrote no unit or
-     wrote that same unit in any of its spellings. */
-  function nearAny(str, answer, tol, expect) {
-    var c = numsIn(str);
-    var hit = false;
+  /* Which units to offer as buttons beside a field. The right one is in there,
+     but so are the units it is most often confused with — a single correct
+     button would make the unit free, and choosing it is the physics. */
+  var UNIT_CHOICES = {
+    "km/h":   ["km/h", "m/s", "km/min", "km", "s"],
+    "m/s":    ["m/s", "km/h", "m/s\u00b2", "m", "s"],
+    "m/s2":   ["m/s\u00b2", "m/s", "km/h", "m", "s"],
+    "km/min": ["km/min", "km/h", "m/s", "km", "min"],
+    "km":     ["km", "m", "cm", "km/h", "m/s"],
+    "m":      ["m", "cm", "km", "m/s", "s"],
+    "cm":     ["cm", "m", "mm", "km"],
+    "s":      ["s", "min", "m", "m/s"],
+    "kj":     ["kJ", "J", "\u00b0C", "kg"],
+    "c":      ["\u00b0C", "K", "kJ", "%"],
+    "%":      ["%", "\u00b0C", "kJ"]
+  };
+  function unitChoices(expect) { return UNIT_CHOICES[expect] || []; }
+
+  /* The verdict on a number field, with a REASON, so the page can say
+     "the number is right, check the unit" instead of a bare cross.
+       right   number and unit both good
+       nounit  number right, no unit written — the unit is part of the answer
+       unit    number right, wrong unit
+       wrong   the number is not right (nothing else is worth saying yet) */
+  function judge(str, answer, tol, expect) {
+    var c = numsIn(str), hit = false;
     for (var i = 0; i < c.length; i++) if (near(c[i], answer, tol)) { hit = true; break; }
-    if (!hit) return false;
-    if (!expect) return true;
+    if (!hit) return "wrong";
+    if (!expect) return "right";
     var typed = normUnit(tailOf(str));
-    if (!typed) return true;                  /* no unit written: the label states it */
-    return unitKey(typed) === expect;
+    if (!typed) return "nounit";
+    return unitKey(typed) === expect ? "right" : "unit";
+  }
+  /* A field that declares a unit is only right WITH it. Physics answers carry
+     units; a bare number is an incomplete answer, and the chem bank has
+     enforced this since the heating-water lesson. */
+  function nearAny(str, answer, tol, expect) {
+    return judge(str, answer, tol, expect) === "right";
   }
   function anyNum(str) { return numsIn(str).length > 0; }
 
@@ -485,9 +511,12 @@
   }
 
   function numInput(k, label, answer, tol) {
-    var expect = unitOfLabel(label);
-    return { k: k, label: label, answer: fmt(answer),
-             check: function (v) { return nearAny(v, answer, tol === undefined ? 0.02 : tol, expect); } };
+    var expect = unitOfLabel(label), t = (tol === undefined ? 0.02 : tol);
+    return { k: k, label: label, answer: fmt(answer) + (expect ? " " + unitChoices(expect)[0] : ""),
+             unit: expect, units: unitChoices(expect),
+             place: expect ? "number + unit" : undefined,
+             judge: function (v) { return judge(v, answer, t, expect); },
+             check: function (v) { return nearAny(v, answer, t, expect); } };
   }
 
   /* ---------------- registry ---------------- */
@@ -531,7 +560,8 @@
 
   window.QBANK = { register: register, gen: gen, teach: teach, hint: hint, list: list, audit: audit,
                    util: { fmt: fmt, eqStr: eqStr, near: near, num: num, numsIn: numsIn,
-                           nearAny: nearAny, anyNum: anyNum, unitKey: unitKey,
+                           nearAny: nearAny, anyNum: anyNum, unitKey: unitKey, judge: judge,
+                           unitChoices: unitChoices,
                            unitOfLabel: unitOfLabel, tailOf: tailOf, parseEq: parseEq,
                            parseCoord: parseCoord, parseVertex: parseVertex, vertexStr: vertexStr,
                            grid: grid, lineSeg: lineSeg, dot: dot, motionChart: motionChart,
