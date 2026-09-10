@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="en-AU" translate="no" class="notranslate">
+<head>
+<meta name="google" content="notranslate">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Julia Gillard's misogyny speech (2012) — the whole speech, the key words and phrases, and the persuasive techniques named where they happen. For EAL students.">
+<title>The Misogyny Speech — Reading &amp; Argument Hub</title>
+<style>
+/* ============================================================
+   ELC · The misogyny speech (Julia Gillard, 9 October 2012)
+   House style per ELC-Pages/AGENTS.md: CSS variables, light/dark
+   via prefers-color-scheme, mobile-first, one self-contained file,
+   no CDNs, no web fonts, no build step.
+
+   The accent is the green of the House of Representatives chamber.
+   Colour is metalanguage here, never decoration:
+     green  = the technique (how the speech is built)
+     ochre  = a key word (what it means)
+   ============================================================ */
+:root{
+  --bg:#f4f6f2; --paper:#fffefb; --ink:#1e231d; --muted:#5f6a5c; --faint:#828d80;
+  --line:#dde3d9; --line-soft:#eaefe6; --accent:#33663f; --accent-soft:#e8f0e7;
+  --on-accent:#ffffff;
+  --kw-bg:#fbf1d8; --kw-tx:#7a5405; --kw-line:#e6c97a;   /* key word   */
+  --dv-bg:#e4efe3; --dv-tx:#2d5c38; --dv-line:#9dc0a1;   /* technique  */
+  --quote:#f6f3ea; --warnbg:#fdf3e3; --warntx:#7d5211;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#13160f; --paper:#1c2018; --ink:#eef0e8; --muted:#a9b3a4; --faint:#8b9587;
+    --line:#333a2e; --line-soft:#262b21; --accent:#7fb98a; --accent-soft:#222b1f;
+    --on-accent:#11150f;
+    --kw-bg:#332b16; --kw-tx:#e8c87c; --kw-line:#6d5a24;
+    --dv-bg:#1f2e22; --dv-tx:#9fcfa8; --dv-line:#3f5f46;
+    --quote:#20241a; --warnbg:#2b2417; --warntx:#e6bd77;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+     line-height:1.55;display:flex;justify-content:center;padding:14px 10px 56px}
+.container{width:100%;max-width:960px;background:var(--paper);border:1px solid var(--line);
+           border-radius:14px;padding:20px 22px 26px}
+h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif}
+h1{font-size:26px;margin:0 0 4px;letter-spacing:-.2px}
+h2{font-size:20px;margin:26px 0 8px}
+h3{font-size:15.5px;margin:0 0 6px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 6px}
+.eyebrow{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--accent)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.topbar .where{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+a{color:var(--accent)}
+.btn{padding:9px 15px;border:1px solid var(--line);border-radius:9px;font-size:14px;font-weight:600;
+     cursor:pointer;background:var(--paper);color:var(--ink);font-family:inherit}
+.btn[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0 4px}
+.panel{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin:0 0 14px}
+.hr{height:1px;background:var(--line);margin:22px 0 16px;border:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 12px}
+
+/* ---- context box ---- */
+.who{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:13.5px;margin:8px 0 0}
+.who dt{font-weight:700;color:var(--accent)}
+.who dd{margin:0;color:var(--ink)}
+.steps{margin:8px 0 0;padding-left:20px;font-size:13.5px}
+.steps li{margin-bottom:4px}
+
+/* ---- the speech ---- */
+.movement{margin:0 0 6px;border-top:1px solid var(--line-soft);padding-top:16px}
+.movement:first-of-type{border-top:0}
+.mv-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:2px}
+.mv-num{font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.5px}
+.mv-title{font-family:Georgia,serif;font-size:18px;margin:0}
+.mv-gist{font-size:13px;color:var(--muted);margin:0 0 10px}
+.speech p{margin:0 0 11px;font-size:15.5px;line-height:1.72}
+.speech .stage{font-size:13px;color:var(--faint);font-style:italic;margin:0 0 11px}
+.speech .speaker{font-weight:700;font-size:12px;letter-spacing:.4px;text-transform:uppercase;
+                 color:var(--accent);display:block;margin:0 0 3px}
+
+/* key word + technique marks — inert until the toggles turn them on */
+.kw{border-bottom:1px dotted transparent;cursor:default}
+body.show-kw .kw{background:var(--kw-bg);border-bottom-color:var(--kw-line);cursor:pointer;
+                 border-radius:2px;padding:0 1px}
+body.show-kw .kw:hover{outline:2px solid var(--kw-line)}
+.dv{border-radius:2px;padding:0 1px}
+body.show-dv .dv{background:var(--dv-bg);box-shadow:inset 0 -2px 0 var(--dv-line)}
+.dvtag{display:none}
+body.show-dv .dvtag{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;
+                    letter-spacing:.4px;color:var(--dv-tx);background:var(--dv-bg);
+                    border:1px solid var(--dv-line);border-radius:4px;padding:0 4px;margin-left:5px;
+                    vertical-align:2px;white-space:nowrap}
+.note{display:none}
+body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background:var(--dv-bg);
+                   color:var(--dv-tx);padding:8px 12px;border-radius:0 8px 8px 0;margin:0 0 12px;font-size:13px}
+.note b{color:var(--dv-tx)}
+.note .rule{display:block;font-weight:700;margin-bottom:2px}
+
+/* ---- glossary popup ---- */
+#gpop{position:absolute;z-index:60;max-width:290px;background:var(--paper);border:1px solid var(--kw-line);
+      border-radius:9px;padding:9px 12px;font-size:13.5px;box-shadow:0 8px 24px rgba(0,0,0,.16);display:none}
+#gpop .w{font-weight:800;color:var(--kw-tx);display:block;margin-bottom:2px}
+#gpop .m{color:var(--ink)}
+
+/* ---- vocab hub ---- */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:9px;margin-top:10px}
+.vcard{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 12px}
+.vcard .w{font-weight:700;font-size:14.5px}
+.vcard .m{font-size:12.8px;color:var(--muted);margin-top:2px;line-height:1.45}
+.vset{margin-top:16px}
+.vset h3{color:var(--accent);font-size:14px;text-transform:uppercase;letter-spacing:.5px;
+         font-family:system-ui,sans-serif;margin-bottom:2px}
+.vset .why{font-size:13px;color:var(--muted);margin:0}
+
+/* ---- quoted lines ---- */
+.lines{display:grid;gap:9px;margin-top:10px}
+.line{background:var(--quote);border:1px solid var(--line);border-left:4px solid var(--accent);
+      border-radius:0 9px 9px 0;padding:10px 14px}
+.line q{font-family:Georgia,serif;font-size:15.5px;display:block;margin-bottom:4px}
+.line q:before,.line q:after{content:'"'}
+.line .why{font-size:13px;color:var(--muted)}
+
+/* ---- technique check ---- */
+.q{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin-bottom:10px}
+.q .stem{font-family:Georgia,serif;font-size:15px;margin:0 0 9px}
+.opts{display:flex;gap:7px;flex-wrap:wrap}
+.opt{padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);
+     cursor:pointer;font-size:13.5px;font-family:inherit;color:var(--ink)}
+.opt.right{background:var(--dv-bg);border-color:var(--dv-line);color:var(--dv-tx);font-weight:700}
+.opt.wrong{opacity:.5;text-decoration:line-through}
+.fb{font-size:13px;margin-top:8px;display:none;color:var(--muted)}
+.fb.on{display:block}
+
+/* ---- source note ---- */
+.source{font-size:12.2px;color:var(--faint);line-height:1.6;margin-top:8px}
+.source b{color:var(--muted)}
+@media (max-width:560px){
+  .container{padding:16px 14px 22px}
+  h1{font-size:22px}
+  .speech p{font-size:15px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="topbar">
+    <span class="where">ELC · Text study</span>
+    <a href="index.html">← Hub</a>
+  </div>
+
+  <span class="eyebrow">House of Representatives · 9 October 2012</span>
+  <h1>The misogyny speech</h1>
+  <p class="sub">Julia Gillard, Prime Minister of Australia, replying to a motion to remove the Speaker.</p>
+  <p class="lede">The whole speech is below. Turn on <b>Key words</b> to see the words worth learning, and
+     tap one to read its meaning. Turn on <b>Techniques</b> to see how the speech is built, named where it happens.</p>
+
+  <div class="btnrow">
+    <button class="btn" id="tKw" aria-pressed="false">Key words</button>
+    <button class="btn" id="tDv" aria-pressed="false">Techniques</button>
+    <a class="btn" href="https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/words" target="_blank" rel="noopener">Practise these words →</a>
+  </div>
+
+  <h2>Before you read</h2>
+  <div class="panel">
+    <p class="sub" style="margin:0">A motion is a proposal that the House votes on. The Leader of the
+       Opposition had moved a motion to remove the Speaker, Peter Slipper, because of sexist text messages
+       Slipper had sent. The Prime Minister rose to oppose that motion. She did not defend the text messages.
+       She argued that the man moving the motion had no standing to make it.</p>
+    <dl class="who">
+      <dt>Julia Gillard</dt><dd>Prime Minister, and Australia's first woman to hold that office.</dd>
+      <dt>The Leader of the Opposition</dt><dd>Tony Abbott, who leads the other side of the House. She never uses his name.</dd>
+      <dt>The Speaker</dt><dd>Peter Slipper, "the member for Fisher", who runs the House. The motion was about him.</dd>
+      <dt>The Deputy Speaker</dt><dd>Anna Burke, chairing the House while this speech was given.</dd>
+    </dl>
+    <p class="sub" style="margin:10px 0 0;padding:9px 12px;background:var(--warnbg);color:var(--warntx);border-radius:8px">
+       <b>A note on two words.</b> The speech quotes two insults that were written about the Prime Minister on
+       protest signs. They are quoted, not said by her, and they are the evidence her argument rests on.
+       They are in the record and they are left in.</p>
+    <ol class="steps">
+      <li>Read it once with both toggles off, for what she is saying.</li>
+      <li>Read it again with <b>Techniques</b> on, for how she says it.</li>
+      <li>Use the vocabulary hub at the end to check the words you did not know.</li>
+    </ol>
+  </div>
+
+  <h2>The speech</h2>
+  <p class="lede" id="speechIntro">Eight movements. Each one is doing a different job in the argument.</p>
+  <div id="speech" class="speech"></div>
+
+  <hr class="hr">
+  <h2>Vocabulary hub</h2>
+  <p class="lede">Every key word from the speech, in five sets. These are the same sets you can build and drill
+     in the Word Builder.</p>
+  <div id="vhub"></div>
+
+  <hr class="hr">
+  <h2>The lines people quote</h2>
+  <p class="lede">Why each one works — the technique is named, so you can use the same move in your own writing.</p>
+  <div class="lines" id="lines"></div>
+
+  <hr class="hr">
+  <h2>Name the technique</h2>
+  <p class="lede">Six real lines from the speech. Choose the technique each one uses. You can try again.</p>
+  <div id="quiz"></div>
+
+  <hr class="hr">
+  <p class="source" id="sourceNote"></p>
+</div>
+<div id="gpop" role="dialog" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — teachers can edit everything in this block.
+   Nothing below the marked END OF DATA line needs touching.
+   ------------------------------------------------------------
+   SPEECH   the speech itself, in movements, verbatim.
+   KEYWORDS word -> student meaning. Marked automatically wherever
+            the word appears in the speech, longest match first.
+   DEVICES  a phrase -> the technique it demonstrates, and the rule.
+            Marked where that phrase appears; the rule shows as a
+            note under the paragraph.
+   ============================================================ */
+
+var SPEECH = [
+ { n:"One", title:"The refusal",
+   gist:"She refuses the lecture before she answers it. Everything after this is evidence for this first sentence.",
+   paras:[
+   {sp:"Deputy Speaker", t:"The question is that the motion be agreed to. I call the Prime Minister."},
+   {sp:"Julia Gillard", t:"Thank you very much Deputy Speaker and I rise to oppose the motion moved by the Leader of the Opposition, and in so doing I say to the Leader of the Opposition: I will not be lectured about sexism and misogyny by this man. I will not. And the government will not be lectured about sexism and misogyny by this man—not now, not ever."},
+   {t:"The Leader of the Opposition says that people who hold sexist views and who are misogynists are not appropriate for high office. Well, I hope the Leader of the Opposition has got a piece of paper and he is writing out his resignation, because if he wants to know what misogyny looks like in modern Australia he doesn't need a motion in the House of Representatives; he needs a mirror. That is what he needs."}
+ ]},
+ { n:"Two", title:"The catalogue of quotes",
+   gist:"Six things he said, in his own words, with dates. This is her evidence, and she reads it out one item at a time.",
+   paras:[
+   {t:"Let's go through the opposition leader's repulsive double standards when it comes to misogyny and sexism. We are now supposed to take seriously that the Leader of the Opposition is offended by Mr Slipper's text messages, when this is the Leader of the Opposition who has said, and this was when he was a minister under the last government—not when he was a student, not when he was in high school, (but) when he was a minister under the last government. He has said, and I quote, in a discussion about women being underrepresented in institutions of power in Australia, the interviewer was a man called Stavros, the Leader of the Opposition said: “If it's true, Stavros, that men have more power, generally speaking, than women, is that a bad thing?” And then a discussion ensues and another person being interviewed says, “I want my daughter to have as much opportunity as my son,” to which the Leader of the Opposition says: “Yeah, I completely agree, but what if men are, by physiology or temperament, more adapted to exercise authority or to issue command?” Then ensues another discussion about women's role in modern society, and the other person participating in the discussions says, “I think it's very hard to deny that there is an underrepresentation of women,” to which the Leader of the Opposition says, “But now, there's an assumption that this is a bad thing.” This is the man from whom we are supposed to take lectures about sexism."},
+   {t:"And then, or course, it goes on. I was very offended personally when the Leader of the Opposition as minister for health said, and I quote, “Abortion is the easy way out.” I was very personally offended by those comments. You said that in March 2004. I suggest you check the records."},
+   {t:"I was also very offended on behalf of the women of Australia when in the course of this carbon pricing campaign the Leader of the Opposition said, “What the housewives of Australia need to understand as they do the ironing ...” Thank you for that painting of women's roles in modern Australia!"},
+   {t:"And then, of course, I was offended too by the sexism, by the misogyny, of the Leader of the Opposition catcalling across this table at me as I sit here as Prime Minister, “if the Prime Minister wants to, politically speaking, make an honest woman of herself ...” — something that would never have been said to any man sitting in this chair. I was offended when the Leader of the Opposition went outside in the front of parliament and stood next to a sign that said 'Ditch the witch'. I was offended when the Leader of the Opposition stood next to a sign that described me as a man's bitch. I was offended by those things. Misogyny, sexism, every day from this Leader of the Opposition. Every day, in every way, across the time the Leader of the Opposition has sat in that chair and I have sat in this chair, that is all we have heard from him."},
+   {t:"And now the Leader of the Opposition wants to be taken seriously. Apparently he's woken up, after this track record and all of these statements, he's woken up and he's gone, “Oh dear, there's this thing called sexism; oh my lord, there's this thing called misogyny. Now who's one of them? Oh, the Speaker must be because that suits my political purpose” (He) doesn't turn a hair about any of his past statements, doesn't walk into this parliament and apologise to the women of Australia, doesn't walk into this parliament and apologise to me for the things that have come out of his mouth—but (he) now seeks to use this as a battering ram against someone else. Well this kind of hypocrisy should not be tolerated, which is why this motion from the Leader of the Opposition should not be taken seriously."}
+ ]},
+ { n:"Three", title:"Responsibility, the second reason",
+   gist:"Her second numbered reason. He demands that others take responsibility; she asks what he has taken responsibility for.",
+   paras:[
+   {t:"And then second, the Leader of the Opposition is always wonderful about walking into this parliament and giving me and others a lecture about what they should take responsibility for; always wonderful about that - everything that I should take responsibility for, now apparently including the text messages of the member for Fisher. Always keen to say others should assume responsibility, particularly me. Well can anybody remind me if the Leader of the Opposition has taken any responsibility for the conduct of the Sydney Young Liberals and the attendance at this event of members of his frontbench? Has he taken any responsibility for the conduct of members of his political party and members of his frontbench, who apparently when the most vile things were being said about my family raised no voice of objection."},
+   {stage:"(Government members interjecting)"},
+   {sp:"Deputy Speaker", t:"Order!"},
+   {sp:"Julia Gillard", t:"No-one walked out of the room, no-one walked up to Mr Jones and said that this was not acceptable. Instead, of course, it was all viewed as good fun—until it was run in a Sunday newspaper, and then the Leader of the Opposition and others started ducking for cover. (He is) big on lectures of responsibility, very light on accepting responsibility himself for the vile conduct of members of his political party."}
+ ]},
+ { n:"Four", title:"The record with Mr Slipper",
+   gist:"Her third reason, and the most forensic. Nine preselections, a wedding, and his own words of praise — all on the record.",
+   paras:[
+   {t:"Third, Ms Deputy Speaker, why the Leader of the Opposition should not be taken seriously on this motion. The Leader of the Opposition and the Deputy Leader of the Opposition have come into this place and have talked about the member for Fisher. Well let me remind the opposition, and the Leader of the Opposition particularly, about their track record and association with the member for Fisher. I remind them that the National Party preselected the member for Fisher for the 1984 election, that the National Party preselected the member for Fisher for the 1987 election, that the Liberal Party preselected the member for Fisher for the 1993 election, then for the 1996 election, then for the 1998 election, then for the 2001 election, then for the 2004 election, then for the 2007 election and then for the 2010 election. And across many of those preselections Mr Slipper enjoyed the personal support of the Leader of the Opposition."},
+   {t:"I remind the Leader of the Opposition that on 28 September 2010, following the last election campaign when Mr Slipper was elected as Deputy Speaker, the Leader of the Opposition at that stage said this, and I quote; he referred to the member for Maranoa, who was also elected to a position at the same time, and then went on as follows: '... and the member for Fisher will serve as a fine complement to the member for Scullin in the chair. I believe that the parliament will be well served by the team which will occupy the chair in this chamber … I congratulate the member for Fisher, who has been a friend of mine for a very long time, who has served this parliament in many capacities with distinction …' The words of the Leader of the Opposition on record about his personal friendship with Mr Slipper and on record about his view about Mr Slipper's qualities and attributes to be the Speaker. (There is) no walking away from those words—they were the statements of the Leader of the Opposition then."},
+   {t:"I remind the Leader of the Opposition, who now comes in here and speaks about Mr Slipper and apparently his inability to work with or talk to Mr Slipper, I remind the Leader of the Opposition, he attended Mr Slipper's wedding. Did he walk up to Mr Slipper in the middle of the service and say he was disgusted to be there? Was that the attitude he took? No, he attended that wedding as a friend. The Leader of the Opposition, keen to lecture others about what they ought to know or did know about Mr Slipper but, with respect, I would say to the Leader of the Opposition after a long personal association, including attending Mr Slipper's wedding, it would be interesting to know whether the Leader of the Opposition was surprised by these text messages. He is certainly in a position to speak more intimately about Mr Slipper than I am and many other people in this parliament, given this long personal association."}
+ ]},
+ { n:"Five", title:"“My father did not die of shame”",
+   gist:"He had used the words “died of shame” weeks after her father's death. She quotes him, then turns the words back.",
+   paras:[
+   {t:"Then, of course, the Leader of the Opposition comes into this place and says, and I quote: “Every day the Prime Minister stands in this parliament to defend this Speaker will be another day of shame for this parliament; another day of shame for a government which should already have died of shame.” Well, can I indicate to the Leader of the Opposition, the government is not dying of shame, my father did not die of shame. What the Leader of the Opposition should be ashamed of is his performance in this parliament and the sexism he brings with it."},
+   {t:"Now, about the text messages that are on the public record,"},
+   {stage:"(Opposition members interjecting)"},
+   {sp:"Jenny Macklin", t:"You used those words. It is a quote."},
+   {sp:"Julia Gillard", t:"That is a direct quote from the Leader of the Opposition, so I suggest those groaning have a word with him."}
+ ]},
+ { n:"Six", title:"Her own judgment on the messages",
+   gist:"She concedes the point about the text messages, then separates it from the motion. Conceding here is what protects her argument.",
+   paras:[
+   {t:"On the conduct of Mr Slipper and on the text messages which are in the public domain—I have seen the press reports of those text messages, I am offended by their content. I am offended by their content because I am always offended by sexism. I am offended by their content because I am always offended by statements that are anti-women. I am offended by those things in the same way I have been offended by things that the Leader of the Opposition has said, and no doubt will continue to say in the future, because if this, today, was an exhibition of his new feminine side, well I don't think we have much to look forward to in terms of changed conduct."},
+   {t:"I am offended by those text messages but I also believe that, in terms of this parliament, making a decision about the speakership, that his parliament should recognise that there is court case in progress, that the judge has reserved his decision, that having waited for a number of months for the legal matters surrounding Mr Slipper to come to a conclusion, that this parliament should see that conclusion. I believe that is the appropriate path forward and that people will then have an opportunity to make up their minds with the fullest information available to them."}
+ ]},
+ { n:"Seven", title:"The double standard named",
+   gist:"The argument's spine, stated plainly: not that he is wrong about Slipper, but that he will not apply the rule to himself.",
+   paras:[
+   {t:"But, whenever people make up their minds about those questions, what I won't stand for, what I will never stand for, is the Leader of the Opposition coming into this place and peddling a double standard; peddling a standard for Mr Slipper he would not set for himself, peddling a standard for Mr Slipper he has not set for other members of his frontbench; peddling a standard for Mr Slipper that has not been acquitted by the people who have been sent out to say the vilest and most revolting things, like his former shadow parliamentary secretary, Senator Bernardi. I will not ever see the Leader of the Opposition seek to impose his double standard on this parliament."},
+   {t:"Sexism should always be unacceptable. We should conduct ourselves as it should be always unacceptable. The Leader of the Opposition says, 'Do something.' Well he could do something himself if he wants to deal with sexism in this parliament. He could change his behaviour, he could apologise for all his past statements, he could apologise for standing next to signs describing me as a witch and a bitch—terminology that is now objected to by the frontbench of the opposition. He could change a standard himself if he sought to do so. But we will see none of that from the Leader of the Opposition, because on these questions he is incapable of change. (He is) capable of double standards but incapable of change."}
+ ]},
+ { n:"Eight", title:"The close",
+   gist:"She uses his own watch-checking as her last example, then ends on the standard she says women are owed.",
+   paras:[
+   {t:"His double standards should not rule this parliament. Good sense, common sense, proper process is what should rule this parliament. That's what I believe is the path forward for this parliament, not the kind of double standards and political game-playing imposed by the Leader of the Opposition, (who is) now looking at his watch because, apparently, a woman's spoken too long—I've had him yell at me to shut up in the past."},
+   {t:"But I will take the remaining seconds of my speaking time to say to the Leader of the Opposition I think the best course for him is to reflect on the standards he has exhibited in public life, on the responsibility he should take for his public statements, on his close personal connection with Peter Slipper, on the hypocrisy he has displayed in this House today. And on that basis, because of the Leader of the Opposition's motivations, this parliament today should reject this motion, and the Leader of the Opposition should think seriously about the role of women in public life and in Australian society—because we are entitled to a better standard than this."},
+   {sp:"Government members", t:"Hear hear!"}
+ ]}
+];
+
+/* word -> meaning. Marked automatically in the speech, longest match first. */
+var KEYWORDS = {
+ "misogyny":"Hatred of women, or deep prejudice against them.",
+ "misogynists":"People who hate women or hold women in contempt.",
+ "sexism":"Treating someone unfairly because of their sex, usually a woman.",
+ "sexist":"Treating women (or men) unfairly because of their sex.",
+ "underrepresented":"Present in smaller numbers than you would expect, given the population.",
+ "underrepresentation":"Being present in smaller numbers than you would expect.",
+ "physiology":"The way the body is built and how it works.",
+ "temperament":"A person's usual nature: calm, quick-tempered, cautious.",
+ "anti-women":"Against women; hostile to women.",
+ "feminine":"Having qualities traditionally treated as belonging to women.",
+ "offended":"Hurt or insulted by what someone said or did.",
+ "repulsive":"So unpleasant that it disgusts you.",
+ "vile":"Extremely bad or disgusting.",
+ "vilest":"The most disgusting of all.",
+ "revolting":"Disgusting.",
+ "double standards":"Judging two people by different rules, when the same rule should apply to both.",
+ "double standard":"Judging two people by different rules, when the same rule should apply to both.",
+ "hypocrisy":"Demanding a standard from others that you do not keep yourself.",
+ "standard":"The level of behaviour that is expected. The speech asks whether one standard applies to everyone.",
+ "responsibility":"The duty to answer for what you or your side has done.",
+ "conduct":"The way a person behaves, especially in public life.",
+ "objection":"A statement that you disagree and think something is wrong.",
+ "acquitted":"Here: satisfied or met. (In a courtroom it means found not guilty.)",
+ "peddling":"Pushing an idea on other people, the way a seller pushes goods.",
+ "tolerated":"Allowed to continue, even though it is wrong.",
+ "resignation":"A formal statement that you are giving up your job.",
+ "apologise":"Say sorry for something you did.",
+ "reflect":"Think carefully about something before you judge it.",
+ "entitled":"Having a fair right to something.",
+ "motion":"A proposal put to the House, which members then debate and vote on.",
+ "Leader of the Opposition":"The leader of the largest party that is not in government.",
+ "Deputy Speaker":"The member chairing the House when the Speaker is not in the chair.",
+ "Speaker":"The member who runs the House and keeps order. The motion was about removing him.",
+ "speakership":"The office of being Speaker.",
+ "member for Fisher":"How the House refers to Peter Slipper: by his electorate, not his name.",
+ "member for Maranoa":"Another member, named by his electorate.",
+ "member for Scullin":"Another member, named by his electorate.",
+ "frontbench":"The senior members of a party, who sit on the front row and lead it.",
+ "preselected":"Chosen by a political party to be its candidate at an election.",
+ "preselections":"The party votes that choose who will be its candidate.",
+ "shadow parliamentary secretary":"An opposition member given responsibility for one policy area.",
+ "interjecting":"Calling out while another member is speaking.",
+ "high office":"An important public position, such as Prime Minister.",
+ "the chair":"The Speaker's seat, and so the job of running the House.",
+ "House of Representatives":"The lower house of the Australian Parliament.",
+ "parliament":"The elected body that makes the laws.",
+ "public domain":"Known to the public; already reported.",
+ "public record":"Information that has been officially published and anyone can check.",
+ "battering ram":"A heavy beam once used to break down a gate. Here: a weapon to attack someone with.",
+ "ducking for cover":"Hiding to avoid blame.",
+ "turn a hair":"Show any reaction at all. Used in the negative: he did not turn a hair.",
+ "game-playing":"Doing something for political advantage rather than because it is right.",
+ "good fun":"Harmless enjoyment. She uses it for something that was not harmless.",
+ "track record":"Everything a person has done in the past, taken together.",
+ "carbon pricing":"A government policy that put a price on greenhouse gas pollution.",
+ "exhibition":"A public display of something.",
+ "assumption":"Something taken to be true without being proved.",
+ "association":"A connection or relationship between people.",
+ "attributes":"The qualities a person has.",
+ "distinction":"Excellence; doing something notably well.",
+ "reserved his decision":"The judge has heard the case but has not yet announced the result.",
+ "proper process":"Doing things in the correct, agreed order.",
+ "terminology":"The particular words used for something."
+};
+
+/* phrase -> the technique it shows, and the rule a student can reuse.
+   `where` names the exact move so the student can find it in their own draft. */
+var DEVICES = [
+ {p:"I will not be lectured about sexism and misogyny by this man. I will not.",
+  name:"Anaphora",
+  rule:"Anaphora is repeating the same opening words in a row.",
+  where:"“I will not” opens the sentence, then stands alone as a two-word sentence. The short one lands harder because the long one came first.",
+  limit:"Two or three times is force. Four or more sounds like a chant, and the House would have laughed."},
+ {p:"not now, not ever",
+  name:"Emphatic doublet",
+  rule:"Two matched negatives close a sentence and shut the door on it.",
+  where:"“not now” refuses today; “not ever” refuses every future day. Together they leave no version of the request open.",
+  limit:"Only works at the end of a sentence. Inside one, it slows the line down."},
+ {p:"he needs a mirror",
+  name:"Metaphor",
+  rule:"A metaphor says one thing IS another, with no “like” or “as”.",
+  where:"He does not need “a motion in the House of Representatives”; he needs “a mirror”. The mirror is not real — it means the problem he is describing is himself.",
+  limit:"One clear image beats three mixed ones. Do not add a second picture to the same sentence."},
+ {p:"Thank you for that painting of women's roles in modern Australia!",
+  name:"Verbal irony",
+  rule:"Verbal irony says the opposite of what you mean, and the audience hears the real meaning.",
+  where:"“Thank you” is not thanks. “That painting” treats one careless phrase about ironing as a whole portrait of women.",
+  limit:"It needs the quote right before it, or the audience misses that you are being ironic."},
+ {p:"I was offended",
+  name:"Personal testimony",
+  rule:"Give evidence from your own experience, in the first person.",
+  where:"She repeats “I was offended” and then names exactly what offended her each time — the sign, the catcall, the interview.",
+  limit:"Testimony is strongest when each repeat carries new evidence, not just more feeling."},
+ {p:"Every day, in every way",
+  name:"Anaphora",
+  rule:"Repeating the frame “every ___” turns separate incidents into a pattern.",
+  where:"Two “every” phrases in four words. The claim shifts from “he said things” to “this is what he is like”.",
+  limit:"You must have already given the examples. Without them this is just an accusation."},
+ {p:"Did he walk up to Mr Slipper in the middle of the service and say he was disgusted to be there?",
+  name:"Rhetorical question",
+  rule:"A rhetorical question is asked for effect; both sides already know the answer.",
+  where:"The picture is deliberately absurd, so the audience answers “no” in their own head — and answering it themselves convinces them more than being told.",
+  limit:"Only ask when the answer is obvious. If the audience could really answer either way, you have handed them the argument."},
+ {p:"then for the 1996 election, then for the 1998 election, then for the 2001 election",
+  name:"Accumulation",
+  rule:"Pile up items in the same shape so the quantity becomes the argument.",
+  where:"Nine preselections, each in the same words. Any one is unremarkable; the list is the point.",
+  limit:"Every item must be checkable. One wrong date and the whole list is doubted."},
+ {p:"my father did not die of shame",
+  name:"Turning the words back",
+  rule:"Quote your opponent exactly, then apply their own words to them.",
+  where:"She reads his “died of shame” out first, then answers it. Her father had died weeks earlier, so the phrase was already in the room.",
+  limit:"You must quote accurately and give the source. Misquoting here would have ended her argument."},
+ {p:"peddling a standard for Mr Slipper he would not set for himself",
+  name:"Anaphora",
+  rule:"Repeat the key verb to hold three different examples in one sentence.",
+  where:"“peddling a standard” three times: not for himself, not for his frontbench, not for Senator Bernardi. One charge, three proofs.",
+  limit:"The examples must differ. Repeating the verb over the same example is padding."},
+ {p:"capable of double standards but incapable of change",
+  name:"Antithesis",
+  rule:"Put two opposites in matching grammar so the contrast snaps.",
+  where:"“capable” against “incapable”, same root, one prefix apart, either side of “but”.",
+  limit:"The two halves must be the same shape. Uneven halves sound clumsy, not sharp."},
+ {p:"Good sense, common sense, proper process",
+  name:"Tricolon",
+  rule:"Three items in a row — the oldest rhythm in speech-making.",
+  where:"Three noun phrases, no “and”, then the verb. It sounds settled and obvious, which is the effect she wants for her own position.",
+  limit:"Three is the rhythm. Two sounds unfinished; four sounds like a list."},
+ {p:"because we are entitled to a better standard than this",
+  name:"Inclusive “we”",
+  rule:"Switch from “I” to “we” at the end, so the audience is inside the claim.",
+  where:"The whole speech is “I was offended”. The last line is “we are entitled” — every woman, not just the Prime Minister.",
+  limit:"Save it for the close. Using “we” early makes the personal evidence sound less personal."}
+];
+
+/* the vocabulary hub, in the same five sets as the Word Builder */
+var VSETS = [
+ {h:"The parliament words", why:"Without these you cannot tell who is speaking, or about whom.",
+  w:["motion","Leader of the Opposition","Speaker","Deputy Speaker","member for Fisher","frontbench","preselected","shadow parliamentary secretary","interjecting","House of Representatives","high office","the chair"]},
+ {h:"The two words the speech is built on", why:"She uses them together, but they are not the same word.",
+  w:["sexism","sexist","misogyny","misogynists","anti-women","underrepresentation","physiology","temperament","feminine"]},
+ {h:"The charge: a double standard", why:"This is the argument. Everything else is evidence for it.",
+  w:["double standard","hypocrisy","standard","responsibility","conduct","peddling","acquitted","tolerated","resignation","apologise","entitled"]},
+ {h:"Words for being offended", why:"She grades them. Notice which word she saves for the worst thing.",
+  w:["offended","repulsive","vile","vilest","revolting","objection"]},
+ {h:"The lines people quote", why:"Idioms: the words together mean something the separate words do not.",
+  w:["battering ram","ducking for cover","turn a hair","good fun","game-playing","track record"]}
+];
+
+/* the famous lines, and why each works */
+var LINES = [
+ {q:"I will not be lectured about sexism and misogyny by this man. I will not.",
+  why:"Anaphora. The second sentence is two words. Short sentences after long ones are what make a line quotable."},
+ {q:"He needs a mirror.",
+  why:"Metaphor. Six words that turn the whole motion around: the man making the accusation becomes the example."},
+ {q:"Not now, not ever.",
+  why:"An emphatic doublet at the end of the sentence. It refuses today and every future day in four words."},
+ {q:"The government is not dying of shame, my father did not die of shame.",
+  why:"Turning the words back. She quotes his phrase first, exactly, then answers it — which is why the quotation had to be accurate."},
+ {q:"Capable of double standards but incapable of change.",
+  why:"Antithesis. Same root word, one prefix apart, balanced across “but”."},
+ {q:"We are entitled to a better standard than this.",
+  why:"The switch from “I” to “we”, saved for the last line, so the complaint becomes a claim on behalf of everyone."}
+];
+
+/* practice: six real lines, name the technique */
+var QUIZ = [
+ {stem:"“I will not be lectured about sexism and misogyny by this man. I will not.”",
+  opts:["Anaphora","Rhetorical question","Metaphor"], a:0,
+  fb:"Anaphora — the same opening words repeated, with the second one cut short."},
+ {stem:"“… he doesn't need a motion in the House of Representatives; he needs a mirror.”",
+  opts:["Statistic","Metaphor","Tricolon"], a:1,
+  fb:"Metaphor — the mirror is not a real mirror; it means the problem is himself."},
+ {stem:"“Thank you for that painting of women's roles in modern Australia!”",
+  opts:["Verbal irony","Personal testimony","Antithesis"], a:0,
+  fb:"Verbal irony — she means the opposite of thanks, and the audience knows it."},
+ {stem:"“Good sense, common sense, proper process is what should rule this parliament.”",
+  opts:["Anaphora","Tricolon","Rhetorical question"], a:1,
+  fb:"Tricolon — three items in a row, which is the oldest rhythm in speech-making."},
+ {stem:"“Did he walk up to Mr Slipper in the middle of the service and say he was disgusted to be there?”",
+  opts:["Metaphor","Accumulation","Rhetorical question"], a:2,
+  fb:"Rhetorical question — asked for effect, because both sides already know the answer is no."},
+ {stem:"“(He is) capable of double standards but incapable of change.”",
+  opts:["Antithesis","Accumulation","Inclusive we"], a:0,
+  fb:"Antithesis — capable against incapable, same root, matching grammar, across “but”."}
+];
+
+var SOURCE = "Speech: Julia Gillard, House of Representatives, 9 October 2012, on the motion moved by the Leader of the Opposition. The text is the Hansard record of proceedings of the Parliament of Australia, © Commonwealth of Australia, reproduced here verbatim and unaltered for classroom study, with attribution and no commercial use. The headings, the notes on technique, the meanings and the practice questions are the ELC's own teaching material, not part of the record. If a word here differs from the official Hansard, Hansard is correct.";
+
+/* =================== END OF DATA =================== */
+</script>
+
+<script>
+(function(){
+  "use strict";
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function rx(s){return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");}
+
+  /* ---- mark a paragraph without ever nesting a mark ----------------
+     Every candidate (technique phrase, then key word) is collected as a
+     [start,end] span. Longer spans win; overlapping spans are dropped.
+     Then one pass builds the HTML. This is why the speech text in the
+     data block stays plain and verbatim. ------------------------------ */
+  var kwKeys = Object.keys(KEYWORDS).sort(function(a,b){return b.length-a.length;});
+
+  function markup(text){
+    var spans=[], i, m, re;
+    for(i=0;i<DEVICES.length;i++){
+      var at=text.indexOf(DEVICES[i].p);
+      if(at>-1) spans.push({s:at,e:at+DEVICES[i].p.length,type:"dv",i:i});
+    }
+    for(i=0;i<kwKeys.length;i++){
+      var k=kwKeys[i];
+      re=new RegExp("\\b"+rx(k)+"\\b","gi");
+      while((m=re.exec(text))!==null){
+        spans.push({s:m.index,e:m.index+m[0].length,type:"kw",k:k});
+        if(re.lastIndex===m.index) re.lastIndex++;
+      }
+    }
+    spans.sort(function(a,b){ return a.s-b.s || (b.e-b.s)-(a.e-a.s); });
+    var out="", cur=0, taken=[];
+    for(i=0;i<spans.length;i++){
+      var sp=spans[i], clash=false, j;
+      for(j=0;j<taken.length;j++){ if(sp.s<taken[j].e && sp.e>taken[j].s){clash=true;break;} }
+      if(clash) continue;
+      taken.push(sp);
+      out+=esc(text.slice(cur,sp.s));
+      var inner=esc(text.slice(sp.s,sp.e));
+      if(sp.type==="dv"){
+        out+='<span class="dv">'+inner+'</span><span class="dvtag">'+esc(DEVICES[sp.i].name)+'</span>';
+      }else{
+        out+='<span class="kw" data-w="'+esc(sp.k)+'">'+inner+'</span>';
+      }
+      cur=sp.e;
+    }
+    out+=esc(text.slice(cur));
+    return {html:out, devices:taken.filter(function(t){return t.type==="dv";}).map(function(t){return DEVICES[t.i];})};
+  }
+
+  /* ---- the speech ---- */
+  var host=document.getElementById("speech"), html="";
+  SPEECH.forEach(function(mv){
+    html+='<section class="movement"><div class="mv-head"><span class="mv-num">Movement '+esc(mv.n)+
+          '</span><h3 class="mv-title">'+esc(mv.title)+'</h3></div>'+
+          '<p class="mv-gist">'+esc(mv.gist)+'</p>';
+    mv.paras.forEach(function(p){
+      if(p.stage){ html+='<p class="stage">'+esc(p.stage)+'</p>'; return; }
+      var r=markup(p.t);
+      html+='<p>'+(p.sp?'<span class="speaker">'+esc(p.sp)+'</span>':'')+r.html+'</p>';
+      r.devices.forEach(function(d){
+        html+='<div class="note"><span class="rule">'+esc(d.name)+' — '+esc(d.rule)+'</span>'+
+              '<b>Where:</b> '+esc(d.where)+' <b>Limit:</b> '+esc(d.limit)+'</div>';
+      });
+    });
+    html+='</section>';
+  });
+  host.innerHTML=html;
+
+  /* ---- toggles ---- */
+  function toggle(btn,cls){
+    btn.addEventListener("click",function(){
+      var on=document.body.classList.toggle(cls);
+      btn.setAttribute("aria-pressed",on?"true":"false");
+      if(!on) closePop();
+    });
+  }
+  toggle(document.getElementById("tKw"),"show-kw");
+  toggle(document.getElementById("tDv"),"show-dv");
+
+  /* ---- key word popup ---- */
+  var pop=document.getElementById("gpop");
+  function closePop(){ pop.style.display="none"; }
+  document.addEventListener("click",function(e){
+    var el=e.target.closest?e.target.closest(".kw"):null;
+    if(!el||!document.body.classList.contains("show-kw")){ if(!pop.contains(e.target)) closePop(); return; }
+    var w=el.getAttribute("data-w");
+    pop.innerHTML='<span class="w">'+esc(w)+'</span><span class="m">'+esc(KEYWORDS[w]||"")+'</span>';
+    pop.style.display="block";
+    var r=el.getBoundingClientRect();
+    var left=Math.min(r.left+window.scrollX, window.scrollX+document.documentElement.clientWidth-pop.offsetWidth-12);
+    pop.style.top=(r.bottom+window.scrollY+6)+"px";
+    pop.style.left=Math.max(8,left)+"px";
+    e.stopPropagation();
+  });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") closePop(); });
+
+  /* ---- vocabulary hub ---- */
+  var vh=document.getElementById("vhub"), vhtml="";
+  VSETS.forEach(function(set){
+    vhtml+='<div class="vset"><h3>'+esc(set.h)+'</h3><p class="why">'+esc(set.why)+'</p><div class="vgrid">';
+    set.w.forEach(function(w){
+      var m=KEYWORDS[w];
+      if(!m) return;
+      vhtml+='<div class="vcard"><div class="w">'+esc(w)+'</div><div class="m">'+esc(m)+'</div></div>';
+    });
+    vhtml+='</div></div>';
+  });
+  vh.innerHTML=vhtml;
+
+  /* ---- quoted lines ---- */
+  document.getElementById("lines").innerHTML=LINES.map(function(l){
+    return '<div class="line"><q>'+esc(l.q)+'</q><span class="why">'+esc(l.why)+'</span></div>';
+  }).join("");
+
+  /* ---- name the technique ---- */
+  var qz=document.getElementById("quiz");
+  qz.innerHTML=QUIZ.map(function(q,qi){
+    return '<div class="q" data-q="'+qi+'"><p class="stem">'+esc(q.stem)+'</p><div class="opts">'+
+      q.opts.map(function(o,oi){ return '<button class="opt" data-o="'+oi+'">'+esc(o)+'</button>'; }).join("")+
+      '</div><p class="fb"></p></div>';
+  }).join("");
+  qz.addEventListener("click",function(e){
+    var b=e.target.closest?e.target.closest(".opt"):null;
+    if(!b) return;
+    var box=b.closest(".q"), qi=+box.getAttribute("data-q"), oi=+b.getAttribute("data-o"), q=QUIZ[qi];
+    var fb=box.querySelector(".fb");
+    if(oi===q.a){
+      box.querySelectorAll(".opt").forEach(function(x){ x.classList.remove("wrong"); });
+      b.classList.add("right");
+      fb.textContent=q.fb; fb.classList.add("on");
+    }else{
+      b.classList.add("wrong");
+      fb.textContent="Not that one — read the line again and try another."; fb.classList.add("on");
+    }
+  });
+
+  document.getElementById("sourceNote").innerHTML="<b>Source and copyright.</b> "+esc(SOURCE);
+})();
+</script>
+<script src="word-tap.js?v=v1" defer></script>
+</body>
+</html>
