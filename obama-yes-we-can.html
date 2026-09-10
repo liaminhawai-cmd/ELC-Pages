@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en-AU" translate="no" class="notranslate">
+<head>
+<meta name="google" content="notranslate">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Barack Obama's election-night speech, Yes we can (2008) — the whole speech, the key words and phrases, and the persuasive techniques named where they happen. For EAL students.">
+<title>Yes we can · ELC</title>
+<style>
+/* ============================================================
+   ELC · Yes we can (Barack Obama, Grant Park, 4 November 2008)
+   House style per ELC-Pages/AGENTS.md: CSS variables, light/dark
+   via prefers-color-scheme, mobile-first, one self-contained file,
+   no CDNs, no web fonts, no build step.
+
+   The accent is a campaign blue. Colour is metalanguage here, never decoration:
+     blue   = the technique (how the speech is built)
+     ochre  = a key word (what it means)
+   ============================================================ */
+:root{
+  --bg:#f4f6f2; --paper:#fffefb; --ink:#1e231d; --muted:#5f6a5c; --faint:#828d80;
+  --line:#dde3d9; --line-soft:#eaefe6; --accent:#2b4f8f; --accent-soft:#e6ecf7;
+  --on-accent:#ffffff;
+  --kw-bg:#fbf1d8; --kw-tx:#7a5405; --kw-line:#e6c97a;   /* key word   */
+  --prefix-bg:#e3ecfa; --prefix-tx:#1f4d8f;               /* word build: prefix / root / suffix */
+  --root-bg:#fbe9d7;   --root-tx:#8a4a12;
+  --suffix-bg:#e6f0e3; --suffix-tx:#2f5f3a;
+  --dv-bg:#e4eaf6; --dv-tx:#274a86; --dv-line:#9db3d9;   /* technique  */
+  --quote:#f6f3ea; --warnbg:#fdf3e3; --warntx:#7d5211;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#13160f; --paper:#1c2018; --ink:#eef0e8; --muted:#a9b3a4; --faint:#8b9587;
+    --line:#333a2e; --line-soft:#262b21; --accent:#8fb0ea; --accent-soft:#1d2536;
+    --on-accent:#11150f;
+    --kw-bg:#332b16; --kw-tx:#e8c87c; --kw-line:#6d5a24;
+    --prefix-bg:#1d2a3d; --prefix-tx:#9fc0ee;
+    --root-bg:#3a2a1a;   --root-tx:#f0c39a;
+    --suffix-bg:#1f2e22; --suffix-tx:#a6d3ae;
+    --dv-bg:#1f2838; --dv-tx:#a9c4f0; --dv-line:#3f5478;
+    --quote:#20241a; --warnbg:#2b2417; --warntx:#e6bd77;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+     line-height:1.55;display:flex;justify-content:center;padding:14px 10px 56px}
+.container{width:100%;max-width:960px;background:var(--paper);border:1px solid var(--line);
+           border-radius:14px;padding:20px 22px 26px}
+h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif}
+h1{font-size:26px;margin:0 0 4px;letter-spacing:-.2px}
+h2{font-size:20px;margin:26px 0 8px}
+h3{font-size:15.5px;margin:0 0 6px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 6px}
+.eyebrow{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--accent)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.topbar .where{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+a{color:var(--accent)}
+.btn{padding:9px 15px;border:1px solid var(--line);border-radius:9px;font-size:14px;font-weight:600;
+     cursor:pointer;background:var(--paper);color:var(--ink);font-family:inherit}
+.btn[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0 4px}
+.panel{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin:0 0 14px}
+.hr{height:1px;background:var(--line);margin:22px 0 16px;border:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 12px}
+
+/* ---- context box ---- */
+.who{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:13.5px;margin:8px 0 0}
+.who dt{font-weight:700;color:var(--accent)}
+.who dd{margin:0;color:var(--ink)}
+.steps{margin:8px 0 0;padding-left:20px;font-size:13.5px}
+.steps li{margin-bottom:4px}
+
+/* ---- the speech ---- */
+.movement{margin:0 0 6px;border-top:1px solid var(--line-soft);padding-top:16px}
+.movement:first-of-type{border-top:0}
+.mv-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:2px}
+.mv-num{font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.5px}
+.mv-title{font-family:Georgia,serif;font-size:18px;margin:0}
+.mv-gist{font-size:13px;color:var(--muted);margin:0 0 10px}
+.speech p{margin:0 0 11px;font-size:15.5px;line-height:1.72}
+.speech .stage{font-size:13px;color:var(--faint);font-style:italic;margin:0 0 11px}
+.speech .speaker{font-weight:700;font-size:12px;letter-spacing:.4px;text-transform:uppercase;
+                 color:var(--accent);display:block;margin:0 0 3px}
+
+/* key word + technique marks — inert until the toggles turn them on */
+.kw{border-bottom:1px dotted transparent;cursor:default}
+body.show-kw .kw{background:var(--kw-bg);border-bottom-color:var(--kw-line);cursor:pointer;
+                 border-radius:2px;padding:0 1px}
+body.show-kw .kw:hover{outline:2px solid var(--kw-line)}
+.dv{border-radius:2px;padding:0 1px}
+body.show-dv .dv{background:var(--dv-bg);box-shadow:inset 0 -2px 0 var(--dv-line)}
+.dvtag{display:none}
+body.show-dv .dvtag{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;
+                    letter-spacing:.4px;color:var(--dv-tx);background:var(--dv-bg);
+                    border:1px solid var(--dv-line);border-radius:4px;padding:0 4px;margin-left:5px;
+                    vertical-align:2px;white-space:nowrap}
+.note{display:none}
+body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background:var(--dv-bg);
+                   color:var(--dv-tx);padding:8px 12px;border-radius:0 8px 8px 0;margin:0 0 12px;font-size:13px}
+.note b{color:var(--dv-tx)}
+.note .rule{display:block;font-weight:700;margin-bottom:2px}
+
+/* ---- glossary popup ---- */
+#gpop{position:absolute;z-index:60;width:min(340px,calc(100vw - 16px));background:var(--paper);border:1px solid var(--kw-line);
+      border-radius:9px;padding:10px 12px 11px;font-size:13.5px;box-shadow:0 8px 24px rgba(0,0,0,.16);display:none}
+#gpop .w{font-weight:800;color:var(--kw-tx);display:block;margin-bottom:2px;font-size:15px}
+#gpop .m{color:var(--ink)}
+#gpop .form{font-size:12px;color:var(--muted);display:block;margin-top:2px}
+.plabel{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.8px;font-weight:800;color:var(--faint);margin:9px 0 4px}
+.morphs{display:flex;gap:5px;flex-wrap:wrap}
+.morph{display:inline-flex;align-items:baseline;gap:4px;border-radius:999px;padding:3px 9px;font-size:12.5px;font-weight:800;
+       background:var(--root-bg);color:var(--root-tx)}
+.morph small{font-weight:600;opacity:.85}
+.morph.prefix{background:var(--prefix-bg);color:var(--prefix-tx)}
+.morph.suffix{background:var(--suffix-bg);color:var(--suffix-tx)}
+.whole{font-size:12.5px;color:var(--muted);font-style:italic;margin:0}
+.tr{font-weight:700;font-size:15px;line-height:1.5}
+.tr[dir=rtl]{text-align:right}
+.lang{padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink);
+      font-size:14px;font-weight:600;max-width:100%}
+
+/* ---- vocab hub ---- */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:9px;margin-top:10px}
+.vcard{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 12px}
+.vcard .w{font-weight:700;font-size:14.5px}
+.vcard .m{font-size:12.8px;color:var(--muted);margin-top:2px;line-height:1.45}
+.vcard .tr{font-size:13.5px;margin-top:4px;color:var(--kw-tx)}
+.vcard .morphs{margin-top:6px}
+.vcard .morph{padding:2px 7px;font-size:11.5px}
+.vset{margin-top:16px}
+.vset h3{color:var(--accent);font-size:14px;text-transform:uppercase;letter-spacing:.5px;
+         font-family:system-ui,sans-serif;margin-bottom:2px}
+.vset .why{font-size:13px;color:var(--muted);margin:0}
+
+/* ---- quoted lines ---- */
+.vset .vhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.vlink{font-size:12.5px;font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap}
+.vlink:hover{text-decoration:underline}
+#gpop .go{display:block;margin-top:8px;font-size:12.5px;font-weight:700;color:var(--accent);text-decoration:none}
+#gpop .go:hover{text-decoration:underline}
+.lines{display:grid;gap:9px;margin-top:10px}
+.line{background:var(--quote);border:1px solid var(--line);border-left:4px solid var(--accent);
+      border-radius:0 9px 9px 0;padding:10px 14px}
+.line q{font-family:Georgia,serif;font-size:15.5px;display:block;margin-bottom:4px}
+.line q:before,.line q:after{content:'"'}
+.line .why{font-size:13px;color:var(--muted)}
+
+/* ---- technique check ---- */
+.q{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin-bottom:10px}
+.q .stem{font-family:Georgia,serif;font-size:15px;margin:0 0 9px}
+.opts{display:flex;gap:7px;flex-wrap:wrap}
+.opt{padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);
+     cursor:pointer;font-size:13.5px;font-family:inherit;color:var(--ink)}
+.opt.right{background:var(--dv-bg);border-color:var(--dv-line);color:var(--dv-tx);font-weight:700}
+.opt.wrong{opacity:.5;text-decoration:line-through}
+.fb{font-size:13px;margin-top:8px;display:none;color:var(--muted)}
+.fb.on{display:block}
+
+/* ---- video ---- */
+.vid{margin:0 0 14px}
+.vidbox{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:11px;
+        padding:0;overflow:hidden}
+.vidbox .ratio{position:relative;width:100%;padding-top:56.25%}
+.vidbox .ratio>iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vidplay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+         justify-content:center;gap:9px;background:var(--accent-soft);border:0;cursor:pointer;
+         font-family:inherit;color:var(--ink);padding:18px;text-align:center}
+.vidplay:hover{background:var(--dv-bg)}
+.vidplay .tri{width:0;height:0;border-style:solid;border-width:13px 0 13px 22px;
+              border-color:transparent transparent transparent var(--accent)}
+.vidplay .big{font-weight:700;font-size:15px}
+.vidplay .small{font-size:12.5px;color:var(--muted);max-width:44ch;line-height:1.5}
+
+/* ---- source note ---- */
+.source{font-size:12.2px;color:var(--faint);line-height:1.6;margin-top:8px}
+.source b{color:var(--muted)}
+@media (max-width:560px){
+  .container{padding:16px 14px 22px}
+  h1{font-size:22px}
+  .speech p{font-size:15px}
+}
+</style>
+</head>
+<body class="show-kw">
+<div class="container">
+
+  <div class="topbar">
+    <span class="where">ELC · Text study</span>
+    <a href="index.html">← Hub</a>
+  </div>
+
+  <span class="eyebrow">Grant Park, Chicago · 4 November 2008</span>
+  <h1>Yes we can</h1>
+  <p class="sub">Barack Obama, on the night he was elected President of the United States.</p>
+  <p class="lede">The whole speech is below. The <b>key words</b> are marked: tap one to read its meaning, its
+     word parts and a translation in your language. Turn on <b>Techniques</b> to see how the speech is built,
+     named where it happens. The language you choose is saved on this device only.</p>
+
+  <div class="btnrow">
+    <button class="btn" id="tKw" aria-pressed="true">Key words</button>
+    <button class="btn" id="tDv" aria-pressed="false">Techniques</button>
+    <select class="lang" id="langSelect" aria-label="Translation language"></select>
+    <a class="btn" id="wbFolder" href="#" target="_blank" rel="noopener">Practise these words in Word Builder ↗</a>
+  </div>
+
+  <h2>Before you read</h2>
+  <div class="panel">
+    <p class="sub" style="margin:0" id="context"></p>
+    <dl class="who" id="who"></dl>
+    <ol class="steps">
+      <li>Read it once with <b>Key words</b> and <b>Techniques</b> both off, for what he is saying.</li>
+      <li>Read it again with <b>Techniques</b> on, for how he says it.</li>
+      <li>Use the vocabulary hub at the end to check the words you did not know.</li>
+    </ol>
+  </div>
+
+  <h2>Watch it first</h2>
+  <p class="lede">Seventeen minutes. Read the speech afterwards and you will hear his voice in it — the pauses
+     and the crowd are part of how it works.</p>
+  <div class="vid">
+    <div class="vidbox"><div class="ratio" id="vidSlot">
+      <button class="vidplay" id="vidPlay" type="button">
+        <span class="tri"></span>
+        <span class="big">Play the speech on YouTube</span>
+        <span class="small">The video is not loaded until you press play. Pressing play loads it from
+              youtube-nocookie.com, and YouTube will see that you watched it.</span>
+      </button>
+    </div></div>
+  </div>
+
+  <h2>The speech</h2>
+  <p class="lede" id="speechIntro">Each movement is doing a different job in the argument.</p>
+  <div id="speech" class="speech"></div>
+
+  <hr class="hr">
+  <h2>Vocabulary hub</h2>
+  <p class="lede">Every key word from the speech, in five sets, with its word parts and a translation in the
+     language chosen above. These are the same sets you can build and drill in the Word Builder.</p>
+  <div id="vhub"></div>
+
+  <hr class="hr">
+  <h2>The lines people quote</h2>
+  <p class="lede">Why each one works — the technique is named, so you can use the same move in your own writing.</p>
+  <div class="lines" id="lines"></div>
+
+  <hr class="hr">
+  <h2>Name the technique</h2>
+  <p class="lede">Six real lines from the speech. Choose the technique each one uses. You can try again.</p>
+  <div id="quiz"></div>
+
+  <hr class="hr">
+  <p class="source" id="sourceNote"></p>
+</div>
+<div id="gpop" role="dialog" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — teachers can edit everything in this block.
+   Nothing below the marked END OF DATA line needs touching.
+   ------------------------------------------------------------
+   SPEECH   the speech itself, in movements, verbatim.
+   KEYWORDS word -> student meaning. Marked automatically wherever
+            the word appears in the speech, longest match first.
+   DEVICES  a phrase -> the technique it demonstrates, and the rule.
+            Marked where that phrase appears; the rule shows as a
+            note under the paragraph.
+   ============================================================ */
+
+/* DATA-START */
+/* DATA-END */
+
+/* VOCAB-START */
+/* VOCAB-END */
+
+/* Translation languages, in the order the picker shows them (same list as the hub's tap-to-translate). */
+var WORD_BUILDER = "https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/learn/elc/english/";
+var WORD_BUILDER_FOLDER = "https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/l/elc/english/f/obama-yes-we-can";
+
+var LANGS = [
+  ["zh-Hant", "繁體中文（台灣） Chinese (Taiwan)"], ["zh-Hans", "简体中文（中国） Chinese (China)"],
+  ["vi", "Tiếng Việt Vietnamese"], ["ja", "日本語 Japanese"], ["ko", "한국어 Korean"],
+  ["ar", "العربية Arabic"], ["fa", "فارسی Farsi/Dari"], ["ur", "اردو Urdu"], ["ps", "پښتو Pashto"],
+  ["hi", "हिन्दी Hindi"], ["ta", "தமிழ் Tamil"], ["ml", "മലയാളം Malayalam"], ["am", "አማርኛ Amharic"],
+  ["tl", "Tagalog"], ["es", "Español Spanish"], ["fr", "Français French"], ["ro", "Română Romanian"],
+  ["ru", "Русский Russian"]
+];
+var RTL = { ar:1, fa:1, ur:1, ps:1 };
+
+
+
+/* the recording. id only — the player is built at press time, never before. */
+
+
+/* =================== END OF DATA =================== */
+</script>
+
+<script>
+(function(){
+  "use strict";
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function rx(s){return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");}
+
+  /* ---- mark a paragraph without ever nesting a mark ----------------
+     Every candidate (technique phrase, then key word) is collected as a
+     [start,end] span. Longer spans win; overlapping spans are dropped.
+     Then one pass builds the HTML. This is why the speech text in the
+     data block stays plain and verbatim. ------------------------------ */
+  var kwKeys = Object.keys(KEYWORDS).sort(function(a,b){return b.length-a.length;});
+
+  function markup(text){
+    var spans=[], i, m, re;
+    for(i=0;i<DEVICES.length;i++){
+      var at=text.indexOf(DEVICES[i].p);
+      if(at>-1) spans.push({s:at,e:at+DEVICES[i].p.length,type:"dv",i:i});
+    }
+    for(i=0;i<kwKeys.length;i++){
+      var k=kwKeys[i];
+      re=new RegExp("\\b"+rx(k)+"\\b","gi");
+      while((m=re.exec(text))!==null){
+        spans.push({s:m.index,e:m.index+m[0].length,type:"kw",k:k});
+        if(re.lastIndex===m.index) re.lastIndex++;
+      }
+    }
+    spans.sort(function(a,b){ return a.s-b.s || (b.e-b.s)-(a.e-a.s); });
+    var out="", cur=0, taken=[];
+    for(i=0;i<spans.length;i++){
+      var sp=spans[i], clash=false, j;
+      for(j=0;j<taken.length;j++){ if(sp.s<taken[j].e && sp.e>taken[j].s){clash=true;break;} }
+      if(clash) continue;
+      taken.push(sp);
+      out+=esc(text.slice(cur,sp.s));
+      var inner=esc(text.slice(sp.s,sp.e));
+      if(sp.type==="dv"){
+        out+='<span class="dv">'+inner+'</span><span class="dvtag">'+esc(DEVICES[sp.i].name)+'</span>';
+      }else{
+        out+='<span class="kw" data-w="'+esc(sp.k)+'">'+inner+'</span>';
+      }
+      cur=sp.e;
+    }
+    out+=esc(text.slice(cur));
+    return {html:out, devices:taken.filter(function(t){return t.type==="dv";}).map(function(t){return DEVICES[t.i];})};
+  }
+
+  /* ---- before you read ---- */
+  document.getElementById("context").textContent=CONTEXT;
+  document.getElementById("who").innerHTML=WHO.map(function(p){ return '<dt>'+esc(p[0])+'</dt><dd>'+esc(p[1])+'</dd>'; }).join("");
+
+  /* ---- the speech ---- */
+  var host=document.getElementById("speech"), html="";
+  SPEECH.forEach(function(mv){
+    html+='<section class="movement"><div class="mv-head"><span class="mv-num">Movement '+esc(mv.n)+
+          '</span><h3 class="mv-title">'+esc(mv.title)+'</h3></div>'+
+          '<p class="mv-gist">'+esc(mv.gist)+'</p>';
+    mv.paras.forEach(function(p){
+      if(p.stage){ html+='<p class="stage">'+esc(p.stage)+'</p>'; return; }
+      var r=markup(p.t);
+      html+='<p>'+(p.sp?'<span class="speaker">'+esc(p.sp)+'</span>':'')+r.html+'</p>';
+      r.devices.forEach(function(d){
+        html+='<div class="note"><span class="rule">'+esc(d.name)+' — '+esc(d.rule)+'</span>'+
+              '<b>Where:</b> '+esc(d.where)+' <b>Limit:</b> '+esc(d.limit)+'</div>';
+      });
+    });
+    html+='</section>';
+  });
+  host.innerHTML=html;
+
+  /* ---- toggles ---- */
+  function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function load(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function toggle(btn,cls,key){
+    var saved=load(key);
+    if(saved==="on") document.body.classList.add(cls);
+    if(saved==="off") document.body.classList.remove(cls);
+    btn.setAttribute("aria-pressed",document.body.classList.contains(cls)?"true":"false");
+    btn.addEventListener("click",function(){
+      var on=document.body.classList.toggle(cls);
+      btn.setAttribute("aria-pressed",on?"true":"false");
+      store(key,on?"on":"off");
+      if(!on) closePop();
+    });
+  }
+  toggle(document.getElementById("tKw"),"show-kw","obama.kw");
+  toggle(document.getElementById("tDv"),"show-dv","obama.dv");
+
+  /* ---- translation language: one choice shared with the hub's tap-to-translate ---- */
+  var LANG_KEY="elc_stem_home_lang", langSel=document.getElementById("langSelect"), LANG_NAME={};
+  langSel.innerHTML=LANGS.map(function(l){ LANG_NAME[l[0]]=l[1]; return '<option value="'+l[0]+'">'+esc(l[1])+'</option>'; }).join("");
+  var savedLang=load(LANG_KEY);
+  langSel.value = (savedLang&&LANG_NAME[savedLang]) ? savedLang : LANGS[0][0];
+  function lang(){ return langSel.value; }
+  langSel.addEventListener("change",function(){ store(LANG_KEY,lang()); renderHub(); closePop(); });
+  document.getElementById("wbFolder").href=WORD_BUILDER_FOLDER;
+
+  /* the word build (morphemes) and the translation, as Word Builder shows them */
+  function morphs(v){
+    if(!v||!v.parts||!v.parts.length) return '<p class="whole">No useful modern word split — learn it as a whole.</p>';
+    return '<div class="morphs">'+v.parts.map(function(p){
+      return '<span class="morph '+esc(p[1])+'"><b>'+esc(p[0])+'</b><small>'+esc(p[2])+'</small></span>';
+    }).join("")+'</div>';
+  }
+  function translation(v){
+    var L=lang(), t=v&&v.tr&&v.tr[L];
+    return '<span class="plabel">'+esc(LANG_NAME[L])+'</span><div class="tr" dir="'+(RTL[L]?'rtl':'auto')+'" lang="'+esc(L)+'">'+esc(t||"—")+'</div>';
+  }
+
+  /* ---- key word popup ---- */
+  var pop=document.getElementById("gpop");
+  /* which Word Builder unit teaches each word, so a tap can offer to practise it */
+  var UNIT_OF={};
+  VSETS.forEach(function(set){ if(set.unit) set.w.forEach(function(w){ UNIT_OF[w.toLowerCase()]=set.unit; }); });
+  function closePop(){ pop.style.display="none"; }
+  document.addEventListener("click",function(e){
+    var el=e.target.closest?e.target.closest(".kw"):null;
+    if(!el||!document.body.classList.contains("show-kw")){ if(!pop.contains(e.target)) closePop(); return; }
+    var w=el.getAttribute("data-w");
+    var unit=UNIT_OF[w.toLowerCase()];
+    var go = unit
+      ? '<a class="go" href="'+WORD_BUILDER+encodeURIComponent(unit)+'" target="_blank" rel="noopener">Practise this set in Word Builder \u2197</a>'
+      : '<a class="go" href="'+WORD_BUILDER_FOLDER+'" target="_blank" rel="noopener">Open the Word Builder folder \u2197</a>';
+    var v=VOCAB[w];
+    pop.innerHTML='<span class="w">'+esc(w)+'</span><span class="m">'+esc(KEYWORDS[w]||"")+'</span>'+
+      (v&&v.form?'<span class="form">A form of <b>'+esc(v.form)+'</b>.</span>':'')+
+      '<span class="plabel">Word build</span>'+morphs(v)+translation(v)+go;
+    pop.style.display="block";
+    var r=el.getBoundingClientRect();
+    var left=Math.min(r.left+window.scrollX, window.scrollX+document.documentElement.clientWidth-pop.offsetWidth-12);
+    pop.style.top=(r.bottom+window.scrollY+6)+"px";
+    pop.style.left=Math.max(8,left)+"px";
+    e.stopPropagation();
+  });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") closePop(); });
+
+  /* ---- vocabulary hub ---- */
+  var vh=document.getElementById("vhub");
+  function renderHub(){
+  var vhtml="";
+  VSETS.forEach(function(set){
+    var link = set.unit
+      ? '<a class="vlink" href="'+WORD_BUILDER+encodeURIComponent(set.unit)+'" target="_blank" rel="noopener">Practise this set \u2197</a>'
+      : '<a class="vlink" href="'+WORD_BUILDER_FOLDER+'" target="_blank" rel="noopener">Open the folder \u2197</a>';
+    vhtml+='<div class="vset"><div class="vhead"><h3>'+esc(set.h)+'</h3>'+link+'</div>'+
+           '<p class="why">'+esc(set.why)+'</p><div class="vgrid">';
+    set.w.forEach(function(w){
+      var m=KEYWORDS[w];
+      if(!m) return;
+      var v=VOCAB[w], L=lang(), t=v&&v.tr&&v.tr[L];
+      vhtml+='<div class="vcard"><div class="w">'+esc(w)+'</div><div class="m">'+esc(m)+'</div>'+
+             '<div class="tr" dir="'+(RTL[L]?'rtl':'auto')+'" lang="'+esc(L)+'">'+esc(t||"—")+'</div>'+
+             (v&&v.parts&&v.parts.length?morphs(v):'')+'</div>';
+    });
+    vhtml+='</div></div>';
+  });
+  vh.innerHTML=vhtml;
+  }
+  renderHub();
+
+  /* ---- quoted lines ---- */
+  document.getElementById("lines").innerHTML=LINES.map(function(l){
+    return '<div class="line"><q>'+esc(l.q)+'</q><span class="why">'+esc(l.why)+'</span></div>';
+  }).join("");
+
+  /* ---- name the technique ---- */
+  var qz=document.getElementById("quiz");
+  qz.innerHTML=QUIZ.map(function(q,qi){
+    return '<div class="q" data-q="'+qi+'"><p class="stem">'+esc(q.stem)+'</p><div class="opts">'+
+      q.opts.map(function(o,oi){ return '<button class="opt" data-o="'+oi+'">'+esc(o)+'</button>'; }).join("")+
+      '</div><p class="fb"></p></div>';
+  }).join("");
+  qz.addEventListener("click",function(e){
+    var b=e.target.closest?e.target.closest(".opt"):null;
+    if(!b) return;
+    var box=b.closest(".q"), qi=+box.getAttribute("data-q"), oi=+b.getAttribute("data-o"), q=QUIZ[qi];
+    var fb=box.querySelector(".fb");
+    if(oi===q.a){
+      box.querySelectorAll(".opt").forEach(function(x){ x.classList.remove("wrong"); });
+      b.classList.add("right");
+      fb.textContent=q.fb; fb.classList.add("on");
+    }else{
+      b.classList.add("wrong");
+      fb.textContent="Not that one — read the line again and try another."; fb.classList.add("on");
+    }
+  });
+
+  /* ---- video: nothing is requested from YouTube until this is pressed ---- */
+  var vidPlay=document.getElementById("vidPlay");
+  if(vidPlay){
+    vidPlay.addEventListener("click",function(){
+      var f=document.createElement("iframe");
+      f.src="https://www.youtube-nocookie.com/embed/"+encodeURIComponent(VIDEO.id)+"?rel=0&autoplay=1";
+      f.title=VIDEO.title;
+      f.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      f.referrerPolicy="strict-origin-when-cross-origin";
+      f.allowFullscreen=true;
+      var slot=document.getElementById("vidSlot");
+      slot.innerHTML=""; slot.appendChild(f);
+    });
+  }
+
+  document.getElementById("sourceNote").innerHTML="<b>Source and copyright.</b> "+esc(SOURCE);
+})();
+</script>
+<script src="word-tap.js?v=v1" defer></script>
+</body>
+</html>
