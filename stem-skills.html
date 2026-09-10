@@ -129,6 +129,21 @@
   input.qin.slot { width:3.8em; padding:5px 6px; text-align:center; }
   input.qin.ok { border-color:var(--accent); }
   input.qin.bad { border-color:var(--alert); }
+  /* unit buttons: m/s² needs a superscript no school keyboard has, so the
+     unit is offered rather than typed. The right one sits among the units it
+     is confused with, so choosing still takes knowing which. */
+  .units { display:inline-flex; flex-wrap:wrap; gap:5px; margin-left:8px; vertical-align:middle; }
+  /* a one-letter unit like m or s must still be a comfortable target, so the
+     button is sized by min-width as well as min-height, not by its text */
+  .units button { font:inherit; font-size:.82rem; line-height:1; padding:8px 10px;
+    min-height:36px; min-width:46px;
+    border:1px solid var(--hair); border-radius:999px; background:var(--paper); color:var(--muted);
+    cursor:pointer; font-family:inherit; }
+  .units button:hover { border-color:var(--accent); color:var(--accent); }
+  .units button.on { background:var(--accent); border-color:var(--accent); color:var(--on-accent); }
+  .units button:disabled { opacity:.45; cursor:default; }
+  .qhintline { display:block; font-size:.78rem; color:var(--muted); margin:5px 0 0; }
+  .mark.warn { color:var(--alert); }
   .qrow { display:flex; align-items:center; gap:10px; margin-top:10px; font-size:.92rem; flex-wrap:wrap; }
   .mark { font-weight:700; margin-left:4px; }
   .mark.ok { color:var(--accent); }
@@ -800,13 +815,66 @@
                   one Check submit; crossCheck (if present) validates the
                   whole set together and overrides per-input verdicts.
        opts     → shuffled buttons, exact match on the "a" string.       */
-  function paintVerdict(el, ok){
+  /* Tap a unit to put it on the answer; tap it again to take it off. The
+     number the student typed is never touched. */
+  function unitButtons(el, units){
+    var wrap = document.createElement("span");
+    wrap.className = "units";
+    var U = window.QBANK && QBANK.util;
+    function current(){ return U ? U.tailOf(el.value) : ""; }
+    function paint(){
+      var now = U ? U.unitKey(current()) : null;
+      [].forEach.call(wrap.children, function (b) {
+        var same = U && U.unitKey(b.textContent) !== null && U.unitKey(b.textContent) === now;
+        b.classList.toggle("on", !!same);
+        b.setAttribute("aria-pressed", same ? "true" : "false");
+      });
+    }
+    /* the correct unit is first in the table — shuffle, or the answer is
+       "always click the left-hand button" */
+    var order = units.slice();
+    for (var i = order.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = order[i]; order[i] = order[j]; order[j] = t;
+    }
+    order.forEach(function (u) {
+      var b = document.createElement("button");
+      b.type = "button"; b.textContent = u;
+      b.setAttribute("aria-label", "use the unit " + u);
+      b.onclick = function () {
+        var v = String(el.value || ""), tail = current();
+        if (tail) v = v.slice(0, v.length - tail.length);          /* drop the old unit */
+        v = v.replace(/\s+$/, "");
+        var already = U && tail && U.unitKey(tail) !== null && U.unitKey(tail) === U.unitKey(u);
+        el.value = already ? v : (v + (v ? " " : "") + u);          /* tapping it again clears it */
+        el.classList.remove("ok", "bad");
+        paint(); el.focus();
+      };
+      wrap.appendChild(b);
+    });
+    el.addEventListener("input", paint);
+    el._units = wrap;
+    setTimeout(paint, 0);
+    return wrap;
+  }
+
+  function paintVerdict(el, ok, why){
     el.classList.remove("ok", "bad");
     el.classList.add(ok ? "ok" : "bad");
     var m = el._mark;
     if (!m) { m = document.createElement("span"); el.parentNode.insertBefore(m, el.nextSibling); el._mark = m; }
     m.className = "mark " + (ok ? "ok" : "bad");
     m.textContent = ok ? "✓" : "✗";
+    /* a right number with a missing or wrong unit is not the same mistake as a
+       wrong number, and the student should be told which one they made */
+    var h = el._hint;
+    if (why === "nounit" || why === "unit") {
+      if (!h) { h = document.createElement("span"); h.className = "qhintline";
+                (el.closest(".qrow") || el.parentNode).appendChild(h); el._hint = h; }
+      h.textContent = why === "nounit"
+        ? "The number is right — now add the unit. A measurement is a number AND a unit."
+        : "The number is right, but that is not the unit this question asks for.";
+    } else if (h) { h.textContent = ""; }
+    if (el._units) [].forEach.call(el._units.children, function (b) { b.disabled = true; });
   }
 
   function mountQuestion(host, inst, cfg){
@@ -882,6 +950,7 @@
           var row = document.createElement("label"); row.className = "qrow";
           var sp = document.createElement("span"); sp.textContent = inp.label;
           row.appendChild(sp); row.appendChild(el);
+          if (inp.units && inp.units.length) row.appendChild(unitButtons(el, inp.units));
           form.appendChild(row);
         }
         fieldEls[inp.k] = el;
@@ -897,10 +966,11 @@
       form.addEventListener("submit", function(ev){
         ev.preventDefault();
         if (done) return;
-        var vals = {}, verd = {}, allOk = true;
+        var vals = {}, verd = {}, why = {}, allOk = true;
         inst.inputs.forEach(function(inp){
           vals[inp.k] = fieldEls[inp.k].value;
           var ok = false; try { ok = !!inp.check(vals[inp.k]); } catch(e){}
+          if (typeof inp.judge === "function") { try { why[inp.k] = inp.judge(vals[inp.k]); } catch(e){} }
           verd[inp.k] = ok; if (!ok) allOk = false;
         });
         var correct = allOk;
@@ -910,7 +980,7 @@
           if (cc) inst.inputs.forEach(function(inp){ verd[inp.k] = true; });
           else if (allOk) inst.inputs.forEach(function(inp){ verd[inp.k] = false; });
         }
-        inst.inputs.forEach(function(inp){ paintVerdict(fieldEls[inp.k], verd[inp.k]); });
+        inst.inputs.forEach(function(inp){ paintVerdict(fieldEls[inp.k], verd[inp.k], why[inp.k]); });
         if (cfg.guided) { if (correct) { lockForm(); guidedOk(); } return; }
         lockForm();
         finish(correct);
