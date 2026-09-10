@@ -113,6 +113,11 @@ body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background
 .vset .why{font-size:13px;color:var(--muted);margin:0}
 
 /* ---- quoted lines ---- */
+.vset .vhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.vlink{font-size:12.5px;font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap}
+.vlink:hover{text-decoration:underline}
+#gpop .go{display:block;margin-top:8px;font-size:12.5px;font-weight:700;color:var(--accent);text-decoration:none}
+#gpop .go:hover{text-decoration:underline}
 .lines{display:grid;gap:9px;margin-top:10px}
 .line{background:var(--quote);border:1px solid var(--line);border-left:4px solid var(--accent);
       border-radius:0 9px 9px 0;padding:10px 14px}
@@ -130,6 +135,21 @@ body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background
 .opt.wrong{opacity:.5;text-decoration:line-through}
 .fb{font-size:13px;margin-top:8px;display:none;color:var(--muted)}
 .fb.on{display:block}
+
+/* ---- video ---- */
+.vid{margin:0 0 14px}
+.vidbox{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:11px;
+        padding:0;overflow:hidden}
+.vidbox .ratio{position:relative;width:100%;padding-top:56.25%}
+.vidbox .ratio>iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vidplay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+         justify-content:center;gap:9px;background:var(--accent-soft);border:0;cursor:pointer;
+         font-family:inherit;color:var(--ink);padding:18px;text-align:center}
+.vidplay:hover{background:var(--dv-bg)}
+.vidplay .tri{width:0;height:0;border-style:solid;border-width:13px 0 13px 22px;
+              border-color:transparent transparent transparent var(--accent)}
+.vidplay .big{font-weight:700;font-size:15px}
+.vidplay .small{font-size:12.5px;color:var(--muted);max-width:44ch;line-height:1.5}
 
 /* ---- source note ---- */
 .source{font-size:12.2px;color:var(--faint);line-height:1.6;margin-top:8px}
@@ -182,6 +202,20 @@ body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background
       <li>Read it again with <b>Techniques</b> on, for how she says it.</li>
       <li>Use the vocabulary hub at the end to check the words you did not know.</li>
     </ol>
+  </div>
+
+  <h2>Watch it first</h2>
+  <p class="lede">Fifteen minutes. Read the speech afterwards and you will hear her voice in it — which
+     is most of how the argument works.</p>
+  <div class="vid">
+    <div class="vidbox"><div class="ratio" id="vidSlot">
+      <button class="vidplay" id="vidPlay" type="button">
+        <span class="tri"></span>
+        <span class="big">Play the speech on YouTube</span>
+        <span class="small">The video is not loaded until you press play. Pressing play loads it from
+              youtube-nocookie.com, and YouTube will see that you watched it.</span>
+      </button>
+    </div></div>
   </div>
 
   <h2>The speech</h2>
@@ -286,6 +320,35 @@ var SPEECH = [
 
 /* word -> meaning. Marked automatically in the speech, longest match first. */
 var KEYWORDS = {
+ "the Leader of the Opposition":"The head of the largest party that is not in government.",
+ "the Speaker":"The member elected to run debates in the House and keep order.",
+ "the member for Fisher":"The way a politician is named in parliament: by the electorate they represent, not by their surname.",
+ "preselect":"To choose, inside a party, which candidate will stand for a seat at an election.",
+ "preselection":"The process by which a party picks its candidate for an electorate.",
+ "interject":"To call out while another member is speaking.",
+ "order":"The rules of behaviour in the chamber; the Speaker calls 'order' to restore them.",
+ "Hansard":"The official written record of everything said in an Australian parliament.",
+ "misogynist":"A person who hates or despises women.",
+ "hypocrite":"A person who criticises in others behaviour they accept in themselves.",
+ "rebuttal":"An answer that argues directly against a claim someone has just made.",
+ "anaphora":"Beginning several sentences or clauses with the same words, for rhythm and force.",
+ "repetition":"Saying a word or phrase again so that the audience remembers it.",
+ "rhetorical question":"A question asked for effect, when the answer is already obvious.",
+ "direct address":"Speaking straight to one person or group, using 'you' or naming them.",
+ "antithesis":"Setting two opposite ideas side by side in a balanced sentence.",
+ "irony":"Saying one thing while the situation shows the opposite.",
+ "sarcasm":"Saying the opposite of what you mean, with a tone meant to sting.",
+ "catalogue":"A long list of items given one after another to build up weight.",
+ "testimony":"A first-hand account given by someone who experienced it.",
+ "register":"The level of formality and tone chosen for a piece of writing or speaking.",
+ "contention":"The main claim a speaker or writer is arguing for.",
+ "evidence":"The facts, quotations or examples offered to support a claim.",
+ "he needs a mirror":"An idiom meaning: look at your own behaviour before you criticise someone else's.",
+ "not now not ever":"A flat refusal covering both the present and the future.",
+ "died of shame":"An idiom meaning someone would have been overwhelmed by embarrassment or disgrace.",
+ "make an honest woman of":"An old idiom for marrying a woman, implying she was disgraced until a man married her.",
+ "ditch the witch":"A protest slogan aimed at the Prime Minister; quoted in the speech as an example of sexist language.",
+ "a better standard":"A higher level of behaviour than the one currently being accepted.",
  "misogyny":"Hatred of women, or deep prejudice against them.",
  "misogynists":"People who hate women or hold women in contempt.",
  "sexism":"Treating someone unfairly because of their sex, usually a woman.",
@@ -423,16 +486,18 @@ var DEVICES = [
 
 /* the vocabulary hub, in the same five sets as the Word Builder */
 var VSETS = [
- {h:"The parliament words", why:"Without these you cannot tell who is speaking, or about whom.",
-  w:["motion","Leader of the Opposition","Speaker","Deputy Speaker","member for Fisher","frontbench","preselected","shadow parliamentary secretary","interjecting","House of Representatives","high office","the chair"]},
- {h:"The two words the speech is built on", why:"She uses them together, but they are not the same word.",
-  w:["sexism","sexist","misogyny","misogynists","anti-women","underrepresentation","physiology","temperament","feminine"]},
- {h:"The charge: a double standard", why:"This is the argument. Everything else is evidence for it.",
-  w:["double standard","hypocrisy","standard","responsibility","conduct","peddling","acquitted","tolerated","resignation","apologise","entitled"]},
- {h:"Words for being offended", why:"She grades them. Notice which word she saves for the worst thing.",
-  w:["offended","repulsive","vile","vilest","revolting","objection"]},
- {h:"The lines people quote", why:"Idioms: the words together mean something the separate words do not.",
-  w:["battering ram","ducking for cover","turn a hair","good fun","game-playing","track record"]}
+ {h:"The parliament words", unit:"gillard-parliament", why:"Without these you cannot tell who is speaking, or about whom.",
+  w:["motion", "the Leader of the Opposition", "Deputy Speaker", "the Speaker", "the member for Fisher", "frontbench", "preselect", "preselection", "shadow parliamentary secretary", "interject", "order", "Hansard", "the chair", "high office"]},
+ {h:"The two words the speech is built on", unit:"gillard-sexism-misogyny", why:"She uses the two together, but they are not the same word.",
+  w:["misogyny", "misogynist", "sexism", "sexist", "underrepresentation", "physiology", "temperament", "anti-women", "feminine", "offended", "repulsive", "vile"]},
+ {h:"The charge: a double standard", unit:"gillard-double-standard", why:"This is the argument. Everything else is evidence for it.",
+  w:["double standard", "hypocrisy", "hypocrite", "standard", "responsibility", "conduct", "objection", "acquitted", "peddling", "tolerated", "resignation", "apologise", "reflect", "entitled"]},
+ {h:"How the speech is built", unit:"gillard-rhetoric", why:"The names for the moves she makes \u2014 use them in your own analysis.",
+  w:["rebuttal", "anaphora", "repetition", "rhetorical question", "direct address", "antithesis", "irony", "sarcasm", "catalogue", "testimony", "register", "contention", "evidence"]},
+ {h:"The lines people quote", unit:"gillard-idioms", why:"Idioms: the words together mean something the separate words do not.",
+  w:["he needs a mirror", "not now not ever", "battering ram", "ducking for cover", "turn a hair", "died of shame", "make an honest woman of", "ditch the witch", "good fun", "game-playing", "a better standard"]},
+ {h:"More words in the speech", unit:"", why:"Worth knowing to read the speech, though the Word Builder teaches them elsewhere.",
+  w:["House of Representatives", "Leader of the Opposition", "Speaker", "association", "assumption", "attributes", "carbon pricing", "distinction", "double standards", "exhibition", "interjecting", "member for Fisher", "member for Maranoa", "member for Scullin", "misogynists", "parliament", "preselected", "preselections", "proper process", "public domain", "public record", "reserved his decision", "revolting", "speakership", "terminology", "track record", "underrepresented", "vilest"]}
 ];
 
 /* the famous lines, and why each works */
@@ -472,6 +537,13 @@ var QUIZ = [
   opts:["Antithesis","Accumulation","Inclusive we"], a:0,
   fb:"Antithesis — capable against incapable, same root, matching grammar, across “but”."}
 ];
+
+/* where the words live in the Word Builder — the same five units this page shows */
+var WORD_BUILDER = "https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/learn/vce/english/";
+var WORD_BUILDER_FOLDER = "https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/l/vce/english/f/gillard-misogyny";
+
+/* the recording. id only — the player is built at press time, never before. */
+var VIDEO = { id:"ihd7ofrwQX0", title:"Julia Gillard's misogyny speech, 9 October 2012" };
 
 var SOURCE = "Speech: Julia Gillard, House of Representatives, 9 October 2012, on the motion moved by the Leader of the Opposition. The text is the Hansard record of proceedings of the Parliament of Australia, © Commonwealth of Australia, reproduced here verbatim and unaltered for classroom study, with attribution and no commercial use. The headings, the notes on technique, the meanings and the practice questions are the ELC's own teaching material, not part of the record. If a word here differs from the official Hansard, Hansard is correct.";
 
@@ -558,12 +630,19 @@ var SOURCE = "Speech: Julia Gillard, House of Representatives, 9 October 2012, o
 
   /* ---- key word popup ---- */
   var pop=document.getElementById("gpop");
+  /* which Word Builder unit teaches each word, so a tap can offer to practise it */
+  var UNIT_OF={};
+  VSETS.forEach(function(set){ if(set.unit) set.w.forEach(function(w){ UNIT_OF[w.toLowerCase()]=set.unit; }); });
   function closePop(){ pop.style.display="none"; }
   document.addEventListener("click",function(e){
     var el=e.target.closest?e.target.closest(".kw"):null;
     if(!el||!document.body.classList.contains("show-kw")){ if(!pop.contains(e.target)) closePop(); return; }
     var w=el.getAttribute("data-w");
-    pop.innerHTML='<span class="w">'+esc(w)+'</span><span class="m">'+esc(KEYWORDS[w]||"")+'</span>';
+    var unit=UNIT_OF[w.toLowerCase()];
+    var go = unit
+      ? '<a class="go" href="'+WORD_BUILDER+encodeURIComponent(unit)+'" target="_blank" rel="noopener">Practise this set in Word Builder \u2197</a>'
+      : '<a class="go" href="'+WORD_BUILDER_FOLDER+'" target="_blank" rel="noopener">Open the Word Builder folder \u2197</a>';
+    pop.innerHTML='<span class="w">'+esc(w)+'</span><span class="m">'+esc(KEYWORDS[w]||"")+'</span>'+go;
     pop.style.display="block";
     var r=el.getBoundingClientRect();
     var left=Math.min(r.left+window.scrollX, window.scrollX+document.documentElement.clientWidth-pop.offsetWidth-12);
@@ -576,7 +655,11 @@ var SOURCE = "Speech: Julia Gillard, House of Representatives, 9 October 2012, o
   /* ---- vocabulary hub ---- */
   var vh=document.getElementById("vhub"), vhtml="";
   VSETS.forEach(function(set){
-    vhtml+='<div class="vset"><h3>'+esc(set.h)+'</h3><p class="why">'+esc(set.why)+'</p><div class="vgrid">';
+    var link = set.unit
+      ? '<a class="vlink" href="'+WORD_BUILDER+encodeURIComponent(set.unit)+'" target="_blank" rel="noopener">Practise this set \u2197</a>'
+      : '<a class="vlink" href="'+WORD_BUILDER_FOLDER+'" target="_blank" rel="noopener">Open the folder \u2197</a>';
+    vhtml+='<div class="vset"><div class="vhead"><h3>'+esc(set.h)+'</h3>'+link+'</div>'+
+           '<p class="why">'+esc(set.why)+'</p><div class="vgrid">';
     set.w.forEach(function(w){
       var m=KEYWORDS[w];
       if(!m) return;
@@ -612,6 +695,21 @@ var SOURCE = "Speech: Julia Gillard, House of Representatives, 9 October 2012, o
       fb.textContent="Not that one — read the line again and try another."; fb.classList.add("on");
     }
   });
+
+  /* ---- video: nothing is requested from YouTube until this is pressed ---- */
+  var vidPlay=document.getElementById("vidPlay");
+  if(vidPlay){
+    vidPlay.addEventListener("click",function(){
+      var f=document.createElement("iframe");
+      f.src="https://www.youtube-nocookie.com/embed/"+encodeURIComponent(VIDEO.id)+"?rel=0&autoplay=1";
+      f.title=VIDEO.title;
+      f.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      f.referrerPolicy="strict-origin-when-cross-origin";
+      f.allowFullscreen=true;
+      var slot=document.getElementById("vidSlot");
+      slot.innerHTML=""; slot.appendChild(f);
+    });
+  }
 
   document.getElementById("sourceNote").innerHTML="<b>Source and copyright.</b> "+esc(SOURCE);
 })();
