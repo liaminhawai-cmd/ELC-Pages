@@ -23,6 +23,9 @@
   --line:#dde3d9; --line-soft:#eaefe6; --accent:#33663f; --accent-soft:#e8f0e7;
   --on-accent:#ffffff;
   --kw-bg:#fbf1d8; --kw-tx:#7a5405; --kw-line:#e6c97a;   /* key word   */
+  --prefix-bg:#e3ecfa; --prefix-tx:#1f4d8f;               /* word build: prefix / root / suffix */
+  --root-bg:#fbe9d7;   --root-tx:#8a4a12;
+  --suffix-bg:#e6f0e3; --suffix-tx:#2f5f3a;
   --dv-bg:#e4efe3; --dv-tx:#2d5c38; --dv-line:#9dc0a1;   /* technique  */
   --quote:#f6f3ea; --warnbg:#fdf3e3; --warntx:#7d5211;
 }
@@ -32,6 +35,9 @@
     --line:#333a2e; --line-soft:#262b21; --accent:#7fb98a; --accent-soft:#222b1f;
     --on-accent:#11150f;
     --kw-bg:#332b16; --kw-tx:#e8c87c; --kw-line:#6d5a24;
+    --prefix-bg:#1d2a3d; --prefix-tx:#9fc0ee;
+    --root-bg:#3a2a1a;   --root-tx:#f0c39a;
+    --suffix-bg:#1f2e22; --suffix-tx:#a6d3ae;
     --dv-bg:#1f2e22; --dv-tx:#9fcfa8; --dv-line:#3f5f46;
     --quote:#20241a; --warnbg:#2b2417; --warntx:#e6bd77;
   }
@@ -97,16 +103,32 @@ body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background
 .note .rule{display:block;font-weight:700;margin-bottom:2px}
 
 /* ---- glossary popup ---- */
-#gpop{position:absolute;z-index:60;max-width:290px;background:var(--paper);border:1px solid var(--kw-line);
-      border-radius:9px;padding:9px 12px;font-size:13.5px;box-shadow:0 8px 24px rgba(0,0,0,.16);display:none}
-#gpop .w{font-weight:800;color:var(--kw-tx);display:block;margin-bottom:2px}
+#gpop{position:absolute;z-index:60;width:min(340px,calc(100vw - 16px));background:var(--paper);border:1px solid var(--kw-line);
+      border-radius:9px;padding:10px 12px 11px;font-size:13.5px;box-shadow:0 8px 24px rgba(0,0,0,.16);display:none}
+#gpop .w{font-weight:800;color:var(--kw-tx);display:block;margin-bottom:2px;font-size:15px}
 #gpop .m{color:var(--ink)}
+#gpop .form{font-size:12px;color:var(--muted);display:block;margin-top:2px}
+.plabel{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.8px;font-weight:800;color:var(--faint);margin:9px 0 4px}
+.morphs{display:flex;gap:5px;flex-wrap:wrap}
+.morph{display:inline-flex;align-items:baseline;gap:4px;border-radius:999px;padding:3px 9px;font-size:12.5px;font-weight:800;
+       background:var(--root-bg);color:var(--root-tx)}
+.morph small{font-weight:600;opacity:.85}
+.morph.prefix{background:var(--prefix-bg);color:var(--prefix-tx)}
+.morph.suffix{background:var(--suffix-bg);color:var(--suffix-tx)}
+.whole{font-size:12.5px;color:var(--muted);font-style:italic;margin:0}
+.tr{font-weight:700;font-size:15px;line-height:1.5}
+.tr[dir=rtl]{text-align:right}
+.lang{padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink);
+      font-size:14px;font-weight:600;max-width:100%}
 
 /* ---- vocab hub ---- */
 .vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:9px;margin-top:10px}
 .vcard{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 12px}
 .vcard .w{font-weight:700;font-size:14.5px}
 .vcard .m{font-size:12.8px;color:var(--muted);margin-top:2px;line-height:1.45}
+.vcard .tr{font-size:13.5px;margin-top:4px;color:var(--kw-tx)}
+.vcard .morphs{margin-top:6px}
+.vcard .morph{padding:2px 7px;font-size:11.5px}
 .vset{margin-top:16px}
 .vset h3{color:var(--accent);font-size:14px;text-transform:uppercase;letter-spacing:.5px;
          font-family:system-ui,sans-serif;margin-bottom:2px}
@@ -161,7 +183,7 @@ body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background
 }
 </style>
 </head>
-<body>
+<body class="show-kw">
 <div class="container">
 
   <div class="topbar">
@@ -172,13 +194,15 @@ body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background
   <span class="eyebrow">House of Representatives · 9 October 2012</span>
   <h1>The misogyny speech</h1>
   <p class="sub">Julia Gillard, Prime Minister of Australia, replying to a motion to remove the Speaker.</p>
-  <p class="lede">The whole speech is below. Turn on <b>Key words</b> to see the words worth learning, and
-     tap one to read its meaning. Turn on <b>Techniques</b> to see how the speech is built, named where it happens.</p>
+  <p class="lede">The whole speech is below. The <b>key words</b> are marked: tap one to read its meaning, its
+     word parts and a translation in your language. Turn on <b>Techniques</b> to see how the speech is built,
+     named where it happens. The language you choose is saved on this device only.</p>
 
   <div class="btnrow">
-    <button class="btn" id="tKw" aria-pressed="false">Key words</button>
+    <button class="btn" id="tKw" aria-pressed="true">Key words</button>
     <button class="btn" id="tDv" aria-pressed="false">Techniques</button>
-    <a class="btn" href="https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/words" target="_blank" rel="noopener">Practise these words →</a>
+    <select class="lang" id="langSelect" aria-label="Translation language"></select>
+    <a class="btn" id="wbFolder" href="#" target="_blank" rel="noopener">Practise these words in Word Builder ↗</a>
   </div>
 
   <h2>Before you read</h2>
@@ -198,7 +222,7 @@ body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background
        protest signs. They are quoted, not said by her, and they are the evidence her argument rests on.
        They are in the record and they are left in.</p>
     <ol class="steps">
-      <li>Read it once with both toggles off, for what she is saying.</li>
+      <li>Read it once with <b>Key words</b> and <b>Techniques</b> both off, for what she is saying.</li>
       <li>Read it again with <b>Techniques</b> on, for how she says it.</li>
       <li>Use the vocabulary hub at the end to check the words you did not know.</li>
     </ol>
@@ -224,8 +248,8 @@ body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background
 
   <hr class="hr">
   <h2>Vocabulary hub</h2>
-  <p class="lede">Every key word from the speech, in five sets. These are the same sets you can build and drill
-     in the Word Builder.</p>
+  <p class="lede">Every key word from the speech, in five sets, with its word parts and a translation in the
+     language chosen above. These are the same sets you can build and drill in the Word Builder.</p>
   <div id="vhub"></div>
 
   <hr class="hr">
@@ -539,8 +563,118 @@ var QUIZ = [
 ];
 
 /* where the words live in the Word Builder — the same five units this page shows */
-var WORD_BUILDER = "https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/learn/vce/english/";
-var WORD_BUILDER_FOLDER = "https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/l/vce/english/f/gillard-misogyny";
+/* VOCAB-START */
+/* Word build and translations for every key word, copied from Word Builder (EAL-Vocabulary-Site/data/vocab.json)
+   so the page works offline. tr = 18 languages; parts = [surface, type, meaning]; form = the headword this is a form of. */
+var VOCAB = {
+  "the Leader of the Opposition": {"tr":{"zh-Hant":"反對黨領袖","zh-Hans":"反对党领袖","vi":"lãnh đạo phe đối lập","ja":"野党党首","ko":"야당 대표","ar":"زعيم المعارضة","fa":"رهبر مخالفان","ur":"قائد حزبِ اختلاف","ps":"د اپوزیسیون مشر","hi":"विपक्ष का नेता","ta":"எதிர்க்கட்சித் தலைவர்","ml":"പ്രതിപക്ഷ നേതാവ്","am":"የተቃዋሚ ፓርቲ መሪ","tl":"Lider ng Oposisyon","es":"líder de la oposición","fr":"chef de l'opposition","ro":"liderul opoziției","ru":"лидер оппозиции"},"parts":[["lead","root","guide"],["er","suffix","one who"],["op","prefix","against"],["posit","root","place"],["ion","suffix","act/process"]]},
+  "the Speaker": {"tr":{"zh-Hant":"議長","zh-Hans":"议长","vi":"Chủ tịch Hạ viện","ja":"下院議長","ko":"하원 의장","ar":"رئيس المجلس","fa":"رئیس مجلس","ur":"اسپیکر","ps":"د مجلس مشر","hi":"सदन अध्यक्ष","ta":"சபாநாயகர்","ml":"സ്പീക്കർ","am":"አፈ ጉባኤ","tl":"Ispiker ng Kapulungan","es":"presidente de la Cámara","fr":"président de la Chambre","ro":"președintele Camerei","ru":"спикер палаты"},"parts":[["speak","root","say aloud"],["er","suffix","one who"]]},
+  "the member for Fisher": {"tr":{"zh-Hant":"費雪選區議員","zh-Hans":"费舍尔选区议员","vi":"đại biểu đơn vị Fisher","ja":"フィッシャー選挙区選出議員","ko":"피셔 선거구 의원","ar":"النائب عن دائرة فيشر","fa":"نمایندهٔ حوزهٔ فیشر","ur":"فشر حلقے کے رکن","ps":"د فیشر حوزې استازی","hi":"फ़िशर क्षेत्र के सदस्य","ta":"ஃபிஷர் தொகுதி உறுப்பினர்","ml":"ഫിഷർ മണ്ഡലം അംഗം","am":"የፊሸር ምርጫ ክልል ተወካይ","tl":"kinatawan ng distrito ng Fisher","es":"el diputado por Fisher","fr":"le député de Fisher","ro":"deputatul de Fisher","ru":"депутат от округа Фишер"},"parts":[["member","root","limb/part"]]},
+  "preselect": {"tr":{"zh-Hant":"黨內提名","zh-Hans":"党内提名","vi":"chọn ứng viên nội bộ đảng","ja":"党の公認候補に選ぶ","ko":"당 후보로 공천하다","ar":"يرشّح داخل الحزب","fa":"نامزد حزبی برگزیدن","ur":"پارٹی امیدوار نامزد کرنا","ps":"د ګوند نوماند ټاکل","hi":"पार्टी उम्मीदवार चुनना","ta":"கட்சி வேட்பாளராகத் தேர்ந்தெடு","ml":"പാർട്ടി സ്ഥാനാർത്ഥിയായി തിരഞ്ഞെടുക്കുക","am":"የፓርቲ እጩ መምረጥ","tl":"pumili ng kandidato ng partido","es":"designar candidato del partido","fr":"investir un candidat","ro":"a desemna candidatul partidului","ru":"выдвигать кандидатом от партии"},"parts":[["pre","prefix","before"],["se","prefix","apart"],["lect","root","choose"]]},
+  "preselection": {"tr":{"zh-Hant":"黨內提名程序","zh-Hans":"党内提名程序","vi":"việc chọn ứng viên của đảng","ja":"党公認候補の選定","ko":"공천(후보 선출)","ar":"الترشيح الحزبي الداخلي","fa":"گزینش نامزد حزبی","ur":"پارٹی امیدوار کی نامزدگی","ps":"د ګوند نوماند ټاکنه","hi":"पार्टी उम्मीदवार चयन","ta":"கட்சி வேட்பாளர் தேர்வு","ml":"പാർട്ടി സ്ഥാനാർത്ഥി നിർണയം","am":"የፓርቲ እጩ ምርጫ","tl":"seleksiyon ng kandidato ng partido","es":"designación de candidato","fr":"investiture","ro":"desemnarea candidatului de partid","ru":"выдвижение кандидата партией"},"parts":[["pre","prefix","before"],["se","prefix","apart"],["lect","root","choose"],["ion","suffix","act/process"]]},
+  "interject": {"tr":{"zh-Hant":"插話打斷","zh-Hans":"插话打断","vi":"ngắt lời chen ngang","ja":"野次を飛ばす","ko":"발언 중 끼어들다","ar":"يقاطع المتحدث","fa":"میان کلام پریدن","ur":"ٹوکنا","ps":"خبره پرې کول","hi":"टोकना","ta":"இடைமறித்துப் பேசு","ml":"ഇടയ്ക്ക് കയറി പറയുക","am":"አቋርጦ መናገር","tl":"sumabat","es":"interrumpir a gritos","fr":"interrompre par des cris","ro":"a interveni întrerupând","ru":"выкрикивать с места"},"parts":[["inter","prefix","between"],["ject","root","throw"]]},
+  "order": {"tr":{"zh-Hant":"議場秩序","zh-Hans":"议场秩序","vi":"trật tự phiên họp","ja":"議事の秩序","ko":"의사 질서","ar":"النظام في الجلسة","fa":"نظم جلسه","ur":"نظم و ضبط","ps":"د غونډې نظم","hi":"सदन की व्यवस्था","ta":"ஒழுங்கு (அவைநடை)","ml":"ക്രമം (സഭാ ചട്ടം)","am":"የስብሰባ ሥርዓት","tl":"kaayusan sa sesyon","es":"orden en la sala","fr":"rappel à l'ordre","ro":"ordine în ședință","ru":"порядок в зале"},"parts":[["order","root","arrangement/system"]]},
+  "Hansard": {"tr":{"zh-Hant":"國會議事錄","zh-Hans":"议会议事录","vi":"biên bản nghị viện","ja":"議会議事録","ko":"의회 속기록","ar":"محضر جلسات البرلمان","fa":"صورت‌جلسهٔ رسمی مجلس","ur":"پارلیمانی کارروائی کا ریکارڈ","ps":"د پارلمان رسمي یادښت","hi":"संसद कार्यवाही रिकॉर्ड","ta":"நாடாளுமன்ற அவைக்குறிப்பு","ml":"പാർലമെന്റ് നടപടിരേഖ","am":"የፓርላማ ቃለ ጉባኤ","tl":"opisyal na talaan ng parlamento","es":"diario de sesiones","fr":"compte rendu parlementaire","ro":"stenograma parlamentului","ru":"стенограмма парламента"},"parts":[["Hansard","root","printer's surname"]]},
+  "misogynist": {"tr":{"zh-Hant":"厭女者","zh-Hans":"厌女者","vi":"kẻ ghét phụ nữ","ja":"女性蔑視者","ko":"여성 혐오자","ar":"كاره النساء","fa":"زن‌ستیز","ur":"عورت بیزار","ps":"د ښځو کینه‌کوونکی","hi":"स्त्रीद्वेषी","ta":"பெண்வெறுப்பாளர்","ml":"സ്ത്രീവിദ്വേഷി","am":"ሴቶችን የሚጠላ ሰው","tl":"mapoot sa kababaihan","es":"misógino","fr":"misogyne","ro":"misogin","ru":"женоненавистник"},"parts":[["miso","prefix","hatred of"],["gyn","root","woman"],["ist","suffix","person who"]]},
+  "hypocrite": {"tr":{"zh-Hant":"偽君子","zh-Hans":"伪君子","vi":"kẻ đạo đức giả","ja":"偽善者","ko":"위선자","ar":"منافق","fa":"ریاکار","ur":"منافق","ps":"دوه‌مخی","hi":"पाखंडी","ta":"பாசாங்குக்காரர்","ml":"കപടനാട്യക്കാരൻ","am":"ግብዝ","tl":"mapagkunwari","es":"hipócrita","fr":"hypocrite","ro":"ipocrit","ru":"лицемер"},"parts":[["hypo","prefix","under"],["crit","root","judge/discern"]]},
+  "rebuttal": {"tr":{"zh-Hant":"反駁","zh-Hans":"反驳","vi":"phản bác","ja":"反論","ko":"반박","ar":"التفنيد","fa":"رد","ur":"تردید","ps":"رد","hi":"खंडन","ta":"மறுப்பு","ml":"ഖണ്ഡനം","am":"ማስተባበያ","tl":"pagtutol","es":"refutación","fr":"réfutation","ro":"respingere","ru":"опровержение"},"parts":[["re","prefix","back"],["butt","root","strike/push"],["al","suffix","relating to"]]},
+  "anaphora": {"tr":{"zh-Hant":"首語重複","zh-Hans":"首语重复","vi":"phép điệp đầu","ja":"首句反復","ko":"어두 반복","ar":"الاستهلال","fa":"تکرار آغازین","ur":"تکرارِ ابتدا","ps":"پیل تکرار","hi":"आरंभिक पुनरावृत्ति","ta":"தொடக்கத் திரும்பல்","ml":"ആരംഭ ആവർത്തനം","am":"የመነሻ ድግግሞሽ","tl":"anapora","es":"anáfora","fr":"anaphore","ro":"anaforă","ru":"анафора"},"parts":[["ana","prefix","up/throughout"],["phor","root","carry"]]},
+  "repetition": {"tr":{"zh-Hant":"重複","zh-Hans":"重复","vi":"điệp ngữ","ja":"反復","ko":"반복","ar":"التكرار","fa":"تکرار","ur":"تکرار","ps":"تکرار","hi":"पुनरावृत्ति","ta":"ஆவர்த்தனம்","ml":"ആവർത്തനം","am":"ድግግሞሽ","tl":"pag-uulit","es":"repetición","fr":"répétition","ro":"repetiție","ru":"повтор"},"parts":[["re","prefix","again"],["petit","root","strive/seek"],["ion","suffix","act/process"]]},
+  "rhetorical question": {"tr":{"zh-Hant":"反問句","zh-Hans":"反问句","vi":"câu hỏi tu từ","ja":"修辞疑問文","ko":"수사 의문문","ar":"السؤال البلاغي","fa":"پرسش بلاغی","ur":"بلاغی سوال","ps":"بلاغتي پوښتنه","hi":"आलंकारिक प्रश्न","ta":"சொல்லாட்சி வினா","ml":"ആലങ്കാരിക ചോദ്യം","am":"የአጽንኦት ጥያቄ","tl":"patalumpating tanong","es":"pregunta retórica","fr":"question rhétorique","ro":"întrebare retorică","ru":"риторический вопрос"},"parts":[["rhetor","root","public speaker"],["ical","suffix","relating to"],["quest","root","seek, win"],["ion","suffix","act/process"]]},
+  "direct address": {"tr":{"zh-Hant":"直接稱呼（用「你」）","zh-Hans":"直接称呼（用“你”）","vi":"cách nói trực tiếp với người đọc","ja":"直接呼びかけ","ko":"직접 호칭","ar":"المخاطبة المباشرة","fa":"خطاب مستقیم","ur":"براہِ راست مخاطبت","ps":"مستقیم مخاطبت","hi":"प्रत्यक्ष संबोधन","ta":"நேரடி விளிப்பு","ml":"നേരിട്ടുള്ള സംബോധന","am":"ቀጥተኛ አነጋገር","tl":"tuwirang pagtawag sa mambabasa","es":"apelación directa","fr":"adresse directe","ro":"adresare directă","ru":"прямое обращение"},"parts":[["di","prefix","apart"],["rect","root","straight/guide"],["ad","prefix","toward"],["dress","root","set right"]]},
+  "antithesis": {"tr":{"zh-Hant":"對照法","zh-Hans":"对照法","vi":"phép đối lập","ja":"対照法","ko":"대조법","ar":"الطباق","fa":"تضاد","ur":"تضاد","ps":"متضاد جوړه","hi":"विरोध अलंकार","ta":"எதிர்நிலை அணி","ml":"വൈരുദ്ധ്യാലങ്കാരം","am":"ተቃርኖ","tl":"antitesis","es":"antítesis","fr":"antithèse","ro":"antiteză","ru":"антитеза"},"parts":[["anti","prefix","against"],["thes","root","place"]]},
+  "irony": {"tr":{"zh-Hant":"反諷","zh-Hans":"反讽","vi":"sự mỉa mai","ja":"皮肉","ko":"아이러니","ar":"سخرية","fa":"کنایه","ur":"طنز","ps":"کنایه","hi":"व्यंग्य","ta":"நகைமுரண்","ml":"വിരോധോക്തി","am":"አሽሙር","tl":"ironya","es":"ironía","fr":"ironie","ro":"ironie","ru":"ирония"},"parts":[["iron","root","pretending not to know"],["y","suffix","state of (makes a noun)"]]},
+  "sarcasm": {"tr":{"zh-Hant":"諷刺","zh-Hans":"讽刺","vi":"lời châm biếm","ja":"皮肉","ko":"비꼬기","ar":"سخرية","fa":"طعنه","ur":"طنز و طعنہ","ps":"ملنډې","hi":"कटाक्ष","ta":"நையாண்டி","ml":"പരിഹാസം","am":"አሽሙር","tl":"panunuya","es":"sarcasmo","fr":"sarcasme","ro":"sarcasm","ru":"сарказм"},"parts":[["sarc","root","flesh"],["asm","suffix","act of"]]},
+  "catalogue": {"tr":{"zh-Hant":"羅列清單","zh-Hans":"罗列清单","vi":"bản liệt kê dài","ja":"列挙","ko":"나열 목록","ar":"سرد متتابع","fa":"فهرست بلند","ur":"طویل فہرست","ps":"اوږد لړلیک","hi":"लंबी सूची","ta":"நீண்ட பட்டியல்","ml":"നീണ്ട പട്ടിക","am":"ረጅም ዝርዝር","tl":"mahabang talaan","es":"enumeración","fr":"énumération","ro":"înșiruire","ru":"перечисление"},"parts":[["cata","prefix","down"],["logue","root","study/word"]]},
+  "testimony": {"tr":{"zh-Hant":"證言","zh-Hans":"证言","vi":"lời chứng","ja":"証言","ko":"증언","ar":"الشهادة","fa":"گواهی","ur":"گواہی","ps":"شاهدي","hi":"गवाही","ta":"சாட்சியம்","ml":"സാക്ഷ്യം","am":"ምስክርነት","tl":"patotoo","es":"el testimonio","fr":"le témoignage","ro":"mărturie","ru":"свидетельство"},"parts":[["testi","root","bear witness/dispute"],["mony","suffix","state or result of (makes a noun)"]]},
+  "register": {"tr":{"zh-Hant":"語域（正式或隨意）","zh-Hans":"语域（正式或随意）","vi":"mức trang trọng của lời nói","ja":"言葉づかいの丁寧さ","ko":"말투의 격식 수준","ar":"مستوى اللغة (رسمي أو عامي)","fa":"سطح گفتار (رسمی یا خودمانی)","ur":"اندازِ گفتگو (رسمی یا غیر رسمی)","ps":"د خبرو کچه (رسمي یا عادي)","hi":"भाषा-स्तर","ta":"பேச்சு நடை (முறையானது அல்லது சாதாரணம்)","ml":"സംസാരശൈലി (ഔപചാരികമോ അല്ലാത്തതോ)","am":"የንግግር ደረጃ (መደበኛ ወይም ተራ)","tl":"antas ng pananalita","es":"registro","fr":"registre de langue","ro":"registru al limbii","ru":"регистр речи"},"parts":[["register","root","a list of things recorded"]]},
+  "contention": {"tr":{"zh-Hant":"論點","zh-Hans":"论点","vi":"luận điểm chính","ja":"主張","ko":"주장","ar":"الأطروحة","fa":"ادعای اصلی","ur":"مرکزی موقف","ps":"مرکزي دلیل","hi":"मुख्य तर्क","ta":"முதன்மை வாதம்","ml":"മുഖ്യ വാദം","am":"ዋና ክርክር","tl":"pangunahing paninindigan","es":"tesis","fr":"thèse","ro":"teza principală","ru":"тезис"},"parts":[["con","prefix","together"],["tent","root","stretch/aim"],["ion","suffix","act/process"]]},
+  "evidence": {"tr":{"zh-Hant":"證據","zh-Hans":"证据","vi":"bằng chứng","ja":"証拠","ko":"증거","ar":"الدليل","fa":"شواهد","ur":"ثبوت","ps":"شواهد","hi":"साक्ष्य","ta":"சான்று","ml":"തെളിവ്","am":"ማስረጃ","tl":"ebidensya","es":"evidencia","fr":"preuve","ro":"dovezi","ru":"доказательства"},"parts":[["e","prefix","out"],["vid","root","see"],["ence","suffix","state of"]]},
+  "he needs a mirror": {"tr":{"zh-Hant":"先照照鏡子","zh-Hans":"先照照镜子","vi":"hãy tự soi gương mình","ja":"まず自分を省みよ","ko":"자기부터 돌아보라","ar":"لينظر إلى نفسه أولاً","fa":"اول خودش را ببیند","ur":"پہلے اپنا گریبان دیکھے","ps":"لومړی دې ځان وګوري","hi":"पहले खुद को देखे","ta":"முதலில் தன்னைப் பார்க்கட்டும்","ml":"ആദ്യം സ്വയം നോക്കട്ടെ","am":"መጀመሪያ ራሱን ይመልከት","tl":"tingnan muna ang sarili","es":"que se mire primero","fr":"qu'il se regarde d'abord","ro":"să se uite întâi la el","ru":"пусть посмотрит на себя"},"parts":[["mir","root","wonder"],["or","suffix","person/thing that"]]},
+  "not now not ever": {"tr":{"zh-Hant":"現在不,永遠不","zh-Hans":"现在不,永远不","vi":"bây giờ không, mãi mãi không","ja":"今も今後も決して","ko":"지금도 앞으로도 결코","ar":"لا الآن ولا أبدًا","fa":"نه اکنون نه هرگز","ur":"نہ اب نہ کبھی","ps":"نه اوس نه هیڅکله","hi":"न अब न कभी","ta":"இப்போதும் இல்லை எப்போதும் இல்லை","ml":"ഇപ്പോഴുമില്ല ഒരിക്കലുമില്ല","am":"አሁንም ወደፊትም በፍጹም","tl":"hindi ngayon hindi kailanman","es":"ni ahora ni nunca","fr":"ni maintenant ni jamais","ro":"nici acum, nici vreodată","ru":"ни сейчас, ни впредь"},"parts":[]},
+  "died of shame": {"tr":{"zh-Hant":"羞愧而死","zh-Hans":"羞愧而死","vi":"chết vì xấu hổ","ja":"恥じ入って死ぬ","ko":"부끄러워 죽다","ar":"مات من الخجل","fa":"از شرم مرد","ur":"شرم سے مر گیا","ps":"له شرمه مړ شو","hi":"शर्म से मर गया","ta":"வெட்கத்தால் இறந்தார்","ml":"നാണക്കേടുകൊണ്ട് മരിച്ചു","am":"በሐፍረት ሞተ","tl":"namatay sa hiya","es":"morirse de vergüenza","fr":"mourir de honte","ro":"a murit de rușine","ru":"умер от стыда"},"parts":[["shame","root","disgrace"]]},
+  "make an honest woman of": {"tr":{"zh-Hant":"娶她以正名分","zh-Hans":"娶她以正名分","vi":"cưới để giữ danh tiết","ja":"責任を取って結婚する","ko":"책임지고 결혼하다","ar":"يتزوجها ليصون سمعتها","fa":"با ازدواج آبرویش را حفظ کردن","ur":"شادی کر کے عزت بحال کرنا","ps":"واده کول او عزت ساتل","hi":"विवाह कर सम्मान देना","ta":"மணந்து மானம் காத்தல்","ml":"വിവാഹം കഴിച്ച് മാനം കാക്കുക","am":"አግብቶ ክብሯን መመለስ","tl":"pakasalan upang mabawi ang dangal","es":"casarse para salvar su honra","fr":"épouser pour sauver l'honneur","ro":"a-i salva onoarea prin căsătorie","ru":"жениться, чтобы спасти репутацию"},"parts":[["honest","root","honourable"]]},
+  "ditch the witch": {"tr":{"zh-Hant":"「甩掉女巫」標語","zh-Hans":"“甩掉女巫”标语","vi":"khẩu hiệu ‘loại bỏ mụ phù thủy’","ja":"「魔女を追い出せ」の標語","ko":"‘마녀를 몰아내라’ 구호","ar":"شعار «تخلصوا من الساحرة»","fa":"شعار «جادوگر را برانید»","ur":"نعرہ ’چڑیل سے چھٹکارا‘","ps":"«کوډګره لرې کړئ» شعار","hi":"नारा ‘डायन को हटाओ’","ta":"‘சூனியக்காரியை ஒழி’ முழக்கம்","ml":"‘മന്ത്രവാദിനിയെ ഒഴിവാക്കൂ’ മുദ്രാവാക്യം","am":"«ጠንቋይዋን አስወግዱ» መፈክር","tl":"islogan na ‘itapon ang bruha’","es":"lema «fuera la bruja»","fr":"slogan « chassez la sorcière »","ro":"sloganul „scăpați de vrăjitoare”","ru":"лозунг «долой ведьму»"},"parts":[["witch","root","female magician"]]},
+  "a better standard": {"tr":{"zh-Hant":"更高的行為標準","zh-Hans":"更高的行为标准","vi":"chuẩn mực cao hơn","ja":"より高い規範","ko":"더 높은 기준","ar":"معيار أرفع","fa":"معیاری بالاتر","ur":"بہتر معیار","ps":"لوړ معیار","hi":"बेहतर मानक","ta":"உயர்ந்த தரநிலை","ml":"മെച്ചപ്പെട്ട മാനദണ്ഡം","am":"የተሻለ መስፈርት","tl":"mas mataas na pamantayan","es":"un nivel más alto","fr":"une norme plus élevée","ro":"un standard mai bun","ru":"более высокая планка"},"parts":[["standard","root","an accepted norm"]]},
+  "misogyny": {"tr":{"zh-Hant":"厭女症","zh-Hans":"厌女症","vi":"sự căm ghét phụ nữ","ja":"女性嫌悪","ko":"여성 혐오","ar":"كراهية النساء","fa":"زن‌ستیزی","ur":"عورت بیزاری","ps":"د ښځو کرکه","hi":"स्त्री-द्वेष","ta":"பெண் வெறுப்பு","ml":"സ്ത്രീവിദ്വേഷം","am":"የሴቶች ጥላቻ","tl":"pagkamuhi sa kababaihan","es":"misoginia","fr":"misogynie","ro":"misoginie","ru":"мизогиния"},"parts":[["miso","prefix","hatred of"],["gyn","root","woman"],["y","suffix","state of (makes a noun)"]]},
+  "misogynists": {"tr":{"zh-Hant":"厭女者","zh-Hans":"厌女者","vi":"kẻ ghét phụ nữ","ja":"女性蔑視者","ko":"여성 혐오자","ar":"كاره النساء","fa":"زن‌ستیز","ur":"عورت بیزار","ps":"د ښځو کینه‌کوونکی","hi":"स्त्रीद्वेषी","ta":"பெண்வெறுப்பாளர்","ml":"സ്ത്രീവിദ്വേഷി","am":"ሴቶችን የሚጠላ ሰው","tl":"mapoot sa kababaihan","es":"misógino","fr":"misogyne","ro":"misogin","ru":"женоненавистник"},"parts":[["miso","prefix","hatred of"],["gyn","root","woman"],["ist","suffix","person who"]],"form":"misogynist"},
+  "sexism": {"tr":{"zh-Hant":"性別歧視","zh-Hans":"性别歧视","vi":"phân biệt giới tính","ja":"性差別","ko":"성차별","ar":"التمييز الجنسي","fa":"تبعیض جنسیتی","ur":"صنفی امتیاز","ps":"جنسي تبعیض","hi":"लैंगिक भेदभाव","ta":"பாலின பாகுபாடு","ml":"ലിംഗവിവേചനം","am":"የጾታ አድልዎ","tl":"seksismo","es":"sexismo","fr":"sexisme","ro":"sexism","ru":"сексизм"},"parts":[["sex","root","gender/reproduction"],["ism","suffix","a state or practice of"]]},
+  "sexist": {"tr":{"zh-Hant":"性別歧視的","zh-Hans":"性别歧视的","vi":"phân biệt giới tính","ja":"性差別的な","ko":"성차별적인","ar":"متحيّز جنسيًا","fa":"جنسیت‌زده","ur":"صنفی امتیاز برتنے والا","ps":"جنسي تبعیض کوونکی","hi":"लिंगभेदी","ta":"பாலின பாகுபாடு கொண்ட","ml":"ലിംഗവിവേചനപരമായ","am":"ጾታዊ አድልዎ ያለው","tl":"seksista","es":"sexista","fr":"sexiste","ro":"sexist","ru":"сексистский"},"parts":[["sex","root","gender/reproduction"],["ist","suffix","person who"]]},
+  "underrepresented": {"tr":{"zh-Hans":"代表性不足","zh-Hant":"代表性不足","ja":"過少代表の","ko":"과소 대표된","vi":"thiếu đại diện","ar":"ناقص التمثيل","fa":"کم‌نماینده","ur":"کم نمائندگی والا","am":"በበቂ ያልተወከለ","ml":"വേണ്ടത്ര പ്രാതിനിധ്യമില്ലാത്ത","ta":"போதிய பிரதிநிதித்துவம் இல்லாத","tl":"kulang sa representasyon","ps":"کم استازیتوب شوی","ro":"subreprezentat","ru":"недопредставленный","fr":"sous-représenté","hi":"अल्प प्रतिनिधित्व वाला","es":"subrepresentado"},"parts":[["under","prefix","below / not enough"],["re","prefix","again / back"],["present","root","be there / show"],["ed","suffix","past / adjective"]]},
+  "underrepresentation": {"tr":{"zh-Hant":"代表性不足","zh-Hans":"代表性不足","vi":"thiếu đại diện","ja":"過少代表","ko":"과소대표","ar":"التمثيل الناقص","fa":"کم‌نمایندگی","ur":"کم نمائندگی","ps":"کم استازیتوب","hi":"कम प्रतिनिधित्व","ta":"போதிய பிரதிநிதித்துவமின்மை","ml":"പ്രാതിനിധ്യക്കുറവ്","am":"ዝቅተኛ ውክልና","tl":"kakulangan sa representasyon","es":"subrepresentación","fr":"sous-représentation","ro":"subreprezentare","ru":"недопредставленность"},"parts":[["under","prefix","below"],["re","prefix","again"],["present","root","show/put forward"],["ation","suffix","process of"]]},
+  "physiology": {"tr":{"zh-Hant":"生理機能","zh-Hans":"生理机能","vi":"sinh lý học","ja":"生理機能","ko":"생리 기능","ar":"وظائف الأعضاء","fa":"فیزیولوژی","ur":"فعلیات","ps":"فزیولوژي","hi":"शरीर क्रिया विज्ञान","ta":"உடலியல்","ml":"ശരീരശാസ്ത്രം","am":"ፊዚዮሎጂ","tl":"pisyolohiya","es":"fisiología","fr":"physiologie","ro":"fiziologie","ru":"физиология"},"parts":[["physio","root","bodily function"],["ology","suffix","study of"]]},
+  "temperament": {"tr":{"zh-Hant":"性情","zh-Hans":"性情","vi":"tính khí","ja":"気質","ko":"기질","ar":"المزاج","fa":"خلق‌وخو","ur":"مزاج","ps":"مزاج","hi":"स्वभाव","ta":"மனநிலை","ml":"സ്വഭാവം","am":"ባህርይ","tl":"ugali","es":"temperamento","fr":"tempérament","ro":"temperament","ru":"темперамент"},"parts":[["temper","root","mix/moderate"],["ment","suffix","result of"]]},
+  "anti-women": {"tr":{"zh-Hant":"反女性的","zh-Hans":"反女性的","vi":"chống phụ nữ","ja":"女性に敵対的な","ko":"반여성적인","ar":"معادٍ للمرأة","fa":"ضد زنان","ur":"خواتین مخالف","ps":"د ښځو ضد","hi":"महिला विरोधी","ta":"பெண்களுக்கு எதிரான","ml":"സ്ത്രീവിരുദ്ധ","am":"ሴቶችን የሚቃወም","tl":"laban sa kababaihan","es":"contrario a las mujeres","fr":"hostile aux femmes","ro":"împotriva femeilor","ru":"антиженский"},"parts":[["anti","prefix","against"],["women","root","adult female people"]]},
+  "feminine": {"tr":{"zh-Hant":"女性化的","zh-Hans":"女性化的","vi":"nữ tính","ja":"女性らしい","ko":"여성스러운","ar":"أنثوي","fa":"زنانه","ur":"نسوانی","ps":"ښځینه","hi":"स्त्रीसुलभ","ta":"பெண்மைத்தன்மையான","ml":"സ്ത്രൈണമായ","am":"ሴታዊ","tl":"pambabae","es":"femenino","fr":"féminin","ro":"feminin","ru":"женственный"},"parts":[["femin","root","woman"]]},
+  "offended": {"tr":{"zh-Hant":"被冒犯","zh-Hans":"被冒犯","vi":"bị xúc phạm","ja":"気分を害した","ko":"모욕감을 느낀","ar":"مُهان","fa":"رنجیده","ur":"دل آزردہ","ps":"خپه شوی","hi":"आहत","ta":"மனம் புண்பட்ட","ml":"അപമാനിതനായ","am":"የተከፋ","tl":"nasaktan ang damdamin","es":"ofendido","fr":"offensé","ro":"jignit","ru":"оскорблённый"},"parts":[["fend","root","strike/defend"],["ed","suffix","past"]]},
+  "repulsive": {"tr":{"zh-Hant":"令人厭惡的","zh-Hans":"令人厌恶的","vi":"ghê tởm","ja":"嫌悪を催す","ko":"역겨운","ar":"مقزز","fa":"نفرت‌انگیز","ur":"نفرت انگیز","ps":"کرکجن","hi":"घिनौना","ta":"அருவருப்பான","ml":"അറപ്പുളവാക്കുന്ന","am":"አስጸያፊ","tl":"nakakadiri","es":"repulsivo","fr":"répugnant","ro":"respingător","ru":"отвратительный"},"parts":[["re","prefix","back"],["puls","root","drive/push"],["ive","suffix","tending to"]]},
+  "vile": {"tr":{"zh-Hant":"卑劣的","zh-Hans":"卑劣的","vi":"đê tiện","ja":"下劣な","ko":"비열한","ar":"حقير","fa":"پست","ur":"گھناؤنا","ps":"ناوړه","hi":"नीच","ta":"இழிவான","ml":"നീചമായ","am":"ወራዳ","tl":"kasuklam-suklam","es":"vil","fr":"ignoble","ro":"josnic","ru":"гнусный"},"parts":[["vile","root","cheap/worthless"]]},
+  "vilest": {"tr":{"zh-Hant":"卑劣的","zh-Hans":"卑劣的","vi":"đê tiện","ja":"下劣な","ko":"비열한","ar":"حقير","fa":"پست","ur":"گھناؤنا","ps":"ناوړه","hi":"नीच","ta":"இழிவான","ml":"നീചമായ","am":"ወራዳ","tl":"kasuklam-suklam","es":"vil","fr":"ignoble","ro":"josnic","ru":"гнусный"},"parts":[["vile","root","cheap/worthless"]],"form":"vile"},
+  "revolting": {"tr":{"zh-Hans":"令人作呕的","zh-Hant":"令人作嘔的","ja":"胸が悪くなる","ko":"역겨운","vi":"kinh tởm","ar":"مقرف","fa":"نفرت‌انگیز","ur":"گھناؤنا","am":"አስጸያፊ","ml":"അറപ്പുളവാക്കുന്ന","ta":"அருவருப்பான","tl":"nakadidiri","ps":"نفرت وړ","ro":"dezgustător","ru":"отвратительный","fr":"répugnant","hi":"घिनौना","es":"repugnante"},"parts":[["re","prefix","back"],["volt","root","turn / roll"],["ing","suffix","adjective"]]},
+  "double standards": {"tr":{"zh-Hant":"雙重標準","zh-Hans":"双重标准","vi":"tiêu chuẩn kép","ja":"二重基準","ko":"이중 잣대","ar":"ازدواجية المعايير","fa":"استاندارد دوگانه","ur":"دوہرا معیار","ps":"دوه‌ګوني معیارونه","hi":"दोहरा मापदंड","ta":"இரட்டை நிலைப்பாடு","ml":"ഇരട്ടത്താപ്പ്","am":"ድርብ መስፈርት","tl":"dobleng pamantayan","es":"doble rasero","fr":"deux poids deux mesures","ro":"standard dublu","ru":"двойные стандарты"},"parts":[["double","root","twofold"],["standard","root","an accepted norm"]],"form":"double standard"},
+  "double standard": {"tr":{"zh-Hant":"雙重標準","zh-Hans":"双重标准","vi":"tiêu chuẩn kép","ja":"二重基準","ko":"이중 잣대","ar":"ازدواجية المعايير","fa":"استاندارد دوگانه","ur":"دوہرا معیار","ps":"دوه‌ګوني معیارونه","hi":"दोहरा मापदंड","ta":"இரட்டை நிலைப்பாடு","ml":"ഇരട്ടത്താപ്പ്","am":"ድርብ መስፈርት","tl":"dobleng pamantayan","es":"doble rasero","fr":"deux poids deux mesures","ro":"standard dublu","ru":"двойные стандарты"},"parts":[["double","root","twofold"],["standard","root","an accepted norm"]]},
+  "hypocrisy": {"tr":{"zh-Hant":"偽善","zh-Hans":"伪善","vi":"thói đạo đức giả","ja":"偽善","ko":"위선","ar":"النفاق","fa":"ریاکاری","ur":"منافقت","ps":"دورویي","hi":"पाखंड","ta":"பாசாங்குத்தனம்","ml":"കാപട്യം","am":"ግብዝነት","tl":"pagkamapagkunwari","es":"hipocresía","fr":"hypocrisie","ro":"ipocrizie","ru":"лицемерие"},"parts":[["hypo","prefix","under"],["cris","root","decide/separate"],["y","suffix","state of (makes a noun)"]]},
+  "standard": {"tr":{"zh-Hant":"行為標準","zh-Hans":"行为标准","vi":"chuẩn mực","ja":"行動基準","ko":"행동 기준","ar":"معيار السلوك","fa":"معیار رفتار","ur":"معیار","ps":"معیار","hi":"मानक","ta":"தரநிலை","ml":"മാനദണ്ഡം","am":"መስፈርት","tl":"pamantayan","es":"norma de conducta","fr":"norme de conduite","ro":"standard de conduită","ru":"норма поведения"},"parts":[["standard","root","an accepted norm"]]},
+  "responsibility": {"tr":{"zh-Hant":"責任","zh-Hans":"责任","vi":"trách nhiệm","ja":"責任","ko":"책임","ar":"مسؤولية","fa":"مسئولیت","ur":"ذمہ داری","ps":"مسؤلیت","hi":"ज़िम्मेदारी","ta":"பொறுப்பு","ml":"ഉത്തരവാദിത്തം","am":"ኃላፊነት","tl":"responsibilidad","es":"responsabilidad","fr":"responsabilité","ro":"responsabilitate","ru":"ответственность"},"parts":[["re","prefix","again"],["spons","root","promise/respond"],["ibility","suffix","capable of"]]},
+  "conduct": {"tr":{"zh-Hant":"行為舉止","zh-Hans":"行为举止","vi":"hành vi cư xử","ja":"行い","ko":"처신","ar":"سلوك","fa":"رفتار","ur":"طرزِ عمل","ps":"چلن","hi":"आचरण","ta":"நடத்தை","ml":"പെരുമാറ്റം","am":"ምግባር","tl":"asal","es":"conducta","fr":"conduite","ro":"conduită","ru":"поведение"},"parts":[["con","prefix","together"],["duct","root","lead"]]},
+  "objection": {"tr":{"zh-Hant":"異議","zh-Hans":"异议","vi":"sự phản đối","ja":"異議","ko":"이의","ar":"اعتراض","fa":"اعتراض","ur":"اعتراض","ps":"اعتراض","hi":"आपत्ति","ta":"ஆட்சேபனை","ml":"എതിർപ്പ്","am":"ተቃውሞ","tl":"pagtutol","es":"objeción","fr":"objection","ro":"obiecție","ru":"возражение"},"parts":[["ob","prefix","against"],["ject","root","throw"],["ion","suffix","act/process"]]},
+  "acquitted": {"tr":{"zh-Hant":"被判無罪","zh-Hans":"被判无罪","vi":"được tuyên trắng án","ja":"無罪とされた","ko":"무죄 선고를 받은","ar":"بُرِّئ","fa":"تبرئه‌شده","ur":"بری کیا گیا","ps":"بې‌ګناه اعلان شوی","hi":"बरी","ta":"விடுவிக்கப்பட்ட","ml":"കുറ്റവിമുക്തനാക്കപ്പെട്ട","am":"ነፃ የተባለ","tl":"pinawalang-sala","es":"absuelto","fr":"acquitté","ro":"achitat","ru":"оправданный"},"parts":[["ac","prefix","toward"],["quit","root","set free"],["ed","suffix","past"]]},
+  "peddling": {"tr":{"zh-Hant":"兜售散播","zh-Hans":"兜售散播","vi":"rao truyền","ja":"言いふらす","ko":"퍼뜨리다","ar":"يروّج","fa":"ترویج کردن","ur":"پھیلانا","ps":"خپرول","hi":"फैलाना","ta":"பரப்புதல்","ml":"പ്രചരിപ്പിക്കുക","am":"ማስፋፋት","tl":"ikalat","es":"propagar","fr":"colporter","ro":"a propaga","ru":"навязывать"},"parts":[["peddl","root","hawk goods"],["ing","suffix","action/process"]]},
+  "tolerated": {"tr":{"zh-Hant":"被容忍","zh-Hans":"被容忍","vi":"được dung túng","ja":"黙認された","ko":"용인된","ar":"مُتسامَح معه","fa":"تحمل‌شده","ur":"برداشت کیا گیا","ps":"زغمل شوی","hi":"सहन किया गया","ta":"பொறுத்துக்கொள்ளப்பட்ட","ml":"സഹിക്കപ്പെട്ട","am":"የተታገሠ","tl":"pinalampas","es":"tolerado","fr":"toléré","ro":"tolerat","ru":"допускаемый"},"parts":[["toler","root","bear/endure"],["ate","suffix","to make/do"],["ed","suffix","past"]]},
+  "resignation": {"tr":{"zh-Hant":"辭職","zh-Hans":"辞职","vi":"sự từ chức","ja":"辞任","ko":"사임","ar":"استقالة","fa":"استعفا","ur":"استعفیٰ","ps":"استعفا","hi":"इस्तीफ़ा","ta":"பதவி விலகல்","ml":"രാജി","am":"መልቀቂያ","tl":"pagbibitiw","es":"dimisión","fr":"démission","ro":"demisie","ru":"отставка"},"parts":[["re","prefix","back"],["sign","root","mark/meaning"],["ation","suffix","process of"]]},
+  "apologise": {"tr":{"zh-Hant":"道歉","zh-Hans":"道歉","vi":"xin lỗi","ja":"謝る","ko":"사과하다","ar":"يعتذر","fa":"عذرخواهی","ur":"معافی مانگنا","ps":"بخښنه غوښتل","hi":"क्षमा मांगना","ta":"மன்னிப்பு கேள்","ml":"ക്ഷമ ചോദിക്കുക","am":"ይቅርታ መጠየቅ","tl":"humingi ng tawad (apologise)","es":"disculparse","fr":"s'excuser","ro":"a-și cere scuze","ru":"извиняться"},"parts":[["apo","prefix","away/from"],["log","root","study/word"],["ise","suffix","to make"]]},
+  "reflect": {"tr":{"zh-Hant":"反映","zh-Hans":"反映","vi":"phản ánh (suy ngẫm)","ja":"反映する（熟考する）","ko":"반영하다(성찰하다)","ar":"يعكس (يتأمل)","fa":"منعکس کردن (تأمل)","ur":"عکاسی کرنا (غور کرنا)","ps":"انعکاس کول","hi":"प्रतिबिंबित करना (विचार करना)","ta":"பிரதிபலி (சிந்தி)","ml":"പ്രതിഫലിപ്പിക്കുക","am":"ማንፀባረቅ (ማሰላሰል)","tl":"magnilay (reflect)","es":"reflejar (reflexionar)","fr":"refléter (réfléchir)","ro":"a reflecta","ru":"отражать (размышлять)"},"parts":[["re","prefix","back"],["flect","root","bend"]]},
+  "entitled": {"tr":{"zh-Hant":"自以為理所應得","zh-Hans":"自以为理所应得","vi":"tự cho mình có quyền","ja":"特権意識のある","ko":"특권 의식이 있는","ar":"يدّعي الاستحقاق","fa":"خود را طلبکار دانستن","ur":"خود کو حقدار سمجھنے والا","ps":"ځان حقدار ګڼونکی","hi":"स्वयं को हकदार मानने वाला","ta":"உரிமை கொண்டாடும் மனப்பான்மை","ml":"അവകാശബോധം നടിക്കുന്ന","am":"መብት አለኝ ባይ","tl":"pakiramdam ng karapatan","es":"que se cree con derecho","fr":"qui se croit tout permis","ro":"cu aere de îndreptățit","ru":"считающий себя вправе"},"parts":[["en","prefix","make/put into"],["title","root","inscription/label"],["ed","suffix","having been (makes an adjective)"]]},
+  "motion": {"tr":{"zh-Hant":"動議","zh-Hans":"动议","vi":"kiến nghị","ja":"動議","ko":"동의(動議)","ar":"اقتراح رسمي","fa":"طرح پیشنهادی","ur":"تحریک","ps":"وړاندیز (پرېکړلیک)","hi":"प्रस्ताव","ta":"தீர்மானம்","ml":"പ്രമേയം","am":"የውሳኔ ሃሳብ","tl":"mosyon","es":"moción","fr":"motion","ro":"moțiune","ru":"предложение"},"parts":[["mot","root","move"],["ion","suffix","act/process"]]},
+  "Leader of the Opposition": {"tr":{"zh-Hant":"反對黨領袖","zh-Hans":"反对党领袖","vi":"lãnh đạo phe đối lập","ja":"野党党首","ko":"야당 대표","ar":"زعيم المعارضة","fa":"رهبر مخالفان","ur":"قائد حزبِ اختلاف","ps":"د اپوزیسیون مشر","hi":"विपक्ष का नेता","ta":"எதிர்க்கட்சித் தலைவர்","ml":"പ്രതിപക്ഷ നേതാവ്","am":"የተቃዋሚ ፓርቲ መሪ","tl":"Lider ng Oposisyon","es":"líder de la oposición","fr":"chef de l'opposition","ro":"liderul opoziției","ru":"лидер оппозиции"},"parts":[["lead","root","guide"],["er","suffix","one who"],["op","prefix","against"],["posit","root","place"],["ion","suffix","act/process"]],"form":"the Leader of the Opposition"},
+  "Deputy Speaker": {"tr":{"zh-Hant":"副議長","zh-Hans":"副议长","vi":"phó chủ tịch hạ viện","ja":"副議長","ko":"부의장","ar":"نائب رئيس المجلس","fa":"نایب رئیس مجلس","ur":"نائب اسپیکر","ps":"د مجلس مرستیال مشر","hi":"उपाध्यक्ष","ta":"துணைச் சபாநாயகர்","ml":"ഉപാധ്യക്ഷൻ","am":"ምክትል አፈ ጉባኤ","tl":"Pangalawang Ispiker","es":"vicepresidente de la Cámara","fr":"vice-président de la Chambre","ro":"vicepreședinte al Camerei","ru":"вице-спикер"},"parts":[["speak","root","say aloud"],["er","suffix","one who"]]},
+  "Speaker": {"tr":{"zh-Hant":"議長","zh-Hans":"议长","vi":"Chủ tịch Hạ viện","ja":"下院議長","ko":"하원 의장","ar":"رئيس المجلس","fa":"رئیس مجلس","ur":"اسپیکر","ps":"د مجلس مشر","hi":"सदन अध्यक्ष","ta":"சபாநாயகர்","ml":"സ്പീക്കർ","am":"አፈ ጉባኤ","tl":"Ispiker ng Kapulungan","es":"presidente de la Cámara","fr":"président de la Chambre","ro":"președintele Camerei","ru":"спикер палаты"},"parts":[["speak","root","say aloud"],["er","suffix","one who"]],"form":"the Speaker"},
+  "speakership": {"tr":{"zh-Hans":"议长职位","zh-Hant":"議長職位","ja":"議長職","ko":"의장직","vi":"chức chủ tịch hạ viện","ar":"منصب رئيس المجلس","fa":"مقام رئیس مجلس","ur":"اسپیکر کا عہدہ","am":"የምክር ቤት አፈ ጉባኤነት","ml":"സ്പീക്കർ പദവി","ta":"அவைத் தலைவர் பதவி","tl":"puwesto ng Ispiker","ps":"د مجلس د مشر څوکۍ","ro":"funcția de președinte","ru":"должность спикера","fr":"présidence de la Chambre","hi":"अध्यक्ष पद","es":"presidencia de la Cámara"},"parts":[["speak","root","say / talk"],["er","suffix","person who"],["ship","suffix","office / state"]]},
+  "member for Fisher": {"tr":{"zh-Hant":"費雪選區議員","zh-Hans":"费舍尔选区议员","vi":"đại biểu đơn vị Fisher","ja":"フィッシャー選挙区選出議員","ko":"피셔 선거구 의원","ar":"النائب عن دائرة فيشر","fa":"نمایندهٔ حوزهٔ فیشر","ur":"فشر حلقے کے رکن","ps":"د فیشر حوزې استازی","hi":"फ़िशर क्षेत्र के सदस्य","ta":"ஃபிஷர் தொகுதி உறுப்பினர்","ml":"ഫിഷർ മണ്ഡലം അംഗം","am":"የፊሸር ምርጫ ክልል ተወካይ","tl":"kinatawan ng distrito ng Fisher","es":"el diputado por Fisher","fr":"le député de Fisher","ro":"deputatul de Fisher","ru":"депутат от округа Фишер"},"parts":[["member","root","limb/part"]],"form":"the member for Fisher"},
+  "member for Maranoa": {"tr":{"zh-Hans":"马拉诺阿选区议员","zh-Hant":"馬拉諾阿選區議員","ja":"マラノア選出議員","ko":"매러노아 지역구 의원","vi":"nghị sĩ Maranoa","ar":"نائب دائرة مارانوا","fa":"نماینده مارانوا","ur":"مارانوا کے رکن","am":"የማራኖዋ ተወካይ","ml":"മരനോവ പ്രതിനിധി","ta":"மரனோவா உறுப்பினர்","tl":"kinatawan ng Maranoa","ps":"د مارانوا استازی","ro":"deputatul de Maranoa","ru":"депутат от Маранои","fr":"député de Maranoa","hi":"मारानोआ के सांसद","es":"diputado por Maranoa"},"parts":[]},
+  "member for Scullin": {"tr":{"zh-Hans":"斯卡林选区议员","zh-Hant":"斯卡林選區議員","ja":"スカリン選出議員","ko":"스컬린 지역구 의원","vi":"nghị sĩ Scullin","ar":"نائب دائرة سكالين","fa":"نماینده اسکالین","ur":"اسکلن کے رکن","am":"የስካሊን ተወካይ","ml":"സ്കള്ളിൻ പ്രതിനിധി","ta":"ஸ்கல்லின் உறுப்பினர்","tl":"kinatawan ng Scullin","ps":"د سکالین استازی","ro":"deputatul de Scullin","ru":"депутат от Скаллина","fr":"député de Scullin","hi":"स्कलिन के सांसद","es":"diputado por Scullin"},"parts":[]},
+  "frontbench": {"tr":{"zh-Hant":"前座議員","zh-Hans":"前座议员","vi":"hàng ghế đầu của đảng","ja":"前列議員(党幹部)","ko":"전열 의원(지도부)","ar":"المقاعد الأمامية (قيادة الحزب)","fa":"کرسی‌های ردیف اول","ur":"اگلی نشستوں کے ارکان","ps":"د مخکینۍ کتار غړي","hi":"अग्रिम पंक्ति के नेता","ta":"முன்வரிசை உறுப்பினர்கள்","ml":"മുൻനിര അംഗങ്ങൾ","am":"የፊት ረድፍ አባላት","tl":"unang hanay ng mga lider","es":"primera fila del partido","fr":"banc des ministres","ro":"prima bancă a partidului","ru":"передняя скамья"},"parts":[["front","root","forehead/front edge"],["bench","root","long seat"]]},
+  "preselected": {"tr":{"zh-Hant":"黨內提名","zh-Hans":"党内提名","vi":"chọn ứng viên nội bộ đảng","ja":"党の公認候補に選ぶ","ko":"당 후보로 공천하다","ar":"يرشّح داخل الحزب","fa":"نامزد حزبی برگزیدن","ur":"پارٹی امیدوار نامزد کرنا","ps":"د ګوند نوماند ټاکل","hi":"पार्टी उम्मीदवार चुनना","ta":"கட்சி வேட்பாளராகத் தேர்ந்தெடு","ml":"പാർട്ടി സ്ഥാനാർത്ഥിയായി തിരഞ്ഞെടുക്കുക","am":"የፓርቲ እጩ መምረጥ","tl":"pumili ng kandidato ng partido","es":"designar candidato del partido","fr":"investir un candidat","ro":"a desemna candidatul partidului","ru":"выдвигать кандидатом от партии"},"parts":[["pre","prefix","before"],["se","prefix","apart"],["lect","root","choose"]],"form":"preselect"},
+  "preselections": {"tr":{"zh-Hant":"黨內提名程序","zh-Hans":"党内提名程序","vi":"việc chọn ứng viên của đảng","ja":"党公認候補の選定","ko":"공천(후보 선출)","ar":"الترشيح الحزبي الداخلي","fa":"گزینش نامزد حزبی","ur":"پارٹی امیدوار کی نامزدگی","ps":"د ګوند نوماند ټاکنه","hi":"पार्टी उम्मीदवार चयन","ta":"கட்சி வேட்பாளர் தேர்வு","ml":"പാർട്ടി സ്ഥാനാർത്ഥി നിർണയം","am":"የፓርቲ እጩ ምርጫ","tl":"seleksiyon ng kandidato ng partido","es":"designación de candidato","fr":"investiture","ro":"desemnarea candidatului de partid","ru":"выдвижение кандидата партией"},"parts":[["pre","prefix","before"],["se","prefix","apart"],["lect","root","choose"],["ion","suffix","act/process"]],"form":"preselection"},
+  "shadow parliamentary secretary": {"tr":{"zh-Hant":"影子國會秘書","zh-Hans":"影子议会秘书","vi":"thứ trưởng nội các bóng","ja":"影の政務次官","ko":"그림자 정무차관","ar":"أمين برلماني في حكومة الظل","fa":"معاون پارلمانی دولت سایه","ur":"شیڈو پارلیمانی سیکرٹری","ps":"د سیوري حکومت پارلماني منشي","hi":"छाया संसदीय सचिव","ta":"நிழல் நாடாளுமன்றச் செயலாளர்","ml":"നിഴൽ പാർലമെന്ററി സെക്രട്ടറി","am":"የጥላ መንግሥት ምክትል ኃላፊ","tl":"kalihim panlehislatibo ng oposisyon","es":"secretario parlamentario en la sombra","fr":"secrétaire parlementaire du cabinet fantôme","ro":"secretar parlamentar din opoziție","ru":"теневой парламентский секретарь"},"parts":[["shadow","root","shade/dark shape"],["parlia","root","speak"],["ment","suffix","result of"],["ary","suffix","relating to"]]},
+  "interjecting": {"tr":{"zh-Hant":"插話打斷","zh-Hans":"插话打断","vi":"ngắt lời chen ngang","ja":"野次を飛ばす","ko":"발언 중 끼어들다","ar":"يقاطع المتحدث","fa":"میان کلام پریدن","ur":"ٹوکنا","ps":"خبره پرې کول","hi":"टोकना","ta":"இடைமறித்துப் பேசு","ml":"ഇടയ്ക്ക് കയറി പറയുക","am":"አቋርጦ መናገር","tl":"sumabat","es":"interrumpir a gritos","fr":"interrompre par des cris","ro":"a interveni întrerupând","ru":"выкрикивать с места"},"parts":[["inter","prefix","between"],["ject","root","throw"]],"form":"interject"},
+  "high office": {"tr":{"zh-Hant":"高級公職","zh-Hans":"高级公职","vi":"chức vụ cao cấp","ja":"要職","ko":"고위 공직","ar":"منصب رفيع","fa":"مقام عالی","ur":"اعلیٰ عہدہ","ps":"لوړ دولتي څوکۍ","hi":"उच्च पद","ta":"உயர் பதவி","ml":"ഉന്നത പദവി","am":"ከፍተኛ ሹመት","tl":"mataas na katungkulan","es":"alto cargo","fr":"haute fonction","ro":"funcție înaltă","ru":"высокий пост"},"parts":[["high","root","high"],["fic","root","make/do"]]},
+  "the chair": {"tr":{"zh-Hant":"主席職位","zh-Hans":"主席职位","vi":"ghế chủ tọa","ja":"議長席","ko":"의장석","ar":"رئاسة الجلسة","fa":"ریاست جلسه","ur":"صدارت","ps":"د غونډې مشري","hi":"अध्यक्ष पद","ta":"தலைமைப் பொறுப்பு","ml":"അധ്യക്ഷസ്ഥാനം","am":"ሊቀ መንበርነት","tl":"pagkatagapangulo","es":"la presidencia","fr":"la présidence de séance","ro":"prezidarea ședinței","ru":"председательское место"},"parts":[["chair","root","seat of authority"]]},
+  "House of Representatives": {"tr":{"zh-Hant":"眾議院","zh-Hans":"众议院","vi":"Hạ viện","ja":"代議院","ko":"하원","ar":"مجلس النواب","fa":"مجلس نمایندگان","ur":"ایوانِ نمائندگان","ps":"د استازو جرګه","hi":"प्रतिनिधि सभा","ta":"மக்களவை","ml":"ജനപ്രതിനിധി സഭ","am":"የተወካዮች ምክር ቤት","tl":"Kapulungan ng mga Kinatawan","es":"Cámara de Representantes","fr":"Chambre des représentants","ro":"Camera Reprezentanților","ru":"Палата представителей"},"parts":[]},
+  "parliament": {"tr":{"zh-Hant":"議會","zh-Hans":"议会","vi":"quốc hội","ja":"議会","ko":"의회","ar":"برلمان","fa":"پارلمان","ur":"پارلیمنٹ","ps":"پارلمان","hi":"संसद","ta":"நாடாளுமன்றம்","ml":"പാർലമെന്റ്","am":"ፓርላማ","tl":"parlamento","es":"parlamento","fr":"parlement","ro":"parlament","ru":"парламент"},"parts":[["parlia","root","speak"],["ment","suffix","result of"]]},
+  "public domain": {"tr":{"zh-Hans":"公开信息","zh-Hant":"公開資訊","ja":"公知の情報","ko":"공개된 정보","vi":"đã công khai","ar":"معروف للعموم","fa":"در دسترس عموم","ur":"عوامی معلومات","am":"ለሕዝብ የታወቀ","ml":"പൊതുജനങ്ങൾക്ക് അറിയാവുന്നത്","ta":"பொது அறிவுக்கு வந்தது","tl":"alam na ng publiko","ps":"عامه معلومات","ro":"cunoscut public","ru":"общеизвестные сведения","fr":"domaine public","hi":"सार्वजनिक जानकारी","es":"dominio público"},"parts":[["dom","root","house / master"],["ain","suffix","forms noun"]]},
+  "public record": {"tr":{"zh-Hans":"公开记录","zh-Hant":"公開紀錄","ja":"公的記録","ko":"공식 기록","vi":"hồ sơ công khai","ar":"سجل عام","fa":"سابقه رسمی","ur":"سرکاری ریکارڈ","am":"የሕዝብ መዝገብ","ml":"പൊതു രേഖ","ta":"பொதுப் பதிவு","tl":"pampublikong talaan","ps":"عامه ثبت","ro":"registru public","ru":"официальный документ","fr":"archives publiques","hi":"सार्वजनिक अभिलेख","es":"registro público"},"parts":[["re","prefix","back / again"],["cord","root","heart"]]},
+  "battering ram": {"tr":{"zh-Hant":"攻城槌","zh-Hans":"攻城槌","vi":"cỗ máy phá thành","ja":"破城槌","ko":"공성추","ar":"كبش الهدم","fa":"دژکوب","ur":"دروازہ توڑنے والا شہتیر","ps":"د دروازې ماتوونکی لرګی","hi":"द्वार तोड़ने वाला शहतीर","ta":"கதவு உடைக்கும் மரம்","ml":"വാതിൽ തകർക്കുന്ന തടി","am":"በር መስበሪያ ግንድ","tl":"pantumbang troso","es":"ariete","fr":"bélier","ro":"berbec de asalt","ru":"таран"},"parts":[["bat","root","beat"],["ing","suffix","action/process"]]},
+  "ducking for cover": {"tr":{"zh-Hant":"躲避責任","zh-Hans":"躲避责任","vi":"trốn tránh trách nhiệm","ja":"責任逃れをする","ko":"몸을 사리다","ar":"يتهرب ويختبئ","fa":"شانه خالی کردن","ur":"جان چھڑانا","ps":"ځان ګوښه کول","hi":"बचकर छिपना","ta":"பொறுப்பிலிருந்து ஒளிதல்","ml":"ഒളിച്ചോടുക","am":"ኃላፊነት መሸሽ","tl":"umiwas sa sisi","es":"escurrir el bulto","fr":"se défiler","ro":"a se pune la adăpost","ru":"прятаться от ответственности"},"parts":[["cover","root","cover"]]},
+  "turn a hair": {"tr":{"zh-Hant":"面不改色","zh-Hans":"面不改色","vi":"tỏ ra nao núng","ja":"眉一つ動かす","ko":"눈 하나 깜짝하다","ar":"يرمش له جفن","fa":"خم به ابرو آوردن","ur":"آنکھ جھپکنا","ps":"سترګه رپول","hi":"पलक झपकना","ta":"சலனம் காட்டுதல்","ml":"ഭാവഭേദം കാട്ടുക","am":"ፊት መለወጥ","tl":"kumurap sa gulat","es":"inmutarse","fr":"sourciller","ro":"a clipi","ru":"повести бровью"},"parts":[["turn","root","to change/rotate"]]},
+  "game-playing": {"tr":{"zh-Hant":"玩弄權術","zh-Hans":"玩弄权术","vi":"trò chơi chính trị","ja":"駆け引き","ko":"정치적 술수","ar":"مناورات وألاعيب","fa":"بازی سیاسی","ur":"سیاسی چالبازی","ps":"سیاسي لوبې","hi":"राजनीतिक खेल","ta":"அரசியல் விளையாட்டு","ml":"രാഷ്ട്രീയ കളികൾ","am":"የፖለቲካ ጨዋታ","tl":"pulitikang laro","es":"juegos políticos","fr":"manœuvres politiciennes","ro":"jocuri politice","ru":"политические игры"},"parts":[["play","root","activity/action"],["ing","suffix","action/process"]]},
+  "good fun": {"tr":{"zh-Hant":"無傷大雅的玩笑","zh-Hans":"无伤大雅的玩笑","vi":"chuyện đùa vô hại","ja":"罪のない冗談","ko":"그저 재미로 한 농담","ar":"مزاح بريء","fa":"شوخی بی‌آزار","ur":"بے ضرر مذاق","ps":"بې‌زیانه ټوکه","hi":"हानिरहित मज़ाक","ta":"பாதிப்பில்லாத நகைச்சுவை","ml":"നിരുപദ്രവ തമാശ","am":"ንፁህ ቀልድ","tl":"biro lang naman","es":"broma inofensiva","fr":"simple plaisanterie","ro":"simplă glumă nevinovată","ru":"безобидная шутка"},"parts":[["good","root","good"]]},
+  "track record": {"tr":{"zh-Hant":"過往表現","zh-Hans":"过往表现","vi":"thành tích trong quá khứ","ja":"実績","ko":"실적","ar":"سجل الإنجازات","fa":"سابقه عملکرد","ur":"ماضی کی کارکردگی","ps":"تېره کړنه","hi":"पिछला रिकॉर्ड","ta":"கடந்த கால செயல்திறன்","ml":"മുൻകാല പ്രകടനം","am":"ያለፈ አፈጻጸም","tl":"nakaraang tala ng gawa","es":"historial de logros","fr":"bilan des réalisations","ro":"istoric al realizărilor","ru":"послужной список"},"parts":[["track","root","to follow a path"],["re","prefix","back"],["cord","root","heart"]]},
+  "carbon pricing": {"tr":{"zh-Hans":"碳定价","zh-Hant":"碳定價","ja":"カーボンプライシング","ko":"탄소 가격제","vi":"định giá carbon","ar":"تسعير الكربون","fa":"قیمت‌گذاری کربن","ur":"کاربن قیمت کاری","am":"የካርበን ዋጋ ተመን","ml":"കാർബൺ വിലനിർണയം","ta":"கார்பன் விலை நிர்ணயம்","tl":"pagpepresyo ng karbon","ps":"د کاربن بیه ټاکنه","ro":"prețul carbonului","ru":"углеродное ценообразование","fr":"tarification du carbone","hi":"कार्बन मूल्य निर्धारण","es":"precio del carbono"},"parts":[["carbon","root","coal / charcoal"],["pric","root","price / value"],["ing","suffix","action noun"]]},
+  "exhibition": {"tr":{"zh-Hans":"展览","zh-Hant":"展覽","ja":"展示会","ko":"전시회","vi":"triển lãm","ar":"معرض","fa":"نمایشگاه","ur":"نمائش","am":"ኤግዚቢሽን","ml":"പ്രദർശനം","ta":"கண்காட்சி","tl":"eksibisyon","ps":"نندارتون","ro":"expoziție","ru":"выставка","fr":"exposition","hi":"प्रदर्शनी","es":"exposición"},"parts":[["ex","prefix","out"],["hibit","root","hold"],["ion","suffix","forms noun"]]},
+  "assumption": {"tr":{"zh-Hant":"假設","zh-Hans":"假设","vi":"giả định","ja":"前提","ko":"전제","ar":"افتراض","fa":"پیش‌فرض","ur":"مفروضہ","ps":"انګیرنه","hi":"पूर्वधारणा","ta":"முன்கருதல்","ml":"അനുമാനം","am":"ግምት","tl":"palagay","es":"suposición","fr":"présupposition","ro":"presupunere","ru":"предположение"},"parts":[["as","prefix","toward"],["sum","root","take"],["ption","suffix","process of"]]},
+  "association": {"tr":{"zh-Hant":"關聯","zh-Hans":"关联","vi":"mối liên hệ","ja":"関連","ko":"연관성","ar":"الارتباط","fa":"ارتباط","ur":"تعلق","ps":"اړیکه","hi":"संबंध","ta":"தொடர்பு","ml":"ബന്ധം","am":"ግንኙነት","tl":"kaugnayan","es":"asociación","fr":"association","ro":"asociere","ru":"связь"},"parts":[["as","prefix","toward"],["soci","root","join"],["ation","suffix","process of"]]},
+  "attributes": {"tr":{"zh-Hans":"特质","zh-Hant":"特質","ja":"資質","ko":"자질","vi":"phẩm chất","ar":"صفات","fa":"ویژگی‌ها","ur":"خصوصیات","am":"ባህርያት","ml":"ഗുണവിശേഷങ്ങൾ","ta":"பண்புகள்","tl":"mga katangian","ps":"ځانګړتیاوې","ro":"însușiri","ru":"качества","fr":"qualités","hi":"गुण","es":"cualidades"},"parts":[["at","prefix","to / toward"],["tribut","root","give / assign"],["es","suffix","plural"]]},
+  "distinction": {"tr":{"zh-Hant":"區別","zh-Hans":"区别","vi":"sự khác biệt","ja":"区別","ko":"구별","ar":"تمييز","fa":"تمایز","ur":"امتیاز","ps":"توپیر","hi":"अंतर","ta":"வேறுபாடு","ml":"വ്യത്യാസം","am":"ልዩነት","tl":"pagkakaiba","es":"distinción","fr":"distinction","ro":"distincție","ru":"различие"},"parts":[["di","prefix","apart"],["stinct","root","mark off / separate"],["ion","suffix","state of"]]},
+  "reserved his decision": {"tr":{"zh-Hans":"保留判决","zh-Hant":"保留判決","ja":"判決を留保する","ko":"판결을 유보하다","vi":"hoãn tuyên án","ar":"حجز الحكم","fa":"صدور رأی را موکول کرد","ur":"فیصلہ محفوظ کر لیا","am":"ውሳኔውን አቆየ","ml":"വിധി പറയാൻ മാറ്റിവച്ചു","ta":"தீர்ப்பை ஒத்திவைத்தார்","tl":"ipinagpaliban ang hatol","ps":"پرېکړه یې وځنډوله","ro":"a amânat hotărârea","ru":"отложил вынесение решения","fr":"a mis en délibéré","hi":"फैसला सुरक्षित रखा","es":"reservó su fallo"},"parts":[["re","prefix","back"],["serv","root","keep / hold"],["ed","suffix","past tense"]]},
+  "proper process": {"tr":{"zh-Hans":"正当程序","zh-Hant":"正當程序","ja":"正当な手続き","ko":"적법한 절차","vi":"quy trình đúng đắn","ar":"الإجراءات الصحيحة","fa":"روند صحیح","ur":"درست طریقہ کار","am":"ትክክለኛ ሂደት","ml":"ശരിയായ നടപടിക്രമം","ta":"முறையான நடைமுறை","ps":"سمه کړنلاره","ro":"procedura corectă","ru":"надлежащая процедура","fr":"procédure régulière","hi":"उचित प्रक्रिया","es":"procedimiento debido","tl":"tamang proseso"},"parts":[["pro","prefix","forward"],["cess","root","go / move"]]},
+  "terminology": {"tr":{"zh-Hant":"術語","zh-Hans":"术语","vi":"thuật ngữ","ja":"用語","ko":"용어","ar":"مصطلحات","fa":"اصطلاحات","ur":"اصطلاحات","ps":"اصطلاحات","hi":"शब्दावली","ta":"சொற்களஞ்சியம்","ml":"സാങ്കേതികപദാവലി","am":"ተርሚኖሎጂ","tl":"terminolohiya","es":"terminología","fr":"terminologie","ro":"terminologie","ru":"терминология"},"parts":[["termin","root","boundary/limit"],["ology","suffix","study of"]]}
+};
+/* VOCAB-END */
+
+/* Translation languages, in the order the picker shows them (same list as the hub's tap-to-translate). */
+var LANGS = [
+  ["zh-Hant", "繁體中文（台灣） Chinese (Taiwan)"], ["zh-Hans", "简体中文（中国） Chinese (China)"],
+  ["vi", "Tiếng Việt Vietnamese"], ["ja", "日本語 Japanese"], ["ko", "한국어 Korean"],
+  ["ar", "العربية Arabic"], ["fa", "فارسی Farsi/Dari"], ["ur", "اردو Urdu"], ["ps", "پښتو Pashto"],
+  ["hi", "हिन्दी Hindi"], ["ta", "தமிழ் Tamil"], ["ml", "മലയാളം Malayalam"], ["am", "አማርኛ Amharic"],
+  ["tl", "Tagalog"], ["es", "Español Spanish"], ["fr", "Français French"], ["ro", "Română Romanian"],
+  ["ru", "Русский Russian"]
+];
+var RTL = { ar:1, fa:1, ur:1, ps:1 };
+
+var WORD_BUILDER = "https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/learn/elc/english/";
+var WORD_BUILDER_FOLDER = "https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/l/elc/english/f/gillard-misogyny";
 
 /* the recording. id only — the player is built at press time, never before. */
 var VIDEO = { id:"ihd7ofrwQX0", title:"Julia Gillard's misogyny speech, 9 October 2012" };
@@ -618,15 +752,43 @@ var SOURCE = "Speech: Julia Gillard, House of Representatives, 9 October 2012, o
   host.innerHTML=html;
 
   /* ---- toggles ---- */
-  function toggle(btn,cls){
+  function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function load(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function toggle(btn,cls,key){
+    var saved=load(key);
+    if(saved==="on") document.body.classList.add(cls);
+    if(saved==="off") document.body.classList.remove(cls);
+    btn.setAttribute("aria-pressed",document.body.classList.contains(cls)?"true":"false");
     btn.addEventListener("click",function(){
       var on=document.body.classList.toggle(cls);
       btn.setAttribute("aria-pressed",on?"true":"false");
+      store(key,on?"on":"off");
       if(!on) closePop();
     });
   }
-  toggle(document.getElementById("tKw"),"show-kw");
-  toggle(document.getElementById("tDv"),"show-dv");
+  toggle(document.getElementById("tKw"),"show-kw","gillard.kw");
+  toggle(document.getElementById("tDv"),"show-dv","gillard.dv");
+
+  /* ---- translation language: one choice shared with the hub's tap-to-translate ---- */
+  var LANG_KEY="elc_stem_home_lang", langSel=document.getElementById("langSelect"), LANG_NAME={};
+  langSel.innerHTML=LANGS.map(function(l){ LANG_NAME[l[0]]=l[1]; return '<option value="'+l[0]+'">'+esc(l[1])+'</option>'; }).join("");
+  var savedLang=load(LANG_KEY);
+  langSel.value = (savedLang&&LANG_NAME[savedLang]) ? savedLang : LANGS[0][0];
+  function lang(){ return langSel.value; }
+  langSel.addEventListener("change",function(){ store(LANG_KEY,lang()); renderHub(); closePop(); });
+  document.getElementById("wbFolder").href=WORD_BUILDER_FOLDER;
+
+  /* the word build (morphemes) and the translation, as Word Builder shows them */
+  function morphs(v){
+    if(!v||!v.parts||!v.parts.length) return '<p class="whole">No useful modern word split — learn it as a whole.</p>';
+    return '<div class="morphs">'+v.parts.map(function(p){
+      return '<span class="morph '+esc(p[1])+'"><b>'+esc(p[0])+'</b><small>'+esc(p[2])+'</small></span>';
+    }).join("")+'</div>';
+  }
+  function translation(v){
+    var L=lang(), t=v&&v.tr&&v.tr[L];
+    return '<span class="plabel">'+esc(LANG_NAME[L])+'</span><div class="tr" dir="'+(RTL[L]?'rtl':'auto')+'" lang="'+esc(L)+'">'+esc(t||"—")+'</div>';
+  }
 
   /* ---- key word popup ---- */
   var pop=document.getElementById("gpop");
@@ -642,7 +804,10 @@ var SOURCE = "Speech: Julia Gillard, House of Representatives, 9 October 2012, o
     var go = unit
       ? '<a class="go" href="'+WORD_BUILDER+encodeURIComponent(unit)+'" target="_blank" rel="noopener">Practise this set in Word Builder \u2197</a>'
       : '<a class="go" href="'+WORD_BUILDER_FOLDER+'" target="_blank" rel="noopener">Open the Word Builder folder \u2197</a>';
-    pop.innerHTML='<span class="w">'+esc(w)+'</span><span class="m">'+esc(KEYWORDS[w]||"")+'</span>'+go;
+    var v=VOCAB[w];
+    pop.innerHTML='<span class="w">'+esc(w)+'</span><span class="m">'+esc(KEYWORDS[w]||"")+'</span>'+
+      (v&&v.form?'<span class="form">A form of <b>'+esc(v.form)+'</b>.</span>':'')+
+      '<span class="plabel">Word build</span>'+morphs(v)+translation(v)+go;
     pop.style.display="block";
     var r=el.getBoundingClientRect();
     var left=Math.min(r.left+window.scrollX, window.scrollX+document.documentElement.clientWidth-pop.offsetWidth-12);
@@ -653,7 +818,9 @@ var SOURCE = "Speech: Julia Gillard, House of Representatives, 9 October 2012, o
   document.addEventListener("keydown",function(e){ if(e.key==="Escape") closePop(); });
 
   /* ---- vocabulary hub ---- */
-  var vh=document.getElementById("vhub"), vhtml="";
+  var vh=document.getElementById("vhub");
+  function renderHub(){
+  var vhtml="";
   VSETS.forEach(function(set){
     var link = set.unit
       ? '<a class="vlink" href="'+WORD_BUILDER+encodeURIComponent(set.unit)+'" target="_blank" rel="noopener">Practise this set \u2197</a>'
@@ -663,11 +830,16 @@ var SOURCE = "Speech: Julia Gillard, House of Representatives, 9 October 2012, o
     set.w.forEach(function(w){
       var m=KEYWORDS[w];
       if(!m) return;
-      vhtml+='<div class="vcard"><div class="w">'+esc(w)+'</div><div class="m">'+esc(m)+'</div></div>';
+      var v=VOCAB[w], L=lang(), t=v&&v.tr&&v.tr[L];
+      vhtml+='<div class="vcard"><div class="w">'+esc(w)+'</div><div class="m">'+esc(m)+'</div>'+
+             '<div class="tr" dir="'+(RTL[L]?'rtl':'auto')+'" lang="'+esc(L)+'">'+esc(t||"—")+'</div>'+
+             (v&&v.parts&&v.parts.length?morphs(v):'')+'</div>';
     });
     vhtml+='</div></div>';
   });
   vh.innerHTML=vhtml;
+  }
+  renderHub();
 
   /* ---- quoted lines ---- */
   document.getElementById("lines").innerHTML=LINES.map(function(l){
