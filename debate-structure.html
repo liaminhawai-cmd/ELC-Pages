@@ -248,8 +248,8 @@
       <p>Nobody has spoken yet, so there is nothing to answer. Every speaker after that one starts with a rebuttal — that is why rebuttal is always red.</p>
     </div>
     <div class="rule" id="ruleSum">
-      <h3>The last speaker adds no new arguments</h3>
-      <p>Their job is to rebut, then pull the team case together. A new argument here is unfair — the other team has no turn left to answer it.</p>
+      <h3>The last speakers add no new arguments</h3>
+      <p>Team A's closer rebuts Team B's final argument, then pulls the team case together. Team B's closer speaks last of all: the speech before it had nothing new to answer, so it only summarises. A new argument here is unfair — the other team has no turn left to answer it.</p>
     </div>
     <div class="rule">
       <h3>Teams can be different sizes</h3>
@@ -323,10 +323,15 @@ function jobsFor(team, s, turns, summaryOnly) {
     jobs.push({ kind:"open" });
     if (!isA) jobs.push({ kind:"reb" });
     jobs.push({ kind:"arg" });
+  } else if (last && summaryOnly) {
+    /* the closing speeches: Team A's still rebuts Team B's last argument; Team B's
+       closes the debate — the speech before it held nothing new, so it only summarises */
+    if (isA) jobs.push({ kind:"reb" });
+    jobs.push({ kind:"sum" });
   } else {
     jobs.push({ kind:"reb" });
-    if (last && summaryOnly) jobs.push({ kind:"sum" });
-    else { jobs.push({ kind:"arg" }); if (last) jobs.push({ kind:"sum" }); }
+    jobs.push({ kind:"arg" });
+    if (last) jobs.push({ kind:"sum" });
   }
   return jobs;
 }
