@@ -193,7 +193,8 @@ body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background
   <span class="eyebrow">Grant Park, Chicago · 4 November 2008</span>
   <h1>Yes we can</h1>
   <p class="sub">Barack Obama, on the night he was elected President of the United States.</p>
-  <p class="lede">The whole speech is below. The <b>key words</b> are marked: tap one to read its meaning, its
+  <p class="lede">The speech is below from the moment he turns to how the campaign was built — the famous
+     opening is quoted in Before you read. The <b>key words</b> are marked: tap one to read its meaning, its
      word parts and a translation in your language. Turn on <b>Techniques</b> to see how the speech is built,
      named where it happens. The language you choose is saved on this device only.</p>
 
@@ -230,7 +231,8 @@ body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background
   </div>
 
   <h2>The speech</h2>
-  <p class="lede" id="speechIntro">Each movement is doing a different job in the argument.</p>
+  <p class="lede" id="speechIntro">Each movement is doing a different job in the argument. The extract below
+     picks up just after the opening.</p>
   <div id="speech" class="speech"></div>
 
   <hr class="hr">
@@ -269,23 +271,14 @@ body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background
 
 /* DATA-START */
 var SPEECH = [
- { n:"One", title:"The answer",
-   gist:"He turns three doubts into one word — answer — and repeats it until the result itself becomes the argument.",
-   paras:[
-   {sp:"Barack Obama", t:"Hello, Chicago. If there is anyone out there who still doubts that America is a place where all things are possible, who still wonders if the dream of our founders is alive in our time, who still questions the power of our democracy, tonight is your answer."},
-   {t:"It's the answer told by lines that stretched around schools and churches in numbers this nation has never seen, by people who waited three hours and four hours, many for the first time in their lives, because they believed that this time must be different, that their voices could be that difference."},
-   {t:"It's the answer spoken by young and old, rich and poor, Democrat and Republican, black, white, Hispanic, Asian, Native American, gay, straight, disabled and not disabled. Americans who sent a message to the world that we have never been just a collection of individuals or a collection of red states and blue states. We are, and always will be, the United States of America."},
-   {t:"It's the answer that led those who've been told for so long by so many to be cynical and fearful and doubtful about what we can achieve to put their hands on the arc of history and bend it once more toward the hope of a better day."},
-   {t:"It's been a long time coming, but tonight, because of what we did on this date in this election at this defining moment change has come to America."}
- ]},
- { n:"Two", title:"Where the campaign came from",
+ { n:"One", title:"Where the campaign came from",
    gist:"He gives the credit away, to ordinary places and small donations, so the win belongs to the crowd and not to him.",
    paras:[
    {t:"We didn't start with much money or many endorsements. Our campaign was not hatched in the halls of Washington. It began in the backyards of Des Moines and the living rooms of Concord and the front porches of Charleston. It was built by working men and women who dug into what little savings they had to give $5 and $10 and $20 to the cause."},
    {t:"It grew strength from the young people who rejected the myth of their generation's apathy who left their homes and their families for jobs that offered little pay and less sleep."},
    {t:"It drew strength from the not-so-young people who braved the bitter cold and scorching heat to knock on doors of perfect strangers, and from the millions of Americans who volunteered and organized and proved that more than two centuries later a government of the people, by the people, and for the people has not perished from the Earth."}
  ]},
- { n:"Three", title:"The size of the task",
+ { n:"Two", title:"The size of the task",
    gist:"He stops the celebration and lists the problems by name, so the promise that follows sounds honest.",
    paras:[
    {t:"This is your victory. And I know you didn't do this just to win an election. And I know you didn't do it for me. You did it because you understand the enormity of the task that lies ahead."},
@@ -293,20 +286,20 @@ var SPEECH = [
    {t:"There are mothers and fathers who will lie awake after the children fall asleep and wonder how they'll make the mortgage or pay their doctors' bills or save enough for their child's college education. There's new energy to harness, new jobs to be created, new schools to build, and threats to meet, alliances to repair."},
    {t:"The road ahead will be long. Our climb will be steep. We may not get there in one year or even in one term. But, America, I have never been more hopeful than I am tonight that we will get there. I promise you, we as a people will get there."}
  ]},
- { n:"Four", title:"What he will not promise",
+ { n:"Three", title:"What he will not promise",
    gist:"He admits in advance that he will fail sometimes and disagree with people, and then asks them to work anyway.",
    paras:[
    {t:"There will be setbacks and false starts. There are many who won't agree with every decision or policy I make as president. And we know the government can't solve every problem. But I will always be honest with you about the challenges we face."},
    {t:"I will listen to you, especially when we disagree. And, above all, I will ask you to join in the work of remaking this nation, the only way it's been done in America for 221 years -- block by block, brick by brick, calloused hand by calloused hand."}
  ]},
- { n:"Five", title:"A new spirit of service",
+ { n:"Four", title:"A new spirit of service",
    gist:"The ask. He moves from what he will do to what the audience must do, and makes selfishness the enemy.",
    paras:[
    {t:"What began 21 months ago in the depths of winter cannot end on this autumn night. This victory alone is not the change we seek. It is only the chance for us to make that change. And that cannot happen if we go back to the way things were. It can't happen without you, without a new spirit of service, a new spirit of sacrifice."},
    {t:"So let us summon a new spirit of patriotism, of responsibility, where each of us resolves to pitch in and work harder and look after not only ourselves but each other."},
    {t:"Let us remember that, if this financial crisis taught us anything, it's that we cannot have a thriving Wall Street while Main Street suffers. In this country, we rise or fall as one nation, as one people."}
  ]},
- { n:"Six", title:"To the people who voted against him",
+ { n:"Five", title:"To the people who voted against him",
    gist:"He praises the other party, quotes Lincoln, and speaks directly to the people who did not vote for him.",
    paras:[
    {t:"Let's resist the temptation to fall back on the same partisanship and pettiness and immaturity that has poisoned our politics for so long."},
@@ -314,7 +307,7 @@ var SPEECH = [
    {t:"And while the Democratic Party has won a great victory tonight, we do so with a measure of humility and determination to heal the divides that have held back our progress. As Lincoln said to a nation far more divided than ours, we are not enemies but friends. Though passion may have strained, it must not break our bonds of affection."},
    {t:"And to those Americans whose support I have yet to earn, I may not have won your vote tonight, but I hear your voices. I need your help. And I will be your president, too."}
  ]},
- { n:"Seven", title:"To the world",
+ { n:"Six", title:"To the world",
    gist:"He turns outward and sorts the world into two audiences, then defines American strength as ideas rather than weapons.",
    paras:[
    {t:"And to all those watching tonight from beyond our shores, from parliaments and palaces to those who are huddled around radios in the forgotten corners of the world, our stories are singular, but our destiny is shared, and a new dawn of American leadership is at hand."},
@@ -322,7 +315,7 @@ var SPEECH = [
    {t:"And to all those who have wondered if America's beacon still burns as bright: Tonight we proved once more that the true strength of our nation comes not from the might of our arms or the scale of our wealth, but from the enduring power of our ideals: democracy, liberty, opportunity, and unyielding hope."},
    {t:"That's the true genius of America: that America can change. Our union can be perfected. What we've already achieved gives us hope for what we can and must achieve tomorrow."}
  ]},
- { n:"Eight", title:"One woman's hundred years",
+ { n:"Seven", title:"One woman's hundred years",
    gist:"One life story carries a century of American history, and each step is answered with the same three words.",
    paras:[
    {t:"This election had many firsts and many stories that will be told for generations. But one that's on my mind tonight's about a woman who cast her ballot in Atlanta. She's a lot like the millions of others who stood in line to make their voice heard in this election except for one thing: Ann Nixon Cooper is 106 years old."},
@@ -334,7 +327,7 @@ var SPEECH = [
    {t:"She was there for the buses in Montgomery, the hoses in Birmingham, a bridge in Selma, and a preacher from Atlanta who told a people that \"We Shall Overcome.\" Yes, we can."},
    {t:"A man touched down on the moon, a wall came down in Berlin, a world was connected by our own science and imagination. And this year, in this election, she touched her finger to a screen, and cast her vote, because after 106 years in America, through the best of times and the darkest of hours, she knows how America can change. Yes, we can."}
  ]},
- { n:"Nine", title:"The question and the answer",
+ { n:"Eight", title:"The question and the answer",
    gist:"He asks what the next hundred years will look like, then ends on the campaign line the crowd already knows.",
    paras:[
    {t:"America, we have come so far. We have seen so much. But there is so much more to do."},
@@ -473,16 +466,11 @@ var VSETS = [
 ];
 
 var DEVICES = [
- {p:"It's the answer told by lines that stretched around schools",
+ {p:"This is our chance to answer that call. This is our moment. This is our time",
   name:"Anaphora",
   rule:"The same words start several sentences in a row. The repeated opening drills the idea in and builds a rhythm the crowd can feel coming.",
-  where:"Four sentences in a row open with “It's the answer”. Each one names a different group of people who gave that answer.",
+  where:"Three sentences in a row open with “This is our” — chance, moment, time — before the sentence finally says what “this time” will do.",
   limit:"Three or four repeats is the useful range. Past that it stops sounding designed and starts sounding stuck."},
- {p:"black, white, Hispanic, Asian, Native American, gay, straight",
-  name:"Catalogue (accumulation)",
-  rule:"A long list of items, piled up without stopping. The point is not each item but the size of the pile.",
-  where:"Nine kinds of American in one sentence, with no “and” until the very end, so the list feels like it could keep going.",
-  limit:"A catalogue only works if every item belongs to the same set. Slip one odd item in and the reader stops to argue with it."},
  {p:"the living rooms of Concord and the front porches of Charleston",
   name:"Tricolon",
   rule:"Three items in the same grammatical shape. Three is the smallest number that makes a pattern, so it sounds finished.",
@@ -503,11 +491,11 @@ var DEVICES = [
   rule:"Two opposites put in one balanced sentence, so the contrast does the arguing.",
   where:"Wall Street against Main Street: banks against ordinary towns, in matching halves either side of “while”.",
   limit:"The two halves must be genuinely opposite and roughly equal in length. Unequal halves read as one idea with a tail."},
- {p:"put their hands on the arc of history and bend it",
+ {p:"a new dawn of American leadership is at hand",
   name:"Metaphor",
   rule:"Saying one thing is another thing, with no “like”. The picture carries the meaning.",
-  where:"History becomes a curved bar that people can physically take hold of and bend. Hands, arc, bend — one picture, three words.",
-  limit:"Keep one picture per metaphor. Bending an arc and then sailing it and then lighting it is a mixed metaphor, and it collapses."},
+  where:"American leadership does not literally rise like the sun. Dawn stands for a hopeful, fresh start — in one word, not a sentence of explanation.",
+  limit:"Keep one picture per metaphor. Mixing dawn with a second, different image in the same breath would collapse it."},
  {p:"if America's beacon still burns as bright",
   name:"Metaphor (extended image)",
   rule:"One image, returned to and developed, instead of a new image every sentence.",
@@ -533,10 +521,10 @@ var DEVICES = [
   rule:"Saying “we” and “our” instead of “I” and “you”, so speaker and audience are one group with one result.",
   where:"“We rise or fall” ties everyone to the same outcome. He uses “I” only for his own promises, and “we” for everything shared.",
   limit:"“We” is dishonest if the speaker is not really included. Do not use it to give other people a job you will not do."},
- {p:"Hello, Chicago. If there is anyone out there who still doubts",
+ {p:"To those -- to those who would tear the world down: We will defeat you.",
   name:"Direct address",
   rule:"Speaking straight to a named listener. The audience feels spoken to rather than spoken about.",
-  where:"He opens by naming the city, and later turns to name other listeners: those who did not vote for him, those watching from other countries, those who would tear the world down.",
+  where:"He names one listener after another: Americans who did not vote for him, the world beyond America's shores, those who would tear it down, those who seek peace.",
   limit:"Address a group you can actually name. Vague address — “to everyone out there” — has no effect at all."},
  {p:"Ann Nixon Cooper is 106 years old.",
   name:"Anecdote",
@@ -552,10 +540,10 @@ var DEVICES = [
 
 /* the lines people quote */
 var LINES = [
- {q:"change has come to America",
-  why:"Five plain words at the end of a long, winding sentence. Everything before them is delay; the delay is what makes them land."},
- {q:"We are, and always will be, the United States of America.",
-  why:"He takes the country's own name apart. “United” stops being a label and becomes the claim of the sentence."},
+ {q:"This is your victory.",
+  why:"After a long paragraph of “I” and “we”, the win is handed to the crowd in four short words — and only then does he explain why."},
+ {q:"The road ahead will be long. Our climb will be steep.",
+  why:"Two short sentences, the same shape twice. Turning the challenge into a climb makes it physical before he asks anything of the crowd."},
  {q:"a government of the people, by the people, and for the people has not perished from the Earth",
   why:"Lincoln's words, unchanged, used as proof: the thing Lincoln hoped for is the thing that just happened."},
  {q:"we cannot have a thriving Wall Street while Main Street suffers",
@@ -568,15 +556,15 @@ var LINES = [
 
 /* practice: six real lines, name the technique */
 var QUIZ = [
- {stem:"“It's the answer told by lines that stretched around schools and churches …” — and three more sentences beginning the same way.",
+ {stem:"“This is our chance to answer that call. This is our moment. This is our time …”",
   opts:["Anaphora","Metaphor","Anecdote"], a:0,
-  fb:"Anaphora — the same opening words, “It's the answer”, start four sentences in a row."},
+  fb:"Anaphora — the same opening words, “This is our”, start three sentences in a row."},
  {stem:"“… we cannot have a thriving Wall Street while Main Street suffers.”",
   opts:["Tricolon","Antithesis","Refrain"], a:1,
   fb:"Antithesis — two opposites balanced in one sentence: the banks against the ordinary town."},
- {stem:"“… put their hands on the arc of history and bend it once more toward the hope of a better day.”",
+ {stem:"“… and a new dawn of American leadership is at hand.”",
   opts:["Metaphor","Direct address","Concession"], a:0,
-  fb:"Metaphor — history is not really a bar that can be bent. The picture carries the idea."},
+  fb:"Metaphor — leadership does not really rise like the sun. The picture carries the idea."},
  {stem:"“There will be setbacks and false starts. There are many who won't agree with every decision or policy I make as president.”",
   opts:["Catalogue","Allusion","Concession"], a:2,
   fb:"Concession — he admits the weakness in his own case first, so the promise after it sounds honest."},
@@ -602,7 +590,7 @@ var WHO = [
  ["Iraq, Afghanistan and the financial crisis","In 2008 the United States was fighting two wars, in Iraq and in Afghanistan, and banks were failing at home. These are the “two wars, a planet in peril, the worst financial crisis in a century” he names."]
 ];
 
-var CONTEXT = "On 4 November 2008 Barack Obama was elected President of the United States. He was the first African American to win the job, in a country where his own grandparents' generation could be stopped from voting because of the colour of their skin. He gave this speech the same night in Grant Park, Chicago, to a crowd of about 240,000 people, weeks after the worst financial crisis in a century had begun to close banks and cost people their homes. “Yes we can” was his campaign slogan, and the crowd already knew it, which is why he can leave it until the last three words.";
+var CONTEXT = "On 4 November 2008 Barack Obama was elected President of the United States. He was the first African American to win the job, in a country where his own grandparents' generation could be stopped from voting because of the colour of their skin. He gave this speech the same night in Grant Park, Chicago, to a crowd of about 240,000 people, weeks after the worst financial crisis in a century had begun to close banks and cost people their homes. “Yes we can” was his campaign slogan, and the crowd already knew it, which is why he can leave it until the last three words. The opening minute names that history — “If there is anyone out there who still doubts … tonight is your answer” — before the extract below picks up with how the campaign itself was built.";
 /* DATA-END */
 
 /* VOCAB-START */
