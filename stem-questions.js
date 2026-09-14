@@ -66,6 +66,34 @@
   }
   function near(a, b, tol) { return Math.abs(a - b) <= (tol === undefined ? 0.02 : tol); }
 
+  /* ---------------- what the keyboard actually produces ----------------
+     A student answering in Chinese has a Chinese IME switched on, and that
+     IME does not type "(4, 5)" — it types "\uff084\uff0c5\uff09" with full-width brackets
+     and a full-width comma. An Arabic or Farsi keyboard types \u0664 and \u06f4 for 4.
+     None of that is a wrong answer; it is the same answer in the characters
+     the student's keyboard makes. Every reader below starts here, so a
+     coordinate, an equation, a number and a unit are all read the same way.
+
+     Deliberately NOT converted: \u00b0, \u00b2 and \u00b3, which units need and which are
+     outside the full-width block anyway. */
+  function asciify(str) {
+    return String(str == null ? "" : str)
+      /* the full-width block: brackets, comma, digits, slash, minus, equals */
+      .replace(/[\uff01-\uff5e]/g, function (ch) {
+        return String.fromCharCode(ch.charCodeAt(0) - 0xfee0);
+      })
+      .replace(/\u3000/g, " ").replace(/\u3001/g, ",").replace(/\u3002/g, ".")
+      .replace(/\u060c/g, ",").replace(/\u061b/g, ";")      /* Arabic comma and semicolon */
+      .replace(/[\u2212\u2013\u2014\u2010\u2011]/g, "-")   /* minus and dashes */
+      .replace(/[\u00a0\u2007\u202f]/g, " ")                /* non-breaking spaces */
+      .replace(/[\u2018\u2019\u201c\u201d]/g, "'")
+      /* digits that are not Latin: Arabic-Indic, Persian, Devanagari */
+      .replace(/[\u0660-\u0669]/g, function (c) { return String(c.charCodeAt(0) - 0x0660); })
+      .replace(/[\u06f0-\u06f9]/g, function (c) { return String(c.charCodeAt(0) - 0x06f0); })
+      .replace(/[\u0966-\u096f]/g, function (c) { return String(c.charCodeAt(0) - 0x0966); })
+      .replace(/\u066b/g, ".").replace(/\u066c/g, ",");       /* Arabic decimal / thousands */
+  }
+
   /* ---------------- reading what a student actually typed ----------------
      num() below is the strict reader, used when this file parses a
      STRUCTURE out of an answer (an equation, a coordinate, a vertex) — there
@@ -115,8 +143,7 @@
   }
   function numsIn(str) {
     if (str == null) return [];
-    var s = String(str).replace(/[\u2212\u2013\u2014]/g, "-").replace(/\u00a0/g, " ")
-      .replace(/[≈~]/g, "").replace(/^\s*=\s*/, "").trim();
+    var s = asciify(str).replace(/[≈~]/g, "").replace(/^\s*=\s*/, "").trim();
     if (!s) return [];
     var f = s.match(/^([+-]?[\d.,\s]*\d)\s*\/\s*([+-]?[\d.,\s]*\d)\s*([\s\S]*)$/);
     if (f && unitLike(f[3])) {
@@ -135,8 +162,7 @@
   /* whatever the student wrote after the number — the unit, if they wrote one */
   function tailOf(str) {
     if (str == null) return "";
-    var s = String(str).replace(/[\u2212\u2013\u2014]/g, "-").replace(/\u00a0/g, " ")
-      .replace(/[≈~]/g, "").replace(/^\s*=\s*/, "").trim();
+    var s = asciify(str).replace(/[≈~]/g, "").replace(/^\s*=\s*/, "").trim();
     var f = s.match(/^([+-]?[\d.,\s]*\d)\s*\/\s*([+-]?[\d.,\s]*\d)\s*([\s\S]*)$/);
     if (f && unitLike(f[3])) return f[3].trim();
     var m = s.match(/^([+-]?[\d.,\s]*\d)\s*([\s\S]*)$/);
@@ -172,7 +198,7 @@
   /* one spelling of a unit, flattened: no spaces, no dots, "per" as a slash,
      superscripts as digits, so kmph / km per hour / KM/H all land together */
   function normUnit(t) {
-    return String(t == null ? "" : t).toLowerCase()
+    return asciify(t).toLowerCase()
       .replace(/\u00b2/g, "2").replace(/\u00b3/g, "3")
       .replace(/[\u00ba\u02da\u2070]/g, "\u00b0")
       .replace(/percentages?|percent/g, "%")   /* before "per" becomes a slash */
@@ -243,7 +269,7 @@
 
   function num(str) {
     if (str == null) return NaN;
-    str = String(str).replace(/−/g, "-").replace(/\s+/g, "")
+    str = asciify(str).replace(/\s+/g, "")
       .replace(/^\+-/, "-").replace(/^-\+/, "-").replace(/^\+/, "");
     if (!str) return NaN;
     var m = str.match(/^(-?\d+(?:\.\d+)?)\/(-?\d+(?:\.\d+)?)$/);
@@ -253,7 +279,7 @@
   }
   function parseEq(str) {
     if (!str) return null;
-    var s = String(str).toLowerCase().replace(/−/g, "-").replace(/\s+/g, "");
+    var s = asciify(str).toLowerCase().replace(/\s+/g, "");
     var mm = s.match(/^y=(.*)$/); if (mm) s = mm[1];
     if (!s) return null;
     var m = 0, c = 0;
@@ -272,9 +298,11 @@
     return { m: m, c: c };
   }
   function parseCoord(str) {
-    var mm = String(str || "").replace(/−/g, "-")
-      .match(/\(?\s*(-?\d+(?:\.\d+)?)\s*[,;]\s*(-?\d+(?:\.\d+)?)\s*\)?/);
-    return mm ? { x: parseFloat(mm[1]), y: parseFloat(mm[2]) } : null;
+    var mm = asciify(str)
+      .match(/[([{]?\s*(-?\d+(?:[.,]\d+)?)\s*[,;]\s*(-?\d+(?:[.,]\d+)?)\s*[)\]}]?/);
+    if (mm) return { x: parseFloat(String(mm[1]).replace(",", ".")),
+                     y: parseFloat(String(mm[2]).replace(",", ".")) };
+    return null;
   }
 
   /* ---------------- SVG helpers (sketch-matched look) ---------------- */
@@ -498,7 +526,7 @@
   /* accepts y = 2(x-3)^2+4, -(x+1)²-5, 0.5(x − 2)² + 3, 1/2x^2, (x-3)^2 … */
   function parseVertex(str) {
     if (!str) return null;
-    var s = String(str).toLowerCase().replace(/−/g, "-").replace(/²/g, "^2")
+    var s = asciify(str).toLowerCase().replace(/²/g, "^2")
       .replace(/\*/g, "").replace(/\s+/g, "");
     var ym = s.match(/^y=(.*)$/); if (ym) s = ym[1];
     var m = s.match(/^([+-]?(?:\d+(?:\.\d+)?(?:\/\d+(?:\.\d+)?)?)?)(?:\(x([+-]\d+(?:\.\d+)?)?\)|x)\^2([+-]\d+(?:\.\d+)?)?$/);
@@ -560,7 +588,7 @@
 
   window.QBANK = { register: register, gen: gen, teach: teach, hint: hint, list: list, audit: audit,
                    util: { fmt: fmt, eqStr: eqStr, near: near, num: num, numsIn: numsIn,
-                           nearAny: nearAny, anyNum: anyNum, unitKey: unitKey, judge: judge,
+                           nearAny: nearAny, anyNum: anyNum, unitKey: unitKey, judge: judge, asciify: asciify,
                            unitChoices: unitChoices,
                            unitOfLabel: unitOfLabel, tailOf: tailOf, parseEq: parseEq,
                            parseCoord: parseCoord, parseVertex: parseVertex, vertexStr: vertexStr,
