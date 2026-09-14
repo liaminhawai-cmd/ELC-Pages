@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en-AU" translate="no" class="notranslate">
+<head>
+<meta name="google" content="notranslate">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Julia Gillard's misogyny speech (2012) — the whole speech, the key words and phrases, and the persuasive techniques named where they happen. For EAL students.">
+<title>The Misogyny Speech — Reading &amp; Argument Hub</title>
+<style>
+/* ============================================================
+   ELC · The misogyny speech (Julia Gillard, 9 October 2012)
+   House style per ELC-Pages/AGENTS.md: CSS variables, light/dark
+   via prefers-color-scheme, mobile-first, one self-contained file,
+   no CDNs, no web fonts, no build step.
+
+   The accent is the green of the House of Representatives chamber.
+   Colour is metalanguage here, never decoration:
+     green  = the technique (how the speech is built)
+     ochre  = a key word (what it means)
+   ============================================================ */
+:root{
+  --bg:#f4f6f2; --paper:#fffefb; --ink:#1e231d; --muted:#5f6a5c; --faint:#828d80;
+  --line:#dde3d9; --line-soft:#eaefe6; --accent:#33663f; --accent-soft:#e8f0e7;
+  --on-accent:#ffffff;
+  --kw-bg:#fbf1d8; --kw-tx:#7a5405; --kw-line:#e6c97a;   /* key word   */
+  --prefix-bg:#e3ecfa; --prefix-tx:#1f4d8f;               /* word build: prefix / root / suffix */
+  --root-bg:#fbe9d7;   --root-tx:#8a4a12;
+  --suffix-bg:#e6f0e3; --suffix-tx:#2f5f3a;
+  --dv-bg:#e4efe3; --dv-tx:#2d5c38; --dv-line:#9dc0a1;   /* technique  */
+  --quote:#f6f3ea; --warnbg:#fdf3e3; --warntx:#7d5211;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#13160f; --paper:#1c2018; --ink:#eef0e8; --muted:#a9b3a4; --faint:#8b9587;
+    --line:#333a2e; --line-soft:#262b21; --accent:#7fb98a; --accent-soft:#222b1f;
+    --on-accent:#11150f;
+    --kw-bg:#332b16; --kw-tx:#e8c87c; --kw-line:#6d5a24;
+    --prefix-bg:#1d2a3d; --prefix-tx:#9fc0ee;
+    --root-bg:#3a2a1a;   --root-tx:#f0c39a;
+    --suffix-bg:#1f2e22; --suffix-tx:#a6d3ae;
+    --dv-bg:#1f2e22; --dv-tx:#9fcfa8; --dv-line:#3f5f46;
+    --quote:#20241a; --warnbg:#2b2417; --warntx:#e6bd77;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+     line-height:1.55;display:flex;justify-content:center;padding:14px 10px 56px}
+.container{width:100%;max-width:960px;background:var(--paper);border:1px solid var(--line);
+           border-radius:14px;padding:20px 22px 26px}
+h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif}
+h1{font-size:26px;margin:0 0 4px;letter-spacing:-.2px}
+h2{font-size:20px;margin:26px 0 8px}
+h3{font-size:15.5px;margin:0 0 6px}
+.sub{color:var(--muted);font-size:13px;margin:0 0 6px}
+.eyebrow{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;color:var(--accent)}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.topbar .where{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+a{color:var(--accent)}
+.btn{padding:9px 15px;border:1px solid var(--line);border-radius:9px;font-size:14px;font-weight:600;
+     cursor:pointer;background:var(--paper);color:var(--ink);font-family:inherit}
+.btn[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0 4px}
+.panel{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin:0 0 14px}
+.hr{height:1px;background:var(--line);margin:22px 0 16px;border:0}
+.lede{font-size:14px;color:var(--muted);margin:0 0 12px}
+
+/* ---- context box ---- */
+.who{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:13.5px;margin:8px 0 0}
+.who dt{font-weight:700;color:var(--accent)}
+.who dd{margin:0;color:var(--ink)}
+.steps{margin:8px 0 0;padding-left:20px;font-size:13.5px}
+.steps li{margin-bottom:4px}
+
+/* ---- the speech ---- */
+.movement{margin:0 0 6px;border-top:1px solid var(--line-soft);padding-top:16px}
+.movement:first-of-type{border-top:0}
+.mv-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:2px}
+.mv-num{font-size:11px;font-weight:800;color:var(--accent);letter-spacing:.5px}
+.mv-title{font-family:Georgia,serif;font-size:18px;margin:0}
+.mv-gist{font-size:13px;color:var(--muted);margin:0 0 10px}
+.speech p{margin:0 0 11px;font-size:15.5px;line-height:1.72}
+.speech .stage{font-size:13px;color:var(--faint);font-style:italic;margin:0 0 11px}
+.speech .speaker{font-weight:700;font-size:12px;letter-spacing:.4px;text-transform:uppercase;
+                 color:var(--accent);display:block;margin:0 0 3px}
+
+/* key word + technique marks — inert until the toggles turn them on */
+.kw{border-bottom:1px dotted transparent;cursor:default}
+body.show-kw .kw{background:var(--kw-bg);border-bottom-color:var(--kw-line);cursor:pointer;
+                 border-radius:2px;padding:0 1px}
+body.show-kw .kw:hover{outline:2px solid var(--kw-line)}
+.dv{border-radius:2px;padding:0 1px}
+body.show-dv .dv{background:var(--dv-bg);box-shadow:inset 0 -2px 0 var(--dv-line)}
+.dvtag{display:none}
+body.show-dv .dvtag{display:inline-block;font-size:10px;font-weight:800;text-transform:uppercase;
+                    letter-spacing:.4px;color:var(--dv-tx);background:var(--dv-bg);
+                    border:1px solid var(--dv-line);border-radius:4px;padding:0 4px;margin-left:5px;
+                    vertical-align:2px;white-space:nowrap}
+.note{display:none}
+body.show-dv .note{display:block;border-left:3px solid var(--dv-line);background:var(--dv-bg);
+                   color:var(--dv-tx);padding:8px 12px;border-radius:0 8px 8px 0;margin:0 0 12px;font-size:13px}
+.note b{color:var(--dv-tx)}
+.note .rule{display:block;font-weight:700;margin-bottom:2px}
+
+/* ---- glossary popup ---- */
+#gpop{position:absolute;z-index:60;width:min(340px,calc(100vw - 16px));background:var(--paper);border:1px solid var(--kw-line);
+      border-radius:9px;padding:10px 12px 11px;font-size:13.5px;box-shadow:0 8px 24px rgba(0,0,0,.16);display:none}
+#gpop .w{font-weight:800;color:var(--kw-tx);display:block;margin-bottom:2px;font-size:15px}
+#gpop .m{color:var(--ink)}
+#gpop .form{font-size:12px;color:var(--muted);display:block;margin-top:2px}
+.plabel{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.8px;font-weight:800;color:var(--faint);margin:9px 0 4px}
+.morphs{display:flex;gap:5px;flex-wrap:wrap}
+.morph{display:inline-flex;align-items:baseline;gap:4px;border-radius:999px;padding:3px 9px;font-size:12.5px;font-weight:800;
+       background:var(--root-bg);color:var(--root-tx)}
+.morph small{font-weight:600;opacity:.85}
+.morph.prefix{background:var(--prefix-bg);color:var(--prefix-tx)}
+.morph.suffix{background:var(--suffix-bg);color:var(--suffix-tx)}
+.whole{font-size:12.5px;color:var(--muted);font-style:italic;margin:0}
+.tr{font-weight:700;font-size:15px;line-height:1.5}
+.tr[dir=rtl]{text-align:right}
+.lang{padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink);
+      font-size:14px;font-weight:600;max-width:100%}
+
+/* ---- vocab hub ---- */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(228px,1fr));gap:9px;margin-top:10px}
+.vcard{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:9px 12px}
+.vcard .w{font-weight:700;font-size:14.5px}
+.vcard .m{font-size:12.8px;color:var(--muted);margin-top:2px;line-height:1.45}
+.vcard .tr{font-size:13.5px;margin-top:4px;color:var(--kw-tx)}
+.vcard .morphs{margin-top:6px}
+.vcard .morph{padding:2px 7px;font-size:11.5px}
+.vset{margin-top:16px}
+.vset h3{color:var(--accent);font-size:14px;text-transform:uppercase;letter-spacing:.5px;
+         font-family:system-ui,sans-serif;margin-bottom:2px}
+.vset .why{font-size:13px;color:var(--muted);margin:0}
+
+/* ---- quoted lines ---- */
+.vset .vhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.vlink{font-size:12.5px;font-weight:700;color:var(--accent);text-decoration:none;white-space:nowrap}
+.vlink:hover{text-decoration:underline}
+#gpop .go{display:block;margin-top:8px;font-size:12.5px;font-weight:700;color:var(--accent);text-decoration:none}
+#gpop .go:hover{text-decoration:underline}
+.lines{display:grid;gap:9px;margin-top:10px}
+.line{background:var(--quote);border:1px solid var(--line);border-left:4px solid var(--accent);
+      border-radius:0 9px 9px 0;padding:10px 14px}
+.line q{font-family:Georgia,serif;font-size:15.5px;display:block;margin-bottom:4px}
+.line q:before,.line q:after{content:'"'}
+.line .why{font-size:13px;color:var(--muted)}
+
+/* ---- technique check ---- */
+.q{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin-bottom:10px}
+.q .stem{font-family:Georgia,serif;font-size:15px;margin:0 0 9px}
+.opts{display:flex;gap:7px;flex-wrap:wrap}
+.opt{padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:var(--paper);
+     cursor:pointer;font-size:13.5px;font-family:inherit;color:var(--ink)}
+.opt.right{background:var(--dv-bg);border-color:var(--dv-line);color:var(--dv-tx);font-weight:700}
+.opt.wrong{opacity:.5;text-decoration:line-through}
+.fb{font-size:13px;margin-top:8px;display:none;color:var(--muted)}
+.fb.on{display:block}
+
+/* ---- video ---- */
+.vid{margin:0 0 14px}
+.vidbox{position:relative;background:var(--bg);border:1px solid var(--line);border-radius:11px;
+        padding:0;overflow:hidden}
+.vidbox .ratio{position:relative;width:100%;padding-top:56.25%}
+.vidbox .ratio>iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vidplay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;
+         justify-content:center;gap:9px;background:var(--accent-soft);border:0;cursor:pointer;
+         font-family:inherit;color:var(--ink);padding:18px;text-align:center}
+.vidplay:hover{background:var(--dv-bg)}
+.vidplay .tri{width:0;height:0;border-style:solid;border-width:13px 0 13px 22px;
+              border-color:transparent transparent transparent var(--accent)}
+.vidplay .big{font-weight:700;font-size:15px}
+.vidplay .small{font-size:12.5px;color:var(--muted);max-width:44ch;line-height:1.5}
+
+/* ---- source note ---- */
+.source{font-size:12.2px;color:var(--faint);line-height:1.6;margin-top:8px}
+.source b{color:var(--muted)}
+@media (max-width:560px){
+  .container{padding:16px 14px 22px}
+  h1{font-size:22px}
+  .speech p{font-size:15px}
+}
+</style>
+</head>
+<body class="show-kw">
+<div class="container">
+
+  <div class="topbar">
+    <span class="where">ELC · Text study</span>
+    <a href="index.html">← Hub</a>
+  </div>
+
+  <span class="eyebrow">House of Representatives · 9 October 2012</span>
+  <h1>The misogyny speech</h1>
+  <p class="sub">Julia Gillard, Prime Minister of Australia, replying to a motion to remove the Speaker.</p>
+  <p class="lede">The whole speech is below. The <b>key words</b> are marked: tap one to read its meaning, its
+     word parts and a translation in your language. Turn on <b>Techniques</b> to see how the speech is built,
+     named where it happens. The language you choose is saved on this device only.</p>
+
+  <div class="btnrow">
+    <button class="btn" id="tKw" aria-pressed="true">Key words</button>
+    <button class="btn" id="tDv" aria-pressed="false">Techniques</button>
+    <select class="lang" id="langSelect" aria-label="Translation language"></select>
+    <a class="btn" id="wbFolder" href="#" target="_blank" rel="noopener">Practise these words in Word Builder ↗</a>
+  </div>
+
+  <h2>Before you read</h2>
+  <div class="panel">
+    <p class="sub" style="margin:0">A motion is a proposal that the House votes on. The Leader of the
+       Opposition had moved a motion to remove the Speaker, Peter Slipper, because of sexist text messages
+       Slipper had sent. The Prime Minister rose to oppose that motion. She did not defend the text messages.
+       She argued that the man moving the motion had no standing to make it.</p>
+    <dl class="who">
+      <dt>Julia Gillard</dt><dd>Prime Minister, and Australia's first woman to hold that office.</dd>
+      <dt>The Leader of the Opposition</dt><dd>Tony Abbott, who leads the other side of the House. She never uses his name.</dd>
+      <dt>The Speaker</dt><dd>Peter Slipper, "the member for Fisher", who runs the House. The motion was about him.</dd>
+      <dt>The Deputy Speaker</dt><dd>Anna Burke, chairing the House while this speech was given.</dd>
+    </dl>
+    <p class="sub" style="margin:10px 0 0;padding:9px 12px;background:var(--warnbg);color:var(--warntx);border-radius:8px">
+       <b>A note on two words.</b> The speech quotes two insults that were written about the Prime Minister on
+       protest signs. They are quoted, not said by her, and they are the evidence her argument rests on.
+       They are in the record and they are left in.</p>
+    <ol class="steps">
+      <li>Read it once with <b>Key words</b> and <b>Techniques</b> both off, for what she is saying.</li>
+      <li>Read it again with <b>Techniques</b> on, for how she says it.</li>
+      <li>Use the vocabulary hub at the end to check the words you did not know.</li>
+    </ol>
+  </div>
+
+  <h2>Watch it first</h2>
+  <p class="lede">Fifteen minutes. Read the speech afterwards and you will hear her voice in it — which
+     is most of how the argument works.</p>
+  <div class="vid">
+    <div class="vidbox"><div class="ratio" id="vidSlot">
+      <button class="vidplay" id="vidPlay" type="button">
+        <span class="tri"></span>
+        <span class="big">Play the speech on YouTube</span>
+        <span class="small">The video is not loaded until you press play. Pressing play loads it from
+              youtube-nocookie.com, and YouTube will see that you watched it.</span>
+      </button>
+    </div></div>
+  </div>
+
+  <h2>The speech</h2>
+  <p class="lede" id="speechIntro">Eight movements. Each one is doing a different job in the argument.</p>
+  <div id="speech" class="speech"></div>
+
+  <hr class="hr">
+  <h2>Vocabulary hub</h2>
+  <p class="lede">Every key word from the speech, in five sets, with its word parts and a translation in the
+     language chosen above. These are the same sets you can build and drill in the Word Builder.</p>
+  <div id="vhub"></div>
+
+  <hr class="hr">
+  <h2>The lines people quote</h2>
+  <p class="lede">Why each one works — the technique is named, so you can use the same move in your own writing.</p>
+  <div class="lines" id="lines"></div>
+
+  <hr class="hr">
+  <h2>Name the technique</h2>
+  <p class="lede">Six real lines from the speech. Choose the technique each one uses. You can try again.</p>
+  <div id="quiz"></div>
+
+  <hr class="hr">
+  <p class="source" id="sourceNote"></p>
+</div>
+<div id="gpop" role="dialog" aria-live="polite"></div>
+
+<script>
+/* ============================================================
+   DATA — teachers can edit everything in this block.
+   Nothing below the marked END OF DATA line needs touching.
+   ------------------------------------------------------------
+   SPEECH   the speech itself, in movements, verbatim.
+   KEYWORDS word -> student meaning. Marked automatically wherever
+            the word appears in the speech, longest match first.
+   DEVICES  a phrase -> the technique it demonstrates, and the rule.
+            Marked where that phrase appears; the rule shows as a
+            note under the paragraph.
+   ============================================================ */
+
+var SPEECH = [
+ { n:"One", title:"The refusal",
+   gist:"She refuses the lecture before she answers it. Everything after this is evidence for this first sentence.",
+   paras:[
+   {sp:"Deputy Speaker", t:"The question is that the motion be agreed to. I call the Prime Minister."},
+   {sp:"Julia Gillard", t:"Thank you very much Deputy Speaker and I rise to oppose the motion moved by the Leader of the Opposition, and in so doing I say to the Leader of the Opposition: I will not be lectured about sexism and misogyny by this man. I will not. And the government will not be lectured about sexism and misogyny by this man—not now, not ever."},
+   {t:"The Leader of the Opposition says that people who hold sexist views and who are misogynists are not appropriate for high office. Well, I hope the Leader of the Opposition has got a piece of paper and he is writing out his resignation, because if he wants to know what misogyny looks like in modern Australia he doesn't need a motion in the House of Representatives; he needs a mirror. That is what he needs."}
+ ]},
+ { n:"Two", title:"The catalogue of quotes",
+   gist:"Six things he said, in his own words, with dates. This is her evidence, and she reads it out one item at a time.",
+   paras:[
+   {t:"Let's go through the opposition leader's repulsive double standards when it comes to misogyny and sexism. We are now supposed to take seriously that the Leader of the Opposition is offended by Mr Slipper's text messages, when this is the Leader of the Opposition who has said, and this was when he was a minister under the last government—not when he was a student, not when he was in high school, (but) when he was a minister under the last government. He has said, and I quote, in a discussion about women being underrepresented in institutions of power in Australia, the interviewer was a man called Stavros, the Leader of the Opposition said: “If it's true, Stavros, that men have more power, generally speaking, than women, is that a bad thing?” And then a discussion ensues and another person being interviewed says, “I want my daughter to have as much opportunity as my son,” to which the Leader of the Opposition says: “Yeah, I completely agree, but what if men are, by physiology or temperament, more adapted to exercise authority or to issue command?” Then ensues another discussion about women's role in modern society, and the other person participating in the discussions says, “I think it's very hard to deny that there is an underrepresentation of women,” to which the Leader of the Opposition says, “But now, there's an assumption that this is a bad thing.” This is the man from whom we are supposed to take lectures about sexism."},
+   {t:"And then, or course, it goes on. I was very offended personally when the Leader of the Opposition as minister for health said, and I quote, “Abortion is the easy way out.” I was very personally offended by those comments. You said that in March 2004. I suggest you check the records."},
+   {t:"I was also very offended on behalf of the women of Australia when in the course of this carbon pricing campaign the Leader of the Opposition said, “What the housewives of Australia need to understand as they do the ironing ...” Thank you for that painting of women's roles in modern Australia!"},
+   {t:"And then, of course, I was offended too by the sexism, by the misogyny, of the Leader of the Opposition catcalling across this table at me as I sit here as Prime Minister, “if the Prime Minister wants to, politically speaking, make an honest woman of herself ...” — something that would never have been said to any man sitting in this chair. I was offended when the Leader of the Opposition went outside in the front of parliament and stood next to a sign that said 'Ditch the witch'. I was offended when the Leader of the Opposition stood next to a sign that described me as a man's bitch. I was offended by those things. Misogyny, sexism, every day from this Leader of the Opposition. Every day, in every way, across the time the Leader of the Opposition has sat in that chair and I have sat in this chair, that is all we have heard from him."},
+   {t:"And now the Leader of the Opposition wants to be taken seriously. Apparently he's woken up, after this track record and all of these statements, he's woken up and he's gone, “Oh dear, there's this thing called sexism; oh my lord, there's this thing called misogyny. Now who's one of them? Oh, the Speaker must be because that suits my political purpose” (He) doesn't turn a hair about any of his past statements, doesn't walk into this parliament and apologise to the women of Australia, doesn't walk into this parliament and apologise to me for the things that have come out of his mouth—but (he) now seeks to use this as a battering ram against someone else. Well this kind of hypocrisy should not be tolerated, which is why this motion from the Leader of the Opposition should not be taken seriously."}
+ ]},
+ { n:"Three", title:"Responsibility, the second reason",
+   gist:"Her second numbered reason. He demands that others take responsibility; she asks what he has taken responsibility for.",
+   paras:[
+   {t:"And then second, the Leader of the Opposition is always wonderful about walking into this parliament and giving me and others a lecture about what they should take responsibility for; always wonderful about that - everything that I should take responsibility for, now apparently including the text messages of the member for Fisher. Always keen to say others should assume responsibility, particularly me. Well can anybody remind me if the Leader of the Opposition has taken any responsibility for the conduct of the Sydney Young Liberals and the attendance at this event of members of his frontbench? Has he taken any responsibility for the conduct of members of his political party and members of his frontbench, who apparently when the most vile things were being said about my family raised no voice of objection."},
+   {stage:"(Government members interjecting)"},
+   {sp:"Deputy Speaker", t:"Order!"},
+   {sp:"Julia Gillard", t:"No-one walked out of the room, no-one walked up to Mr Jones and said that this was not acceptable. Instead, of course, it was all viewed as good fun—until it was run in a Sunday newspaper, and then the Leader of the Opposition and others started ducking for cover. (He is) big on lectures of responsibility, very light on accepting responsibility himself for the vile conduct of members of his political party."}
+ ]},
+ { n:"Four", title:"The record with Mr Slipper",
+   gist:"Her third reason, and the most forensic. Nine preselections, a wedding, and his own words of praise — all on the record.",
+   paras:[
+   {t:"Third, Ms Deputy Speaker, why the Leader of the Opposition should not be taken seriously on this motion. The Leader of the Opposition and the Deputy Leader of the Opposition have come into this place and have talked about the member for Fisher. Well let me remind the opposition, and the Leader of the Opposition particularly, about their track record and association with the member for Fisher. I remind them that the National Party preselected the member for Fisher for the 1984 election, that the National Party preselected the member for Fisher for the 1987 election, that the Liberal Party preselected the member for Fisher for the 1993 election, then for the 1996 election, then for the 1998 election, then for the 2001 election, then for the 2004 election, then for the 2007 election and then for the 2010 election. And across many of those preselections Mr Slipper enjoyed the personal support of the Leader of the Opposition."},
+   {t:"I remind the Leader of the Opposition that on 28 September 2010, following the last election campaign when Mr Slipper was elected as Deputy Speaker, the Leader of the Opposition at that stage said this, and I quote; he referred to the member for Maranoa, who was also elected to a position at the same time, and then went on as follows: '... and the member for Fisher will serve as a fine complement to the member for Scullin in the chair. I believe that the parliament will be well served by the team which will occupy the chair in this chamber … I congratulate the member for Fisher, who has been a friend of mine for a very long time, who has served this parliament in many capacities with distinction …' The words of the Leader of the Opposition on record about his personal friendship with Mr Slipper and on record about his view about Mr Slipper's qualities and attributes to be the Speaker. (There is) no walking away from those words—they were the statements of the Leader of the Opposition then."},
+   {t:"I remind the Leader of the Opposition, who now comes in here and speaks about Mr Slipper and apparently his inability to work with or talk to Mr Slipper, I remind the Leader of the Opposition, he attended Mr Slipper's wedding. Did he walk up to Mr Slipper in the middle of the service and say he was disgusted to be there? Was that the attitude he took? No, he attended that wedding as a friend. The Leader of the Opposition, keen to lecture others about what they ought to know or did know about Mr Slipper but, with respect, I would say to the Leader of the Opposition after a long personal association, including attending Mr Slipper's wedding, it would be interesting to know whether the Leader of the Opposition was surprised by these text messages. He is certainly in a position to speak more intimately about Mr Slipper than I am and many other people in this parliament, given this long personal association."}
+ ]},
+ { n:"Five", title:"“My father did not die of shame”",
+   gist:"He had used the words “died of shame” weeks after her father's death. She quotes him, then turns the words back.",
+   paras:[
+   {t:"Then, of course, the Leader of the Opposition comes into this place and says, and I quote: “Every day the Prime Minister stands in this parliament to defend this Speaker will be another day of shame for this parliament; another day of shame for a government which should already have died of shame.” Well, can I indicate to the Leader of the Opposition, the government is not dying of shame, my father did not die of shame. What the Leader of the Opposition should be ashamed of is his performance in this parliament and the sexism he brings with it."},
+   {t:"Now, about the text messages that are on the public record,"},
+   {stage:"(Opposition members interjecting)"},
+   {sp:"Jenny Macklin", t:"You used those words. It is a quote."},
+   {sp:"Julia Gillard", t:"That is a direct quote from the Leader of the Opposition, so I suggest those groaning have a word with him."}
+ ]},
+ { n:"Six", title:"Her own judgment on the messages",
+   gist:"She concedes the point about the text messages, then separates it from the motion. Conceding here is what protects her argument.",
+   paras:[
+   {t:"On the conduct of Mr Slipper and on the text messages which are in the public domain—I have seen the press reports of those text messages, I am offended by their content. I am offended by their content because I am always offended by sexism. I am offended by their content because I am always offended by statements that are anti-women. I am offended by those things in the same way I have been offended by things that the Leader of the Opposition has said, and no doubt will continue to say in the future, because if this, today, was an exhibition of his new feminine side, well I don't think we have much to look forward to in terms of changed conduct."},
+   {t:"I am offended by those text messages but I also believe that, in terms of this parliament, making a decision about the speakership, that his parliament should recognise that there is court case in progress, that the judge has reserved his decision, that having waited for a number of months for the legal matters surrounding Mr Slipper to come to a conclusion, that this parliament should see that conclusion. I believe that is the appropriate path forward and that people will then have an opportunity to make up their minds with the fullest information available to them."}
+ ]},
+ { n:"Seven", title:"The double standard named",
+   gist:"The argument's spine, stated plainly: not that he is wrong about Slipper, but that he will not apply the rule to himself.",
+   paras:[
+   {t:"But, whenever people make up their minds about those questions, what I won't stand for, what I will never stand for, is the Leader of the Opposition coming into this place and peddling a double standard; peddling a standard for Mr Slipper he would not set for himself, peddling a standard for Mr Slipper he has not set for other members of his frontbench; peddling a standard for Mr Slipper that has not been acquitted by the people who have been sent out to say the vilest and most revolting things, like his former shadow parliamentary secretary, Senator Bernardi. I will not ever see the Leader of the Opposition seek to impose his double standard on this parliament."},
+   {t:"Sexism should always be unacceptable. We should conduct ourselves as it should be always unacceptable. The Leader of the Opposition says, 'Do something.' Well he could do something himself if he wants to deal with sexism in this parliament. He could change his behaviour, he could apologise for all his past statements, he could apologise for standing next to signs describing me as a witch and a bitch—terminology that is now objected to by the frontbench of the opposition. He could change a standard himself if he sought to do so. But we will see none of that from the Leader of the Opposition, because on these questions he is incapable of change. (He is) capable of double standards but incapable of change."}
+ ]},
+ { n:"Eight", title:"The close",
+   gist:"She uses his own watch-checking as her last example, then ends on the standard she says women are owed.",
+   paras:[
+   {t:"His double standards should not rule this parliament. Good sense, common sense, proper process is what should rule this parliament. That's what I believe is the path forward for this parliament, not the kind of double standards and political game-playing imposed by the Leader of the Opposition, (who is) now looking at his watch because, apparently, a woman's spoken too long—I've had him yell at me to shut up in the past."},
+   {t:"But I will take the remaining seconds of my speaking time to say to the Leader of the Opposition I think the best course for him is to reflect on the standards he has exhibited in public life, on the responsibility he should take for his public statements, on his close personal connection with Peter Slipper, on the hypocrisy he has displayed in this House today. And on that basis, because of the Leader of the Opposition's motivations, this parliament today should reject this motion, and the Leader of the Opposition should think seriously about the role of women in public life and in Australian society—because we are entitled to a better standard than this."},
+   {sp:"Government members", t:"Hear hear!"}
+ ]}
+];
+
+/* word -> meaning. Marked automatically in the speech, longest match first. */
+var KEYWORDS = {
+ "the Leader of the Opposition":"The head of the largest party that is not in government.",
+ "the Speaker":"The member elected to run debates in the House and keep order.",
+ "the member for Fisher":"The way a politician is named in parliament: by the electorate they represent, not by their surname.",
+ "preselect":"To choose, inside a party, which candidate will stand for a seat at an election.",
+ "preselection":"The process by which a party picks its candidate for an electorate.",
+ "interject":"To call out while another member is speaking.",
+ "order":"The rules of behaviour in the chamber; the Speaker calls 'order' to restore them.",
+ "Hansard":"The official written record of everything said in an Australian parliament.",
+ "misogynist":"A person who hates or despises women.",
+ "hypocrite":"A person who criticises in others behaviour they accept in themselves.",
+ "rebuttal":"An answer that argues directly against a claim someone has just made.",
+ "anaphora":"Beginning several sentences or clauses with the same words, for rhythm and force.",
+ "repetition":"Saying a word or phrase again so that the audience remembers it.",
+ "rhetorical question":"A question asked for effect, when the answer is already obvious.",
+ "direct address":"Speaking straight to one person or group, using 'you' or naming them.",
+ "antithesis":"Setting two opposite ideas side by side in a balanced sentence.",
+ "irony":"Saying one thing while the situation shows the opposite.",
+ "sarcasm":"Saying the opposite of what you mean, with a tone meant to sting.",
+ "catalogue":"A long list of items given one after another to build up weight.",
+ "testimony":"A first-hand account given by someone who experienced it.",
+ "register":"The level of formality and tone chosen for a piece of writing or speaking.",
+ "contention":"The main claim a speaker or writer is arguing for.",
+ "evidence":"The facts, quotations or examples offered to support a claim.",
+ "he needs a mirror":"An idiom meaning: look at your own behaviour before you criticise someone else's.",
+ "not now not ever":"A flat refusal covering both the present and the future.",
+ "died of shame":"An idiom meaning someone would have been overwhelmed by embarrassment or disgrace.",
+ "make an honest woman of":"An old idiom for marrying a woman, implying she was disgraced until a man married her.",
+ "ditch the witch":"A protest slogan aimed at the Prime Minister; quoted in the speech as an example of sexist language.",
+ "a better standard":"A higher level of behaviour than the one currently being accepted.",
+ "misogyny":"Hatred of women, or deep prejudice against them.",
+ "misogynists":"People who hate women or hold women in contempt.",
+ "sexism":"Treating someone unfairly because of their sex, usually a woman.",
+ "sexist":"Treating women (or men) unfairly because of their sex.",
+ "underrepresented":"Present in smaller numbers than you would expect, given the population.",
+ "underrepresentation":"Being present in smaller numbers than you would expect.",
+ "physiology":"The way the body is built and how it works.",
+ "temperament":"A person's usual nature: calm, quick-tempered, cautious.",
+ "anti-women":"Against women; hostile to women.",
+ "feminine":"Having qualities traditionally treated as belonging to women.",
+ "offended":"Hurt or insulted by what someone said or did.",
+ "repulsive":"So unpleasant that it disgusts you.",
+ "vile":"Extremely bad or disgusting.",
+ "vilest":"The most disgusting of all.",
+ "revolting":"Disgusting.",
+ "double standards":"Judging two people by different rules, when the same rule should apply to both.",
+ "double standard":"Judging two people by different rules, when the same rule should apply to both.",
+ "hypocrisy":"Demanding a standard from others that you do not keep yourself.",
+ "standard":"The level of behaviour that is expected. The speech asks whether one standard applies to everyone.",
+ "responsibility":"The duty to answer for what you or your side has done.",
+ "conduct":"The way a person behaves, especially in public life.",
+ "objection":"A statement that you disagree and think something is wrong.",
+ "acquitted":"Here: satisfied or met. (In a courtroom it means found not guilty.)",
+ "peddling":"Pushing an idea on other people, the way a seller pushes goods.",
+ "tolerated":"Allowed to continue, even though it is wrong.",
+ "resignation":"A formal statement that you are giving up your job.",
+ "apologise":"Say sorry for something you did.",
+ "reflect":"Think carefully about something before you judge it.",
+ "entitled":"Having a fair right to something.",
+ "motion":"A proposal put to the House, which members then debate and vote on.",
+ "Leader of the Opposition":"The leader of the largest party that is not in government.",
+ "Deputy Speaker":"The member chairing the House when the Speaker is not in the chair.",
+ "Speaker":"The member who runs the House and keeps order. The motion was about removing him.",
+ "speakership":"The office of being Speaker.",
+ "member for Fisher":"How the House refers to Peter Slipper: by his electorate, not his name.",
+ "member for Maranoa":"Another member, named by his electorate.",
+ "member for Scullin":"Another member, named by his electorate.",
+ "frontbench":"The senior members of a party, who sit on the front row and lead it.",
+ "preselected":"Chosen by a political party to be its candidate at an election.",
+ "preselections":"The party votes that choose who will be its candidate.",
+ "shadow parliamentary secretary":"An opposition member given responsibility for one policy area.",
+ "interjecting":"Calling out while another member is speaking.",
+ "high office":"An important public position, such as Prime Minister.",
+ "the chair":"The Speaker's seat, and so the job of running the House.",
+ "House of Representatives":"The lower house of the Australian Parliament.",
+ "parliament":"The elected body that makes the laws.",
+ "public domain":"Known to the public; already reported.",
+ "public record":"Information that has been officially published and anyone can check.",
+ "battering ram":"A heavy beam once used to break down a gate. Here: a weapon to attack someone with.",
+ "ducking for cover":"Hiding to avoid blame.",
+ "turn a hair":"Show any reaction at all. Used in the negative: he did not turn a hair.",
+ "game-playing":"Doing something for political advantage rather than because it is right.",
+ "good fun":"Harmless enjoyment. She uses it for something that was not harmless.",
+ "track record":"Everything a person has done in the past, taken together.",
+ "carbon pricing":"A government policy that put a price on greenhouse gas pollution.",
+ "exhibition":"A public display of something.",
+ "assumption":"Something taken to be true without being proved.",
+ "association":"A connection or relationship between people.",
+ "attributes":"The qualities a person has.",
+ "distinction":"Excellence; doing something notably well.",
+ "reserved his decision":"The judge has heard the case but has not yet announced the result.",
+ "proper process":"Doing things in the correct, agreed order.",
+ "terminology":"The particular words used for something."
+};
+
+/* phrase -> the technique it shows, and the rule a student can reuse.
+   `where` names the exact move so the student can find it in their own draft. */
+var DEVICES = [
+ {p:"I will not be lectured about sexism and misogyny by this man. I will not.",
+  name:"Anaphora",
+  rule:"Anaphora is repeating the same opening words in a row.",
+  where:"“I will not” opens the sentence, then stands alone as a two-word sentence. The short one lands harder because the long one came first.",
+  limit:"Two or three times is force. Four or more sounds like a chant, and the House would have laughed."},
+ {p:"not now, not ever",
+  name:"Emphatic doublet",
+  rule:"Two matched negatives close a sentence and shut the door on it.",
+  where:"“not now” refuses today; “not ever” refuses every future day. Together they leave no version of the request open.",
+  limit:"Only works at the end of a sentence. Inside one, it slows the line down."},
+ {p:"he needs a mirror",
+  name:"Metaphor",
+  rule:"A metaphor says one thing IS another, with no “like” or “as”.",
+  where:"He does not need “a motion in the House of Representatives”; he needs “a mirror”. The mirror is not real — it means the problem he is describing is himself.",
+  limit:"One clear image beats three mixed ones. Do not add a second picture to the same sentence."},
+ {p:"Thank you for that painting of women's roles in modern Australia!",
+  name:"Verbal irony",
+  rule:"Verbal irony says the opposite of what you mean, and the audience hears the real meaning.",
+  where:"“Thank you” is not thanks. “That painting” treats one careless phrase about ironing as a whole portrait of women.",
+  limit:"It needs the quote right before it, or the audience misses that you are being ironic."},
+ {p:"I was offended",
+  name:"Personal testimony",
+  rule:"Give evidence from your own experience, in the first person.",
+  where:"She repeats “I was offended” and then names exactly what offended her each time — the sign, the catcall, the interview.",
+  limit:"Testimony is strongest when each repeat carries new evidence, not just more feeling."},
+ {p:"Every day, in every way",
+  name:"Anaphora",
+  rule:"Repeating the frame “every ___” turns separate incidents into a pattern.",
+  where:"Two “every” phrases in four words. The claim shifts from “he said things” to “this is what he is like”.",
+  limit:"You must have already given the examples. Without them this is just an accusation."},
+ {p:"Did he walk up to Mr Slipper in the middle of the service and say he was disgusted to be there?",
+  name:"Rhetorical question",
+  rule:"A rhetorical question is asked for effect; both sides already know the answer.",
+  where:"The picture is deliberately absurd, so the audience answers “no” in their own head — and answering it themselves convinces them more than being told.",
+  limit:"Only ask when the answer is obvious. If the audience could really answer either way, you have handed them the argument."},
+ {p:"then for the 1996 election, then for the 1998 election, then for the 2001 election",
+  name:"Accumulation",
+  rule:"Pile up items in the same shape so the quantity becomes the argument.",
+  where:"Nine preselections, each in the same words. Any one is unremarkable; the list is the point.",
+  limit:"Every item must be checkable. One wrong date and the whole list is doubted."},
+ {p:"my father did not die of shame",
+  name:"Turning the words back",
+  rule:"Quote your opponent exactly, then apply their own words to them.",
+  where:"She reads his “died of shame” out first, then answers it. Her father had died weeks earlier, so the phrase was already in the room.",
+  limit:"You must quote accurately and give the source. Misquoting here would have ended her argument."},
+ {p:"peddling a standard for Mr Slipper he would not set for himself",
+  name:"Anaphora",
+  rule:"Repeat the key verb to hold three different examples in one sentence.",
+  where:"“peddling a standard” three times: not for himself, not for his frontbench, not for Senator Bernardi. One charge, three proofs.",
+  limit:"The examples must differ. Repeating the verb over the same example is padding."},
+ {p:"capable of double standards but incapable of change",
+  name:"Antithesis",
+  rule:"Put two opposites in matching grammar so the contrast snaps.",
+  where:"“capable” against “incapable”, same root, one prefix apart, either side of “but”.",
+  limit:"The two halves must be the same shape. Uneven halves sound clumsy, not sharp."},
+ {p:"Good sense, common sense, proper process",
+  name:"Tricolon",
+  rule:"Three items in a row — the oldest rhythm in speech-making.",
+  where:"Three noun phrases, no “and”, then the verb. It sounds settled and obvious, which is the effect she wants for her own position.",
+  limit:"Three is the rhythm. Two sounds unfinished; four sounds like a list."},
+ {p:"because we are entitled to a better standard than this",
+  name:"Inclusive “we”",
+  rule:"Switch from “I” to “we” at the end, so the audience is inside the claim.",
+  where:"The whole speech is “I was offended”. The last line is “we are entitled” — every woman, not just the Prime Minister.",
+  limit:"Save it for the close. Using “we” early makes the personal evidence sound less personal."}
+];
+
+/* the vocabulary hub, in the same five sets as the Word Builder */
+var VSETS = [
+ {h:"The parliament words", unit:"gillard-parliament", why:"Without these you cannot tell who is speaking, or about whom.",
+  w:["motion", "the Leader of the Opposition", "Deputy Speaker", "the Speaker", "the member for Fisher", "frontbench", "preselect", "preselection", "shadow parliamentary secretary", "interject", "order", "Hansard", "the chair", "high office"]},
+ {h:"The two words the speech is built on", unit:"gillard-sexism-misogyny", why:"She uses the two together, but they are not the same word.",
+  w:["misogyny", "misogynist", "sexism", "sexist", "underrepresentation", "physiology", "temperament", "anti-women", "feminine", "offended", "repulsive", "vile"]},
+ {h:"The charge: a double standard", unit:"gillard-double-standard", why:"This is the argument. Everything else is evidence for it.",
+  w:["double standard", "hypocrisy", "hypocrite", "standard", "responsibility", "conduct", "objection", "acquitted", "peddling", "tolerated", "resignation", "apologise", "reflect", "entitled"]},
+ {h:"How the speech is built", unit:"gillard-rhetoric", why:"The names for the moves she makes \u2014 use them in your own analysis.",
+  w:["rebuttal", "anaphora", "repetition", "rhetorical question", "direct address", "antithesis", "irony", "sarcasm", "catalogue", "testimony", "register", "contention", "evidence"]},
+ {h:"The lines people quote", unit:"gillard-idioms", why:"Idioms: the words together mean something the separate words do not.",
+  w:["he needs a mirror", "not now not ever", "battering ram", "ducking for cover", "turn a hair", "died of shame", "make an honest woman of", "ditch the witch", "good fun", "game-playing", "a better standard"]},
+ {h:"More words in the speech", unit:"", why:"Worth knowing to read the speech, though the Word Builder teaches them elsewhere.",
+  w:["House of Representatives", "Leader of the Opposition", "Speaker", "association", "assumption", "attributes", "carbon pricing", "distinction", "double standards", "exhibition", "interjecting", "member for Fisher", "member for Maranoa", "member for Scullin", "misogynists", "parliament", "preselected", "preselections", "proper process", "public domain", "public record", "reserved his decision", "revolting", "speakership", "terminology", "track record", "underrepresented", "vilest"]}
+];
+
+/* the famous lines, and why each works */
+var LINES = [
+ {q:"I will not be lectured about sexism and misogyny by this man. I will not.",
+  why:"Anaphora. The second sentence is two words. Short sentences after long ones are what make a line quotable."},
+ {q:"He needs a mirror.",
+  why:"Metaphor. Six words that turn the whole motion around: the man making the accusation becomes the example."},
+ {q:"Not now, not ever.",
+  why:"An emphatic doublet at the end of the sentence. It refuses today and every future day in four words."},
+ {q:"The government is not dying of shame, my father did not die of shame.",
+  why:"Turning the words back. She quotes his phrase first, exactly, then answers it — which is why the quotation had to be accurate."},
+ {q:"Capable of double standards but incapable of change.",
+  why:"Antithesis. Same root word, one prefix apart, balanced across “but”."},
+ {q:"We are entitled to a better standard than this.",
+  why:"The switch from “I” to “we”, saved for the last line, so the complaint becomes a claim on behalf of everyone."}
+];
+
+/* practice: six real lines, name the technique */
+var QUIZ = [
+ {stem:"“I will not be lectured about sexism and misogyny by this man. I will not.”",
+  opts:["Anaphora","Rhetorical question","Metaphor"], a:0,
+  fb:"Anaphora — the same opening words repeated, with the second one cut short."},
+ {stem:"“… he doesn't need a motion in the House of Representatives; he needs a mirror.”",
+  opts:["Statistic","Metaphor","Tricolon"], a:1,
+  fb:"Metaphor — the mirror is not a real mirror; it means the problem is himself."},
+ {stem:"“Thank you for that painting of women's roles in modern Australia!”",
+  opts:["Verbal irony","Personal testimony","Antithesis"], a:0,
+  fb:"Verbal irony — she means the opposite of thanks, and the audience knows it."},
+ {stem:"“Good sense, common sense, proper process is what should rule this parliament.”",
+  opts:["Anaphora","Tricolon","Rhetorical question"], a:1,
+  fb:"Tricolon — three items in a row, which is the oldest rhythm in speech-making."},
+ {stem:"“Did he walk up to Mr Slipper in the middle of the service and say he was disgusted to be there?”",
+  opts:["Metaphor","Accumulation","Rhetorical question"], a:2,
+  fb:"Rhetorical question — asked for effect, because both sides already know the answer is no."},
+ {stem:"“(He is) capable of double standards but incapable of change.”",
+  opts:["Antithesis","Accumulation","Inclusive we"], a:0,
+  fb:"Antithesis — capable against incapable, same root, matching grammar, across “but”."}
+];
+
+/* where the words live in the Word Builder — the same five units this page shows */
+/* VOCAB-START */
+/* Word build and translations for every key word, copied from Word Builder (EAL-Vocabulary-Site/data/vocab.json)
+   so the page works offline. tr = 18 languages; parts = [surface, type, meaning]; form = the headword this is a form of. */
+var VOCAB = {
+  "the Leader of the Opposition": {"tr":{"zh-Hant":"反對黨領袖","zh-Hans":"反对党领袖","vi":"lãnh đạo phe đối lập","ja":"野党党首","ko":"야당 대표","ar":"زعيم المعارضة","fa":"رهبر مخالفان","ur":"قائد حزبِ اختلاف","ps":"د اپوزیسیون مشر","hi":"विपक्ष का नेता","ta":"எதிர்க்கட்சித் தலைவர்","ml":"പ്രതിപക്ഷ നേതാവ്","am":"የተቃዋሚ ፓርቲ መሪ","tl":"Lider ng Oposisyon","es":"líder de la oposición","fr":"chef de l'opposition","ro":"liderul opoziției","ru":"лидер оппозиции"},"parts":[["lead","root","guide"],["er","suffix","one who"],["op","prefix","against"],["posit","root","place"],["ion","suffix","act/process"]]},
+  "the Speaker": {"tr":{"zh-Hant":"議長","zh-Hans":"议长","vi":"Chủ tịch Hạ viện","ja":"下院議長","ko":"하원 의장","ar":"رئيس المجلس","fa":"رئیس مجلس","ur":"اسپیکر","ps":"د مجلس مشر","hi":"सदन अध्यक्ष","ta":"சபாநாயகர்","ml":"സ്പീക്കർ","am":"አፈ ጉባኤ","tl":"Ispiker ng Kapulungan","es":"presidente de la Cámara","fr":"président de la Chambre","ro":"președintele Camerei","ru":"спикер палаты"},"parts":[["speak","root","say aloud"],["er","suffix","one who"]]},
+  "the member for Fisher": {"tr":{"zh-Hant":"費雪選區議員","zh-Hans":"费舍尔选区议员","vi":"đại biểu đơn vị Fisher","ja":"フィッシャー選挙区選出議員","ko":"피셔 선거구 의원","ar":"النائب عن دائرة فيشر","fa":"نمایندهٔ حوزهٔ فیشر","ur":"فشر حلقے کے رکن","ps":"د فیشر حوزې استازی","hi":"फ़िशर क्षेत्र के सदस्य","ta":"ஃபிஷர் தொகுதி உறுப்பினர்","ml":"ഫിഷർ മണ്ഡലം അംഗം","am":"የፊሸር ምርጫ ክልል ተወካይ","tl":"kinatawan ng distrito ng Fisher","es":"el diputado por Fisher","fr":"le député de Fisher","ro":"deputatul de Fisher","ru":"депутат от округа Фишер"},"parts":[["member","root","limb/part"]]},
+  "preselect": {"tr":{"zh-Hant":"黨內提名","zh-Hans":"党内提名","vi":"chọn ứng viên nội bộ đảng","ja":"党の公認候補に選ぶ","ko":"당 후보로 공천하다","ar":"يرشّح داخل الحزب","fa":"نامزد حزبی برگزیدن","ur":"پارٹی امیدوار نامزد کرنا","ps":"د ګوند نوماند ټاکل","hi":"पार्टी उम्मीदवार चुनना","ta":"கட்சி வேட்பாளராகத் தேர்ந்தெடு","ml":"പാർട്ടി സ്ഥാനാർത്ഥിയായി തിരഞ്ഞെടുക്കുക","am":"የፓርቲ እጩ መምረጥ","tl":"pumili ng kandidato ng partido","es":"designar candidato del partido","fr":"investir un candidat","ro":"a desemna candidatul partidului","ru":"выдвигать кандидатом от партии"},"parts":[["pre","prefix","before"],["se","prefix","apart"],["lect","root","choose"]]},
+  "preselection": {"tr":{"zh-Hant":"黨內提名程序","zh-Hans":"党内提名程序","vi":"việc chọn ứng viên của đảng","ja":"党公認候補の選定","ko":"공천(후보 선출)","ar":"الترشيح الحزبي الداخلي","fa":"گزینش نامزد حزبی","ur":"پارٹی امیدوار کی نامزدگی","ps":"د ګوند نوماند ټاکنه","hi":"पार्टी उम्मीदवार चयन","ta":"கட்சி வேட்பாளர் தேர்வு","ml":"പാർട്ടി സ്ഥാനാർത്ഥി നിർണയം","am":"የፓርቲ እጩ ምርጫ","tl":"seleksiyon ng kandidato ng partido","es":"designación de candidato","fr":"investiture","ro":"desemnarea candidatului de partid","ru":"выдвижение кандидата партией"},"parts":[["pre","prefix","before"],["se","prefix","apart"],["lect","root","choose"],["ion","suffix","act/process"]]},
+  "interject": {"tr":{"zh-Hant":"插話打斷","zh-Hans":"插话打断","vi":"ngắt lời chen ngang","ja":"野次を飛ばす","ko":"발언 중 끼어들다","ar":"يقاطع المتحدث","fa":"میان کلام پریدن","ur":"ٹوکنا","ps":"خبره پرې کول","hi":"टोकना","ta":"இடைமறித்துப் பேசு","ml":"ഇടയ്ക്ക് കയറി പറയുക","am":"አቋርጦ መናገር","tl":"sumabat","es":"interrumpir a gritos","fr":"interrompre par des cris","ro":"a interveni întrerupând","ru":"выкрикивать с места"},"parts":[["inter","prefix","between"],["ject","root","throw"]]},
+  "order": {"tr":{"zh-Hant":"議場秩序","zh-Hans":"议场秩序","vi":"trật tự phiên họp","ja":"議事の秩序","ko":"의사 질서","ar":"النظام في الجلسة","fa":"نظم جلسه","ur":"نظم و ضبط","ps":"د غونډې نظم","hi":"सदन की व्यवस्था","ta":"ஒழுங்கு (அவைநடை)","ml":"ക്രമം (സഭാ ചട്ടം)","am":"የስብሰባ ሥርዓት","tl":"kaayusan sa sesyon","es":"orden en la sala","fr":"rappel à l'ordre","ro":"ordine în ședință","ru":"порядок в зале"},"parts":[["order","root","arrangement/system"]]},
+  "Hansard": {"tr":{"zh-Hant":"國會議事錄","zh-Hans":"议会议事录","vi":"biên bản nghị viện","ja":"議会議事録","ko":"의회 속기록","ar":"محضر جلسات البرلمان","fa":"صورت‌جلسهٔ رسمی مجلس","ur":"پارلیمانی کارروائی کا ریکارڈ","ps":"د پارلمان رسمي یادښت","hi":"संसद कार्यवाही रिकॉर्ड","ta":"நாடாளுமன்ற அவைக்குறிப்பு","ml":"പാർലമെന്റ് നടപടിരേഖ","am":"የፓርላማ ቃለ ጉባኤ","tl":"opisyal na talaan ng parlamento","es":"diario de sesiones","fr":"compte rendu parlementaire","ro":"stenograma parlamentului","ru":"стенограмма парламента"},"parts":[["Hansard","root","printer's surname"]]},
+  "misogynist": {"tr":{"zh-Hant":"厭女者","zh-Hans":"厌女者","vi":"kẻ ghét phụ nữ","ja":"女性蔑視者","ko":"여성 혐오자","ar":"كاره النساء","fa":"زن‌ستیز","ur":"عورت بیزار","ps":"د ښځو کینه‌کوونکی","hi":"स्त्रीद्वेषी","ta":"பெண்வெறுப்பாளர்","ml":"സ്ത്രീവിദ്വേഷി","am":"ሴቶችን የሚጠላ ሰው","tl":"mapoot sa kababaihan","es":"misógino","fr":"misogyne","ro":"misogin","ru":"женоненавистник"},"parts":[["miso","prefix","hatred of"],["gyn","root","woman"],["ist","suffix","person who"]]},
+  "hypocrite": {"tr":{"zh-Hant":"偽君子","zh-Hans":"伪君子","vi":"kẻ đạo đức giả","ja":"偽善者","ko":"위선자","ar":"منافق","fa":"ریاکار","ur":"منافق","ps":"دوه‌مخی","hi":"पाखंडी","ta":"பாசாங்குக்காரர்","ml":"കപടനാട്യക്കാരൻ","am":"ግብዝ","tl":"mapagkunwari","es":"hipócrita","fr":"hypocrite","ro":"ipocrit","ru":"лицемер"},"parts":[["hypo","prefix","under"],["crit","root","judge/discern"]]},
+  "rebuttal": {"tr":{"zh-Hant":"反駁","zh-Hans":"反驳","vi":"phản bác","ja":"反論","ko":"반박","ar":"التفنيد","fa":"رد","ur":"تردید","ps":"رد","hi":"खंडन","ta":"மறுப்பு","ml":"ഖണ്ഡനം","am":"ማስተባበያ","tl":"pagtutol","es":"refutación","fr":"réfutation","ro":"respingere","ru":"опровержение"},"parts":[["re","prefix","back"],["butt","root","strike/push"],["al","suffix","relating to"]]},
+  "anaphora": {"tr":{"zh-Hant":"首語重複","zh-Hans":"首语重复","vi":"phép điệp đầu","ja":"首句反復","ko":"어두 반복","ar":"الاستهلال","fa":"تکرار آغازین","ur":"تکرارِ ابتدا","ps":"پیل تکرار","hi":"आरंभिक पुनरावृत्ति","ta":"தொடக்கத் திரும்பல்","ml":"ആരംഭ ആവർത്തനം","am":"የመነሻ ድግግሞሽ","tl":"anapora","es":"anáfora","fr":"anaphore","ro":"anaforă","ru":"анафора"},"parts":[["ana","prefix","up/throughout"],["phor","root","carry"]]},
+  "repetition": {"tr":{"zh-Hant":"重複","zh-Hans":"重复","vi":"điệp ngữ","ja":"反復","ko":"반복","ar":"التكرار","fa":"تکرار","ur":"تکرار","ps":"تکرار","hi":"पुनरावृत्ति","ta":"ஆவர்த்தனம்","ml":"ആവർത്തനം","am":"ድግግሞሽ","tl":"pag-uulit","es":"repetición","fr":"répétition","ro":"repetiție","ru":"повтор"},"parts":[["re","prefix","again"],["petit","root","strive/seek"],["ion","suffix","act/process"]]},
+  "rhetorical question": {"tr":{"zh-Hant":"反問句","zh-Hans":"反问句","vi":"câu hỏi tu từ","ja":"修辞疑問文","ko":"수사 의문문","ar":"السؤال البلاغي","fa":"پرسش بلاغی","ur":"بلاغی سوال","ps":"بلاغتي پوښتنه","hi":"आलंकारिक प्रश्न","ta":"சொல்லாட்சி வினா","ml":"ആലങ്കാരിക ചോദ്യം","am":"የአጽንኦት ጥያቄ","tl":"patalumpating tanong","es":"pregunta retórica","fr":"question rhétorique","ro":"întrebare retorică","ru":"риторический вопрос"},"parts":[["rhetor","root","public speaker"],["ical","suffix","relating to"],["quest","root","seek, win"],["ion","suffix","act/process"]]},
+  "direct address": {"tr":{"zh-Hant":"直接稱呼（用「你」）","zh-Hans":"直接称呼（用“你”）","vi":"cách nói trực tiếp với người đọc","ja":"直接呼びかけ","ko":"직접 호칭","ar":"المخاطبة المباشرة","fa":"خطاب مستقیم","ur":"براہِ راست مخاطبت","ps":"مستقیم مخاطبت","hi":"प्रत्यक्ष संबोधन","ta":"நேரடி விளிப்பு","ml":"നേരിട്ടുള്ള സംബോധന","am":"ቀጥተኛ አነጋገር","tl":"tuwirang pagtawag sa mambabasa","es":"apelación directa","fr":"adresse directe","ro":"adresare directă","ru":"прямое обращение"},"parts":[["di","prefix","apart"],["rect","root","straight/guide"],["ad","prefix","toward"],["dress","root","set right"]]},
+  "antithesis": {"tr":{"zh-Hant":"對照法","zh-Hans":"对照法","vi":"phép đối lập","ja":"対照法","ko":"대조법","ar":"الطباق","fa":"تضاد","ur":"تضاد","ps":"متضاد جوړه","hi":"विरोध अलंकार","ta":"எதிர்நிலை அணி","ml":"വൈരുദ്ധ്യാലങ്കാരം","am":"ተቃርኖ","tl":"antitesis","es":"antítesis","fr":"antithèse","ro":"antiteză","ru":"антитеза"},"parts":[["anti","prefix","against"],["thes","root","place"]]},
+  "irony": {"tr":{"zh-Hant":"反諷","zh-Hans":"反讽","vi":"sự mỉa mai","ja":"皮肉","ko":"아이러니","ar":"سخرية","fa":"کنایه","ur":"طنز","ps":"کنایه","hi":"व्यंग्य","ta":"நகைமுரண்","ml":"വിരോധോക്തി","am":"አሽሙር","tl":"ironya","es":"ironía","fr":"ironie","ro":"ironie","ru":"ирония"},"parts":[["iron","root","pretending not to know"],["y","suffix","state of (makes a noun)"]]},
+  "sarcasm": {"tr":{"zh-Hant":"諷刺","zh-Hans":"讽刺","vi":"lời châm biếm","ja":"皮肉","ko":"비꼬기","ar":"سخرية","fa":"طعنه","ur":"طنز و طعنہ","ps":"ملنډې","hi":"कटाक्ष","ta":"நையாண்டி","ml":"പരിഹാസം","am":"አሽሙር","tl":"panunuya","es":"sarcasmo","fr":"sarcasme","ro":"sarcasm","ru":"сарказм"},"parts":[["sarc","root","flesh"],["asm","suffix","act of"]]},
+  "catalogue": {"tr":{"zh-Hant":"羅列清單","zh-Hans":"罗列清单","vi":"bản liệt kê dài","ja":"列挙","ko":"나열 목록","ar":"سرد متتابع","fa":"فهرست بلند","ur":"طویل فہرست","ps":"اوږد لړلیک","hi":"लंबी सूची","ta":"நீண்ட பட்டியல்","ml":"നീണ്ട പട്ടിക","am":"ረጅም ዝርዝር","tl":"mahabang talaan","es":"enumeración","fr":"énumération","ro":"înșiruire","ru":"перечисление"},"parts":[["cata","prefix","down"],["logue","root","study/word"]]},
+  "testimony": {"tr":{"zh-Hant":"證言","zh-Hans":"证言","vi":"lời chứng","ja":"証言","ko":"증언","ar":"الشهادة","fa":"گواهی","ur":"گواہی","ps":"شاهدي","hi":"गवाही","ta":"சாட்சியம்","ml":"സാക്ഷ്യം","am":"ምስክርነት","tl":"patotoo","es":"el testimonio","fr":"le témoignage","ro":"mărturie","ru":"свидетельство"},"parts":[["testi","root","bear witness/dispute"],["mony","suffix","state or result of (makes a noun)"]]},
+  "register": {"tr":{"zh-Hant":"語域（正式或隨意）","zh-Hans":"语域（正式或随意）","vi":"mức trang trọng của lời nói","ja":"言葉づかいの丁寧さ","ko":"말투의 격식 수준","ar":"مستوى اللغة (رسمي أو عامي)","fa":"سطح گفتار (رسمی یا خودمانی)","ur":"اندازِ گفتگو (رسمی یا غیر رسمی)","ps":"د خبرو کچه (رسمي یا عادي)","hi":"भाषा-स्तर","ta":"பேச்சு நடை (முறையானது அல்லது சாதாரணம்)","ml":"സംസാരശൈലി (ഔപചാരികമോ അല്ലാത്തതോ)","am":"የንግግር ደረጃ (መደበኛ ወይም ተራ)","tl":"antas ng pananalita","es":"registro","fr":"registre de langue","ro":"registru al limbii","ru":"регистр речи"},"parts":[["register","root","a list of things recorded"]]},
+  "contention": {"tr":{"zh-Hant":"論點","zh-Hans":"论点","vi":"luận điểm chính","ja":"主張","ko":"주장","ar":"الأطروحة","fa":"ادعای اصلی","ur":"مرکزی موقف","ps":"مرکزي دلیل","hi":"मुख्य तर्क","ta":"முதன்மை வாதம்","ml":"മുഖ്യ വാദം","am":"ዋና ክርክር","tl":"pangunahing paninindigan","es":"tesis","fr":"thèse","ro":"teza principală","ru":"тезис"},"parts":[["con","prefix","together"],["tent","root","stretch/aim"],["ion","suffix","act/process"]]},
+  "evidence": {"tr":{"zh-Hant":"證據","zh-Hans":"证据","vi":"bằng chứng","ja":"証拠","ko":"증거","ar":"الدليل","fa":"شواهد","ur":"ثبوت","ps":"شواهد","hi":"साक्ष्य","ta":"சான்று","ml":"തെളിവ്","am":"ማስረጃ","tl":"ebidensya","es":"evidencia","fr":"preuve","ro":"dovezi","ru":"доказательства"},"parts":[["e","prefix","out"],["vid","root","see"],["ence","suffix","state of"]]},
+  "he needs a mirror": {"tr":{"zh-Hant":"先照照鏡子","zh-Hans":"先照照镜子","vi":"hãy tự soi gương mình","ja":"まず自分を省みよ","ko":"자기부터 돌아보라","ar":"لينظر إلى نفسه أولاً","fa":"اول خودش را ببیند","ur":"پہلے اپنا گریبان دیکھے","ps":"لومړی دې ځان وګوري","hi":"पहले खुद को देखे","ta":"முதலில் தன்னைப் பார்க்கட்டும்","ml":"ആദ്യം സ്വയം നോക്കട്ടെ","am":"መጀመሪያ ራሱን ይመልከት","tl":"tingnan muna ang sarili","es":"que se mire primero","fr":"qu'il se regarde d'abord","ro":"să se uite întâi la el","ru":"пусть посмотрит на себя"},"parts":[["mir","root","wonder"],["or","suffix","person/thing that"]]},
+  "not now not ever": {"tr":{"zh-Hant":"現在不,永遠不","zh-Hans":"现在不,永远不","vi":"bây giờ không, mãi mãi không","ja":"今も今後も決して","ko":"지금도 앞으로도 결코","ar":"لا الآن ولا أبدًا","fa":"نه اکنون نه هرگز","ur":"نہ اب نہ کبھی","ps":"نه اوس نه هیڅکله","hi":"न अब न कभी","ta":"இப்போதும் இல்லை எப்போதும் இல்லை","ml":"ഇപ്പോഴുമില്ല ഒരിക്കലുമില്ല","am":"አሁንም ወደፊትም በፍጹም","tl":"hindi ngayon hindi kailanman","es":"ni ahora ni nunca","fr":"ni maintenant ni jamais","ro":"nici acum, nici vreodată","ru":"ни сейчас, ни впредь"},"parts":[]},
+  "died of shame": {"tr":{"zh-Hant":"羞愧而死","zh-Hans":"羞愧而死","vi":"chết vì xấu hổ","ja":"恥じ入って死ぬ","ko":"부끄러워 죽다","ar":"مات من الخجل","fa":"از شرم مرد","ur":"شرم سے مر گیا","ps":"له شرمه مړ شو","hi":"शर्म से मर गया","ta":"வெட்கத்தால் இறந்தார்","ml":"നാണക്കേടുകൊണ്ട് മരിച്ചു","am":"በሐፍረት ሞተ","tl":"namatay sa hiya","es":"morirse de vergüenza","fr":"mourir de honte","ro":"a murit de rușine","ru":"умер от стыда"},"parts":[["shame","root","disgrace"]]},
+  "make an honest woman of": {"tr":{"zh-Hant":"娶她以正名分","zh-Hans":"娶她以正名分","vi":"cưới để giữ danh tiết","ja":"責任を取って結婚する","ko":"책임지고 결혼하다","ar":"يتزوجها ليصون سمعتها","fa":"با ازدواج آبرویش را حفظ کردن","ur":"شادی کر کے عزت بحال کرنا","ps":"واده کول او عزت ساتل","hi":"विवाह कर सम्मान देना","ta":"மணந்து மானம் காத்தல்","ml":"വിവാഹം കഴിച്ച് മാനം കാക്കുക","am":"አግብቶ ክብሯን መመለስ","tl":"pakasalan upang mabawi ang dangal","es":"casarse para salvar su honra","fr":"épouser pour sauver l'honneur","ro":"a-i salva onoarea prin căsătorie","ru":"жениться, чтобы спасти репутацию"},"parts":[["honest","root","honourable"]]},
+  "ditch the witch": {"tr":{"zh-Hant":"「甩掉女巫」標語","zh-Hans":"“甩掉女巫”标语","vi":"khẩu hiệu ‘loại bỏ mụ phù thủy’","ja":"「魔女を追い出せ」の標語","ko":"‘마녀를 몰아내라’ 구호","ar":"شعار «تخلصوا من الساحرة»","fa":"شعار «جادوگر را برانید»","ur":"نعرہ ’چڑیل سے چھٹکارا‘","ps":"«کوډګره لرې کړئ» شعار","hi":"नारा ‘डायन को हटाओ’","ta":"‘சூனியக்காரியை ஒழி’ முழக்கம்","ml":"‘മന്ത്രവാദിനിയെ ഒഴിവാക്കൂ’ മുദ്രാവാക്യം","am":"«ጠንቋይዋን አስወግዱ» መፈክር","tl":"islogan na ‘itapon ang bruha’","es":"lema «fuera la bruja»","fr":"slogan « chassez la sorcière »","ro":"sloganul „scăpați de vrăjitoare”","ru":"лозунг «долой ведьму»"},"parts":[["witch","root","female magician"]]},
+  "a better standard": {"tr":{"zh-Hant":"更高的行為標準","zh-Hans":"更高的行为标准","vi":"chuẩn mực cao hơn","ja":"より高い規範","ko":"더 높은 기준","ar":"معيار أرفع","fa":"معیاری بالاتر","ur":"بہتر معیار","ps":"لوړ معیار","hi":"बेहतर मानक","ta":"உயர்ந்த தரநிலை","ml":"മെച്ചപ്പെട്ട മാനദണ്ഡം","am":"የተሻለ መስፈርት","tl":"mas mataas na pamantayan","es":"un nivel más alto","fr":"une norme plus élevée","ro":"un standard mai bun","ru":"более высокая планка"},"parts":[["standard","root","an accepted norm"]]},
+  "misogyny": {"tr":{"zh-Hant":"厭女症","zh-Hans":"厌女症","vi":"sự căm ghét phụ nữ","ja":"女性嫌悪","ko":"여성 혐오","ar":"كراهية النساء","fa":"زن‌ستیزی","ur":"عورت بیزاری","ps":"د ښځو کرکه","hi":"स्त्री-द्वेष","ta":"பெண் வெறுப்பு","ml":"സ്ത്രീവിദ്വേഷം","am":"የሴቶች ጥላቻ","tl":"pagkamuhi sa kababaihan","es":"misoginia","fr":"misogynie","ro":"misoginie","ru":"мизогиния"},"parts":[["miso","prefix","hatred of"],["gyn","root","woman"],["y","suffix","state of (makes a noun)"]]},
+  "misogynists": {"tr":{"zh-Hant":"厭女者","zh-Hans":"厌女者","vi":"kẻ ghét phụ nữ","ja":"女性蔑視者","ko":"여성 혐오자","ar":"كاره النساء","fa":"زن‌ستیز","ur":"عورت بیزار","ps":"د ښځو کینه‌کوونکی","hi":"स्त्रीद्वेषी","ta":"பெண்வெறுப்பாளர்","ml":"സ്ത്രീവിദ്വേഷി","am":"ሴቶችን የሚጠላ ሰው","tl":"mapoot sa kababaihan","es":"misógino","fr":"misogyne","ro":"misogin","ru":"женоненавистник"},"parts":[["miso","prefix","hatred of"],["gyn","root","woman"],["ist","suffix","person who"]],"form":"misogynist"},
+  "sexism": {"tr":{"zh-Hant":"性別歧視","zh-Hans":"性别歧视","vi":"phân biệt giới tính","ja":"性差別","ko":"성차별","ar":"التمييز الجنسي","fa":"تبعیض جنسیتی","ur":"صنفی امتیاز","ps":"جنسي تبعیض","hi":"लैंगिक भेदभाव","ta":"பாலின பாகுபாடு","ml":"ലിംഗവിവേചനം","am":"የጾታ አድልዎ","tl":"seksismo","es":"sexismo","fr":"sexisme","ro":"sexism","ru":"сексизм"},"parts":[["sex","root","gender/reproduction"],["ism","suffix","a state or practice of"]]},
+  "sexist": {"tr":{"zh-Hant":"性別歧視的","zh-Hans":"性别歧视的","vi":"phân biệt giới tính","ja":"性差別的な","ko":"성차별적인","ar":"متحيّز جنسيًا","fa":"جنسیت‌زده","ur":"صنفی امتیاز برتنے والا","ps":"جنسي تبعیض کوونکی","hi":"लिंगभेदी","ta":"பாலின பாகுபாடு கொண்ட","ml":"ലിംഗവിവേചനപരമായ","am":"ጾታዊ አድልዎ ያለው","tl":"seksista","es":"sexista","fr":"sexiste","ro":"sexist","ru":"сексистский"},"parts":[["sex","root","gender/reproduction"],["ist","suffix","person who"]]},
+  "underrepresented": {"tr":{"zh-Hans":"代表性不足","zh-Hant":"代表性不足","ja":"過少代表の","ko":"과소 대표된","vi":"thiếu đại diện","ar":"ناقص التمثيل","fa":"کم‌نماینده","ur":"کم نمائندگی والا","am":"በበቂ ያልተወከለ","ml":"വേണ്ടത്ര പ്രാതിനിധ്യമില്ലാത്ത","ta":"போதிய பிரதிநிதித்துவம் இல்லாத","tl":"kulang sa representasyon","ps":"کم استازیتوب شوی","ro":"subreprezentat","ru":"недопредставленный","fr":"sous-représenté","hi":"अल्प प्रतिनिधित्व वाला","es":"subrepresentado"},"parts":[["under","prefix","below / not enough"],["re","prefix","again / back"],["present","root","be there / show"],["ed","suffix","past / adjective"]]},
+  "underrepresentation": {"tr":{"zh-Hant":"代表性不足","zh-Hans":"代表性不足","vi":"thiếu đại diện","ja":"過少代表","ko":"과소대표","ar":"التمثيل الناقص","fa":"کم‌نمایندگی","ur":"کم نمائندگی","ps":"کم استازیتوب","hi":"कम प्रतिनिधित्व","ta":"போதிய பிரதிநிதித்துவமின்மை","ml":"പ്രാതിനിധ്യക്കുറവ്","am":"ዝቅተኛ ውክልና","tl":"kakulangan sa representasyon","es":"subrepresentación","fr":"sous-représentation","ro":"subreprezentare","ru":"недопредставленность"},"parts":[["under","prefix","below"],["re","prefix","again"],["present","root","show/put forward"],["ation","suffix","process of"]]},
+  "physiology": {"tr":{"zh-Hant":"生理機能","zh-Hans":"生理机能","vi":"sinh lý học","ja":"生理機能","ko":"생리 기능","ar":"وظائف الأعضاء","fa":"فیزیولوژی","ur":"فعلیات","ps":"فزیولوژي","hi":"शरीर क्रिया विज्ञान","ta":"உடலியல்","ml":"ശരീരശാസ്ത്രം","am":"ፊዚዮሎጂ","tl":"pisyolohiya","es":"fisiología","fr":"physiologie","ro":"fiziologie","ru":"физиология"},"parts":[["physio","root","bodily function"],["ology","suffix","study of"]]},
+  "temperament": {"tr":{"zh-Hant":"性情","zh-Hans":"性情","vi":"tính khí","ja":"気質","ko":"기질","ar":"المزاج","fa":"خلق‌وخو","ur":"مزاج","ps":"مزاج","hi":"स्वभाव","ta":"மனநிலை","ml":"സ്വഭാവം","am":"ባህርይ","tl":"ugali","es":"temperamento","fr":"tempérament","ro":"temperament","ru":"темперамент"},"parts":[["temper","root","mix/moderate"],["ment","suffix","result of"]]},
+  "anti-women": {"tr":{"zh-Hant":"反女性的","zh-Hans":"反女性的","vi":"chống phụ nữ","ja":"女性に敵対的な","ko":"반여성적인","ar":"معادٍ للمرأة","fa":"ضد زنان","ur":"خواتین مخالف","ps":"د ښځو ضد","hi":"महिला विरोधी","ta":"பெண்களுக்கு எதிரான","ml":"സ്ത്രീവിരുദ്ധ","am":"ሴቶችን የሚቃወም","tl":"laban sa kababaihan","es":"contrario a las mujeres","fr":"hostile aux femmes","ro":"împotriva femeilor","ru":"антиженский"},"parts":[["anti","prefix","against"],["women","root","adult female people"]]},
+  "feminine": {"tr":{"zh-Hant":"女性化的","zh-Hans":"女性化的","vi":"nữ tính","ja":"女性らしい","ko":"여성스러운","ar":"أنثوي","fa":"زنانه","ur":"نسوانی","ps":"ښځینه","hi":"स्त्रीसुलभ","ta":"பெண்மைத்தன்மையான","ml":"സ്ത്രൈണമായ","am":"ሴታዊ","tl":"pambabae","es":"femenino","fr":"féminin","ro":"feminin","ru":"женственный"},"parts":[["femin","root","woman"]]},
+  "offended": {"tr":{"zh-Hant":"被冒犯","zh-Hans":"被冒犯","vi":"bị xúc phạm","ja":"気分を害した","ko":"모욕감을 느낀","ar":"مُهان","fa":"رنجیده","ur":"دل آزردہ","ps":"خپه شوی","hi":"आहत","ta":"மனம் புண்பட்ட","ml":"അപമാനിതനായ","am":"የተከፋ","tl":"nasaktan ang damdamin","es":"ofendido","fr":"offensé","ro":"jignit","ru":"оскорблённый"},"parts":[["fend","root","strike/defend"],["ed","suffix","past"]]},
+  "repulsive": {"tr":{"zh-Hant":"令人厭惡的","zh-Hans":"令人厌恶的","vi":"ghê tởm","ja":"嫌悪を催す","ko":"역겨운","ar":"مقزز","fa":"نفرت‌انگیز","ur":"نفرت انگیز","ps":"کرکجن","hi":"घिनौना","ta":"அருவருப்பான","ml":"അറപ്പുളവാക്കുന്ന","am":"አስጸያፊ","tl":"nakakadiri","es":"repulsivo","fr":"répugnant","ro":"respingător","ru":"отвратительный"},"parts":[["re","prefix","back"],["puls","root","drive/push"],["ive","suffix","tending to"]]},
+  "vile": {"tr":{"zh-Hant":"卑劣的","zh-Hans":"卑劣的","vi":"đê tiện","ja":"下劣な","ko":"비열한","ar":"حقير","fa":"پست","ur":"گھناؤنا","ps":"ناوړه","hi":"नीच","ta":"இழிவான","ml":"നീചമായ","am":"ወራዳ","tl":"kasuklam-suklam","es":"vil","fr":"ignoble","ro":"josnic","ru":"гнусный"},"parts":[["vile","root","cheap/worthless"]]},
+  "vilest": {"tr":{"zh-Hant":"卑劣的","zh-Hans":"卑劣的","vi":"đê tiện","ja":"下劣な","ko":"비열한","ar":"حقير","fa":"پست","ur":"گھناؤنا","ps":"ناوړه","hi":"नीच","ta":"இழிவான","ml":"നീചമായ","am":"ወራዳ","tl":"kasuklam-suklam","es":"vil","fr":"ignoble","ro":"josnic","ru":"гнусный"},"parts":[["vile","root","cheap/worthless"]],"form":"vile"},
+  "revolting": {"tr":{"zh-Hans":"令人作呕的","zh-Hant":"令人作嘔的","ja":"胸が悪くなる","ko":"역겨운","vi":"kinh tởm","ar":"مقرف","fa":"نفرت‌انگیز","ur":"گھناؤنا","am":"አስጸያፊ","ml":"അറപ്പുളവാക്കുന്ന","ta":"அருவருப்பான","tl":"nakadidiri","ps":"نفرت وړ","ro":"dezgustător","ru":"отвратительный","fr":"répugnant","hi":"घिनौना","es":"repugnante"},"parts":[["re","prefix","back"],["volt","root","turn / roll"],["ing","suffix","adjective"]]},
+  "double standards": {"tr":{"zh-Hant":"雙重標準","zh-Hans":"双重标准","vi":"tiêu chuẩn kép","ja":"二重基準","ko":"이중 잣대","ar":"ازدواجية المعايير","fa":"استاندارد دوگانه","ur":"دوہرا معیار","ps":"دوه‌ګوني معیارونه","hi":"दोहरा मापदंड","ta":"இரட்டை நிலைப்பாடு","ml":"ഇരട്ടത്താപ്പ്","am":"ድርብ መስፈርት","tl":"dobleng pamantayan","es":"doble rasero","fr":"deux poids deux mesures","ro":"standard dublu","ru":"двойные стандарты"},"parts":[["double","root","twofold"],["standard","root","an accepted norm"]],"form":"double standard"},
+  "double standard": {"tr":{"zh-Hant":"雙重標準","zh-Hans":"双重标准","vi":"tiêu chuẩn kép","ja":"二重基準","ko":"이중 잣대","ar":"ازدواجية المعايير","fa":"استاندارد دوگانه","ur":"دوہرا معیار","ps":"دوه‌ګوني معیارونه","hi":"दोहरा मापदंड","ta":"இரட்டை நிலைப்பாடு","ml":"ഇരട്ടത്താപ്പ്","am":"ድርብ መስፈርት","tl":"dobleng pamantayan","es":"doble rasero","fr":"deux poids deux mesures","ro":"standard dublu","ru":"двойные стандарты"},"parts":[["double","root","twofold"],["standard","root","an accepted norm"]]},
+  "hypocrisy": {"tr":{"zh-Hant":"偽善","zh-Hans":"伪善","vi":"thói đạo đức giả","ja":"偽善","ko":"위선","ar":"النفاق","fa":"ریاکاری","ur":"منافقت","ps":"دورویي","hi":"पाखंड","ta":"பாசாங்குத்தனம்","ml":"കാപട്യം","am":"ግብዝነት","tl":"pagkamapagkunwari","es":"hipocresía","fr":"hypocrisie","ro":"ipocrizie","ru":"лицемерие"},"parts":[["hypo","prefix","under"],["cris","root","decide/separate"],["y","suffix","state of (makes a noun)"]]},
+  "standard": {"tr":{"zh-Hant":"行為標準","zh-Hans":"行为标准","vi":"chuẩn mực","ja":"行動基準","ko":"행동 기준","ar":"معيار السلوك","fa":"معیار رفتار","ur":"معیار","ps":"معیار","hi":"मानक","ta":"தரநிலை","ml":"മാനദണ്ഡം","am":"መስፈርት","tl":"pamantayan","es":"norma de conducta","fr":"norme de conduite","ro":"standard de conduită","ru":"норма поведения"},"parts":[["standard","root","an accepted norm"]]},
+  "responsibility": {"tr":{"zh-Hant":"責任","zh-Hans":"责任","vi":"trách nhiệm","ja":"責任","ko":"책임","ar":"مسؤولية","fa":"مسئولیت","ur":"ذمہ داری","ps":"مسؤلیت","hi":"ज़िम्मेदारी","ta":"பொறுப்பு","ml":"ഉത്തരവാദിത്തം","am":"ኃላፊነት","tl":"responsibilidad","es":"responsabilidad","fr":"responsabilité","ro":"responsabilitate","ru":"ответственность"},"parts":[["re","prefix","again"],["spons","root","promise/respond"],["ibility","suffix","capable of"]]},
+  "conduct": {"tr":{"zh-Hant":"行為舉止","zh-Hans":"行为举止","vi":"hành vi cư xử","ja":"行い","ko":"처신","ar":"سلوك","fa":"رفتار","ur":"طرزِ عمل","ps":"چلن","hi":"आचरण","ta":"நடத்தை","ml":"പെരുമാറ്റം","am":"ምግባር","tl":"asal","es":"conducta","fr":"conduite","ro":"conduită","ru":"поведение"},"parts":[["con","prefix","together"],["duct","root","lead"]]},
+  "objection": {"tr":{"zh-Hant":"異議","zh-Hans":"异议","vi":"sự phản đối","ja":"異議","ko":"이의","ar":"اعتراض","fa":"اعتراض","ur":"اعتراض","ps":"اعتراض","hi":"आपत्ति","ta":"ஆட்சேபனை","ml":"എതിർപ്പ്","am":"ተቃውሞ","tl":"pagtutol","es":"objeción","fr":"objection","ro":"obiecție","ru":"возражение"},"parts":[["ob","prefix","against"],["ject","root","throw"],["ion","suffix","act/process"]]},
+  "acquitted": {"tr":{"zh-Hant":"被判無罪","zh-Hans":"被判无罪","vi":"được tuyên trắng án","ja":"無罪とされた","ko":"무죄 선고를 받은","ar":"بُرِّئ","fa":"تبرئه‌شده","ur":"بری کیا گیا","ps":"بې‌ګناه اعلان شوی","hi":"बरी","ta":"விடுவிக்கப்பட்ட","ml":"കുറ്റവിമുക്തനാക്കപ്പെട്ട","am":"ነፃ የተባለ","tl":"pinawalang-sala","es":"absuelto","fr":"acquitté","ro":"achitat","ru":"оправданный"},"parts":[["ac","prefix","toward"],["quit","root","set free"],["ed","suffix","past"]]},
+  "peddling": {"tr":{"zh-Hant":"兜售散播","zh-Hans":"兜售散播","vi":"rao truyền","ja":"言いふらす","ko":"퍼뜨리다","ar":"يروّج","fa":"ترویج کردن","ur":"پھیلانا","ps":"خپرول","hi":"फैलाना","ta":"பரப்புதல்","ml":"പ്രചരിപ്പിക്കുക","am":"ማስፋፋት","tl":"ikalat","es":"propagar","fr":"colporter","ro":"a propaga","ru":"навязывать"},"parts":[["peddl","root","hawk goods"],["ing","suffix","action/process"]]},
+  "tolerated": {"tr":{"zh-Hant":"被容忍","zh-Hans":"被容忍","vi":"được dung túng","ja":"黙認された","ko":"용인된","ar":"مُتسامَح معه","fa":"تحمل‌شده","ur":"برداشت کیا گیا","ps":"زغمل شوی","hi":"सहन किया गया","ta":"பொறுத்துக்கொள்ளப்பட்ட","ml":"സഹിക്കപ്പെട്ട","am":"የተታገሠ","tl":"pinalampas","es":"tolerado","fr":"toléré","ro":"tolerat","ru":"допускаемый"},"parts":[["toler","root","bear/endure"],["ate","suffix","to make/do"],["ed","suffix","past"]]},
+  "resignation": {"tr":{"zh-Hant":"辭職","zh-Hans":"辞职","vi":"sự từ chức","ja":"辞任","ko":"사임","ar":"استقالة","fa":"استعفا","ur":"استعفیٰ","ps":"استعفا","hi":"इस्तीफ़ा","ta":"பதவி விலகல்","ml":"രാജി","am":"መልቀቂያ","tl":"pagbibitiw","es":"dimisión","fr":"démission","ro":"demisie","ru":"отставка"},"parts":[["re","prefix","back"],["sign","root","mark/meaning"],["ation","suffix","process of"]]},
+  "apologise": {"tr":{"zh-Hant":"道歉","zh-Hans":"道歉","vi":"xin lỗi","ja":"謝る","ko":"사과하다","ar":"يعتذر","fa":"عذرخواهی","ur":"معافی مانگنا","ps":"بخښنه غوښتل","hi":"क्षमा मांगना","ta":"மன்னிப்பு கேள்","ml":"ക്ഷമ ചോദിക്കുക","am":"ይቅርታ መጠየቅ","tl":"humingi ng tawad (apologise)","es":"disculparse","fr":"s'excuser","ro":"a-și cere scuze","ru":"извиняться"},"parts":[["apo","prefix","away/from"],["log","root","study/word"],["ise","suffix","to make"]]},
+  "reflect": {"tr":{"zh-Hant":"反映","zh-Hans":"反映","vi":"phản ánh (suy ngẫm)","ja":"反映する（熟考する）","ko":"반영하다(성찰하다)","ar":"يعكس (يتأمل)","fa":"منعکس کردن (تأمل)","ur":"عکاسی کرنا (غور کرنا)","ps":"انعکاس کول","hi":"प्रतिबिंबित करना (विचार करना)","ta":"பிரதிபலி (சிந்தி)","ml":"പ്രതിഫലിപ്പിക്കുക","am":"ማንፀባረቅ (ማሰላሰል)","tl":"magnilay (reflect)","es":"reflejar (reflexionar)","fr":"refléter (réfléchir)","ro":"a reflecta","ru":"отражать (размышлять)"},"parts":[["re","prefix","back"],["flect","root","bend"]]},
+  "entitled": {"tr":{"zh-Hant":"自以為理所應得","zh-Hans":"自以为理所应得","vi":"tự cho mình có quyền","ja":"特権意識のある","ko":"특권 의식이 있는","ar":"يدّعي الاستحقاق","fa":"خود را طلبکار دانستن","ur":"خود کو حقدار سمجھنے والا","ps":"ځان حقدار ګڼونکی","hi":"स्वयं को हकदार मानने वाला","ta":"உரிமை கொண்டாடும் மனப்பான்மை","ml":"അവകാശബോധം നടിക്കുന്ന","am":"መብት አለኝ ባይ","tl":"pakiramdam ng karapatan","es":"que se cree con derecho","fr":"qui se croit tout permis","ro":"cu aere de îndreptățit","ru":"считающий себя вправе"},"parts":[["en","prefix","make/put into"],["title","root","inscription/label"],["ed","suffix","having been (makes an adjective)"]]},
+  "motion": {"tr":{"zh-Hant":"動議","zh-Hans":"动议","vi":"kiến nghị","ja":"動議","ko":"동의(動議)","ar":"اقتراح رسمي","fa":"طرح پیشنهادی","ur":"تحریک","ps":"وړاندیز (پرېکړلیک)","hi":"प्रस्ताव","ta":"தீர்மானம்","ml":"പ്രമേയം","am":"የውሳኔ ሃሳብ","tl":"mosyon","es":"moción","fr":"motion","ro":"moțiune","ru":"предложение"},"parts":[["mot","root","move"],["ion","suffix","act/process"]]},
+  "Leader of the Opposition": {"tr":{"zh-Hant":"反對黨領袖","zh-Hans":"反对党领袖","vi":"lãnh đạo phe đối lập","ja":"野党党首","ko":"야당 대표","ar":"زعيم المعارضة","fa":"رهبر مخالفان","ur":"قائد حزبِ اختلاف","ps":"د اپوزیسیون مشر","hi":"विपक्ष का नेता","ta":"எதிர்க்கட்சித் தலைவர்","ml":"പ്രതിപക്ഷ നേതാവ്","am":"የተቃዋሚ ፓርቲ መሪ","tl":"Lider ng Oposisyon","es":"líder de la oposición","fr":"chef de l'opposition","ro":"liderul opoziției","ru":"лидер оппозиции"},"parts":[["lead","root","guide"],["er","suffix","one who"],["op","prefix","against"],["posit","root","place"],["ion","suffix","act/process"]],"form":"the Leader of the Opposition"},
+  "Deputy Speaker": {"tr":{"zh-Hant":"副議長","zh-Hans":"副议长","vi":"phó chủ tịch hạ viện","ja":"副議長","ko":"부의장","ar":"نائب رئيس المجلس","fa":"نایب رئیس مجلس","ur":"نائب اسپیکر","ps":"د مجلس مرستیال مشر","hi":"उपाध्यक्ष","ta":"துணைச் சபாநாயகர்","ml":"ഉപാധ്യക്ഷൻ","am":"ምክትል አፈ ጉባኤ","tl":"Pangalawang Ispiker","es":"vicepresidente de la Cámara","fr":"vice-président de la Chambre","ro":"vicepreședinte al Camerei","ru":"вице-спикер"},"parts":[["speak","root","say aloud"],["er","suffix","one who"]]},
+  "Speaker": {"tr":{"zh-Hant":"議長","zh-Hans":"议长","vi":"Chủ tịch Hạ viện","ja":"下院議長","ko":"하원 의장","ar":"رئيس المجلس","fa":"رئیس مجلس","ur":"اسپیکر","ps":"د مجلس مشر","hi":"सदन अध्यक्ष","ta":"சபாநாயகர்","ml":"സ്പീക്കർ","am":"አፈ ጉባኤ","tl":"Ispiker ng Kapulungan","es":"presidente de la Cámara","fr":"président de la Chambre","ro":"președintele Camerei","ru":"спикер палаты"},"parts":[["speak","root","say aloud"],["er","suffix","one who"]],"form":"the Speaker"},
+  "speakership": {"tr":{"zh-Hans":"议长职位","zh-Hant":"議長職位","ja":"議長職","ko":"의장직","vi":"chức chủ tịch hạ viện","ar":"منصب رئيس المجلس","fa":"مقام رئیس مجلس","ur":"اسپیکر کا عہدہ","am":"የምክር ቤት አፈ ጉባኤነት","ml":"സ്പീക്കർ പദവി","ta":"அவைத் தலைவர் பதவி","tl":"puwesto ng Ispiker","ps":"د مجلس د مشر څوکۍ","ro":"funcția de președinte","ru":"должность спикера","fr":"présidence de la Chambre","hi":"अध्यक्ष पद","es":"presidencia de la Cámara"},"parts":[["speak","root","say / talk"],["er","suffix","person who"],["ship","suffix","office / state"]]},
+  "member for Fisher": {"tr":{"zh-Hant":"費雪選區議員","zh-Hans":"费舍尔选区议员","vi":"đại biểu đơn vị Fisher","ja":"フィッシャー選挙区選出議員","ko":"피셔 선거구 의원","ar":"النائب عن دائرة فيشر","fa":"نمایندهٔ حوزهٔ فیشر","ur":"فشر حلقے کے رکن","ps":"د فیشر حوزې استازی","hi":"फ़िशर क्षेत्र के सदस्य","ta":"ஃபிஷர் தொகுதி உறுப்பினர்","ml":"ഫിഷർ മണ്ഡലം അംഗം","am":"የፊሸር ምርጫ ክልል ተወካይ","tl":"kinatawan ng distrito ng Fisher","es":"el diputado por Fisher","fr":"le député de Fisher","ro":"deputatul de Fisher","ru":"депутат от округа Фишер"},"parts":[["member","root","limb/part"]],"form":"the member for Fisher"},
+  "member for Maranoa": {"tr":{"zh-Hans":"马拉诺阿选区议员","zh-Hant":"馬拉諾阿選區議員","ja":"マラノア選出議員","ko":"매러노아 지역구 의원","vi":"nghị sĩ Maranoa","ar":"نائب دائرة مارانوا","fa":"نماینده مارانوا","ur":"مارانوا کے رکن","am":"የማራኖዋ ተወካይ","ml":"മരനോവ പ്രതിനിധി","ta":"மரனோவா உறுப்பினர்","tl":"kinatawan ng Maranoa","ps":"د مارانوا استازی","ro":"deputatul de Maranoa","ru":"депутат от Маранои","fr":"député de Maranoa","hi":"मारानोआ के सांसद","es":"diputado por Maranoa"},"parts":[]},
+  "member for Scullin": {"tr":{"zh-Hans":"斯卡林选区议员","zh-Hant":"斯卡林選區議員","ja":"スカリン選出議員","ko":"스컬린 지역구 의원","vi":"nghị sĩ Scullin","ar":"نائب دائرة سكالين","fa":"نماینده اسکالین","ur":"اسکلن کے رکن","am":"የስካሊን ተወካይ","ml":"സ്കള്ളിൻ പ്രതിനിധി","ta":"ஸ்கல்லின் உறுப்பினர்","tl":"kinatawan ng Scullin","ps":"د سکالین استازی","ro":"deputatul de Scullin","ru":"депутат от Скаллина","fr":"député de Scullin","hi":"स्कलिन के सांसद","es":"diputado por Scullin"},"parts":[]},
+  "frontbench": {"tr":{"zh-Hant":"前座議員","zh-Hans":"前座议员","vi":"hàng ghế đầu của đảng","ja":"前列議員(党幹部)","ko":"전열 의원(지도부)","ar":"المقاعد الأمامية (قيادة الحزب)","fa":"کرسی‌های ردیف اول","ur":"اگلی نشستوں کے ارکان","ps":"د مخکینۍ کتار غړي","hi":"अग्रिम पंक्ति के नेता","ta":"முன்வரிசை உறுப்பினர்கள்","ml":"മുൻനിര അംഗങ്ങൾ","am":"የፊት ረድፍ አባላት","tl":"unang hanay ng mga lider","es":"primera fila del partido","fr":"banc des ministres","ro":"prima bancă a partidului","ru":"передняя скамья"},"parts":[["front","root","forehead/front edge"],["bench","root","long seat"]]},
+  "preselected": {"tr":{"zh-Hant":"黨內提名","zh-Hans":"党内提名","vi":"chọn ứng viên nội bộ đảng","ja":"党の公認候補に選ぶ","ko":"당 후보로 공천하다","ar":"يرشّح داخل الحزب","fa":"نامزد حزبی برگزیدن","ur":"پارٹی امیدوار نامزد کرنا","ps":"د ګوند نوماند ټاکل","hi":"पार्टी उम्मीदवार चुनना","ta":"கட்சி வேட்பாளராகத் தேர்ந்தெடு","ml":"പാർട്ടി സ്ഥാനാർത്ഥിയായി തിരഞ്ഞെടുക്കുക","am":"የፓርቲ እጩ መምረጥ","tl":"pumili ng kandidato ng partido","es":"designar candidato del partido","fr":"investir un candidat","ro":"a desemna candidatul partidului","ru":"выдвигать кандидатом от партии"},"parts":[["pre","prefix","before"],["se","prefix","apart"],["lect","root","choose"]],"form":"preselect"},
+  "preselections": {"tr":{"zh-Hant":"黨內提名程序","zh-Hans":"党内提名程序","vi":"việc chọn ứng viên của đảng","ja":"党公認候補の選定","ko":"공천(후보 선출)","ar":"الترشيح الحزبي الداخلي","fa":"گزینش نامزد حزبی","ur":"پارٹی امیدوار کی نامزدگی","ps":"د ګوند نوماند ټاکنه","hi":"पार्टी उम्मीदवार चयन","ta":"கட்சி வேட்பாளர் தேர்வு","ml":"പാർട്ടി സ്ഥാനാർത്ഥി നിർണയം","am":"የፓርቲ እጩ ምርጫ","tl":"seleksiyon ng kandidato ng partido","es":"designación de candidato","fr":"investiture","ro":"desemnarea candidatului de partid","ru":"выдвижение кандидата партией"},"parts":[["pre","prefix","before"],["se","prefix","apart"],["lect","root","choose"],["ion","suffix","act/process"]],"form":"preselection"},
+  "shadow parliamentary secretary": {"tr":{"zh-Hant":"影子國會秘書","zh-Hans":"影子议会秘书","vi":"thứ trưởng nội các bóng","ja":"影の政務次官","ko":"그림자 정무차관","ar":"أمين برلماني في حكومة الظل","fa":"معاون پارلمانی دولت سایه","ur":"شیڈو پارلیمانی سیکرٹری","ps":"د سیوري حکومت پارلماني منشي","hi":"छाया संसदीय सचिव","ta":"நிழல் நாடாளுமன்றச் செயலாளர்","ml":"നിഴൽ പാർലമെന്ററി സെക്രട്ടറി","am":"የጥላ መንግሥት ምክትል ኃላፊ","tl":"kalihim panlehislatibo ng oposisyon","es":"secretario parlamentario en la sombra","fr":"secrétaire parlementaire du cabinet fantôme","ro":"secretar parlamentar din opoziție","ru":"теневой парламентский секретарь"},"parts":[["shadow","root","shade/dark shape"],["parlia","root","speak"],["ment","suffix","result of"],["ary","suffix","relating to"]]},
+  "interjecting": {"tr":{"zh-Hant":"插話打斷","zh-Hans":"插话打断","vi":"ngắt lời chen ngang","ja":"野次を飛ばす","ko":"발언 중 끼어들다","ar":"يقاطع المتحدث","fa":"میان کلام پریدن","ur":"ٹوکنا","ps":"خبره پرې کول","hi":"टोकना","ta":"இடைமறித்துப் பேசு","ml":"ഇടയ്ക്ക് കയറി പറയുക","am":"አቋርጦ መናገር","tl":"sumabat","es":"interrumpir a gritos","fr":"interrompre par des cris","ro":"a interveni întrerupând","ru":"выкрикивать с места"},"parts":[["inter","prefix","between"],["ject","root","throw"]],"form":"interject"},
+  "high office": {"tr":{"zh-Hant":"高級公職","zh-Hans":"高级公职","vi":"chức vụ cao cấp","ja":"要職","ko":"고위 공직","ar":"منصب رفيع","fa":"مقام عالی","ur":"اعلیٰ عہدہ","ps":"لوړ دولتي څوکۍ","hi":"उच्च पद","ta":"உயர் பதவி","ml":"ഉന്നത പദവി","am":"ከፍተኛ ሹመት","tl":"mataas na katungkulan","es":"alto cargo","fr":"haute fonction","ro":"funcție înaltă","ru":"высокий пост"},"parts":[["high","root","high"],["fic","root","make/do"]]},
+  "the chair": {"tr":{"zh-Hant":"主席職位","zh-Hans":"主席职位","vi":"ghế chủ tọa","ja":"議長席","ko":"의장석","ar":"رئاسة الجلسة","fa":"ریاست جلسه","ur":"صدارت","ps":"د غونډې مشري","hi":"अध्यक्ष पद","ta":"தலைமைப் பொறுப்பு","ml":"അധ്യക്ഷസ്ഥാനം","am":"ሊቀ መንበርነት","tl":"pagkatagapangulo","es":"la presidencia","fr":"la présidence de séance","ro":"prezidarea ședinței","ru":"председательское место"},"parts":[["chair","root","seat of authority"]]},
+  "House of Representatives": {"tr":{"zh-Hant":"眾議院","zh-Hans":"众议院","vi":"Hạ viện","ja":"代議院","ko":"하원","ar":"مجلس النواب","fa":"مجلس نمایندگان","ur":"ایوانِ نمائندگان","ps":"د استازو جرګه","hi":"प्रतिनिधि सभा","ta":"மக்களவை","ml":"ജനപ്രതിനിധി സഭ","am":"የተወካዮች ምክር ቤት","tl":"Kapulungan ng mga Kinatawan","es":"Cámara de Representantes","fr":"Chambre des représentants","ro":"Camera Reprezentanților","ru":"Палата представителей"},"parts":[]},
+  "parliament": {"tr":{"zh-Hant":"議會","zh-Hans":"议会","vi":"quốc hội","ja":"議会","ko":"의회","ar":"برلمان","fa":"پارلمان","ur":"پارلیمنٹ","ps":"پارلمان","hi":"संसद","ta":"நாடாளுமன்றம்","ml":"പാർലമെന്റ്","am":"ፓርላማ","tl":"parlamento","es":"parlamento","fr":"parlement","ro":"parlament","ru":"парламент"},"parts":[["parlia","root","speak"],["ment","suffix","result of"]]},
+  "public domain": {"tr":{"zh-Hans":"公开信息","zh-Hant":"公開資訊","ja":"公知の情報","ko":"공개된 정보","vi":"đã công khai","ar":"معروف للعموم","fa":"در دسترس عموم","ur":"عوامی معلومات","am":"ለሕዝብ የታወቀ","ml":"പൊതുജനങ്ങൾക്ക് അറിയാവുന്നത്","ta":"பொது அறிவுக்கு வந்தது","tl":"alam na ng publiko","ps":"عامه معلومات","ro":"cunoscut public","ru":"общеизвестные сведения","fr":"domaine public","hi":"सार्वजनिक जानकारी","es":"dominio público"},"parts":[["dom","root","house / master"],["ain","suffix","forms noun"]]},
+  "public record": {"tr":{"zh-Hans":"公开记录","zh-Hant":"公開紀錄","ja":"公的記録","ko":"공식 기록","vi":"hồ sơ công khai","ar":"سجل عام","fa":"سابقه رسمی","ur":"سرکاری ریکارڈ","am":"የሕዝብ መዝገብ","ml":"പൊതു രേഖ","ta":"பொதுப் பதிவு","tl":"pampublikong talaan","ps":"عامه ثبت","ro":"registru public","ru":"официальный документ","fr":"archives publiques","hi":"सार्वजनिक अभिलेख","es":"registro público"},"parts":[["re","prefix","back / again"],["cord","root","heart"]]},
+  "battering ram": {"tr":{"zh-Hant":"攻城槌","zh-Hans":"攻城槌","vi":"cỗ máy phá thành","ja":"破城槌","ko":"공성추","ar":"كبش الهدم","fa":"دژکوب","ur":"دروازہ توڑنے والا شہتیر","ps":"د دروازې ماتوونکی لرګی","hi":"द्वार तोड़ने वाला शहतीर","ta":"கதவு உடைக்கும் மரம்","ml":"വാതിൽ തകർക്കുന്ന തടി","am":"በር መስበሪያ ግንድ","tl":"pantumbang troso","es":"ariete","fr":"bélier","ro":"berbec de asalt","ru":"таран"},"parts":[["bat","root","beat"],["ing","suffix","action/process"]]},
+  "ducking for cover": {"tr":{"zh-Hant":"躲避責任","zh-Hans":"躲避责任","vi":"trốn tránh trách nhiệm","ja":"責任逃れをする","ko":"몸을 사리다","ar":"يتهرب ويختبئ","fa":"شانه خالی کردن","ur":"جان چھڑانا","ps":"ځان ګوښه کول","hi":"बचकर छिपना","ta":"பொறுப்பிலிருந்து ஒளிதல்","ml":"ഒളിച്ചോടുക","am":"ኃላፊነት መሸሽ","tl":"umiwas sa sisi","es":"escurrir el bulto","fr":"se défiler","ro":"a se pune la adăpost","ru":"прятаться от ответственности"},"parts":[["cover","root","cover"]]},
+  "turn a hair": {"tr":{"zh-Hant":"面不改色","zh-Hans":"面不改色","vi":"tỏ ra nao núng","ja":"眉一つ動かす","ko":"눈 하나 깜짝하다","ar":"يرمش له جفن","fa":"خم به ابرو آوردن","ur":"آنکھ جھپکنا","ps":"سترګه رپول","hi":"पलक झपकना","ta":"சலனம் காட்டுதல்","ml":"ഭാവഭേദം കാട്ടുക","am":"ፊት መለወጥ","tl":"kumurap sa gulat","es":"inmutarse","fr":"sourciller","ro":"a clipi","ru":"повести бровью"},"parts":[["turn","root","to change/rotate"]]},
+  "game-playing": {"tr":{"zh-Hant":"玩弄權術","zh-Hans":"玩弄权术","vi":"trò chơi chính trị","ja":"駆け引き","ko":"정치적 술수","ar":"مناورات وألاعيب","fa":"بازی سیاسی","ur":"سیاسی چالبازی","ps":"سیاسي لوبې","hi":"राजनीतिक खेल","ta":"அரசியல் விளையாட்டு","ml":"രാഷ്ട്രീയ കളികൾ","am":"የፖለቲካ ጨዋታ","tl":"pulitikang laro","es":"juegos políticos","fr":"manœuvres politiciennes","ro":"jocuri politice","ru":"политические игры"},"parts":[["play","root","activity/action"],["ing","suffix","action/process"]]},
+  "good fun": {"tr":{"zh-Hant":"無傷大雅的玩笑","zh-Hans":"无伤大雅的玩笑","vi":"chuyện đùa vô hại","ja":"罪のない冗談","ko":"그저 재미로 한 농담","ar":"مزاح بريء","fa":"شوخی بی‌آزار","ur":"بے ضرر مذاق","ps":"بې‌زیانه ټوکه","hi":"हानिरहित मज़ाक","ta":"பாதிப்பில்லாத நகைச்சுவை","ml":"നിരുപദ്രവ തമാശ","am":"ንፁህ ቀልድ","tl":"biro lang naman","es":"broma inofensiva","fr":"simple plaisanterie","ro":"simplă glumă nevinovată","ru":"безобидная шутка"},"parts":[["good","root","good"]]},
+  "track record": {"tr":{"zh-Hant":"過往表現","zh-Hans":"过往表现","vi":"thành tích trong quá khứ","ja":"実績","ko":"실적","ar":"سجل الإنجازات","fa":"سابقه عملکرد","ur":"ماضی کی کارکردگی","ps":"تېره کړنه","hi":"पिछला रिकॉर्ड","ta":"கடந்த கால செயல்திறன்","ml":"മുൻകാല പ്രകടനം","am":"ያለፈ አፈጻጸም","tl":"nakaraang tala ng gawa","es":"historial de logros","fr":"bilan des réalisations","ro":"istoric al realizărilor","ru":"послужной список"},"parts":[["track","root","to follow a path"],["re","prefix","back"],["cord","root","heart"]]},
+  "carbon pricing": {"tr":{"zh-Hans":"碳定价","zh-Hant":"碳定價","ja":"カーボンプライシング","ko":"탄소 가격제","vi":"định giá carbon","ar":"تسعير الكربون","fa":"قیمت‌گذاری کربن","ur":"کاربن قیمت کاری","am":"የካርበን ዋጋ ተመን","ml":"കാർബൺ വിലനിർണയം","ta":"கார்பன் விலை நிர்ணயம்","tl":"pagpepresyo ng karbon","ps":"د کاربن بیه ټاکنه","ro":"prețul carbonului","ru":"углеродное ценообразование","fr":"tarification du carbone","hi":"कार्बन मूल्य निर्धारण","es":"precio del carbono"},"parts":[["carbon","root","coal / charcoal"],["pric","root","price / value"],["ing","suffix","action noun"]]},
+  "exhibition": {"tr":{"zh-Hans":"展览","zh-Hant":"展覽","ja":"展示会","ko":"전시회","vi":"triển lãm","ar":"معرض","fa":"نمایشگاه","ur":"نمائش","am":"ኤግዚቢሽን","ml":"പ്രദർശനം","ta":"கண்காட்சி","tl":"eksibisyon","ps":"نندارتون","ro":"expoziție","ru":"выставка","fr":"exposition","hi":"प्रदर्शनी","es":"exposición"},"parts":[["ex","prefix","out"],["hibit","root","hold"],["ion","suffix","forms noun"]]},
+  "assumption": {"tr":{"zh-Hant":"假設","zh-Hans":"假设","vi":"giả định","ja":"前提","ko":"전제","ar":"افتراض","fa":"پیش‌فرض","ur":"مفروضہ","ps":"انګیرنه","hi":"पूर्वधारणा","ta":"முன்கருதல்","ml":"അനുമാനം","am":"ግምት","tl":"palagay","es":"suposición","fr":"présupposition","ro":"presupunere","ru":"предположение"},"parts":[["as","prefix","toward"],["sum","root","take"],["ption","suffix","process of"]]},
+  "association": {"tr":{"zh-Hant":"關聯","zh-Hans":"关联","vi":"mối liên hệ","ja":"関連","ko":"연관성","ar":"الارتباط","fa":"ارتباط","ur":"تعلق","ps":"اړیکه","hi":"संबंध","ta":"தொடர்பு","ml":"ബന്ധം","am":"ግንኙነት","tl":"kaugnayan","es":"asociación","fr":"association","ro":"asociere","ru":"связь"},"parts":[["as","prefix","toward"],["soci","root","join"],["ation","suffix","process of"]]},
+  "attributes": {"tr":{"zh-Hans":"特质","zh-Hant":"特質","ja":"資質","ko":"자질","vi":"phẩm chất","ar":"صفات","fa":"ویژگی‌ها","ur":"خصوصیات","am":"ባህርያት","ml":"ഗുണവിശേഷങ്ങൾ","ta":"பண்புகள்","tl":"mga katangian","ps":"ځانګړتیاوې","ro":"însușiri","ru":"качества","fr":"qualités","hi":"गुण","es":"cualidades"},"parts":[["at","prefix","to / toward"],["tribut","root","give / assign"],["es","suffix","plural"]]},
+  "distinction": {"tr":{"zh-Hant":"區別","zh-Hans":"区别","vi":"sự khác biệt","ja":"区別","ko":"구별","ar":"تمييز","fa":"تمایز","ur":"امتیاز","ps":"توپیر","hi":"अंतर","ta":"வேறுபாடு","ml":"വ്യത്യാസം","am":"ልዩነት","tl":"pagkakaiba","es":"distinción","fr":"distinction","ro":"distincție","ru":"различие"},"parts":[["di","prefix","apart"],["stinct","root","mark off / separate"],["ion","suffix","state of"]]},
+  "reserved his decision": {"tr":{"zh-Hans":"保留判决","zh-Hant":"保留判決","ja":"判決を留保する","ko":"판결을 유보하다","vi":"hoãn tuyên án","ar":"حجز الحكم","fa":"صدور رأی را موکول کرد","ur":"فیصلہ محفوظ کر لیا","am":"ውሳኔውን አቆየ","ml":"വിധി പറയാൻ മാറ്റിവച്ചു","ta":"தீர்ப்பை ஒத்திவைத்தார்","tl":"ipinagpaliban ang hatol","ps":"پرېکړه یې وځنډوله","ro":"a amânat hotărârea","ru":"отложил вынесение решения","fr":"a mis en délibéré","hi":"फैसला सुरक्षित रखा","es":"reservó su fallo"},"parts":[["re","prefix","back"],["serv","root","keep / hold"],["ed","suffix","past tense"]]},
+  "proper process": {"tr":{"zh-Hans":"正当程序","zh-Hant":"正當程序","ja":"正当な手続き","ko":"적법한 절차","vi":"quy trình đúng đắn","ar":"الإجراءات الصحيحة","fa":"روند صحیح","ur":"درست طریقہ کار","am":"ትክክለኛ ሂደት","ml":"ശരിയായ നടപടിക്രമം","ta":"முறையான நடைமுறை","ps":"سمه کړنلاره","ro":"procedura corectă","ru":"надлежащая процедура","fr":"procédure régulière","hi":"उचित प्रक्रिया","es":"procedimiento debido","tl":"tamang proseso"},"parts":[["pro","prefix","forward"],["cess","root","go / move"]]},
+  "terminology": {"tr":{"zh-Hant":"術語","zh-Hans":"术语","vi":"thuật ngữ","ja":"用語","ko":"용어","ar":"مصطلحات","fa":"اصطلاحات","ur":"اصطلاحات","ps":"اصطلاحات","hi":"शब्दावली","ta":"சொற்களஞ்சியம்","ml":"സാങ്കേതികപദാവലി","am":"ተርሚኖሎጂ","tl":"terminolohiya","es":"terminología","fr":"terminologie","ro":"terminologie","ru":"терминология"},"parts":[["termin","root","boundary/limit"],["ology","suffix","study of"]]}
+};
+/* VOCAB-END */
+
+/* Translation languages, in the order the picker shows them (same list as the hub's tap-to-translate). */
+var LANGS = [
+  ["zh-Hant", "繁體中文（台灣） Chinese (Taiwan)"], ["zh-Hans", "简体中文（中国） Chinese (China)"],
+  ["vi", "Tiếng Việt Vietnamese"], ["ja", "日本語 Japanese"], ["ko", "한국어 Korean"],
+  ["ar", "العربية Arabic"], ["fa", "فارسی Farsi/Dari"], ["ur", "اردو Urdu"], ["ps", "پښتو Pashto"],
+  ["hi", "हिन्दी Hindi"], ["ta", "தமிழ் Tamil"], ["ml", "മലയാളം Malayalam"], ["am", "አማርኛ Amharic"],
+  ["tl", "Tagalog"], ["es", "Español Spanish"], ["fr", "Français French"], ["ro", "Română Romanian"],
+  ["ru", "Русский Russian"]
+];
+var RTL = { ar:1, fa:1, ur:1, ps:1 };
+
+var WORD_BUILDER = "https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/learn/elc/english/";
+var WORD_BUILDER_FOLDER = "https://liaminhawai-cmd.github.io/EAL-Vocabulary-Site/#/l/elc/english/f/gillard-misogyny";
+
+/* the recording. id only — the player is built at press time, never before. */
+var VIDEO = { id:"ihd7ofrwQX0", title:"Julia Gillard's misogyny speech, 9 October 2012" };
+
+var SOURCE = "Speech: Julia Gillard, House of Representatives, 9 October 2012, on the motion moved by the Leader of the Opposition. The text is the Hansard record of proceedings of the Parliament of Australia, © Commonwealth of Australia, reproduced here verbatim and unaltered for classroom study, with attribution and no commercial use. The headings, the notes on technique, the meanings and the practice questions are the ELC's own teaching material, not part of the record. If a word here differs from the official Hansard, Hansard is correct.";
+
+/* =================== END OF DATA =================== */
+</script>
+
+<script>
+(function(){
+  "use strict";
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function rx(s){return s.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");}
+
+  /* ---- mark a paragraph without ever nesting a mark ----------------
+     Every candidate (technique phrase, then key word) is collected as a
+     [start,end] span. Longer spans win; overlapping spans are dropped.
+     Then one pass builds the HTML. This is why the speech text in the
+     data block stays plain and verbatim. ------------------------------ */
+  var kwKeys = Object.keys(KEYWORDS).sort(function(a,b){return b.length-a.length;});
+
+  function markup(text){
+    var spans=[], i, m, re;
+    for(i=0;i<DEVICES.length;i++){
+      var at=text.indexOf(DEVICES[i].p);
+      if(at>-1) spans.push({s:at,e:at+DEVICES[i].p.length,type:"dv",i:i});
+    }
+    for(i=0;i<kwKeys.length;i++){
+      var k=kwKeys[i];
+      re=new RegExp("\\b"+rx(k)+"\\b","gi");
+      while((m=re.exec(text))!==null){
+        spans.push({s:m.index,e:m.index+m[0].length,type:"kw",k:k});
+        if(re.lastIndex===m.index) re.lastIndex++;
+      }
+    }
+    spans.sort(function(a,b){ return a.s-b.s || (b.e-b.s)-(a.e-a.s); });
+    var out="", cur=0, taken=[];
+    for(i=0;i<spans.length;i++){
+      var sp=spans[i], clash=false, j;
+      for(j=0;j<taken.length;j++){ if(sp.s<taken[j].e && sp.e>taken[j].s){clash=true;break;} }
+      if(clash) continue;
+      taken.push(sp);
+      out+=esc(text.slice(cur,sp.s));
+      var inner=esc(text.slice(sp.s,sp.e));
+      if(sp.type==="dv"){
+        out+='<span class="dv">'+inner+'</span><span class="dvtag">'+esc(DEVICES[sp.i].name)+'</span>';
+      }else{
+        out+='<span class="kw" data-w="'+esc(sp.k)+'">'+inner+'</span>';
+      }
+      cur=sp.e;
+    }
+    out+=esc(text.slice(cur));
+    return {html:out, devices:taken.filter(function(t){return t.type==="dv";}).map(function(t){return DEVICES[t.i];})};
+  }
+
+  /* ---- the speech ---- */
+  var host=document.getElementById("speech"), html="";
+  SPEECH.forEach(function(mv){
+    html+='<section class="movement"><div class="mv-head"><span class="mv-num">Movement '+esc(mv.n)+
+          '</span><h3 class="mv-title">'+esc(mv.title)+'</h3></div>'+
+          '<p class="mv-gist">'+esc(mv.gist)+'</p>';
+    mv.paras.forEach(function(p){
+      if(p.stage){ html+='<p class="stage">'+esc(p.stage)+'</p>'; return; }
+      var r=markup(p.t);
+      html+='<p>'+(p.sp?'<span class="speaker">'+esc(p.sp)+'</span>':'')+r.html+'</p>';
+      r.devices.forEach(function(d){
+        html+='<div class="note"><span class="rule">'+esc(d.name)+' — '+esc(d.rule)+'</span>'+
+              '<b>Where:</b> '+esc(d.where)+' <b>Limit:</b> '+esc(d.limit)+'</div>';
+      });
+    });
+    html+='</section>';
+  });
+  host.innerHTML=html;
+
+  /* ---- toggles ---- */
+  function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function load(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+  function toggle(btn,cls,key){
+    var saved=load(key);
+    if(saved==="on") document.body.classList.add(cls);
+    if(saved==="off") document.body.classList.remove(cls);
+    btn.setAttribute("aria-pressed",document.body.classList.contains(cls)?"true":"false");
+    btn.addEventListener("click",function(){
+      var on=document.body.classList.toggle(cls);
+      btn.setAttribute("aria-pressed",on?"true":"false");
+      store(key,on?"on":"off");
+      if(!on) closePop();
+    });
+  }
+  toggle(document.getElementById("tKw"),"show-kw","gillard.kw");
+  toggle(document.getElementById("tDv"),"show-dv","gillard.dv");
+
+  /* ---- translation language: one choice shared with the hub's tap-to-translate ---- */
+  var LANG_KEY="elc_stem_home_lang", langSel=document.getElementById("langSelect"), LANG_NAME={};
+  langSel.innerHTML=LANGS.map(function(l){ LANG_NAME[l[0]]=l[1]; return '<option value="'+l[0]+'">'+esc(l[1])+'</option>'; }).join("");
+  var savedLang=load(LANG_KEY);
+  langSel.value = (savedLang&&LANG_NAME[savedLang]) ? savedLang : LANGS[0][0];
+  function lang(){ return langSel.value; }
+  langSel.addEventListener("change",function(){ store(LANG_KEY,lang()); renderHub(); closePop(); });
+  document.getElementById("wbFolder").href=WORD_BUILDER_FOLDER;
+
+  /* the word build (morphemes) and the translation, as Word Builder shows them */
+  function morphs(v){
+    if(!v||!v.parts||!v.parts.length) return '<p class="whole">No useful modern word split — learn it as a whole.</p>';
+    return '<div class="morphs">'+v.parts.map(function(p){
+      return '<span class="morph '+esc(p[1])+'"><b>'+esc(p[0])+'</b><small>'+esc(p[2])+'</small></span>';
+    }).join("")+'</div>';
+  }
+  function translation(v){
+    var L=lang(), t=v&&v.tr&&v.tr[L];
+    return '<span class="plabel">'+esc(LANG_NAME[L])+'</span><div class="tr" dir="'+(RTL[L]?'rtl':'auto')+'" lang="'+esc(L)+'">'+esc(t||"—")+'</div>';
+  }
+
+  /* ---- key word popup ---- */
+  var pop=document.getElementById("gpop");
+  /* which Word Builder unit teaches each word, so a tap can offer to practise it */
+  var UNIT_OF={};
+  VSETS.forEach(function(set){ if(set.unit) set.w.forEach(function(w){ UNIT_OF[w.toLowerCase()]=set.unit; }); });
+  function closePop(){ pop.style.display="none"; }
+  document.addEventListener("click",function(e){
+    var el=e.target.closest?e.target.closest(".kw"):null;
+    if(!el||!document.body.classList.contains("show-kw")){ if(!pop.contains(e.target)) closePop(); return; }
+    var w=el.getAttribute("data-w");
+    var unit=UNIT_OF[w.toLowerCase()];
+    var go = unit
+      ? '<a class="go" href="'+WORD_BUILDER+encodeURIComponent(unit)+'" target="_blank" rel="noopener">Practise this set in Word Builder \u2197</a>'
+      : '<a class="go" href="'+WORD_BUILDER_FOLDER+'" target="_blank" rel="noopener">Open the Word Builder folder \u2197</a>';
+    var v=VOCAB[w];
+    pop.innerHTML='<span class="w">'+esc(w)+'</span><span class="m">'+esc(KEYWORDS[w]||"")+'</span>'+
+      (v&&v.form?'<span class="form">A form of <b>'+esc(v.form)+'</b>.</span>':'')+
+      '<span class="plabel">Word build</span>'+morphs(v)+translation(v)+go;
+    pop.style.display="block";
+    var r=el.getBoundingClientRect();
+    var left=Math.min(r.left+window.scrollX, window.scrollX+document.documentElement.clientWidth-pop.offsetWidth-12);
+    pop.style.top=(r.bottom+window.scrollY+6)+"px";
+    pop.style.left=Math.max(8,left)+"px";
+    e.stopPropagation();
+  });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape") closePop(); });
+
+  /* ---- vocabulary hub ---- */
+  var vh=document.getElementById("vhub");
+  function renderHub(){
+  var vhtml="";
+  VSETS.forEach(function(set){
+    var link = set.unit
+      ? '<a class="vlink" href="'+WORD_BUILDER+encodeURIComponent(set.unit)+'" target="_blank" rel="noopener">Practise this set \u2197</a>'
+      : '<a class="vlink" href="'+WORD_BUILDER_FOLDER+'" target="_blank" rel="noopener">Open the folder \u2197</a>';
+    vhtml+='<div class="vset"><div class="vhead"><h3>'+esc(set.h)+'</h3>'+link+'</div>'+
+           '<p class="why">'+esc(set.why)+'</p><div class="vgrid">';
+    set.w.forEach(function(w){
+      var m=KEYWORDS[w];
+      if(!m) return;
+      var v=VOCAB[w], L=lang(), t=v&&v.tr&&v.tr[L];
+      vhtml+='<div class="vcard"><div class="w">'+esc(w)+'</div><div class="m">'+esc(m)+'</div>'+
+             '<div class="tr" dir="'+(RTL[L]?'rtl':'auto')+'" lang="'+esc(L)+'">'+esc(t||"—")+'</div>'+
+             (v&&v.parts&&v.parts.length?morphs(v):'')+'</div>';
+    });
+    vhtml+='</div></div>';
+  });
+  vh.innerHTML=vhtml;
+  }
+  renderHub();
+
+  /* ---- quoted lines ---- */
+  document.getElementById("lines").innerHTML=LINES.map(function(l){
+    return '<div class="line"><q>'+esc(l.q)+'</q><span class="why">'+esc(l.why)+'</span></div>';
+  }).join("");
+
+  /* ---- name the technique ---- */
+  var qz=document.getElementById("quiz");
+  qz.innerHTML=QUIZ.map(function(q,qi){
+    return '<div class="q" data-q="'+qi+'"><p class="stem">'+esc(q.stem)+'</p><div class="opts">'+
+      q.opts.map(function(o,oi){ return '<button class="opt" data-o="'+oi+'">'+esc(o)+'</button>'; }).join("")+
+      '</div><p class="fb"></p></div>';
+  }).join("");
+  qz.addEventListener("click",function(e){
+    var b=e.target.closest?e.target.closest(".opt"):null;
+    if(!b) return;
+    var box=b.closest(".q"), qi=+box.getAttribute("data-q"), oi=+b.getAttribute("data-o"), q=QUIZ[qi];
+    var fb=box.querySelector(".fb");
+    if(oi===q.a){
+      box.querySelectorAll(".opt").forEach(function(x){ x.classList.remove("wrong"); });
+      b.classList.add("right");
+      fb.textContent=q.fb; fb.classList.add("on");
+    }else{
+      b.classList.add("wrong");
+      fb.textContent="Not that one — read the line again and try another."; fb.classList.add("on");
+    }
+  });
+
+  /* ---- video: nothing is requested from YouTube until this is pressed ---- */
+  var vidPlay=document.getElementById("vidPlay");
+  if(vidPlay){
+    vidPlay.addEventListener("click",function(){
+      var f=document.createElement("iframe");
+      f.src="https://www.youtube-nocookie.com/embed/"+encodeURIComponent(VIDEO.id)+"?rel=0&autoplay=1";
+      f.title=VIDEO.title;
+      f.allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+      f.referrerPolicy="strict-origin-when-cross-origin";
+      f.allowFullscreen=true;
+      var slot=document.getElementById("vidSlot");
+      slot.innerHTML=""; slot.appendChild(f);
+    });
+  }
+
+  document.getElementById("sourceNote").innerHTML="<b>Source and copyright.</b> "+esc(SOURCE);
+})();
+</script>
+<script src="word-tap.js?v=v1" defer></script>
+</body>
+</html>
