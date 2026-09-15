@@ -30,15 +30,21 @@
   ul.stem-behind { margin:2px 0 0; padding-left:18px; font-size:.88rem; }
   ul.stem-behind li { margin:2px 0; }
   /* cross-app progress */
-  .app-cards { display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); margin-top:9px; }
-  .app-card { border:1px solid var(--line); border-radius:10px; background:var(--bg); padding:12px 13px; }
-  .app-card h3 { font-size:.95rem; margin:0 0 1px; }
-  .app-card h3 a { color:inherit; text-decoration:none; }
-  .app-card h3 a:hover { text-decoration:underline; }
-  .app-card .last { font-size:.76rem; color:var(--muted); }
-  .app-card dl { display:grid; grid-template-columns:auto 1fr; gap:1px 8px; margin:8px 0 0; font-size:.84rem; }
-  .app-card dt { font-weight:700; }
-  .app-card dd { color:var(--muted); margin:0; }
+  .sum-stats { display:flex; gap:10px; flex-wrap:wrap; margin-top:9px; }
+  .sum-stats > div { flex:1; min-width:110px; border:1px solid var(--line); border-radius:10px;
+                     background:var(--bg); padding:10px 8px; text-align:center; }
+  .sum-stats b { display:block; font-size:1.25rem; line-height:1.2; }
+  .sum-stats span { font-size:.76rem; color:var(--muted); }
+  .app-rows { margin-top:10px; }
+  .app-row { display:flex; justify-content:space-between; gap:12px; align-items:baseline;
+             padding:9px 0; border-bottom:1px solid var(--line); }
+  .app-row:last-child { border-bottom:0; }
+  .app-row .who { font-weight:700; font-size:.92rem; }
+  .app-row .who a { color:inherit; text-decoration:none; }
+  .app-row .who a:hover { text-decoration:underline; }
+  .app-row .what { display:block; font-weight:400; color:var(--muted); font-size:.82rem; margin-top:1px; }
+  .app-row .when { color:var(--muted); font-size:.78rem; white-space:nowrap; }
+  .day { break-inside:avoid; }
   .day { margin-top:12px; }
   .day > .date { font-size:.86rem; font-weight:700; padding-bottom:4px; border-bottom:1px solid var(--line); }
   .day ul { list-style:none; margin:6px 0 0; padding:0; }
@@ -47,9 +53,6 @@
   .day li .detail { color:var(--muted); font-size:.82rem; }
   .more { font-size:.82rem; color:var(--muted); margin-top:10px; }
   .stem-box a.more { display:inline-block; margin-top:9px; color:var(--accent); font-weight:700; font-size:.88rem; text-decoration:none; }
-  ul.log { list-style:none; padding:0; margin-top:8px; }
-  ul.log li { display:flex; justify-content:space-between; gap:12px; padding:9px 0; border-bottom:1px solid var(--line); font-size:.92rem; }
-  ul.log li .cat { color:var(--muted); font-size:.8rem; text-align:right; }
   .actions { margin-top:22px; display:flex; flex-wrap:wrap; gap:9px; }
   button { padding:10px 14px; min-height:44px; border-radius:8px; border:1px solid var(--line); background:var(--card); color:var(--ink); font-weight:700; cursor:pointer; font-size:.88rem; }
   button.primary { background:var(--accent); color:#fff; border-color:transparent; }
@@ -73,24 +76,21 @@
     <h2>My learning direction</h2>
     <div id="goal"></div>
 
-    <h2>Progress across the apps</h2>
+    <h2>What you've done so far</h2>
     <p class="privacy noprint">Collected from the phonics trainer, vocabulary, grammar hub, pronunciation hub and STEM — but only from work done <b>in this browser</b>. Work done on another device or in a different browser is saved there, not here.</p>
     <div id="appCards"></div>
-
-    <h2>Day by day</h2>
-    <div id="timeline"></div>
 
     <h2>🧪 STEM progress</h2>
     <div id="stem"></div>
 
-    <h2>Activities opened</h2>
-    <ul class="log" id="log"></ul>
-    <p class="empty" id="emptyActivities" hidden>Nothing opened yet — return to the hub and choose a tool.</p>
+    <h2>Activity</h2>
+    <p class="privacy noprint">Every day you worked, newest first, with the app named beside each entry. Tools you opened without finishing anything are listed too, marked “Opened”.</p>
+    <div id="timeline"></div>
 
     <div class="actions noprint">
       <button class="primary" id="print">🖨️ Print / Save</button>
       <button id="another">Do another activity</button>
-      <button class="clear" id="clear">Clear activity record</button>
+      <button class="clear" id="clear">Clear opened-tools log</button>
     </div>
   </main>
 </div>
@@ -225,37 +225,96 @@ const stemBox=document.getElementById("stem");
     const p = el("p", "empty"); p.textContent = msg; return p;
   }
 
+  /* The hub records every tool a student opens (elc_visited). Those were
+     shown in a separate list that printed a time with no date, so an entry
+     from last term looked like one from this morning. They belong on the
+     same dated timeline as the work itself, tagged like any other entry. */
+  function openedEvents() {
+    let visits = [];
+    try { visits = JSON.parse(localStorage.getItem(VISITS_KEY) || "[]"); } catch (e) { visits = []; }
+    if (!Array.isArray(visits)) return {};
+    const byDay = {};
+    visits.forEach((v) => {
+      if (!v || !v.ts) return;
+      const d = new Date(v.ts);
+      if (isNaN(d)) return;
+      const key = d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+      (byDay[key] = byDay[key] || []).push({
+        appTitle: v.cat || "ELC Hub", icon: "",
+        label: "Opened " + (v.title || "an activity"),
+        detail: d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      });
+    });
+    return byDay;
+  }
+
+  // Merge the work days and the opened-tool days into one dated list.
+  function mergeDays(recDays) {
+    const opened = openedEvents();
+    const map = {};
+    (recDays || []).forEach((d) => { map[d.day] = { day: d.day, events: d.events.slice() }; });
+    Object.keys(opened).forEach((day) => {
+      map[day] = map[day] || { day, events: [] };
+      map[day].events = map[day].events.concat(opened[day]);
+    });
+    return Object.values(map).sort((a, b) => (a.day < b.day) - (a.day > b.day));
+  }
+
   ELCProgress.all().then((rec) => {
-    if (!rec.apps.length) {
+    const days = mergeDays(rec.days);
+    if (!rec.apps.length && !days.length) {
       cards.append(empty("No app progress saved on this device yet. Open the phonics trainer, vocabulary, grammar hub, pronunciation hub or STEM and your work will show up here."));
       timeline.append(empty("Nothing dated yet."));
       return;
     }
+    if (!rec.apps.length) {
+      cards.append(empty("No finished work saved on this device yet — only the tools you opened, below."));
+    }
 
-    const grid = el("div", "app-cards");
+    /* One line per app rather than a card each: the same facts, read top to
+       bottom in a glance. The id stays on the row because other pages deep
+       link to it (report-button.js sends the pronunciation hub to #app-pron). */
+    const stats = el("div", "sum-stats");
+    const stat = (value, label) => {
+      const d = el("div");
+      const b = el("b"); b.textContent = String(value);
+      const s = el("span"); s.textContent = label;
+      d.append(b, s); return d;
+    };
+    /* Only claim a summary where there is finished work to summarise. A
+       student who opened a tool and did nothing has an activity line, not a
+       day of work, and the counts must not imply otherwise. "Days active"
+       counts any day with an entry, which is what the list below shows. */
+    if (rec.apps.length) {
+      const dayTotal = days.length;
+      const newest = days.length ? days[0].day : null;
+      stats.append(stat(rec.apps.length, rec.apps.length === 1 ? "app used" : "apps used"));
+      stats.append(stat(dayTotal, dayTotal === 1 ? "day active" : "days active"));
+      stats.append(stat(newest ? niceDay(newest) : "—", "last active"));
+      cards.append(stats);
+    }
+
+    const rows = el("div", "app-rows");
     rec.apps.forEach((a) => {
-      const card = el("div", "app-card"); card.id = "app-" + a.id;
-      const h = el("h3");
+      const row = el("div", "app-row"); row.id = "app-" + a.id;
+      const left = el("div");
+      const who = el("div", "who");
       const link = el("a"); link.href = a.href; link.textContent = (a.icon ? a.icon + " " : "") + a.title;
-      h.append(link); card.append(h);
-      const last = el("div", "last");
-      last.textContent = a.lastDay ? "Last worked on " + niceDay(a.lastDay) : "No dated activity yet";
-      card.append(last);
-      const dl = el("dl");
-      (a.stats || []).forEach((st) => {
-        const dt = el("dt"); dt.textContent = st.value;
-        const dd = el("dd"); dd.textContent = st.label;
-        dl.append(dt, dd);
-      });
-      card.append(dl);
-      grid.append(card);
+      who.append(link);
+      const what = el("span", "what");
+      what.textContent = (a.stats || []).map((st) => st.value + " " + st.label).join(" · ");
+      left.append(who, what);
+      const when = el("span", "when");
+      when.textContent = a.lastDay ? niceDay(a.lastDay) : "not yet";
+      row.append(left, when);
+      rows.append(row);
     });
-    cards.append(grid);
+    cards.append(rows);
 
     // A long record is for reading, not scrolling — show the recent run
     // and say plainly how much is behind it rather than silently cutting.
     const SHOW = 30;
-    const shown = rec.days.slice(0, SHOW);
+    const shown = days.slice(0, SHOW);
     if (!shown.length) { timeline.append(empty("Nothing dated yet.")); return; }
     shown.forEach((d) => {
       const wrap = el("div", "day");
@@ -272,9 +331,9 @@ const stemBox=document.getElementById("stem");
       wrap.append(ul);
       timeline.append(wrap);
     });
-    if (rec.days.length > SHOW) {
+    if (days.length > SHOW) {
       const more = el("p", "more");
-      const n = rec.days.length - SHOW;
+      const n = days.length - SHOW;
       more.textContent = n + (n === 1 ? " earlier day" : " earlier days") + " not shown.";
       timeline.append(more);
     }
@@ -284,25 +343,14 @@ const stemBox=document.getElementById("stem");
   });
 })();
 
-let visits=[];
-try { visits=JSON.parse(localStorage.getItem(VISITS_KEY)||"[]"); } catch(e) {}
-visits=Array.isArray(visits)?visits.sort((a,b)=>a.ts-b.ts):[];
-const log=document.getElementById("log");
-document.getElementById("emptyActivities").hidden=visits.length!==0;
-visits.forEach(item=>{
-  const li=document.createElement("li");
-  li.append(text("span",item.title||"Activity"));
-  const when=new Date(item.ts).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
-  li.append(text("span",`${item.cat||"ELC Hub"} · ${when}`,"cat"));
-  log.append(li);
-});
-
 document.getElementById("print").onclick=()=>window.print();
 document.getElementById("another").onclick=()=>location.href="index.html";
+// Only the opened-tools log is stored under this key; finished work lives in
+// each app's own record and is deliberately left alone. Redraw from storage
+// rather than hand-patching the timeline, so the counts stay truthful.
 document.getElementById("clear").onclick=()=>{
   localStorage.removeItem(VISITS_KEY);
-  log.replaceChildren();
-  document.getElementById("emptyActivities").hidden=false;
+  location.reload();
 };
 </script>
 <script src="word-tap.js?v=v1" defer></script>
