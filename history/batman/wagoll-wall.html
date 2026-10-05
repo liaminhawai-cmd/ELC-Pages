@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23223f43'/><text x='16' y='24' font-family='Georgia,serif' font-size='22' font-weight='700' fill='%23c99a2e' text-anchor='middle'>7</text></svg>">
+<meta name="description" content="Batman's Treaty WAGOLL wall. Two sources that disagree, a painting and Governor Bourke's Proclamation, answered at Grade 5 to Year 10 with the evidence-bearing phrases marked and the matching learning continuum underneath.">
+<title>Two Documents, One Meeting</title>
+<style>
+:root{
+  --paper:#fbf7ee; --bg:#efe8dc; --ink:#20231f; --muted:#675f54; --line:#d4c8b6;
+  --deep:#223f43; --on-deep:#fbf7ee; --band:#f5f0e6;
+  --shadow:0 1px 2px rgba(48,39,24,.06),0 4px 14px rgba(48,39,24,.08);
+  --gold:#8b681e; --gold-soft:#f6e7c2;
+  --source:#176b87; --source-soft:#d8edf4;
+  --context:#357a46; --context-soft:#dff0df;
+  --evidence:#a34d1d; --evidence-soft:#f7e3d4;
+  --judge:#744f91; --judge-soft:#eadff2;
+  --meta:#53666b; --meta-soft:#e2eaeb;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#1b1e1c; --bg:#111312; --ink:#eae5db; --muted:#a49a8b; --line:#3a4038;
+    --deep:#cfe0e0; --on-deep:#111312; --band:#232725;
+    --shadow:0 1px 2px rgba(0,0,0,.5);
+    --gold:#e0b64c; --gold-soft:#3a2f10;
+    --source:#6fc0da; --source-soft:#12303a;
+    --context:#74c288; --context-soft:#15301d;
+    --evidence:#e89a63; --evidence-soft:#3a2417;
+    --judge:#bda0d8; --judge-soft:#2b1f3a;
+    --meta:#a3b6bb; --meta-soft:#232c2e;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1b1e1c; --bg:#111312; --ink:#eae5db; --muted:#a49a8b; --line:#3a4038;
+  --deep:#cfe0e0; --on-deep:#111312; --band:#232725;
+  --shadow:0 1px 2px rgba(0,0,0,.5);
+  --gold:#e0b64c; --gold-soft:#3a2f10;
+  --source:#6fc0da; --source-soft:#12303a;
+  --context:#74c288; --context-soft:#15301d;
+  --evidence:#e89a63; --evidence-soft:#3a2417;
+  --judge:#bda0d8; --judge-soft:#2b1f3a;
+  --meta:#a3b6bb; --meta-soft:#232c2e;
+}
+
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);line-height:1.5;
+     font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+.sheet{max-width:1900px;margin:14px auto;background:var(--paper);border:1px solid var(--line);
+       border-radius:14px;box-shadow:var(--shadow);padding:20px 22px 24px}
+
+/* ---------- masthead ---------- */
+.mast{border-bottom:3px solid var(--deep);padding-bottom:11px;margin-bottom:12px}
+.kicker{text-transform:uppercase;letter-spacing:.14em;font-size:.7rem;font-weight:800;color:var(--muted)}
+h1{font-size:clamp(1.5rem,3vw,2.4rem);line-height:1.05;color:var(--deep);margin:.18rem 0 .3rem;letter-spacing:-.015em}
+.read{font-size:.82rem;color:var(--muted)}
+.read b{color:var(--ink)}
+
+/* ---------- source band ----------
+   Both sources appear, because the wall's whole argument is that they
+   disagree. Neither is reproduced in full here: each has its own A3 source
+   sheet, and the pointer under the plates says so. */
+.src{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:14px;
+     align-items:start;margin:12px 0 13px}
+.plates{display:flex;flex-direction:column;gap:8px}
+.plates img{width:100%;height:auto;display:block;border:1px solid var(--line);border-radius:8px;background:#111}
+.quote{border:1px solid var(--line);border-left:5px solid var(--evidence);border-radius:8px;
+       background:var(--band);padding:8px 10px}
+.quote b{display:block;color:var(--evidence);font-size:.65rem;text-transform:uppercase;
+         letter-spacing:.07em;margin-bottom:3px}
+.quote p{font-size:.76rem;line-height:1.4}
+.seealso{font-size:.68rem;color:var(--muted);line-height:1.4}
+.srcbody{display:flex;flex-direction:column;gap:8px}
+.inquiry{background:var(--deep);color:var(--on-deep);border-radius:9px;padding:9px 13px;
+         font-size:1.02rem;font-weight:800;line-height:1.3}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.fact{border:1px solid var(--line);border-radius:8px;padding:7px 9px;background:var(--band);font-size:.76rem;line-height:1.36}
+.fact b{display:block;color:var(--deep);font-size:.65rem;text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+
+/* ---------- key ---------- */
+.key{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}
+.key .k{border:1px solid var(--line);border-left:5px solid;border-radius:8px;padding:7px 9px;background:var(--band)}
+.k .kh{font-weight:800;font-size:.8rem;display:flex;align-items:baseline;gap:6px;line-height:1.25}
+/* no colour/weight here: the sample must render exactly like a real mark */
+.k .sample{display:block;margin-top:3px;font-size:.72rem}
+.k-source{border-left-color:var(--source)} .k-source .kh{color:var(--source)}
+.k-context{border-left-color:var(--context)} .k-context .kh{color:var(--context)}
+.k-evidence{border-left-color:var(--evidence)} .k-evidence .kh{color:var(--evidence)}
+.k-judge{border-left-color:var(--judge)} .k-judge .kh{color:var(--judge)}
+
+/* ---------- two channels: colour AND line pattern ---------- */
+.m{font-weight:600;text-decoration-line:underline;text-underline-offset:2.5px;text-decoration-thickness:1.3px}
+.m-source{color:var(--source);text-decoration-color:var(--source);text-decoration-style:solid}
+.m-context{color:var(--context);text-decoration-color:var(--context);text-decoration-style:dashed}
+.m-evidence{color:var(--evidence);text-decoration-color:var(--evidence);text-decoration-style:dotted}
+.m-judge{color:var(--judge);text-decoration-color:var(--judge);text-decoration-style:double}
+
+/* ---------- toolbar ---------- */
+.tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px}
+.tools button{font:inherit;font-size:.78rem;font-weight:600;padding:5px 11px;border-radius:999px;
+              border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;
+              display:inline-flex;align-items:center;gap:6px}
+.tools button[aria-pressed="true"]{border-color:var(--deep);box-shadow:inset 0 0 0 1px var(--deep)}
+.tools .sp{flex:1}
+.t-source[aria-pressed="true"]{color:var(--source);border-color:var(--source);box-shadow:inset 0 0 0 1px var(--source)}
+.t-context[aria-pressed="true"]{color:var(--context);border-color:var(--context);box-shadow:inset 0 0 0 1px var(--context)}
+.t-evidence[aria-pressed="true"]{color:var(--evidence);border-color:var(--evidence);box-shadow:inset 0 0 0 1px var(--evidence)}
+.t-judge[aria-pressed="true"]{color:var(--judge);border-color:var(--judge);box-shadow:inset 0 0 0 1px var(--judge)}
+
+body.filtering .m{color:var(--muted);font-weight:400;text-decoration-color:transparent}
+body.filtering .exp-item,body.filtering tr.crit{opacity:.22}
+body.f-source .m-source,body.f-context .m-context,body.f-evidence .m-evidence,
+body.f-judge .m-judge{font-weight:600;text-decoration-color:currentColor}
+body.f-source .m-source{color:var(--source)} body.f-context .m-context{color:var(--context)}
+body.f-evidence .m-evidence{color:var(--evidence)} body.f-judge .m-judge{color:var(--judge)}
+body.f-source .exp-source,body.f-context .exp-context,body.f-evidence .exp-evidence,
+body.f-judge .exp-judge,
+body.f-source tr.crit-source,body.f-context tr.crit-context,body.f-evidence tr.crit-evidence,
+body.f-judge tr.crit-judge{opacity:1}
+body.greyscale .sheet{filter:grayscale(1)}
+
+/* ---------- the matrix ---------- */
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:11px}
+table.wall{border-collapse:collapse;width:100%;min-width:1500px;table-layout:fixed}
+.wall th,.wall td{border:1px solid var(--line);padding:9px 10px;vertical-align:top;text-align:left}
+.wall col.lbl{width:150px}
+.wall thead th{background:var(--deep);color:var(--on-deep);text-align:center;vertical-align:middle;
+               font-size:.95rem;padding:8px 6px}
+.wall thead th.expected{background:var(--gold)}
+.wall thead th .sub{display:block;font-size:.63rem;font-weight:700;opacity:.85;letter-spacing:.1em;
+                    text-transform:uppercase;margin-top:2px}
+.wall .rowlab{font-size:.72rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;
+              color:var(--deep);vertical-align:middle;background:var(--band)}
+
+td.example{font-family:Georgia,"Times New Roman",serif;font-size:.85rem;line-height:1.6}
+td.expl{font-size:.73rem;line-height:1.44;background:var(--band)}
+.exp-item{display:flex;gap:5px;margin-bottom:5px}
+.exp-item .g{flex:none;font-size:.8em;line-height:1.75}
+.exp-source .g{color:var(--source)}
+.exp-context .g{color:var(--context)}
+.exp-evidence .g{color:var(--evidence)}
+.exp-judge .g{color:var(--judge)}
+
+.wall tr.band td{background:var(--deep);color:var(--on-deep);font-size:.72rem;font-weight:800;
+                 letter-spacing:.09em;text-transform:uppercase;text-align:center;padding:5px}
+.wall tr.crit td{font-size:.75rem;line-height:1.42}
+.wall tr.crit .rowlab{background:transparent}
+tr.crit-source td{background:var(--source-soft)} tr.crit-source .rowlab{color:var(--source)}
+tr.crit-context td{background:var(--context-soft)} tr.crit-context .rowlab{color:var(--context)}
+tr.crit-evidence td{background:var(--evidence-soft)} tr.crit-evidence .rowlab{color:var(--evidence)}
+tr.crit-judge td{background:var(--judge-soft)} tr.crit-judge .rowlab{color:var(--judge)}
+.wall td.expected-col{box-shadow:inset 3px 0 0 var(--gold),inset -3px 0 0 var(--gold)}
+
+.foot{margin-top:11px;padding-top:9px;border-top:1px solid var(--line);
+      font-size:.73rem;color:var(--muted);line-height:1.5}
+.foot b{color:var(--ink)}
+.foot a{color:inherit}
+
+@media (max-width:1100px){.key{grid-template-columns:repeat(2,1fr)}.src{grid-template-columns:1fr}}
+@media (max-width:620px){.facts{grid-template-columns:1fr}.key{grid-template-columns:1fr}
+  .sheet{padding:14px;margin:0;border-radius:0;border:0}}
+
+/* ---------- print master: A2 landscape, one page ---------- */
+@page{size:A2 landscape;margin:8mm}
+@media print{
+  :root{--paper:#fff;--bg:#fff;--ink:#000;--muted:#4a463d;--line:#c3b8a4;
+        --deep:#223f43;--on-deep:#fff;--band:#f5f0e6}
+  body{background:#fff}
+  .tools,.noprint{display:none!important}
+  .sheet{max-width:none;margin:0;padding:0;border:0;border-radius:0;box-shadow:none}
+  .wrap{overflow:visible;border:0;border-radius:0}
+  table.wall{min-width:0;width:100%}
+  .mast{padding-bottom:6px;margin-bottom:8px;border-bottom-width:3px}
+  h1{font-size:30pt;margin:2pt 0 3pt}
+  .kicker{font-size:9.2pt} .read{font-size:9.8pt}
+  .src{gap:12px;margin:9px 0 10px;grid-template-columns:minmax(0,268px) minmax(0,1fr)}
+  .quote{padding:5pt 7pt} .quote b{font-size:7.4pt} .quote p{font-size:8.9pt}
+  .seealso{font-size:7.8pt}
+  .inquiry{font-size:14pt;padding:6.5pt 11pt}
+  .fact{font-size:8.9pt;padding:5pt 6.5pt} .fact b{font-size:7.4pt}
+  .key{gap:5px;margin-bottom:10px}
+  .k{padding:6px 9px} .k .kh{font-size:10pt} .k .sample{font-size:8.9pt}
+  .wall col.lbl{width:126pt}
+  .wall th,.wall td{padding:5.5pt 6.5pt}
+  .wall thead th{font-size:13.5pt;padding:5.5pt} .wall thead th .sub{font-size:7.4pt}
+  .wall .rowlab{font-size:8.8pt}
+  td.example{font-size:10.3pt;line-height:1.4}
+  td.expl{font-size:8.5pt;line-height:1.3} .exp-item{margin-bottom:3pt}
+  .wall tr.band td{font-size:8.6pt;padding:3pt}
+  .wall tr.crit td{font-size:9pt;line-height:1.3}
+  .foot{font-size:8pt;margin-top:7pt;padding-top:5pt}
+  .wall tr,.wall td{break-inside:avoid}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<header class="mast">
+  <div class="kicker">Ancient Australia &middot; Historical source analysis &middot; WAGOLL wall</div>
+  <h1 id="wallTitle"></h1>
+  <p class="read"><b>Read across</b> for twelve months of growth. <b>Read down</b> from the marked phrase, to what it proves, to the continuum descriptor. Only the phrases that prove a criterion are marked, the black text is the glue.</p>
+</header>
+
+<section class="src">
+  <div class="plates" id="plates"></div>
+  <div class="srcbody">
+    <div class="inquiry" id="inquiry"></div>
+    <div class="facts" id="facts"></div>
+  </div>
+</section>
+
+<div class="key" id="key"></div>
+
+<div class="tools noprint" role="group" aria-label="Wall tools">
+  <button id="showAll" aria-pressed="true">Show all</button>
+  <span id="lenses" style="display:contents"></span>
+  <span class="sp"></span>
+  <button id="grey" aria-pressed="false">Greyscale check</button>
+  <button id="print">Print / save PDF</button>
+</div>
+
+<div class="wrap"><table class="wall" id="wall"></table></div>
+
+<p class="foot" id="foot"></p>
+
+</div>
+
+<script src="content.js"></script>
+<script>
+/* ===================== rendering ===================== */
+
+const esc = s => String(s).replace(/&(?!amp;|lt;|gt;|#\d+;|[a-z]+;)/g,"&amp;");
+const mark = s => esc(s).replace(/\{(\w+)\|([^}]*)\}/g,
+  (_,k,t)=>`<span class="m m-${k}">${t}</span>`);
+
+document.getElementById("wallTitle").textContent = WALL.title;
+document.getElementById("inquiry").textContent = WALL.inquiry;
+document.getElementById("foot").innerHTML = WALL.foot;
+document.getElementById("facts").innerHTML =
+  FACTS.map(([h,t])=>`<div class="fact"><b>${h}</b>${t}</div>`).join("");
+
+/* The plates column: the picture source at a readable thumbnail size, and the
+   written source as the standfirst its own sheet opens with, rather than the
+   full Proclamation. Reproducing both in full is what the two A3 source sheets
+   are for, and trying to do it here is what pushed this wall onto two pages. */
+const pic = SOURCES.find(s => s.kind === "image");
+const txt = SOURCES.find(s => s.kind === "text");
+document.getElementById("plates").innerHTML =
+  (pic ? `<img src="${esc(pic.file)}" alt="${esc(pic.alt)}">` : "") +
+  (txt ? `<div class="quote"><b>${esc(txt.tab.replace(/^[A-Z]\s*·\s*/,""))}</b>
+           <p>${esc(txt.whole.text)}</p></div>` : "") +
+  `<p class="seealso">Each source is reproduced in full, with its details explained,
+    on its own A3 sheet.</p>`;
+
+document.getElementById("key").innerHTML = CRITERIA.map(c=>`
+  <div class="k k-${c.key}">
+    <div class="kh"><span>${c.glyph}</span><span>${c.name}</span></div>
+    <span class="sample m m-${c.key}">marked like this</span>
+  </div>`).join("");
+
+const isExp = lv => lv === WALL.expected;
+
+const head = `<colgroup><col class="lbl">${LEVELS.map(()=>"<col>").join("")}</colgroup>
+<thead><tr><th class="rowlab" scope="col">Year level</th>${
+  LEVELS.map(lv=>`<th scope="col"${isExp(lv)?' class="expected"':''}>${lv}${
+    isExp(lv)?'<span class="sub">Expected</span>':''}</th>`).join("")}</tr></thead>`;
+
+const exampleRow = `<tr><th class="rowlab" scope="row">Worked example</th>${
+  LEVELS.map(lv=>`<td class="example${isExp(lv)?" expected-col":""}">${mark(EXAMPLES[lv])}</td>`).join("")}</tr>`;
+
+const explainRow = `<tr><th class="rowlab" scope="row">What it proves</th>${
+  LEVELS.map(lv=>`<td class="expl${isExp(lv)?" expected-col":""}">${
+    CRITERIA.map(c=>`<div class="exp-item exp-${c.key}"><span class="g">${c.glyph}</span><span>${
+      esc(EXPLANATIONS[lv][c.key])}</span></div>`).join("")}</td>`).join("")}</tr>`;
+
+const bandRow = `<tr class="band"><td>Learning continuum</td>${
+  LEVELS.map(lv=>`<td${isExp(lv)?' class="expected-col"':''}>${lv}</td>`).join("")}</tr>`;
+
+const critRows = CRITERIA.map(c=>`<tr class="crit crit-${c.key}"><th class="rowlab" scope="row">${c.row}</th>${
+  LEVELS.map(lv=>`<td${isExp(lv)?' class="expected-col"':''}>${esc(CONTINUUM[c.key][lv])}</td>`).join("")}</tr>`).join("");
+
+document.getElementById("wall").innerHTML =
+  head + "<tbody>" + exampleRow + explainRow + bandRow + critRows + "</tbody>";
+
+/* ===================== tools ===================== */
+
+const lenses = document.getElementById("lenses");
+lenses.innerHTML = CRITERIA.map(c=>
+  `<button class="t-${c.key}" data-f="${c.key}" aria-pressed="false"><span>${c.glyph}</span>${c.name}</button>`).join("");
+
+const allBtn = document.getElementById("showAll");
+function setFilter(f){
+  document.body.classList.remove("filtering", ...CRITERIA.map(c=>"f-"+c.key));
+  if(f) document.body.classList.add("filtering","f-"+f);
+  allBtn.setAttribute("aria-pressed", f ? "false" : "true");
+  lenses.querySelectorAll("button").forEach(b=>
+    b.setAttribute("aria-pressed", b.dataset.f===f ? "true" : "false"));
+}
+allBtn.onclick = ()=>setFilter("");
+lenses.querySelectorAll("button").forEach(b=>
+  b.onclick = ()=>setFilter(b.getAttribute("aria-pressed")==="true" ? "" : b.dataset.f));
+
+const grey = document.getElementById("grey");
+grey.onclick = ()=>{
+  const on = document.body.classList.toggle("greyscale");
+  grey.setAttribute("aria-pressed", String(on));
+};
+document.getElementById("print").onclick = ()=>window.print();
+</script>
+</body>
+</html>

@@ -25,11 +25,11 @@
   </header>
 
   <section class="grid" aria-label="History units">
-    <a class="card" data-cat="History" data-title="Ancient Australia" href="history-ancient-australia.html">
+    <a class="card" data-cat="History" data-title="Ancient Australia" href="history/batman/">
       <span class="tag" data-i18n="y7">Year 7</span>
       <span class="emoji" aria-hidden="true">🦅</span>
       <h2 data-i18n="ancientTitle">Ancient Australia</h2>
-      <p data-i18n="ancientText">The Kulin Nation and Wurundjeri people: migration, Country, the Dreaming, kinship, trade and Lake Mungo.</p>
+      <p data-i18n="ancientText">Batman's Treaty at Merri Creek. A painting showing a bargain being struck, and a Proclamation saying no such bargain was ever possible.</p>
       <span class="open" data-i18n="ancientOpen">Open the unit →</span>
     </a>
     <div class="card soon" data-i18n-title="colonisationTitle">
@@ -54,9 +54,9 @@
 const VISITS_KEY="elc_visited";
 const LANG_KEY="elc_page_language";
 const COPY={
-  en:{back:"← ELC Hub",eyebrow:"History",title:"🪃 History",intro:"One continuous thread through Aboriginal and Torres Strait Islander history: ancient Australia, the impact of colonisation, and the rights and freedoms movement.",y7:"Year 7",y9:"Year 9",y10:"Year 10",ancientTitle:"Ancient Australia",ancientText:"The Kulin Nation and Wurundjeri people: migration, Country, the Dreaming, kinship, trade and Lake Mungo.",ancientOpen:"Open the unit →",colonisationTitle:"Impact of Colonisation",colonisationText:"1788 onward: first contact, resistance and the frontier wars.",rightsTitle:"Rights & Freedoms",rightsText:"1938 to today: the referendum, the Apology and the Uluru Statement.",soon:"Coming soon",note:"No account is needed. Activity records stay in this browser."},
-  "zh-Hans":{back:"← ELC 学习中心",eyebrow:"历史",title:"🪃 历史",intro:"澳大利亚原住民和托雷斯海峡岛民历史的完整脉络：古代澳大利亚、殖民的影响，以及权利与自由运动。",y7:"7年级",y9:"9年级",y10:"10年级",ancientTitle:"古代澳大利亚",ancientText:"库林民族与沃伦杰里人：迁徙、土地、梦创时代、亲属关系、贸易与蒙戈湖。",ancientOpen:"打开本单元 →",colonisationTitle:"殖民的影响",colonisationText:"1788年起：初次接触、反抗与边疆战争。",rightsTitle:"权利与自由",rightsText:"1938年至今：公投、道歉与乌鲁鲁宣言。",soon:"即将推出",note:"无需账户。活动记录只保存在此浏览器中。"},
-  "zh-Hant":{back:"← ELC 學習中心",eyebrow:"歷史",title:"🪃 歷史",intro:"澳洲原住民和托雷斯海峽島民歷史的完整脈絡：古代澳洲、殖民的影響，以及權利與自由運動。",y7:"7年級",y9:"9年級",y10:"10年級",ancientTitle:"古代澳洲",ancientText:"庫林民族與沃倫傑里人：遷徙、土地、夢創時代、親屬關係、貿易與蒙哥湖。",ancientOpen:"開啟本單元 →",colonisationTitle:"殖民的影響",colonisationText:"1788年起：初次接觸、反抗與邊疆戰爭。",rightsTitle:"權利與自由",rightsText:"1938年至今：公投、道歉與烏魯魯宣言。",soon:"即將推出",note:"無需帳戶。活動紀錄只保存在此瀏覽器中。"},
+  en:{back:"← ELC Hub",eyebrow:"History",title:"🪃 History",intro:"One continuous thread through Aboriginal and Torres Strait Islander history: ancient Australia, the impact of colonisation, and the rights and freedoms movement.",y7:"Year 7",y9:"Year 9",y10:"Year 10",ancientTitle:"Ancient Australia",ancientText:"Batman's Treaty at Merri Creek. A painting showing a bargain being struck, and a Proclamation saying no such bargain was ever possible.",ancientOpen:"Open the unit →",colonisationTitle:"Impact of Colonisation",colonisationText:"1788 onward: first contact, resistance and the frontier wars.",rightsTitle:"Rights & Freedoms",rightsText:"1938 to today: the referendum, the Apology and the Uluru Statement.",soon:"Coming soon",note:"No account is needed. Activity records stay in this browser."},
+  "zh-Hans":{back:"← ELC 学习中心",eyebrow:"历史",title:"🪃 历史",intro:"澳大利亚原住民和托雷斯海峡岛民历史的完整脉络：古代澳大利亚、殖民的影响，以及权利与自由运动。",y7:"7年级",y9:"9年级",y10:"10年级",ancientTitle:"古代澳大利亚",ancientText:"梅里溪的巴特曼条约。一幅画描绘了一笔交易的达成，而一份公告却说这样的交易根本不可能成立。",ancientOpen:"打开本单元 →",colonisationTitle:"殖民的影响",colonisationText:"1788年起：初次接触、反抗与边疆战争。",rightsTitle:"权利与自由",rightsText:"1938年至今：公投、道歉与乌鲁鲁宣言。",soon:"即将推出",note:"无需账户。活动记录只保存在此浏览器中。"},
+  "zh-Hant":{back:"← ELC 學習中心",eyebrow:"歷史",title:"🪃 歷史",intro:"澳洲原住民和托雷斯海峽島民歷史的完整脈絡：古代澳洲、殖民的影響，以及權利與自由運動。",y7:"7年級",y9:"9年級",y10:"10年級",ancientTitle:"古代澳洲",ancientText:"梅里溪的巴特曼條約。一幅畫描繪了一筆交易的達成，而一份公告卻說這樣的交易根本不可能成立。",ancientOpen:"開啟本單元 →",colonisationTitle:"殖民的影響",colonisationText:"1788年起：初次接觸、反抗與邊疆戰爭。",rightsTitle:"權利與自由",rightsText:"1938年至今：公投、道歉與烏魯魯宣言。",soon:"即將推出",note:"無需帳戶。活動紀錄只保存在此瀏覽器中。"},
 };
 function setPageLanguage(lang){const copy=COPY[lang]||COPY.en;document.documentElement.lang=lang;document.querySelectorAll("[data-i18n]").forEach(el=>el.textContent=copy[el.dataset.i18n]);document.getElementById("pageLanguage").value=lang;localStorage.setItem(LANG_KEY,lang)}
 document.getElementById("pageLanguage").addEventListener("change",e=>setPageLanguage(e.target.value));

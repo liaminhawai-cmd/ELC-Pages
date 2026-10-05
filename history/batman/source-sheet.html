@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23223f43'/><text x='16' y='24' font-family='Georgia,serif' font-size='22' font-weight='700' fill='%23c99a2e' text-anchor='middle'>7</text></svg>">
+<meta name="description" content="One A3 landscape source sheet per source: Burtt's painting of Batman's Treaty and Governor Bourke's Proclamation, each reproduced as large as the page allows, with who made it, when, and the context needed to weigh it.">
+<title>Batman's Treaty Source Sheets</title>
+<style>
+:root{
+  --paper:#fbf7ee; --bg:#efe8dc; --ink:#20231f; --muted:#675f54; --line:#d4c8b6;
+  --deep:#223f43; --on-deep:#fbf7ee; --band:#f5f0e6;
+  --shadow:0 1px 2px rgba(48,39,24,.06),0 4px 14px rgba(48,39,24,.08);
+  --rule:#b9ac96;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#1b1e1c; --bg:#111312; --ink:#eae5db; --muted:#a49a8b; --line:#3a4038;
+    --deep:#cfe0e0; --on-deep:#111312; --band:#232725; --rule:#4a5148;
+    --shadow:0 1px 2px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1b1e1c; --bg:#111312; --ink:#eae5db; --muted:#a49a8b; --line:#3a4038;
+  --deep:#cfe0e0; --on-deep:#111312; --band:#232725; --rule:#4a5148;
+  --shadow:0 1px 2px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);
+     font-family:Georgia,"Times New Roman",serif;line-height:1.5}
+
+/* A3 landscape, 420 x 297. The source is the page: the plate runs the full
+   printable width and everything else is compressed around it. What is NOT
+   here is any note on what the picture contains. Reading the source is the
+   task the wall sets, and a sheet that hands the reading over has done the
+   task for the student. Provenance is different: who made it, when, and how
+   long after the event, is what a student needs BEFORE they can weigh it. */
+/* On screen the sheet is fluid up to its paper width: 420mm is 1587px, and a
+   school ThinkPad's window is about 1366, so a fixed-width sheet forced 221px
+   of horizontal scrolling on the machines students actually hold. Print gets
+   its exact dimensions from the print block below either way. */
+.sheet{width:min(100%,420mm);height:auto;margin:14px auto;background:var(--paper);
+       border:1px solid var(--line);box-shadow:var(--shadow);
+       padding:9mm 10mm 7mm;display:flex;flex-direction:column;overflow:hidden}
+
+/* Title left, provenance right, so the header costs one block of height
+   instead of two. */
+.head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr);
+      gap:10mm;align-items:end;margin-bottom:3mm}
+.kicker{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+        text-transform:uppercase;letter-spacing:.18em;font-size:8.5pt;font-weight:700;color:var(--muted)}
+h1{font-size:38pt;line-height:.96;color:var(--deep);letter-spacing:-.015em;margin:.5mm 0 0;font-weight:700}
+.prov{font-size:13.6pt;line-height:1.4;color:var(--ink);font-style:italic}
+.cite{display:block;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      font-style:normal;font-size:10pt;line-height:1.35;color:var(--muted);margin-top:2mm}
+.rule{height:2.2px;background:var(--deep);margin:0 0 4mm}
+
+/* ---------- the plate ----------
+   Full printable width, which on this page is 400mm, and the reason the sheet
+   is landscape at all.
+
+   batman-treaty-source.jpg is 1600x800 but the painting only occupies rows
+   30 to 768: it ships with 61px of black letterbox padding, 7.6% of the file,
+   which prints as two black bands and reads as a fault in the printing. The
+   file itself cannot be cropped, because bump-it-up.html positions its
+   hotspots as percentages of the full 1600x800 frame and every one of them
+   would shift. So the crop happens here instead, where there are no hotspots
+   to break: the box is set to the painting's true 1600x739 aspect and
+   object-fit:cover scales to the width and takes the overflow off the top and
+   bottom equally, which is where the padding is. */
+.plate{width:100%;aspect-ratio:1600/739;overflow:hidden;margin-bottom:4mm;
+       border:1px solid var(--line);background:#111}
+.plate img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}
+
+/* A written source has no aspect to preserve, so it is the one element
+   allowed to stretch into whatever room the page has left. */
+.doc{flex:1;min-height:0;border:1px solid var(--line);background:var(--band);border-radius:3px;
+     padding:8mm 10mm;margin-bottom:4mm;columns:2;column-gap:10mm;column-rule:1px solid var(--line);
+     font-size:21pt;line-height:1.48;text-align:justify;hyphens:auto}
+.doc p{margin-bottom:4mm;break-inside:avoid-column}
+.doc p:last-child{margin-bottom:0}
+
+/* ---------- the context strip ----------
+   The same FACTS the wall carries. Every sheet shows all of them, because
+   the two sources only mean anything against each other and either sheet
+   may be the only one on the wall. */
+.facts{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:auto;
+       border-top:2px solid var(--deep);padding-top:4.5mm}
+.fact{padding:0 5mm;border-left:1px solid var(--line);font-size:12.2pt;line-height:1.38}
+.fact:first-child{border-left:0;padding-left:0}
+.fact:last-child{padding-right:0}
+.fact b{display:block;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+        color:var(--deep);font-size:9.2pt;text-transform:uppercase;letter-spacing:.07em;
+        margin-bottom:1.5mm;line-height:1.25}
+
+.foot{margin-top:3mm;padding-top:2.5mm;border-top:1px solid var(--line);
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      font-size:7.2pt;color:var(--muted);line-height:1.4}
+.foot b{color:var(--ink)}
+
+@media screen and (max-width:900px){
+  .sheet{width:auto;height:auto;padding:16px;margin:0;border:0}
+  .head{grid-template-columns:1fr;gap:4mm;align-items:start}
+  .doc{columns:1}
+  .facts{grid-template-columns:1fr;gap:4mm}
+  .fact{border-left:0;padding:0}
+}
+
+@page{size:A3 landscape;margin:9mm}
+@media print{
+  :root{--paper:#fff;--bg:#fff;--ink:#000;--muted:#4a463d;--line:#c3b8a4;--rule:#9c9382;--band:#f5f0e6}
+  body{background:#fff}
+  .sheet{width:auto;height:auto;margin:0;padding:0;border:0;box-shadow:none;
+         break-after:page;min-height:calc(297mm - 18mm);max-height:calc(297mm - 18mm)}
+  .sheet:last-of-type{break-after:auto}
+  .fact{break-inside:avoid}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<main id="out"></main>
+
+<script src="content.js"></script>
+<script>
+/* One A3 landscape sheet per entry in SOURCES. Everything on it comes from
+   content.js: the plate, the citation, the standfirst and the shared FACTS.
+   Nothing here holds any wording of its own.
+
+   The hotspots are deliberately NOT printed. They are the reading of the
+   source, and the reading is what the wall and the interactive are for. */
+
+const esc = s => String(s).replace(/&(?!amp;|lt;|gt;|#\d+;|[a-z]+;)/g,"&amp;");
+const LETTERS = ["A","B","C","D"];
+
+/* Head with the work's own title where the topic gives one, falling back to
+   the tab label with its "A · " stripped. "The painting" is what this sheet
+   is; "Batman's Treaty with the Aborigines at Merri Creek" is what the thing
+   on it is called, which is the half a student needs. */
+const heading = s => s.title || s.tab.replace(/^[A-Z]\s*·\s*/,"");
+
+const plate = s => s.kind === "text"
+  ? `<div class="doc">${s.paragraphs.map(p=>`<p>${esc(p)}</p>`).join("")}</div>`
+  : `<div class="plate"><img src="${esc(s.file)}" alt="${esc(s.alt)}"></div>`;
+
+document.getElementById("out").innerHTML = SOURCES.map((s,i)=>`
+  <section class="sheet">
+    <header class="head">
+      <div>
+        <div class="kicker">Ancient Australia &middot; Source ${LETTERS[i] || i+1}</div>
+        <h1>${esc(heading(s))}</h1>
+      </div>
+      <p class="prov">${esc(s.whole.text)}
+        <span class="cite">${esc(s.cite)}</span></p>
+    </header>
+    <div class="rule"></div>
+
+    ${plate(s)}
+
+    <div class="facts">${FACTS.map(([h,t])=>`<div class="fact"><b>${h}</b>${t}</div>`).join("")}</div>
+    <p class="foot">${WALL.foot}</p>
+  </section>`).join("");
+</script>
+</body>
+</html>
