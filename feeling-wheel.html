@@ -220,6 +220,7 @@
       <button class="pill active" type="button" data-lang="en" lang="en">English</button>
       <button class="pill" type="button" data-lang="zhHans" lang="zh-Hans">简体中文（中国）</button>
       <button class="pill" type="button" data-lang="zhHant" lang="zh-Hant">繁體中文（台灣）</button>
+      <button class="pill" type="button" data-lang="yue" lang="zh-HK">廣東話（香港）</button>
       <button class="pill" type="button" data-lang="vi" lang="vi">Tiếng Việt</button>
     </div>
     <div class="spin-controls" role="group" aria-label="Spin wheel">
@@ -254,82 +255,82 @@
     </aside>
   </div>
 
-  <p class="bottom-note">Translations are classroom-friendly equivalents: emotion words do not always match one-to-one across languages. Ask which word best fits the situation.</p>
+  <p class="bottom-note">Translations are classroom-friendly equivalents: emotion words do not always match one-to-one across languages. The Cantonese option uses everyday spoken Hong Kong Cantonese. Ask which word best fits the situation.</p>
 </main>
 
 <script>
 (() => {
   "use strict";
 
-  const W = (en, zhHant, zhHans, vi) => ({ en, zhHant, zhHans, vi });
+  const W = (en, zhHant, zhHans, vi, yue) => ({ en, zhHant, zhHans, vi, yue });
   const EMOTIONS = [
     {
-      colour:"#a7efc0", core:W("Happy","快樂","快乐","Vui vẻ"), branches:[
-        [W("Playful","調皮","调皮","Tinh nghịch"), W("Aroused","興奮","兴奋","Phấn khích"), W("Cheeky","頑皮","顽皮","Lém lỉnh")],
-        [W("Content","滿足","满足","Hài lòng"), W("Free","自由","自由","Tự do"), W("Joyful","喜悅","喜悦","Hân hoan")],
-        [W("Interested","感興趣","感兴趣","Quan tâm"), W("Curious","好奇","好奇","Tò mò"), W("Inquisitive","愛探究","爱探究","Ham tìm hiểu")],
-        [W("Proud","自豪","自豪","Tự hào"), W("Successful","成功","成功","Thành công"), W("Confident","自信","自信","Tự tin")],
-        [W("Accepted","被接納","被接纳","Được chấp nhận"), W("Respected","被尊重","被尊重","Được tôn trọng"), W("Valued","被重視","被重视","Được coi trọng")],
-        [W("Powerful","強大","强大","Mạnh mẽ"), W("Courageous","勇敢","勇敢","Can đảm"), W("Creative","有創意","有创意","Sáng tạo")],
-        [W("Peaceful","平靜","平静","Bình yên"), W("Loving","有愛心","有爱心","Yêu thương"), W("Thankful","感激","感激","Biết ơn")],
-        [W("Trusting","信任","信任","Tin tưởng"), W("Sensitive","敏感","敏感","Nhạy cảm"), W("Intimate","親密","亲密","Thân mật")],
-        [W("Optimistic","樂觀","乐观","Lạc quan"), W("Hopeful","充滿希望","充满希望","Đầy hy vọng"), W("Inspired","受到啟發","受到启发","Được truyền cảm hứng")]
+      colour:"#a7efc0", core:W("Happy","快樂","快乐","Vui vẻ","開心"), branches:[
+        [W("Playful","調皮","调皮","Tinh nghịch","貪玩"), W("Aroused","興奮","兴奋","Phấn khích","好興奮"), W("Cheeky","頑皮","顽皮","Lém lỉnh","百厭")],
+        [W("Content","滿足","满足","Hài lòng","滿足"), W("Free","自由","自由","Tự do","自由自在"), W("Joyful","喜悅","喜悦","Hân hoan","好高興")],
+        [W("Interested","感興趣","感兴趣","Quan tâm","有興趣"), W("Curious","好奇","好奇","Tò mò","好奇"), W("Inquisitive","愛探究","爱探究","Ham tìm hiểu","好奇心重")],
+        [W("Proud","自豪","自豪","Tự hào","自豪"), W("Successful","成功","成功","Thành công","成功"), W("Confident","自信","自信","Tự tin","有自信")],
+        [W("Accepted","被接納","被接纳","Được chấp nhận","俾人接納"), W("Respected","被尊重","被尊重","Được tôn trọng","俾人尊重"), W("Valued","被重視","被重视","Được coi trọng","俾人重視")],
+        [W("Powerful","強大","强大","Mạnh mẽ","好有力量"), W("Courageous","勇敢","勇敢","Can đảm","夠膽"), W("Creative","有創意","有创意","Sáng tạo","有創意")],
+        [W("Peaceful","平靜","平静","Bình yên","心平氣和"), W("Loving","有愛心","有爱心","Yêu thương","有愛心"), W("Thankful","感激","感激","Biết ơn","感激")],
+        [W("Trusting","信任","信任","Tin tưởng","信任"), W("Sensitive","敏感","敏感","Nhạy cảm","敏感"), W("Intimate","親密","亲密","Thân mật","親密")],
+        [W("Optimistic","樂觀","乐观","Lạc quan","樂觀"), W("Hopeful","充滿希望","充满希望","Đầy hy vọng","有希望"), W("Inspired","受到啟發","受到启发","Được truyền cảm hứng","受啟發")]
       ]
     },
     {
-      colour:"#ffd4c2", core:W("Surprised","驚訝","惊讶","Ngạc nhiên"), branches:[
-        [W("Excited","興奮","兴奋","Hào hứng"), W("Energetic","精力充沛","精力充沛","Tràn đầy năng lượng"), W("Eager","渴望","渴望","Háo hức")],
-        [W("Amazed","驚奇","惊奇","Kinh ngạc"), W("Awe","敬畏","敬畏","Choáng ngợp"), W("Astonished","震驚","震惊","Sửng sốt")],
-        [W("Confused","困惑","困惑","Bối rối"), W("Perplexed","不知所措","不知所措","Hoang mang"), W("Disillusioned","幻滅","幻灭","Vỡ mộng")],
-        [W("Startled","吃驚","吃惊","Giật mình"), W("Dismayed","驚愕","惊愕","Hoảng hốt"), W("Shocked","震驚","震惊","Sốc")]
+      colour:"#ffd4c2", core:W("Surprised","驚訝","惊讶","Ngạc nhiên","驚訝"), branches:[
+        [W("Excited","興奮","兴奋","Hào hứng","雀躍"), W("Energetic","精力充沛","精力充沛","Tràn đầy năng lượng","好有精神"), W("Eager","渴望","渴望","Háo hức","好期待")],
+        [W("Amazed","驚奇","惊奇","Kinh ngạc","嘩然"), W("Awe","敬畏","敬畏","Choáng ngợp","讚嘆"), W("Astonished","震驚","震惊","Sửng sốt","目瞪口呆")],
+        [W("Confused","困惑","困惑","Bối rối","唔明"), W("Perplexed","不知所措","不知所措","Hoang mang","一頭霧水"), W("Disillusioned","幻滅","幻灭","Vỡ mộng","幻滅")],
+        [W("Startled","吃驚","吃惊","Giật mình","嚇親"), W("Dismayed","驚愕","惊愕","Hoảng hốt","愕然"), W("Shocked","震驚","震惊","Sốc","嚇窒")]
       ]
     },
     {
-      colour:"#fff2a8", core:W("Bad","糟糕","糟糕","Tồi tệ"), branches:[
-        [W("Tired","疲倦","疲倦","Mệt mỏi"), W("Sleepy","睏倦","困倦","Buồn ngủ"), W("Unfocused","不專心","不专心","Mất tập trung")],
-        [W("Stressed","有壓力","有压力","Căng thẳng"), W("Out of control","失控","失控","Mất kiểm soát"), W("Overwhelmed","不知所措","不知所措","Quá tải")],
-        [W("Busy","忙碌","忙碌","Bận rộn"), W("Rushed","匆忙","匆忙","Vội vã"), W("Pressured","感到壓力","感到压力","Bị áp lực")],
-        [W("Bored","無聊","无聊","Chán"), W("Apathetic","冷漠","冷漠","Thờ ơ"), W("Indifferent","漠不關心","漠不关心","Dửng dưng")]
+      colour:"#fff2a8", core:W("Bad","糟糕","糟糕","Tồi tệ","唔好受"), branches:[
+        [W("Tired","疲倦","疲倦","Mệt mỏi","攰"), W("Sleepy","睏倦","困倦","Buồn ngủ","眼瞓"), W("Unfocused","不專心","不专心","Mất tập trung","唔專心")],
+        [W("Stressed","有壓力","有压力","Căng thẳng","壓力大"), W("Out of control","失控","失控","Mất kiểm soát","失控"), W("Overwhelmed","不知所措","不知所措","Quá tải","頂唔順")],
+        [W("Busy","忙碌","忙碌","Bận rộn","好忙"), W("Rushed","匆忙","匆忙","Vội vã","趕頭趕命"), W("Pressured","感到壓力","感到压力","Bị áp lực","俾人逼")],
+        [W("Bored","無聊","无聊","Chán","悶"), W("Apathetic","冷漠","冷漠","Thờ ơ","提唔起勁"), W("Indifferent","漠不關心","漠不关心","Dửng dưng","冇所謂")]
       ]
     },
     {
-      colour:"#dce8e5", core:W("Fearful","恐懼","恐惧","Sợ hãi"), branches:[
-        [W("Scared","害怕","害怕","Sợ"), W("Helpless","無助","无助","Bất lực"), W("Frightened","驚恐","惊恐","Hoảng sợ")],
-        [W("Anxious","焦慮","焦虑","Lo âu"), W("Overwhelmed","不知所措","不知所措","Quá tải"), W("Worried","擔心","担心","Lo lắng")],
-        [W("Insecure","不安","不安","Thiếu an toàn"), W("Inadequate","覺得不足","觉得不足","Cảm thấy chưa đủ tốt"), W("Inferior","自卑","自卑","Tự ti")],
-        [W("Weak","軟弱","软弱","Yếu đuối"), W("Worthless","毫無價值","毫无价值","Vô giá trị"), W("Insignificant","微不足道","微不足道","Không đáng kể")],
-        [W("Rejected","被拒絕","被拒绝","Bị từ chối"), W("Excluded","被排斥","被排斥","Bị loại trừ"), W("Persecuted","受迫害","受迫害","Bị ngược đãi")],
-        [W("Threatened","受威脅","受威胁","Bị đe doạ"), W("Nervous","緊張","紧张","Hồi hộp"), W("Exposed","暴露","暴露","Bị phơi bày")]
+      colour:"#dce8e5", core:W("Fearful","恐懼","恐惧","Sợ hãi","驚"), branches:[
+        [W("Scared","害怕","害怕","Sợ","好驚"), W("Helpless","無助","无助","Bất lực","無助"), W("Frightened","驚恐","惊恐","Hoảng sợ","驚到震")],
+        [W("Anxious","焦慮","焦虑","Lo âu","焦慮"), W("Overwhelmed","不知所措","不知所措","Quá tải","頂唔順"), W("Worried","擔心","担心","Lo lắng","擔心")],
+        [W("Insecure","不安","不安","Thiếu an toàn","冇安全感"), W("Inadequate","覺得不足","觉得不足","Cảm thấy chưa đủ tốt","覺得自己唔夠好"), W("Inferior","自卑","自卑","Tự ti","自卑")],
+        [W("Weak","軟弱","软弱","Yếu đuối","軟弱"), W("Worthless","毫無價值","毫无价值","Vô giá trị","覺得自己冇用"), W("Insignificant","微不足道","微不足道","Không đáng kể","覺得自己唔重要")],
+        [W("Rejected","被拒絕","被拒绝","Bị từ chối","俾人拒絕"), W("Excluded","被排斥","被排斥","Bị loại trừ","俾人排擠"), W("Persecuted","受迫害","受迫害","Bị ngược đãi","俾人迫害")],
+        [W("Threatened","受威脅","受威胁","Bị đe doạ","受威脅"), W("Nervous","緊張","紧张","Hồi hộp","緊張"), W("Exposed","暴露","暴露","Bị phơi bày","無所遁形")]
       ]
     },
     {
-      colour:"#f7a7a8", core:W("Angry","憤怒","愤怒","Tức giận"), branches:[
-        [W("Let down","失望","失望","Bị thất vọng"), W("Betrayed","被背叛","被背叛","Bị phản bội"), W("Resentful","怨恨","怨恨","Ấm ức")],
-        [W("Humiliated","受辱","受辱","Bị sỉ nhục"), W("Disrespected","不被尊重","不被尊重","Không được tôn trọng"), W("Ridiculed","被嘲笑","被嘲笑","Bị chế giễu")],
-        [W("Bitter","憤恨","愤恨","Cay đắng"), W("Indignant","憤慨","愤慨","Phẫn nộ"), W("Violated","被侵犯","被侵犯","Bị xâm phạm")],
-        [W("Mad","生氣","生气","Tức tối"), W("Furious","暴怒","暴怒","Giận dữ"), W("Jealous","嫉妒","嫉妒","Ghen tị")],
-        [W("Aggressive","攻擊性","攻击性","Hung hăng"), W("Provoked","被激怒","被激怒","Bị chọc giận"), W("Hostile","敵對","敌对","Thù địch")],
-        [W("Frustrated","沮喪","沮丧","Bực bội"), W("Infuriated","狂怒","狂怒","Điên tiết"), W("Annoyed","惱火","恼火","Khó chịu")],
-        [W("Distant","疏離","疏离","Xa cách"), W("Withdrawn","退縮","退缩","Thu mình"), W("Numb","麻木","麻木","Tê liệt")],
-        [W("Critical","挑剔","挑剔","Hay chỉ trích"), W("Sceptical","懷疑","怀疑","Hoài nghi"), W("Dismissive","輕視","轻视","Coi thường")]
+      colour:"#f7a7a8", core:W("Angry","憤怒","愤怒","Tức giận","嬲"), branches:[
+        [W("Let down","失望","失望","Bị thất vọng","失望"), W("Betrayed","被背叛","被背叛","Bị phản bội","俾人出賣"), W("Resentful","怨恨","怨恨","Ấm ức","唔忿氣")],
+        [W("Humiliated","受辱","受辱","Bị sỉ nhục","俾人羞辱"), W("Disrespected","不被尊重","不被尊重","Không được tôn trọng","俾人唔尊重"), W("Ridiculed","被嘲笑","被嘲笑","Bị chế giễu","俾人笑")],
+        [W("Bitter","憤恨","愤恨","Cay đắng","心有不甘"), W("Indignant","憤慨","愤慨","Phẫn nộ","憤憤不平"), W("Violated","被侵犯","被侵犯","Bị xâm phạm","俾人侵犯")],
+        [W("Mad","生氣","生气","Tức tối","激嬲"), W("Furious","暴怒","暴怒","Giận dữ","嬲到爆"), W("Jealous","嫉妒","嫉妒","Ghen tị","妒忌")],
+        [W("Aggressive","攻擊性","攻击性","Hung hăng","好惡"), W("Provoked","被激怒","被激怒","Bị chọc giận","俾人激"), W("Hostile","敵對","敌对","Thù địch","充滿敵意")],
+        [W("Frustrated","沮喪","沮丧","Bực bội","沮喪"), W("Infuriated","狂怒","狂怒","Điên tiết","火滾"), W("Annoyed","惱火","恼火","Khó chịu","好煩")],
+        [W("Distant","疏離","疏离","Xa cách","疏遠"), W("Withdrawn","退縮","退缩","Thu mình","收埋自己"), W("Numb","麻木","麻木","Tê liệt","麻木")],
+        [W("Critical","挑剔","挑剔","Hay chỉ trích","諸多挑剔"), W("Sceptical","懷疑","怀疑","Hoài nghi","懷疑"), W("Dismissive","輕視","轻视","Coi thường","睇唔起")]
       ]
     },
     {
-      colour:"#e8d9ee", core:W("Disgusted","厭惡","厌恶","Ghê tởm"), branches:[
-        [W("Disapproving","不贊同","不赞同","Không tán thành"), W("Judgmental","愛批判","爱批判","Hay phán xét"), W("Embarrassed","尷尬","尴尬","Xấu hổ")],
-        [W("Disappointed","失望","失望","Thất vọng"), W("Appalled","駭然","骇然","Kinh hoàng"), W("Revolted","反感","反感","Ghê sợ")],
-        [W("Awful","糟透了","糟透了","Tồi tệ"), W("Nauseated","噁心","恶心","Buồn nôn"), W("Detestable","可憎","可憎","Đáng ghét")],
-        [W("Repelled","反感","反感","Bị ghê tởm"), W("Horrified","驚駭","惊骇","Khiếp sợ"), W("Hesitant","猶豫","犹豫","Do dự")]
+      colour:"#e8d9ee", core:W("Disgusted","厭惡","厌恶","Ghê tởm","嘔心"), branches:[
+        [W("Disapproving","不贊同","不赞同","Không tán thành","唔贊成"), W("Judgmental","愛批判","爱批判","Hay phán xét","鍾意批評人"), W("Embarrassed","尷尬","尴尬","Xấu hổ","尷尬")],
+        [W("Disappointed","失望","失望","Thất vọng","失望"), W("Appalled","駭然","骇然","Kinh hoàng","駭然"), W("Revolted","反感","反感","Ghê sợ","反感")],
+        [W("Awful","糟透了","糟透了","Tồi tệ","好核突"), W("Nauseated","噁心","恶心","Buồn nôn","想嘔"), W("Detestable","可憎","可憎","Đáng ghét","可惡")],
+        [W("Repelled","反感","反感","Bị ghê tởm","抗拒"), W("Horrified","驚駭","惊骇","Khiếp sợ","驚到呆"), W("Hesitant","猶豫","犹豫","Do dự","猶豫")]
       ]
     },
     {
-      colour:"#d8eaf6", core:W("Sad","悲傷","悲伤","Buồn"), branches:[
-        [W("Hurt","受傷","受伤","Tổn thương"), W("Embarrassed","尷尬","尴尬","Xấu hổ"), W("Disappointed","失望","失望","Thất vọng")],
-        [W("Depressed","情緒低落","情绪低落","Trầm uất"), W("Inferior","自卑","自卑","Tự ti"), W("Empty","空虛","空虚","Trống rỗng")],
-        [W("Guilty","內疚","内疚","Có lỗi"), W("Remorseful","懊悔","懊悔","Ân hận"), W("Ashamed","羞愧","羞愧","Hổ thẹn")],
-        [W("Despair","絕望","绝望","Tuyệt vọng"), W("Powerless","無力","无力","Bất lực"), W("Grief","悲痛","悲痛","Đau buồn")],
-        [W("Vulnerable","脆弱","脆弱","Dễ bị tổn thương"), W("Fragile","易受傷","易受伤","Mong manh"), W("Victimised","受害","受害","Bị hại")],
-        [W("Lonely","孤單","孤单","Cô đơn"), W("Abandoned","被遺棄","被遗弃","Bị bỏ rơi"), W("Isolated","被孤立","被孤立","Bị cô lập")]
+      colour:"#d8eaf6", core:W("Sad","悲傷","悲伤","Buồn","傷心"), branches:[
+        [W("Hurt","受傷","受伤","Tổn thương","受傷"), W("Embarrassed","尷尬","尴尬","Xấu hổ","尷尬"), W("Disappointed","失望","失望","Thất vọng","失望")],
+        [W("Depressed","情緒低落","情绪低落","Trầm uất","情緒低落"), W("Inferior","自卑","自卑","Tự ti","自卑"), W("Empty","空虛","空虚","Trống rỗng","空虛")],
+        [W("Guilty","內疚","内疚","Có lỗi","內疚"), W("Remorseful","懊悔","懊悔","Ân hận","後悔"), W("Ashamed","羞愧","羞愧","Hổ thẹn","羞家")],
+        [W("Despair","絕望","绝望","Tuyệt vọng","絕望"), W("Powerless","無力","无力","Bất lực","無能為力"), W("Grief","悲痛","悲痛","Đau buồn","悲痛")],
+        [W("Vulnerable","脆弱","脆弱","Dễ bị tổn thương","脆弱"), W("Fragile","易受傷","易受伤","Mong manh","好易受傷"), W("Victimised","受害","受害","Bị hại","受害")],
+        [W("Lonely","孤單","孤单","Cô đơn","孤單"), W("Abandoned","被遺棄","被遗弃","Bị bỏ rơi","俾人拋棄"), W("Isolated","被孤立","被孤立","Bị cô lập","孤立")]
       ]
     }
   ];
@@ -989,6 +990,7 @@
     en:{title:"Feeling Wheel",intro:"Start with a broad feeling, spin its arc to the top, then move outwards to find a more precise word.",language:"Wheel language",spin:"Spin",drag:"Drag anywhere to spin · click a core emotion to bring its arc to the top · use ← → on the keyboard",focus:"Words inside",choose:"Choose any word",chooseHelp:"Its translation, word family and nearby emotions will appear here.",family:"English word family",morphKey:["prefix","root","suffix"],nearby:"Nearby emotion words",tryIt:"Try it in a sentence",ring:["Core emotion","Emotion group","Precise word"]},
     zhHant:{title:"情緒輪",intro:"先選一個核心情緒，把它轉到頂部，再向外找更精確的詞語。",language:"情緒輪語言",spin:"旋轉",drag:"拖曳情緒輪來旋轉 · 點選核心情緒把該區轉到頂部 · 鍵盤可用 ← →",focus:"這個情緒裡的詞語",choose:"選擇任何詞語",chooseHelp:"這裡會顯示翻譯、英語詞族和相關情緒。",family:"英語詞族",morphKey:["前綴","詞根","後綴"],nearby:"相關情緒詞",tryIt:"放進句子裡",ring:["核心情緒","情緒類別","精確詞語"]},
     zhHans:{title:"情绪轮",intro:"先选一个核心情绪，把它转到顶部，再向外找更精确的词语。",language:"情绪轮语言",spin:"旋转",drag:"拖动情绪轮来旋转 · 点击核心情绪把该区转到顶部 · 键盘可用 ← →",focus:"这个情绪里的词语",choose:"选择任何词语",chooseHelp:"这里会显示翻译、英语词族和相关情绪。",family:"英语词族",morphKey:["前缀","词根","后缀"],nearby:"相关情绪词",tryIt:"放进句子里",ring:["核心情绪","情绪类别","精确词语"]},
+    yue:{title:"情緒輪",intro:"揀一個主要情緒，轉佢去最頂，再向外搵一個更準確嘅詞。",language:"情緒輪語言",spin:"轉",drag:"拖住情緒輪嚟轉 · 撳主要情緒，將嗰部分轉去最頂 · 鍵盤可以用 ← →",focus:"呢個情緒入面嘅詞",choose:"揀任何一個詞",chooseHelp:"呢度會顯示翻譯、英文詞族同相關情緒。",family:"英文詞族",morphKey:["前綴","詞根","後綴"],nearby:"相關情緒詞",tryIt:"放入句子度試吓",ring:["主要情緒","情緒類別","準確詞語"]},
     vi:{title:"Vòng tròn cảm xúc",intro:"Bắt đầu với một cảm xúc chính, xoay cung đó lên trên, rồi đi ra ngoài để tìm từ chính xác hơn.",language:"Ngôn ngữ",spin:"Xoay",drag:"Kéo để xoay · bấm cảm xúc chính để đưa cung lên trên · dùng phím ← →",focus:"Các từ trong cảm xúc",choose:"Chọn bất kỳ từ nào",chooseHelp:"Bản dịch, họ từ tiếng Anh và các cảm xúc gần nghĩa sẽ hiện ở đây.",family:"Họ từ tiếng Anh",morphKey:["tiền tố","gốc từ","hậu tố"],nearby:"Từ cảm xúc liên quan",tryIt:"Dùng trong câu",ring:["Cảm xúc chính","Nhóm cảm xúc","Từ cụ thể"]}
   };
 
@@ -1004,6 +1006,7 @@
   const registry = new Map();
   const byEnglish = new Map();
   const coreAngles = [];
+  const LANG_TAG = {en:"en",zhHant:"zh-Hant",zhHans:"zh-Hans",yue:"zh-HK",vi:"vi"};
   let language = "en";
   let rotation = 0;
   let selectedCore = null;
@@ -1199,7 +1202,7 @@
     detailColour.style.background = EMOTIONS[entry.coreIndex].colour;
     detailInner.innerHTML = `
       <p class="detail-kicker">${escapeHtml(ui.ring[["core","branch","leaf"].indexOf(entry.level)])}</p>
-      <h2 class="detail-word" lang="${language === "en" ? "en" : language === "vi" ? "vi" : language === "zhHant" ? "zh-Hant" : "zh-Hans"}">${escapeHtml(entry.word[language])}</h2>
+      <h2 class="detail-word" lang="${LANG_TAG[language]}">${escapeHtml(entry.word[language])}</h2>
       ${translated}
       <div class="trail">${detailTrail(entry)}</div>
       <section class="detail-section">
@@ -1240,7 +1243,7 @@
   function setLanguage(next) {
     language = next;
     const ui = UI[language];
-    document.documentElement.lang = language === "zhHant" ? "zh-Hant" : language === "zhHans" ? "zh-Hans" : language;
+    document.documentElement.lang = LANG_TAG[language];
     document.getElementById("pageTitle").textContent = ui.title;
     document.getElementById("pageIntro").textContent = ui.intro;
     document.getElementById("languageLabel").textContent = ui.language;
