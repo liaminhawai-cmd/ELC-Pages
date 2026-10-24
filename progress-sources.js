@@ -326,6 +326,30 @@ window.ELCProgress = (() => {
     };
   }
 
+  /* ---------------- Rabbit-Proof Fence ----------------
+     elc_rpf_v1 → { quiz:[{date, right, total, missed:[answer]}] }
+     Saved by rabbit-proof-fence/techniques.html. Dates are day strings,
+     like the Grammar Hub's. */
+  function rpf() {
+    const s = readJson("elc_rpf_v1", null);
+    const quiz = s && Array.isArray(s.quiz) ? s.quiz.filter((q) => q && q.date && q.total) : [];
+    if (!quiz.length) return null;
+
+    const events = quiz.map((q) => ({ day: q.date, label: "Film techniques quiz",
+                                      detail: q.right + "/" + q.total + " right first try" }));
+    const best = quiz.reduce((b, q) => ((Number(q.right) || 0) > (Number(b.right) || 0) ? q : b), quiz[0]);
+    const last = quiz[quiz.length - 1];
+    return {
+      id: "rpf", title: "Rabbit-Proof Fence", icon: "🎬", href: "rabbit-proof-fence/",
+      stats: [
+        stat(quiz.length, "quiz", "quizzes", "done"),
+        { value: best.right + "/" + best.total, label: "best quiz score" },
+        { value: last.right + "/" + last.total, label: "last quiz score" },
+      ],
+      events,
+    };
+  }
+
   /* ---------------- assembly ---------------- */
   const SAFE = (fn) => { try { return fn(); } catch (e) { console.warn("ELCProgress:", e); return null; } };
 
@@ -333,7 +357,7 @@ window.ELCProgress = (() => {
     let ph = null;
     try { ph = await phonics(); } catch (e) { console.warn("ELCProgress: phonics", e); }
     // Order is the order they appear in the record: literacy first, STEM last.
-    const live = [ph, SAFE(vocab), SAFE(grammar), SAFE(pron), SAFE(stem)].filter(Boolean);
+    const live = [ph, SAFE(vocab), SAFE(grammar), SAFE(pron), SAFE(rpf), SAFE(stem)].filter(Boolean);
     live.forEach((a) => {
       a.events = (a.events || []).filter((e) => e && e.day);
       a.lastDay = a.events.length ? a.events.map((e) => e.day).sort().slice(-1)[0] : null;

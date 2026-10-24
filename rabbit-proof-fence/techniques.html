@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Rabbit-Proof Fence film techniques: shots, angles, camera movement, sound, light and colour. Slides to teach from, and a quiz to test yourself.">
+<title>Film Techniques — Rabbit-Proof Fence</title>
+<style>
+:root{
+  --bg:#f5efe4; --card:#fffaf1; --ink:#2a2118; --muted:#6c5f50; --line:#e1d2ba;
+  --earth:#b5532a; --earth-soft:#f6dfcf; --deep:#1f4b4b; --deep-soft:#dcebe8;
+  --ok:#2f7a4a; --ok-soft:#dff1e4; --bad:#b23a2a; --bad-soft:#f8e0dc;
+  --shadow:0 1px 2px rgba(60,40,20,.06),0 6px 18px rgba(60,40,20,.08);
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#17140f; --card:#241f18; --ink:#f4ede1; --muted:#c9bba6; --line:#463c2e;
+         --earth:#e58a5c; --earth-soft:#3d2518; --deep:#8fcfc6; --deep-soft:#173230;
+         --ok:#7fd29a; --ok-soft:#173222; --bad:#f08a7a; --bad-soft:#3a1d18; --shadow:0 2px 10px rgba(0,0,0,.45); }
+}
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+button,select{font:inherit}
+a{color:inherit}
+
+/* ---------- top bar ---------- */
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--card)}
+.bar .back{color:var(--earth);font-weight:800;text-decoration:none}
+.bar .back:hover{text-decoration:underline}
+.bar h1{font-family:Georgia,"Times New Roman",serif;font-size:1.15rem;margin-right:auto}
+.tabs{display:flex;gap:4px;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:3px}
+.tabs button{border:0;background:none;color:var(--muted);font-weight:800;border-radius:999px;padding:6px 14px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--deep);color:#fff}
+.bar select{border:1px solid var(--line);border-radius:999px;padding:6px 10px;background:var(--card);color:var(--ink);font-weight:700;max-width:100%}
+
+/* ---------- slides ---------- */
+#slides{display:flex;flex-direction:column;height:calc(100dvh - 56px);min-height:420px}
+.stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:14px}
+.slide{width:min(100%,calc((100dvh - 150px) * 16 / 9));aspect-ratio:16/9;background:var(--card);border:1px solid var(--line);
+       border-radius:16px;box-shadow:var(--shadow);padding:2.4% 3%;display:flex;flex-direction:column;overflow:hidden;
+       font-size:clamp(12px,1.55vw,30px)}
+.slide .kicker{font-size:.62em;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--earth)}
+.slide h2{font-family:Georgia,"Times New Roman",serif;font-size:1.65em;line-height:1.1;margin:.15em 0 .45em;color:var(--deep)}
+.slide .cols{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:4%;align-items:start}
+.slide .cols.wide{grid-template-columns:1fr}
+.slide .rule{background:var(--deep-soft);border-left:.28em solid var(--deep);border-radius:.4em;padding:.45em .7em;margin-bottom:.6em;font-weight:650}
+.slide ul.pts{list-style:none;padding:0;display:grid;gap:.5em}
+.slide ul.pts li{padding-left:1em;position:relative;font-size:.86em;line-height:1.35}
+.slide ul.pts li::before{content:"";position:absolute;left:0;top:.5em;width:.45em;height:.45em;border-radius:50%;background:var(--earth)}
+.slide ul.pts b{color:var(--deep)}
+.slide ol.qs{padding-left:1.3em;display:grid;gap:.45em;font-size:.95em}
+.slide .figs{display:grid;gap:.6em;grid-template-columns:repeat(var(--n,1),minmax(0,1fr));align-content:start}
+.slide figure{background:var(--bg);border:1px solid var(--line);border-radius:.5em;padding:.3em;display:flex;flex-direction:column;gap:.25em}
+.slide figure svg{width:100%;height:auto;display:block;border-radius:.3em}
+.slide figcaption{font-size:.62em;font-weight:800;text-align:center;color:var(--muted)}
+.slide .terms{display:flex;flex-wrap:wrap;gap:.35em;margin-top:.5em}
+.term{font-size:.6em;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:.2em .7em}
+.term b{color:var(--earth)}
+.term .tr{margin-left:.35em;color:var(--muted)}
+.slide .note{font-size:.55em;color:var(--muted);margin-top:.4em;border-top:1px dashed var(--line);padding-top:.35em}
+.slide table.apply{width:100%;border-collapse:collapse;font-size:.54em}
+.slide table.apply th,.slide table.apply td{border:1px solid var(--line);padding:.16em .5em;text-align:left}
+.slide table.apply th{background:var(--deep-soft)}
+.slide .frame{font-size:.7em;background:var(--earth-soft);border-radius:.4em;padding:.4em .7em;margin-top:.45em}
+.slidenav{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;padding:8px 12px 12px}
+.slidenav button{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px 16px;font-weight:800;cursor:pointer}
+.slidenav button:disabled{opacity:.35;cursor:default}
+.slidenav select{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:8px;max-width:min(60vw,420px)}
+.slidenav .count{color:var(--muted);font-weight:700;min-width:5.5em;text-align:center}
+
+/* ---------- quiz ---------- */
+#quiz{max-width:780px;margin:0 auto;padding:18px 14px 50px}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px}
+.qtop{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-weight:700;font-size:.9rem;margin-bottom:8px}
+.qtext{font-size:1.15rem;font-weight:650;margin:6px 0 12px}
+.qfig{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px;margin-bottom:12px}
+.qfig svg{width:100%;height:auto;display:block;max-height:46vh}
+.opts{display:grid;gap:8px;grid-template-columns:1fr 1fr}
+.opts button{border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:12px;font-weight:700;text-align:left;cursor:pointer}
+.opts button:hover:not(:disabled){border-color:var(--deep)}
+.opts button.right{border-color:var(--ok);background:var(--ok-soft)}
+.opts button.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.feedback{margin-top:12px;padding:10px 12px;border-radius:10px;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:var(--ok-soft)}
+.feedback.no{background:var(--bad-soft)}
+.qrow{display:flex;justify-content:flex-end;gap:8px;margin-top:12px}
+.btn{border:0;border-radius:10px;padding:10px 18px;font-weight:800;cursor:pointer;background:var(--deep);color:#fff}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink)}
+.sum h2{font-family:Georgia,"Times New Roman",serif;color:var(--deep);margin-bottom:6px}
+.sum .big{font-size:2.4rem;font-weight:900;color:var(--earth)}
+.sum ul{margin:8px 0 0 1.2em}
+.sum .honest{color:var(--muted);font-size:.85rem;margin-top:10px}
+.trnote{color:var(--muted);font-size:.78rem;padding:0 16px 8px;text-align:center}
+@media (max-width:760px){
+  #slides{height:auto}
+  .slide{width:100%;aspect-ratio:auto;font-size:16px;padding:16px}
+  .slide .cols{grid-template-columns:1fr}
+  .opts{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="back" href="./">&larr; Rabbit-Proof Fence</a>
+  <h1>Film techniques</h1>
+  <div class="tabs" role="tablist" aria-label="Mode">
+    <button type="button" role="tab" id="tabSlides" aria-selected="true">Slides</button>
+    <button type="button" role="tab" id="tabQuiz" aria-selected="false">Quiz</button>
+  </div>
+  <label><span class="sr" hidden>Key words in</span><select id="lang" aria-label="Key words in another language">
+    <option value="">Key words: English only</option>
+    <option value="zh-Hans">简体中文（中国）</option>
+    <option value="zh-Hant">繁體中文（台灣）</option>
+    <option value="vi">Tiếng Việt</option>
+  </select></label>
+</header>
+
+<main id="slides">
+  <div class="stage"><section class="slide" id="slide" aria-live="polite"></section></div>
+  <nav class="slidenav" aria-label="Slides">
+    <button type="button" id="prev">&larr; Back</button>
+    <span class="count" id="count"></span>
+    <button type="button" id="next">Next &rarr;</button>
+    <select id="jump" aria-label="Go to slide"></select>
+    <button type="button" id="full">Full screen</button>
+  </nav>
+  <p class="trnote" id="trnote" hidden>Translations are drafted and not yet checked by a speaker of each language.</p>
+</main>
+
+<main id="quiz" hidden></main>
+
+<script>
+/* =======================================================================
+   CONTENT — edit here. Slides follow the unit's film techniques
+   PowerPoint; every picture is drawn below, none is a film still.
+   ======================================================================= */
+
+/* Key words, with drafted translations: Simplified (Mainland usage),
+   Traditional (Taiwan usage) and Vietnamese. */
+const TERMS = {
+  "shot":                    { "zh-Hans":"镜头", "zh-Hant":"鏡頭", vi:"cảnh quay" },
+  "framing":                 { "zh-Hans":"取景", "zh-Hant":"取景", vi:"khung hình" },
+  "extreme long shot":       { "zh-Hans":"大远景", "zh-Hant":"大遠景", vi:"đại toàn cảnh" },
+  "long shot":               { "zh-Hans":"远景", "zh-Hant":"遠景", vi:"toàn cảnh" },
+  "medium shot":             { "zh-Hans":"中景", "zh-Hant":"中景", vi:"trung cảnh" },
+  "close-up":                { "zh-Hans":"特写", "zh-Hant":"特寫", vi:"cận cảnh" },
+  "extreme close-up":        { "zh-Hans":"大特写", "zh-Hant":"大特寫", vi:"đặc tả" },
+  "setting":                 { "zh-Hans":"场景", "zh-Hant":"場景", vi:"bối cảnh" },
+  "body language":           { "zh-Hans":"肢体语言", "zh-Hant":"肢體語言", vi:"ngôn ngữ cơ thể" },
+  "camera angle":            { "zh-Hans":"拍摄角度", "zh-Hant":"拍攝角度", vi:"góc máy" },
+  "low angle":               { "zh-Hans":"仰拍镜头", "zh-Hant":"仰角鏡頭", vi:"góc máy thấp" },
+  "high angle":              { "zh-Hans":"俯拍镜头", "zh-Hant":"俯角鏡頭", vi:"góc máy cao" },
+  "eye level":               { "zh-Hans":"平视镜头", "zh-Hant":"平視鏡頭", vi:"góc ngang tầm mắt" },
+  "bird's-eye view":         { "zh-Hans":"鸟瞰镜头", "zh-Hant":"鳥瞰鏡頭", vi:"góc nhìn từ trên cao" },
+  "worm's-eye view":         { "zh-Hans":"极低角度仰拍", "zh-Hant":"極低角度仰角鏡頭", vi:"góc nhìn sát mặt đất" },
+  "Dutch angle":             { "zh-Hans":"倾斜镜头", "zh-Hant":"傾斜鏡頭", vi:"góc máy nghiêng" },
+  "point of view shot":      { "zh-Hans":"主观镜头", "zh-Hant":"主觀鏡頭", vi:"cảnh góc nhìn nhân vật" },
+  "over-the-shoulder shot":  { "zh-Hans":"过肩镜头", "zh-Hant":"過肩鏡頭", vi:"cảnh qua vai" },
+  "camera movement":         { "zh-Hans":"运镜", "zh-Hant":"運鏡", vi:"chuyển động máy quay" },
+  "pan":                     { "zh-Hans":"水平摇镜", "zh-Hant":"水平搖鏡", vi:"lia máy ngang" },
+  "tilt":                    { "zh-Hans":"垂直摇镜", "zh-Hant":"垂直搖鏡", vi:"lia máy dọc" },
+  "zoom":                    { "zh-Hans":"变焦", "zh-Hant":"變焦", vi:"thu phóng" },
+  "tracking shot":           { "zh-Hans":"跟拍镜头", "zh-Hant":"推軌鏡頭", vi:"cảnh máy di chuyển theo" },
+  "diegetic sound":          { "zh-Hans":"剧情内声音", "zh-Hant":"劇情內聲音", vi:"âm thanh trong truyện" },
+  "non-diegetic sound":      { "zh-Hans":"剧情外声音", "zh-Hant":"劇情外聲音", vi:"âm thanh ngoài truyện" },
+  "soundtrack":              { "zh-Hans":"配乐", "zh-Hant":"配樂", vi:"nhạc phim" },
+  "voice-over":              { "zh-Hans":"旁白", "zh-Hant":"旁白", vi:"lời dẫn" },
+  "silence":                 { "zh-Hans":"静默", "zh-Hant":"靜默", vi:"sự im lặng" },
+  "lighting":                { "zh-Hans":"灯光", "zh-Hant":"燈光", vi:"ánh sáng" },
+  "colour":                  { "zh-Hans":"色彩", "zh-Hant":"色彩", vi:"màu sắc" },
+  "warm colours":            { "zh-Hans":"暖色调", "zh-Hant":"暖色調", vi:"tông màu ấm" },
+  "cold colours":            { "zh-Hans":"冷色调", "zh-Hant":"冷色調", vi:"tông màu lạnh" },
+  "archival footage":        { "zh-Hans":"档案影像", "zh-Hant":"檔案影片", vi:"phim tư liệu lưu trữ" },
+  "mise en scène":           { "zh-Hans":"场面调度", "zh-Hant":"場面調度", vi:"dàn dựng cảnh" },
+  "symbol":                  { "zh-Hans":"象征", "zh-Hant":"象徵", vi:"biểu tượng" },
+  "flashback":               { "zh-Hans":"闪回", "zh-Hant":"倒敘", vi:"hồi tưởng" },
+  "effect":                  { "zh-Hans":"效果", "zh-Hant":"效果", vi:"tác động" },
+  "audience":                { "zh-Hans":"观众", "zh-Hant":"觀眾", vi:"khán giả" },
+  "timestamp":               { "zh-Hans":"时间点", "zh-Hant":"時間點", vi:"mốc thời gian" },
+  "power":                   { "zh-Hans":"权力", "zh-Hant":"權力", vi:"quyền lực" },
+  "vulnerable":              { "zh-Hans":"脆弱的", "zh-Hant":"脆弱的", vi:"dễ bị tổn thương" },
+};
+
+/* One slide = { kicker, title, rule?, points?:[[term, text]], qs?:[...],
+   figs?:[[diagram, caption]], terms?:[...], note?, table?, frame?, wide? }.
+   A point's term can be "" for a plain line. */
+const SLIDES = [
+  { kicker:"Rabbit-Proof Fence · Film techniques", title:"How a film tells a story without words",
+    rule:"A director chooses how we see and hear every moment. Those choices are film techniques.",
+    points:[["Shots","how much of the person and the place we see"],
+            ["Angles","where the camera stands"],
+            ["Movement","how the camera moves"],
+            ["Sound","what we hear, and who can hear it"],
+            ["Light and colour","how the screen feels"]],
+    figs:[["shot:els","The desert and the fence"]] },
+
+  { kicker:"Shots", title:"Framing: how much of the screen the subject fills",
+    rule:"The further away the camera, the more we see of the place. The closer the camera, the more we see of the person's feelings.",
+    figs:[["shot:els","Extreme long shot"],["shot:ls","Long shot"],["shot:ms","Medium shot"],["shot:cu","Close-up"],["shot:ecu","Extreme close-up"]],
+    wide:true, terms:["framing","extreme long shot","long shot","medium shot","close-up","extreme close-up"] },
+
+  { kicker:"Shots", title:"Long shots show the place",
+    points:[["Extreme long shot (ELS)","the land fills the screen. People are tiny."],
+            ["Long shot (LS)","the whole person, head to feet, and the place around them."],
+            ["Effect","shows where we are and how big the land is. A small person in a big place can look alone, lost or free."],
+            ["In the film","look for the three girls as small figures against the desert and the fence."]],
+    figs:[["shot:els","Extreme long shot"],["shot:ls","Long shot"]],
+    terms:["extreme long shot","long shot","setting"] },
+
+  { kicker:"Shots", title:"Medium shot: people and their body language",
+    points:[["Medium shot (MS)","shows a person from the waist up."],
+            ["Effect","we see gestures, body language and who they are with. It feels like standing near them in real life."],
+            ["Use it for","conversations, groups, people working together."]],
+    figs:[["shot:ms","Medium shot"]],
+    terms:["medium shot","body language"] },
+
+  { kicker:"Shots", title:"Close-ups show feelings",
+    points:[["Close-up (CU)","the face fills the screen."],
+            ["Extreme close-up (ECU)","one small detail: the eyes, the hands, an object."],
+            ["Effect","we read the character's emotion in detail and feel close to them. Often used for private, emotional moments."],
+            ["Watch for","an extreme close-up of an object makes it important. Ask why the director wants you to notice it."]],
+    figs:[["shot:cu","Close-up"],["shot:ecu","Extreme close-up"]],
+    terms:["close-up","extreme close-up"] },
+
+  { kicker:"Angles", title:"Camera angle: where the camera is placed",
+    rule:"The angle changes how we judge a person: strong or weak, normal or strange.",
+    figs:[["angle:low","Low angle"],["angle:eye","Eye level"],["angle:high","High angle"]],
+    wide:true, terms:["camera angle","low angle","eye level","high angle"] },
+
+  { kicker:"Angles", title:"Low angle and high angle",
+    points:[["Low angle","the camera looks up at the subject. Effect: they look big, strong and powerful, or threatening."],
+            ["High angle","the camera looks down on the subject. Effect: they look small, weak or in danger."],
+            ["Not always","a low angle can also show how a child sees an adult. Ask: whose eyes are we looking through?"],
+            ["In the film","look for who the camera looks up at, and who it looks down on."]],
+    figs:[["angle:low","Low angle: looking up"],["angle:high","High angle: looking down"]],
+    terms:["low angle","high angle","power","vulnerable"] },
+
+  { kicker:"Angles", title:"Eye level, bird's-eye and worm's-eye",
+    points:[["Eye level","the camera is at the person's eye height, like a person watching. Effect: neutral; we feel equal to the character."],
+            ["Bird's-eye view","straight down from high above. Effect: people look tiny, like on a map. It can show a pattern, or a long way to travel."],
+            ["Worm's-eye view","from the ground, looking straight up. Effect: an extreme low angle; the subject towers over us."]],
+    figs:[["angle:eye","Eye level"],["angle:bird","Bird's-eye view"],["angle:worm","Worm's-eye view"]],
+    terms:["eye level","bird's-eye view","worm's-eye view"] },
+
+  { kicker:"Angles", title:"Dutch angle, point of view, over the shoulder",
+    points:[["Dutch (canted) angle","the camera is tilted, so the horizon slopes. Effect: something feels wrong: tension, confusion, danger."],
+            ["Point of view (POV)","we see exactly what a character sees. Effect: we share their experience and their feelings."],
+            ["Over the shoulder (OTS)","the camera is behind one person, looking at another. Effect: we join the conversation."]],
+    figs:[["angle:dutch","Dutch angle"],["angle:pov","Point of view"],["angle:ots","Over the shoulder"]],
+    terms:["Dutch angle","point of view shot","over-the-shoulder shot"] },
+
+  { kicker:"Movement", title:"Camera movement: how the camera moves while filming",
+    rule:"Movement guides our eyes. It can follow someone, show a whole place, or bring us closer.",
+    figs:[["move:pan","Pan"],["move:tilt","Tilt"],["move:zoom","Zoom"],["move:track","Tracking shot"]],
+    wide:true, terms:["camera movement","pan","tilt","zoom","tracking shot"] },
+
+  { kicker:"Movement", title:"Pan and tilt: the camera turns",
+    points:[["Pan","the camera turns left or right from one spot, like turning your head. Effect: shows how wide a place is, or follows something moving across it."],
+            ["Tilt","the camera turns up or down from one spot. Effect: shows height: a tall tree, a building, a person from feet to face."]],
+    figs:[["move:pan","Pan: turns side to side"],["move:tilt","Tilt: turns up and down"]],
+    terms:["pan","tilt"] },
+
+  { kicker:"Movement", title:"Zoom and tracking",
+    points:[["Zoom","the lens changes from a wide shot to a closer shot. The camera itself does not move. Effect: pulls our attention to something; can create excitement or shock."],
+            ["Tracking (dolly) shot","the camera moves along beside the action, on a vehicle or on rails. Effect: we travel with the characters and feel part of the journey."],
+            ["In the film","look for the camera moving with the girls as they walk or run."]],
+    figs:[["move:zoom","Zoom: the lens moves in"],["move:track","Tracking: the camera travels"]],
+    terms:["zoom","tracking shot"] },
+
+  { kicker:"Sound", title:"Sound: what we hear, and who can hear it",
+    points:[["Diegetic sound","the characters can hear it: voices, footsteps, wind, a song someone sings."],
+            ["Non-diegetic sound","only the audience can hear it: background music, a narrator's voice-over."],
+            ["Silence","no sound at all. Effect: we hold our breath; a moment feels serious, shocking or lonely."],
+            ["Test it","ask: could the characters hear this? Yes: diegetic. No: non-diegetic."]],
+    figs:[["sound:world","Inside or outside the story world"]],
+    terms:["diegetic sound","non-diegetic sound","soundtrack","voice-over","silence"] },
+
+  { kicker:"Activity", title:"Close your eyes… and listen",
+    rule:"We will hear the opening of the film, from the start to about 1:54. Keep your eyes closed.",
+    qs:["What music did you hear?","What other sounds did you hear: birds, wind, footsteps, voices?","How did the sounds make you feel?","Was each sound diegetic or non-diegetic?"],
+    figs:[["icon:listen",""]],
+    note:"Teacher: play from the start to about 1:54 with the screen covered or turned away." },
+
+  { kicker:"Activity", title:"Now turn the sound off",
+    rule:"Watch the same part again with no sound at all.",
+    qs:["What did you see that you did not notice before?","Did the feeling change without sound? How?","What does the music add to the opening?"],
+    figs:[["icon:mute",""]],
+    note:"Teacher: replay the same part, muted." },
+
+  { kicker:"Light and colour", title:"Light and colour: how the screen feels",
+    points:[["Lighting","bright light can feel open and safe. Dark light and shadows can feel scary or secret."],
+            ["Colour","warm colours (gold, orange, red earth) can feel free, alive, at home. Cold colours (grey, blue) can feel sad, cold, trapped."],
+            ["In the film","compare the colours of the desert with the colours at Moore River. What changes, and why?"]],
+    figs:[["light:contrast","Warm and bright, cold and grey"]],
+    terms:["lighting","colour","warm colours","cold colours"] },
+
+  { kicker:"Other techniques", title:"Footage, the frame, symbols and flashbacks",
+    points:[["Archival footage","real film or photos from the past. Effect: reminds us the story is true. The film ends with footage of the real Molly and Daisy."],
+            ["Mise en scène","everything placed in the frame: the setting, costumes, props, where people stand. Ask: why is this here?"],
+            ["Symbol","something that stands for an idea. Think about the spirit bird and the fence: what could they stand for?"],
+            ["Flashback","a scene from an earlier time, shown inside the story. Effect: shows a memory or explains the past."]],
+    figs:[["icon:film","Archival footage"],["icon:frame","Mise en scène"]],
+    terms:["archival footage","mise en scène","symbol","flashback"] },
+
+  { kicker:"Your turn", title:"Find them in the first 10 minutes",
+    rule:"For each technique, write the time, what you see or hear, and the effect on the audience. Take a screenshot if you can.",
+    table:["Long shot","Mid shot","Close-up","High angle","Eye level","Low angle","Pan / tracking","Diegetic sound","Non-diegetic sound","Silence","Lighting / colour"],
+    frame:"At [time], the [technique] of [what we see or hear] makes the audience [feel / notice] [effect], because [reason].",
+    wide:true },
+];
+
+/* Quiz items: { fam, q, fig?, a, opts, why }. fam groups the misses on
+   the summary. Wrong answers come back at the end; the score counts
+   first tries only. */
+const QUIZ = [
+  { fam:"Shots", q:"What shot is this?", fig:"shot:els", a:"Extreme long shot", opts:["Extreme long shot","Long shot","Medium shot","Close-up"],
+    why:"The land fills the screen and the people are tiny: an extreme long shot." },
+  { fam:"Shots", q:"What shot is this?", fig:"shot:cu", a:"Close-up", opts:["Close-up","Medium shot","Extreme close-up","Long shot"],
+    why:"The face fills the screen: a close-up. Only the eyes would be an extreme close-up." },
+  { fam:"Shots", q:"What shot is this?", fig:"shot:ms", a:"Medium shot", opts:["Medium shot","Long shot","Close-up","Extreme long shot"],
+    why:"Waist up: a medium shot." },
+  { fam:"Shots", q:"What shot is this?", fig:"shot:ls", a:"Long shot", opts:["Long shot","Extreme long shot","Medium shot","Close-up"],
+    why:"The whole person, head to feet, and some of the place: a long shot." },
+  { fam:"Shots", q:"What shot is this?", fig:"shot:ecu", a:"Extreme close-up", opts:["Extreme close-up","Close-up","Medium shot","Long shot"],
+    why:"Only one small detail, the eyes: an extreme close-up." },
+  { fam:"Angles", q:"Where is the camera?", fig:"angle:low", a:"Low angle", opts:["Low angle","High angle","Eye level","Bird's-eye view"],
+    why:"The camera is below the person, looking up: a low angle." },
+  { fam:"Angles", q:"Where is the camera?", fig:"angle:high", a:"High angle", opts:["High angle","Low angle","Eye level","Worm's-eye view"],
+    why:"The camera is above the person, looking down: a high angle." },
+  { fam:"Angles", q:"What angle is this?", fig:"angle:dutch", a:"Dutch angle", opts:["Dutch angle","Eye level","Bird's-eye view","High angle"],
+    why:"The frame is tilted, so the horizon slopes: a Dutch (canted) angle." },
+  { fam:"Angles", q:"Where is the camera?", fig:"angle:bird", a:"Bird's-eye view", opts:["Bird's-eye view","High angle","Eye level","Low angle"],
+    why:"Straight down from high above: a bird's-eye view. A high angle looks down at a slope." },
+  { fam:"Angles", q:"We see exactly what the character sees. What shot is this?", fig:"angle:pov", a:"Point of view shot", opts:["Point of view shot","Over-the-shoulder shot","Eye level","Close-up"],
+    why:"Through the character's own eyes: a point of view (POV) shot." },
+  { fam:"Movement", q:"How does the camera move?", fig:"move:pan", a:"Pan", opts:["Pan","Tilt","Zoom","Tracking shot"],
+    why:"It turns left and right from one spot: a pan." },
+  { fam:"Movement", q:"How does the camera move?", fig:"move:track", a:"Tracking shot", opts:["Tracking shot","Pan","Zoom","Tilt"],
+    why:"The whole camera travels alongside the person: a tracking shot." },
+  { fam:"Movement", q:"How does the camera move?", fig:"move:zoom", a:"Zoom", opts:["Zoom","Tracking shot","Pan","Tilt"],
+    why:"The camera stays still and the lens moves in closer: a zoom." },
+  { fam:"Sound", q:"A mother sings softly to her child. The child can hear her. What kind of sound is this?", a:"Diegetic sound", opts:["Diegetic sound","Non-diegetic sound"],
+    why:"A character can hear it, so it is diegetic." },
+  { fam:"Sound", q:"Sad music plays while the girls walk. The girls cannot hear it. What kind of sound is this?", a:"Non-diegetic sound", opts:["Diegetic sound","Non-diegetic sound"],
+    why:"Only the audience hears it, so it is non-diegetic." },
+  { fam:"Sound", q:"A narrator's voice tells the story over the pictures. What kind of sound is this?", a:"Non-diegetic sound", opts:["Diegetic sound","Non-diegetic sound"],
+    why:"A voice-over is for the audience. The characters in the scene cannot hear it." },
+  { fam:"Sound", q:"The wind blows and the girls' feet crunch on the dry ground. What kind of sound is this?", a:"Diegetic sound", opts:["Diegetic sound","Non-diegetic sound"],
+    why:"The wind and the footsteps happen in the story world, so the characters can hear them." },
+  { fam:"Effect", q:"A high-angle shot of a child most often makes the child look…", a:"small and in danger", opts:["small and in danger","strong and in charge","far away and calm","angry and loud"],
+    why:"Looking down on someone makes them look smaller and weaker." },
+  { fam:"Effect", q:"Why would a director use a close-up of a face?", a:"to show the person's feelings", opts:["to show the person's feelings","to show where the scene is","to show how big the land is","to show who is in the group"],
+    why:"A close-up lets us read emotion in detail." },
+  { fam:"Effect", q:"An extreme long shot shows three tiny girls in a huge desert. What does it make the audience feel?", a:"the walk home is long and hard", opts:["the walk home is long and hard","the girls are strong and powerful","the girls are safe at home now","the desert is small and easy"],
+    why:"Tiny people in a huge place make the distance, and the danger, feel real." },
+  { fam:"Light and colour", q:"Cold, grey colours in a scene most often make the audience feel…", a:"sad, cold or trapped", opts:["sad, cold or trapped","free, warm and happy","excited and busy","proud and strong"],
+    why:"Cold colours usually feel sad or trapped; warm colours usually feel free or alive." },
+  { fam:"Sound", q:"A scene suddenly has no sound at all. What is the most likely effect?", a:"the moment feels serious or shocking", opts:["the moment feels serious or shocking","the audience stops paying attention","the film is about to finish","the characters cannot hear anything"],
+    why:"Silence makes us hold our breath. It makes a moment feel serious, shocking or lonely." },
+  { fam:"Other", q:"The film ends with real film of the real Molly and Daisy. What technique is this?", a:"Archival footage", opts:["Archival footage","Flashback","Voice-over","Close-up"],
+    why:"Real film from outside the story is archival footage. It reminds us the story is true." },
+  { fam:"Other", q:"Everything placed in the frame (the setting, costumes and props) is called…", a:"mise en scène", opts:["mise en scène","framing","soundtrack","camera angle"],
+    why:"Mise en scène means everything placed in the frame." },
+];
+
+/* =======================================================================
+   DIAGRAMS — all drawn here, nothing copied from the film.
+   ======================================================================= */
+let uid = 0;
+const C = { skyTop:"#b9d8e6", skyLow:"#f1efe2", land:"#d99a5b", landDark:"#c27f45", hill:"#c8895a", post:"#6b4a2f",
+            skin:"#6e4630", hair:"#22160f", dress:"#a5654a", dress2:"#5f7e8c", dress3:"#9a8a3e", camera:"#2c3e46", ink:"#2a2118" };
+
+/* A girl drawn with her feet at (0,0) and the top of her head at y=-153. */
+function girl(dress, scale, x, y){
+  return `<g transform="translate(${x} ${y}) scale(${scale})">
+    <path d="M-7 -58 L-9 0 M7 -58 L9 0" stroke="${C.skin}" stroke-width="7" stroke-linecap="round"/>
+    <path d="M-17 -120 Q0 -126 17 -120 L21 -56 Q0 -50 -21 -56 Z" fill="${dress}"/>
+    <path d="M-17 -116 L-25 -70 M17 -116 L25 -70" stroke="${C.skin}" stroke-width="6" stroke-linecap="round"/>
+    <rect x="-4" y="-127" width="8" height="8" fill="${C.skin}"/>
+    <circle cx="0" cy="-138" r="15" fill="${C.skin}"/>
+    <path d="M-16 -134 Q-17 -156 0 -155 Q17 -156 16 -134 L16 -126 Q13 -142 0 -146 Q-13 -142 -16 -126 Z" fill="${C.hair}"/>
+    <path d="M-8.5 -141.5 L-2.5 -142 M2.5 -142 L8.5 -141.5" stroke="${C.hair}" stroke-width="1.2" stroke-linecap="round"/>
+    <ellipse cx="-5" cy="-137.5" rx="2" ry="1.5" fill="#1a110c"/><ellipse cx="5" cy="-137.5" rx="2" ry="1.5" fill="#1a110c"/>
+    <circle cx="-4.4" cy="-138" r=".5" fill="#fff"/><circle cx="5.6" cy="-138" r=".5" fill="#fff"/>
+    <path d="M0 -136 L-1.2 -132 L1 -132" stroke="#4a2c1d" stroke-width=".8" fill="none"/>
+    <path d="M-3.5 -128.5 Q0 -127 3.5 -128.5" stroke="#4a2c1d" stroke-width="1" fill="none" stroke-linecap="round"/>
+  </g>`;
+}
+
+/* One desert scene; each shot size is just a different crop of it. */
+const SHOT_X = 1600, SHOT_Y = 1300, SHOT_U = 0.4;
+const CROPS = {           // [centre x, centre y, width] in the girl's own units
+  els: null,
+  ls:  [0, -78, 320],
+  ms:  [0, -112, 140],
+  cu:  [0, -133, 64],
+  ecu: [0, -137.5, 30],
+};
+function shotSVG(kind){
+  const id = "g" + (++uid);
+  let vb = "0 0 3200 1800";
+  if (CROPS[kind]){
+    const [cx, cy, w] = CROPS[kind], h = w * 9 / 16;
+    vb = [SHOT_X + SHOT_U * (cx - w / 2), SHOT_Y + SHOT_U * (cy - h / 2), SHOT_U * w, SHOT_U * h].map((n) => n.toFixed(2)).join(" ");
+  }
+  let fence = "";
+  for (let x = 0; x <= 3200; x += 16) fence += `<rect x="${x - 1.2}" y="1268" width="2.4" height="26" fill="${C.post}"/>`;
+  let bush = "";
+  [[300,1500,60],[900,1420,40],[2300,1460,55],[2800,1600,70],[1200,1650,80],[1950,1380,30],[600,1340,25],[1530,1312,9],[1685,1318,8]].forEach(([x,y,r]) =>
+    bush += `<ellipse cx="${x}" cy="${y}" rx="${r}" ry="${r * .45}" fill="#8f8a4a"/>`);
+  const label = { els:"Extreme long shot", ls:"Long shot", ms:"Medium shot", cu:"Close-up", ecu:"Extreme close-up" }[kind];
+  return `<svg viewBox="${vb}" preserveAspectRatio="xMidYMid slice" role="img" aria-label="${label}: drawing of a girl in the desert">
+    <defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${C.skyTop}"/><stop offset="1" stop-color="${C.skyLow}"/></linearGradient></defs>
+    <rect width="3200" height="1800" fill="url(#${id})"/>
+    <circle cx="2600" cy="330" r="110" fill="#f6d57a"/>
+    <path d="M0 1215 Q400 1150 800 1205 T1600 1195 T2400 1185 T3200 1200 L3200 1260 L0 1260 Z" fill="${C.hill}"/>
+    <rect y="1240" width="3200" height="560" fill="${C.land}"/>
+    <path d="M0 1279 L3200 1279 M0 1288 L3200 1288" stroke="${C.post}" stroke-width="1.6"/>
+    ${fence}${bush}
+    ${girl(C.dress2, SHOT_U * .82, SHOT_X - 46, SHOT_Y + 4)}
+    ${girl(C.dress, SHOT_U, SHOT_X, SHOT_Y)}
+    ${girl(C.dress3, SHOT_U * .7, SHOT_X + 42, SHOT_Y + 6)}
+  </svg>`;
+}
+
+/* Side view: where the camera stands, and what it points at. */
+function camera(x, y, deg){
+  return `<g transform="translate(${x} ${y}) rotate(${deg})">
+    <rect x="-16" y="-10" width="26" height="20" rx="4" fill="${C.camera}"/>
+    <path d="M10 -6 L22 -11 L22 11 L10 6 Z" fill="${C.camera}"/>
+    <circle cx="-9" cy="-14" r="5" fill="${C.camera}"/><circle cx="3" cy="-14" r="5" fill="${C.camera}"/>
+  </g>`;
+}
+function sideView(camX, camY, label, extra){
+  const headY = 210 - 0.9 * 138, tx = 270;
+  const deg = Math.atan2(headY - camY, tx - camX) * 180 / Math.PI;
+  return `<svg viewBox="0 0 400 240" role="img" aria-label="${label}">
+    <rect width="400" height="240" fill="#eef3ee"/>
+    <rect y="210" width="400" height="30" fill="${C.land}"/>
+    <path d="M${camX} ${camY} L${tx} ${headY - 22} M${camX} ${camY} L${tx} ${headY + 40}" stroke="#6c5f50" stroke-width="1.5" stroke-dasharray="5 4" opacity=".7"/>
+    ${girl(C.dress, 0.9, tx, 210)}
+    ${camera(camX, camY, deg)}
+    ${extra || ""}
+  </svg>`;
+}
+function angleSVG(kind){
+  if (kind === "low")  return sideView(95, 196, "Low angle: the camera is low, looking up");
+  if (kind === "high") return sideView(95, 30, "High angle: the camera is high, looking down");
+  if (kind === "eye")  return sideView(80, 210 - 0.9 * 138, "Eye level: the camera is at eye height");
+  if (kind === "worm") return sideView(232, 204, "Worm's-eye view: the camera is on the ground, looking straight up");
+  if (kind === "bird") {
+    return `<svg viewBox="0 0 400 240" role="img" aria-label="Bird's-eye view: the camera is straight above, looking down">
+      <rect width="400" height="240" fill="#eef3ee"/><rect y="210" width="400" height="30" fill="${C.land}"/>
+      <path d="M270 34 L236 70 M270 34 L304 70" stroke="#6c5f50" stroke-width="1.5" stroke-dasharray="5 4" opacity=".7"/>
+      ${girl(C.dress, 0.9, 270, 210)}
+      ${camera(270, 26, 90)}
+    </svg>`;
+  }
+  if (kind === "dutch") {
+    const id = "d" + (++uid);
+    return `<svg viewBox="0 0 400 240" role="img" aria-label="Dutch angle: the picture is tilted and the horizon slopes">
+      <rect width="400" height="240" fill="#f3efe6"/>
+      <g transform="translate(0 -8) rotate(-14 200 120)">
+        <defs><clipPath id="${id}"><rect x="70" y="45" width="260" height="146"/></clipPath></defs>
+        <g clip-path="url(#${id})">
+          <rect x="70" y="45" width="260" height="146" fill="${C.skyTop}"/>
+          <rect x="70" y="140" width="260" height="60" fill="${C.land}"/>
+          ${girl(C.dress, 0.55, 200, 178)}
+        </g>
+        <rect x="70" y="45" width="260" height="146" fill="none" stroke="${C.ink}" stroke-width="3"/>
+      </g>
+      <path d="M20 205 L380 205" stroke="#6c5f50" stroke-width="1.5" stroke-dasharray="6 5"/>
+      <text x="390" y="232" text-anchor="end" font-size="17" fill="#6c5f50">the real horizon is flat</text>
+    </svg>`;
+  }
+  if (kind === "pov") {
+    return `<svg viewBox="0 0 400 240" role="img" aria-label="Point of view: we see what the character's eyes see">
+      <rect width="400" height="240" fill="#f3efe6"/>
+      <g transform="translate(58 120)">
+        <ellipse cx="0" cy="-16" rx="22" ry="12" fill="#fff" stroke="${C.ink}" stroke-width="3"/><circle cx="4" cy="-16" r="7" fill="${C.ink}"/>
+        <ellipse cx="0" cy="16" rx="22" ry="12" fill="#fff" stroke="${C.ink}" stroke-width="3"/><circle cx="4" cy="16" r="7" fill="${C.ink}"/>
+      </g>
+      <path d="M86 104 L170 50 M86 136 L170 196" stroke="#6c5f50" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <rect x="170" y="48" width="210" height="150" fill="${C.skyTop}" stroke="${C.ink}" stroke-width="3"/>
+      <rect x="171" y="140" width="208" height="57" fill="${C.land}"/>
+      <path d="M171 152 L379 152 M171 158 L379 158" stroke="${C.post}" stroke-width="1.5"/>
+      ${[185,215,245,275,305,335,365].map((x) => `<rect x="${x}" y="144" width="3" height="20" fill="${C.post}"/>`).join("")}
+      <text x="275" y="226" text-anchor="middle" font-size="17" fill="#6c5f50">what the character sees</text>
+    </svg>`;
+  }
+  if (kind === "ots") {
+    return `<svg viewBox="0 0 400 240" role="img" aria-label="Over the shoulder: behind one person, looking at another">
+      <rect width="400" height="240" fill="${C.skyTop}"/><rect y="170" width="400" height="70" fill="${C.land}"/>
+      ${girl(C.dress, 1.05, 255, 245)}
+      <g><ellipse cx="95" cy="258" rx="105" ry="70" fill="#4a3a30"/><circle cx="110" cy="150" r="58" fill="${C.hair}"/></g>
+      <rect x="2" y="2" width="396" height="236" fill="none" stroke="${C.ink}" stroke-width="3"/>
+    </svg>`;
+  }
+  return "";
+}
+
+function moveSVG(kind){
+  const arrow = (id) => `<defs><marker id="${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="${C.earth || "#b5532a"}"/></marker></defs>`;
+  const id = "m" + (++uid);
+  if (kind === "pan") {
+    return `<svg viewBox="0 0 400 240" role="img" aria-label="Pan: the camera turns left and right from one spot">${arrow(id)}
+      <rect width="400" height="240" fill="#f3efe6"/>
+      <path d="M200 190 L70 50 M200 190 L150 40" stroke="#6c5f50" stroke-width="1.5" stroke-dasharray="5 4" opacity=".55"/>
+      <path d="M200 190 L250 40 M200 190 L330 50" stroke="#6c5f50" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <path d="M110 108 Q200 48 290 108" fill="none" stroke="#b5532a" stroke-width="5" marker-start="url(#${id})" marker-end="url(#${id})"/>
+      ${camera(200, 190, -90)}
+      <text x="200" y="234" text-anchor="middle" font-size="17" fill="#6c5f50">from above: it stays in one spot</text>
+    </svg>`;
+  }
+  if (kind === "tilt") {
+    return `<svg viewBox="0 0 400 240" role="img" aria-label="Tilt: the camera turns up and down from one spot">${arrow(id)}
+      <rect width="400" height="240" fill="#eef3ee"/><rect y="210" width="400" height="30" fill="${C.land}"/>
+      <path d="M296 210 L300 70" stroke="#6b4a2f" stroke-width="12"/>
+      <ellipse cx="300" cy="62" rx="62" ry="40" fill="#7f9a52"/><ellipse cx="270" cy="88" rx="40" ry="26" fill="#8faa5f"/>
+      <path d="M110 150 L300 40 M110 150 L300 200" stroke="#6c5f50" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <path d="M150 80 Q205 130 150 190" fill="none" stroke="#b5532a" stroke-width="5" marker-start="url(#${id})" marker-end="url(#${id})"/>
+      ${camera(100, 150, 0)}
+    </svg>`;
+  }
+  if (kind === "zoom") {
+    return `<svg viewBox="0 0 400 240" role="img" aria-label="Zoom: the camera stays still; the picture gets closer">${arrow(id)}
+      <rect width="400" height="240" fill="#f3efe6"/>
+      <rect x="40" y="20" width="320" height="180" fill="none" stroke="${C.ink}" stroke-width="3"/>
+      <rect x="120" y="65" width="160" height="90" fill="none" stroke="#b5532a" stroke-width="3" stroke-dasharray="7 5"/>
+      <path d="M60 36 L112 60 M340 36 L288 60 M60 184 L112 160 M340 184 L288 160" stroke="#b5532a" stroke-width="4" marker-end="url(#${id})"/>
+      <text x="200" y="228" text-anchor="middle" font-size="17" fill="#6c5f50">the camera stays still</text>
+    </svg>`;
+  }
+  if (kind === "track") {
+    return `<svg viewBox="0 0 400 240" role="img" aria-label="Tracking shot: the camera travels alongside the person">${arrow(id)}
+      <rect width="400" height="240" fill="#eef3ee"/><rect y="150" width="400" height="90" fill="${C.land}"/>
+      ${girl(C.dress, 0.6, 210, 160)}
+      <path d="M240 112 L300 112" stroke="#b5532a" stroke-width="5" marker-end="url(#${id})"/>
+      <path d="M20 222 L380 222 M20 232 L380 232" stroke="#6b4a2f" stroke-width="3"/>
+      ${[40,80,120,160,200,240,280,320,360].map((x) => `<rect x="${x}" y="218" width="5" height="18" fill="#6b4a2f"/>`).join("")}
+      <rect x="150" y="196" width="70" height="16" rx="4" fill="#6b4a2f"/><circle cx="162" cy="214" r="6" fill="${C.ink}"/><circle cx="208" cy="214" r="6" fill="${C.ink}"/>
+      ${camera(185, 184, -12)}
+      <path d="M230 196 L300 196" stroke="#b5532a" stroke-width="5" marker-end="url(#${id})"/>
+    </svg>`;
+  }
+  return "";
+}
+
+function soundSVG(){
+  const viewer = (x, y) => `<circle cx="${x}" cy="${y}" r="12" fill="#5d4a3a"/><path d="M${x - 20} ${y + 34} Q${x} ${y + 8} ${x + 20} ${y + 34} Z" fill="#5d4a3a"/>`;
+  return `<svg viewBox="0 0 480 270" role="img" aria-label="Diegetic sound is inside the story world; non-diegetic sound reaches only the audience">
+    <rect width="480" height="270" fill="#f3efe6"/>
+    <rect x="14" y="16" width="292" height="214" rx="14" fill="#e3efe9" stroke="#1f4b4b" stroke-width="2.5" stroke-dasharray="9 6"/>
+    <text x="30" y="40" font-size="15" font-weight="700" fill="#1f4b4b">The story world</text>
+    ${girl(C.dress2, 0.85, 110, 200)}${girl(C.dress, 0.62, 180, 200)}
+    <path d="M128 92 q8 -8 16 0 M134 82 q12 -12 24 0" stroke="#1f4b4b" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    <text x="232" y="104" font-size="22" fill="#1f4b4b">♪</text>
+    <text x="30" y="218" font-size="13" fill="#1f4b4b">Diegetic: the characters can hear it</text>
+    <text x="336" y="52" font-size="26" fill="#b5532a">♫</text><text x="384" y="74" font-size="26" fill="#b5532a">♪</text><text x="430" y="50" font-size="26" fill="#b5532a">♫</text>
+    <path d="M396 84 L396 124" stroke="#b5532a" stroke-width="2" stroke-dasharray="4 4"/>
+    ${viewer(364, 140)}${viewer(410, 140)}${viewer(456, 140)}
+    <text x="318" y="204" font-size="13" fill="#b5532a">the audience</text>
+    <text x="318" y="236" font-size="13" font-weight="700" fill="#b5532a">Non-diegetic: only</text>
+    <text x="318" y="253" font-size="13" font-weight="700" fill="#b5532a">the audience hears it</text>
+  </svg>`;
+}
+
+function lightSVG(){
+  const a = "w" + (++uid), b = "c" + (++uid);
+  return `<svg viewBox="0 0 480 236" role="img" aria-label="Warm, bright colour beside cold, grey colour">
+    <defs>
+      <linearGradient id="${a}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6c66a"/><stop offset="1" stop-color="#e08a46"/></linearGradient>
+      <linearGradient id="${b}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8d99a3"/><stop offset="1" stop-color="#5d6b78"/></linearGradient>
+    </defs>
+    <rect x="8" y="8" width="226" height="170" rx="10" fill="url(#${a})"/>
+    <circle cx="180" cy="50" r="24" fill="#fff1b8"/>
+    <path d="M8 140 Q120 120 234 140 L234 178 L8 178 Z" fill="#c4672f"/>
+    <rect x="246" y="8" width="226" height="170" rx="10" fill="url(#${b})"/>
+    <rect x="300" y="88" width="120" height="70" fill="#4c5560"/><path d="M290 90 L360 50 L430 90 Z" fill="#3e4650"/>
+    ${[262,290,318,346,374,402,430,458].map((x) => `<path d="M${x} 20 l-10 26 M${x + 10} 52 l-10 26" stroke="#d6dde3" stroke-width="2"/>`).join("")}
+    <text x="121" y="200" text-anchor="middle" font-size="15" font-weight="800" fill="#9a4a1e">Warm and bright</text>
+    <text x="121" y="222" text-anchor="middle" font-size="14" fill="#9a4a1e">free, alive, at home</text>
+    <text x="359" y="200" text-anchor="middle" font-size="15" font-weight="800" fill="#3e4c5a">Cold and grey</text>
+    <text x="359" y="222" text-anchor="middle" font-size="14" fill="#3e4c5a">sad, cold, trapped</text>
+  </svg>`;
+}
+
+function iconSVG(kind){
+  if (kind === "listen") return `<svg viewBox="0 0 400 240" role="img" aria-label="Eyes closed, listening">
+      <rect width="400" height="240" fill="#f3efe6"/>
+      <path d="M90 120 Q140 150 190 120" stroke="${C.ink}" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <path d="M210 120 Q260 150 310 120" stroke="${C.ink}" stroke-width="6" fill="none" stroke-linecap="round"/>
+      ${[0,1,2].map((i) => `<path d="M${330 + i * 16} ${96 - i * 10} q${14 + i * 6} ${24 + i * 10} 0 ${48 + i * 20}" stroke="#b5532a" stroke-width="4" fill="none" stroke-linecap="round"/>`).join("")}
+      <text x="200" y="200" text-anchor="middle" font-size="16" fill="#6c5f50">eyes closed: just listen</text></svg>`;
+  if (kind === "mute") return `<svg viewBox="0 0 400 240" role="img" aria-label="Sound off">
+      <rect width="400" height="240" fill="#f3efe6"/>
+      <path d="M140 95 L175 95 L215 60 L215 180 L175 145 L140 145 Z" fill="${C.ink}"/>
+      <path d="M245 90 L305 150 M305 90 L245 150" stroke="#b5532a" stroke-width="10" stroke-linecap="round"/>
+      <text x="200" y="215" text-anchor="middle" font-size="16" fill="#6c5f50">sound off: just watch</text></svg>`;
+  if (kind === "film") return `<svg viewBox="0 0 400 240" role="img" aria-label="A strip of old film">
+      <rect width="400" height="240" fill="#f3efe6"/>
+      <rect x="40" y="50" width="320" height="140" fill="#2a2118"/>
+      ${[60,100,140,180,220,260,300,340].map((x) => `<rect x="${x - 6}" y="58" width="12" height="10" rx="2" fill="#f3efe6"/><rect x="${x - 6}" y="172" width="12" height="10" rx="2" fill="#f3efe6"/>`).join("")}
+      ${[60,160,260].map((x) => `<rect x="${x}" y="78" width="88" height="84" fill="#b9ad97"/>`).join("")}
+      ${[104,204,304].map((x) => `<circle cx="${x}" cy="108" r="12" fill="#6e6252"/><path d="M${x - 18} 160 Q${x} 128 ${x + 18} 160 Z" fill="#6e6252"/>`).join("")}
+    </svg>`;
+  if (kind === "frame") return `<svg viewBox="0 0 400 240" role="img" aria-label="Everything placed in the frame: setting, costume, props">
+      <rect width="400" height="240" fill="${C.skyTop}"/><rect y="160" width="400" height="80" fill="${C.land}"/>
+      ${girl(C.dress, 0.8, 200, 205)}
+      <rect x="280" y="150" width="60" height="40" fill="#8a6a4a"/>
+      <path d="M20 168 L380 168 M20 176 L380 176" stroke="${C.post}" stroke-width="2"/>
+      ${[30,70,110,290,330,370].map((x) => `<rect x="${x}" y="160" width="4" height="24" fill="${C.post}"/>`).join("")}
+      <g font-size="19" font-weight="700" fill="#1f4b4b">
+        <text x="14" y="32">setting: desert, fence</text>
+        <text x="222" y="100">costume</text><path d="M224 104 L206 130" stroke="#1f4b4b" stroke-width="2"/>
+        <text x="292" y="140">prop</text>
+      </g>
+      <rect x="2" y="2" width="396" height="236" fill="none" stroke="${C.ink}" stroke-width="3"/></svg>`;
+  return "";
+}
+
+function diagram(key){
+  const [k, v] = key.split(":");
+  if (k === "shot") return shotSVG(v);
+  if (k === "angle") return angleSVG(v);
+  if (k === "move") return moveSVG(v);
+  if (k === "sound") return soundSVG();
+  if (k === "light") return lightSVG();
+  if (k === "icon") return iconSVG(v);
+  return "";
+}
+
+/* =======================================================================
+   APP
+   ======================================================================= */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+};
+const LANG_KEY = "elc_rpf_lang", SLIDE_KEY = "elc_rpf_slide", RESULT_KEY = "elc_rpf_v1";
+let lang = store.get(LANG_KEY, null);
+if (lang == null) { try { const p = localStorage.getItem("elc_page_language"); lang = (p === "zh-Hans" || p === "zh-Hant") ? p : ""; } catch (e) { lang = ""; } }
+$("lang").value = lang;
+
+function termChip(t){
+  const tr = lang && TERMS[t] && TERMS[t][lang];
+  return `<span class="term"><b>${esc(t)}</b>${tr ? `<span class="tr" lang="${lang}">${esc(tr)}</span>` : ""}</span>`;
+}
+
+/* ---------- slides ---------- */
+let si = Math.min(Math.max(0, store.get(SLIDE_KEY, 0) | 0), SLIDES.length - 1);
+$("jump").innerHTML = SLIDES.map((s, i) => `<option value="${i}">${i + 1}. ${esc(s.title)}</option>`).join("");
+
+function renderSlide(){
+  const s = SLIDES[si];
+  const figs = (s.figs || []).filter(([k]) => k);
+  const figHtml = figs.length ? `<div class="figs" style="--n:${s.wide ? Math.min(figs.length, 5) : Math.min(figs.length, 2)}">${
+    figs.map(([k, cap]) => `<figure>${diagram(k)}${cap ? `<figcaption>${esc(cap)}</figcaption>` : ""}</figure>`).join("")}</div>` : "";
+  const text = `${s.rule ? `<p class="rule">${esc(s.rule)}</p>` : ""}
+    ${s.points ? `<ul class="pts">${s.points.map(([t, x]) => `<li>${t ? `<b>${esc(t)}:</b> ` : ""}${esc(x)}</li>`).join("")}</ul>` : ""}
+    ${s.qs ? `<ol class="qs">${s.qs.map((q) => `<li>${esc(q)}</li>`).join("")}</ol>` : ""}
+    ${s.table ? `<table class="apply"><thead><tr><th>Technique</th><th>Example (time + screenshot)</th><th>Effect on the audience</th></tr></thead><tbody>${
+        s.table.map((t) => `<tr><td>${esc(t)}</td><td></td><td></td></tr>`).join("")}</tbody></table>` : ""}
+    ${s.frame ? `<p class="frame"><b>Sentence frame:</b> ${esc(s.frame)}</p>` : ""}`;
+  $("slide").innerHTML = `<div class="kicker">${esc(s.kicker)}</div><h2>${esc(s.title)}</h2>
+    <div class="cols${s.wide ? " wide" : ""}">${s.wide ? `<div>${text}${figHtml}</div>` : `<div>${text}</div>${figHtml}`}</div>
+    ${s.terms ? `<div class="terms">${s.terms.map(termChip).join("")}</div>` : ""}
+    ${s.note ? `<p class="note">${esc(s.note)}</p>` : ""}`;
+  fitFigs();
+  $("count").textContent = `${si + 1} / ${SLIDES.length}`;
+  $("prev").disabled = si === 0;
+  $("next").disabled = si === SLIDES.length - 1;
+  $("jump").value = String(si);
+  $("trnote").hidden = !lang;
+  store.set(SLIDE_KEY, si);
+}
+/* Make the pictures as big as the space left on the slide allows: try
+   each number of columns and keep the one that gives the biggest. */
+function fitFigs(){
+  const figs = document.querySelector("#slide .figs");
+  if (!figs) return;
+  figs.style.gridTemplateColumns = figs.style.justifyContent = "";
+  if (matchMedia("(max-width:760px)").matches) return;
+  const cols = figs.closest(".cols"), list = [...figs.children];
+  const svg0 = list[0].querySelector("svg").getBoundingClientRect();
+  const padW = list[0].offsetWidth - svg0.width;
+  let padH = list[0].offsetHeight - svg0.height;
+  const gap = parseFloat(getComputedStyle(figs).columnGap) || 0;
+  const ar = Math.min(...list.map((f) => { const b = f.querySelector("svg").viewBox.baseVal; return b && b.height ? b.width / b.height : 16 / 9; }));
+  for (let pass = 0; pass < 2; pass++){
+    const W = figs.clientWidth, H = cols.getBoundingClientRect().bottom - figs.getBoundingClientRect().top;
+    let best = { w: 0, n: 1, rows: 1 };
+    for (let n = 1; n <= list.length; n++){
+      const rows = Math.ceil(list.length / n);
+      const w = Math.min((W - (n - 1) * gap) / n, ((H - (rows - 1) * gap) / rows - padH) * ar + padW);
+      if (w > best.w + 1) best = { w, n, rows };
+    }
+    figs.style.gridTemplateColumns = `repeat(${best.n}, ${Math.floor(best.w)}px)`;
+    figs.style.justifyContent = "center";
+    const over = figs.getBoundingClientRect().bottom - cols.getBoundingClientRect().bottom;
+    if (over <= 0.5) break;
+    padH += over / best.rows;   // a caption wrapped: leave room and try once more
+  }
+}
+addEventListener("resize", fitFigs);
+const go = (n) => { si = Math.min(Math.max(0, n), SLIDES.length - 1); renderSlide(); };
+$("prev").onclick = () => go(si - 1);
+$("next").onclick = () => go(si + 1);
+$("jump").onchange = (e) => go(+e.target.value);
+$("full").onclick = () => {
+  const el = document.documentElement;
+  if (!document.fullscreenElement && el.requestFullscreen) el.requestFullscreen().catch(() => {});
+  else if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+};
+document.addEventListener("keydown", (e) => {
+  if ($("slides").hidden || e.target.closest("select,input,textarea")) return;
+  if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); go(si + 1); }
+  if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); go(si - 1); }
+});
+
+/* ---------- quiz ---------- */
+let queue = [], first = {}, done = 0;
+const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+function startQuiz(){ queue = QUIZ.map((_, i) => i); first = {}; done = 0; showQ(); }
+function showQ(){
+  if (!queue.length) return summary();
+  const it = QUIZ[queue[0]];
+  const opts = it.opts.length === 2 ? it.opts : shuffle(it.opts);
+  $("quiz").innerHTML = `<div class="qcard">
+    <div class="qtop"><span>${esc(it.fam)}</span><span>${done} of ${QUIZ.length} right</span></div>
+    ${it.fig ? `<div class="qfig">${diagram(it.fig)}</div>` : ""}
+    <p class="qtext">${esc(it.q)}</p>
+    <div class="opts">${opts.map((o) => `<button type="button" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>
+    <div class="feedback" id="fb"></div>
+    <div class="qrow"><button type="button" class="btn ghost" id="skip">Skip for now</button><button type="button" class="btn" id="qnext" hidden>Next &rarr;</button></div>
+  </div>`;
+  const qi = queue[0];
+  $("quiz").querySelectorAll(".opts button").forEach((b) => b.onclick = () => {
+    const ok = b.dataset.o === it.a;
+    if (first[qi] === undefined) first[qi] = ok;
+    $("quiz").querySelectorAll(".opts button").forEach((x) => {
+      x.disabled = true;
+      if (x.dataset.o === it.a) x.classList.add("right");
+    });
+    if (!ok) b.classList.add("wrong");
+    const fb = $("fb");
+    fb.className = "feedback show " + (ok ? "ok" : "no");
+    fb.innerHTML = `<b>${ok ? "Right." : `Not this time. The answer is: ${esc(it.a)}.`}</b> ${esc(it.why)}${ok ? "" : " This one comes back at the end."}`;
+    queue.shift();
+    if (ok) done++; else queue.push(qi);
+    $("skip").hidden = true;
+    $("qnext").hidden = false;
+    $("qnext").focus();
+  });
+  $("skip").onclick = () => { queue.push(queue.shift()); showQ(); };
+  $("qnext").onclick = showQ;
+}
+function summary(){
+  const right = QUIZ.filter((_, i) => first[i] === true).length;
+  const missed = QUIZ.map((it, i) => first[i] === false ? it : null).filter(Boolean);
+  const byFam = {};
+  missed.forEach((it) => (byFam[it.fam] = byFam[it.fam] || []).push(it.a));
+  const day = new Date(), pad = (n) => String(n).padStart(2, "0");
+  const date = `${day.getFullYear()}-${pad(day.getMonth() + 1)}-${pad(day.getDate())}`;
+  const rec = store.get(RESULT_KEY, { quiz: [] });
+  rec.quiz = (rec.quiz || []).concat([{ date, right, total: QUIZ.length, missed: missed.map((m) => m.a) }]).slice(-30);
+  store.set(RESULT_KEY, rec);
+  const line = `Rabbit-Proof Fence film techniques\t${date}\t${right}/${QUIZ.length} right first try\t${missed.length ? "Missed: " + missed.map((m) => m.a).join("; ") : "No misses"}`;
+  $("quiz").innerHTML = `<div class="qcard sum">
+    <h2>Quiz finished</h2>
+    <div class="big">${right} / ${QUIZ.length}</div>
+    <p>right on the first try.</p>
+    ${missed.length ? `<p style="margin-top:10px"><b>Go back over these slides:</b></p><ul>${
+      Object.keys(byFam).map((f) => `<li><b>${esc(f)}:</b> ${esc(byFam[f].join(", "))}</li>`).join("")}</ul>` : `<p style="margin-top:10px">No misses.</p>`}
+    <div class="qrow" style="justify-content:flex-start">
+      <button type="button" class="btn" id="again">Try again</button>
+      <button type="button" class="btn ghost" id="copy">Copy my result</button>
+    </div>
+    <p class="honest">Saved on this device only, so it shows in your ELC Hub report. It cannot tell whether you had help.</p>
+  </div>`;
+  $("again").onclick = startQuiz;
+  $("copy").onclick = () => {
+    const done = () => { $("copy").textContent = "Copied"; };
+    if (navigator.clipboard) navigator.clipboard.writeText(line).then(done, () => prompt("Copy this:", line));
+    else prompt("Copy this:", line);
+  };
+}
+
+/* ---------- modes ---------- */
+function setMode(m){
+  const quiz = m === "quiz";
+  $("slides").hidden = quiz; $("quiz").hidden = !quiz;
+  $("tabSlides").setAttribute("aria-selected", String(!quiz));
+  $("tabQuiz").setAttribute("aria-selected", String(quiz));
+  if (quiz && !queue.length && !Object.keys(first).length) startQuiz();
+  history.replaceState(null, "", quiz ? "#quiz" : "#slides");
+}
+$("tabSlides").onclick = () => setMode("slides");
+$("tabQuiz").onclick = () => setMode("quiz");
+$("lang").onchange = (e) => { lang = e.target.value; store.set(LANG_KEY, lang); renderSlide(); };
+
+renderSlide();
+setMode(location.hash === "#quiz" ? "quiz" : "slides");
+</script>
+</body>
+</html>
