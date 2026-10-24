@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231f4b4b'/><path d='M4 13h24M4 19h24' stroke='%23e8b36a' stroke-width='2'/><path d='M9 8v18M16 8v18M23 8v18' stroke='%23f5efe4' stroke-width='3' stroke-linecap='round'/></svg>">
+<meta name="description" content="Rabbit-Proof Fence word bank: the extra words from the film and the articles, to look up like a dictionary.">
+<title>Word Bank — Rabbit-Proof Fence</title>
+<style>
+:root{
+  --bg:#f5efe4; --card:#fffaf1; --ink:#2a2118; --muted:#6c5f50; --line:#e1d2ba;
+  --earth:#b5532a; --deep:#1f4b4b; --deep-soft:#dcebe8; --warn:#9b2c1d; --warn-soft:#f8e0dc;
+  --mpre:#2b6cb0; --mpre-bg:#e3eefa; --mroot:#9a5a1c; --mroot-bg:#f6e7d6; --msuf:#2f7a4a; --msuf-bg:#dff1e4;
+  --shadow:0 1px 2px rgba(60,40,20,.06),0 4px 14px rgba(60,40,20,.08);
+}
+@media (prefers-color-scheme:dark){
+  :root{ --bg:#17140f; --card:#241f18; --ink:#f4ede1; --muted:#c9bba6; --line:#463c2e;
+         --earth:#e58a5c; --deep:#8fcfc6; --deep-soft:#173230; --warn:#f08a7a; --warn-soft:#3a1d18;
+         --mpre:#8ab8ee; --mpre-bg:#16263a; --mroot:#e2a868; --mroot-bg:#33240f; --msuf:#7fd29a; --msuf-bg:#173222;
+         --shadow:0 2px 10px rgba(0,0,0,.45); }
+}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.45}
+button,select,input{font:inherit}
+
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:10px 16px;border-bottom:1px solid var(--line);background:var(--card)}
+.bar .back{color:var(--earth);font-weight:800;text-decoration:none}
+.bar .back:hover{text-decoration:underline}
+.bar h1{font-family:Georgia,"Times New Roman",serif;font-size:1.15rem;margin-right:auto}
+.bar select{border:1px solid var(--line);border-radius:999px;padding:6px 10px;background:var(--card);color:var(--ink);font-weight:700;max-width:100%}
+
+main{max-width:980px;margin:0 auto;padding:18px 16px 50px}
+.lead{color:var(--muted);margin-bottom:12px}
+.lead a{color:var(--earth);font-weight:700}
+#q{width:100%;border:2px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--card);color:var(--ink);font-size:1.05rem}
+#q:focus{outline:none;border-color:var(--deep)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px}
+.chips button{border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:5px 12px;font-weight:700;font-size:.85rem;cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--deep);border-color:var(--deep);color:#fff}
+.count{color:var(--muted);font-size:.88rem;margin:8px 0 12px}
+
+.list{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(290px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--earth);border-radius:14px;padding:14px 15px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:7px}
+.card.warn{border-left-color:var(--warn)}
+.head{display:flex;align-items:flex-start;gap:8px}
+.word{font-family:Georgia,"Times New Roman",serif;font-size:1.35rem;font-weight:700;line-height:1.15;color:var(--deep)}
+.say{border:0;background:none;cursor:pointer;font-size:1.05rem;padding:0 2px;line-height:1.2}
+.tag{margin-left:auto;font-size:.68rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 8px;white-space:nowrap}
+.tr{font-size:1.05rem;font-weight:650}
+.tr .py{font-weight:400;color:var(--muted);font-size:.9rem;margin-left:6px}
+.parts{display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;font-size:.86rem}
+.part{border-radius:7px;padding:1px 7px;border:1px solid}
+.part b{font-family:ui-monospace,Menlo,Consolas,monospace}
+.part i{color:var(--muted);margin-left:4px}
+.part.prefix{color:var(--mpre);background:var(--mpre-bg);border-color:var(--mpre)}
+.part.root{color:var(--mroot);background:var(--mroot-bg);border-color:var(--mroot)}
+.part.suffix{color:var(--msuf);background:var(--msuf-bg);border-color:var(--msuf)}
+.plus{color:var(--muted)}
+.story{font-size:.86rem;color:var(--muted)}
+.meaning{font-size:.95rem}
+.note{font-size:.85rem;background:var(--warn-soft);color:var(--ink);border-radius:8px;padding:7px 9px}
+.note b{color:var(--warn)}
+.hub{font-size:.83rem}
+.hub a{color:var(--deep);font-weight:700}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.8rem;color:var(--muted);margin-top:4px}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;background:var(--c)}
+.empty{color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:12px;padding:16px}
+.trnote{color:var(--muted);font-size:.78rem;margin-top:22px}
+mark{background:#f6d57a;color:inherit;border-radius:3px;padding:0 1px}
+</style>
+</head>
+<body>
+<header class="bar">
+  <a class="back" href="./">&larr; Rabbit-Proof Fence</a>
+  <h1>Word bank</h1>
+  <select id="lang" aria-label="Show translations in">
+    <option value="">English only</option>
+    <option value="zh-Hant" lang="zh-Hant">Mandarin (Traditional) · 繁體國語</option>
+    <option value="zh-Hans" lang="zh-Hans">Mandarin (Simplified) · 简体普通话</option>
+    <option value="vi" lang="vi">Vietnamese · Tiếng Việt</option>
+  </select>
+</header>
+<main>
+  <p class="lead">The extra words from the film and the articles we read. Look a word up here like a dictionary. The key words for the unit are in the <a href="vocab-hub.html">vocab hub</a>.</p>
+  <input id="q" type="search" placeholder="Search a word, a meaning, or your own language…" aria-label="Search the word bank" autocomplete="off">
+  <div class="chips" id="chips" role="group" aria-label="Show words from"></div>
+  <div class="legend" aria-hidden="true"><span style="--c:var(--mpre)">prefix (start)</span><span style="--c:var(--mroot)">root (heart)</span><span style="--c:var(--msuf)">suffix (end)</span></div>
+  <p class="count" id="count" aria-live="polite"></p>
+  <div class="list" id="list"></div>
+  <p class="trnote" id="trnote" hidden>Translations are drafted and not yet checked by a speaker of each language.</p>
+</main>
+
+<!-- =======================================================================
+     WORDS. One word per line, columns separated by TABS, in the same order
+     as the vocabulary spreadsheet, so rows can be copied straight from it
+     (columns B to H):
+       Scene | Source | Word | Morphemes / Origin | Meaning | Chinese | Vietnamese
+     then two more columns this page adds:
+       | Traditional Chinese (Taiwan usage) | Note (shown in red, for warnings)
+     Chinese is Simplified, with pinyin in brackets: 逮捕 (dàibǔ).
+     Morphemes are written piece (“meaning”) + piece (“meaning”); a prefix
+     ends in -, a suffix starts with -. A row with no Traditional Chinese
+     shows none: Simplified is never shown in its place.
+     ======================================================================= -->
+<script type="text/plain" id="words">
+Scene 1	Rabbit Proof Fence	apprehend	ad- (“toward”) + prehendere (“to seize”)	To arrest or capture someone	逮捕 (dàibǔ)	bắt giữ	逮捕
+Scene 1	Rabbit Proof Fence	authorities	author (“power”) + -ity (“state”) + -es (plural)	People or organisations with power to enforce laws	当局 (dāngjú)	chính quyền	當局
+Scene 3	Rabbit Proof Fence	captor	capere (“to seize”) + -or (“one who”)	A person who has captured someone	俘获者 (fúhuò zhě)	kẻ bắt giữ	俘獲者
+Scene 3	Rabbit Proof Fence	concealment	con- (“together”) + celare (“to hide”) + -ment (“action”)	The act of hiding something or someone	隐藏 (yǐncáng)	che giấu	隱藏
+Scene 1	Rabbit Proof Fence	deportation	de- (“away”) + portare (“to carry”) + -tion (“act of”)	The act of forcing someone to leave a place or country	驱逐出境 (qūzhú chūjìng)	trục xuất	驅逐出境
+Scene 5	Rabbit Proof Fence	desolation	de- (“completely”) + solus (“alone”) + -tion (“state”)	A state of emptiness or misery	荒凉 (huāngliáng)	hoang tàn	荒涼
+Scene 5	Rabbit Proof Fence	determination	de- (“completely”) + terminare (“to set boundaries”) + -tion (“process”)	Firmness of purpose; resolve	决心 (juéxīn)	quyết tâm	決心
+Scene 4	Rabbit Proof Fence	dehydration	de- (“remove”) + hydro (“water”) + -tion (“state”)	Loss of body water due to heat or lack of drinking	脱水 (tuōshuǐ)	mất nước	脫水
+Scene 2	Rabbit Proof Fence	discipline	dis- (“apart”) + capere → ciplin (“to grasp”)	Training that enforces rules and control	纪律 (jìlǜ)	kỷ luật	紀律
+Scene 2	Rabbit Proof Fence	domestic	domus (“house”) + -tic (“related to”)	Related to the home or household work	家务的 (jiāwù de)	nội trợ	家務的
+Scene 5	Rabbit Proof Fence	endurance	en- (“make”) + durare (“to last”) + -ance (“quality”)	The ability to withstand hardship or fatigue	耐力 (nàilì)	sức bền	耐力
+Scene 4	Rabbit Proof Fence	exhaustion	ex- (“out”) + haurire (“to drain”) + -tion (“process”)	Extreme physical or mental tiredness	疲惫 (píbèi)	kiệt sức	疲憊
+Scene 6	Rabbit Proof Fence	freedom	free (“not restrained”) + -dom (“state of being”)	The condition of being free from control or oppression	自由 (zìyóu)	tự do	自由
+Scene 1	Rabbit Proof Fence	half-caste	half (“partly”) + caste (“social rank”)	An offensive term the government used in the 1930s for Aboriginal people with one white parent or grandparent	混血儿（冒犯性的旧称） (hùnxuèr)	con lai (cách gọi xúc phạm thời xưa)	混血兒（冒犯性的舊稱）	Offensive. The 1930s law used this word to decide which children could be taken. Never use it to describe a person; write it in quotation marks only when you discuss the film or its history.
+Scene 2	Rabbit Proof Fence	institution	in- (“in”) + statuere (“to set up”) + -tion (“act of”)	A large organization, especially one run by government or church	机构 (jīgòu)	cơ sở	機構
+Scene 2	Rabbit Proof Fence	indoctrinate	in- (“into”) + doctrina (“teaching”) + -ate (“cause to be”)	To teach someone to accept beliefs uncritically	灌输 (guànshū)	nhồi sọ	灌輸（思想）
+Scene 2	Rabbit Proof Fence	obedience	ob- (“toward”) + audire (“to hear”) + -ence (“state of”)	The act of following orders or authority	服从 (fúcóng)	vâng lời	服從
+Scene 2	Rabbit Proof Fence	obedient	ob- (“toward”) + audire (“to hear”) + -ent (“being”)	Willing to follow orders or rules	听话的 (tīnghuà de)	ngoan ngoãn	聽話的
+Scene 4	Rabbit Proof Fence	spear	Old English spere (“pointed weapon”)	A pole weapon with a pointed tip	矛 (máo)	cây giáo	長矛
+Scene 1	Rabbit Proof Fence	outback	out + back (“remote inland area”)	Remote, sparsely populated parts of Australia	内陆地区 (nèilù dìqū)	vùng hoang vu	澳洲內陸（偏遠地區）
+Scene 3	Rabbit Proof Fence	pursuer	pur- (“forward”, from pro-) + sequi (“to follow”) + -er (“one who”)	Someone who chases or follows another	追捕者 (zhuībǔ zhě)	kẻ truy đuổi	追捕者
+Scene 5	Rabbit Proof Fence	perseverance	per- (“through”) + severus (“strict”) + -ance (“quality”)	Continued effort despite difficulty	毅力 (yìlì)	kiên trì	毅力
+Scene 5	Rabbit Proof Fence	sanctuary	sanctus (“holy”) + -ary (“place for”)	A safe or sacred place of refuge	避难所 (bìnàn suǒ)	nơi trú ẩn	避難所
+Scene 3	Rabbit Proof Fence	stealthily	stealth (“secret action”) + -ily (“in a manner”)	In a quiet or secretive way	偷偷地 (tōutōu de)	lén lút	偷偷地
+Scene 4	Rabbit Proof Fence	tracker	track (“trail”) + -er (“one who does”)	A person skilled at following animal or human tracks	追踪者 (zhuīzōng zhě)	người lần theo dấu	追蹤者
+Scene 4	Rabbit Proof Fence	tracking	track (“trail”) + -ing (“ongoing action”)	Following footprints or traces to find someone	跟踪 (gēnzōng)	theo dõi	追蹤
+Scene 4	Rabbit Proof Fence	tracker’s skill	track + -er (“one who”) + skill (“ability”)	The ability to follow traces or signs expertly	跟踪技巧 (gēnzōng jìqiǎo)	kỹ năng lần dấu	追蹤技巧
+Scene 3	Rabbit Proof Fence	trespass	trans- (“across”) + passus (“step”)	To enter someone’s land without permission	擅入 (shànrù)	xâm phạm	擅自進入
+</script>
+
+<script>
+/* Words that are also taught in the vocab hub, and the lesson they are in. */
+const IN_HUB = { "determination":"2.2", "freedom":"2.3" };
+
+/* ===================================================================== */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} },
+};
+/* Search ignores case and Vietnamese tone marks: "bat giu" finds "bắt giữ". */
+const fold = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/đ/g, "d");
+
+function parseParts(text){
+  const pieces = String(text || "").split(/\s+\+\s+/).map((p) => p.trim()).filter(Boolean);
+  const parts = pieces.map((p) => {
+    const m = p.match(/^(.+?)\s*\((.+)\)\s*$/);
+    const piece = (m ? m[1] : p).trim();
+    const gloss = m ? m[2].replace(/[“”"]/g, "").trim() : "";
+    const type = /-$/.test(piece) ? "prefix" : /^-/.test(piece) ? "suffix" : "root";
+    return { piece, gloss, type };
+  });
+  return parts;
+}
+const WORDS = $("words").textContent.split("\n").map((line) => line.replace(/\r$/, "")).filter((l) => l.trim()).map((line) => {
+  const c = line.split("\t").map((x) => x.trim());
+  const zhm = (c[5] || "").match(/^(.*?)\s*\(([^()]*)\)\s*$/);
+  return {
+    scene: c[0] || "", source: c[1] || "", w: c[2] || "", morph: c[3] || "", meaning: c[4] || "",
+    tr: { "zh-Hans": zhm ? zhm[1] : (c[5] || ""), vi: c[6] || "", "zh-Hant": c[7] || "" },
+    py: zhm ? zhm[2] : "", note: c[8] || "",
+  };
+}).filter((w) => w.w);
+WORDS.forEach((w) => { w.parts = parseParts(w.morph); });
+WORDS.sort((a, b) => a.w.localeCompare(b.w, "en", { sensitivity: "base" }));
+
+const LANG_KEY = "elc_rpf_lang";
+let lang = store.get(LANG_KEY, null);
+if (lang == null) { try { const p = localStorage.getItem("elc_page_language"); lang = (p === "zh-Hans" || p === "zh-Hant") ? p : ""; } catch (e) { lang = ""; } }
+$("lang").value = lang;
+
+/* filter chips: one per scene or source, in the order they first appear */
+const groupOf = (w) => w.scene || w.source || "Other";
+const GROUPS = [...new Set(WORDS.map(groupOf))].sort((a, b) => a.localeCompare(b, "en", { numeric: true }));
+let group = "";
+function drawChips(){
+  $("chips").innerHTML = [["", "All words"]].concat(GROUPS.map((g) => [g, g])).map(([v, t]) =>
+    `<button type="button" data-g="${esc(v)}" aria-pressed="${group === v}">${esc(t)}</button>`).join("");
+  $("chips").querySelectorAll("button").forEach((b) => b.onclick = () => { group = b.dataset.g; drawChips(); draw(); });
+}
+
+/* Read-aloud: the browser's own speech engine, nothing leaves the device. */
+const TTS = "speechSynthesis" in window;
+let voice = null;
+if (TTS) { const pick = () => { const vs = speechSynthesis.getVoices(); voice = vs.find((v) => v.lang === "en-AU") || vs.find((v) => v.lang && v.lang.startsWith("en")) || null; }; pick(); speechSynthesis.onvoiceschanged = pick; }
+function speak(t){ if (!TTS) return; speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); if (voice) u.voice = voice; u.lang = (voice && voice.lang) || "en-AU"; u.rate = .9; speechSynthesis.speak(u); }
+
+function score(w, q){
+  const word = fold(w.w);
+  if (word === q) return 1000;
+  if (word.startsWith(q)) return 800;
+  if (word.includes(q)) return 600;
+  if (fold(w.meaning).includes(q)) return 400;
+  if (Object.values(w.tr).some((t) => fold(t).includes(q)) || fold(w.py).replace(/\s/g, "").includes(q.replace(/\s/g, ""))) return 300;
+  if (w.parts.some((p) => fold(p.piece).replace(/-/g, "") === q.replace(/-/g, "") || fold(p.gloss).includes(q))) return 250;
+  return 0;
+}
+function hi(text, q){
+  if (!q) return esc(text);
+  const i = fold(text).indexOf(q);
+  if (i < 0 || fold(text).length !== text.length) return esc(text);
+  return esc(text.slice(0, i)) + "<mark>" + esc(text.slice(i, i + q.length)) + "</mark>" + esc(text.slice(i + q.length));
+}
+function card(w, q){
+  const tr = lang && w.tr[lang];
+  const showParts = w.parts.length >= 2;
+  const partsHtml = showParts ? `<div class="parts">${w.parts.map((p) =>
+      `<span class="part ${p.type}"><b>${esc(p.piece)}</b>${p.gloss ? `<i>${esc(p.gloss)}</i>` : ""}</span>`).join('<span class="plus">+</span>')}</div>`
+    : (w.morph ? `<p class="story">Word story: ${esc(w.morph)}</p>` : "");
+  const hub = IN_HUB[w.w.toLowerCase()];
+  return `<article class="card${w.note ? " warn" : ""}">
+    <div class="head"><span class="word">${hi(w.w, q)}</span>${TTS ? `<button class="say" type="button" data-say="${esc(w.w)}" aria-label="Read ${esc(w.w)} aloud" title="Read aloud">&#128266;</button>` : ""}
+      <span class="tag">${esc(groupOf(w))}</span></div>
+    ${tr ? `<div class="tr" lang="${lang}">${esc(tr)}${lang === "zh-Hans" && w.py ? `<span class="py">${esc(w.py)}</span>` : ""}</div>` : ""}
+    ${partsHtml}
+    <p class="meaning">${hi(w.meaning, q)}</p>
+    ${w.note ? `<p class="note"><b>Careful:</b> ${esc(w.note)}</p>` : ""}
+    ${hub ? `<p class="hub">Also a key word in the <a href="vocab-hub.html">vocab hub</a>, lesson ${esc(hub)}.</p>` : ""}
+  </article>`;
+}
+function draw(){
+  const q = fold($("q").value.trim());
+  let list = WORDS.filter((w) => !group || groupOf(w) === group);
+  if (q) list = list.map((w) => [w, score(w, q)]).filter(([, s]) => s).sort((a, b) => b[1] - a[1] || a[0].w.localeCompare(b[0].w)).map(([w]) => w);
+  const where = group ? ` in ${group}` : "";
+  $("count").textContent = q
+    ? (list.length ? `${list.length} matching word${list.length === 1 ? "" : "s"}${where}` : `Nothing matched${where}. Try part of the word, or its meaning.`)
+    : `${list.length} word${list.length === 1 ? "" : "s"}${where}, A to Z. Start typing to search.`;
+  $("list").innerHTML = list.length ? list.map((w) => card(w, q)).join("") : `<p class="empty">No words here yet. Check the spelling, or search the <a href="vocab-hub.html">vocab hub</a>.</p>`;
+  $("list").querySelectorAll(".say").forEach((b) => b.onclick = () => speak(b.dataset.say));
+  $("trnote").hidden = !lang;
+}
+$("q").addEventListener("input", draw);
+$("lang").onchange = (e) => { lang = e.target.value; store.set(LANG_KEY, lang); draw(); };
+drawChips();
+draw();
+</script>
+</body>
+</html>

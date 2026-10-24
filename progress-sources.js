@@ -328,26 +328,37 @@ window.ELCProgress = (() => {
 
   /* ---------------- Rabbit-Proof Fence ----------------
      elc_rpf_v1 → { quiz:[{date, right, total, missed:[answer]}] }
-     Saved by rabbit-proof-fence/techniques.html. Dates are day strings,
-     like the Grammar Hub's. */
+       saved by rabbit-proof-fence/techniques.html; dates are day strings.
+     elc.rpf.vocabhub.v1 → { lessons:{id:{buildComplete, applyDone, ...}},
+       reviews:[{when, got, total, missed}] }  saved by the vocab hub.
+     A lesson finish carries no time, so lessons count towards the totals
+     but only reviews appear on a dated line. */
   function rpf() {
     const s = readJson("elc_rpf_v1", null);
     const quiz = s && Array.isArray(s.quiz) ? s.quiz.filter((q) => q && q.date && q.total) : [];
-    if (!quiz.length) return null;
+    const v = readJson("elc.rpf.vocabhub.v1", null);
+    const lessons = v && v.lessons && typeof v.lessons === "object" ? Object.values(v.lessons) : [];
+    const reviews = v && Array.isArray(v.reviews) ? v.reviews.filter((r) => r && r.when) : [];
+    const lessonsDone = lessons.filter((l) => l && l.buildComplete && l.applyDone).length;
+    if (!quiz.length && !lessonsDone && !reviews.length) return null;
 
     const events = quiz.map((q) => ({ day: q.date, label: "Film techniques quiz",
                                       detail: q.right + "/" + q.total + " right first try" }));
-    const best = quiz.reduce((b, q) => ((Number(q.right) || 0) > (Number(b.right) || 0) ? q : b), quiz[0]);
-    const last = quiz[quiz.length - 1];
-    return {
-      id: "rpf", title: "Rabbit-Proof Fence", icon: "🎬", href: "rabbit-proof-fence/",
-      stats: [
-        stat(quiz.length, "quiz", "quizzes", "done"),
-        { value: best.right + "/" + best.total, label: "best quiz score" },
-        { value: last.right + "/" + last.total, label: "last quiz score" },
-      ],
-      events,
-    };
+    reviews.forEach((r) => {
+      const day = dayOf(r.when);
+      if (day) events.push({ day, label: "Vocab hub review", detail: r.got + "/" + r.total + " right first try" });
+    });
+    const stats = [];
+    if (quiz.length) {
+      const best = quiz.reduce((b, q) => ((Number(q.right) || 0) > (Number(b.right) || 0) ? q : b), quiz[0]);
+      stats.push(stat(quiz.length, "quiz", "quizzes", "done"),
+                 { value: best.right + "/" + best.total, label: "best quiz score" });
+    }
+    if (lessonsDone || reviews.length) {
+      stats.push(stat(lessonsDone, "vocab lesson", null, "finished"),
+                 stat(reviews.length, "vocab review", null, "done"));
+    }
+    return { id: "rpf", title: "Rabbit-Proof Fence", icon: "🎬", href: "rabbit-proof-fence/", stats, events };
   }
 
   /* ---------------- assembly ---------------- */

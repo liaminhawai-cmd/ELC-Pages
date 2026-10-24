@@ -1,0 +1,2315 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231f4b4b'/><path d='M4 13h24M4 19h24' stroke='%23e8b36a' stroke-width='2'/><path d='M9 8v18M16 8v18M23 8v18' stroke='%23f5efe4' stroke-width='3' stroke-linecap='round'/></svg>">
+<title>Rabbit-Proof Fence: Vocab Hub</title>
+<meta name="description" content="The essential words for the Rabbit-Proof Fence film study, lesson by lesson. Build each word from its morphemes, then keep it alive with quick reviews.">
+<style>
+  /* Suite family with the Water in the World vocab hub: same warm paper, same
+     Georgia display face, same two-accent system, here for the Rabbit-Proof Fence film study.
+     ochre for land & movement, teal for evidence & sources. Two quieter
+     accents extend it: plum for beliefs & values, storm-red for law & custom. */
+  :root{
+    --bg:#f2ece0; --paper:#fbf7ef; --ink:#211d17; --muted:#6c6353;
+    --line:#d9cfb9; --line-soft:#e8e0ce;
+    --earth:#b0741f; --earth-d:#8f5d16;      /* primary accent: land & movement */
+    --water:#2c7488; --water-d:#215866;      /* secondary accent: evidence & sources */
+    --people:#7a4a6f; --people-d:#5e3755;    /* beliefs & values: plum          */
+    --hazard:#a8432f; --hazard-d:#86331f;    /* law & custom: storm red         */
+    --correct:#2f6a3e; --wrong:#a8432f;
+    --okbg:#eef4ec; --badbg:#f6ece8;
+    --waterbg:#e6f0f1; --earthbg:#f4ead7; --peoplebg:#f1e6ee; --hazardbg:#f6e4df;
+    --stretch:#1f4e5e; --stretchbg:#e2edf0;
+    --base:#7c6a3c; --basebg:#f2ecdb;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg);
+       min-height:100vh;padding:16px;display:flex;justify-content:center;align-items:flex-start;color:var(--ink)}
+  .container{background:var(--paper);border:1px solid var(--line);border-radius:12px;
+       max-width:920px;width:100%;padding:26px;margin-top:12px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+  h1{text-align:center;font-size:24px;font-family:Georgia,'Times New Roman',serif;letter-spacing:.3px}
+  h2{font-family:Georgia,serif;font-size:18px;margin:4px 0 10px}
+  h3{font-family:Georgia,serif;font-size:15px;margin:18px 0 8px}
+  .subtitle{color:var(--muted);text-align:center;margin:6px 0 18px;font-size:13px}
+  .muted{color:var(--muted);font-size:13px;line-height:1.5}
+  .screen{display:none}.screen.active{display:block}
+  button{font-family:inherit}
+  .btn{padding:11px 18px;border:1px solid var(--line);border-radius:8px;font-size:15px;font-weight:600;
+       cursor:pointer;background:var(--paper);color:var(--ink);transition:all .15s ease}
+  .btn-primary{background:var(--earth);color:#fff;border-color:var(--earth)}
+  .btn-primary:hover:not(:disabled){background:var(--earth-d)}
+  .btn-primary:disabled{background:var(--line);border-color:var(--line);color:var(--muted);cursor:not-allowed}
+  .btn-water{background:var(--water);color:#fff;border-color:var(--water)}
+  .btn-water:hover:not(:disabled){background:var(--water-d)}
+  .btn-ghost{background:var(--bg);color:var(--muted)}
+  .btn-ghost:hover{color:var(--ink);border-color:var(--ink)}
+  .linkbtn{background:none;border:none;color:var(--earth);font-weight:600;font-size:13px;cursor:pointer;padding:4px 8px}
+  .linkbtn:hover{text-decoration:underline}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .progress{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.4px}
+  button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--earth);outline-offset:2px}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important}}
+
+  /* ---- key-word translations (EAL) ---- */
+  .langrow{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:0 0 16px;
+       font-size:12.5px;color:var(--muted);font-weight:600}
+  .langrow select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);
+       font-family:inherit;font-size:13px;color:var(--ink)}
+  .wtr{font-size:14px;color:var(--water-d);font-weight:600;background:var(--waterbg);border-radius:6px;padding:1px 8px}
+  .wtr.big{font-size:16px}
+
+  /* ---- home: unit map ---- */
+  .topichead{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);
+       margin:18px 0 8px;border-bottom:1px solid var(--line-soft);padding-bottom:4px}
+  .lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+  .lcard{border:1px solid var(--line-soft);border-radius:10px;background:var(--paper);padding:12px 14px;
+       text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px;transition:border-color .15s ease}
+  .lcard:hover{border-color:var(--earth)}
+  .lcard .lnum{font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--muted)}
+  .lcard .lname{font-family:Georgia,serif;font-size:15px;font-weight:700;line-height:1.25}
+  .lcard .lstat{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px}
+  .lcard.done{border-color:var(--correct)}
+  .chip{font-size:10px;font-weight:800;letter-spacing:.4px;border-radius:20px;padding:2px 8px;background:var(--bg);color:var(--muted)}
+  .chip.ok{background:var(--okbg);color:var(--correct)}
+  .chip.now{background:var(--earth);color:#fff}
+  .chip.part{background:var(--earthbg);color:var(--earth-d)}
+  .chip.str{background:var(--stretchbg);color:var(--stretch)}
+  .chip.base{background:var(--basebg);color:var(--base)}
+  .homerow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+  @media(max-width:640px){.homerow{grid-template-columns:1fr}}
+  .panelcard{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--bg)}
+  .panelcard .t{font-family:Georgia,serif;font-weight:700;font-size:15px;margin-bottom:4px}
+  .panelcard .d{font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+  details.teach{margin-top:16px;border:1px dashed var(--line);border-radius:10px;padding:10px 14px}
+  details.teach summary{font-size:12px;font-weight:700;color:var(--muted);cursor:pointer}
+  details.teach p{font-size:12.5px;color:var(--muted);line-height:1.55;margin:8px 0}
+
+  /* ---- lesson home: step cards ---- */
+  .focusline{text-align:center;font-family:Georgia,serif;font-size:15px;color:var(--ink);
+       background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;padding:10px 14px;margin:0 0 14px;line-height:1.45}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+  .step{display:flex;align-items:center;gap:14px;border:1px solid var(--line-soft);border-radius:10px;
+        padding:14px 16px;background:var(--paper);text-align:left;cursor:pointer;width:100%}
+  .step:hover:not(:disabled){border-color:var(--earth)}
+  .step:disabled{opacity:.55;cursor:not-allowed}
+  .step .num{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--line);
+        display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+  .step.done .num{background:var(--okbg);border-color:var(--correct);color:var(--correct)}
+  .step .t{font-weight:700;font-size:15px}
+  .step .d{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .step .tag{margin-left:auto;font-size:11px;font-weight:800;letter-spacing:.4px;color:var(--muted);flex-shrink:0;text-align:right}
+  .step.done .tag{color:var(--correct)}
+  .tierbar{border-radius:10px;padding:12px 16px;margin:10px 0;font-size:13.5px;line-height:1.5;display:flex;
+       gap:12px;align-items:center;flex-wrap:wrap}
+  .tierbar .grow{flex:1;min-width:200px}
+  .tierbar b{display:block;font-family:Georgia,serif;font-size:14.5px}
+  .tierbar.base{background:var(--basebg);border:1px solid #d8c893}
+  .tierbar.stretch{background:var(--stretchbg);border:1px solid #b9d2da}
+  .tierbar .btn{padding:8px 14px;font-size:13.5px}
+
+  /* ---- study list ---- */
+  .vcard{border:1px solid var(--line-soft);border-radius:10px;padding:14px 16px;margin-bottom:10px;background:var(--paper)}
+  .vcard .top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .vcard .w{font-family:Georgia,serif;font-size:23px;font-weight:700}
+  .vcard .w .mp{color:var(--mpre)} .vcard .w .mr{color:var(--mroot)} .vcard .w .ms{color:var(--msuf)} .vcard .w .mc{color:var(--mcon)}
+  .vcard .pos{font-size:12px;color:var(--muted);font-style:italic}
+  .vcard .meaning{font-size:14px;margin:6px 0;line-height:1.5}
+  .vcard .morph{font-size:13.5px;color:var(--muted);line-height:1.7;border-top:1px dashed var(--line-soft);padding-top:6px;margin-top:6px}
+  .vcard .morph b,.vcard .morph i{color:var(--ink)}
+  code.mp,code.mr,code.ms,code.mc{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;font-size:16px}
+  code.mp{color:var(--mpre)} code.mr{color:var(--mroot)} code.ms{color:var(--msuf)} code.mc{color:var(--mcon)}
+  .dtag{margin-left:auto;font-size:10.5px;font-weight:800;letter-spacing:.5px;padding:3px 9px;border-radius:20px;flex-shrink:0}
+  .dtag.water{color:var(--water-d);background:var(--waterbg)}
+  .dtag.earth{color:var(--earth-d);background:var(--earthbg)}
+  .dtag.people{color:var(--people-d);background:var(--peoplebg)}
+  .dtag.hazard{color:var(--hazard-d);background:var(--hazardbg)}
+
+  /* ---- word builder ---- */
+  .buildword{font-family:Georgia,serif;font-size:22px;text-align:center;margin-bottom:2px;color:var(--muted)}
+  .slots,.bank{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:14px 0}
+  .slot{min-width:78px;min-height:50px;border:2px dashed var(--line);border-radius:9px;
+        display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;padding:6px 12px;background:var(--bg)}
+  .slot.filled{border-style:solid;border-color:var(--correct);background:var(--okbg);color:var(--correct)}
+  .joiner{align-self:center;font-size:18px;color:var(--muted);font-weight:700}
+  .tile{min-width:78px;padding:9px 14px;border:1px solid var(--line);border-radius:9px;background:var(--paper);
+        cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.15;transition:all .12s ease}
+  .tile:hover:not(:disabled){border-color:var(--earth)}
+  .tile:disabled{opacity:.3;cursor:default}
+  .tile .mm{font-weight:800;font-size:16px}
+  .tile .gl{font-size:11px;color:var(--muted)}
+  .tile.shake{animation:shake .3s;border-color:var(--wrong)}
+  .tile.shake .mm,.tile.shake .gl{color:var(--wrong)}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  .buildprog{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-bottom:14px}
+  .bdot{width:12px;height:12px;border-radius:50%;border:1px solid var(--line);background:var(--bg)}
+  .bdot.done{background:var(--correct);border-color:var(--correct)}
+  .bdot.now{border-color:var(--earth);background:var(--paper);box-shadow:0 0 0 2px rgba(176,116,31,.3)}
+  .maprow{margin:12px auto 2px;max-width:560px;font-size:13px;color:var(--muted);line-height:1.7;text-align:center}
+  .maprow b{color:var(--ink)}
+  .reveal{border:1px solid var(--correct);background:var(--okbg);border-radius:10px;padding:14px 16px;
+          margin:14px 0;font-size:14.5px;line-height:1.6;display:none}
+  .reveal.show{display:block}
+  .reveal .rw{font-family:Georgia,serif;font-weight:700}
+
+  /* ---- task shell (apply / review / tiers) ---- */
+  .prompt{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px}
+  .qtext{font-size:17px;line-height:1.6;margin-bottom:16px}
+  .qtext .gap{display:inline-block;min-width:120px;border-bottom:2px solid var(--ink);text-align:center;font-weight:800;color:var(--earth)}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opts.chips{flex-direction:row;flex-wrap:wrap}
+  .opt{padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);font-size:15px;
+       text-align:left;cursor:pointer;line-height:1.5}
+  .chips .opt{flex:0 0 auto;padding:9px 16px}
+  .opt:hover:not(:disabled){border-color:var(--earth)}
+  .opt:disabled{cursor:default}
+  .opt.right{background:var(--okbg);border-color:var(--correct);color:var(--correct);font-weight:700}
+  .opt.wrongpick{background:var(--badbg);border-color:var(--wrong);color:var(--wrong)}
+  .feedback{margin-top:14px;padding:12px 14px;border-radius:8px;font-size:14px;line-height:1.55;display:none}
+  .feedback.ok{display:block;background:var(--okbg);border:1px solid var(--correct)}
+  .feedback.bad{display:block;background:var(--badbg);border:1px solid var(--wrong)}
+  .nextrow{margin-top:16px;display:flex;justify-content:flex-end;gap:8px}
+  .reviewtag{font-size:11px;font-weight:800;letter-spacing:.4px;color:var(--water-d);background:var(--waterbg);
+       border-radius:20px;padding:3px 10px;display:inline-block;margin-bottom:10px}
+
+  /* ---- diagrams (unused in this module, kept for shared engine) ---- */
+  .svgbox{border:1px solid var(--line-soft);border-radius:10px;background:var(--bg);padding:10px;margin:0 auto 16px;
+          max-width:360px;display:flex;justify-content:center}
+  .svgbox svg{width:100%;height:auto;display:block}
+
+  /* ---- summary ---- */
+  .sumbox{border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0;text-align:center}
+  .sumbox .big{font-family:Georgia,serif;font-size:30px;font-weight:700}
+  .sumbox .big.good{color:var(--correct)} .sumbox .big.mid{color:#9a6b1f} .sumbox .big.low{color:var(--wrong)}
+
+  /* ---- report ---- */
+  .repgrid{width:100%;border-collapse:collapse;margin:12px 0}
+  .repgrid th,.repgrid td{border:1px solid var(--line);padding:7px 9px;font-size:13px;text-align:left}
+  .repgrid th{background:var(--bg);font-size:11.5px;text-transform:uppercase;letter-spacing:.4px}
+  .repgrid td.score{font-weight:700;white-space:nowrap}
+  .repgrid td.nf{color:var(--muted);font-style:italic}
+  .idrow{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+  .idrow label{font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px}
+  .idrow input{padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px;font-family:inherit;background:#fff}
+  .vcode{font-family:'Courier New',monospace;font-size:13px;letter-spacing:2px}
+  /* ---- persistent nav ---- */
+  .topnav{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:-4px 0 16px;
+       border-bottom:1px solid var(--line-soft);padding-bottom:12px}
+  .topnav button{font-family:inherit;font-size:12.5px;font-weight:700;letter-spacing:.3px;color:var(--muted);
+       background:var(--bg);border:1px solid var(--line-soft);border-radius:20px;padding:7px 15px;cursor:pointer}
+  .topnav button:hover{border-color:var(--earth);color:var(--earth-d)}
+  .topnav button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  /* ---- morpheme colour system (prefix / root / suffix), from the EAL book ---- */
+  :root{
+    --mpre:#2c6fa8; --mpre-bg:#e5eef5;
+    --mroot:#9a5518; --mroot-bg:#f5e7d8;
+    --msuf:#3f7a4a; --msuf-bg:#e6f1e8;
+    --mcon:#6c6353; --mcon-bg:#ece7db;
+  }
+  .mlegend{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:8px 0 14px;font-size:12px}
+  .mlegend span{display:inline-flex;align-items:center;gap:5px;font-weight:700;color:var(--ink)}
+  .mlegend i{width:13px;height:13px;border-radius:4px;display:inline-block}
+  .mtile{border-radius:9px;padding:8px 12px;display:inline-flex;flex-direction:column;align-items:center;gap:1px;
+       line-height:1.15;font-family:inherit;cursor:grab;user-select:none;touch-action:none;border:1.5px solid;background:var(--paper)}
+  .mtile .mm{font-weight:800;font-size:16px}
+  .mtile .gl{font-size:10.5px;opacity:.85}
+  .mtile.prefix{color:var(--mpre);background:var(--mpre-bg);border-color:var(--mpre)}
+  .mtile.root{color:var(--mroot);background:var(--mroot-bg);border-color:var(--mroot)}
+  .mtile.suffix{color:var(--msuf);background:var(--msuf-bg);border-color:var(--msuf)}
+  .mtile.connector{color:var(--mcon);background:var(--mcon-bg);border-color:var(--mcon)}
+  .mtile.sel{outline:3px solid var(--ink);outline-offset:2px}
+  .mtile.dragging{opacity:.35}
+  .drag-ghost{position:fixed;transform:translate(-50%,-50%);z-index:999;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+  /* ---- Access mode: big tap targets, tap-only, most slots prefilled ----
+     A persistent per-device profile (localStorage "y7h-access"), for students
+     for whom fine pointer control is the barrier: every target is large, a
+     tapped tile enlarges so the current selection is unmissable, dragging is
+     off so a tremor cannot yank a tile, and each word starts with every slot
+     but one already placed and locked, so one accurate tap finishes a word. */
+  .accessrow{text-align:center;margin-top:26px;border-top:1px solid var(--line-soft);padding-top:8px}
+  .accessrow button{background:none;border:none;font-family:inherit;font-size:10.5px;color:var(--muted);cursor:pointer;padding:4px 8px;letter-spacing:.3px}
+  .accessrow button:hover{color:var(--ink);text-decoration:underline}
+  body.access .accessrow button{color:var(--earth-d);font-weight:800;font-size:13px}
+  body.access .mtile{padding:16px 22px;border-radius:12px;border-width:2px}
+  body.access .mtile .mm{font-size:26px}
+  body.access .mtile .gl{font-size:15px}
+  body.access .mtile.sel{transform:scale(1.45);z-index:20;position:relative;box-shadow:0 8px 24px rgba(0,0,0,.3);outline-width:4px}
+  body.access .mtiles{gap:14px}
+  body.access .wslot{min-width:110px;min-height:74px;border-width:3px;border-radius:12px;font-size:24px}
+  body.access .wslot .mm{font-size:24px}
+  body.access .wslot .ph{font-size:15px}
+  body.access .wslot.locked{border-style:solid;cursor:default;opacity:.9}
+  body.access .wrow{padding:14px}
+  body.access .wmean{font-size:17px}
+  body.access .mbank{position:static}
+  .say{border:0;background:none;font-size:15px;cursor:pointer;padding:2px 5px;border-radius:6px;line-height:1;vertical-align:middle}
+  .say:hover{background:var(--bg)}
+  body.access .say{font-size:26px;padding:5px 8px}
+  body.access .tile{padding:16px 22px;font-size:24px;border-radius:12px}
+  body.access .tile .mm{font-size:24px}
+  body.access .opt{padding:16px 18px;font-size:17px}
+  /* colour the tap-tile builder used by the tiers, too */
+  .tile.prefix .mm{color:var(--mpre)} .tile.root .mm{color:var(--mroot)} .tile.suffix .mm{color:var(--msuf)} .tile.connector .mm{color:var(--mcon)}
+
+  .mbank{background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;padding:12px;margin-bottom:14px;position:sticky;top:6px;z-index:5}
+  .mbank .mgroup{margin-bottom:8px}
+  .mbank .mgroup:last-child{margin-bottom:0}
+  .mbank .glabel{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+  .mbank .glabel.prefix{color:var(--mpre)} .mbank .glabel.root{color:var(--mroot)} .mbank .glabel.suffix{color:var(--msuf)} .mbank .glabel.connector{color:var(--mcon)}
+  .mtiles{display:flex;flex-wrap:wrap;gap:7px}
+
+  /* ---- word-build table (drag morphemes to the matching meaning) ---- */
+  .wtable{display:flex;flex-direction:column;gap:9px}
+  .wrow{display:flex;align-items:center;gap:12px;border:1px solid var(--line-soft);border-radius:10px;
+       padding:10px 12px;background:var(--paper);transition:opacity .3s ease,transform .3s ease,background .2s}
+  .wrow.wrong{animation:shake .3s;border-color:var(--wrong)}
+  .wrow.done{border-color:var(--correct);background:var(--okbg)}
+  .wrow.gone{opacity:0;transform:translateX(40px)}
+  .wmean{flex:1 1 46%;min-width:190px;font-size:13.5px;line-height:1.45}
+  .wmean .pos{color:var(--muted);font-style:italic;font-size:12px}
+  .wslots{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .wjoin{color:var(--muted);font-weight:700}
+  .wslot{min-width:60px;min-height:46px;border:2px dashed var(--line);border-radius:8px;display:flex;
+       align-items:center;justify-content:center;background:var(--bg);cursor:pointer;padding:4px 8px}
+  .wslot .ph{color:var(--muted);font-size:10px;letter-spacing:.3px}
+  .wslot .mm{font-weight:800;font-size:15px}
+  .wslot.over{border-color:var(--ink);background:#fff}
+  .wslot.filled{border-style:solid}
+  .wslot.filled.prefix{border-color:var(--mpre);background:var(--mpre-bg);color:var(--mpre)}
+  .wslot.filled.root{border-color:var(--mroot);background:var(--mroot-bg);color:var(--mroot)}
+  .wslot.filled.suffix{border-color:var(--msuf);background:var(--msuf-bg);color:var(--msuf)}
+  .wslot.filled.connector{border-color:var(--mcon);background:var(--mcon-bg);color:var(--mcon)}
+  .wbuilt{flex:1 1 46%;min-width:190px;text-align:right;display:none}
+  .wrow.done .wslots{display:none}
+  .wrow.done .wbuilt{display:block}
+  .wbuilt .wname{font-family:Georgia,serif;font-weight:700;font-size:16px;color:var(--correct)}
+  .wbuilt .wtickmark{color:var(--correct);font-weight:800;margin-left:4px}
+  .buildhint{font-size:12.5px;color:var(--wrong);text-align:center;min-height:16px;margin:4px 0 6px;font-weight:600}
+  @media(max-width:560px){ .wmean{flex:1 1 100%} .wbuilt{flex:1 1 100%;text-align:left} }
+
+  /* ---- reference views (morpheme table + word list) ---- */
+  .reftable{width:100%;border-collapse:collapse;margin:4px 0 14px}
+  .reftable th,.reftable td{border:1px solid var(--line-soft);padding:7px 10px;font-size:13px;text-align:left;vertical-align:middle}
+  .reftable th{background:var(--bg);font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)}
+  .reftable .mtile{display:inline-flex}
+  .refhead{font-family:Georgia,serif;font-size:16px;margin:18px 0 6px;padding-bottom:3px;border-bottom:2px solid var(--line-soft)}
+  .refhead.prefix{color:var(--mpre)} .refhead.root{color:var(--mroot)} .refhead.suffix{color:var(--msuf)} .refhead.connector{color:var(--mcon)}
+  .reffilter{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .reffilter input{padding:9px 13px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px;background:var(--paper);color:var(--ink);min-width:220px}
+  .eqn{font-family:Georgia,serif;font-size:18px;letter-spacing:.5px}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .container{border:none;box-shadow:none;max-width:100%;padding:8px}
+    .noprint{display:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="topnav noprint">
+  <a href="./" style="font-family:inherit;font-size:12.5px;font-weight:700;letter-spacing:.3px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:8px">&larr; Rabbit-Proof Fence</a>
+  <button data-scr="home" onclick="go('home')">&#9776; Lessons</button>
+  <button data-scr="morphtable" onclick="go('morphtable')">Morpheme table</button>
+  <button data-scr="glossary" onclick="go('glossary')">Word list</button>
+  <button data-scr="report" onclick="go('report')">My report</button>
+</div>
+
+<div class="screen active" id="scr-home">
+  <h1>Rabbit-Proof Fence</h1>
+  <p class="subtitle">Vocab Hub &middot; the essential words for the film study: the history behind it, its themes, and the words of the analysis ladder &middot; build each lesson&rsquo;s words from their morphemes, then keep them alive with quick reviews</p>
+  <div id="home-map"></div>
+  <div class="homerow">
+    <div class="panelcard">
+      <div class="t">&#8635; Quick review</div>
+      <div class="d" id="review-desc">A shuffled set of words from the lessons you&rsquo;ve already done, everyone gets a different mix, so eyes on your own screen.</div>
+      <button class="btn btn-water" id="review-start" onclick="startReviewSetup()">Review earlier words</button>
+    </div>
+    <div class="panelcard">
+      <div class="t">&#9998; My report</div>
+      <div class="d">Everything you&rsquo;ve done: first-attempt scores lesson by lesson, plus your review history. Save it as a PDF for your teacher at any time.</div>
+      <button class="btn btn-ghost" onclick="go('report')">Open my report</button>
+    </div>
+  </div>
+  <div class="nextrow noprint" style="justify-content:center">
+    <button class="linkbtn" onclick="resetAll()">start over (clears everything)</button>
+  </div>
+</div>
+
+<div class="screen" id="scr-lesson">
+  <div class="topbar noprint"><button class="linkbtn" onclick="go('home')">&larr; all lessons</button><span class="progress" id="lesson-prog"></span></div>
+  <div id="lesson-body"></div>
+</div>
+
+<div class="screen" id="scr-study">
+  <div class="topbar noprint"><button class="linkbtn" onclick="goLesson()">&larr; lesson</button><span class="progress" id="study-prog">STEP 1 &middot; MEET THE WORDS</span></div>
+  <div id="study-body"></div>
+</div>
+
+<div class="screen" id="scr-build">
+  <div class="topbar noprint"><button class="linkbtn" onclick="goLesson()">&larr; lesson</button><span class="progress" id="build-prog">STEP 2 &middot; BUILD</span></div>
+  <div id="build-body"></div>
+</div>
+
+<div class="screen" id="scr-apply">
+  <div class="topbar noprint"><button class="linkbtn" onclick="goLesson()">&larr; lesson</button><span class="progress" id="apply-prog">STEP 3 &middot; USE THE WORDS</span></div>
+  <div id="apply-body"></div>
+</div>
+
+<div class="screen" id="scr-base">
+  <div class="topbar noprint"><button class="linkbtn" onclick="goLesson()">&larr; lesson</button><span class="progress" id="base-prog">BASE CAMP</span></div>
+  <div id="base-body"></div>
+</div>
+
+<div class="screen" id="scr-stretch">
+  <div class="topbar noprint"><button class="linkbtn" onclick="goLesson()">&larr; lesson</button><span class="progress" id="stretch-prog">STRETCH</span></div>
+  <div id="stretch-body"></div>
+</div>
+
+<div class="screen" id="scr-review">
+  <div class="topbar noprint"><button class="linkbtn" onclick="go('home')">&larr; home</button><span class="progress" id="review-prog">REVIEW</span></div>
+  <div id="review-body"></div>
+</div>
+
+<div class="screen" id="scr-report">
+  <div class="topbar noprint"><button class="linkbtn" onclick="go('home')">&larr; home</button><span class="progress">REPORT</span></div>
+  <div id="report-body"></div>
+</div>
+
+<div class="screen" id="scr-morphtable">
+  <div class="topbar noprint"><button class="linkbtn" onclick="go('home')">&larr; lessons</button><span class="progress">MORPHEME TABLE</span></div>
+  <div id="morphtable-body"></div>
+</div>
+
+<div class="screen" id="scr-glossary">
+  <div class="topbar noprint"><button class="linkbtn" onclick="go('home')">&larr; lessons</button><span class="progress">WORD LIST</span></div>
+  <div id="glossary-body"></div>
+</div>
+
+<div class="accessrow noprint"><button id="accessToggle" onclick="toggleAccess()" aria-pressed="false" title="Bigger tiles, tap only, most pieces already placed">Access mode: off</button></div>
+</div>
+<script>
+/* Access mode: regular mode is the default, always. A ?access link switches
+   it on for that sitting only (sessionStorage, so it follows the student
+   between this site's pages in the tab and then lapses), and the small
+   toggle at the foot of the page makes it stick on this device
+   (localStorage) until it is switched off again. Nothing else turns it on,
+   so a shared laptop always opens in regular mode. */
+const ACCESS_KEY="y7h-access";
+let ACCESS=false;
+try{
+  if(new URLSearchParams(location.search).has("access")) sessionStorage.setItem(ACCESS_KEY,"on");
+  ACCESS=localStorage.getItem(ACCESS_KEY)==="on"||sessionStorage.getItem(ACCESS_KEY)==="on";
+}catch(e){}
+function accessLabel(){
+  const b=document.getElementById("accessToggle");
+  if(b){ b.textContent="Access mode: "+(ACCESS?"on":"off"); b.setAttribute("aria-pressed",String(ACCESS)); }
+}
+document.addEventListener("DOMContentLoaded",()=>{ if(ACCESS) document.body.classList.add("access"); accessLabel(); });
+/* Read-aloud: the browser's own speech engine, nothing leaves the device.
+   Always on show, not gated behind Access mode: a student who needs text read
+   aloud does not necessarily need the motor scaffold. */
+const TTS_OK="speechSynthesis" in window;
+let VOICE=null;
+if(TTS_OK){
+  const pick=()=>{const vs=speechSynthesis.getVoices();
+    VOICE=vs.find(v=>v.lang==="en-AU")||vs.find(v=>v.lang&&v.lang.startsWith("en"))||null};
+  pick();speechSynthesis.onvoiceschanged=pick;
+}
+function speak(text){
+  if(!TTS_OK)return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  if(VOICE)u.voice=VOICE;u.lang=(VOICE&&VOICE.lang)||"en-AU";u.rate=.95;
+  speechSynthesis.speak(u);
+}
+function sayBtn(text){return TTS_OK?`<button class="say" type="button" data-say="${esc(text)}" aria-label="Read aloud" title="Read aloud">\u{1F50A}</button>`:""}
+function wireSay(root){root.querySelectorAll(".say").forEach(b=>b.onclick=e=>{e.stopPropagation();speak(b.dataset.say)})}
+function toggleAccess(){
+  ACCESS=!ACCESS;
+  try{
+    if(ACCESS) localStorage.setItem(ACCESS_KEY,"on");
+    else { localStorage.removeItem(ACCESS_KEY); sessionStorage.removeItem(ACCESS_KEY); }
+  }catch(e){}
+  document.body.classList.toggle("access",ACCESS);
+  accessLabel();
+  const row=document.querySelector("#wtable .wrow");
+  if(row && buildCtx) renderBuildTable(buildCtx.l, buildCtx.l.words.filter(w=>w.type==="morph"||w.type==="compound"));
+}
+"use strict";
+/* ============================================================
+   RABBIT-PROOF FENCE: VOCAB HUB
+   The essential words for the ELC film study. Module 1 · the history
+   in the film, Module 2 · themes, Module 3 · writing about film (the
+   skill ladder's own words: describe, explain, analyse, interpret, and
+   the analytical verbs). Incidental words from the film and articles
+   go in word-bank.html, not here.
+
+   Engine shared with the Water in the World Vocab Hub. Clicking a
+   lesson AUTO-RUNS a short review of earlier lessons first (skipped
+   for the very first lesson), then drops into it.
+
+   One lesson = one short set of key words. For each lesson:
+     MEET: read the words: meaning + the morphemes that build it.
+     BUILD: a single colour-coded morpheme bank (prefix/root/suffix)
+             above a table of word MEANINGS; drag (or tap) each
+             morpheme into the word it belongs to. Morphemes are
+             reused across many words, so the bank never depletes.
+             A finished word ticks off and leaves the board; you go
+             until none remain. Opaque/borrowed words (Theory, the
+             Dreaming) can't be cut into parts, so they come as
+             honest word-origin questions afterwards.
+     USE: a mixed bag of tasks (cloze, scenario, description,
+             word-sum, meaning-match, part-meaning) sampled and
+             generated so neighbouring students differ.
+
+   A persistent MORPHEME TABLE and WORD LIST are always available
+   from the top nav as look-ups.
+
+   ADAPTIVE TIERS:
+     BASE CAMP (support): the same morphemes in everyday words;
+       offered when a lesson is rough, always self-selectable.
+     STRETCH (extension): heavier words built from known parts +
+       "word alchemy" transfer questions; unlocks on a clean lesson.
+
+   All scores record FIRST attempts; wrong answers loop until
+   mastered. The REPORT prints to PDF with a verification code.
+   ============================================================ */
+const SVGS = {};
+
+/* ============================================================
+   LESSON DATA
+   word types: "morph": build from morpheme tiles (in order);
+                "compound": same mechanic, plain-English pieces;
+                "origin": no honest cuts -> word-origin question.
+   Each word carries its own APPLY bank; one item per word is
+   sampled per run. Review draws on the same banks.
+   ============================================================ */
+const LESSONS = [
+
+/* ================= 1.1 TAKEN FROM THEIR FAMILIES ================= */
+{ id:"1.1", topic:"Module 1 · The history in the film", title:"Taken from Their Families",
+  focus:"In 1931 the law let the government take Aboriginal children from their families. These are the words for what happened, and why.",
+  words:[
+  { w:"Stolen Generations", pos:"noun", domain:"earth",
+    meaning:"The Aboriginal and Torres Strait Islander children taken from their families by Australian governments, churches and welfare groups, from about 1910 to the 1970s.",
+    type:"compound",
+    tiles:[["Stolen","taken without any right to take"],["Generations","the people born at about the same time"]],
+    decoys:[["Lost","not able to be found"],["Children","young people"],["Families","parents and their children"]],
+    note:"Plain English words for a policy that lasted more than sixty years: whole <b>generations</b> of children were <b>stolen</b>. It is a name, so it takes capital letters. Molly, Daisy and Gracie in the film are members of the Stolen Generations. In 2008 the Australian Government made a formal apology to the Stolen Generations in Parliament.",
+    apply:[
+      { id:"ap_sg_scn", type:"scenario",
+        q:"Between about 1910 and the 1970s, thousands of Aboriginal and Torres Strait Islander children were taken from their families by governments and churches. These children are called the…",
+        a:"Stolen Generations", opts:["Stolen Generations","Protectors","Pursuers","Settlers"],
+        explain:"<i>Stolen</i> (taken without the right to take) + <i>Generations</i> (people born around the same time). Capital letters: it is a name." },
+      { id:"ap_sg_cloze", type:"cloze",
+        before:"Molly, Daisy and Gracie are three of the children of the", after:": taken from their mothers by the government.",
+        a:"Stolen Generations", opts:["Stolen Generations","rabbit-proof fence","Moore River settlement","outback"],
+        explain:"The name for the children taken from their families. Capital S, capital G." } ] },
+
+  { w:"Removal", pos:"noun", domain:"hazard",
+    meaning:"The act of taking someone or something away from a place.",
+    type:"morph",
+    tiles:[["re-","back, again"],["mov","to move"],["-al","the act of"]],
+    decoys:[["de-","down, completely"],["-ment","the result of"],["pro-","forward, in front"]],
+    note:"Latin <i>removere</i>, to move back or away. Same <i>mov</i> in <b>move</b>, <b>movement</b> and <b>remove</b>. Historians use <b>removal</b> for the government taking Aboriginal children from their families. The girls’ removal from Jigalong is the event that starts the story.",
+    apply:[
+      { id:"ap_rem_desc", type:"desc",
+        q:"Which word means the act of taking someone away from a place?",
+        a:"Removal", opts:["Removal","Survival","Pursuit","Escape"],
+        explain:"<i>re-</i> (back) + <i>mov</i> (move) + <i>-al</i> (the act of): moving someone away." },
+      { id:"ap_rem_cloze", type:"cloze",
+        before:"The film shows the girls’ forced", after:"from their families at Jigalong, and their long walk back.",
+        a:"removal", opts:["removal","survival","reunion","escape"],
+        explain:"Removal: the act of taking someone away. A <i>forced</i> removal happens against the family’s will." } ] },
+
+  { w:"Assimilation", pos:"noun", domain:"hazard",
+    meaning:"A government policy that tried to make Aboriginal people give up their own culture and live like white Australians.",
+    type:"morph",
+    tiles:[["as-","to, towards (changed from ad-)"],["simil","like, the same"],["-ation","the act or state of"]],
+    decoys:[["dis-","apart, not"],["-ment","the result of"],["re-","back, again"]],
+    note:"Latin <i>assimilare</i>, to make like: <i>ad-</i> (to) + <i>similis</i> (like). The <i>d</i> of <i>ad-</i> changed to <i>s</i> to match the next letter, so it is written <i>as-</i>. Same <i>simil</i> in <b>similar</b> and <b>simile</b>. Taking children away from their families and their language was one way governments tried to make Aboriginal people “the same” as white Australians.",
+    apply:[
+      { id:"ap_ass_scn", type:"scenario",
+        q:"A government decides Aboriginal children should be raised away from their families, speak only English and forget their own culture, so that they become ‘like’ white Australians. This policy is called…",
+        a:"Assimilation", opts:["Assimilation","Reunion","Survival","Determination"],
+        explain:"<i>as-</i> (to) + <i>simil</i> (like) + <i>-ation</i> (the act of): the act of making people the same." },
+      { id:"ap_ass_cloze", type:"cloze",
+        before:"At Moore River the girls are told to speak only English: the settlement is a tool of", after:".",
+        a:"assimilation", opts:["assimilation","survival","freedom","pursuit"],
+        explain:"Stopping a language is part of assimilation: making people give up their own culture." } ] },
+
+  { w:"Protector", pos:"noun", domain:"hazard",
+    meaning:"In the film’s time, the government official with legal power over Aboriginal people’s lives in Western Australia.",
+    type:"morph",
+    tiles:[["pro-","forward, in front"],["tect","to cover"],["-or","one who"]],
+    decoys:[["de-","down, completely"],["-ion","the act or state of"],["con-","together, with"]],
+    note:"Latin <i>protegere</i>, to cover in front: a protector stands in front of you like a shield. Same <i>tect</i> in <b>protect</b> and <b>detective</b> (one who takes the cover off). In the film, Mr Neville’s title is Chief Protector of Aborigines (an old word no longer used for people), yet he orders the girls taken from their mothers. When a word says one thing and the truth is the opposite, writers call it <b>irony</b>.",
+    apply:[
+      { id:"ap_pro_desc", type:"desc",
+        q:"Which title literally means ‘one who covers in front’, like a shield?",
+        a:"Protector", opts:["Protector","Tracker","Director","Pursuer"],
+        explain:"<i>pro-</i> (in front) + <i>tect</i> (cover) + <i>-or</i> (one who)." },
+      { id:"ap_pro_cloze", type:"cloze",
+        before:"Mr Neville’s title is Chief", after:", but he orders the girls taken from their mothers.",
+        a:"Protector", opts:["Protector","Tracker","Pursuer","Director"],
+        explain:"His title says he protects; his actions do the opposite. That gap is irony." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>re-</b> (back, again), <b>mov</b> (move), <b>simil</b> (like), <b>pro-</b> (in front) and <b>tect</b> (cover), also build everyday words you already know.",
+    items:[
+      { id:"b11_remove", kind:"build", w:"remove", tiles:[["re-","back, again"],["move","to move"]], decoys:[["de-","down, completely"],["-al","the act of"]],
+        meaning:"to take something away from a place." },
+      { id:"b11_simil", kind:"mcq", q:"<b>Similar</b>, <b>simile</b> and <b>assimilation</b> share the root <b>simil</b>. It means…", a:"like, the same", opts:["like, the same","to move","to cover","apart"],
+        explain:"Two similar things are like each other. Assimilation is the act of making people the same." },
+      { id:"b11_tect", kind:"mcq", q:"A <b>detective</b> uncovers the truth. The root <b>tect</b> in <i>detective</i> and <i>protector</i> means…", a:"to cover", opts:["to cover","to steal","to look","to carry"],
+        explain:"<i>de-</i> (off) + <i>tect</i> (cover): a detective takes the cover off. A protector covers you in front." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus the word for a protector who harms.",
+    items:[
+      { id:"s11_similarity", kind:"build", w:"similarity", tiles:[["simil","like, the same"],["-ar","relating to"],["-ity","the state of"]], decoys:[["as-","to, towards (changed from ad-)"],["-ation","the act or state of"]],
+        meaning:"the state of being like something else.",
+        explain:"<i>simil</i> (like) + <i>-ar</i> + <i>-ity</i> (the state of): the state of being alike." },
+      { id:"s11_irony", kind:"mcq", q:"Mr Neville is called the Chief <b>Protector</b>, but he harms the people he is meant to protect. When a word says one thing and the truth is the opposite, writers call it…", a:"irony", opts:["irony","a simile","a flashback","a close-up"],
+        explain:"Irony: the gap between what is said and what is real. Pointing out irony is a strong move in analytical writing." } ] },
+},
+
+/* ================= 1.2 THE WALK HOME ================= */
+{ id:"1.2", topic:"Module 1 · The history in the film", title:"The Walk Home",
+  focus:"The girls escape from Moore River and follow the fence home, with a tracker behind them. These words tell that story.",
+  words:[
+  { w:"Rabbit-proof", pos:"adjective", domain:"earth",
+    meaning:"Built so that rabbits cannot get through.",
+    type:"compound",
+    tiles:[["rabbit","the small animal the fence was built to stop"],["-proof","able to keep something out"]],
+    decoys:[["-less","without"],["-ful","full of"],["-like","similar to"]],
+    note:"<b>-proof</b> means able to keep something out: <b>waterproof</b>, <b>soundproof</b>, <b>bulletproof</b>. The rabbit-proof fence was built across Western Australia in the early 1900s to stop rabbits spreading into farmland. In the film it becomes the girls’ map: if they follow it, it leads them home.",
+    apply:[
+      { id:"ap_rp_scn", type:"scenario",
+        q:"A long fence is built across Western Australia so that rabbits cannot get through into the farmland. The fence is…",
+        a:"rabbit-proof", opts:["rabbit-proof","rabbit-less","rabbit-ful","rabbit-like"],
+        explain:"<i>-proof</i>: able to keep something out. Waterproof keeps water out; rabbit-proof keeps rabbits out." },
+      { id:"ap_rp_cloze", type:"cloze",
+        before:"Molly knows that if they follow the", after:"fence, it will lead them home to Jigalong.",
+        a:"rabbit-proof", opts:["rabbit-proof","waterproof","soundproof","fireproof"],
+        explain:"The fence runs past Jigalong, so following it is the way home." } ] },
+
+  { w:"Escape", pos:"verb", domain:"earth",
+    meaning:"To get away from a place where you are kept, or from danger.",
+    type:"morph",
+    tiles:[["es-","out of (changed from ex-)"],["cape","a cloak"]],
+    decoys:[["pro-","forward, in front"],["-er","one who"],["re-","back, again"]],
+    note:"From Old French <i>escaper</i>, literally “to get out of your cape”: <i>es-</i> (out of) + <i>cape</i> (a cloak). Picture someone grabbing your cloak, and you slipping out of it and running, leaving them holding an empty cape. Molly leads the girls’ escape from Moore River.",
+    apply:[
+      { id:"ap_esc_desc", type:"desc",
+        q:"Which word comes from ‘to get out of your cape’, and means to get away from where you are kept?",
+        a:"Escape", opts:["Escape","Pursuit","Removal","Survival"],
+        explain:"<i>es-</i> (out of) + <i>cape</i> (cloak): slipping out of the cloak someone is holding." },
+      { id:"ap_esc_cloze", type:"cloze",
+        before:"When the rain starts, Molly sees her chance: the girls", after:"from the settlement, and the rain covers their tracks.",
+        a:"escape", opts:["escape","pursue","remove","assimilate"],
+        explain:"To escape is to get away from the place where you are kept." } ] },
+
+  { w:"Pursuit", pos:"noun", domain:"hazard",
+    meaning:"The act of chasing someone to catch them.",
+    type:"morph",
+    tiles:[["pur-","forward (changed from pro-)"],["suit","to follow"]],
+    decoys:[["per-","through"],["-er","one who"],["sub-","under"]],
+    note:"From Old French <i>poursuite</i>, from Latin <i>prosequi</i>: to follow forward. The verb is <b>pursue</b>; the person chasing is the <b>pursuer</b>. The whole film is built on a pursuit: the girls walk, and the tracker and the police follow.",
+    apply:[
+      { id:"ap_pur_scn", type:"scenario",
+        q:"The police and a tracker follow the girls’ footprints for weeks, trying to catch them. This chase is called a…",
+        a:"pursuit", opts:["pursuit","removal","reunion","settlement"],
+        explain:"<i>pur-</i> (forward) + <i>suit</i> (follow): following someone forward to catch them." },
+      { id:"ap_pur_cloze", type:"cloze",
+        before:"The tracker Moodoo leads the", after:", but the girls stay one step ahead.",
+        a:"pursuit", opts:["pursuit","escape","survival","separation"],
+        explain:"A pursuit is a chase. Moodoo leads it; the girls run from it." } ] },
+
+  { w:"Survival", pos:"noun", domain:"earth",
+    meaning:"Staying alive through danger or hardship.",
+    type:"morph",
+    tiles:[["sur-","over, beyond"],["viv","to live"],["-al","the act of"]],
+    decoys:[["re-","back, again"],["-ment","the result of"],["sub-","under"]],
+    note:"Latin <i>supervivere</i>, to live beyond: <i>sur-</i> (over, beyond) + <i>viv</i> (live). Same <i>viv</i> in <b>vivid</b> and <b>revive</b>. In the desert, the girls’ survival depends on what Molly knows: finding water, catching food, hiding from the people chasing them.",
+    apply:[
+      { id:"ap_sur_desc", type:"desc",
+        q:"Which word means staying alive through danger or hardship?",
+        a:"Survival", opts:["Survival","Removal","Pursuit","Assimilation"],
+        explain:"<i>sur-</i> (beyond) + <i>viv</i> (live) + <i>-al</i> (the act of): living beyond the danger." },
+      { id:"ap_sur_cloze", type:"cloze",
+        before:"With little food or water, the long walk becomes a test of", after:".",
+        a:"survival", opts:["survival","removal","assimilation","authority"],
+        explain:"Survival: staying alive. The desert makes every day a test of it." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>-proof</b> (keeps out), <b>es-</b> (out of), <b>sur-</b> (over, beyond) and <b>viv</b> (live), also build everyday words you already know.",
+    items:[
+      { id:"b12_waterproof", kind:"build", w:"waterproof", tiles:[["water","the liquid in rivers and rain"],["-proof","able to keep something out"]], decoys:[["-less","without"],["-ful","full of"]],
+        meaning:"able to keep water out, like a good raincoat." },
+      { id:"b12_sur", kind:"mcq", q:"<b>sur-</b> in <i>survive</i>, <i>surface</i> and <i>surpass</i> means…", a:"over, beyond", opts:["over, beyond","under","before","again"],
+        explain:"The surface is the face over the top; to surpass is to pass beyond. To survive is to live beyond the danger." },
+      { id:"b12_viv", kind:"mcq", q:"The root <b>viv</b> in <i>survive</i> and <i>revive</i> means…", a:"to live", opts:["to live","to run","to follow","to hide"],
+        explain:"To revive is to bring back to life: <i>re-</i> (again) + <i>viv</i> (live)." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s12_vivid", kind:"build", w:"vivid", tiles:[["viv","to live"],["-id","having the quality of"]], decoys:[["sur-","over, beyond"],["-al","the act of"]],
+        meaning:"full of life; very bright and clear.",
+        explain:"<i>viv</i> (live) + <i>-id</i>: a vivid memory feels alive." },
+      { id:"s12_pursuer", kind:"mcq", q:"Word alchemy: you know <b>pursuit</b> (the chase) and <b>-er</b> (one who). A <b>pursuer</b> is…", a:"the person doing the chasing", opts:["the person doing the chasing","the person being chased","the place where the chase ends","the reason for the chase"],
+        explain:"<i>pursue</i> + <i>-er</i> (one who): the one who chases. In the film, the tracker is the girls’ pursuer." } ] },
+},
+
+/* ================= 2.1 BELONGING AND IDENTITY ================= */
+{ id:"2.1", topic:"Module 2 · Themes", title:"Belonging and Identity",
+  focus:"The film keeps asking where the girls belong, and who gets to decide. These are the words for those ideas.",
+  words:[
+  { w:"Belonging", pos:"noun", domain:"people",
+    meaning:"The feeling of being accepted and at home with a family, a group or a place.",
+    type:"morph",
+    tiles:[["be-","completely, thoroughly"],["long","to go with, to be part of"],["-ing","the state of"]],
+    decoys:[["un-","not"],["-ful","full of"],["a-","on, in"]],
+    note:"Old English <i>langian</i>, to go with or be part of, + <i>be-</i> (completely): to belong is to be completely part of something. <b>Belonging</b> is one of the film’s biggest themes. At Jigalong the girls belong with their mothers and their Country; at Moore River they are told they belong somewhere else.",
+    apply:[
+      { id:"ap_bel_desc", type:"desc",
+        q:"Which word means the feeling of being accepted and at home with your family, group or place?",
+        a:"Belonging", opts:["Belonging","Isolation","Separation","Assimilation"],
+        explain:"<i>be-</i> (completely) + <i>long</i> (be part of) + <i>-ing</i>: being completely part of something." },
+      { id:"ap_bel_cloze", type:"cloze",
+        before:"The spirit bird reminds Molly of her mother and her Country: the film links the bird to", after:".",
+        a:"belonging", opts:["belonging","pursuit","removal","authority"],
+        explain:"The spirit bird connects Molly to her mother and her home: a symbol of belonging." } ] },
+
+  { w:"Identity", pos:"noun", domain:"people",
+    meaning:"Who a person is: the family, culture, language and beliefs that make them who they are.",
+    type:"morph",
+    tiles:[["ident","the same"],["-ity","the state of"]],
+    decoys:[["-ify","to make"],["-al","the act of"],["re-","back, again"]],
+    note:"Late Latin <i>identitas</i>, from <i>idem</i>, the same: your identity is what stays the same about you, wherever you are. Same root in <b>identical</b> and <b>identify</b>. The settlement tries to change the girls’ identity with new rules and a new language. The girls hold on to theirs.",
+    apply:[
+      { id:"ap_ide_scn", type:"scenario",
+        q:"A girl is told to forget her language, her family and her Country, and to become someone else. What is the settlement trying to change?",
+        a:"Her identity", opts:["Her identity","Her survival","Her pursuit","Her removal"],
+        explain:"<i>ident</i> (the same) + <i>-ity</i>: what stays the same about a person. The settlement tries to change it." },
+      { id:"ap_ide_cloze", type:"cloze",
+        before:"Speaking their own language together helps the girls keep their", after:"as girls from Jigalong.",
+        a:"identity", opts:["identity","authority","removal","pursuit"],
+        explain:"Language is part of identity: who you are." } ] },
+
+  { w:"Culture", pos:"noun", domain:"people",
+    meaning:"The shared way of life of a group: its language, beliefs, stories, food and customs.",
+    type:"morph",
+    tiles:[["cult","to grow, to care for"],["-ure","the result of"]],
+    decoys:[["-ive","tending to, doing"],["agri","a field"],["-al","the act of"]],
+    note:"Latin <i>cultura</i>, growing or caring for something, from <i>colere</i>, to grow. Same root in <b>agriculture</b> (growing fields). A culture is grown and cared for by a people over many generations. Molly’s culture taught her to read the land: the skills that keep the girls alive on the walk.",
+    apply:[
+      { id:"ap_cul_desc", type:"desc",
+        q:"Which word means the shared way of life of a group: its language, beliefs, stories and customs?",
+        a:"Culture", opts:["Culture","Authority","Pursuit","Settlement"],
+        explain:"<i>cult</i> (grow, care for) + <i>-ure</i>: what a people grows and cares for over generations." },
+      { id:"ap_cul_cloze", type:"cloze",
+        before:"Molly’s knowledge of the land (how to find food and water, and how to hide her tracks) comes from her", after:".",
+        a:"culture", opts:["culture","removal","assimilation","pursuit"],
+        explain:"Knowledge passed down by a people is part of their culture." } ] },
+
+  { w:"Connection", pos:"noun", domain:"people",
+    meaning:"A link between people, or between people and a place.",
+    type:"morph",
+    tiles:[["con-","together, with"],["nect","to tie, to bind"],["-ion","the act or state of"]],
+    decoys:[["dis-","apart, not"],["-ment","the result of"],["inter-","between"]],
+    note:"Latin <i>conectere</i>, to tie together. Same <i>nect</i> in <b>connect</b> and <b>disconnect</b>. The film shows the girls’ connection to family and to Country as something the government cannot cut. Even the fence becomes a line that ties them back to home.",
+    apply:[
+      { id:"ap_con_desc", type:"desc",
+        q:"Which word means a link that ties people together, or ties people to a place?",
+        a:"Connection", opts:["Connection","Separation","Isolation","Removal"],
+        explain:"<i>con-</i> (together) + <i>nect</i> (tie) + <i>-ion</i>: a tie that holds things together." },
+      { id:"ap_con_scn", type:"scenario",
+        q:"Far from home, Molly still feels her mother and her Country pulling her back. What does this show?",
+        a:"A strong connection", opts:["A strong connection","A strong removal","A strong pursuit","A strong assimilation"],
+        explain:"A connection is a tie. Distance does not break Molly’s." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>be-</b> (completely), <b>ident</b> (the same), <b>cult</b> (grow, care for), <b>con-</b> (together) and <b>nect</b> (tie).",
+    items:[
+      { id:"b21_connect", kind:"build", w:"connect", tiles:[["con-","together, with"],["nect","to tie, to bind"]], decoys:[["dis-","apart, not"],["-ion","the act or state of"]],
+        meaning:"to join two things together." },
+      { id:"b21_ident", kind:"mcq", q:"<b>Identical</b> twins look exactly…", a:"the same", opts:["the same","different","old","happy"],
+        explain:"<i>ident</i> = the same. Your identity is what stays the same about you." },
+      { id:"b21_cult", kind:"mcq", q:"<b>Agriculture</b> is farming. The <b>cult</b> in <i>agriculture</i> and <i>culture</i> means…", a:"to grow, to care for", opts:["to grow, to care for","to fight","to travel","to speak"],
+        explain:"Farmers grow fields; a people grows its culture." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s21_disconnection", kind:"build", w:"disconnection", tiles:[["dis-","apart, not"],["con-","together, with"],["nect","to tie, to bind"],["-ion","the act or state of"]], decoys:[["re-","back, again"],["-ity","the state of"]],
+        meaning:"the state of being cut off from the people or places you were tied to.",
+        explain:"<i>dis-</i> (apart) reverses <i>connection</i>. The settlement tries to cause disconnection." },
+      { id:"s21_identify", kind:"mcq", q:"Word alchemy: you know <b>ident</b> means the same. When police <b>identify</b> someone, they…", a:"show that the person is the one they are looking for", opts:["show that the person is the one they are looking for","let the person go free","chase the person across the country","give the person a new name"],
+        explain:"<i>ident</i> (the same) + <i>-ify</i> (to make): to show someone is the same one." } ] },
+},
+
+/* ================= 2.2 FAMILY AND HOME ================= */
+{ id:"2.2", topic:"Module 2 · Themes", title:"Family and Home",
+  focus:"Taken from their mothers, the girls walk for weeks to get back. The words for being apart, and for not giving up.",
+  words:[
+  { w:"Separation", pos:"noun", domain:"people",
+    meaning:"Being kept apart from people you belong with.",
+    type:"morph",
+    tiles:[["se-","apart"],["par","to make ready, to put"],["-ation","the act or state of"]],
+    decoys:[["re-","back, again"],["con-","together, with"],["-ment","the result of"]],
+    note:"Latin <i>separare</i>, to put apart: <i>se-</i> (apart) + <i>parare</i> (to make ready, to put). Same <i>par</i> in <b>prepare</b>. The film’s first scene of separation is at Jigalong, when the girls are taken from their mothers.",
+    apply:[
+      { id:"ap_sep_desc", type:"desc",
+        q:"Which word means being kept apart from people you belong with?",
+        a:"Separation", opts:["Separation","Connection","Reunion","Belonging"],
+        explain:"<i>se-</i> (apart) + <i>par</i> (put) + <i>-ation</i>: the act of putting apart." },
+      { id:"ap_sep_cloze", type:"cloze",
+        before:"The scene where the car drives away from the mothers shows the pain of", after:".",
+        a:"separation", opts:["separation","reunion","survival","culture"],
+        explain:"Separation: being kept apart. The scene makes the audience feel its pain." } ] },
+
+  { w:"Reunion", pos:"noun", domain:"people",
+    meaning:"Coming together again after being apart.",
+    type:"morph",
+    tiles:[["re-","back, again"],["un","one"],["-ion","the act or state of"]],
+    decoys:[["se-","apart"],["dis-","apart, not"],["-ity","the state of"]],
+    note:"<i>re-</i> (again) + <i>union</i> (Latin <i>unus</i>, one): becoming one again. Same <i>un</i> in <b>unite</b>, <b>unit</b> and <b>uniform</b>. The film ends with a reunion: Molly and Daisy return to their family at Jigalong.",
+    apply:[
+      { id:"ap_reu_scn", type:"scenario",
+        q:"After weeks apart, Molly and Daisy come back to their family and are held by their mother and grandmother. This moment is a…",
+        a:"reunion", opts:["reunion","separation","pursuit","removal"],
+        explain:"<i>re-</i> (again) + <i>un</i> (one) + <i>-ion</i>: becoming one family again." },
+      { id:"ap_reu_cloze", type:"cloze",
+        before:"The", after:"at the end of the film is joyful, but it is not complete: Gracie is not there.",
+        a:"reunion", opts:["reunion","removal","pursuit","assimilation"],
+        explain:"A reunion brings people together again. Gracie’s absence makes this one bittersweet." } ] },
+
+  { w:"Determination", pos:"noun", domain:"people",
+    meaning:"A strong decision to do something, and to keep going until it is done.",
+    type:"morph",
+    tiles:[["de-","down, completely"],["termin","an end, a limit"],["-ation","the act or state of"]],
+    decoys:[["ex-","out"],["-al","the act of"],["re-","back, again"]],
+    note:"Latin <i>determinare</i>, to set the limits of: when you are determined, you have completely fixed where you will end up. Same <i>termin</i> in <b>terminal</b> and <b>terminate</b>. Molly’s determination drives the film: whatever happens, she keeps walking home.",
+    apply:[
+      { id:"ap_det_desc", type:"desc",
+        q:"Which word means a strong decision to keep going until something is done?",
+        a:"Determination", opts:["Determination","Separation","Assimilation","Isolation"],
+        explain:"<i>de-</i> (completely) + <i>termin</i> (end, limit): you have fixed your end point and will reach it." },
+      { id:"ap_det_cloze", type:"cloze",
+        before:"Tired, hungry and chased, Molly still will not give up. Her", after:"gets the girls home.",
+        a:"determination", opts:["determination","separation","removal","authority"],
+        explain:"Determination: not giving up. It is the quality the film admires most in Molly." } ] },
+
+  { w:"Resilience", pos:"noun", domain:"people",
+    meaning:"The ability to recover from hard times and keep going.",
+    type:"morph",
+    tiles:[["re-","back, again"],["sil","to jump, to leap"],["-ience","the state or quality of"]],
+    decoys:[["se-","apart"],["-ment","the result of"],["de-","down, completely"]],
+    note:"Latin <i>resilire</i>, to jump back: <i>re-</i> (back) + <i>salire</i> (to jump). A resilient person is knocked down and springs back up. Resilience is not the same as never being hurt: the girls are hurt, tired and scared, and they keep going anyway.",
+    apply:[
+      { id:"ap_res_scn", type:"scenario",
+        q:"Gracie is caught. Daisy is too tired to walk, so Molly carries her. Molly springs back from every setback. This shows her…",
+        a:"resilience", opts:["resilience","assimilation","removal","authority"],
+        explain:"<i>re-</i> (back) + <i>sil</i> (jump): springing back after being knocked down." },
+      { id:"ap_res_cloze", type:"cloze",
+        before:"The film’s ending shows the", after:"of the Stolen Generations: their families and culture survived.",
+        a:"resilience", opts:["resilience","pursuit","removal","isolation"],
+        explain:"Resilience: recovering and going on. Here it describes whole families and cultures, not only one girl." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>se-</b> (apart), <b>par</b> (put), <b>un</b> (one), <b>termin</b> (end) and <b>sil</b> (jump), also build everyday words you already know.",
+    items:[
+      { id:"b22_unite", kind:"build", w:"unite", tiles:[["un","one"],["-ite","to make"]], decoys:[["re-","back, again"],["se-","apart"]],
+        meaning:"to join together into one." },
+      { id:"b22_se", kind:"mcq", q:"<b>se-</b> in <i>separate</i> and <i>select</i> means…", a:"apart", opts:["apart","together","again","forward"],
+        explain:"To separate is to put apart; to select is to choose one apart from the rest." },
+      { id:"b22_termin", kind:"mcq", q:"At the airport, a <b>terminal</b> is where the trip begins or ends. The root <b>termin</b> means…", a:"an end, a limit", opts:["an end, a limit","a beginning","a ticket","a journey"],
+        explain:"<i>termin</i> = end. Determination fixes your end point." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s22_resilient", kind:"build", w:"resilient", tiles:[["re-","back, again"],["sil","to jump, to leap"],["-ient","being, doing"]], decoys:[["se-","apart"],["-ation","the act or state of"]],
+        meaning:"able to spring back after being knocked down.",
+        explain:"The adjective: Molly is resilient (adjective); she shows resilience (noun)." },
+      { id:"s22_unanimous", kind:"mcq", q:"Word alchemy: you know <b>un</b> means one. A <b>unanimous</b> decision is one where…", a:"everyone agrees, as if with one mind", opts:["everyone agrees, as if with one mind","nobody agrees at all","only one person votes","the vote happens twice"],
+        explain:"Latin <i>unus</i> (one) + <i>animus</i> (mind): of one mind." } ] },
+},
+
+/* ================= 2.3 POWER AND FREEDOM ================= */
+{ id:"2.3", topic:"Module 2 · Themes", title:"Power and Freedom",
+  focus:"Who has power in the film, and who wants to be free? These words name that struggle.",
+  words:[
+  { w:"Oppression", pos:"noun", domain:"hazard",
+    meaning:"Cruel and unfair control over a group of people.",
+    type:"morph",
+    tiles:[["op-","against (changed from ob-)"],["press","to push down"],["-ion","the act or state of"]],
+    decoys:[["ex-","out"],["im-","in, into"],["-ment","the result of"]],
+    note:"Latin <i>opprimere</i>, to press against, to push down. Same <i>press</i> in <b>pressure</b> and <b>depress</b>. In 1931 the law let the government decide where Aboriginal people lived and worked, and even who they could marry: that is oppression. The film shows it through the settlement’s rules, locks and punishments.",
+    apply:[
+      { id:"ap_opp_desc", type:"desc",
+        q:"Which word means cruel and unfair control over a group of people?",
+        a:"Oppression", opts:["Oppression","Resilience","Connection","Survival"],
+        explain:"<i>op-</i> (against) + <i>press</i> (push down) + <i>-ion</i>: pushing a people down." },
+      { id:"ap_opp_cloze", type:"cloze",
+        before:"Locked dormitories, strict rules and punishments at Moore River show the", after:"of Aboriginal people.",
+        a:"oppression", opts:["oppression","resilience","reunion","belonging"],
+        explain:"Oppression: unfair control. The settlement’s locks and rules make it visible." } ] },
+
+  { w:"Injustice", pos:"noun", domain:"hazard",
+    meaning:"Unfair treatment; a situation where people’s rights are ignored.",
+    type:"morph",
+    tiles:[["in-","not"],["just","fair, right"],["-ice","the state or quality of"]],
+    decoys:[["re-","back, again"],["-ment","the result of"],["ad-","to, towards"]],
+    note:"Latin <i>iniustitia</i>: <i>in-</i> (not) + <i>iustus</i> (fair, right). Same <i>just</i> in <b>justice</b> and <b>justify</b>. A film can make an audience feel injustice: we watch children punished for wanting to go home.",
+    apply:[
+      { id:"ap_inj_scn", type:"scenario",
+        q:"Children are taken from loving families by law, only because of their race. What is the best word for this?",
+        a:"Injustice", opts:["Injustice","Survival","Reunion","Culture"],
+        explain:"<i>in-</i> (not) + <i>just</i> (fair) + <i>-ice</i>: a situation that is not fair." },
+      { id:"ap_inj_cloze", type:"cloze",
+        before:"Noyce makes the audience feel the", after:"of the removal by showing it through the children’s eyes.",
+        a:"injustice", opts:["injustice","resilience","belonging","determination"],
+        explain:"Injustice: unfairness. Showing events from the children’s point of view makes us feel it." } ] },
+
+  { w:"Freedom", pos:"noun", domain:"hazard",
+    meaning:"The power to live, move and choose for yourself, without being controlled.",
+    type:"morph",
+    tiles:[["free","not controlled, able to choose"],["-dom","the state or realm of"]],
+    decoys:[["-ful","full of"],["-ly","in a way"],["un-","not"]],
+    note:"Old English <i>freodom</i>: <i>free</i> + <i>-dom</i> (the state of). Same <i>-dom</i> in <b>kingdom</b> and <b>wisdom</b>. In the film the open desert often stands for freedom; the fences and locks of the settlement stand for its loss.",
+    apply:[
+      { id:"ap_fre_desc", type:"desc",
+        q:"Which word means the power to live, move and choose for yourself?",
+        a:"Freedom", opts:["Freedom","Oppression","Authority","Separation"],
+        explain:"<i>free</i> + <i>-dom</i> (the state of): the state of being free." },
+      { id:"ap_fre_cloze", type:"cloze",
+        before:"Long shots of the girls running across the open land suggest", after:", in contrast to the locked dormitory.",
+        a:"freedom", opts:["freedom","oppression","authority","assimilation"],
+        explain:"The open land suggests freedom; the locks suggest its loss. A pair like this is a contrast." } ] },
+
+  { w:"Isolation", pos:"noun", domain:"people",
+    meaning:"Being alone and cut off from other people.",
+    type:"morph",
+    tiles:[["isol","an island"],["-ation","the act or state of"]],
+    decoys:[["in-","not"],["-ment","the result of"],["re-","back, again"]],
+    note:"From Italian <i>isola</i>, an island: someone in isolation is like an island, with nothing around them. Same root in <b>isolated</b>, and (from Latin <i>insula</i>) <b>peninsula</b>. Extreme long shots of the tiny girls in the huge desert show their isolation.",
+    apply:[
+      { id:"ap_iso_desc", type:"desc",
+        q:"Which word means being alone and cut off from other people, like an island?",
+        a:"Isolation", opts:["Isolation","Connection","Reunion","Belonging"],
+        explain:"<i>isol</i> (island) + <i>-ation</i> (state of): being an island." },
+      { id:"ap_iso_cloze", type:"cloze",
+        before:"Noyce uses a long shot to highlight the girls’", after:"in the vast desert.",
+        a:"isolation", opts:["isolation","connection","authority","reunion"],
+        explain:"Technique + analytical verb + theme word: the C4 sentence on the skill ladder." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>op-</b> (against), <b>press</b> (push down), <b>in-</b> (not), <b>just</b> (fair), <b>-dom</b> (the state of) and <b>isol</b> (island).",
+    items:[
+      { id:"b23_pressure", kind:"build", w:"pressure", tiles:[["press","to push down"],["-ure","the result of"]], decoys:[["op-","against (changed from ob-)"],["-ion","the act or state of"]],
+        meaning:"the force of something pushing on something else." },
+      { id:"b23_just", kind:"mcq", q:"<b>Unjust</b> and <b>injustice</b> both contain <b>just</b>. Here it means…", a:"fair, right", opts:["fair, right","only","angry","strong"],
+        explain:"Not the <i>just</i> that means ‘only’: this is the <i>just</i> of <b>justice</b>, meaning fair." },
+      { id:"b23_dom", kind:"mcq", q:"A <b>kingdom</b> is the land a king rules. The <b>-dom</b> in <i>kingdom</i> and <i>freedom</i> means…", a:"the state or realm of", opts:["the state or realm of","one who","the opposite of","full of"],
+        explain:"<i>-dom</i> turns a word into a state or realm: free → freedom." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s23_suppression", kind:"build", w:"suppression", tiles:[["sup-","under (changed from sub-)"],["press","to push down"],["-ion","the act or state of"]], decoys:[["op-","against (changed from ob-)"],["ex-","out"]],
+        meaning:"the act of pushing something down so it cannot be seen or heard, like a language or a culture.",
+        explain:"<i>sup-</i> (under) + <i>press</i> + <i>-ion</i>: pressing it under. Banning a language is suppression." },
+      { id:"s23_peninsula", kind:"mcq", q:"Word alchemy: <b>peninsula</b> comes from Latin <i>paene</i> (almost) + <i>insula</i> (island), the same island root as <b>isolation</b>. A peninsula is…", a:"land that is almost an island, joined to the mainland on one side", opts:["land that is almost an island, joined to the mainland on one side","a very small island in a lake","a group of islands far out at sea","land in the middle of a desert"],
+        explain:"Almost an island: water on three sides." } ] },
+},
+
+/* ================= 3.1 THE FOUR STEPS OF THE LADDER ================= */
+{ id:"3.1", topic:"Module 3 · Writing about film", title:"The Four Steps of the Ladder",
+  focus:"The skill ladder climbs from Describe (C2) to Interpret (VCE 1). Know what each step asks you to do.",
+  words:[
+  { w:"Describe", pos:"verb", domain:"water",
+    meaning:"To say what you see or hear, clearly and in detail.",
+    type:"morph",
+    tiles:[["de-","down, completely"],["scribe","to write"]],
+    decoys:[["pre-","before"],["con-","together, with"],["sub-","under"]],
+    note:"Latin <i>describere</i>, to write down: <i>de-</i> (down) + <i>scribere</i> (to write). Same <i>scribe</i> in <b>scribble</b> and <b>prescribe</b>. On the skill ladder, <b>Describe</b> is C2: say what happens on screen. “The film uses a long shot to show the girls walking alone.”",
+    apply:[
+      { id:"ap_des_desc", type:"desc",
+        q:"On the skill ladder, which step means ‘say what happens on screen’?",
+        a:"Describe", opts:["Describe","Explain","Analyse","Interpret"],
+        explain:"<i>de-</i> (down) + <i>scribe</i> (write): write down what you see. C2." },
+      { id:"ap_des_scn", type:"scenario",
+        q:"“The film uses a long shot to show the girls walking alone.” This sentence only says what is on screen. Which step is it?",
+        a:"Describe", opts:["Describe","Explain","Analyse","Interpret"],
+        explain:"It names the technique and says what we see, nothing more: describing. C2." } ] },
+
+  { w:"Explain", pos:"verb", domain:"water",
+    meaning:"To make something clear by giving reasons: say why, or what it means.",
+    type:"morph",
+    tiles:[["ex-","out"],["plain","flat, clear"]],
+    decoys:[["com-","together"],["re-","back, again"],["-ed","in the past"]],
+    note:"Latin <i>explanare</i>, to make flat, to smooth out: <i>ex-</i> (out) + <i>planus</i> (flat). Explaining smooths a problem out until it is plain. On the skill ladder, <b>Explain</b> is C3: add the meaning, often with <i>because</i> or <i>so</i>. “The long shot makes the audience see how far the girls must travel, showing their bravery.”",
+    apply:[
+      { id:"ap_exp_desc", type:"desc",
+        q:"Which step on the skill ladder adds a reason or a meaning, often with ‘because’ or ‘so’?",
+        a:"Explain", opts:["Explain","Describe","Interpret","Analyse"],
+        explain:"<i>ex-</i> (out) + <i>plain</i> (clear): making it clear. C3." },
+      { id:"ap_exp_scn", type:"scenario",
+        q:"“The long shot makes the audience see how far the girls must travel, showing their bravery.” This sentence gives the effect on the audience. Which step is it?",
+        a:"Explain", opts:["Explain","Describe","Analyse","Interpret"],
+        explain:"It says what the technique does to the audience: explaining. C3." } ] },
+
+  { w:"Analyse", pos:"verb", domain:"water",
+    meaning:"To look closely at the parts of something to show how they work together to make meaning.",
+    type:"morph",
+    tiles:[["ana-","up, back, again"],["lyse","to loosen, to break apart"]],
+    decoys:[["para-","beside"],["cata-","down"],["-ise","to make"]],
+    note:"Greek <i>analusis</i>, a loosening up: <i>ana-</i> (up) + <i>luein</i> (to loosen). To analyse is to take something apart to see how it works. Australian spelling: <b>analyse</b>, <b>analysis</b>. On the skill ladder, <b>Analyse</b> is C4: link the technique to a theme with a verb like <i>highlight</i> or <i>symbolise</i>. “Noyce uses a long shot to highlight the girls’ isolation in the vast desert, symbolising their determination and loss of freedom.”",
+    apply:[
+      { id:"ap_ana_desc", type:"desc",
+        q:"Which step on the skill ladder links a technique to a theme, with verbs like ‘highlight’ and ‘symbolise’?",
+        a:"Analyse", opts:["Analyse","Describe","Explain","Interpret"],
+        explain:"<i>ana-</i> (up) + <i>lyse</i> (loosen): taking the scene apart to show how it makes meaning. C4." },
+      { id:"ap_ana_cloze", type:"cloze",
+        before:"To", after:"a scene, take it apart: the technique, what it shows, and the theme it builds.",
+        a:"analyse", opts:["analyse","describe","escape","remove"],
+        explain:"Analyse: break apart to see how the parts work together." } ] },
+
+  { w:"Interpret", pos:"verb", domain:"water",
+    meaning:"To explain the deeper meaning: what the director is saying about people, society or history.",
+    type:"origin",
+    originQ:"The word ‘interpret’ comes from a Latin word for a person who…",
+    originOpts:["goes between two sides and explains one to the other","writes things down for a king","runs away from danger","builds fences"],
+    originA:"goes between two sides and explains one to the other",
+    note:"Latin <i>interpres</i>: a go-between, someone who explains one side to the other. An interpreter still does this between two languages. Interpreting a film means going between the screen and the real world: what is the director saying about people, history or values? On the skill ladder, <b>Interpret</b> is VCE 1. “Noyce repeatedly uses wide landscape shots to contrast the beauty of the land with the cruelty of the government’s control, emphasising the theme of resilience against oppression.”",
+    apply:[
+      { id:"ap_int_desc", type:"desc",
+        q:"Which step on the skill ladder discusses the director’s message and values: what the film says about the real world?",
+        a:"Interpret", opts:["Interpret","Describe","Explain","Analyse"],
+        explain:"Latin <i>interpres</i>, a go-between: between the film and the world. VCE 1." },
+      { id:"ap_int_scn", type:"scenario",
+        q:"“Noyce contrasts the beauty of the land with the cruelty of the government’s control, emphasising resilience against oppression.” This sentence discusses the director’s message. Which step is it?",
+        a:"Interpret", opts:["Interpret","Describe","Explain","Analyse"],
+        explain:"It talks about the director’s message and values: interpreting. VCE 1." } ] },
+  ],
+  base:{ intro:"The parts inside the ladder’s words: <b>de-</b> (down), <b>scribe</b> (write), <b>ex-</b> (out), <b>plain</b> (clear), <b>ana-</b> (up) and <b>lyse</b> (loosen).",
+    items:[
+      { id:"b31_subscribe", kind:"build", w:"subscribe", tiles:[["sub-","under"],["scribe","to write"]], decoys:[["de-","down, completely"],["ex-","out"]],
+        meaning:"to sign up for something; first it meant to write your name under." },
+      { id:"b31_ladder", kind:"mcq", q:"The skill ladder goes Describe → Explain → Analyse → Interpret. Which step comes straight after Describe?", a:"Explain", opts:["Explain","Interpret","Analyse","Represent"],
+        explain:"C2 Describe, C3 Explain, C4 Analyse, VCE 1 Interpret." },
+      { id:"b31_ex", kind:"mcq", q:"<b>ex-</b> in <i>explain</i>, <i>exit</i> and <i>export</i> means…", a:"out", opts:["out","in","again","under"],
+        explain:"Exit: go out. Export: carry out. Explain: smooth it out until it is plain." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s31_analysis", kind:"build", w:"analysis", tiles:[["ana-","up, back, again"],["lys","to loosen, to break apart"],["-is","the act of"]], decoys:[["para-","beside"],["-ise","to make"]],
+        meaning:"a close look at the parts of something; what you write when you analyse.",
+        explain:"The noun: you <b>analyse</b> (verb) and write an <b>analysis</b> (noun)." },
+      { id:"s31_interpreter", kind:"mcq", q:"Word alchemy: an <b>interpreter</b> goes between two languages. When you <b>interpret</b> a film, you go between…", a:"what is on the screen and what it says about the real world", opts:["what is on the screen and what it says about the real world","two different cinemas","the start and the end of the film","two actors in a scene"],
+        explain:"Interpreting links the film to people, history and values: VCE 1." } ] },
+},
+
+/* ================= 3.2 VERBS THAT SHOW MEANING ================= */
+{ id:"3.2", topic:"Module 3 · Writing about film", title:"Verbs That Show Meaning",
+  focus:"Swap ‘shows’ for a verb that says how the film makes meaning.",
+  words:[
+  { w:"Represent", pos:"verb", domain:"water",
+    meaning:"To stand for something, or to show it in a particular way.",
+    type:"morph",
+    tiles:[["re-","back, again"],["present","to show, to place before"]],
+    decoys:[["pre-","before"],["-ation","the act or state of"],["de-","down, completely"]],
+    note:"Latin <i>repraesentare</i>, to show again, to make present. In film analysis: “The fence <b>represents</b> the government’s control”, or “the way home”. The noun is <b>representation</b>: “the film’s representation of the Stolen Generations”.",
+    apply:[
+      { id:"ap_rep_desc", type:"desc",
+        q:"Which verb means ‘to stand for something, or to show it in a particular way’?",
+        a:"Represent", opts:["Represent","Escape","Describe","Pursue"],
+        explain:"<i>re-</i> (again) + <i>present</i> (show): to show again, in a new form." },
+      { id:"ap_rep_cloze", type:"cloze",
+        before:"The locked gate of the settlement", after:"the girls’ loss of freedom.",
+        a:"represents", opts:["represents","escapes","describes","pursues"],
+        explain:"An object can represent an idea: the gate stands for lost freedom." } ] },
+
+  { w:"Symbolise", pos:"verb", domain:"water",
+    meaning:"To be a sign of a bigger idea: an object, colour or sound that stands for something else.",
+    type:"morph",
+    tiles:[["sym-","together"],["bol","to throw"],["-ise","to make"]],
+    decoys:[["syn-","with"],["-ic","relating to"],["-ism","a belief"]],
+    note:"Greek <i>sumbolon</i>, a token: two halves of a broken object “thrown together” to prove who you are. A symbol is a thing put together with an idea. Australian spelling: <b>symbolise</b>. “The spirit bird symbolises Molly’s connection to her mother.”",
+    apply:[
+      { id:"ap_sym_desc", type:"desc",
+        q:"Which verb means ‘to be a sign of a bigger idea’?",
+        a:"Symbolise", opts:["Symbolise","Describe","Remove","Survive"],
+        explain:"<i>sym-</i> (together) + <i>bol</i> (throw) + <i>-ise</i> (make): an object thrown together with an idea." },
+      { id:"ap_sym_cloze", type:"cloze",
+        before:"The spirit bird", after:"Molly’s connection to her mother and her Country.",
+        a:"symbolises", opts:["symbolises","escapes","pursues","removes"],
+        explain:"The bird is a symbol: it stands for her connection to home." } ] },
+
+  { w:"Highlight", pos:"verb", domain:"water",
+    meaning:"To draw attention to something, so the audience notices it.",
+    type:"compound",
+    tiles:[["high","up above"],["light","brightness that lets us see"]],
+    decoys:[["down","below"],["shade","darkness where light is blocked"],["sun","the star that lights the day"]],
+    note:"A plain English compound: a light held up high so everyone can see. Painters first used <i>highlight</i> for the brightest parts of a picture. In analysis it is one of the most useful verbs: “Noyce uses a long shot to <b>highlight</b> the girls’ isolation.”",
+    apply:[
+      { id:"ap_hig_desc", type:"desc",
+        q:"Which verb means ‘to draw attention to something, so the audience notices it’?",
+        a:"Highlight", opts:["Highlight","Escape","Remove","Pursue"],
+        explain:"<i>high</i> + <i>light</i>: holding a light up so it can be seen." },
+      { id:"ap_hig_cloze", type:"cloze",
+        before:"The extreme long shot", after:"how small the girls are in the huge desert.",
+        a:"highlights", opts:["highlights","removes","escapes","assimilates"],
+        explain:"Highlight: make the audience notice. Here, how small and alone the girls are." } ] },
+
+  { w:"Reveal", pos:"verb", domain:"water",
+    meaning:"To show something that was hidden or not known.",
+    type:"morph",
+    tiles:[["re-","back, again"],["veal","a veil, a cover"]],
+    decoys:[["de-","down, completely"],["-ed","in the past"],["con-","together, with"]],
+    note:"Latin <i>revelare</i>, to pull back the veil: <i>re-</i> (back) + <i>velum</i> (a veil, a cover). When a film reveals something, it pulls the cover back so we see what was hidden. “The close-up reveals Molly’s fear.”",
+    apply:[
+      { id:"ap_rev_desc", type:"desc",
+        q:"Which verb means ‘to show something that was hidden’?",
+        a:"Reveal", opts:["Reveal","Pursue","Remove","Survive"],
+        explain:"<i>re-</i> (back) + <i>veal</i> (veil): pulling back the veil." },
+      { id:"ap_rev_cloze", type:"cloze",
+        before:"A close-up of Molly’s face", after:"her fear, even though she says nothing.",
+        a:"reveals", opts:["reveals","escapes","removes","assimilates"],
+        explain:"Reveal: show what was hidden. The close-up shows a feeling she keeps silent." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>re-</b> (back, again), <b>sym-</b> (together), <b>bol</b> (throw), <b>-ise</b> (to make) and <b>veal</b> (veil).",
+    items:[
+      { id:"b32_symbol", kind:"build", w:"symbol", tiles:[["sym-","together"],["bol","to throw"]], decoys:[["syn-","with"],["-ise","to make"]],
+        meaning:"a thing that stands for an idea, like a flag for a country." },
+      { id:"b32_ise", kind:"mcq", q:"<b>-ise</b> in <i>symbolise</i>, <i>emphasise</i> and <i>realise</i> means…", a:"to make", opts:["to make","one who","not","full of"],
+        explain:"<i>-ise</i> turns a word into an action: symbol → symbolise. Australian spelling uses <i>-ise</i>." },
+      { id:"b32_verb", kind:"mcq", q:"In a sentence about a film, which verb says more than ‘shows’?", a:"highlights", opts:["highlights","has","goes","is"],
+        explain:"<i>Highlights</i> says HOW the film shows something: it draws attention to it." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s32_representation", kind:"build", w:"representation", tiles:[["re-","back, again"],["present","to show, to place before"],["-ation","the act or state of"]], decoys:[["pre-","before"],["-ise","to make"]],
+        meaning:"the way something is shown: the film’s representation of the Stolen Generations.",
+        explain:"Verb + <i>-ation</i> makes the noun. You can analyse how a film represents a group of people: its representation of them." },
+      { id:"s32_revelation", kind:"mcq", q:"Word alchemy: <b>revelation</b> is the noun from <b>reveal</b>. A revelation is…", a:"a surprising discovery of something hidden", opts:["a surprising discovery of something hidden","a long journey on foot","a kind of fence","a loud sound"],
+        explain:"Pull back the veil, and what you see is a revelation." } ] },
+},
+
+/* ================= 3.3 VERBS THAT INTERPRET ================= */
+{ id:"3.3", topic:"Module 3 · Writing about film", title:"Verbs That Interpret",
+  focus:"The verbs at the top of the ladder: what the director does to the audience, and why.",
+  words:[
+  { w:"Emphasise", pos:"verb", domain:"water",
+    meaning:"To give extra importance to something, so it stands out.",
+    type:"morph",
+    tiles:[["em-","in, into"],["phas","to show, to appear"],["-ise","to make"]],
+    decoys:[["sym-","together"],["-ic","relating to"],["ex-","out"]],
+    note:"Greek <i>emphasis</i>, a showing in: <i>em-</i> (in) + <i>phainein</i> (to show). Same root in <b>phase</b>. Australian spelling: <b>emphasise</b>. “The silence emphasises the shock of the removal.”",
+    apply:[
+      { id:"ap_emp_desc", type:"desc",
+        q:"Which verb means ‘to give extra importance to something, so it stands out’?",
+        a:"Emphasise", opts:["Emphasise","Remove","Escape","Describe"],
+        explain:"<i>em-</i> (in) + <i>phas</i> (show) + <i>-ise</i> (make): to make it show strongly." },
+      { id:"ap_emp_cloze", type:"cloze",
+        before:"Slow, sad music", after:"how alone the girls feel.",
+        a:"emphasises", opts:["emphasises","escapes","removes","describes"],
+        explain:"Emphasise: make it stand out. The music makes us feel their loneliness more strongly." } ] },
+
+  { w:"Contrast", pos:"verb", domain:"water",
+    meaning:"To show how two things are different by putting them side by side. As a noun: a difference that stands out.",
+    type:"morph",
+    tiles:[["contra-","against"],["st","to stand"]],
+    decoys:[["con-","together, with"],["-ion","the act or state of"],["sub-","under"]],
+    note:"Latin <i>contra</i> (against) + <i>stare</i> (to stand): two things standing against each other. Same <i>st</i> in <b>stand</b> and <b>stable</b>. Directors use contrast all the time: the warm desert against the cold settlement, open land against locked gates. “Noyce contrasts the beauty of the land with the cruelty of the government’s control.”",
+    apply:[
+      { id:"ap_cnt_scn", type:"scenario",
+        q:"One scene shows the girls in warm, golden, open land. The next shows grey, locked rooms. What is the director doing?",
+        a:"Creating a contrast", opts:["Creating a contrast","Creating a pursuit","Creating a removal","Creating a reunion"],
+        explain:"<i>contra-</i> (against) + <i>st</i> (stand): two things standing against each other, so the difference stands out." },
+      { id:"ap_cnt_cloze", type:"cloze",
+        before:"Noyce", after:"the freedom of the desert with the locked dormitory at Moore River.",
+        a:"contrasts", opts:["contrasts","escapes","removes","survives"],
+        explain:"To contrast A with B: put them side by side so the difference is clear." } ] },
+
+  { w:"Convey", pos:"verb", domain:"water",
+    meaning:"To carry a feeling, idea or message to the audience.",
+    type:"morph",
+    tiles:[["con-","together, with"],["vey","a way, a road"]],
+    decoys:[["sur-","over, beyond"],["-or","one who"],["pre-","before"]],
+    note:"From Latin <i>via</i>, a way or road, through Old French <i>conveier</i>, to go with someone on their way. Same root in <b>conveyor belt</b>. A film conveys a message: it carries it all the way to the audience. “The close-ups convey Molly’s determination.”",
+    apply:[
+      { id:"ap_cvy_desc", type:"desc",
+        q:"Which verb means ‘to carry a feeling or message to the audience’?",
+        a:"Convey", opts:["Convey","Escape","Remove","Pursue"],
+        explain:"<i>con-</i> (with) + <i>vey</i> (way): to send something on its way." },
+      { id:"ap_cvy_cloze", type:"cloze",
+        before:"Through close-ups of her face, the director", after:"Molly’s determination to get home.",
+        a:"conveys", opts:["conveys","removes","escapes","assimilates"],
+        explain:"Convey: carry a feeling to the audience." } ] },
+
+  { w:"Evoke", pos:"verb", domain:"water",
+    meaning:"To call up a feeling or a memory in the audience.",
+    type:"morph",
+    tiles:[["e-","out"],["voke","to call"]],
+    decoys:[["pro-","forward, in front"],["re-","back, again"],["-ed","in the past"]],
+    note:"Latin <i>evocare</i>, to call out: <i>e-</i> (out) + <i>vocare</i> (to call). Same root in <b>voice</b> and <b>vocal</b>. Music and sound often evoke feelings: they call them out of us. “The soundtrack evokes sadness.”",
+    apply:[
+      { id:"ap_evo_desc", type:"desc",
+        q:"Which verb means ‘to call up a feeling or memory in the audience’?",
+        a:"Evoke", opts:["Evoke","Escape","Pursue","Remove"],
+        explain:"<i>e-</i> (out) + <i>voke</i> (call): to call a feeling out of the audience." },
+      { id:"ap_evo_cloze", type:"cloze",
+        before:"Gentle singing", after:"the warmth of home and family.",
+        a:"evokes", opts:["evokes","removes","pursues","escapes"],
+        explain:"Evoke: call up a feeling. Sound is the technique that does this most." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>em-</b> (in), <b>contra-</b> (against), <b>con-</b> (with), <b>vey</b> (way), <b>e-</b> (out) and <b>voke</b> (call).",
+    items:[
+      { id:"b33_convoy", kind:"build", w:"convoy", tiles:[["con-","together, with"],["voy","a way, a road"]], decoys:[["e-","out"],["-ise","to make"]],
+        meaning:"a group of vehicles travelling together on the same road." },
+      { id:"b33_voc", kind:"mcq", q:"<b>Voice</b>, <b>vocal</b> and <b>evoke</b> share a root. It means…", a:"to call", opts:["to call","to see","to hear","to run"],
+        explain:"Latin <i>vocare</i>, to call. Your voice calls out." },
+      { id:"b33_contra", kind:"mcq", q:"<b>contra-</b> in <i>contrast</i>, <i>contradict</i> and <i>contrary</i> means…", a:"against", opts:["against","together","before","under"],
+        explain:"To contradict is to speak against. Contrast: stand against." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s33_emphasis", kind:"build", w:"emphasis", tiles:[["em-","in, into"],["phas","to show, to appear"],["-is","the act of"]], decoys:[["-ise","to make"],["sym-","together"]],
+        meaning:"special importance given to something.",
+        explain:"Noun: the director places <b>emphasis</b> on the girls’ isolation. Verb: the director <b>emphasises</b> it." },
+      { id:"s33_contradict", kind:"mcq", q:"Word alchemy: you know <b>contra-</b> means against, and <b>dict</b> means say. To <b>contradict</b> someone is to…", a:"say the opposite of what they said", opts:["say the opposite of what they said","agree with everything they say","repeat their words","write their words down"],
+        explain:"<i>contra-</i> (against) + <i>dict</i> (say)." } ] },
+},
+
+/* ================= 3.4 THE DIRECTOR AND THE AUDIENCE ================= */
+{ id:"3.4", topic:"Module 3 · Writing about film", title:"The Director and the Audience",
+  focus:"Every analytical sentence has a who and a to-whom: the director makes choices; the audience feels them.",
+  words:[
+  { w:"Director", pos:"noun", domain:"water",
+    meaning:"The person in charge of making a film, who chooses how every scene is shot and heard.",
+    type:"morph",
+    tiles:[["direct","to guide, to set straight"],["-or","one who"]],
+    decoys:[["-ion","the act or state of"],["-ive","tending to, doing"],["in-","not"]],
+    note:"Latin <i>dirigere</i>, to set straight, to guide. A director guides the actors, the camera and the sound. The director of <i>Rabbit-Proof Fence</i> is Phillip Noyce, so analytical sentences can start “Noyce uses…”: surname only.",
+    apply:[
+      { id:"ap_dir_desc", type:"desc",
+        q:"Who chooses how every scene of a film is shot and heard?",
+        a:"The director", opts:["The director","The audience","The tracker","The protector"],
+        explain:"<i>direct</i> (guide) + <i>-or</i> (one who): the one who guides the whole film." },
+      { id:"ap_dir_cloze", type:"cloze",
+        before:"An analytical paragraph talks about the", after:"’s choices: “Noyce uses a close-up to…”",
+        a:"director", opts:["director","audience","pursuer","protector"],
+        explain:"Name the director by surname: Noyce." } ] },
+
+  { w:"Audience", pos:"noun", domain:"water",
+    meaning:"The people who watch a film or listen to a speech.",
+    type:"morph",
+    tiles:[["audi","to hear"],["-ence","the state or act of"]],
+    decoys:[["-ion","the act or state of"],["vis","to see"],["-or","one who"]],
+    note:"Latin <i>audientia</i>, a hearing, from <i>audire</i>, to hear. Same <i>audi</i> in <b>audio</b> and <b>audition</b>. In analysis, the audience is who the effect happens to: “…makes the audience feel…”, “…positions the audience to…”.",
+    apply:[
+      { id:"ap_aud_desc", type:"desc",
+        q:"Which word means the people who watch a film?",
+        a:"Audience", opts:["Audience","Director","Protector","Pursuer"],
+        explain:"<i>audi</i> (hear) + <i>-ence</i>: the people who hear, and watch." },
+      { id:"ap_aud_cloze", type:"cloze",
+        before:"The high angle makes the", after:"feel that the girls are small and in danger.",
+        a:"audience", opts:["audience","director","tracker","protector"],
+        explain:"The effect of a technique happens to the audience." } ] },
+
+  { w:"Perspective", pos:"noun", domain:"water",
+    meaning:"A point of view: the way a person, or a film, sees events.",
+    type:"morph",
+    tiles:[["per-","through"],["spect","to look"],["-ive","tending to, doing"]],
+    decoys:[["pro-","forward, in front"],["re-","back, again"],["-ion","the act or state of"]],
+    note:"Latin <i>perspicere</i>, to look through. Same <i>spect</i> in <b>inspect</b> and <b>spectator</b>. A film is told from a perspective. <i>Rabbit-Proof Fence</i> often takes the girls’ perspective: we see the settlement and the officials through their eyes.",
+    apply:[
+      { id:"ap_per_desc", type:"desc",
+        q:"Which word means a point of view: the way someone sees events?",
+        a:"Perspective", opts:["Perspective","Pursuit","Removal","Survival"],
+        explain:"<i>per-</i> (through) + <i>spect</i> (look) + <i>-ive</i>: looking through someone’s eyes." },
+      { id:"ap_per_cloze", type:"cloze",
+        before:"A point of view shot puts the audience inside a character’s", after:": we see exactly what she sees.",
+        a:"perspective", opts:["perspective","pursuit","removal","authority"],
+        explain:"A POV shot shows the character’s perspective, literally." } ] },
+
+  { w:"Purpose", pos:"noun", domain:"water",
+    meaning:"The reason something is done: what the director wants to achieve.",
+    type:"morph",
+    tiles:[["pur-","forward (changed from pro-)"],["pose","to put, to place"]],
+    decoys:[["sup-","under (changed from sub-)"],["-ive","tending to, doing"],["com-","together"]],
+    note:"Old French <i>porpos</i>, from <i>porposer</i>, to put forward: a purpose is the aim you put in front of you. Same <i>pur-</i> as <b>pursuit</b>. On the skill ladder, <b>Purpose & Interpretation</b> asks why the director made a choice. Sentence starter: “Noyce’s purpose is to…”.",
+    apply:[
+      { id:"ap_pus_desc", type:"desc",
+        q:"Which word means the reason something is done: what the director wants to achieve?",
+        a:"Purpose", opts:["Purpose","Pursuit","Perspective","Removal"],
+        explain:"<i>pur-</i> (forward) + <i>pose</i> (put): the aim you put in front of you." },
+      { id:"ap_pus_cloze", type:"cloze",
+        before:"Noyce’s", after:"is to make the audience understand what the Stolen Generations suffered.",
+        a:"purpose", opts:["purpose","pursuit","removal","escape"],
+        explain:"Purpose: the director’s aim. VCE 1 writing discusses it." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>direct</b> (guide), <b>audi</b> (hear), <b>per-</b> (through), <b>spect</b> (look), <b>pur-</b> (forward) and <b>pose</b> (put).",
+    items:[
+      { id:"b34_respect", kind:"build", w:"respect", tiles:[["re-","back, again"],["spect","to look"]], decoys:[["per-","through"],["-or","one who"]],
+        meaning:"to look up to someone and treat them well; first it meant to look back at them." },
+      { id:"b34_audi", kind:"mcq", q:"<b>Audio</b>, <b>audition</b> and <b>audience</b> share <b>audi</b>. It means…", a:"to hear", opts:["to hear","to see","to write","to call"],
+        explain:"Latin <i>audire</i>, to hear." },
+      { id:"b34_who", kind:"mcq", q:"In an analytical sentence, who feels the effect of a technique?", a:"the audience", opts:["the audience","the director","the camera","the soundtrack"],
+        explain:"The director makes the choice; the audience feels it: “The low angle makes the audience feel…”" } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s34_audition", kind:"build", w:"audition", tiles:[["audi","to hear"],["-tion","the act of"]], decoys:[["-ence","the state or act of"],["vis","to see"]],
+        meaning:"a short performance so that a director can hear and see whether you suit a role.",
+        explain:"<i>audi</i> (hear) + <i>-tion</i>: a hearing. Directors hold auditions to choose their actors." },
+      { id:"s34_spectator", kind:"mcq", q:"Word alchemy: you know <b>spect</b> means look. A <b>spectator</b> at a football match is someone who…", a:"watches", opts:["watches","plays","referees","sells the tickets"],
+        explain:"<i>spect</i> (look) + <i>-ator</i> (one who): a watcher. A film audience are spectators too." } ] },
+},
+];
+
+/* ---------------- KEY-WORD TRANSLATIONS ----------------
+   This year's ELC languages: Mandarin in Traditional characters (Taiwan
+   usage), Mandarin in Simplified characters (Mainland usage) and
+   Vietnamese. Drafted, not yet checked by a speaker of each language.
+   Shown on study cards and build reveals when a language is chosen;
+   the practice tasks stay in English. */
+const LANGS = [
+  ["zh-Hant","Mandarin (Traditional) · 繁體國語"],
+  ["zh-Hans","Mandarin (Simplified) · 简体普通话"],
+  ["vi","Vietnamese · Tiếng Việt"],
+];
+const RTL = {};
+const TR = {
+"Stolen Generations":{"zh-Hans":"被偷走的一代","zh-Hant":"被偷走的世代",vi:"Thế hệ bị đánh cắp"},
+"Removal":{"zh-Hans":"带离（强行带走）","zh-Hant":"帶離（強行帶走）",vi:"sự mang đi (tách khỏi gia đình)"},
+"Assimilation":{"zh-Hans":"同化（政策）","zh-Hant":"同化（政策）",vi:"sự đồng hóa"},
+"Protector":{"zh-Hans":"保护官","zh-Hant":"保護官",vi:"quan bảo hộ"},
+"Rabbit-proof":{"zh-Hans":"防兔的","zh-Hant":"防兔的",vi:"chống thỏ"},
+"Escape":{"zh-Hans":"逃跑","zh-Hant":"逃脫",vi:"trốn thoát"},
+"Pursuit":{"zh-Hans":"追捕","zh-Hant":"追捕",vi:"cuộc truy đuổi"},
+"Survival":{"zh-Hans":"生存","zh-Hant":"生存",vi:"sự sống sót"},
+"Belonging":{"zh-Hans":"归属感","zh-Hant":"歸屬感",vi:"cảm giác thuộc về"},
+"Identity":{"zh-Hans":"身份认同","zh-Hant":"身分認同",vi:"bản sắc"},
+"Culture":{"zh-Hans":"文化","zh-Hant":"文化",vi:"văn hóa"},
+"Connection":{"zh-Hans":"联系（纽带）","zh-Hant":"連結（紐帶）",vi:"sự gắn kết"},
+"Separation":{"zh-Hans":"分离","zh-Hant":"分離",vi:"sự chia cắt"},
+"Reunion":{"zh-Hans":"团聚","zh-Hant":"團聚",vi:"sự đoàn tụ"},
+"Determination":{"zh-Hans":"决心","zh-Hant":"決心",vi:"quyết tâm"},
+"Resilience":{"zh-Hans":"韧性（复原力）","zh-Hant":"韌性（復原力）",vi:"sự kiên cường"},
+"Oppression":{"zh-Hans":"压迫","zh-Hant":"壓迫",vi:"sự áp bức"},
+"Injustice":{"zh-Hans":"不公正","zh-Hant":"不公義",vi:"sự bất công"},
+"Freedom":{"zh-Hans":"自由","zh-Hant":"自由",vi:"tự do"},
+"Isolation":{"zh-Hans":"孤立（与世隔绝）","zh-Hant":"孤立（與世隔絕）",vi:"sự cô lập"},
+"Describe":{"zh-Hans":"描述","zh-Hant":"描述",vi:"mô tả"},
+"Explain":{"zh-Hans":"解释","zh-Hant":"解釋",vi:"giải thích"},
+"Analyse":{"zh-Hans":"分析","zh-Hant":"分析",vi:"phân tích"},
+"Interpret":{"zh-Hans":"诠释（解读）","zh-Hant":"詮釋（解讀）",vi:"diễn giải"},
+"Represent":{"zh-Hans":"代表（表现）","zh-Hant":"代表（呈現）",vi:"đại diện cho, thể hiện"},
+"Symbolise":{"zh-Hans":"象征","zh-Hant":"象徵",vi:"tượng trưng cho"},
+"Highlight":{"zh-Hans":"突出（凸显）","zh-Hant":"凸顯（強調）",vi:"làm nổi bật"},
+"Reveal":{"zh-Hans":"揭示","zh-Hant":"揭露（顯示）",vi:"cho thấy, tiết lộ"},
+"Emphasise":{"zh-Hans":"强调","zh-Hant":"強調",vi:"nhấn mạnh"},
+"Contrast":{"zh-Hans":"对比","zh-Hant":"對比",vi:"tương phản, đối chiếu"},
+"Convey":{"zh-Hans":"传达","zh-Hant":"傳達",vi:"truyền tải"},
+"Evoke":{"zh-Hans":"唤起","zh-Hant":"喚起",vi:"gợi lên"},
+"Director":{"zh-Hans":"导演","zh-Hant":"導演",vi:"đạo diễn"},
+"Audience":{"zh-Hans":"观众","zh-Hant":"觀眾",vi:"khán giả"},
+"Perspective":{"zh-Hans":"视角","zh-Hant":"觀點（視角）",vi:"góc nhìn"},
+"Purpose":{"zh-Hans":"目的","zh-Hant":"目的",vi:"mục đích"},
+};
+
+/* ================= INDEXES ================= */
+const LESSON_BY_ID = {}; LESSONS.forEach(l=>LESSON_BY_ID[l.id]=l);
+const ALL_WORDS = []; const WORD_LESSON = {};
+LESSONS.forEach(l=>l.words.forEach(w=>{ ALL_WORDS.push(w); WORD_LESSON[w.w]=l.id; }));
+const ITEM_WORD = {}; // apply item id -> word object
+LESSONS.forEach(l=>l.words.forEach(w=>(w.apply||[]).forEach(it=>ITEM_WORD[it.id]=w)));
+const WORD_BY_NAME = {}; ALL_WORDS.forEach(w=>WORD_BY_NAME[w.w]=w);
+
+/* morpheme index: unique word-parts across every buildable word, typed + with examples */
+function classifyMorph(piece){
+  if(/^-.*-$/.test(piece)) return "connector";   // e.g. -o-
+  if(/^-/.test(piece)) return "suffix";
+  if(/-$/.test(piece)) return "prefix";
+  return "root";
+}
+const MORPHS = [];                 // {piece, gloss, type, examples:[wordName]}
+const MORPH_BY_PIECE = {};
+LESSONS.forEach(l=>l.words.forEach(w=>(w.tiles||[]).forEach(([p,g])=>{
+  if(!MORPH_BY_PIECE[p]){ const m={piece:p, gloss:g, type:classifyMorph(p), examples:[]}; MORPH_BY_PIECE[p]=m; MORPHS.push(m); }
+  if(MORPH_BY_PIECE[p].examples.indexOf(w.w)<0) MORPH_BY_PIECE[p].examples.push(w.w);
+})));
+const ALL_GLOSSES = [...new Set(MORPHS.map(m=>m.gloss))];
+const MTYPE_LABEL = {prefix:"Prefixes", root:"Roots & base words", suffix:"Suffixes", connector:"Joiners"};
+const MTYPE_ORDER = ["prefix","root","suffix","connector"];
+const MTYPE_LETTER = {prefix:"mp", root:"mr", suffix:"ms", connector:"mc"};
+
+/* Colour a word's own spelling by morpheme role, matching the coloured
+   code-chips in its morph line below: the purple-lab word-list treatment.
+   Falls back to the plain word if a tile can't be found inside it. */
+function colourWord(v){
+  if(v.type==="origin"||!v.tiles?.length) return esc(v.w);
+  let out="", rest=v.w;
+  for(const [piece] of v.tiles){
+    const clean=piece.replace(/-/g,"");
+    const idx=rest.toLowerCase().indexOf(clean.toLowerCase());
+    if(idx===-1) return esc(v.w);
+    out+=esc(rest.slice(0,idx))+`<span class="${MTYPE_LETTER[classifyMorph(piece)]}">${esc(rest.slice(idx,idx+clean.length))}</span>`;
+    rest=rest.slice(idx+clean.length);
+  }
+  return out+esc(rest);
+}
+function morphChips(tiles){
+  return tiles.map(t=>`<code class="${MTYPE_LETTER[classifyMorph(t[0])]}">${esc(t[0])}</code> <i>${esc(t[1])}</i>`).join(" + ");
+}
+const MLEGEND=`<div class="mlegend"><span><i style="background:var(--mpre)"></i>Prefix</span><span><i style="background:var(--mroot)"></i>Root</span><span><i style="background:var(--msuf)"></i>Suffix</span><span><i style="background:var(--mcon)"></i>Joiner</span></div>`;
+
+/* ================= STATE ================= */
+/* storage shim: real localStorage as a standalone file / on GitHub Pages;
+   silent in-memory fallback if storage is blocked (e.g. a sandboxed preview). */
+const store = (function(){
+  try{ const k="__rpfvh_probe"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return localStorage; }
+  catch(e){ const m={}; return { getItem:k=>(k in m?m[k]:null), setItem:(k,v)=>{m[k]=String(v);}, removeItem:k=>{delete m[k];} }; }
+})();
+// Own key: every vocab hub on this github.io origin shares one localStorage.
+const KEY = "elc.rpf.vocabhub.v1";
+let S = load();
+function blankLesson(){ return { studied:false, buildDone:{}, buildFirst:{}, buildComplete:false,
+  applySample:[], applyFirst:{}, applyDone:false,
+  baseDone:false, baseFirst:{}, stretchDone:false, stretchFirst:{} }; }
+/* A first visit starts in the language last chosen on the other Rabbit-Proof Fence pages, else the ELC Hub's. */
+function hubLang(){ try{ const r=JSON.parse(localStorage.getItem("elc_rpf_lang")); if(typeof r==="string") return LANGS.some(([c])=>c===r)?r:""; const p=localStorage.getItem("elc_page_language"); return (p==="zh-Hans"||p==="zh-Hant")?p:""; }catch(e){ return ""; } }
+function blank(){ return { lang:hubLang(), startedAt:null, lessons:{}, reviews:[], wstat:{} }; }
+function load(){ try{ const s=JSON.parse(store.getItem(KEY)); return (s&&s.lessons)?s:blank(); }catch(e){ return blank(); } }
+function save(){ try{ store.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function L(id){ if(!S.lessons[id]) S.lessons[id]=blankLesson(); return S.lessons[id]; }
+function WS(w){ if(!S.wstat[w]) S.wstat[w]={wrong:0,seen:0,rev:0}; return S.wstat[w]; }
+function resetAll(){ if(confirm("Wipe all your progress, scores and review history?")){ S=blank(); save(); go("home"); } }
+function touchStart(){ if(!S.startedAt){ S.startedAt=Date.now(); save(); } }
+
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function esc(t){ const d=document.createElement("div"); d.textContent=t; return d.innerHTML; }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+let cur = null; // current lesson id
+function go(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("scr-"+id).classList.add("active");
+  window.scrollTo(0,0);
+  updateNav(id);
+  if(id==="home") renderHome();
+  if(id==="report") renderReport();
+  if(id==="morphtable") renderMorphTable();
+  if(id==="glossary") renderGlossary();
+}
+function updateNav(id){
+  const group={morphtable:"morphtable", glossary:"glossary", report:"report"}[id] || "home";
+  document.querySelectorAll(".topnav button").forEach(b=>b.classList.toggle("on", b.dataset.scr===group));
+}
+function goLesson(){ if(cur) openLesson(cur, false); else go("home"); }
+
+/* translations */
+function trSpan(w, big){
+  if(!S.lang || !TR[w]) return "";
+  const t = TR[w][S.lang]; if(!t) return "";
+  return `<span class="wtr${big?" big":""}" ${RTL[S.lang]?'dir="rtl"':""} lang="${esc(S.lang)}">${esc(t)}</span>`;
+}
+
+/* ================= SCORE HELPERS ================= */
+function buildCounts(l){
+  const st=L(l.id);
+  const done=l.words.filter(w=>st.buildDone[w.w]).length;
+  const clean=l.words.filter(w=>st.buildFirst[w.w]===true).length;
+  return {done, clean, total:l.words.length};
+}
+/* apply sample = descriptors: {k:"a",id} authored, or {k:"g",g:type,w:name} generated */
+function applyKey(d){ return d.k==="a" ? d.id : ("g:"+d.g+":"+d.w); }
+function applyItem(d){
+  if(d.k==="a"){ const w=ITEM_WORD[d.id]; return w.apply.find(x=>x.id===d.id); }
+  return genTask(d.g, WORD_BY_NAME[d.w]);
+}
+function applyWordName(d){ return d.k==="a" ? ITEM_WORD[d.id].w : d.w; }
+function applyCounts(l){
+  const st=L(l.id);
+  const ds=st.applySample||[];
+  const ans=ds.filter(d=>st.applyFirst[applyKey(d)]!==undefined).length;
+  const got=ds.filter(d=>st.applyFirst[applyKey(d)]===true).length;
+  return {ans, got, total:ds.length||l.words.length};
+}
+function lessonCleanRate(l){
+  const b=buildCounts(l), a=applyCounts(l);
+  const attempted=b.done+a.ans; if(!attempted) return null;
+  return (b.clean+a.got)/attempted;
+}
+function lessonDone(l){ const st=L(l.id); return st.buildComplete && st.applyDone; }
+function tierCounts(items, firsts){
+  const ans=items.filter(it=>firsts[it.id]!==undefined).length;
+  const got=items.filter(it=>firsts[it.id]===true).length;
+  return {ans, got, total:items.length};
+}
+
+/* ================= HOME ================= */
+function renderHome(){
+  const wrap=document.getElementById("home-map"); wrap.innerHTML="";
+  /* language toggle */
+  const lrow=document.createElement("div");
+  lrow.className="langrow noprint";
+  let lopts=`<option value="">English only</option>`;
+  LANGS.forEach(([c,n])=>{ lopts+=`<option value="${c}"${S.lang===c?" selected":""}>${esc(n)}</option>`; });
+  lrow.innerHTML=`<label for="langsel">Key words in my language:</label> <select id="langsel">${lopts}</select>`;
+  wrap.appendChild(lrow);
+  lrow.querySelector("#langsel").onchange=(e)=>{ S.lang=e.target.value; save(); try{ localStorage.setItem("elc_rpf_lang", JSON.stringify(S.lang)); }catch(err){} };
+
+  let topic="";
+  let firstOpen=null;
+  LESSONS.forEach(l=>{
+    if(l.topic!==topic){ topic=l.topic;
+      const h=document.createElement("div"); h.className="topichead"; h.textContent=topic; wrap.appendChild(h);
+      const grid=document.createElement("div"); grid.className="lessons"; grid.dataset.grid="1"; wrap.appendChild(grid);
+    }
+    const grid=wrap.querySelectorAll(".lessons")[wrap.querySelectorAll(".lessons").length-1];
+    const st=L(l.id), b=buildCounts(l), a=applyCounts(l);
+    const chips=[];
+    if(lessonDone(l)) chips.push(`<span class="chip ok">DONE ✓</span>`);
+    else if(b.done||st.studied){ chips.push(`<span class="chip now">IN PROGRESS</span>`); if(firstOpen===null) firstOpen=l.id; }
+    if(st.studied) chips.push(`<span class="chip part">met</span>`);
+    if(b.done) chips.push(`<span class="chip ${st.buildComplete?"ok":"part"}">built ${st.buildComplete?`${b.clean}/${b.total} clean`:`${b.done}/${b.total}`}</span>`);
+    if(a.ans) chips.push(`<span class="chip ${st.applyDone?"ok":"part"}">used ${a.got}/${st.applyDone?a.total:a.ans}</span>`);
+    if(st.baseDone) chips.push(`<span class="chip base">base camp ✓</span>`);
+    if(st.stretchDone) chips.push(`<span class="chip str">stretch ✓</span>`);
+    const card=document.createElement("button");
+    card.className="lcard"+(lessonDone(l)?" done":"");
+    card.innerHTML=`<span class="lnum">LESSON ${esc(l.id)} · ${l.words.length} WORDS</span>
+      <span class="lname">${esc(l.title)}</span>
+      <span class="lstat">${chips.join("")||`<span class="chip">not started</span>`}</span>`;
+    card.onclick=()=>openLesson(l.id, true);
+    grid.appendChild(card);
+  });
+  /* review availability */
+  const pool=reviewPool(latestLessonIdx());
+  const btn=document.getElementById("review-start");
+  btn.disabled = pool.length<4;
+  document.getElementById("review-desc").innerHTML = pool.length<4
+    ? "A quick look back is <b>baked into the start of every lesson</b> once you’ve done your first one. This button is here for extra practice any time."
+    : `Extra practice: a shuffled set from the <b>${pool.length} words</b> you’ve met so far (this also runs automatically when you open a lesson). Everyone gets a different mix. Done ${S.reviews.length} review${S.reviews.length===1?"":"s"} so far.`;
+}
+
+/* ================= LESSON HOME ================= */
+function openLesson(id, fromHome){
+  cur=id;
+  const l=LESSON_BY_ID[id], st=L(id);
+  if(fromHome){
+    const idx=LESSONS.findIndex(x=>x.id===id);
+    const pool=reviewPool(idx);
+    if(pool.length>=4){ runReview(idx, {contLesson:id}); return; }
+  }
+  document.getElementById("lesson-prog").textContent=`LESSON ${id}`;
+  const b=buildCounts(l), a=applyCounts(l);
+  const rate=lessonCleanRate(l);
+  const steps=[
+    { t:"Meet the words", d:`Read this lesson’s ${l.words.length} words, meaning, morphemes and where each came from.`,
+      done:st.studied, locked:false, fn:()=>renderStudy(l), tag:st.studied?"READ":"" },
+    { t:"Build the words", d:"Drag the colour-coded morphemes into the word each one belongs to. Finished words tick off and leave the board.",
+      done:st.buildComplete, locked:false, fn:()=>startBuild(l),
+      tag:st.buildComplete?`${b.clean}/${b.total} CLEAN`:(b.done?`${b.done}/${b.total} built`:"") },
+    { t:"Use the words", d:"Your own sample of apply tasks: scenarios, sentences, meaning-matches. Your neighbour’s set will be different.",
+      done:st.applyDone, locked:false, fn:()=>startApply(l),
+      tag:st.applyDone?`${a.got}/${a.total} FIRST TRY`:(a.ans?`${a.ans}/${a.total} done`:"") },
+  ];
+  const mount=document.getElementById("lesson-body");
+  mount.innerHTML=`<h2 style="text-align:center">${esc(l.id)} · ${esc(l.title)}</h2>
+    <p class="focusline">${l.focus}</p><div class="steps" id="lsteps"></div><div id="ltiers"></div>`;
+  const wrap=mount.querySelector("#lsteps");
+  steps.forEach((stp,i)=>{
+    const btn=document.createElement("button");
+    btn.className="step"+(stp.done?" done":"");
+    btn.disabled=stp.locked;
+    btn.innerHTML=`<span class="num">${stp.done?"✓":i+1}</span><span><span class="t">${stp.t}</span><br><span class="d">${stp.d}</span></span><span class="tag">${stp.locked?"LOCKED":stp.tag}</span>`;
+    btn.onclick=stp.fn;
+    wrap.appendChild(btn);
+  });
+  /* adaptive tiers */
+  const tiers=mount.querySelector("#ltiers");
+  if(l.base){
+    const bc=tierCounts(l.base.items, st.baseFirst);
+    const struggling = st.buildComplete && rate!==null && rate<0.5 && !st.baseDone;
+    const t=document.createElement("div"); t.className="tierbar base";
+    t.innerHTML=`<span class="grow"><b>⛺ Base camp${st.baseDone?`, done (${bc.got}/${bc.total} first try)`:""}</b>
+      ${struggling?"That was a tough climb: these are the same word-parts inside easy words you already know. Five minutes here makes the lesson words much friendlier.":"The same morphemes in everyday words. Start here any time you want a warm-up. It all counts on your report."}</span>
+      <button class="btn btn-ghost" onclick="startBase('${l.id}')">${st.baseDone?"Do it again":"Warm up"}</button>`;
+    tiers.appendChild(t);
+  }
+  if(l.stretch){
+    const sc=tierCounts(l.stretch.items, st.stretchFirst);
+    const unlocked = true;
+    const t=document.createElement("div"); t.className="tierbar stretch";
+    t.innerHTML=`<span class="grow"><b>⛰ Stretch${st.stretchDone?`, done (${sc.got}/${sc.total} first try)`:""}</b>
+      Heavier words built from the parts in this lesson, plus a little word alchemy.</span>
+      <button class="btn btn-water" ${unlocked?"":"disabled"} onclick="startStretch('${l.id}')">${st.stretchDone?"Do it again":"Stretch"}</button>`;
+    tiers.appendChild(t);
+  }
+  go("lesson");
+}
+
+/* ================= STUDY ================= */
+function renderStudy(l){
+  const mount=document.getElementById("study-body");
+  document.getElementById("study-prog").textContent=`STEP 1 · MEET THE WORDS · ${l.id}`;
+  let html=`<h2>Lesson ${esc(l.id)}, ${esc(l.title)}</h2>
+    <p class="muted" style="margin-bottom:14px">Read each word: its meaning, and how its <b>morphemes</b> build that meaning. Tags show each word’s domain.</p>
+    ${MLEGEND}`;
+  mount.innerHTML=html;
+  l.words.forEach(v=>{
+    const map=(v.type==="origin")?"":morphChips(v.tiles);
+    const d=document.createElement("div"); d.className="vcard";
+    const domLabel={water:"FILM ANALYSIS",earth:"HISTORY & STORY",people:"THEMES & IDEAS",hazard:"POWER & CONTROL"}[v.domain]||v.domain;
+    d.innerHTML=`<div class="top"><span class="w">${colourWord(v)}</span><span class="pos">${esc(v.pos)}</span>${trSpan(v.w)}
+        <span class="dtag ${v.domain}">${domLabel}</span></div>
+      <div class="meaning">${esc(v.meaning)}</div>
+      <div class="morph">${ v.type==="origin" ? v.note : (map+" &nbsp;→&nbsp; "+esc(v.w)+"<br>"+v.note) }</div>`;
+    mount.appendChild(d);
+  });
+  const row=document.createElement("div"); row.className="nextrow noprint";
+  row.innerHTML=`<button class="btn btn-primary">I’ve read them: start building →</button>`;
+  row.querySelector("button").onclick=()=>{ L(l.id).studied=true; touchStart(); save(); startBuild(l); };
+  mount.appendChild(row);
+  go("study");
+}
+
+/* ================= GENERIC BUILDER (words + tier builds) ================= */
+function renderBuilder(mount, spec, opts){
+  /* spec: {w, pos?, tiles, decoys, meaning, note?/explain?} ; opts: {dots, prompt, onFirst, onDone} */
+  const pieces=spec.tiles.map(t=>t[0]);
+  const bank=shuffle(spec.tiles.concat(spec.decoys||[]));
+  let pos=0, errored=false;
+  const slotHtml=pieces.map((_,i)=>(i?`<span class="joiner">+</span>`:"")+`<span class="slot">&nbsp;</span>`).join("");
+  mount.innerHTML=`${opts.dots||""}
+    <div class="prompt">${opts.prompt||"Build the word: tap the morphemes into place, in order"}</div>
+    <div class="buildword" id="bword">? ${spec.pos?`<span class="muted" style="font-size:14px">(${esc(spec.pos)})</span>`:""}</div>
+    <div class="slots" id="slots">${slotHtml}</div>
+    <div class="bank" id="bank"></div>
+    <div class="maprow" id="maprow"></div>
+    <div class="reveal" id="reveal"></div>
+    <div class="nextrow noprint"><button class="btn btn-primary" id="bnext" style="display:none">Next →</button></div>`;
+  const bankEl=mount.querySelector("#bank");
+  const slots=mount.querySelectorAll("#slots .slot");
+  bank.forEach(([piece,gloss])=>{
+    const t=document.createElement("button"); t.className="tile "+classifyMorph(piece);
+    t.innerHTML=`<span class="mm">${esc(piece)}</span><span class="gl">${esc(gloss)}</span>`;
+    t.onclick=()=>{
+      if(pos>=pieces.length) return;
+      if(piece===pieces[pos] && !t.disabled){
+        slots[pos].textContent=piece; slots[pos].classList.add("filled");
+        t.disabled=true; pos++;
+        if(pos===pieces.length){
+          mount.querySelector("#bword").innerHTML=`${esc(spec.w)} ${spec.pos?`<span class="muted" style="font-size:14px">(${esc(spec.pos)})</span>`:""} ${trSpan(spec.w)}`;
+          opts.onFirst && opts.onFirst(!errored);
+          const mr=mount.querySelector("#maprow");
+          mr.innerHTML=morphChips(spec.tiles)+" &nbsp;→&nbsp; <b>"+esc(spec.w)+"</b>";
+          const r=mount.querySelector("#reveal");
+          r.className="reveal show";
+          r.innerHTML=`<span class="rw">${esc(spec.w)}</span>: ${esc(spec.meaning)}${(spec.note||spec.explain)?`<br><span class="muted">${spec.note||spec.explain}</span>`:""}`;
+          const nb=mount.querySelector("#bnext");
+          nb.style.display="inline-block"; nb.onclick=opts.onDone;
+          nb.focus();
+        }
+      } else {
+        errored=true;
+        t.classList.add("shake");
+        setTimeout(()=>t.classList.remove("shake"),320);
+      }
+    };
+    bankEl.appendChild(t);
+  });
+}
+
+/* origin question (used in build step + review) */
+function renderOriginQ(mount, spec, opts){
+  mount.innerHTML=`${opts.dots||""}
+    <div class="prompt">Word origin. This one can’t be cut into smaller meaningful parts</div>
+    <div class="buildword">${esc(spec.w)} ${spec.pos?`<span class="muted" style="font-size:14px">(${esc(spec.pos)})</span>`:""}</div>
+    <div class="qtext" style="text-align:center">${spec.originQ}</div>
+    <div class="opts" id="oopts"></div>
+    <div class="reveal" id="reveal"></div>
+    <div class="nextrow noprint"><button class="btn btn-primary" id="bnext" style="display:none">Next →</button></div>`;
+  const optsEl=mount.querySelector("#oopts");
+  let first=true;
+  shuffle(spec.originOpts.slice()).forEach(o=>{
+    const btn=document.createElement("button"); btn.className="opt"; btn.textContent=o;
+    btn.onclick=()=>{
+      const correct=(o===spec.originA);
+      if(first){ opts.onFirst && opts.onFirst(correct); first=false; }
+      if(correct){
+        btn.classList.add("right");
+        optsEl.querySelectorAll(".opt").forEach(x=>x.disabled=true);
+        const r=mount.querySelector("#reveal");
+        r.className="reveal show";
+        r.innerHTML=`<span class="rw">${esc(spec.w)}</span> ${trSpan(spec.w)}, ${esc(spec.meaning)}<br><span class="muted">${spec.note}</span>`;
+        const nb=mount.querySelector("#bnext");
+        nb.style.display="inline-block"; nb.onclick=opts.onDone; nb.focus();
+      } else {
+        btn.classList.add("wrongpick"); btn.disabled=true;
+      }
+    };
+    optsEl.appendChild(btn);
+  });
+}
+
+/* ================= STEP 2 · BUILD: colour-coded drag-and-drop morpheme table ================= */
+let buildCtx=null; // {l, tapSel}
+function startBuild(l){
+  touchStart();
+  const st=L(l.id);
+  const buildable=l.words.filter(w=>w.type==="morph"||w.type==="compound");
+  if(buildable.every(w=>st.buildDone[w.w])){ buildOriginPhase(l); return; }
+  go("build");
+  renderBuildTable(l, buildable);
+}
+function buildProgressText(l){
+  const st=L(l.id);
+  const done=l.words.filter(w=>st.buildDone[w.w]).length;
+  document.getElementById("build-prog").textContent=`STEP 2 · BUILD · ${done}/${l.words.length} words`;
+}
+function renderBuildTable(l, buildable){
+  const st=L(l.id);
+  buildCtx={l, tapSel:null};
+  /* one shared morpheme bank: every part these words need, deduped, plus a few decoys */
+  const need=new Map();
+  buildable.forEach(w=>w.tiles.forEach(([p,g])=>{ if(!need.has(p)) need.set(p,g); }));
+  const realSet=new Set(need.keys());
+  const decoyPool=[]; const seenD=new Set();
+  buildable.forEach(w=>(w.decoys||[]).forEach(([p,g])=>{ if(!realSet.has(p)&&!seenD.has(p)){ seenD.add(p); decoyPool.push([p,g]); } }));
+  const bankArr=[...need.entries()].map(([p,g])=>({piece:p,gloss:g,type:classifyMorph(p)}))
+    .concat(shuffle(decoyPool).slice(0,3).map(([p,g])=>({piece:p,gloss:g,type:classifyMorph(p)})));
+  let bankHtml="";
+  MTYPE_ORDER.forEach(type=>{
+    const group=bankArr.filter(m=>m.type===type);
+    if(!group.length) return;
+    bankHtml+=`<div class="mgroup"><div class="glabel ${type}">${MTYPE_LABEL[type]}</div><div class="mtiles">`+
+      shuffle(group).map(m=>`<button class="mtile ${m.type}" data-piece="${esc(m.piece)}" data-gloss="${esc(m.gloss)}" data-type="${m.type}"><span class="mm">${esc(m.piece)}</span><span class="gl">${esc(m.gloss)}</span></button>`).join("")+
+      `</div></div>`;
+  });
+  const active=shuffle(buildable.filter(w=>!st.buildDone[w.w]));
+  const rowsHtml=active.map(w=>{
+    const slots=w.tiles.map((_,si)=>(si?`<span class="wjoin">+</span>`:"")+`<span class="wslot" data-i="${si}"><span class="ph">drop</span></span>`).join("");
+    return `<div class="wrow" data-w="${esc(w.w)}">
+      <div class="wmean">${sayBtn(w.meaning)}<span class="pos">${esc(w.pos)}</span>: ${esc(w.meaning)}</div>
+      <div class="wslots">${slots}</div>
+      <div class="wbuilt"></div></div>`;
+  }).join("");
+  const mount=document.getElementById("build-body");
+  mount.innerHTML=`
+    <h2 style="text-align:center">Build the words: Lesson ${esc(l.id)}</h2>
+    <p class="muted" style="text-align:center;margin-bottom:8px">${ACCESS
+      ? "Most pieces are placed for you. Read the meaning, tap the missing morpheme, then tap the empty slot. A finished word ticks off and leaves the board."
+      : "Drag each morpheme into the word it belongs to, or tap a morpheme, then tap a slot. Build <b>prefix → root → suffix</b>, left to right. A finished word ticks off and leaves the board; keep going until none are left."}</p>
+    <div class="mlegend"><span><i style="background:var(--mpre)"></i>Prefix (start)</span><span><i style="background:var(--mroot)"></i>Root (heart)</span><span><i style="background:var(--msuf)"></i>Suffix (end)</span></div>
+    <div class="mbank">${bankHtml}</div>
+    <div class="buildhint" id="buildhint"></div>
+    <div class="wtable" id="wtable">${rowsHtml}</div>`;
+  buildProgressText(l);
+  wireBuildDnD(mount);
+  wireSay(mount);
+}
+function wireBuildDnD(mount){
+  mount.querySelectorAll(".mtile").forEach(tile=>{
+    const info={piece:tile.dataset.piece, gloss:tile.dataset.gloss, type:tile.dataset.type};
+    if(ACCESS){
+      /* Tap only. A drag threshold of six pixels reads a tremor as a drag,
+         so in access mode the pointer never drags: tap selects (and the tile
+         grows), tap again deselects. */
+      tile.addEventListener("click", ()=>{
+        const same=buildCtx.tapSel && buildCtx.tapSel.piece===info.piece && buildCtx.tapSel.type===info.type;
+        setTapSel(same ? null : info);
+      });
+    } else {
+      tile.addEventListener("pointerdown", e=>startTileDrag(e, tile, info));
+    }
+  });
+  mount.querySelectorAll(".wslot").forEach(slot=>{
+    slot.addEventListener("click", ()=>{
+      if(slot.classList.contains("locked")) return;
+      if(slot.dataset.piece){ clearSlot(slot); return; }
+      if(buildCtx.tapSel){ const s=buildCtx.tapSel; setTapSel(null); fillSlot(slot, s); }
+    });
+  });
+  if(ACCESS) prefillBoard(mount);
+}
+/* Access mode: pre-place every slot but one per word, and lock what is
+   pre-placed. The open slot varies by word, so the student still reads the
+   meaning and still chooses the piece; what falls away is the tap count. */
+function prefillBoard(mount){
+  mount.querySelectorAll(".wrow").forEach(row=>{
+    const w=WORD_BY_NAME[row.dataset.w];
+    if(!w || w.tiles.length<2) return;
+    const open=Math.floor(Math.random()*w.tiles.length);
+    row.querySelectorAll(".wslot").forEach((slot,si)=>{
+      if(si===open) return;
+      const [piece]=w.tiles[si];
+      const m=MORPH_BY_PIECE[piece]||{};
+      slot.dataset.piece=piece; slot.dataset.type=m.type||classifyMorph(piece);
+      slot.className="wslot filled locked "+(m.type||classifyMorph(piece));
+      slot.innerHTML=`<span class="mm">${esc(piece)}</span>`;
+    });
+  });
+}
+function setTapSel(info){
+  buildCtx.tapSel=info;
+  document.querySelectorAll("#build-body .mtile").forEach(t=>{
+    t.classList.toggle("sel", !!info && t.dataset.piece===info.piece && t.dataset.type===info.type);
+  });
+}
+function startTileDrag(e, tile, info){
+  e.preventDefault();
+  const sx=e.clientX, sy=e.clientY; let moved=false, ghost=null;
+  try{ tile.setPointerCapture(e.pointerId); }catch(_){}
+  function mv(ev){
+    if(!moved && Math.hypot(ev.clientX-sx, ev.clientY-sy)>6){ moved=true; tile.classList.add("dragging"); ghost=mkGhost(info); }
+    if(moved && ghost){ ghost.style.left=ev.clientX+"px"; ghost.style.top=ev.clientY+"px"; hoverSlot(ev); }
+  }
+  function up(ev){
+    tile.removeEventListener("pointermove",mv); tile.removeEventListener("pointerup",up);
+    try{ tile.releasePointerCapture(e.pointerId); }catch(_){}
+    if(moved){
+      tile.classList.remove("dragging"); if(ghost) ghost.remove(); clearHover();
+      const slot=slotAt(ev);
+      if(slot && !slot.dataset.piece) fillSlot(slot, info);
+    } else {
+      const same=buildCtx.tapSel && buildCtx.tapSel.piece===info.piece && buildCtx.tapSel.type===info.type;
+      setTapSel(same ? null : info);
+    }
+  }
+  tile.addEventListener("pointermove",mv); tile.addEventListener("pointerup",up);
+}
+function mkGhost(info){
+  const g=document.createElement("div"); g.className="drag-ghost mtile "+info.type;
+  g.innerHTML=`<span class="mm">${esc(info.piece)}</span><span class="gl">${esc(info.gloss)}</span>`;
+  document.body.appendChild(g); return g;
+}
+function slotAt(ev){ const el=document.elementFromPoint(ev.clientX,ev.clientY); return el?el.closest(".wslot"):null; }
+function hoverSlot(ev){ clearHover(); const s=slotAt(ev); if(s && !s.dataset.piece) s.classList.add("over"); }
+function clearHover(){ document.querySelectorAll("#build-body .wslot.over").forEach(s=>s.classList.remove("over")); }
+function fillSlot(slot, info){
+  slot.dataset.piece=info.piece; slot.dataset.type=info.type;
+  slot.className="wslot filled "+info.type; slot.innerHTML=`<span class="mm">${esc(info.piece)}</span>`;
+  checkRow(slot.closest(".wrow"));
+}
+function clearSlot(slot){
+  delete slot.dataset.piece; delete slot.dataset.type;
+  slot.className="wslot"; slot.innerHTML=`<span class="ph">drop</span>`;
+  const h=document.getElementById("buildhint"); if(h) h.textContent="";
+}
+function checkRow(rowEl){
+  const w=WORD_BY_NAME[rowEl.dataset.w];
+  const slots=[...rowEl.querySelectorAll(".wslot")];
+  if(slots.some(s=>!s.dataset.piece)) return;
+  const placed=slots.map(s=>s.dataset.piece);
+  const answer=w.tiles.map(t=>t[0]);
+  const correct=placed.length===answer.length && placed.every((p,i)=>p===answer[i]);
+  const hint=document.getElementById("buildhint");
+  if(correct){ if(hint) hint.textContent=""; markRowDone(rowEl, w); }
+  else {
+    const st=L(buildCtx.l.id);
+    if(st.buildFirst[w.w]===undefined){ st.buildFirst[w.w]=false; WS(w.w).wrong++; save(); }
+    const sameSet=[...placed].sort().join("~")===[...answer].sort().join("~");
+    rowEl.classList.add("wrong"); setTimeout(()=>rowEl.classList.remove("wrong"),320);
+    if(ACCESS){
+      slots.forEach(s=>{ if(!s.classList.contains("locked")) clearSlot(s); });
+      if(hint) hint.innerHTML="Not that piece: reread the meaning and pick again.";
+    } else if(hint) hint.innerHTML = sameSet
+      ? "Right pieces: check the <b>order</b> (prefix → root → suffix). Tap a slot to send its piece back."
+      : "Not a match yet: reread the meaning. Tap any slot to send its piece back.";
+  }
+}
+function markRowDone(rowEl, w){
+  const st=L(buildCtx.l.id);
+  st.buildDone[w.w]=true;
+  if(st.buildFirst[w.w]===undefined) st.buildFirst[w.w]=true;
+  save();
+  rowEl.classList.add("done");
+  rowEl.querySelector(".wbuilt").innerHTML=`<span class="wname">${esc(w.w)}</span> ${trSpan(w.w)} <span class="wtickmark">✓</span>`;
+  buildProgressText(buildCtx.l);
+  setTimeout(()=>{
+    rowEl.classList.add("gone");
+    setTimeout(()=>{
+      rowEl.remove();
+      if(!document.querySelector("#wtable .wrow")) buildOriginPhase(buildCtx.l);
+    },320);
+  },850);
+}
+function buildOriginPhase(l){
+  const st=L(l.id);
+  const origins=l.words.filter(w=>w.type==="origin" && !st.buildDone[w.w]);
+  if(!origins.length){ finishBuild(l); return; }
+  go("build");
+  const mount=document.getElementById("build-body");
+  mount.innerHTML=`<h2 style="text-align:center">Word origins: Lesson ${esc(l.id)}</h2>
+    <p class="muted" style="text-align:center;margin-bottom:12px">A few of this lesson’s words come from names or ideas, not word-parts, so you match their story instead of building them.</p>
+    <div id="origin-slot"></div>`;
+  let queue=shuffle(origins.slice());
+  function next(){
+    buildProgressText(l);
+    if(!queue.length){ finishBuild(l); return; }
+    const w=queue.shift();
+    renderTaskItem(document.getElementById("origin-slot"),
+      {type:"desc", q:w.originQ, a:w.originA, opts:w.originOpts.slice(), explain:w.note, tag:"ORIGIN · "+w.w},
+      { onAnswer:(correct)=>{
+          if(st.buildFirst[w.w]===undefined){ st.buildFirst[w.w]=correct; if(!correct) WS(w.w).wrong++; save(); }
+          if(correct){ st.buildDone[w.w]=true; save(); } else queue.push(w);
+        },
+        onNext:next });
+  }
+  next();
+}
+function finishBuild(l){
+  const st=L(l.id); st.buildComplete=true; save();
+  const b=buildCounts(l);
+  const pct=Math.round(100*b.clean/b.total);
+  const cls=pct>=80?"good":(pct>=60?"mid":"low");
+  document.getElementById("build-body").innerHTML=`
+    <div class="sumbox"><div class="prompt">Lesson ${esc(l.id)}, clean builds (right first go)</div>
+    <div class="big ${cls}">${b.clean} / ${b.total}</div>
+    <p class="muted">Every word is built. “Clean” means you placed it correctly on the first full attempt, anything you had to redo still counts as done, just not clean.</p></div>
+    <div class="nextrow" style="justify-content:center">
+      <button class="btn btn-ghost" onclick="goLesson()">back to lesson</button>
+      <button class="btn btn-primary" onclick="startApply(LESSON_BY_ID['${l.id}'])">Use the words →</button></div>`;
+}
+
+/* ================= SHARED MCQ ITEM RENDERER ================= */
+function renderTaskItem(mount, it, hooks){
+  /* it: {type, q/before/after/svg(string name or raw), a, opts, explain, tag?} */
+  const box=document.createElement("div");
+  if(it.tag) box.innerHTML+=`<span class="reviewtag">${esc(it.tag)}</span>`;
+  let fb, nextBtn;
+  const isRight=(o)=>o===it.a;
+  function finishItem(correct){
+    fb.className="feedback "+(correct?"ok":"bad");
+    fb.innerHTML=(correct?"<b>Correct.</b> ":`<b>Not quite: the answer is “${esc(it.a)}”.</b> `)+(it.explain||"");
+    if(!correct) fb.innerHTML+=" <i>This one will come back around.</i>";
+    nextBtn.style.display="inline-block";
+    hooks.onAnswer && hooks.onAnswer(correct);
+  }
+  const kind=it.type||"desc";
+  if(kind==="diagram"){
+    const svg=SVGS[it.svg]||it.svg;
+    box.innerHTML+=`<div class="prompt">Read the diagram, then choose</div><div class="svgbox">${svg}</div>`;
+    const qd=document.createElement("div"); qd.className="qtext"; qd.innerHTML=it.q; box.appendChild(qd);
+    box.appendChild(buildOpts(it,isRight,finishItem,()=>nextBtn.style.display==="inline-block",null));
+  } else if(kind==="cloze"){
+    box.innerHTML+=`<div class="prompt">Choose the word that fits the sentence</div>`;
+    const qd=document.createElement("div"); qd.className="qtext";
+    qd.innerHTML=`${esc(it.before)} <span class="gap">&nbsp;</span> ${esc(it.after)}`;
+    box.appendChild(qd);
+    box.appendChild(buildOpts(it,isRight,finishItem,()=>nextBtn.style.display==="inline-block",qd.querySelector(".gap")));
+  } else {
+    const prompts={scenario:"Read the scenario, then choose",desc:"Match the word",morphmatch:"Read the morphemes, then choose the word they build",alchemy:"Word alchemy, use the parts to work it out",wordsum:"Add the morphemes, which word do they make?",meaningmatch:"Which word fits the meaning?",morphmeaning:"What does the word-part mean?"};
+    box.innerHTML+=`<div class="prompt">${prompts[kind]||prompts.desc}</div>`;
+    const qd=document.createElement("div"); qd.className="qtext"; qd.innerHTML=it.q; box.appendChild(qd);
+    box.appendChild(buildOpts(it,isRight,finishItem,()=>nextBtn.style.display==="inline-block",null));
+  }
+  fb=document.createElement("div"); fb.className="feedback"; box.appendChild(fb);
+  const row=document.createElement("div"); row.className="nextrow noprint";
+  nextBtn=document.createElement("button"); nextBtn.className="btn btn-primary"; nextBtn.textContent="Next →";
+  nextBtn.style.display="none"; nextBtn.onclick=hooks.onNext;
+  row.appendChild(nextBtn); box.appendChild(row);
+  mount.innerHTML=""; mount.appendChild(box);
+}
+function buildOpts(it, isRight, finishItem, locked, gapEl){
+  const optList=shuffle(it.opts.slice());
+  const opts=document.createElement("div");
+  opts.className=optList.every(o=>o.length<28)?"opts chips":"opts";
+  optList.forEach(o=>{
+    const btn=document.createElement("button"); btn.className="opt"; btn.textContent=o;
+    btn.onclick=()=>{
+      if(locked()) return;
+      const correct=isRight(o);
+      btn.classList.add(correct?"right":"wrongpick");
+      if(!correct) opts.querySelectorAll(".opt").forEach(x=>{ if(isRight(x.textContent)) x.classList.add("right"); });
+      opts.querySelectorAll(".opt").forEach(x=>x.disabled=true);
+      if(gapEl && correct) gapEl.textContent=o;
+      finishItem(correct);
+    };
+    opts.appendChild(btn);
+  });
+  return opts;
+}
+
+/* ================= GENERATED TASKS (for variety + anti-copying) ================= */
+function sameLessonDistractors(word, n){
+  const l=LESSON_BY_ID[WORD_LESSON[word.w]];
+  return shuffle(l.words.filter(x=>x.w!==word.w).map(x=>x.w)).slice(0,n);
+}
+function morphMap(word){
+  return word.tiles ? morphChips(word.tiles)+" → <b>"+esc(word.w)+"</b>" : (word.note||"");
+}
+function genTypesFor(word){ return word.tiles ? ["meaningmatch","wordsum","morphmeaning"] : ["meaningmatch"]; }
+function genTask(gtype, word){
+  if(gtype==="wordsum" && word.tiles){
+    const eq=word.tiles.map(t=>`<b>${esc(t[0])}</b>`).join(" + ");
+    return { type:"wordsum", q:`Which word do these parts build?<br><span class="eqn">${eq}</span>`,
+      a:word.w, opts:[word.w].concat(sameLessonDistractors(word,3)), explain:morphMap(word) };
+  }
+  if(gtype==="morphmeaning" && word.tiles){
+    const roots=word.tiles.filter(t=>classifyMorph(t[0])==="root");
+    const t=pick(roots.length?roots:word.tiles);
+    const wrong=shuffle(ALL_GLOSSES.filter(g=>g!==t[1])).slice(0,3);
+    return { type:"morphmeaning", q:`In <b>${esc(word.w)}</b>, what does the part <b>${esc(t[0])}</b> mean?`,
+      a:t[1], opts:[t[1]].concat(wrong), explain:`<b>${esc(t[0])}</b> = ${esc(t[1])}. &nbsp; ${morphMap(word)}` };
+  }
+  return { type:"meaningmatch", q:`Which word means this?<br><i>${esc(word.meaning)}</i>`,
+    a:word.w, opts:[word.w].concat(sameLessonDistractors(word,3)), explain:morphMap(word) };
+}
+
+/* ================= STEP 3 · USE THE WORDS ================= */
+function startApply(l){
+  touchStart();
+  const st=L(l.id);
+  if(!st.applySample.length){
+    st.applySample=l.words.map(w=>{
+      const gts=genTypesFor(w);
+      if(Math.random()<0.5 && w.apply && w.apply.length) return {k:"a", id:pick(w.apply).id};
+      return {k:"g", g:pick(gts), w:w.w};
+    });
+    save();
+  }
+  go("apply");
+  const descs=st.applySample.slice();
+  const record = !st.applyDone; /* re-runs don't change the report */
+  let queue=shuffle(descs.map(d=>({d, it:Object.assign({}, applyItem(d))})));
+  let mastered=0;
+  function next(){
+    document.getElementById("apply-prog").textContent=`STEP 3 · USE THE WORDS · mastered ${mastered}/${descs.length}`;
+    if(!queue.length){ finishApply(l, record); return; }
+    const cur=queue.shift();
+    const key=applyKey(cur.d);
+    renderTaskItem(document.getElementById("apply-body"), cur.it, {
+      onAnswer:(correct)=>{
+        if(record && st.applyFirst[key]===undefined){
+          st.applyFirst[key]=correct;
+          if(!correct) WS(applyWordName(cur.d)).wrong++;
+          save();
+        }
+        if(correct) mastered++; else queue.push(cur);
+      },
+      onNext:next,
+    });
+  }
+  next();
+}
+function finishApply(l, recorded){
+  const st=L(l.id);
+  if(recorded){ st.applyDone=true; save(); }
+  const a=applyCounts(l);
+  const pct=a.total?Math.round(100*a.got/a.total):0;
+  const cls=pct>=80?"good":(pct>=60?"mid":"low");
+  const rate=lessonCleanRate(l);
+  let follow="";
+  if(rate!==null && rate<0.5 && l.base && !st.baseDone){
+    follow=`<div class="tierbar base"><span class="grow"><b>⛺ Base camp?</b> Those words fought back. The same word-parts live inside easy words you already know, a five-minute warm-up there, then this lesson will feel different.</span>
+      <button class="btn btn-ghost" onclick="startBase('${l.id}')">Warm up</button></div>`;
+  } else if(rate!==null && rate>=0.85 && l.stretch && !st.stretchDone){
+    follow=`<div class="tierbar stretch"><span class="grow"><b>⛰ Stretch unlocked.</b> You own these morphemes now: take on the heavier words built from them.</span>
+      <button class="btn btn-water" onclick="startStretch('${l.id}')">Stretch</button></div>`;
+  }
+  document.getElementById("apply-body").innerHTML=`
+    <div class="sumbox"><div class="prompt">Lesson ${esc(l.id)}, first attempts</div>
+    <div class="big ${cls}">${a.got} / ${a.total}</div>
+    <p class="muted">Every task is mastered: wrong answers looped back until you cleared them. The score above is your FIRST attempt on each.${recorded?"":" (Practice run: your report kept the original scores.)"}</p></div>
+    ${follow}
+    <div class="nextrow" style="justify-content:center">
+      <button class="btn btn-ghost" onclick="goLesson()">back to lesson</button>
+      <button class="btn btn-primary" onclick="go('home')">all lessons</button></div>`;
+}
+
+/* ================= TIERS: BASE CAMP & STRETCH ================= */
+function runTier(lid, tierKey){
+  const l=LESSON_BY_ID[lid], st=L(lid);
+  const tier=l[tierKey];
+  const firsts = tierKey==="base" ? st.baseFirst : st.stretchFirst;
+  const doneFlag = tierKey==="base" ? "baseDone" : "stretchDone";
+  const scr = tierKey==="base" ? "base" : "stretch";
+  const label = tierKey==="base" ? "BASE CAMP" : "STRETCH";
+  touchStart();
+  go(scr);
+  const mount=document.getElementById(scr+"-body");
+  const progEl=document.getElementById(scr+"-prog");
+  const record=!st[doneFlag];
+  let queue=shuffle(tier.items.slice());
+  let mastered=0; const total=tier.items.length;
+  let intro=true;
+  function recFirst(id, correct){
+    if(record && firsts[id]===undefined){ firsts[id]=correct; save(); }
+  }
+  function next(){
+    progEl.textContent=`${label} · ${lid} · mastered ${mastered}/${total}`;
+    if(!queue.length){
+      if(record){ st[doneFlag]=true; save(); }
+      const tc=tierCounts(tier.items, firsts);
+      const pct=Math.round(100*tc.got/tc.total);
+      const cls=pct>=80?"good":(pct>=60?"mid":"low");
+      mount.innerHTML=`<div class="sumbox"><div class="prompt">${label} · lesson ${esc(lid)}: first attempts</div>
+        <div class="big ${cls}">${tc.got} / ${tc.total}</div>
+        <p class="muted">${tierKey==="base"?"Foundations set. Those same parts are waiting inside the lesson words, go back and use them.":"Heavy words carried. These count as bonus territory on your report."}</p></div>
+        <div class="nextrow" style="justify-content:center">
+        <button class="btn btn-primary" onclick="goLesson()">back to lesson</button></div>`;
+      return;
+    }
+    const it=queue.shift();
+    if(it.kind==="build"){
+      renderBuilder(mount, it, { prompt:"Build the word: tap the pieces into place, in order",
+        onFirst:(clean)=>recFirst(it.id, clean),
+        onDone:()=>{ mastered++; next(); } });
+    } else {
+      renderTaskItem(mount, {type:"alchemy", q:it.q, a:it.a, opts:it.opts, explain:it.explain}, {
+        onAnswer:(correct)=>{ recFirst(it.id, correct); if(correct) mastered++; else queue.push(it); },
+        onNext:next });
+    }
+  }
+  if(intro){
+    mount.innerHTML=`<h2 style="text-align:center">${tierKey==="base"?"⛺ Base camp":"⛰ Stretch"} · Lesson ${esc(lid)}</h2>
+      <p class="focusline">${tier.intro}</p>
+      <div class="nextrow" style="justify-content:center"><button class="btn btn-primary" id="tstart">Start →</button></div>`;
+    mount.querySelector("#tstart").onclick=()=>{ intro=false; next(); };
+  }
+}
+function startBase(lid){ runTier(lid,"base"); }
+function startStretch(lid){ runTier(lid,"stretch"); }
+
+/* ================= REVIEW ================= */
+function latestLessonIdx(){
+  let idx=-1;
+  LESSONS.forEach((l,i)=>{ const st=S.lessons[l.id]; if(st && (st.studied||Object.keys(st.buildDone).length)) idx=i; });
+  return idx;
+}
+function reviewPool(uptoIdx){
+  /* every word from the lessons BEFORE this one in the sequence, a warm-up always
+     looks back over prior lessons, whether or not they were fully finished */
+  const pool=[];
+  LESSONS.forEach((l,i)=>{ if(uptoIdx>=0 && i>=uptoIdx) return; l.words.forEach(w=>pool.push(w)); });
+  return pool;
+}
+function startReviewSetup(){
+  const idx=latestLessonIdx();
+  if(idx<0){ return; }
+  go("review");
+  const mount=document.getElementById("review-body");
+  document.getElementById("review-prog").textContent="REVIEW · SET-UP";
+  let opts="";
+  LESSONS.forEach((l,i)=>{
+    const st=S.lessons[l.id];
+    const started=st&&(st.studied||Object.keys(st.buildDone).length);
+    if(started||i<=idx) opts+=`<option value="${i}"${i===idx?" selected":""}>${l.id} · ${esc(l.title)}</option>`;
+  });
+  mount.innerHTML=`<h2 style="text-align:center">Quick review</h2>
+    <p class="focusline">Five words drawn from earlier lessons: weighted so the ones you’ve missed before come back more often. Gap-fill or match to meaning. Every run is a different mix.</p>
+    <div class="idrow" style="justify-content:center">
+      <span><label for="rev-upto">We’re currently learning lesson…</label>
+      <select id="rev-upto" class="btn" style="font-weight:600">${opts}</select></span>
+    </div>
+    <div class="nextrow" style="justify-content:center">
+      <button class="btn btn-water" id="rev-go">Shuffle my six →</button>
+    </div>`;
+  mount.querySelector("#rev-go").onclick=()=>{
+    const upto=parseInt(mount.querySelector("#rev-upto").value,10);
+    runReview(upto);
+  };
+}
+function weightedSample(pool, n){
+  const entries=pool.map(w=>{
+    const ws=WS(w.w);
+    let wt=1 + 2*Math.min(ws.wrong,4) + (ws.rev===0?1.5:0);
+    return {w, wt};
+  });
+  const out=[];
+  while(out.length<n && entries.length){
+    let total=entries.reduce((s,e)=>s+e.wt,0);
+    let r=Math.random()*total;
+    let k=0;
+    for(let i=0;i<entries.length;i++){ r-=entries[i].wt; if(r<=0){ k=i; break; } }
+    out.push(entries[k].w);
+    entries.splice(k,1);
+  }
+  return out;
+}
+function reviewTaskFor(word, pool){
+  /* quick warm-up tasks only: GAP-FILL a sentence, or MATCH the word to its definition.
+     Both are backed by the lesson data (authored cloze items + word meanings). */
+  const clozes=(word.apply||[]).filter(it=>it.type==="cloze");
+  if(clozes.length && Math.random()<0.5) return Object.assign({}, pick(clozes));
+  /* match word -> definition, with distractors drawn from the review pool */
+  const others=shuffle(pool.filter(x=>x.w!==word.w)).slice(0,3).map(x=>x.w);
+  const opts=[word.w].concat(others.length>=3?others:sameLessonDistractors(word,3));
+  return { type:"meaningmatch", q:`Which word means this?<br><i>${esc(word.meaning)}</i>`,
+    a:word.w, opts, explain:morphMap(word) };
+}
+function runReview(uptoIdx, opts){
+  opts=opts||{};
+  const pool=reviewPool(uptoIdx);
+  if(pool.length<4){ if(opts.contLesson) openLesson(opts.contLesson, false); else go("home"); return; }
+  go("review");
+  const n=Math.min(5,pool.length);
+  const words=weightedSample(pool,n);
+  const items=words.map(w=>{ const it=Object.assign({}, reviewTaskFor(w,pool)); it._w=w.w; it.tag="REVIEW · from lesson "+WORD_LESSON[w.w]; return it; });
+  let queue=shuffle(items);
+  let mastered=0;
+  const firsts={};
+  words.forEach(w=>{ const ws=WS(w.w); ws.seen++; ws.rev++; });
+  function next(){
+    document.getElementById("review-prog").textContent=(opts.contLesson?`WARM-UP REVIEW → LESSON ${opts.contLesson}`:"REVIEW")+` · mastered ${mastered}/${items.length}`;
+    if(!queue.length){ finishReview(uptoIdx, words, firsts, opts); return; }
+    const it=queue.shift();
+    renderTaskItem(document.getElementById("review-body"), it, {
+      onAnswer:(correct)=>{
+        if(firsts[it._w]===undefined){
+          firsts[it._w]=correct;
+          if(!correct) WS(it._w).wrong++;
+          save();
+        }
+        if(correct) mastered++; else queue.push(it);
+      },
+      onNext:next,
+    });
+  }
+  if(opts.contLesson){
+    const mount=document.getElementById("review-body");
+    mount.innerHTML=`<div class="sumbox"><div class="prompt">Before Lesson ${esc(opts.contLesson)}</div>
+      <p class="muted" style="margin:6px 0 0">Quick warm-up first: <b>5 words from earlier lessons</b>, drawn at random (ones you’ve missed come back more often). Just gap-fill a sentence or match the word to its meaning. Then we jump into the new lesson.</p></div>
+      <div class="nextrow" style="justify-content:center"><button class="btn btn-water" id="rev-begin">Start warm-up →</button>
+      <button class="btn btn-ghost" onclick="openLesson('${opts.contLesson}', false)">Skip to lesson</button></div>`;
+    mount.querySelector("#rev-begin").onclick=next;
+  } else next();
+}
+function finishReview(uptoIdx, words, firsts, opts){
+  opts=opts||{};
+  const got=words.filter(w=>firsts[w.w]===true).length;
+  const missed=words.filter(w=>firsts[w.w]===false).map(w=>w.w);
+  S.reviews.push({ when:Date.now(), upTo:LESSONS[uptoIdx]?LESSONS[uptoIdx].id:": ", total:words.length, got, missed });
+  save();
+  const pct=Math.round(100*got/words.length);
+  const cls=pct>=80?"good":(pct>=60?"mid":"low");
+  const buttons = opts.contLesson
+    ? `<button class="btn btn-primary" onclick="openLesson('${opts.contLesson}', false)">Start Lesson ${esc(opts.contLesson)} →</button>
+       <button class="btn btn-ghost" onclick="go('home')">home</button>`
+    : `<button class="btn btn-water" onclick="startReviewSetup()">Another six</button>
+       <button class="btn btn-ghost" onclick="go('home')">home</button>
+       <button class="btn btn-ghost" onclick="go('report')">my report</button>`;
+  document.getElementById("review-body").innerHTML=`
+    <div class="sumbox"><div class="prompt">${opts.contLesson?"Warm-up review":"Review"}: first attempts</div>
+    <div class="big ${cls}">${got} / ${words.length}</div>
+    <p class="muted">${missed.length?`Back for another visit soon: <b>${esc(missed.join(", "))}</b>: the shuffle remembers.`:"Clean sweep: these words are sticking."}</p></div>
+    <div class="nextrow" style="justify-content:center">${buttons}</div>`;
+}
+
+/* ================= REFERENCE LOOK-UPS (always available from the nav) ================= */
+function renderMorphTable(){
+  const m=document.getElementById("morphtable-body");
+  let html=`<h2 style="text-align:center">Morpheme table</h2>
+    <p class="muted" style="text-align:center;margin-bottom:6px">Every word-part in the module, colour-coded. Learn a part once and you can read it inside dozens of words.</p>
+    <div class="mlegend"><span><i style="background:var(--mpre)"></i>Prefix</span><span><i style="background:var(--mroot)"></i>Root / base</span><span><i style="background:var(--msuf)"></i>Suffix</span></div>`;
+  MTYPE_ORDER.forEach(type=>{
+    const group=MORPHS.filter(mm=>mm.type===type).slice().sort((a,b)=>a.piece.replace(/-/g,"").localeCompare(b.piece.replace(/-/g,"")));
+    if(!group.length) return;
+    html+=`<div class="refhead ${type}">${MTYPE_LABEL[type]}</div>
+      <table class="reftable"><tr><th>Part</th><th>Meaning</th><th>Words that use it</th></tr>`;
+    group.forEach(mm=>{
+      html+=`<tr><td><span class="mtile ${type}"><span class="mm">${esc(mm.piece)}</span></span></td>
+        <td>${esc(mm.gloss)}</td><td class="muted">${mm.examples.map(esc).join(", ")}</td></tr>`;
+    });
+    html+=`</table>`;
+  });
+  m.innerHTML=html;
+}
+function renderGlossary(){
+  const m=document.getElementById("glossary-body");
+  m.innerHTML=`<h2 style="text-align:center">Word list</h2>
+    <p class="muted" style="text-align:center;margin-bottom:10px">Every key word in the module, meaning, parts and (if you’ve chosen a language) your translation. Search or scroll.</p>
+    ${MLEGEND}
+    <div class="reffilter"><input id="gloss-search" placeholder="Search a word or meaning…" aria-label="search words"></div>
+    <div id="gloss-list"></div>`;
+  const input=m.querySelector("#gloss-search");
+  input.addEventListener("input", ()=>drawGloss(input.value.trim().toLowerCase()));
+  drawGloss("");
+}
+function drawGloss(q){
+  const wrap=document.getElementById("gloss-list"); if(!wrap) return;
+  let html="";
+  LESSONS.forEach(l=>{
+    const ws=l.words.filter(w=> !q || w.w.toLowerCase().includes(q) || w.meaning.toLowerCase().includes(q));
+    if(!ws.length) return;
+    html+=`<div class="topichead">Lesson ${esc(l.id)} · ${esc(l.title)}</div>`;
+    ws.forEach(w=>{
+      const map=w.tiles
+        ? morphChips(w.tiles)+" &nbsp;→&nbsp; <b>"+esc(w.w)+"</b>"
+        : `<span class="muted">from a name or idea: see its story in the lesson</span>`;
+      const domLabel={water:"FILM ANALYSIS",earth:"HISTORY & STORY",people:"THEMES & IDEAS",hazard:"POWER & CONTROL"}[w.domain]||w.domain;
+      html+=`<div class="vcard"><div class="top"><span class="w">${colourWord(w)}</span>${sayBtn(w.w+". "+w.meaning)}<span class="pos">${esc(w.pos)}</span>${trSpan(w.w)}
+          <span class="dtag ${w.domain}">${domLabel}</span></div>
+        <div class="meaning">${esc(w.meaning)}</div>
+        <div class="morph">${map}</div></div>`;
+    });
+  });
+  wrap.innerHTML=html || `<p class="muted" style="text-align:center">No words match “${esc(q)}”.</p>`;
+  wireSay(wrap);
+}
+
+/* ================= REPORT ================= */
+function vcode(str){
+  let h=5381; for(let i=0;i<str.length;i++){ h=((h<<5)+h+str.charCodeAt(i))>>>0; }
+  return h.toString(36).toUpperCase().padStart(7,"0").slice(0,7);
+}
+function fmtWhen(t){
+  try{ return new Date(t).toLocaleString("en-AU",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}); }
+  catch(e){ return ""; }
+}
+function renderReport(){
+  const m=document.getElementById("report-body");
+  const dt=new Date().toLocaleString("en-AU",{dateStyle:"full",timeStyle:"short"});
+  let rows="", aggFirst=0, aggAtt=0, sig="";
+  LESSONS.forEach(l=>{
+    const st=S.lessons[l.id];
+    if(!st){ rows+=`<tr><td>${esc(l.id)} ${esc(l.title)}</td><td class="nf">: </td><td class="nf">: </td><td class="nf">: </td><td class="nf">: </td></tr>`; return; }
+    const b=buildCounts(l), a=applyCounts(l);
+    const bTxt = b.done? (st.buildComplete?`${b.clean}/${b.total}`:`${b.clean}/${b.done} (${b.done}/${b.total} built)`) : ": ";
+    const aTxt = a.ans? (st.applyDone?`${a.got}/${a.total}`:`${a.got}/${a.ans} (unfinished)`) : ": ";
+    const bc=l.base?tierCounts(l.base.items, st.baseFirst):null;
+    const sc=l.stretch?tierCounts(l.stretch.items, st.stretchFirst):null;
+    const bcTxt = bc&&bc.ans? `${bc.got}/${st.baseDone?bc.total:bc.ans}` : ": ";
+    const scTxt = sc&&sc.ans? `${sc.got}/${st.stretchDone?sc.total:sc.ans}` : ": ";
+    aggFirst += b.clean + a.got; aggAtt += b.done + a.ans;
+    sig += `|${l.id}:${b.clean}.${a.got}`;
+    rows+=`<tr><td>${esc(l.id)} ${esc(l.title)}</td>
+      <td class="score">${bTxt}</td><td class="score">${aTxt}</td>
+      <td class="score">${bcTxt}</td><td class="score">${scTxt}</td></tr>`;
+  });
+  /* review log */
+  let revRows="";
+  S.reviews.slice(-12).forEach(r=>{
+    revRows+=`<tr><td>${esc(fmtWhen(r.when))}</td><td>${esc(r.upTo)}</td><td class="score">${r.got}/${r.total}</td>
+      <td${r.missed.length?"":" class='nf'"}>${r.missed.length?esc(r.missed.join(", ")):"none"}</td></tr>`;
+  });
+  /* words needing another go */
+  const needs={};
+  LESSONS.forEach(l=>{
+    const st=S.lessons[l.id]; if(!st) return;
+    l.words.forEach(w=>{ if(st.buildFirst[w.w]===false) needs[w.w]=(needs[w.w]||0)+1; });
+    (st.applySample||[]).forEach(d=>{ if(st.applyFirst[applyKey(d)]===false) needs[applyWordName(d)]=(needs[applyWordName(d)]||0)+1; });
+  });
+  S.reviews.forEach(r=>r.missed.forEach(w=>{ needs[w]=(needs[w]||0)+1; }));
+  const needList=Object.keys(needs).sort((x,y)=>needs[y]-needs[x]);
+  const revFirst=S.reviews.reduce((s,r)=>s+r.got,0), revAtt=S.reviews.reduce((s,r)=>s+r.total,0);
+  const code=vcode(`${aggFirst}/${aggAtt}|${revFirst}/${revAtt}${sig}`);
+  m.innerHTML=`
+    <p class="noprint" style="margin-bottom:14px"><button class="btn btn-primary" onclick="window.print()">Save as PDF</button></p>
+    <p class="muted noprint" style="margin-bottom:14px">Click <b>Save as PDF</b> and choose &ldquo;Save as PDF&rdquo; as the destination. Put your name in the file name, then send the file to your teacher. This page does not ask for your name.</p>
+    <h2>Rabbit-Proof Fence: Vocab Report</h2>
+    <p class="muted">${dt}</p>
+    <table class="repgrid">
+      <tr><th>Lesson</th><th>Build (clean)</th><th>Use (1st try)</th><th>Base camp</th><th>Stretch</th></tr>
+      ${rows}
+      <tr><td><b>All lesson items attempted</b></td><td class="score" colspan="2"><b>${aggAtt?`${aggFirst}/${aggAtt} (${Math.round(100*aggFirst/aggAtt)}%)`:": "}</b></td><td colspan="2">first attempts; everything was then mastered via the retry loop</td></tr>
+    </table>
+    <h3>Review sessions (${S.reviews.length})</h3>
+    ${S.reviews.length?`<table class="repgrid"><tr><th>When</th><th>Up to lesson</th><th>First try</th><th>Missed</th></tr>${revRows}</table>
+      <p class="muted">Across all reviews: <b>${revFirst}/${revAtt}</b> first-attempt. ${S.reviews.length>12?"(last 12 shown)":""}</p>`
+      :`<p class="muted">No review sessions yet: reviews are the part that makes words stick.</p>`}
+    <h3>Words needing another go</h3>
+    <p class="muted">${needList.length?needList.map(w=>`${esc(w)}${needs[w]>1?` (×${needs[w]})`:""}`).join(", "):"None recorded: every first attempt so far has landed."}</p>
+    <h3>Reading this report</h3>
+    <p class="muted">Each lesson runs meet → build (assemble the word from its morphemes) → use (apply tasks sampled from a bank). Base camp is the support tier, the same morphemes in everyday words; Stretch is the extension tier. Reviews shuffle words from earlier lessons, weighted toward ones previously missed. All scores are FIRST attempts; wrong answers loop until mastered, so a rough first-attempt score with everything cleared still shows honest, finished work.</p>
+    <p class="muted">Verification code: <span class="vcode">${code}</span> · Rabbit-Proof Fence Vocab Hub</p>`;
+}
+/* ---- boot ---- */
+go("home");
+</script>
+</body>
+</html>
