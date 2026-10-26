@@ -306,6 +306,22 @@
     .noprint{display:none !important}
   }
 </style>
+<style>
+  /* showing several languages at once (teacher display) */
+  .alsoshow { display:inline-flex; flex-wrap:wrap; align-items:center; gap:6px; }
+  .aslabel { font-size:.78rem; opacity:.7; }
+  .langchip { font:inherit; font-size:.78rem; line-height:1; cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px; white-space:nowrap;
+    padding:5px 8px 5px 10px; border-radius:999px;
+    border:1px solid currentColor; background:transparent; color:inherit; }
+  .langx { font-weight:700; opacity:.55; }
+  .langchip:hover .langx { opacity:1; }
+  .trstack { display:inline-flex; flex-direction:column; gap:2px; vertical-align:top; }
+  .trone { display:flex; align-items:baseline; gap:6px; }
+  .trtag { flex:0 0 auto; font-style:normal; font-size:.62rem; font-weight:700;
+    opacity:.62; white-space:nowrap; min-width:4.2em; }
+  @media (max-width:640px){ .trtag { min-width:3.4em; font-size:.58rem; } }
+</style>
 </head>
 <body>
 <div class="container">
@@ -2303,10 +2319,79 @@ function updateNav(id){
 function goLesson(){ if(cur) openLesson(cur, false); else go("home"); }
 
 /* translations */
+/* Several languages at once, for teacher display. S.lang stays the student's
+   own choice; S.langs2 are languages shown ALONGSIDE it, so one screen at the
+   front of a room can serve a class that does not share a home language.
+   Display only — nothing here changes what is built, checked or recorded. */
+function shownLangs(){
+  const extra = Array.isArray(S.langs2) ? S.langs2 : [];
+  if(!S.lang) return [];
+  return [S.lang].concat(extra.filter(c =>
+    c && c !== S.lang && LANGS.some(([x]) => x === c)));
+}
+/* The short tag beside each line. LANGS labels put the native name on either
+   side of the "·" depending on the page, so take whichever side actually
+   carries non-Latin script rather than assuming a fixed order. */
+function langShort(c){
+  const l = LANGS.find(([x]) => x === c);
+  if(!l) return c;
+  const parts = String(l[1]).split("\u00b7").map(s => s.trim()).filter(Boolean);
+  if(parts.length < 2) return parts[0] || c;
+  const nonAscii = s => (s.match(/[^\x00-\x7F]/g) || []).length;
+  return nonAscii(parts[1]) > nonAscii(parts[0]) ? parts[1] : parts[0];
+}
 function trSpan(w, big){
-  if(!S.lang || !TR[w]) return "";
-  const t = TR[w][S.lang]; if(!t) return "";
-  return `<span class="wtr${big?" big":""}" ${RTL[S.lang]?'dir="rtl"':""} lang="${esc(S.lang)}">${esc(t)}</span>`;
+  if(!TR[w]) return "";
+  const langs = shownLangs();
+  if(!langs.length) return "";
+  const found = langs.map(c => [c, TR[w][c]]).filter(p => p[1]);
+  if(!found.length) return "";
+  const one = (c, t) => `<span class="wtr${big?" big":""}" ${RTL[c]?'dir="rtl"':""} lang="${esc(c)}">${esc(t)}</span>`;
+  if(langs.length === 1) return one(found[0][0], found[0][1]);
+  return `<span class="trstack">` + found.map(([c,t]) =>
+    `<span class="trone"><i class="trtag">${esc(langShort(c))}</i>${one(c,t)}</span>`
+  ).join("") + `</span>`;
+}
+/* chips for the added languages (click to remove) + a dropdown to add one */
+function alsoShowHTML(){
+  if(!S.lang) return "";
+  const extra = shownLangs().slice(1);
+  let h = `<span class="aslabel">Also show</span>`;
+  extra.forEach(c => {
+    h += `<button type="button" class="langchip" data-drop="${esc(c)}" title="Stop showing ${esc(langShort(c))}">${esc(langShort(c))}<span class="langx">\u00d7</span></button>`;
+  });
+  const taken = shownLangs();
+  const opts = LANGS.filter(([c]) => taken.indexOf(c) < 0);
+  if(opts.length){
+    h += `<select id="langsel2" aria-label="Also show another language"><option value="">+ another language</option>`
+      + opts.map(([c,n]) => `<option value="${esc(c)}">${esc(n)}</option>`).join("")
+      + `</select>`;
+  }
+  return h;
+}
+function paintAlsoShow(lrow){
+  const box = lrow.querySelector(".alsoshow");
+  if(!box) return;
+  box.innerHTML = alsoShowHTML();
+  const s2 = box.querySelector("#langsel2");
+  if(s2) s2.onchange = (e) => {
+    if(!e.target.value) return;
+    S.langs2 = shownLangs().slice(1).concat([e.target.value]); save(); paintAlsoShow(lrow);
+  };
+  Array.prototype.forEach.call(box.querySelectorAll("[data-drop]"), (b) => {
+    b.onclick = () => {
+      const id = b.getAttribute("data-drop");
+      S.langs2 = shownLangs().slice(1).filter(c => c !== id); save(); paintAlsoShow(lrow);
+    };
+  });
+  const main = lrow.querySelector("#langsel");
+  if(main && !main._alsoWired){
+    main._alsoWired = true;
+    /* The page assigns its own .onchange AFTER this runs, so a plain listener
+       here would fire first and still read the previous S.lang. Defer a tick
+       and repaint once the page has stored the new choice. */
+    main.addEventListener("change", () => setTimeout(() => paintAlsoShow(lrow), 0));
+  }
 }
 
 /* ================= SCORE HELPERS ================= */
@@ -2350,8 +2435,9 @@ function renderHome(){
   lrow.className="langrow noprint";
   let lopts=`<option value="">English only</option>`;
   LANGS.forEach(([c,n])=>{ lopts+=`<option value="${c}"${S.lang===c?" selected":""}>${esc(n)}</option>`; });
-  lrow.innerHTML=`<label for="langsel">Key words in my language:</label> <select id="langsel">${lopts}</select>`;
+  lrow.innerHTML=`<label for="langsel">Key words in my language:</label> <select id="langsel">${lopts}</select><span class="alsoshow"></span>`;
   wrap.appendChild(lrow);
+  paintAlsoShow(lrow);
   lrow.querySelector("#langsel").onchange=(e)=>{ S.lang=e.target.value; save(); };
 
   let topic="";
