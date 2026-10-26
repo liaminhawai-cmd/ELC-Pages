@@ -326,28 +326,35 @@ window.ELCProgress = (() => {
     };
   }
 
-  /* ---------------- Rabbit-Proof Fence ----------------
-     elc_rpf_v1 → { quiz:[{date, right, total, missed:[answer]}] }
-       saved by rabbit-proof-fence/techniques.html; dates are day strings.
-     elc.rpf.vocabhub.v1 → { lessons:{id:{buildComplete, applyDone, ...}},
-       reviews:[{when, got, total, missed}] }  saved by the vocab hub.
+  /* ---------------- vocab hubs ----------------
+     <key> → { lessons:{id:{buildComplete, applyDone, ...}},
+       reviews:[{when, got, total, missed}] }  saved by each vocab hub.
      A lesson finish carries no time, so lessons count towards the totals
      but only reviews appear on a dated line. */
-  function rpf() {
-    const s = readJson("elc_rpf_v1", null);
-    const quiz = s && Array.isArray(s.quiz) ? s.quiz.filter((q) => q && q.date && q.total) : [];
-    const v = readJson("elc.rpf.vocabhub.v1", null);
+  function vocabHub(key) {
+    const v = readJson(key, null);
     const lessons = v && v.lessons && typeof v.lessons === "object" ? Object.values(v.lessons) : [];
     const reviews = v && Array.isArray(v.reviews) ? v.reviews.filter((r) => r && r.when) : [];
-    const lessonsDone = lessons.filter((l) => l && l.buildComplete && l.applyDone).length;
-    if (!quiz.length && !lessonsDone && !reviews.length) return null;
-
-    const events = quiz.map((q) => ({ day: q.date, label: "Film techniques quiz",
-                                      detail: q.right + "/" + q.total + " right first try" }));
+    const events = [];
     reviews.forEach((r) => {
       const day = dayOf(r.when);
       if (day) events.push({ day, label: "Vocab hub review", detail: r.got + "/" + r.total + " right first try" });
     });
+    return { lessonsDone: lessons.filter((l) => l && l.buildComplete && l.applyDone).length, reviews, events };
+  }
+
+  /* ---------------- Rabbit-Proof Fence ----------------
+     elc_rpf_v1 → { quiz:[{date, right, total, missed:[answer]}] }
+       saved by rabbit-proof-fence/techniques.html; dates are day strings.
+     elc.rpf.vocabhub.v1 → the vocab hub (see vocabHub). */
+  function rpf() {
+    const s = readJson("elc_rpf_v1", null);
+    const quiz = s && Array.isArray(s.quiz) ? s.quiz.filter((q) => q && q.date && q.total) : [];
+    const { lessonsDone, reviews, events: hubEvents } = vocabHub("elc.rpf.vocabhub.v1");
+    if (!quiz.length && !lessonsDone && !reviews.length) return null;
+
+    const events = quiz.map((q) => ({ day: q.date, label: "Film techniques quiz",
+                                      detail: q.right + "/" + q.total + " right first try" })).concat(hubEvents);
     const stats = [];
     if (quiz.length) {
       const best = quiz.reduce((b, q) => ((Number(q.right) || 0) > (Number(b.right) || 0) ? q : b), quiz[0]);
@@ -361,6 +368,17 @@ window.ELCProgress = (() => {
     return { id: "rpf", title: "Rabbit-Proof Fence", icon: "🎬", href: "rabbit-proof-fence/", stats, events };
   }
 
+  /* ---------------- Impact of Colonisation ----------------
+     elc.colonisation.vocabhub.v1 → history/colonisation/vocab-hub.html
+     (see vocabHub). */
+  function colonisation() {
+    const { lessonsDone, reviews, events } = vocabHub("elc.colonisation.vocabhub.v1");
+    if (!lessonsDone && !reviews.length) return null;
+    return { id: "colonisation", title: "Impact of Colonisation", icon: "⚓", href: "history/colonisation/",
+             stats: [stat(lessonsDone, "vocab lesson", null, "finished"), stat(reviews.length, "vocab review", null, "done")],
+             events };
+  }
+
   /* ---------------- assembly ---------------- */
   const SAFE = (fn) => { try { return fn(); } catch (e) { console.warn("ELCProgress:", e); return null; } };
 
@@ -368,7 +386,7 @@ window.ELCProgress = (() => {
     let ph = null;
     try { ph = await phonics(); } catch (e) { console.warn("ELCProgress: phonics", e); }
     // Order is the order they appear in the record: literacy first, STEM last.
-    const live = [ph, SAFE(vocab), SAFE(grammar), SAFE(pron), SAFE(rpf), SAFE(stem)].filter(Boolean);
+    const live = [ph, SAFE(vocab), SAFE(grammar), SAFE(pron), SAFE(rpf), SAFE(colonisation), SAFE(stem)].filter(Boolean);
     live.forEach((a) => {
       a.events = (a.events || []).filter((e) => e && e.day);
       a.lastDay = a.events.length ? a.events.map((e) => e.day).sort().slice(-1)[0] : null;

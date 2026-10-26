@@ -55,6 +55,7 @@
   /* ---- key-word translations (EAL) ---- */
   .langrow{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:0 0 16px;
        font-size:12.5px;color:var(--muted);font-weight:600}
+  .langrow .trnote{flex-basis:100%;text-align:center;font-size:12px;font-weight:400;color:var(--muted)}
   .langrow select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);
        font-family:inherit;font-size:13px;color:var(--ink)}
   .wtr{font-size:14px;color:var(--water-d);font-weight:600;background:var(--waterbg);border-radius:6px;padding:1px 8px}
@@ -1446,9 +1447,9 @@ function renderHome(){
   lrow.className="langrow noprint";
   let lopts=`<option value="">English only</option>`;
   LANGS.forEach(([c,n])=>{ lopts+=`<option value="${c}"${S.lang===c?" selected":""}>${esc(n)}</option>`; });
-  lrow.innerHTML=`<label for="langsel">Key words in my language:</label> <select id="langsel">${lopts}</select>`;
+  lrow.innerHTML=`<label for="langsel">Key words in my language:</label> <select id="langsel">${lopts}</select><span class="trnote"${S.lang?"":" hidden"}>Translations are drafted and not yet checked by a speaker of each language.</span>`;
   wrap.appendChild(lrow);
-  lrow.querySelector("#langsel").onchange=(e)=>{ S.lang=e.target.value; save(); try{ localStorage.setItem("elc_rpf_lang", JSON.stringify(S.lang)); }catch(err){} };
+  lrow.querySelector("#langsel").onchange=(e)=>{ S.lang=e.target.value; save(); lrow.querySelector(".trnote").hidden=!S.lang; try{ localStorage.setItem("elc_rpf_lang", JSON.stringify(S.lang)); }catch(err){} };
 
   let topic="";
   let firstOpen=null;

@@ -1,0 +1,2596 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%23223f43'/><g fill='none' stroke='%23c99a2e' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'><circle cx='16' cy='7' r='2.6'/><path d='M16 9.6V26.5M11 13.5h10M7.5 18.5c0 5 4 8 8.5 8s8.5-3 8.5-8M5.5 20.5l2-2.5 2.5 1.8M26.5 20.5l-2-2.5-2.5 1.8'/></g></svg>">
+<title>Impact of Colonisation: Vocab Hub</title>
+<meta name="description" content="The Impact of Colonisation history unit, lesson by lesson, from 1788 to Federation. Build each word from its morphemes, then keep it alive with quick reviews.">
+<style>
+  /* Suite family with the Water in the World vocab hub: same warm paper, same
+     Georgia display face, same two-accent system, repurposed for History.
+     ochre for land & movement, teal for evidence & sources. Two quieter
+     accents extend it: plum for beliefs & values, storm-red for law & custom. */
+  :root{
+    --bg:#f2ece0; --paper:#fbf7ef; --ink:#211d17; --muted:#6c6353;
+    --line:#d9cfb9; --line-soft:#e8e0ce;
+    --earth:#b0741f; --earth-d:#8f5d16;      /* primary accent: land & movement */
+    --water:#2c7488; --water-d:#215866;      /* secondary accent: evidence & sources */
+    --people:#7a4a6f; --people-d:#5e3755;    /* beliefs & values: plum          */
+    --hazard:#a8432f; --hazard-d:#86331f;    /* law & custom: storm red         */
+    --correct:#2f6a3e; --wrong:#a8432f;
+    --okbg:#eef4ec; --badbg:#f6ece8;
+    --waterbg:#e6f0f1; --earthbg:#f4ead7; --peoplebg:#f1e6ee; --hazardbg:#f6e4df;
+    --stretch:#1f4e5e; --stretchbg:#e2edf0;
+    --base:#7c6a3c; --basebg:#f2ecdb;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background:var(--bg);
+       min-height:100vh;padding:16px;display:flex;justify-content:center;align-items:flex-start;color:var(--ink)}
+  .container{background:var(--paper);border:1px solid var(--line);border-radius:12px;
+       max-width:920px;width:100%;padding:26px;margin-top:12px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+  h1{text-align:center;font-size:24px;font-family:Georgia,'Times New Roman',serif;letter-spacing:.3px}
+  h2{font-family:Georgia,serif;font-size:18px;margin:4px 0 10px}
+  h3{font-family:Georgia,serif;font-size:15px;margin:18px 0 8px}
+  .subtitle{color:var(--muted);text-align:center;margin:6px 0 18px;font-size:13px}
+  .muted{color:var(--muted);font-size:13px;line-height:1.5}
+  .screen{display:none}.screen.active{display:block}
+  button{font-family:inherit}
+  .btn{padding:11px 18px;border:1px solid var(--line);border-radius:8px;font-size:15px;font-weight:600;
+       cursor:pointer;background:var(--paper);color:var(--ink);transition:all .15s ease}
+  .btn-primary{background:var(--earth);color:#fff;border-color:var(--earth)}
+  .btn-primary:hover:not(:disabled){background:var(--earth-d)}
+  .btn-primary:disabled{background:var(--line);border-color:var(--line);color:var(--muted);cursor:not-allowed}
+  .btn-water{background:var(--water);color:#fff;border-color:var(--water)}
+  .btn-water:hover:not(:disabled){background:var(--water-d)}
+  .btn-ghost{background:var(--bg);color:var(--muted)}
+  .btn-ghost:hover{color:var(--ink);border-color:var(--ink)}
+  .linkbtn{background:none;border:none;color:var(--earth);font-weight:600;font-size:13px;cursor:pointer;padding:4px 8px}
+  .linkbtn:hover{text-decoration:underline}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .progress{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.4px}
+  button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--earth);outline-offset:2px}
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms !important;transition-duration:.001ms !important}}
+
+  /* ---- key-word translations (EAL) ---- */
+  .langrow{display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap;margin:0 0 16px;
+       font-size:12.5px;color:var(--muted);font-weight:600}
+  .langrow .trnote{flex-basis:100%;text-align:center;font-size:12px;font-weight:400;color:var(--muted)}
+  .langrow select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);
+       font-family:inherit;font-size:13px;color:var(--ink)}
+  .wtr{font-size:14px;color:var(--water-d);font-weight:600;background:var(--waterbg);border-radius:6px;padding:1px 8px}
+  .wtr.big{font-size:16px}
+
+  /* ---- home: unit map ---- */
+  .topichead{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);
+       margin:18px 0 8px;border-bottom:1px solid var(--line-soft);padding-bottom:4px}
+  .lessons{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+  .lcard{border:1px solid var(--line-soft);border-radius:10px;background:var(--paper);padding:12px 14px;
+       text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px;transition:border-color .15s ease}
+  .lcard:hover{border-color:var(--earth)}
+  .lcard .lnum{font-size:11px;font-weight:800;letter-spacing:.5px;color:var(--muted)}
+  .lcard .lname{font-family:Georgia,serif;font-size:15px;font-weight:700;line-height:1.25}
+  .lcard .lstat{display:flex;gap:5px;flex-wrap:wrap;margin-top:2px}
+  .lcard.done{border-color:var(--correct)}
+  .chip{font-size:10px;font-weight:800;letter-spacing:.4px;border-radius:20px;padding:2px 8px;background:var(--bg);color:var(--muted)}
+  .chip.ok{background:var(--okbg);color:var(--correct)}
+  .chip.now{background:var(--earth);color:#fff}
+  .chip.part{background:var(--earthbg);color:var(--earth-d)}
+  .chip.str{background:var(--stretchbg);color:var(--stretch)}
+  .chip.base{background:var(--basebg);color:var(--base)}
+  .homerow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+  @media(max-width:640px){.homerow{grid-template-columns:1fr}}
+  .panelcard{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--bg)}
+  .panelcard .t{font-family:Georgia,serif;font-weight:700;font-size:15px;margin-bottom:4px}
+  .panelcard .d{font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:10px}
+  details.teach{margin-top:16px;border:1px dashed var(--line);border-radius:10px;padding:10px 14px}
+  details.teach summary{font-size:12px;font-weight:700;color:var(--muted);cursor:pointer}
+  details.teach p{font-size:12.5px;color:var(--muted);line-height:1.55;margin:8px 0}
+
+  /* ---- lesson home: step cards ---- */
+  .focusline{text-align:center;font-family:Georgia,serif;font-size:15px;color:var(--ink);
+       background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;padding:10px 14px;margin:0 0 14px;line-height:1.45}
+  .steps{display:flex;flex-direction:column;gap:10px;margin:14px 0}
+  .step{display:flex;align-items:center;gap:14px;border:1px solid var(--line-soft);border-radius:10px;
+        padding:14px 16px;background:var(--paper);text-align:left;cursor:pointer;width:100%}
+  .step:hover:not(:disabled){border-color:var(--earth)}
+  .step:disabled{opacity:.55;cursor:not-allowed}
+  .step .num{width:34px;height:34px;border-radius:50%;background:var(--bg);border:1px solid var(--line);
+        display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0}
+  .step.done .num{background:var(--okbg);border-color:var(--correct);color:var(--correct)}
+  .step .t{font-weight:700;font-size:15px}
+  .step .d{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .step .tag{margin-left:auto;font-size:11px;font-weight:800;letter-spacing:.4px;color:var(--muted);flex-shrink:0;text-align:right}
+  .step.done .tag{color:var(--correct)}
+  .tierbar{border-radius:10px;padding:12px 16px;margin:10px 0;font-size:13.5px;line-height:1.5;display:flex;
+       gap:12px;align-items:center;flex-wrap:wrap}
+  .tierbar .grow{flex:1;min-width:200px}
+  .tierbar b{display:block;font-family:Georgia,serif;font-size:14.5px}
+  .tierbar.base{background:var(--basebg);border:1px solid #d8c893}
+  .tierbar.stretch{background:var(--stretchbg);border:1px solid #b9d2da}
+  .tierbar .btn{padding:8px 14px;font-size:13.5px}
+
+  /* ---- study list ---- */
+  .vcard{border:1px solid var(--line-soft);border-radius:10px;padding:14px 16px;margin-bottom:10px;background:var(--paper)}
+  .vcard .top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .vcard .w{font-family:Georgia,serif;font-size:23px;font-weight:700}
+  .vcard .w .mp{color:var(--mpre)} .vcard .w .mr{color:var(--mroot)} .vcard .w .ms{color:var(--msuf)} .vcard .w .mc{color:var(--mcon)}
+  .vcard .pos{font-size:12px;color:var(--muted);font-style:italic}
+  .vcard .meaning{font-size:14px;margin:6px 0;line-height:1.5}
+  .vcard .morph{font-size:13.5px;color:var(--muted);line-height:1.7;border-top:1px dashed var(--line-soft);padding-top:6px;margin-top:6px}
+  .vcard .morph b,.vcard .morph i{color:var(--ink)}
+  code.mp,code.mr,code.ms,code.mc{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-weight:700;font-size:16px}
+  code.mp{color:var(--mpre)} code.mr{color:var(--mroot)} code.ms{color:var(--msuf)} code.mc{color:var(--mcon)}
+  .dtag{margin-left:auto;font-size:10.5px;font-weight:800;letter-spacing:.5px;padding:3px 9px;border-radius:20px;flex-shrink:0}
+  .dtag.water{color:var(--water-d);background:var(--waterbg)}
+  .dtag.earth{color:var(--earth-d);background:var(--earthbg)}
+  .dtag.people{color:var(--people-d);background:var(--peoplebg)}
+  .dtag.hazard{color:var(--hazard-d);background:var(--hazardbg)}
+
+  /* ---- word builder ---- */
+  .buildword{font-family:Georgia,serif;font-size:22px;text-align:center;margin-bottom:2px;color:var(--muted)}
+  .slots,.bank{display:flex;flex-wrap:wrap;gap:9px;justify-content:center;margin:14px 0}
+  .slot{min-width:78px;min-height:50px;border:2px dashed var(--line);border-radius:9px;
+        display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;padding:6px 12px;background:var(--bg)}
+  .slot.filled{border-style:solid;border-color:var(--correct);background:var(--okbg);color:var(--correct)}
+  .joiner{align-self:center;font-size:18px;color:var(--muted);font-weight:700}
+  .tile{min-width:78px;padding:9px 14px;border:1px solid var(--line);border-radius:9px;background:var(--paper);
+        cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.15;transition:all .12s ease}
+  .tile:hover:not(:disabled){border-color:var(--earth)}
+  .tile:disabled{opacity:.3;cursor:default}
+  .tile .mm{font-weight:800;font-size:16px}
+  .tile .gl{font-size:11px;color:var(--muted)}
+  .tile.shake{animation:shake .3s;border-color:var(--wrong)}
+  .tile.shake .mm,.tile.shake .gl{color:var(--wrong)}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+  .buildprog{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;margin-bottom:14px}
+  .bdot{width:12px;height:12px;border-radius:50%;border:1px solid var(--line);background:var(--bg)}
+  .bdot.done{background:var(--correct);border-color:var(--correct)}
+  .bdot.now{border-color:var(--earth);background:var(--paper);box-shadow:0 0 0 2px rgba(176,116,31,.3)}
+  .maprow{margin:12px auto 2px;max-width:560px;font-size:13px;color:var(--muted);line-height:1.7;text-align:center}
+  .maprow b{color:var(--ink)}
+  .reveal{border:1px solid var(--correct);background:var(--okbg);border-radius:10px;padding:14px 16px;
+          margin:14px 0;font-size:14.5px;line-height:1.6;display:none}
+  .reveal.show{display:block}
+  .reveal .rw{font-family:Georgia,serif;font-weight:700}
+
+  /* ---- task shell (apply / review / tiers) ---- */
+  .prompt{font-size:12.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:8px}
+  .qtext{font-size:17px;line-height:1.6;margin-bottom:16px}
+  .qtext .gap{display:inline-block;min-width:120px;border-bottom:2px solid var(--ink);text-align:center;font-weight:800;color:var(--earth)}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opts.chips{flex-direction:row;flex-wrap:wrap}
+  .opt{padding:12px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);font-size:15px;
+       text-align:left;cursor:pointer;line-height:1.5}
+  .chips .opt{flex:0 0 auto;padding:9px 16px}
+  .opt:hover:not(:disabled){border-color:var(--earth)}
+  .opt:disabled{cursor:default}
+  .opt.right{background:var(--okbg);border-color:var(--correct);color:var(--correct);font-weight:700}
+  .opt.wrongpick{background:var(--badbg);border-color:var(--wrong);color:var(--wrong)}
+  .feedback{margin-top:14px;padding:12px 14px;border-radius:8px;font-size:14px;line-height:1.55;display:none}
+  .feedback.ok{display:block;background:var(--okbg);border:1px solid var(--correct)}
+  .feedback.bad{display:block;background:var(--badbg);border:1px solid var(--wrong)}
+  .nextrow{margin-top:16px;display:flex;justify-content:flex-end;gap:8px}
+  .reviewtag{font-size:11px;font-weight:800;letter-spacing:.4px;color:var(--water-d);background:var(--waterbg);
+       border-radius:20px;padding:3px 10px;display:inline-block;margin-bottom:10px}
+
+  /* ---- diagrams (unused in this module, kept for shared engine) ---- */
+  .svgbox{border:1px solid var(--line-soft);border-radius:10px;background:var(--bg);padding:10px;margin:0 auto 16px;
+          max-width:360px;display:flex;justify-content:center}
+  .svgbox svg{width:100%;height:auto;display:block}
+
+  /* ---- summary ---- */
+  .sumbox{border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0;text-align:center}
+  .sumbox .big{font-family:Georgia,serif;font-size:30px;font-weight:700}
+  .sumbox .big.good{color:var(--correct)} .sumbox .big.mid{color:#9a6b1f} .sumbox .big.low{color:var(--wrong)}
+
+  /* ---- report ---- */
+  .repgrid{width:100%;border-collapse:collapse;margin:12px 0}
+  .repgrid th,.repgrid td{border:1px solid var(--line);padding:7px 9px;font-size:13px;text-align:left}
+  .repgrid th{background:var(--bg);font-size:11.5px;text-transform:uppercase;letter-spacing:.4px}
+  .repgrid td.score{font-weight:700;white-space:nowrap}
+  .repgrid td.nf{color:var(--muted);font-style:italic}
+  .idrow{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+  .idrow label{font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px}
+  .idrow input{padding:10px 12px;border:1px solid var(--line);border-radius:8px;font-size:15px;font-family:inherit;background:#fff}
+  .vcode{font-family:'Courier New',monospace;font-size:13px;letter-spacing:2px}
+  /* ---- persistent nav ---- */
+  .topnav{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin:-4px 0 16px;
+       border-bottom:1px solid var(--line-soft);padding-bottom:12px}
+  .topnav button{font-family:inherit;font-size:12.5px;font-weight:700;letter-spacing:.3px;color:var(--muted);
+       background:var(--bg);border:1px solid var(--line-soft);border-radius:20px;padding:7px 15px;cursor:pointer}
+  .topnav button:hover{border-color:var(--earth);color:var(--earth-d)}
+  .topnav button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+  /* ---- morpheme colour system (prefix / root / suffix), from the EAL book ---- */
+  :root{
+    --mpre:#2c6fa8; --mpre-bg:#e5eef5;
+    --mroot:#9a5518; --mroot-bg:#f5e7d8;
+    --msuf:#3f7a4a; --msuf-bg:#e6f1e8;
+    --mcon:#6c6353; --mcon-bg:#ece7db;
+  }
+  .mlegend{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:8px 0 14px;font-size:12px}
+  .mlegend span{display:inline-flex;align-items:center;gap:5px;font-weight:700;color:var(--ink)}
+  .mlegend i{width:13px;height:13px;border-radius:4px;display:inline-block}
+  .mtile{border-radius:9px;padding:8px 12px;display:inline-flex;flex-direction:column;align-items:center;gap:1px;
+       line-height:1.15;font-family:inherit;cursor:grab;user-select:none;touch-action:none;border:1.5px solid;background:var(--paper)}
+  .mtile .mm{font-weight:800;font-size:16px}
+  .mtile .gl{font-size:10.5px;opacity:.85}
+  .mtile.prefix{color:var(--mpre);background:var(--mpre-bg);border-color:var(--mpre)}
+  .mtile.root{color:var(--mroot);background:var(--mroot-bg);border-color:var(--mroot)}
+  .mtile.suffix{color:var(--msuf);background:var(--msuf-bg);border-color:var(--msuf)}
+  .mtile.connector{color:var(--mcon);background:var(--mcon-bg);border-color:var(--mcon)}
+  .mtile.sel{outline:3px solid var(--ink);outline-offset:2px}
+  .mtile.dragging{opacity:.35}
+  .drag-ghost{position:fixed;transform:translate(-50%,-50%);z-index:999;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+  /* ---- Access mode: big tap targets, tap-only, most slots prefilled ----
+     A persistent per-device profile (localStorage "y7h-access"), for students
+     for whom fine pointer control is the barrier: every target is large, a
+     tapped tile enlarges so the current selection is unmissable, dragging is
+     off so a tremor cannot yank a tile, and each word starts with every slot
+     but one already placed and locked, so one accurate tap finishes a word. */
+  .accessrow{text-align:center;margin-top:26px;border-top:1px solid var(--line-soft);padding-top:8px}
+  .accessrow button{background:none;border:none;font-family:inherit;font-size:10.5px;color:var(--muted);cursor:pointer;padding:4px 8px;letter-spacing:.3px}
+  .accessrow button:hover{color:var(--ink);text-decoration:underline}
+  body.access .accessrow button{color:var(--earth-d);font-weight:800;font-size:13px}
+  body.access .mtile{padding:16px 22px;border-radius:12px;border-width:2px}
+  body.access .mtile .mm{font-size:26px}
+  body.access .mtile .gl{font-size:15px}
+  body.access .mtile.sel{transform:scale(1.45);z-index:20;position:relative;box-shadow:0 8px 24px rgba(0,0,0,.3);outline-width:4px}
+  body.access .mtiles{gap:14px}
+  body.access .wslot{min-width:110px;min-height:74px;border-width:3px;border-radius:12px;font-size:24px}
+  body.access .wslot .mm{font-size:24px}
+  body.access .wslot .ph{font-size:15px}
+  body.access .wslot.locked{border-style:solid;cursor:default;opacity:.9}
+  body.access .wrow{padding:14px}
+  body.access .wmean{font-size:17px}
+  body.access .mbank{position:static}
+  .say{border:0;background:none;font-size:15px;cursor:pointer;padding:2px 5px;border-radius:6px;line-height:1;vertical-align:middle}
+  .say:hover{background:var(--bg)}
+  body.access .say{font-size:26px;padding:5px 8px}
+  body.access .tile{padding:16px 22px;font-size:24px;border-radius:12px}
+  body.access .tile .mm{font-size:24px}
+  body.access .opt{padding:16px 18px;font-size:17px}
+  /* colour the tap-tile builder used by the tiers, too */
+  .tile.prefix .mm{color:var(--mpre)} .tile.root .mm{color:var(--mroot)} .tile.suffix .mm{color:var(--msuf)} .tile.connector .mm{color:var(--mcon)}
+
+  .mbank{background:var(--bg);border:1px solid var(--line-soft);border-radius:10px;padding:12px;margin-bottom:14px;position:sticky;top:6px;z-index:5}
+  .mbank .mgroup{margin-bottom:8px}
+  .mbank .mgroup:last-child{margin-bottom:0}
+  .mbank .glabel{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;margin-bottom:5px}
+  .mbank .glabel.prefix{color:var(--mpre)} .mbank .glabel.root{color:var(--mroot)} .mbank .glabel.suffix{color:var(--msuf)} .mbank .glabel.connector{color:var(--mcon)}
+  .mtiles{display:flex;flex-wrap:wrap;gap:7px}
+
+  /* ---- word-build table (drag morphemes to the matching meaning) ---- */
+  .wtable{display:flex;flex-direction:column;gap:9px}
+  .wrow{display:flex;align-items:center;gap:12px;border:1px solid var(--line-soft);border-radius:10px;
+       padding:10px 12px;background:var(--paper);transition:opacity .3s ease,transform .3s ease,background .2s}
+  .wrow.wrong{animation:shake .3s;border-color:var(--wrong)}
+  .wrow.done{border-color:var(--correct);background:var(--okbg)}
+  .wrow.gone{opacity:0;transform:translateX(40px)}
+  .wmean{flex:1 1 46%;min-width:190px;font-size:13.5px;line-height:1.45}
+  .wmean .pos{color:var(--muted);font-style:italic;font-size:12px}
+  .wslots{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .wjoin{color:var(--muted);font-weight:700}
+  .wslot{min-width:60px;min-height:46px;border:2px dashed var(--line);border-radius:8px;display:flex;
+       align-items:center;justify-content:center;background:var(--bg);cursor:pointer;padding:4px 8px}
+  .wslot .ph{color:var(--muted);font-size:10px;letter-spacing:.3px}
+  .wslot .mm{font-weight:800;font-size:15px}
+  .wslot.over{border-color:var(--ink);background:#fff}
+  .wslot.filled{border-style:solid}
+  .wslot.filled.prefix{border-color:var(--mpre);background:var(--mpre-bg);color:var(--mpre)}
+  .wslot.filled.root{border-color:var(--mroot);background:var(--mroot-bg);color:var(--mroot)}
+  .wslot.filled.suffix{border-color:var(--msuf);background:var(--msuf-bg);color:var(--msuf)}
+  .wslot.filled.connector{border-color:var(--mcon);background:var(--mcon-bg);color:var(--mcon)}
+  .wbuilt{flex:1 1 46%;min-width:190px;text-align:right;display:none}
+  .wrow.done .wslots{display:none}
+  .wrow.done .wbuilt{display:block}
+  .wbuilt .wname{font-family:Georgia,serif;font-weight:700;font-size:16px;color:var(--correct)}
+  .wbuilt .wtickmark{color:var(--correct);font-weight:800;margin-left:4px}
+  .buildhint{font-size:12.5px;color:var(--wrong);text-align:center;min-height:16px;margin:4px 0 6px;font-weight:600}
+  @media(max-width:560px){ .wmean{flex:1 1 100%} .wbuilt{flex:1 1 100%;text-align:left} }
+
+  /* ---- reference views (morpheme table + word list) ---- */
+  .reftable{width:100%;border-collapse:collapse;margin:4px 0 14px}
+  .reftable th,.reftable td{border:1px solid var(--line-soft);padding:7px 10px;font-size:13px;text-align:left;vertical-align:middle}
+  .reftable th{background:var(--bg);font-size:11px;text-transform:uppercase;letter-spacing:.3px;color:var(--muted)}
+  .reftable .mtile{display:inline-flex}
+  .refhead{font-family:Georgia,serif;font-size:16px;margin:18px 0 6px;padding-bottom:3px;border-bottom:2px solid var(--line-soft)}
+  .refhead.prefix{color:var(--mpre)} .refhead.root{color:var(--mroot)} .refhead.suffix{color:var(--msuf)} .refhead.connector{color:var(--mcon)}
+  .reffilter{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .reffilter input{padding:9px 13px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px;background:var(--paper);color:var(--ink);min-width:220px}
+  .eqn{font-family:Georgia,serif;font-size:18px;letter-spacing:.5px}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .container{border:none;box-shadow:none;max-width:100%;padding:8px}
+    .noprint{display:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="topnav noprint">
+  <a href="./" style="font-family:inherit;font-size:12.5px;font-weight:700;letter-spacing:.3px;color:var(--muted);text-decoration:none;padding:6px 10px;border-radius:8px">&larr; Impact of Colonisation</a>
+  <button data-scr="home" onclick="go('home')">&#9776; Lessons</button>
+  <button data-scr="morphtable" onclick="go('morphtable')">Morpheme table</button>
+  <button data-scr="glossary" onclick="go('glossary')">Word list</button>
+  <button data-scr="report" onclick="go('report')">My report</button>
+</div>
+
+<div class="screen active" id="scr-home">
+  <h1>Impact of Colonisation</h1>
+  <p class="subtitle">Vocab Hub &middot; the whole unit, lesson by lesson, from the First Fleet in 1788 to Federation and what it meant for First Nations Peoples &middot; build each lesson&rsquo;s words from their morphemes, then keep them alive with quick reviews</p>
+  <div id="home-map"></div>
+  <div class="homerow">
+    <div class="panelcard">
+      <div class="t">&#8635; Quick review</div>
+      <div class="d" id="review-desc">A shuffled set of words from the lessons you&rsquo;ve already done, everyone gets a different mix, so eyes on your own screen.</div>
+      <button class="btn btn-water" id="review-start" onclick="startReviewSetup()">Review earlier words</button>
+    </div>
+    <div class="panelcard">
+      <div class="t">&#9998; My report</div>
+      <div class="d">Everything you&rsquo;ve done: first-attempt scores lesson by lesson, plus your review history. Save it as a PDF for your teacher at any time.</div>
+      <button class="btn btn-ghost" onclick="go('report')">Open my report</button>
+    </div>
+  </div>
+  <div class="nextrow noprint" style="justify-content:center">
+    <button class="linkbtn" onclick="resetAll()">start over (clears everything)</button>
+  </div>
+</div>
+
+<div class="screen" id="scr-lesson">
+  <div class="topbar noprint"><button class="linkbtn" onclick="go('home')">&larr; all lessons</button><span class="progress" id="lesson-prog"></span></div>
+  <div id="lesson-body"></div>
+</div>
+
+<div class="screen" id="scr-study">
+  <div class="topbar noprint"><button class="linkbtn" onclick="goLesson()">&larr; lesson</button><span class="progress" id="study-prog">STEP 1 &middot; MEET THE WORDS</span></div>
+  <div id="study-body"></div>
+</div>
+
+<div class="screen" id="scr-build">
+  <div class="topbar noprint"><button class="linkbtn" onclick="goLesson()">&larr; lesson</button><span class="progress" id="build-prog">STEP 2 &middot; BUILD</span></div>
+  <div id="build-body"></div>
+</div>
+
+<div class="screen" id="scr-apply">
+  <div class="topbar noprint"><button class="linkbtn" onclick="goLesson()">&larr; lesson</button><span class="progress" id="apply-prog">STEP 3 &middot; USE THE WORDS</span></div>
+  <div id="apply-body"></div>
+</div>
+
+<div class="screen" id="scr-base">
+  <div class="topbar noprint"><button class="linkbtn" onclick="goLesson()">&larr; lesson</button><span class="progress" id="base-prog">BASE CAMP</span></div>
+  <div id="base-body"></div>
+</div>
+
+<div class="screen" id="scr-stretch">
+  <div class="topbar noprint"><button class="linkbtn" onclick="goLesson()">&larr; lesson</button><span class="progress" id="stretch-prog">STRETCH</span></div>
+  <div id="stretch-body"></div>
+</div>
+
+<div class="screen" id="scr-review">
+  <div class="topbar noprint"><button class="linkbtn" onclick="go('home')">&larr; home</button><span class="progress" id="review-prog">REVIEW</span></div>
+  <div id="review-body"></div>
+</div>
+
+<div class="screen" id="scr-report">
+  <div class="topbar noprint"><button class="linkbtn" onclick="go('home')">&larr; home</button><span class="progress">REPORT</span></div>
+  <div id="report-body"></div>
+</div>
+
+<div class="screen" id="scr-morphtable">
+  <div class="topbar noprint"><button class="linkbtn" onclick="go('home')">&larr; lessons</button><span class="progress">MORPHEME TABLE</span></div>
+  <div id="morphtable-body"></div>
+</div>
+
+<div class="screen" id="scr-glossary">
+  <div class="topbar noprint"><button class="linkbtn" onclick="go('home')">&larr; lessons</button><span class="progress">WORD LIST</span></div>
+  <div id="glossary-body"></div>
+</div>
+
+<div class="accessrow noprint"><button id="accessToggle" onclick="toggleAccess()" aria-pressed="false" title="Bigger tiles, tap only, most pieces already placed">Access mode: off</button></div>
+</div>
+<script>
+/* Access mode: regular mode is the default, always. A ?access link switches
+   it on for that sitting only (sessionStorage, so it follows the student
+   between this site's pages in the tab and then lapses), and the small
+   toggle at the foot of the page makes it stick on this device
+   (localStorage) until it is switched off again. Nothing else turns it on,
+   so a shared laptop always opens in regular mode. */
+const ACCESS_KEY="y7h-access";
+let ACCESS=false;
+try{
+  if(new URLSearchParams(location.search).has("access")) sessionStorage.setItem(ACCESS_KEY,"on");
+  ACCESS=localStorage.getItem(ACCESS_KEY)==="on"||sessionStorage.getItem(ACCESS_KEY)==="on";
+}catch(e){}
+function accessLabel(){
+  const b=document.getElementById("accessToggle");
+  if(b){ b.textContent="Access mode: "+(ACCESS?"on":"off"); b.setAttribute("aria-pressed",String(ACCESS)); }
+}
+document.addEventListener("DOMContentLoaded",()=>{ if(ACCESS) document.body.classList.add("access"); accessLabel(); });
+/* Read-aloud: the browser's own speech engine, nothing leaves the device.
+   Always on show, not gated behind Access mode: a student who needs text read
+   aloud does not necessarily need the motor scaffold. */
+const TTS_OK="speechSynthesis" in window;
+let VOICE=null;
+if(TTS_OK){
+  const pick=()=>{const vs=speechSynthesis.getVoices();
+    VOICE=vs.find(v=>v.lang==="en-AU")||vs.find(v=>v.lang&&v.lang.startsWith("en"))||null};
+  pick();speechSynthesis.onvoiceschanged=pick;
+}
+function speak(text){
+  if(!TTS_OK)return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);
+  if(VOICE)u.voice=VOICE;u.lang=(VOICE&&VOICE.lang)||"en-AU";u.rate=.95;
+  speechSynthesis.speak(u);
+}
+function sayBtn(text){return TTS_OK?`<button class="say" type="button" data-say="${esc(text)}" aria-label="Read aloud" title="Read aloud">\u{1F50A}</button>`:""}
+function wireSay(root){root.querySelectorAll(".say").forEach(b=>b.onclick=e=>{e.stopPropagation();speak(b.dataset.say)})}
+function toggleAccess(){
+  ACCESS=!ACCESS;
+  try{
+    if(ACCESS) localStorage.setItem(ACCESS_KEY,"on");
+    else { localStorage.removeItem(ACCESS_KEY); sessionStorage.removeItem(ACCESS_KEY); }
+  }catch(e){}
+  document.body.classList.toggle("access",ACCESS);
+  accessLabel();
+  const row=document.querySelector("#wtable .wrow");
+  if(row && buildCtx) renderBuildTable(buildCtx.l, buildCtx.l.words.filter(w=>w.type==="morph"||w.type==="compound"));
+}
+"use strict";
+/* ============================================================
+   IMPACT OF COLONISATION: VOCAB HUB
+   Companion to the Impact of Colonisation history unit (Australia
+   1788 to 1918), in the order the unit is taught. Module 1 · first
+   contact and resistance (1 initial impacts, 2 Pemulwuy and Yagan),
+   Module 2 · the frontier (3 Myall Creek, 4 the Frontier Wars,
+   4.5 recognising them), Module 3 · Victoria (5 from Naarm to Port
+   Phillip Bay), Module 4 · Federation (6 reasons, 7 countdown,
+   8 its impact on First Nations Peoples).
+
+   Engine shared with the Water in the World Vocab Hub. Clicking a
+   lesson AUTO-RUNS a short review of earlier lessons first (skipped
+   for the very first lesson), then drops into it.
+
+   One lesson = one short set of key words. For each lesson:
+     MEET: read the words: meaning + the morphemes that build it.
+     BUILD: a single colour-coded morpheme bank (prefix/root/suffix)
+             above a table of word MEANINGS; drag (or tap) each
+             morpheme into the word it belongs to. Morphemes are
+             reused across many words, so the bank never depletes.
+             A finished word ticks off and leaves the board; you go
+             until none remain. Opaque/borrowed words (Theory, the
+             Dreaming) can't be cut into parts, so they come as
+             honest word-origin questions afterwards.
+     USE: a mixed bag of tasks (cloze, scenario, description,
+             word-sum, meaning-match, part-meaning) sampled and
+             generated so neighbouring students differ.
+
+   A persistent MORPHEME TABLE and WORD LIST are always available
+   from the top nav as look-ups.
+
+   ADAPTIVE TIERS:
+     BASE CAMP (support): the same morphemes in everyday words;
+       offered when a lesson is rough, always self-selectable.
+     STRETCH (extension): heavier words built from known parts +
+       "word alchemy" transfer questions; unlocks on a clean lesson.
+
+   All scores record FIRST attempts; wrong answers loop until
+   mastered. The REPORT prints to PDF with a verification code.
+   ============================================================ */
+const SVGS = {};
+
+/* ============================================================
+   LESSON DATA
+   word types: "morph": build from morpheme tiles (in order);
+                "compound": same mechanic, plain-English pieces;
+                "origin": no honest cuts -> word-origin question.
+   Each word carries its own APPLY bank; one item per word is
+   sampled per run. Review draws on the same banks.
+   ============================================================ */
+const LESSONS = [
+
+/* ================= 1 INITIAL IMPACTS (1788) ================= */
+{ id:"1", topic:"Module 1 · First contact and resistance", title:"Initial Impacts (1788)",
+  focus:"1788: the First Fleet arrives at Sydney Cove. How did First Nations Peoples see the British, and what changed first: the land, the food, the people’s health?",
+  words:[
+  { w:"Convict", pos:"noun", domain:"water",
+    meaning:"A person found guilty of a crime. In the 1700s and 1800s, Britain sent many convicts to its Australian colonies as punishment.",
+    type:"morph",
+    tiles:[["con-","together, thoroughly"],["vict","to conquer, to defeat"]],
+    decoys:[["e-","out"],["-ion","the act or state of"],["pro-","forward, in front"]],
+    note:"Latin <i>convincere</i>, to defeat completely, to prove guilty: <i>con-</i> (thoroughly) + <i>vincere</i> (to conquer). Same root in <b>victory</b> and <b>convince</b>. Between 1788 and 1868, Britain sent about 160,000 convicts to the Australian colonies. The First Fleet arrived at Sydney Cove in January 1788, on the Country of the Gadigal people.",
+    apply:[
+      { id:"ap_cvt_scn", type:"scenario",
+        q:"In 1788, Britain sent ships full of prisoners to Sydney Cove, guarded by soldiers. These prisoners were…",
+        a:"convicts", opts:["convicts","colonies","squatters","witnesses"],
+        explain:"<i>con-</i> (thoroughly) + <i>vict</i> (conquer): someone defeated in court, found guilty." },
+      { id:"ap_cvt_cloze", type:"cloze",
+        before:"Many of the first British people in the colony were", after:"sent from Britain as punishment for crimes.",
+        a:"convicts", opts:["convicts","witnesses","explorers","monuments"],
+        explain:"Convicts: people found guilty of a crime. Britain transported them to the Australian colonies." } ] },
+
+  { w:"Colony", pos:"noun", domain:"earth",
+    meaning:"A place ruled by a faraway country, with settlers from that country living there.",
+    type:"morph",
+    tiles:[["colon","a farmer, a settler"],["-y","the place or state of"]],
+    decoys:[["-ment","the act or result of"],["-ive","tending to, doing"],["-ist","one who"]],
+    note:"Latin <i>colonia</i>, a farm or settlement, from <i>colonus</i>, a farmer, and <i>colere</i>, to farm (the same root as <b>culture</b>). Arthur Phillip was the first governor of the colony of New South Wales, ruled from London. By 1859 there were six Australian colonies, and in 1901 they joined together.",
+    apply:[
+      { id:"ap_col_desc", type:"desc",
+        q:"Which word means a place ruled by a faraway country, with settlers from that country living there?",
+        a:"Colony", opts:["Colony","Convict","Disease","Occupation"],
+        explain:"<i>colon</i> (settler) + <i>-y</i>: the place of the settlers." },
+      { id:"ap_col_cloze", type:"cloze",
+        before:"Arthur Phillip was the first governor of the", after:"of New South Wales.",
+        a:"colony", opts:["colony","convict","immunity","disease"],
+        explain:"A colony is ruled by a faraway country: here, Britain." } ] },
+
+  { w:"Occupation", pos:"noun", domain:"earth",
+    meaning:"Taking control of land and living on it, often by force.",
+    type:"morph",
+    tiles:[["oc-","towards (changed from ob-)"],["cup","to take, to seize"],["-ation","the act or state of"]],
+    decoys:[["pre-","before"],["-ment","the act or result of"],["in-","in, into"]],
+    note:"Latin <i>occupare</i>, to seize: <i>ob-</i> (towards, changed to <i>oc-</i>) + <i>capere</i> (to take). The same <i>capere</i> is inside <b>capture</b>. The British occupation of the land around Sydney Cove cleared the bush, fenced the land, and took the hunting grounds, fishing places and waterholes that First Nations Peoples lived by.",
+    apply:[
+      { id:"ap_occ_desc", type:"desc",
+        q:"Which word means taking control of land and living on it, often by force?",
+        a:"Occupation", opts:["Occupation","Immunity","Colony","Convict"],
+        explain:"<i>oc-</i> (towards) + <i>cup</i> (seize) + <i>-ation</i>: the act of seizing and holding land." },
+      { id:"ap_occ_cloze", type:"cloze",
+        before:"The British", after:"of the land around Sydney Cove took away hunting grounds and fishing places.",
+        a:"occupation", opts:["occupation","immunity","smallpox","colony"],
+        explain:"Occupation: taking and holding land." } ] },
+
+  { w:"Disease", pos:"noun", domain:"people",
+    meaning:"An illness that affects people, animals or plants.",
+    type:"morph",
+    tiles:[["dis-","apart, away, not"],["ease","comfort, rest"]],
+    decoys:[["un-","not"],["-ful","full of"],["re-","back, again"]],
+    note:"<i>dis-</i> (not) + <i>ease</i> (comfort): a disease is a lack of ease, a body not at rest. The colonists brought diseases such as <b>smallpox</b>, <b>influenza</b>, <b>measles</b> and <b>tuberculosis</b>. First Nations Peoples had never met these diseases, and many thousands died.",
+    apply:[
+      { id:"ap_dis_desc", type:"desc",
+        q:"Which word, built from ‘not’ + ‘comfort’, means an illness?",
+        a:"Disease", opts:["Disease","Immunity","Convict","Occupation"],
+        explain:"<i>dis-</i> (not) + <i>ease</i> (comfort): the body is not at ease." },
+      { id:"ap_dis_cloze", type:"cloze",
+        before:"Introduced", after:"such as influenza and tuberculosis spread quickly through First Nations communities.",
+        a:"diseases", opts:["diseases","convicts","treaties","colonies"],
+        explain:"Diseases: illnesses. The colonists brought them, and First Nations Peoples had no protection against them." } ] },
+
+  { w:"Smallpox", pos:"noun", domain:"people",
+    meaning:"A very serious disease that spreads easily and covers the body in blisters.",
+    type:"compound",
+    tiles:[["small","little"],["pox","blisters, sores on the skin"]],
+    decoys:[["chicken","a farm bird"],["great","big, large"],["flu","a short word for influenza"]],
+    note:"A plain English compound: <i>small</i> + <i>pox</i> (blisters), named to tell it apart from the ‘great pox’. In 1789, a year after the First Fleet arrived, smallpox spread among the First Nations people around Sydney and killed a great many of them. Historians still debate how it started.",
+    apply:[
+      { id:"ap_spx_desc", type:"desc",
+        q:"Which disease, named for the blisters it leaves, killed a great many First Nations people around Sydney in 1789?",
+        a:"Smallpox", opts:["Smallpox","Immunity","Convict","Occupation"],
+        explain:"<i>small</i> + <i>pox</i> (blisters). The 1789 outbreak spread through the First Nations people around Sydney." },
+      { id:"ap_spx_cloze", type:"cloze",
+        before:"In 1789, an outbreak of", after:"killed a great many First Nations people around Sydney Cove.",
+        a:"smallpox", opts:["smallpox","occupation","colony","immunity"],
+        explain:"Smallpox: a deadly disease that covers the body in blisters." } ] },
+
+  { w:"Immunity", pos:"noun", domain:"people",
+    meaning:"The body’s protection against a disease, built up after meeting it before.",
+    type:"morph",
+    tiles:[["im-","not (changed from in-)"],["mun","a duty, a burden"],["-ity","the state of"]],
+    decoys:[["com-","together"],["-ment","the act or result of"],["pre-","before"]],
+    note:"Latin <i>immunis</i>, free from duty: <i>im-</i> (not) + <i>munus</i> (a duty, a burden). Someone immune is free from a burden, here a disease. Same root in <b>community</b> (<i>com-</i> + <i>munus</i>: people who share duties). Europeans had lived with smallpox and influenza for centuries, and many had some immunity. First Nations Peoples had none.",
+    apply:[
+      { id:"ap_imm_desc", type:"desc",
+        q:"Which word means the body’s protection against a disease?",
+        a:"Immunity", opts:["Immunity","Disease","Smallpox","Occupation"],
+        explain:"<i>im-</i> (not) + <i>mun</i> (burden) + <i>-ity</i>: the state of being free from the disease." },
+      { id:"ap_imm_scn", type:"scenario",
+        q:"Europeans had lived with influenza for hundreds of years. When it reached Australia, it killed many First Nations people but far fewer colonists. Why?",
+        a:"First Nations people had no immunity to it", opts:["First Nations people had no immunity to it","The colonists had better houses","Influenza only affects children","The colonists lived near the sea"],
+        explain:"No earlier contact meant no immunity: the disease met bodies with no protection." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>con-</b> (thoroughly), <b>vict</b> (conquer), <b>dis-</b> (not), <b>im-</b> (not) and <b>-ity</b> (the state of), also build everyday words you already know.",
+    items:[
+      { id:"b1_victory", kind:"build", w:"victory", tiles:[["vict","to conquer, to defeat"],["-ory","the result of"]], decoys:[["con-","together, thoroughly"],["-ion","the act or state of"]],
+        meaning:"winning a battle or a game." },
+      { id:"b1_dis", kind:"mcq", q:"<b>dis-</b> in <i>disease</i>, <i>dislike</i> and <i>disagree</i> means…", a:"not, the opposite of", opts:["not, the opposite of","again","before","very"],
+        explain:"Dislike: not like. Disease: not at ease." },
+      { id:"b1_mun", kind:"mcq", q:"<b>Community</b> and <b>immunity</b> share the root <b>mun</b>. It means…", a:"a duty, something you carry for others", opts:["a duty, something you carry for others","a disease","a ship","a crime"],
+        explain:"<i>com-</i> + <i>mun</i>: people who share duties. <i>im-</i> + <i>mun</i>: free from the burden." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s1_convince", kind:"build", w:"convince", tiles:[["con-","together, thoroughly"],["vince","to conquer"]], decoys:[["e-","out"],["-ity","the state of"]],
+        meaning:"to make someone believe that something is true.",
+        explain:"<i>con-</i> + <i>vincere</i> (conquer): you win the argument completely. In old courts, a convict had been ‘convinced’: proved guilty." },
+      { id:"s1_epidemic", kind:"mcq", q:"Word alchemy: <b>epidemic</b> comes from Greek <i>epi</i> (upon) + <i>demos</i> (the people). An epidemic is a disease that…", a:"spreads quickly through many people at the same time", opts:["spreads quickly through many people at the same time","lives only in animals","affects one person for many years","is cured by one medicine"],
+        explain:"Upon the people: the 1789 smallpox outbreak was an epidemic." } ] },
+},
+
+/* ================= 2 PEMULWUY AND YAGAN ================= */
+{ id:"2", topic:"Module 1 · First contact and resistance", title:"Pemulwuy and Yagan: Resistance Warriors",
+  focus:"First Nations Peoples resisted the occupation of their land from 1788: Pemulwuy around Sydney, Yagan around Perth. Why should they be remembered today?",
+  words:[
+  { w:"Resistance", pos:"noun", domain:"hazard",
+    meaning:"Fighting back against people who are trying to take control.",
+    type:"morph",
+    tiles:[["re-","back, again"],["sist","to stand"],["-ance","the act or state of"]],
+    decoys:[["in-","in, into"],["-ment","the act or result of"],["per-","through, thoroughly"]],
+    note:"Latin <i>resistere</i>, to stand back against: <i>re-</i> (back) + <i>sistere</i> (to stand). Same root in <b>insist</b> and <b>persist</b>. Around Sydney, the Bidjigal warrior Pemulwuy led resistance for about twelve years, until he was shot in 1802. Around the Swan River Colony (Perth), the Noongar warrior Yagan resisted until he was killed in 1833.",
+    apply:[
+      { id:"ap_res_scn", type:"scenario",
+        q:"Pemulwuy and his warriors attacked farms, burned crops and drove settlers back from their Country. This is an example of…",
+        a:"resistance", opts:["resistance","immunity","settlement","significance"],
+        explain:"<i>re-</i> (back) + <i>sist</i> (stand): standing against the people taking the land." },
+      { id:"ap_res_cloze", type:"cloze",
+        before:"First Nations", after:"to the British began in 1788 and went on for more than a hundred years.",
+        a:"resistance", opts:["resistance","monument","settlement","significance"],
+        explain:"Resistance: fighting back against the people taking the land." } ] },
+
+  { w:"Guerrilla", pos:"noun", domain:"hazard",
+    meaning:"A fighter in a small group that makes surprise attacks and then disappears, instead of fighting large battles.",
+    type:"origin",
+    originQ:"The word ‘guerrilla’ comes from Spanish. It means…",
+    originOpts:["a little war","a big army","a gorilla","a hidden village"],
+    originA:"a little war",
+    note:"Spanish <i>guerrilla</i>, a little war: <i>guerra</i> (war) + <i>-illa</i> (small). It sounds like <b>gorilla</b> but has nothing to do with the animal. Pemulwuy led a guerrilla war: his warriors knew the land, struck quickly, and were gone before the soldiers could follow.",
+    apply:[
+      { id:"ap_gue_desc", type:"desc",
+        q:"Which word describes fighters in small groups who make surprise attacks and then disappear?",
+        a:"Guerrilla", opts:["Guerrilla","Convict","Monument","Settlement"],
+        explain:"Spanish <i>guerrilla</i>, a little war: small, fast, surprise attacks." },
+      { id:"ap_gue_cloze", type:"cloze",
+        before:"Pemulwuy led a", after:"war: quick raids on farms, then a fast escape into the bush.",
+        a:"guerrilla", opts:["guerrilla","gorilla","monument","settlement"],
+        explain:"Guerrilla (little war), not gorilla (the animal): the two words sound the same." } ] },
+
+  { w:"Invasion", pos:"noun", domain:"hazard",
+    meaning:"Entering a country or land by force to take control of it.",
+    type:"morph",
+    tiles:[["in-","in, into"],["vas","to go"],["-ion","the act or state of"]],
+    decoys:[["e-","out"],["per-","through, thoroughly"],["-ment","the act or result of"]],
+    note:"Latin <i>invadere</i>, to go into: <i>in-</i> (into) + <i>vadere</i> (to go). Many First Nations people, and many historians, call 1788 an <b>invasion</b>, not a settlement, because the land was taken by force without agreement. Many First Nations people call 26 January Invasion Day or Survival Day.",
+    apply:[
+      { id:"ap_inv_desc", type:"desc",
+        q:"Which word means entering a land by force to take control of it?",
+        a:"Invasion", opts:["Invasion","Settlement","Monument","Significance"],
+        explain:"<i>in-</i> (into) + <i>vas</i> (go) + <i>-ion</i>: going in by force." },
+      { id:"ap_inv_scn", type:"scenario",
+        q:"A speaker says: ‘The British took our land by force, and never asked or paid. That was not a settlement.’ Which word would the speaker use instead?",
+        a:"invasion", opts:["invasion","immunity","monument","colony"],
+        explain:"Invasion names the force; settlement hides it." } ] },
+
+  { w:"Settlement", pos:"noun", domain:"earth",
+    meaning:"A place where newcomers build homes and live; also the act of moving onto new land to live there.",
+    type:"morph",
+    tiles:[["settle","to sit, to make a home"],["-ment","the act or result of"]],
+    decoys:[["re-","back, again"],["-ion","the act or state of"],["un-","not"]],
+    note:"Old English <i>setl</i>, a seat: to settle is to sit down somewhere for good. The word matters in this unit. Calling 1788 a <b>settlement</b> makes it sound peaceful; calling it an <b>invasion</b> says the land was taken by force. Historians and communities still argue about which word to use.",
+    apply:[
+      { id:"ap_set_desc", type:"desc",
+        q:"Which word means a place where newcomers build homes and live?",
+        a:"Settlement", opts:["Settlement","Resistance","Guerrilla","Monument"],
+        explain:"<i>settle</i> (make a home) + <i>-ment</i> (the result of)." },
+      { id:"ap_set_scn", type:"scenario",
+        q:"One history book says ‘the settlement of Sydney’. Another says ‘the invasion of Sydney’. What is the difference?",
+        a:"‘Settlement’ sounds peaceful; ‘invasion’ says the land was taken by force", opts:["‘Settlement’ sounds peaceful; ‘invasion’ says the land was taken by force","There is no difference at all","‘Invasion’ is just an older word","‘Settlement’ means a war"],
+        explain:"Word choice is an argument. The same event can be named to sound peaceful or violent." } ] },
+
+  { w:"Significance", pos:"noun", domain:"people",
+    meaning:"How important something is, and why it still matters.",
+    type:"morph",
+    tiles:[["sign","a mark, a sign"],["-ific","making"],["-ance","the act or state of"]],
+    decoys:[["re-","back, again"],["-ation","the act or state of"],["de-","down, away"]],
+    note:"Latin <i>significare</i>, to make a sign: <i>signum</i> (a mark) + <i>facere</i> (to make). Something significant leaves a mark. Historians judge significance with questions such as: did it change things for many people, for a long time, and does it still matter today? Pemulwuy and Yagan are significant because they show First Nations Peoples fighting for their Country from the very start.",
+    apply:[
+      { id:"ap_sig_desc", type:"desc",
+        q:"Which word means how important something is, and why it still matters?",
+        a:"Significance", opts:["Significance","Resistance","Settlement","Invasion"],
+        explain:"<i>sign</i> (mark) + <i>-ific</i> (making) + <i>-ance</i>: making a mark." },
+      { id:"ap_sig_cloze", type:"cloze",
+        before:"To judge the historical", after:"of an event, ask whether it changed many people’s lives, for a long time.",
+        a:"significance", opts:["significance","resistance","guerrilla","monument"],
+        explain:"Significance: how much an event mattered, and still matters." } ] },
+
+  { w:"Monument", pos:"noun", domain:"people",
+    meaning:"A statue or building made to remind people of a person or an event.",
+    type:"morph",
+    tiles:[["mon","to remind, to warn"],["-ument","a thing that does"]],
+    decoys:[["-ment","the act or result of"],["re-","back, again"],["-ial","relating to"]],
+    note:"Latin <i>monumentum</i>, a reminder, from <i>monere</i>, to remind, to warn. Same root in <b>monitor</b>. Most Australian cities have statues of British explorers and governors, and very few of First Nations warriors. A question for this lesson: should Pemulwuy and Yagan be remembered with monuments?",
+    apply:[
+      { id:"ap_mon_desc", type:"desc",
+        q:"Which word means a statue or building made to remind people of a person or an event?",
+        a:"Monument", opts:["Monument","Settlement","Guerrilla","Significance"],
+        explain:"<i>mon</i> (remind) + <i>-ument</i>: a thing that reminds." },
+      { id:"ap_mon_scn", type:"scenario",
+        q:"A city puts up a bronze statue of a resistance warrior, so that people remember what he fought for. The statue is a…",
+        a:"monument", opts:["monument","settlement","colony","convict"],
+        explain:"A monument reminds people of a person or an event." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>re-</b> (back), <b>sist</b> (stand), <b>in-</b> (into), <b>vas</b> (go), <b>sign</b> (a mark) and <b>mon</b> (remind).",
+    items:[
+      { id:"b2_insist", kind:"build", w:"insist", tiles:[["in-","in, into"],["sist","to stand"]], decoys:[["re-","back, again"],["-ance","the act or state of"]],
+        meaning:"to say something firmly and not change your mind." },
+      { id:"b2_evade", kind:"mcq", q:"An <b>invasion</b> goes into a land. To <b>evade</b> something is to…", a:"go out of its way, to escape it", opts:["go out of its way, to escape it","go into it by force","build it","count it"],
+        explain:"Same root, <i>vad/vas</i> (go): in-vade, go in; e-vade, go out of the way." },
+      { id:"b2_sign", kind:"mcq", q:"A road <b>sign</b> shows you something. The <b>sign</b> in <i>significance</i> means…", a:"a mark, something that shows", opts:["a mark, something that shows","a song","a fight","a farm"],
+        explain:"Something significant leaves a mark on history." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s2_persistence", kind:"build", w:"persistence", tiles:[["per-","through, thoroughly"],["sist","to stand"],["-ence","the act or state of"]], decoys:[["re-","back, again"],["-ion","the act or state of"]],
+        meaning:"keeping going for a long time, even when it is hard.",
+        explain:"<i>per-</i> (through) + <i>sist</i> (stand): standing firm all the way through." },
+      { id:"s2_homophone", kind:"mcq", q:"Word alchemy: <b>guerrilla</b> (a little war) and <b>gorilla</b> sound the same. Words like these are called…", a:"homophones", opts:["homophones","synonyms","opposites","prefixes"],
+        explain:"Greek <i>homo</i> (same) + <i>phone</i> (sound): same sound, different spelling and meaning." } ] },
+},
+
+/* ================= 3 THE MYALL CREEK MASSACRE (1838) ================= */
+{ id:"3", topic:"Module 2 · The frontier", title:"The Myall Creek Massacre (1838)",
+  focus:"In June 1838, at Myall Creek in New South Wales, a group of stockmen murdered at least 28 Wirrayaraay people. Seven of the men were hanged: the first time colonists were executed for a massacre of First Nations people.",
+  words:[
+  { w:"Frontier", pos:"noun", domain:"earth",
+    meaning:"The moving edge of the colony, where colonists’ land met First Nations Country.",
+    type:"morph",
+    tiles:[["front","the forehead, the face"],["-ier","the place at"]],
+    decoys:[["con-","together, thoroughly"],["-ment","the act or result of"],["-ive","tending to, doing"]],
+    note:"Old French <i>frontiere</i>, the front line, from Latin <i>frons</i>, the forehead: the face a land shows to its neighbours. In Australia the frontier kept moving inland as colonists took more land, and most of the violence of colonisation happened there. Myall Creek, in northern New South Wales, was on the frontier in 1838.",
+    apply:[
+      { id:"ap_fro_desc", type:"desc",
+        q:"Which word means the moving edge where colonists’ land met First Nations Country?",
+        a:"Frontier", opts:["Frontier","Trial","Witness","Justice"],
+        explain:"<i>front</i> (the face) + <i>-ier</i>: the front line of the colony." },
+      { id:"ap_fro_cloze", type:"cloze",
+        before:"As sheep and cattle stations spread inland, the", after:"moved with them, and so did the violence.",
+        a:"frontier", opts:["frontier","trial","witness","justice"],
+        explain:"The frontier moved as the colonists moved." } ] },
+
+  { w:"Squatter", pos:"noun", domain:"earth",
+    meaning:"In the colonies, a person who took large areas of land to graze sheep or cattle, at first without the government’s permission.",
+    type:"morph",
+    tiles:[["squatt","to sit down on land (the t doubles before -er)"],["-er","one who"]],
+    decoys:[["-ist","one who"],["-ing","doing"],["re-","back, again"]],
+    note:"<i>squat</i> (to crouch, to sit on land) + <i>-er</i> (one who); the <i>t</i> doubles, as in <b>sitter</b>. The first squatters took land that the government had not given them; later, many became the richest people in the colonies. The stockmen who carried out the Myall Creek massacre worked on squatters’ cattle stations.",
+    apply:[
+      { id:"ap_squ_scn", type:"scenario",
+        q:"In the 1830s, a man drives his cattle past the edge of the colony and takes thousands of hectares of First Nations land for grazing, without asking the government. He is a…",
+        a:"squatter", opts:["squatter","convict","witness","magistrate"],
+        explain:"<i>squat</i> + <i>-er</i>: one who sits down on land." },
+      { id:"ap_squ_cloze", type:"cloze",
+        before:"The sheep and cattle of each", after:"trampled waterholes and ate the plants that First Nations people depended on.",
+        a:"squatter", opts:["squatter","witness","trial","frontier"],
+        explain:"Squatters: graziers who took land on the frontier." } ] },
+
+  { w:"Massacre", pos:"noun", domain:"hazard",
+    meaning:"The violent killing of many people who cannot defend themselves.",
+    type:"origin",
+    originQ:"The word ‘massacre’ comes from an Old French word for…",
+    originOpts:["a slaughterhouse, where animals are killed","a large crowd at a market","a small war in the mountains","a court of law"],
+    originA:"a slaughterhouse, where animals are killed",
+    note:"Old French <i>maçacre</i>, a slaughterhouse. Historians have mapped hundreds of massacres of First Nations people on the frontier. At Myall Creek in 1838, at least 28 Wirrayaraay people, most of them women, children and old men, were murdered by stockmen. It was different from most massacres because the killers were put on trial.",
+    apply:[
+      { id:"ap_mas_desc", type:"desc",
+        q:"Which word means the violent killing of many people who cannot defend themselves?",
+        a:"Massacre", opts:["Massacre","Trial","Frontier","Justice"],
+        explain:"Old French <i>maçacre</i>: a slaughterhouse." },
+      { id:"ap_mas_cloze", type:"cloze",
+        before:"The Myall Creek", after:"of 1838 was one of the few frontier killings that ended in a trial.",
+        a:"massacre", opts:["massacre","witness","squatter","frontier"],
+        explain:"A massacre: the killing of many people who cannot defend themselves." } ] },
+
+  { w:"Witness", pos:"noun", domain:"water",
+    meaning:"A person who sees something happen and can tell others, often in court, what they saw.",
+    type:"morph",
+    tiles:[["wit","to know, to see"],["-ness","the state of"]],
+    decoys:[["-ful","full of"],["un-","not"],["-ly","in a way"]],
+    note:"Old English <i>witnes</i>, knowledge: <i>wit</i> (to know) + <i>-ness</i>. A witness knows because they saw. At Myall Creek, the convict hut-keeper George Anderson refused to join the killers, and later gave evidence against them in court.",
+    apply:[
+      { id:"ap_wit_scn", type:"scenario",
+        q:"A man saw the stockmen arrive at the station, and later he told the court exactly what happened. In court he is a…",
+        a:"witness", opts:["witness","squatter","convict","massacre"],
+        explain:"<i>wit</i> (know) + <i>-ness</i>: the person who knows because they saw." },
+      { id:"ap_wit_cloze", type:"cloze",
+        before:"Without the evidence of a", after:"who saw what happened, there might never have been a trial.",
+        a:"witness", opts:["witness","frontier","squatter","massacre"],
+        explain:"A witness tells the court what they saw." } ] },
+
+  { w:"Trial", pos:"noun", domain:"water",
+    meaning:"A meeting in a court of law where a judge or jury decides whether someone is guilty of a crime.",
+    type:"morph",
+    tiles:[["tri","to test, to try"],["-al","the act of, relating to"]],
+    decoys:[["-ment","the act or result of"],["re-","back, again"],["-ity","the state of"]],
+    note:"Anglo-French <i>trial</i>, from <i>trier</i>, to try, to test: a trial tests the evidence. After Myall Creek, the first trial found the men not guilty. A second trial found seven of them guilty, and they were hanged in December 1838. Many colonists were angry that the men had been punished at all.",
+    apply:[
+      { id:"ap_tri_desc", type:"desc",
+        q:"Which word means the meeting in court where a judge or jury decides whether someone is guilty?",
+        a:"Trial", opts:["Trial","Witness","Massacre","Frontier"],
+        explain:"<i>tri</i> (test) + <i>-al</i>: the act of testing the evidence." },
+      { id:"ap_tri_cloze", type:"cloze",
+        before:"At the second", after:", seven of the men were found guilty of murder.",
+        a:"trial", opts:["trial","frontier","witness","squatter"],
+        explain:"The trial is where the court decides who is guilty." } ] },
+
+  { w:"Justice", pos:"noun", domain:"water",
+    meaning:"Fair treatment, and the fair use of the law to punish wrongdoing.",
+    type:"morph",
+    tiles:[["just","fair, right"],["-ice","the state or quality of"]],
+    decoys:[["in-","in, into"],["-ment","the act or result of"],["-ful","full of"]],
+    note:"Latin <i>iustitia</i>, from <i>iustus</i>, fair. Same root in <b>justify</b> and <b>injustice</b>. Myall Creek is remembered because justice was done once; for most frontier killings, nobody was ever charged. Today the Myall Creek Memorial is the site of a yearly gathering of descendants of the people who were killed and of the men who killed them.",
+    apply:[
+      { id:"ap_jus_scn", type:"scenario",
+        q:"For most killings on the frontier, nobody was ever arrested or charged. What was missing?",
+        a:"Justice", opts:["Justice","A frontier","A squatter","A massacre"],
+        explain:"<i>just</i> (fair) + <i>-ice</i>: fairness under the law." },
+      { id:"ap_jus_cloze", type:"cloze",
+        before:"Many First Nations families waited for", after:"that never came.",
+        a:"justice", opts:["justice","smallpox","guerrilla","colony"],
+        explain:"Justice: the fair use of the law." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>front</b> (the face), <b>wit</b> (know), <b>-ness</b> (the state of), <b>tri</b> (test), <b>just</b> (fair) and <b>-ice</b> (the state of).",
+    items:[
+      { id:"b3_kindness", kind:"build", w:"kindness", tiles:[["kind","gentle, caring"],["-ness","the state of"]], decoys:[["-ful","full of"],["un-","not"]],
+        meaning:"being gentle and caring towards others." },
+      { id:"b3_try", kind:"mcq", q:"When you <b>try</b> a new food, you test it. A court <b>trial</b> tests…", a:"the evidence, to decide if someone is guilty", opts:["the evidence, to decide if someone is guilty","the weather","a new road","the size of a farm"],
+        explain:"<i>tri</i> (try, test) + <i>-al</i>: a trial is a test of the evidence." },
+      { id:"b3_just", kind:"mcq", q:"<b>Just</b> in <i>justice</i> and <i>unjust</i> means…", a:"fair, right", opts:["fair, right","only","quickly","old"],
+        explain:"Not the <i>just</i> that means ‘only’: this is the <i>just</i> of a just law." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s3_justify", kind:"build", w:"justify", tiles:[["just","fair, right"],["-ify","to make"]], decoys:[["-ice","the state or quality of"],["-ness","the state of"]],
+        meaning:"to give reasons that make something seem right.",
+        explain:"<i>just</i> + <i>-ify</i> (to make): to make it seem fair. Many colonists tried to justify the killings." },
+      { id:"s3_witty", kind:"mcq", q:"Word alchemy: you know <b>wit</b> means to know. A <b>witty</b> person is…", a:"quick and clever with words", opts:["quick and clever with words","very slow to speak","always angry","good at farming"],
+        explain:"<i>wit</i> (knowing) + <i>-y</i>: full of quick knowing." } ] },
+},
+
+/* ================= 4 SIGNIFICANCE OF THE FRONTIER WARS ================= */
+{ id:"4", topic:"Module 2 · The frontier", title:"Significance of the Frontier Wars",
+  focus:"From 1788 until the 1930s, First Nations people fought to defend their Country, and colonists carried out massacres to expand the colony. What caused the Frontier Wars, and why are they significant?",
+  words:[
+  { w:"Frontier Wars", pos:"noun", domain:"hazard",
+    meaning:"The conflicts between colonists and First Nations people defending their Country, from 1788 until the 1930s.",
+    type:"compound",
+    tiles:[["Frontier","the moving edge of the colony"],["Wars","fights between armed groups"]],
+    decoys:[["Colony","a place ruled by a faraway country"],["Peace","a time without fighting"],["Battles","single fights in a war"]],
+    note:"Plain English words, chosen on purpose: calling them <b>wars</b> says First Nations people were defending their land, not committing crimes. The fighting moved with the frontier, from Sydney in 1788 to the 1928 Coniston massacre in the Northern Territory and beyond. It is estimated that more than 100,000 First Nations people and more than 2,000 colonists were killed, though historians’ estimates vary.",
+    apply:[
+      { id:"ap_fw_desc", type:"desc",
+        q:"Which name do many historians now use for the conflicts on the frontier from 1788 until the 1930s?",
+        a:"The Frontier Wars", opts:["The Frontier Wars","The Gold Rush","Federation","The Myall Creek trial"],
+        explain:"<i>Frontier</i> + <i>Wars</i>: wars fought on the moving edge of the colony." },
+      { id:"ap_fw_scn", type:"scenario",
+        q:"A historian says: ‘First Nations warriors were not criminals. They were defending their Country against invaders.’ Which name for the conflict fits this view?",
+        a:"The Frontier Wars", opts:["The Frontier Wars","The peaceful settlement","The convict system","The census"],
+        explain:"Calling it a war says both sides were fighting for the land." } ] },
+
+  { w:"Dispossession", pos:"noun", domain:"earth",
+    meaning:"Having your land, home or property taken away from you.",
+    type:"morph",
+    tiles:[["dis-","apart, away, not"],["possess","to own, to hold"],["-ion","the act or state of"]],
+    decoys:[["re-","back, again"],["pro-","forward, in front"],["-ment","the act or result of"]],
+    note:"<i>dis-</i> (away) + <i>possess</i> (to own) + <i>-ion</i>: the act of taking away what someone owns. Dispossession was the main cause of the Frontier Wars: First Nations peoples lost their Country, and with it food, water, sacred places and ways of life.",
+    apply:[
+      { id:"ap_dsp_desc", type:"desc",
+        q:"Which word means having your land taken away from you?",
+        a:"Dispossession", opts:["Dispossession","Possession","Retaliation","Perpetrator"],
+        explain:"<i>dis-</i> (away) + <i>possess</i> (own) + <i>-ion</i>." },
+      { id:"ap_dsp_cloze", type:"cloze",
+        before:"The", after:"of First Nations peoples cut them off from their food, water and sacred places.",
+        a:"dispossession", opts:["dispossession","retaliation","perpetrator","immunity"],
+        explain:"Dispossession: losing the land you own." } ] },
+
+  { w:"Intergenerational", pos:"adjective", domain:"people",
+    meaning:"Passed from one generation to the next: from grandparents to parents to children.",
+    type:"morph",
+    tiles:[["inter-","between"],["gener","birth, a family line"],["-ation","the act or state of"],["-al","the act of, relating to"]],
+    decoys:[["trans-","across"],["-ist","one who"],["re-","back, again"]],
+    note:"<i>inter-</i> (between) + <i>generation</i> (Latin <i>genus</i>, birth, family) + <i>-al</i>. <b>Intergenerational trauma</b> means the harm of the past (massacres, the removal of children, the loss of land and language) carried on in families long after the events themselves.",
+    apply:[
+      { id:"ap_int_desc", type:"desc",
+        q:"Which word means passed from one generation to the next?",
+        a:"Intergenerational", opts:["Intergenerational","Premeditated","Colonial","Immune"],
+        explain:"<i>inter-</i> (between) + <i>gener</i> + <i>-ation</i> + <i>-al</i>: between the generations." },
+      { id:"ap_int_cloze", type:"cloze",
+        before:"Doctors and historians use the phrase", after:"trauma for harm that is passed down through families.",
+        a:"intergenerational", opts:["intergenerational","premeditated","colonial","guerrilla"],
+        explain:"Intergenerational trauma: harm that lasts across generations." } ] },
+
+  { w:"Retaliation", pos:"noun", domain:"hazard",
+    meaning:"Hurting someone back because they hurt you.",
+    type:"morph",
+    tiles:[["re-","back, again"],["tali","such, of the same kind"],["-ation","the act or state of"]],
+    decoys:[["pre-","before"],["-ment","the act or result of"],["ex-","out"]],
+    note:"Latin <i>retaliare</i>, to pay back in the same kind: <i>re-</i> (back) + <i>talis</i> (such, the same). On the frontier, an attack by one side was often followed by retaliation from the other, and the colonists’ retaliation was usually far bigger than the attack that started it.",
+    apply:[
+      { id:"ap_ret_scn", type:"scenario",
+        q:"After one colonist was killed, a group of armed settlers attacked the nearest First Nations camp. Their attack was…",
+        a:"retaliation", opts:["retaliation","immunity","settlement","justice"],
+        explain:"<i>re-</i> (back) + <i>tali</i> (the same kind): paying back an attack." },
+      { id:"ap_ret_cloze", type:"cloze",
+        before:"Fear of", after:"kept frontier families on both sides awake at night.",
+        a:"retaliation", opts:["retaliation","dispossession","colony","census"],
+        explain:"Retaliation: hitting back." } ] },
+
+  { w:"Perpetrator", pos:"noun", domain:"hazard",
+    meaning:"The person who commits a crime or does something harmful.",
+    type:"morph",
+    tiles:[["per-","through, thoroughly"],["petr","to bring about, to carry out"],["-ator","one who"]],
+    decoys:[["pro-","forward, in front"],["-ion","the act or state of"],["re-","back, again"]],
+    note:"Latin <i>perpetrare</i>, to carry out completely: <i>per-</i> (thoroughly) + <i>patrare</i> (to bring about). Historians use <b>perpetrator</b> and <b>victim</b> to say clearly who did the harm and who suffered it. On the frontier, most perpetrators were never punished.",
+    apply:[
+      { id:"ap_per_desc", type:"desc",
+        q:"Which word means the person who commits a crime?",
+        a:"Perpetrator", opts:["Perpetrator","Witness","Victim","Colonist"],
+        explain:"<i>per-</i> (thoroughly) + <i>petr</i> (carry out) + <i>-ator</i> (one who)." },
+      { id:"ap_per_cloze", type:"cloze",
+        before:"Only a few", after:"of frontier massacres were ever brought to trial.",
+        a:"perpetrators", opts:["perpetrators","witnesses","victims","colonies"],
+        explain:"The perpetrators: the people who did the killing." } ] },
+
+  { w:"Premeditated", pos:"adjective", domain:"hazard",
+    meaning:"Planned before it is done, not done suddenly or by accident.",
+    type:"morph",
+    tiles:[["pre-","before"],["medit","to think about"],["-ated","made, done"]],
+    decoys:[["re-","back, again"],["-ion","the act or state of"],["per-","through, thoroughly"]],
+    note:"Latin <i>praemeditari</i>, to think about beforehand: <i>pre-</i> (before) + <i>meditari</i> (to think over). Same root in <b>meditate</b>. In court, a premeditated killing is treated as worse than a sudden one. Many frontier massacres were premeditated: the killers planned them in advance.",
+    apply:[
+      { id:"ap_pre_scn", type:"scenario",
+        q:"A group of men met the night before, chose their guns, and rode out at dawn to attack a camp. The attack was…",
+        a:"premeditated", opts:["premeditated","accidental","peaceful","colonial"],
+        explain:"<i>pre-</i> (before) + <i>medit</i> (think): thought about before." },
+      { id:"ap_pre_cloze", type:"cloze",
+        before:"The evidence showed that the killing was", after:": the men had planned it days before.",
+        a:"premeditated", opts:["premeditated","immune","colonial","guerrilla"],
+        explain:"Premeditated: planned in advance." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>dis-</b> (away), <b>inter-</b> (between), <b>re-</b> (back), <b>per-</b> (thoroughly) and <b>pre-</b> (before).",
+    items:[
+      { id:"b4_preview", kind:"build", w:"preview", tiles:[["pre-","before"],["view","to see, to look at"]], decoys:[["re-","back, again"],["-ion","the act or state of"]],
+        meaning:"to see something before other people do." },
+      { id:"b4_pre", kind:"mcq", q:"<b>pre-</b> in <i>premeditated</i>, <i>prehistory</i> and <i>prepare</i> means…", a:"before", opts:["before","after","not","again"],
+        explain:"Prepare: make ready before. Premeditated: thought about before." },
+      { id:"b4_inter", kind:"mcq", q:"<b>inter-</b> in <i>international</i>, <i>internet</i> and <i>intergenerational</i> means…", a:"between", opts:["between","under","before","not"],
+        explain:"International: between nations. Intergenerational: between generations." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s4_perpetrate", kind:"build", w:"perpetrate", tiles:[["per-","through, thoroughly"],["petr","to bring about, to carry out"],["-ate","to do, to make"]], decoys:[["pre-","before"],["-ion","the act or state of"]],
+        meaning:"to carry out a crime or a harmful act.",
+        explain:"The verb: to perpetrate a crime. The person: the perpetrator." },
+      { id:"s4_talio", kind:"mcq", q:"Word alchemy: <b>retaliation</b> pays back ‘the same kind’. The old law ‘an eye for an eye’ is about…", a:"paying back exactly the harm that was done", opts:["paying back exactly the harm that was done","forgiving everyone","paying a fine in money","never going to court"],
+        explain:"Latin <i>talio</i>: punishment of the same kind as the crime." } ] },
+},
+
+/* ================= 4.5 RECOGNISING THE FRONTIER WARS ================= */
+{ id:"4.5", topic:"Module 2 · The frontier", title:"Recognising the Frontier Wars",
+  focus:"Should Australia have a national day to remember the people who died in the Frontier Wars? How are these wars different from the wars remembered on Anzac Day?",
+  words:[
+  { w:"Sovereignty", pos:"noun", domain:"water",
+    meaning:"The right to rule a land and its people, without being ruled by anyone else.",
+    type:"morph",
+    tiles:[["sovereign","a supreme ruler"],["-ty","the state of"]],
+    decoys:[["-ity","the state of"],["-ment","the act or result of"],["-ist","one who"]],
+    note:"Old French <i>soverain</i>, the highest ruler, from Latin <i>super</i>, above. No treaty was signed and the land was never sold, so many First Nations people say their sovereignty was never given up. The 2017 Uluru Statement from the Heart says that this sovereignty ‘has never been ceded or extinguished’.",
+    apply:[
+      { id:"ap_sov_desc", type:"desc",
+        q:"Which word means the right to rule a land and its people?",
+        a:"Sovereignty", opts:["Sovereignty","Displacement","Memorial","Denial"],
+        explain:"<i>sovereign</i> (supreme ruler) + <i>-ty</i> (the state of)." },
+      { id:"ap_sov_cloze", type:"cloze",
+        before:"Because no treaty was ever signed, many First Nations people say their", after:"was never given up.",
+        a:"sovereignty", opts:["sovereignty","denial","displacement","memorial"],
+        explain:"Sovereignty: the right to rule your own land." } ] },
+
+  { w:"Displacement", pos:"noun", domain:"earth",
+    meaning:"Being forced to leave your home or land and move somewhere else.",
+    type:"morph",
+    tiles:[["dis-","apart, away, not"],["place","a space, a position"],["-ment","the act or result of"]],
+    decoys:[["re-","back, again"],["-ion","the act or state of"],["un-","not"]],
+    note:"<i>dis-</i> (away) + <i>place</i> + <i>-ment</i>: being moved out of your place. Dispossession takes the land; displacement moves the people. After the frontier fighting, many First Nations families were displaced onto missions and reserves far from their own Country.",
+    apply:[
+      { id:"ap_dpl_desc", type:"desc",
+        q:"Which word means being forced to leave your home and move somewhere else?",
+        a:"Displacement", opts:["Displacement","Sovereignty","Memorial","Atrocity"],
+        explain:"<i>dis-</i> (away) + <i>place</i> + <i>-ment</i>: moved out of your place." },
+      { id:"ap_dpl_scn", type:"scenario",
+        q:"A government moves a First Nations family three hundred kilometres away, far from their Country. This is…",
+        a:"displacement", opts:["displacement","sovereignty","a memorial","denial"],
+        explain:"Displacement moves the people; dispossession takes the land." } ] },
+
+  { w:"Atrocity", pos:"noun", domain:"hazard",
+    meaning:"A very cruel and violent act, especially one that kills or hurts many people.",
+    type:"morph",
+    tiles:[["atroc","cruel, fierce"],["-ity","the state of"]],
+    decoys:[["-ment","the act or result of"],["re-","back, again"],["-ous","full of"]],
+    note:"Latin <i>atrox</i>, fierce, cruel. Same root in <b>atrocious</b>. Historians use <b>atrocity</b> for the worst acts of the Frontier Wars, such as the massacre of whole families.",
+    apply:[
+      { id:"ap_atr_desc", type:"desc",
+        q:"Which word means a very cruel and violent act?",
+        a:"Atrocity", opts:["Atrocity","Memorial","Sovereignty","Denial"],
+        explain:"<i>atroc</i> (cruel) + <i>-ity</i> (the state of)." },
+      { id:"ap_atr_cloze", type:"cloze",
+        before:"The murder of women and children at Myall Creek was an", after:"that many colonists still tried to defend.",
+        a:"atrocity", opts:["atrocity","memorial","sovereignty","displacement"],
+        explain:"An atrocity: an act of extreme cruelty." } ] },
+
+  { w:"Genocide", pos:"noun", domain:"hazard",
+    meaning:"Acts done to destroy a whole people, such as killing them, or destroying their families, language and culture.",
+    type:"morph",
+    tiles:[["geno","a people, a race, a family line"],["-cide","killing"]],
+    decoys:[["homi","a person"],["pesti","a pest"],["-ist","one who"]],
+    note:"A word made in 1944 by the lawyer Raphael Lemkin: Greek <i>genos</i> (a people) + Latin <i>-cide</i> (killing). <b>Cultural genocide</b> means destroying a people’s culture: banning languages and ceremonies, and removing children. In 1997 the <i>Bringing Them Home</i> report found that the forced removal of First Nations children was an act of genocide.",
+    apply:[
+      { id:"ap_gen_desc", type:"desc",
+        q:"Which word, from Greek ‘a people’ and Latin ‘killing’, means acts done to destroy a whole people?",
+        a:"Genocide", opts:["Genocide","Atrocity","Displacement","Denial"],
+        explain:"<i>geno</i> (a people) + <i>-cide</i> (killing)." },
+      { id:"ap_gen_cloze", type:"cloze",
+        before:"Banning a people’s language, ceremonies and family life is sometimes called cultural", after:".",
+        a:"genocide", opts:["genocide","sovereignty","denial","memorial"],
+        explain:"Cultural genocide: destroying a people’s culture." } ] },
+
+  { w:"Memorial", pos:"noun", domain:"people",
+    meaning:"A statue, stone or place made to help people remember a person or an event, especially people who died.",
+    type:"morph",
+    tiles:[["memor","to remember, mindful"],["-ial","relating to"]],
+    decoys:[["-ise","to make"],["-y","the place or state of"],["re-","back, again"]],
+    note:"Latin <i>memoria</i>, memory. Same root in <b>remember</b> and <b>memory</b>. Australia has thousands of memorials to soldiers who died in wars overseas, and Anzac Day to remember them, but very few memorials to the people who died in the Frontier Wars. The Myall Creek Memorial, opened in 2000, is one of them.",
+    apply:[
+      { id:"ap_mem_desc", type:"desc",
+        q:"Which word means a statue or place made to help people remember those who died?",
+        a:"Memorial", opts:["Memorial","Atrocity","Sovereignty","Denial"],
+        explain:"<i>memor</i> (remember) + <i>-ial</i> (relating to)." },
+      { id:"ap_mem_cloze", type:"cloze",
+        before:"Some people want a national", after:"for those who died in the Frontier Wars, like the memorials for soldiers who died overseas.",
+        a:"memorial", opts:["memorial","atrocity","sovereignty","displacement"],
+        explain:"A memorial helps people remember." } ] },
+
+  { w:"Denial", pos:"noun", domain:"people",
+    meaning:"Refusing to accept that something true really happened.",
+    type:"morph",
+    tiles:[["deni","to say no to (from deny)"],["-al","the act of, relating to"]],
+    decoys:[["-ment","the act or result of"],["re-","back, again"],["-able","able to be"]],
+    note:"From <i>deny</i> (Latin <i>denegare</i>, to say no completely) + <i>-al</i>. For much of the 1900s, many school books left the Frontier Wars out completely. In 1968 the anthropologist W. E. H. Stanner called this ‘the great Australian silence’. Denial refuses the evidence; truth-telling faces it.",
+    apply:[
+      { id:"ap_den_desc", type:"desc",
+        q:"Which word means refusing to accept that something true really happened?",
+        a:"Denial", opts:["Denial","Memorial","Sovereignty","Genocide"],
+        explain:"<i>deny</i> + <i>-al</i>: the act of saying no to the truth." },
+      { id:"ap_den_scn", type:"scenario",
+        q:"A writer says the Frontier Wars never happened, even though diaries, court records and First Nations oral histories describe them. This is…",
+        a:"denial", opts:["denial","a memorial","sovereignty","displacement"],
+        explain:"Denial: refusing the evidence." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>dis-</b> (away), <b>atroc</b> (cruel), <b>-cide</b> (killing), <b>memor</b> (remember) and <b>-al</b> (the act of).",
+    items:[
+      { id:"b45_memory", kind:"build", w:"memory", tiles:[["memor","to remember, mindful"],["-y","the place or state of"]], decoys:[["-ial","relating to"],["re-","back, again"]],
+        meaning:"what you remember; the power to remember." },
+      { id:"b45_cide", kind:"mcq", q:"<b>-cide</b> in <i>genocide</i>, <i>pesticide</i> and <i>insecticide</i> means…", a:"killing", opts:["killing","growing","counting","protecting"],
+        explain:"A pesticide kills pests. Genocide is the killing of a people." },
+      { id:"b45_deny", kind:"mcq", q:"To <b>deny</b> something is to…", a:"say it is not true", opts:["say it is not true","remember it","build a statue","win a war"],
+        explain:"deny → denial, just as arrive → arrival." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s45_commemorate", kind:"build", w:"commemorate", tiles:[["com-","together"],["memor","to remember, mindful"],["-ate","to do, to make"]], decoys:[["re-","back, again"],["-ial","relating to"]],
+        meaning:"to remember an event or a person together, with a ceremony or a memorial.",
+        explain:"<i>com-</i> (together) + <i>memor</i> (remember) + <i>-ate</i> (to do). Anzac Day commemorates soldiers who died in wars overseas." },
+      { id:"s45_truth", kind:"mcq", q:"<b>Truth-telling</b> means saying openly what really happened. Which is the opposite of denial?", a:"truth-telling", opts:["truth-telling","silence","forgetting","retaliation"],
+        explain:"Truth-telling faces the evidence; denial refuses it." } ] },
+},
+
+/* ================= 5 VICTORIA: FROM NAARM TO PORT PHILLIP BAY ================= */
+{ id:"5", topic:"Module 3 · Victoria", title:"Victoria: From Naarm to Port Phillip Bay",
+  focus:"Before Melbourne there was Naarm, the Country of the Kulin Nations. From the first British ships in Port Phillip Bay in 1802 to the colony of Victoria in 1851.",
+  words:[
+  { w:"Expedition", pos:"noun", domain:"earth",
+    meaning:"A long, organised journey made by a group for a purpose, such as exploring.",
+    type:"morph",
+    tiles:[["ex-","out"],["ped","the foot"],["-ition","the act or state of"]],
+    decoys:[["pro-","forward, in front"],["-al","the act of, relating to"],["im-","not (changed from in-)"]],
+    note:"Latin <i>expeditio</i>, a setting out: <i>ex-</i> (out) + <i>pes, pedis</i> (foot), freeing the feet to march. Same root in <b>pedal</b> and <b>pedestrian</b>. In 1824, Hume and Hovell’s expedition walked overland from New South Wales to Port Phillip Bay. In 1835, John Batman sailed from Van Diemen’s Land (Tasmania) to look for grazing land.",
+    apply:[
+      { id:"ap_exd_desc", type:"desc",
+        q:"Which word means a long, organised journey made by a group for a purpose?",
+        a:"Expedition", opts:["Expedition","Treaty","Bounty","Justification"],
+        explain:"<i>ex-</i> (out) + <i>ped</i> (foot) + <i>-ition</i>: setting out on foot." },
+      { id:"ap_exd_cloze", type:"cloze",
+        before:"In 1824, the Hume and Hovell", after:"travelled overland from New South Wales to Port Phillip Bay.",
+        a:"expedition", opts:["expedition","treaty","bounty","justification"],
+        explain:"An expedition: an organised journey with a purpose." } ] },
+
+  { w:"Bounty", pos:"noun", domain:"hazard",
+    meaning:"Money offered as a reward, for example for catching someone.",
+    type:"origin",
+    originQ:"The word ‘bounty’ comes from a Latin word meaning…",
+    originOpts:["goodness, kindness","a hunter","a ship’s captain","a large farm"],
+    originA:"goodness, kindness",
+    note:"Latin <i>bonitas</i>, goodness, the same root as <b>bonus</b>. A bounty was once a generous gift; later it meant a reward. In Van Diemen’s Land in 1830, during the Black War against the Palawa people, the colonial government offered a bounty of five pounds for every Aboriginal adult captured, and two pounds for every child. John Batman took part in that war before he sailed to Port Phillip.",
+    apply:[
+      { id:"ap_bou_desc", type:"desc",
+        q:"Which word means money offered as a reward for catching someone?",
+        a:"Bounty", opts:["Bounty","Treaty","Expedition","Justification"],
+        explain:"Latin <i>bonitas</i> (goodness): first a gift, then a reward." },
+      { id:"ap_bou_cloze", type:"cloze",
+        before:"In 1830, the government of Van Diemen’s Land offered a", after:"for every Palawa person captured.",
+        a:"bounty", opts:["bounty","treaty","expedition","negotiation"],
+        explain:"A bounty: a reward offered for a capture." } ] },
+
+  { w:"Treaty", pos:"noun", domain:"water",
+    meaning:"A formal agreement between two nations or peoples, for example about land, peace or trade.",
+    type:"origin",
+    originQ:"The word ‘treaty’ comes from a Latin word meaning…",
+    originOpts:["to handle, to deal with","to fight until one side wins","to buy land","to sail across the sea"],
+    originA:"to handle, to deal with",
+    note:"Latin <i>tractare</i>, to handle, to deal with; the same root as <b>treat</b>. In 1835, John Batman claimed he had made a treaty with Kulin leaders to buy land around Port Phillip in exchange for blankets, knives, flour and other goods. Governor Bourke declared the treaty void: under British law, only the Crown could own the land. No treaty with First Nations people was ever recognised in colonial Australia.",
+    apply:[
+      { id:"ap_trt_desc", type:"desc",
+        q:"Which word means a formal agreement between two nations or peoples?",
+        a:"Treaty", opts:["Treaty","Bounty","Expedition","Justification"],
+        explain:"Latin <i>tractare</i>: to deal with each other." },
+      { id:"ap_trt_cloze", type:"cloze",
+        before:"Governor Bourke declared Batman’s", after:"void, because he said only the Crown could own the land.",
+        a:"treaty", opts:["treaty","bounty","expedition","negotiation"],
+        explain:"A treaty: a formal agreement between peoples." } ] },
+
+  { w:"Negotiate", pos:"verb", domain:"water",
+    meaning:"To talk with someone in order to reach an agreement.",
+    type:"morph",
+    tiles:[["neg","not"],["oti","free time, rest"],["-ate","to do, to make"]],
+    decoys:[["pre-","before"],["-ion","the act or state of"],["re-","back, again"]],
+    note:"Latin <i>negotium</i>, business: <i>neg</i> (not) + <i>otium</i> (free time). Business is ‘not free time’, and to negotiate is to do the business of reaching an agreement. Batman claimed he had negotiated with Kulin leaders, the <i>Ngurungaeta</i>; historians ask whether the two sides understood the agreement in the same way.",
+    apply:[
+      { id:"ap_neg_desc", type:"desc",
+        q:"Which word means to talk with someone in order to reach an agreement?",
+        a:"Negotiate", opts:["Negotiate","Retaliate","Perpetrate","Commemorate"],
+        explain:"<i>neg</i> (not) + <i>oti</i> (free time) + <i>-ate</i>: doing the business of agreeing." },
+      { id:"ap_neg_cloze", type:"cloze",
+        before:"A treaty is made when two sides", after:"and agree on the terms.",
+        a:"negotiate", opts:["negotiate","retaliate","perpetrate","commemorate"],
+        explain:"To negotiate: to talk until you agree." } ] },
+
+  { w:"Terra nullius", pos:"noun", domain:"water",
+    meaning:"Latin for ‘land belonging to no one’: the false idea that nobody owned Australia when the British arrived.",
+    type:"compound",
+    tiles:[["terra","land, earth"],["nullius","of no one"]],
+    decoys:[["terri","frightening"],["omnis","all, everyone"],["mare","the sea"]],
+    note:"Latin <i>terra</i> (land) + <i>nullius</i> (of nobody). The British acted as if the land had no owners, so they did not need treaties or to pay for it; it is why Batman’s treaty could be declared void. In 1992, in the Mabo case, the High Court of Australia ruled that this was wrong: the Meriam people of the Torres Strait had owned their land before the British came.",
+    apply:[
+      { id:"ap_tn_desc", type:"desc",
+        q:"Which Latin phrase means ‘land belonging to no one’?",
+        a:"Terra nullius", opts:["Terra nullius","Sovereignty","Federation","Census"],
+        explain:"<i>terra</i> (land) + <i>nullius</i> (of no one)." },
+      { id:"ap_tn_cloze", type:"cloze",
+        before:"In 1992, the High Court’s Mabo decision ended the idea of", after:".",
+        a:"terra nullius", opts:["terra nullius","a bounty","an expedition","a treaty"],
+        explain:"Mabo found that the land had owners: terra nullius was false." } ] },
+
+  { w:"Justification", pos:"noun", domain:"water",
+    meaning:"A reason given to show that an action was right or fair.",
+    type:"morph",
+    tiles:[["just","fair, right"],["-ific","making"],["-ation","the act or state of"]],
+    decoys:[["in-","in, into"],["-ice","the state or quality of"],["-ment","the act or result of"]],
+    note:"<i>just</i> (fair) + <i>-ific</i> (making) + <i>-ation</i>: making something seem fair. Terra nullius was a justification: it let the British say that taking the land was legal. ‘What was the justification, and who did it serve?’ is a historian’s question.",
+    apply:[
+      { id:"ap_jst_desc", type:"desc",
+        q:"Which word means a reason given to show that an action was right or fair?",
+        a:"Justification", opts:["Justification","Treaty","Bounty","Expedition"],
+        explain:"<i>just</i> + <i>-ific</i> + <i>-ation</i>: the act of making it seem fair." },
+      { id:"ap_jst_cloze", type:"cloze",
+        before:"Terra nullius gave the British a legal", after:"for taking the land without a treaty.",
+        a:"justification", opts:["justification","bounty","expedition","negotiation"],
+        explain:"A justification: the reason given to make an action look right." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>ex-</b> (out), <b>ped</b> (foot), <b>neg</b> (not), <b>terra</b> (land) and <b>just</b> (fair).",
+    items:[
+      { id:"b5_pedal", kind:"build", w:"pedal", tiles:[["ped","the foot"],["-al","the act of, relating to"]], decoys:[["ex-","out"],["-er","one who"]],
+        meaning:"the part of a bike that you push with your foot." },
+      { id:"b5_terra", kind:"mcq", q:"<b>terra</b> in <i>terra nullius</i> and <i>territory</i> means…", a:"land, earth", opts:["land, earth","fear","law","the sea"],
+        explain:"Terra nullius: nobody’s land. Territory: an area of land." },
+      { id:"b5_ped", kind:"mcq", q:"A <b>pedestrian</b> is someone walking. The <b>ped</b> in <i>pedestrian</i> and <i>expedition</i> means…", a:"the foot", opts:["the foot","the sea","money","a map"],
+        explain:"Latin <i>pes, pedis</i>: the foot." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s5_nullify", kind:"build", w:"nullify", tiles:[["null","nothing, none"],["-ify","to make"]], decoys:[["terra","land, earth"],["-ation","the act or state of"]],
+        meaning:"to take away the legal force of something, to cancel it.",
+        explain:"<i>null</i> (nothing) + <i>-ify</i> (make): to make it count for nothing." },
+      { id:"s5_void", kind:"mcq", q:"Word alchemy: lawyers say an agreement is ‘<b>null and void</b>’. Null and void both mean…", a:"empty, with no force", opts:["empty, with no force","very strong","signed twice","written in Latin"],
+        explain:"Null and void: it counts for nothing. Governor Bourke declared Batman’s treaty void." } ] },
+},
+
+/* ================= 6 REASONS FOR FEDERATION ================= */
+{ id:"6", topic:"Module 4 · Federation", title:"Reasons for Federation",
+  focus:"In the 1890s there were six separate colonies, each with its own laws, taxes and defence forces. Why did they decide to join together?",
+  words:[
+  { w:"Federation", pos:"noun", domain:"water",
+    meaning:"The joining of states or colonies into one nation with one national government. In Australia, the six colonies joined on 1 January 1901.",
+    type:"morph",
+    tiles:[["feder","a league, an agreement"],["-ation","the act or state of"]],
+    decoys:[["con-","together, thoroughly"],["-ism","a belief, a system"],["-ist","one who"]],
+    note:"Latin <i>foedus</i>, a league or treaty. Reasons for Federation included defence, free trade between the colonies (no more taxes at the borders), one national railway and postal system, a shared national feeling, and a shared wish to control who could come to Australia.",
+    apply:[
+      { id:"ap_fed_desc", type:"desc",
+        q:"Which word means the joining of the six colonies into one nation in 1901?",
+        a:"Federation", opts:["Federation","Colonisation","Invasion","Settlement"],
+        explain:"<i>feder</i> (league) + <i>-ation</i>: the act of joining in a league." },
+      { id:"ap_fed_cloze", type:"cloze",
+        before:"After", after:"in 1901, the colonies became states of the Commonwealth of Australia.",
+        a:"Federation", opts:["Federation","the crisis","the speculation","the census"],
+        explain:"Federation: from Latin <i>foedus</i>, a league." } ] },
+
+  { w:"National", pos:"adjective", domain:"people",
+    meaning:"Belonging to, or shared by, a whole nation.",
+    type:"morph",
+    tiles:[["nation","a people, a country"],["-al","the act of, relating to"]],
+    decoys:[["inter-","between"],["-ist","one who"],["-ity","the state of"]],
+    note:"Latin <i>natio</i>, a birth, a people, from <i>nasci</i>, to be born. Same root in <b>native</b>. In the 1890s, people such as Henry Parkes argued that the colonies shared one national identity and would be stronger, and better respected by other nations, as one country.",
+    apply:[
+      { id:"ap_nat_desc", type:"desc",
+        q:"Which word means belonging to, or shared by, a whole nation?",
+        a:"National", opts:["National","Colonial","Intergenerational","Premeditated"],
+        explain:"<i>nation</i> + <i>-al</i> (relating to)." },
+      { id:"ap_nat_cloze", type:"cloze",
+        before:"Supporters of Federation said Australians shared one", after:"identity, not six separate ones.",
+        a:"national", opts:["national","colonial","premeditated","guerrilla"],
+        explain:"National: shared by the whole nation." } ] },
+
+  { w:"Speculation", pos:"noun", domain:"earth",
+    meaning:"Buying land or shares in the hope of selling them later for much more money, which is risky.",
+    type:"morph",
+    tiles:[["specul","to watch, to look out"],["-ation","the act or state of"]],
+    decoys:[["in-","in, into"],["re-","back, again"],["-ive","tending to, doing"]],
+    note:"Latin <i>speculari</i>, to watch from a lookout, from <i>specere</i>, to look. A speculator watches prices and hopes they rise. In the 1880s, rampant speculation pushed Melbourne land prices sky-high; in the early 1890s the boom crashed, banks failed, and the colonies fell into a depression just before Federation.",
+    apply:[
+      { id:"ap_spe_desc", type:"desc",
+        q:"Which word means buying land in the hope of selling it later for much more money?",
+        a:"Speculation", opts:["Speculation","Federation","Crisis","Perspective"],
+        explain:"<i>specul</i> (watch) + <i>-ation</i>: watching prices and gambling on them." },
+      { id:"ap_spe_cloze", type:"cloze",
+        before:"Rampant land", after:"in 1880s Melbourne ended in a crash and a depression.",
+        a:"speculation", opts:["speculation","federation","perspective","crisis"],
+        explain:"Speculation: risky buying in the hope of big profits." } ] },
+
+  { w:"Crisis", pos:"noun", domain:"people",
+    meaning:"A time of great difficulty or danger, when important decisions must be made.",
+    type:"origin",
+    originQ:"The word ‘crisis’ comes from a Greek word meaning…",
+    originOpts:["a decision, a turning point","a fire","an illness","great wealth"],
+    originA:"a decision, a turning point",
+    note:"Greek <i>krisis</i>, a decision, a turning point; the same root as <b>critic</b>. In the 1890s the colonies faced a crisis: the land boom crashed, banks closed, thousands lost their jobs, and great strikes, such as the 1890 maritime strike, divided workers and employers. Many people argued that one nation would be stronger in hard times.",
+    apply:[
+      { id:"ap_cri_desc", type:"desc",
+        q:"Which word means a time of great difficulty or danger?",
+        a:"Crisis", opts:["Crisis","Federation","Speculation","Perspective"],
+        explain:"Greek <i>krisis</i>: a turning point." },
+      { id:"ap_cri_cloze", type:"cloze",
+        before:"When banks closed and thousands lost their jobs in the 1890s, the colonies faced an economic", after:".",
+        a:"crisis", opts:["crisis","federation","perspective","speculation"],
+        explain:"A crisis: a dangerous time that forces decisions." } ] },
+
+  { w:"Perspective", pos:"noun", domain:"people",
+    meaning:"A point of view: the way a person or group sees events.",
+    type:"morph",
+    tiles:[["per-","through, thoroughly"],["spect","to look"],["-ive","tending to, doing"]],
+    decoys:[["pro-","forward, in front"],["re-","back, again"],["-ion","the act or state of"]],
+    note:"Latin <i>perspicere</i>, to look through. Historians ask whose perspective a source gives. In the 1890s, a businessman, a worker and a First Nations person would each have seen Federation differently, and First Nations perspectives were hardly heard at all.",
+    apply:[
+      { id:"ap_psp_desc", type:"desc",
+        q:"Which word means a point of view: the way a person or group sees events?",
+        a:"Perspective", opts:["Perspective","Federation","Crisis","Speculation"],
+        explain:"<i>per-</i> (through) + <i>spect</i> (look) + <i>-ive</i>: looking through someone’s eyes." },
+      { id:"ap_psp_scn", type:"scenario",
+        q:"A merchant in 1898 wants Federation because it will end the taxes on goods crossing colony borders. A First Nations leader fears it will change nothing for his people. These are two different…",
+        a:"perspectives", opts:["perspectives","federations","crises","speculations"],
+        explain:"Different people, different points of view on the same event." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>feder</b> (league), <b>nation</b> (a people), <b>specul</b> (watch), <b>per-</b> (through) and <b>spect</b> (look).",
+    items:[
+      { id:"b6_inspect", kind:"build", w:"inspect", tiles:[["in-","in, into"],["spect","to look"]], decoys:[["per-","through, thoroughly"],["-ive","tending to, doing"]],
+        meaning:"to look closely at something." },
+      { id:"b6_feder", kind:"mcq", q:"A <b>federal</b> government governs the whole country. The <b>feder</b> in <i>federal</i> and <i>Federation</i> means…", a:"a league, an agreement", opts:["a league, an agreement","a fence","a colony","a flag"],
+        explain:"Latin <i>foedus</i>: a league. The colonies agreed to join." },
+      { id:"b6_nat", kind:"mcq", q:"<b>Native</b> and <b>nation</b> share a Latin root meaning…", a:"to be born", opts:["to be born","to sail","to fight","to buy"],
+        explain:"Your nation and your native land: where you were born." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s6_spectator", kind:"build", w:"spectator", tiles:[["spect","to look"],["-ator","one who"]], decoys:[["specul","to watch, to look out"],["-ion","the act or state of"]],
+        meaning:"a person who watches an event.",
+        explain:"<i>spect</i> (look) + <i>-ator</i> (one who): the same look-root as perspective and speculation." },
+      { id:"s6_federate", kind:"mcq", q:"Word alchemy: <b>federate</b> is the verb from Federation. To federate is to…", a:"join together into one nation or league", opts:["join together into one nation or league","break into small parts","sail to a new colony","count the population"],
+        explain:"<i>feder</i> (league) + <i>-ate</i> (to make): to make a league." } ] },
+},
+
+/* ================= 7 COUNTDOWN TO FEDERATION ================= */
+{ id:"7", topic:"Module 4 · Federation", title:"Countdown to Federation",
+  focus:"From the federation movement of the 1880s and 1890s to the first national Parliament in May 1901: the votes, the documents and the day the nation began.",
+  words:[
+  { w:"Referendum", pos:"noun", domain:"water",
+    meaning:"A vote in which all the voters answer one question, such as whether to change the Constitution.",
+    type:"morph",
+    tiles:[["re-","back, again"],["fer","to carry"],["-endum","a thing that must be done"]],
+    decoys:[["con-","together, thoroughly"],["trans-","across"],["-ence","the act or state of"]],
+    note:"Latin <i>referendum</i>, a thing to be carried back: <i>re-</i> (back) + <i>ferre</i> (to carry). The question is carried back to the people. In 1899 and 1900, voters in the colonies said yes to Federation in referendums. In the 1967 referendum, more than 90 per cent of Australians voted to change the Constitution so that Aboriginal people would be counted in the population.",
+    apply:[
+      { id:"ap_ref_desc", type:"desc",
+        q:"Which word means a vote where all the voters answer one question?",
+        a:"Referendum", opts:["Referendum","Census","Parliament","Constitution"],
+        explain:"<i>re-</i> (back) + <i>fer</i> (carry) + <i>-endum</i>: the question carried back to the people." },
+      { id:"ap_ref_cloze", type:"cloze",
+        before:"In 1899, voters in five colonies said yes to Federation in a", after:".",
+        a:"referendum", opts:["referendum","census","parliament","constitution"],
+        explain:"A referendum: every voter answers the same question." } ] },
+
+  { w:"Constitution", pos:"noun", domain:"water",
+    meaning:"The set of basic laws and rules that says how a country is governed.",
+    type:"morph",
+    tiles:[["con-","together, thoroughly"],["stitut","to set up, to make stand"],["-ion","the act or state of"]],
+    decoys:[["in-","in, into"],["sub-","under"],["-ment","the act or result of"]],
+    note:"Latin <i>constituere</i>, to set up: <i>con-</i> + <i>statuere</i> (to make stand). The Australian Constitution was approved by voters and passed by the British Parliament, and Queen Victoria signed it on 9 July 1900. It set up the national Parliament, the High Court and the states. It also said that ‘aboriginal natives shall not be counted’ in the population.",
+    apply:[
+      { id:"ap_cns_desc", type:"desc",
+        q:"Which word means the set of basic laws that says how a country is governed?",
+        a:"Constitution", opts:["Constitution","Referendum","Census","Treaty"],
+        explain:"<i>con-</i> + <i>stitut</i> (set up) + <i>-ion</i>: what sets the country up." },
+      { id:"ap_cns_cloze", type:"cloze",
+        before:"The Australian", after:"set up the national Parliament and the High Court.",
+        a:"Constitution", opts:["Constitution","Census","Referendum","Parliament"],
+        explain:"The Constitution: the country’s basic rules." } ] },
+
+  { w:"Parliament", pos:"noun", domain:"water",
+    meaning:"The group of elected people who make a country’s laws, and the building where they meet.",
+    type:"origin",
+    originQ:"The word ‘parliament’ comes from a French word meaning…",
+    originOpts:["to speak, to talk","to fight","to count","to sail"],
+    originA:"to speak, to talk",
+    note:"Old French <i>parlement</i>, a speaking, from <i>parler</i>, to speak: a parliament is where people talk through the laws. Australia’s first national Parliament was opened in Melbourne on 9 May 1901, in the Exhibition Building; Tom Roberts painted the scene. Parliament moved to Canberra in 1927.",
+    apply:[
+      { id:"ap_par_desc", type:"desc",
+        q:"Which word means the group of elected people who make a country’s laws?",
+        a:"Parliament", opts:["Parliament","Constitution","Referendum","Census"],
+        explain:"French <i>parler</i>: a parliament talks through the laws." },
+      { id:"ap_par_cloze", type:"cloze",
+        before:"The first national", after:"met in Melbourne in May 1901.",
+        a:"Parliament", opts:["Parliament","Census","Referendum","Constitution"],
+        explain:"Parliament: the law-makers, and the place they meet." } ] },
+
+  { w:"Proclaim", pos:"verb", domain:"water",
+    meaning:"To announce something officially and publicly.",
+    type:"morph",
+    tiles:[["pro-","forward, in front"],["claim","to call out, to declare"]],
+    decoys:[["ex-","out"],["re-","back, again"],["-ation","the act or state of"]],
+    note:"Latin <i>proclamare</i>, to call out in front: <i>pro-</i> + <i>clamare</i> (to call). Same root in <b>exclaim</b>. The Commonwealth of Australia was proclaimed in Centennial Park, Sydney, on 1 January 1901. Governors also used proclamations: in 1835, Governor Bourke’s proclamation declared Batman’s treaty void.",
+    apply:[
+      { id:"ap_prc_desc", type:"desc",
+        q:"Which word means to announce something officially and publicly?",
+        a:"Proclaim", opts:["Proclaim","Negotiate","Retaliate","Commemorate"],
+        explain:"<i>pro-</i> (in front) + <i>claim</i> (call out)." },
+      { id:"ap_prc_cloze", type:"cloze",
+        before:"On 1 January 1901, a crowd in Centennial Park, Sydney, heard officials", after:"the Commonwealth of Australia.",
+        a:"proclaim", opts:["proclaim","negotiate","exclaim","commemorate"],
+        explain:"Proclaim: announce officially. Exclaim: shout out suddenly." } ] },
+
+  { w:"Census", pos:"noun", domain:"water",
+    meaning:"An official count of all the people in a country, with facts about them.",
+    type:"origin",
+    originQ:"The word ‘census’ comes from a Latin word meaning…",
+    originOpts:["to count and assess, to judge what something is worth","to shut out","to sail around","to build a fence"],
+    originA:"to count and assess, to judge what something is worth",
+    note:"Latin <i>censere</i>, to assess: in ancient Rome, the censor counted the citizens and judged their property. The 1901 Constitution said Aboriginal people ‘shall not be counted’ in the population of the nation. That line stayed until the 1967 referendum.",
+    apply:[
+      { id:"ap_cen_desc", type:"desc",
+        q:"Which word means an official count of all the people in a country?",
+        a:"Census", opts:["Census","Referendum","Parliament","Constitution"],
+        explain:"Latin <i>censere</i>: to count and assess." },
+      { id:"ap_cen_cloze", type:"cloze",
+        before:"After the 1967 referendum, the national", after:"included Aboriginal people in the population figures, like all other Australians.",
+        a:"census", opts:["census","parliament","constitution","referendum"],
+        explain:"The census: the official count of the population." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>re-</b> (back), <b>fer</b> (carry), <b>con-</b> (together), <b>stitut</b> (set up) and <b>claim</b> (call out).",
+    items:[
+      { id:"b7_exclaim", kind:"build", w:"exclaim", tiles:[["ex-","out"],["claim","to call out, to declare"]], decoys:[["pro-","forward, in front"],["-ation","the act or state of"]],
+        meaning:"to shout out suddenly, from surprise or strong feeling." },
+      { id:"b7_fer", kind:"mcq", q:"To <b>transfer</b> money is to carry it across. The <b>fer</b> in <i>transfer</i> and <i>referendum</i> means…", a:"to carry", opts:["to carry","to count","to speak","to choose"],
+        explain:"Latin <i>ferre</i>, to carry: a referendum carries the question back to the people." },
+      { id:"b7_stitut", kind:"mcq", q:"<b>Constitution</b> and <b>institution</b> share <b>stitut</b>. It means…", a:"to set up, to make stand", opts:["to set up, to make stand","to shut","to send","to vote"],
+        explain:"A constitution sets up a country; an institution is something set up, like a school or a court." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s7_transfer", kind:"build", w:"transfer", tiles:[["trans-","across"],["fer","to carry"]], decoys:[["re-","back, again"],["-ence","the act or state of"]],
+        meaning:"to move something or someone from one place to another.",
+        explain:"<i>trans-</i> (across) + <i>fer</i> (carry): carry across." },
+      { id:"s7_parlour", kind:"mcq", q:"Word alchemy: <b>parliament</b> comes from French <i>parler</i>, to speak. An old word for a room in a house where people sat and talked is…", a:"a parlour", opts:["a parlour","a kitchen","a cellar","a stable"],
+        explain:"<i>parl</i>: speak. A parlour was a room for talking." } ] },
+},
+
+/* ================= 8 IMPACT OF FEDERATION ON FIRST NATIONS PEOPLES ================= */
+{ id:"8", topic:"Module 4 · Federation", title:"Impact of Federation on First Nations Peoples",
+  focus:"After 1901, laws shut First Nations Peoples out of the new nation, while state governments controlled where they lived and took their children.",
+  words:[
+  { w:"Mission", pos:"noun", domain:"earth",
+    meaning:"A settlement run by a church, where First Nations people were made to live, work and follow Christian rules.",
+    type:"morph",
+    tiles:[["miss","to send"],["-ion","the act or state of"]],
+    decoys:[["pro-","forward, in front"],["-ive","tending to, doing"],["-ment","the act or result of"]],
+    note:"Latin <i>missio</i>, a sending, from <i>mittere</i>, to send: churches sent missionaries to convert people. Same root in <b>dismiss</b> and <b>message</b>. On many missions, First Nations people were banned from speaking their languages and practising ceremony, and children were kept in dormitories away from their parents.",
+    apply:[
+      { id:"ap_mis_desc", type:"desc",
+        q:"Which word means a settlement run by a church, where First Nations people were made to live?",
+        a:"Mission", opts:["Mission","Citizenship","Exclusion","Assimilation"],
+        explain:"<i>miss</i> (send) + <i>-ion</i>: a place the church was sent to." },
+      { id:"ap_mis_scn", type:"scenario",
+        q:"At this settlement, a minister runs the school and the church, children sleep in dormitories away from their parents, and First Nations languages are banned. It is a…",
+        a:"mission", opts:["mission","colony","parliament","referendum"],
+        explain:"A mission: a church-run settlement." } ] },
+
+  { w:"Reserve", pos:"noun", domain:"earth",
+    meaning:"Land the government set aside, where First Nations people were made to live, often far from their own Country.",
+    type:"morph",
+    tiles:[["re-","back, again"],["serve","to keep, to save"]],
+    decoys:[["pre-","before"],["con-","together, thoroughly"],["-ation","the act or state of"]],
+    note:"Latin <i>reservare</i>, to keep back: <i>re-</i> (back) + <i>servare</i> (to keep). A reserve is land kept back for a purpose. First Nations people were moved onto reserves, sometimes far from home, and needed permission to leave. At Coranderrk in Victoria, residents built a successful farm, and the government still took the land.",
+    apply:[
+      { id:"ap_rsv_desc", type:"desc",
+        q:"Which word means land set aside by the government where First Nations people were made to live?",
+        a:"Reserve", opts:["Reserve","Mission","Census","Parliament"],
+        explain:"<i>re-</i> (back) + <i>serve</i> (keep): land kept back." },
+      { id:"ap_rsv_cloze", type:"cloze",
+        before:"Families were moved onto a", after:"and needed a manager’s permission to leave it.",
+        a:"reserve", opts:["reserve","referendum","census","parliament"],
+        explain:"A reserve: land set aside, with rules about leaving." } ] },
+
+  { w:"Protection", pos:"noun", domain:"water",
+    meaning:"Keeping someone safe from harm. In Australian laws, ‘protection’ was also the name for policies that controlled First Nations people’s lives.",
+    type:"morph",
+    tiles:[["pro-","forward, in front"],["tect","to cover"],["-ion","the act or state of"]],
+    decoys:[["de-","down, away"],["-ive","tending to, doing"],["con-","together, thoroughly"]],
+    note:"Latin <i>protegere</i>, to cover in front: <i>pro-</i> + <i>tegere</i> (to cover). After Federation, each state kept its own protection laws, such as the New South Wales Aborigines Protection Act of 1909. A board or a Chief Protector decided where First Nations people could live and work, who they could marry, and whether their children could be taken. The name said protection; the laws gave control.",
+    apply:[
+      { id:"ap_prt_desc", type:"desc",
+        q:"Which word means keeping someone safe, but was also the name of laws that controlled First Nations people’s lives?",
+        a:"Protection", opts:["Protection","Exclusion","Citizenship","Assimilation"],
+        explain:"<i>pro-</i> (in front) + <i>tect</i> (cover) + <i>-ion</i>." },
+      { id:"ap_prt_cloze", type:"cloze",
+        before:"Under the", after:"laws, a government board decided where First Nations people could live.",
+        a:"protection", opts:["protection","citizenship","referendum","parliament"],
+        explain:"The protection laws were named for safety but used for control." } ] },
+
+  { w:"Exclusion", pos:"noun", domain:"people",
+    meaning:"Keeping someone out, or not letting them take part.",
+    type:"morph",
+    tiles:[["ex-","out"],["clus","to shut, to close"],["-ion","the act or state of"]],
+    decoys:[["in-","in, into"],["con-","together, thoroughly"],["-ive","tending to, doing"]],
+    note:"Latin <i>excludere</i>, to shut out: <i>ex-</i> (out) + <i>claudere</i> (to shut). Its opposite is <b>inclusion</b>. After 1901, exclusion was written into law: political (most Aboriginal people could not vote in federal elections), economic (no old-age pension under the 1908 law) and social (living on reserves, under curfews and permits).",
+    apply:[
+      { id:"ap_exc_desc", type:"desc",
+        q:"Which word means keeping someone out, or not letting them take part?",
+        a:"Exclusion", opts:["Exclusion","Inclusion","Citizenship","Protection"],
+        explain:"<i>ex-</i> (out) + <i>clus</i> (shut) + <i>-ion</i>: shutting out." },
+      { id:"ap_exc_cloze", type:"cloze",
+        before:"Laws about voting and pensions show the", after:"of First Nations people from rights other Australians had.",
+        a:"exclusion", opts:["exclusion","inclusion","protection","referendum"],
+        explain:"Exclusion: being shut out." } ] },
+
+  { w:"Citizenship", pos:"noun", domain:"water",
+    meaning:"Being an official member of a country, with its rights (such as voting) and its duties.",
+    type:"morph",
+    tiles:[["citizen","a member of a city or country"],["-ship","the state of being"]],
+    decoys:[["-ism","a belief, a system"],["-ity","the state of"],["-ful","full of"]],
+    note:"<i>citizen</i> (Old French <i>citeain</i>, a person of the city) + <i>-ship</i> (the state of being). On paper, Aboriginal people became Australian citizens in 1949, like everyone born here. In practice, laws still kept many of them from voting, from pensions and from moving freely until the 1960s. All Aboriginal people gained the right to vote in federal elections in 1962.",
+    apply:[
+      { id:"ap_cit_desc", type:"desc",
+        q:"Which word means being an official member of a country, with its rights and duties?",
+        a:"Citizenship", opts:["Citizenship","Exclusion","Sovereignty","Protection"],
+        explain:"<i>citizen</i> + <i>-ship</i> (the state of being)." },
+      { id:"ap_cit_cloze", type:"cloze",
+        before:"Aboriginal people had", after:"on paper from 1949, but many of its rights were still denied to them.",
+        a:"citizenship", opts:["citizenship","protection","a mission","a reserve"],
+        explain:"Citizenship: membership of the nation, with rights." } ] },
+
+  { w:"Assimilation", pos:"noun", domain:"water",
+    meaning:"A government policy that tried to make First Nations people give up their own culture and live the same way as other Australians.",
+    type:"morph",
+    tiles:[["as-","to, towards (changed from ad-)"],["simil","like, the same"],["-ation","the act or state of"]],
+    decoys:[["dis-","apart, away, not"],["-ment","the act or result of"],["re-","back, again"]],
+    note:"Latin <i>assimilare</i>, to make like: <i>ad-</i> (to) + <i>similis</i> (like). Assimilation became national policy in 1951. Children had already been taken from their families under the protection laws, and assimilation was used to justify taking many more, to be raised in institutions or by white families. These children are the Stolen Generations.",
+    apply:[
+      { id:"ap_asm_desc", type:"desc",
+        q:"Which word means a policy that tried to make First Nations people give up their own culture?",
+        a:"Assimilation", opts:["Assimilation","Citizenship","Protection","Exclusion"],
+        explain:"<i>as-</i> (to) + <i>simil</i> (like) + <i>-ation</i>: the act of making people the same." },
+      { id:"ap_asm_cloze", type:"cloze",
+        before:"Under the policy of", after:", children were taken from their families to be raised in institutions or by white families.",
+        a:"assimilation", opts:["assimilation","federation","citizenship","exclusion"],
+        explain:"Assimilation was used to justify the removal of children." } ] },
+  ],
+  base:{ intro:"The parts inside this lesson’s words: <b>miss</b> (send), <b>serve</b> (keep), <b>tect</b> (cover), <b>ex-</b> (out), <b>clus</b> (shut) and <b>simil</b> (like).",
+    items:[
+      { id:"b8_protect", kind:"build", w:"protect", tiles:[["pro-","forward, in front"],["tect","to cover"]], decoys:[["de-","down, away"],["-ion","the act or state of"]],
+        meaning:"to keep someone or something safe." },
+      { id:"b8_miss", kind:"mcq", q:"To <b>dismiss</b> a class is to send them away. The <b>miss</b> in <i>dismiss</i> and <i>mission</i> means…", a:"to send", opts:["to send","to keep","to cover","to count"],
+        explain:"Latin <i>mittere</i>, to send: a mission was a church sending people out." },
+      { id:"b8_inclusion", kind:"mcq", q:"<b>Inclusion</b> is the opposite of exclusion. The <b>in-</b> in <i>inclusion</i> means…", a:"in", opts:["in","out","not","before"],
+        explain:"In-clusion: shut in. Ex-clusion: shut out." } ] },
+  stretch:{ intro:"Same parts, heavier words: plus a little word alchemy.",
+    items:[
+      { id:"s8_exemption", kind:"build", w:"exemption", tiles:[["ex-","out"],["empt","to take, to buy"],["-ion","the act or state of"]], decoys:[["pre-","before"],["con-","together, thoroughly"]],
+        meaning:"being freed from a rule that applies to other people.",
+        explain:"<i>ex-</i> + <i>empt</i> (take) + <i>-ion</i>: taken out of the rule. Some states gave exemption certificates, freedom from the protection laws, but often only if the holder kept away from family and community. Many people called them ‘dog tags’." },
+      { id:"s8_petition", kind:"mcq", q:"Word alchemy: <b>petition</b> comes from Latin <i>petere</i>, to ask. In the 1930s, the Yorta Yorta leader William Cooper collected signatures on a petition to the King. A petition is…", a:"a written request signed by many people", opts:["a written request signed by many people","a kind of census","a law made by Parliament","a church settlement"],
+        explain:"<i>pet</i> (ask) + <i>-ition</i>: the act of asking, formally." } ] },
+},
+];
+
+/* ---------------- KEY-WORD TRANSLATIONS ----------------
+   This year's ELC languages: Mandarin in Traditional characters (Taiwan
+   usage), Mandarin in Simplified characters (Mainland usage) and
+   Vietnamese. Drafted, not yet checked by a speaker of each language.
+   Shown on study cards and build reveals when a language is chosen;
+   the practice tasks stay in English. */
+const LANGS = [
+  ["zh-Hant","Mandarin (Traditional) · 繁體國語"],
+  ["zh-Hans","Mandarin (Simplified) · 简体普通话"],
+  ["vi","Vietnamese · Tiếng Việt"],
+];
+const RTL = {};
+const TR = {
+"Convict":{"zh-Hans":"囚犯（流放犯）","zh-Hant":"囚犯（流放犯）",vi:"tù nhân (bị lưu đày)"},
+"Colony":{"zh-Hans":"殖民地","zh-Hant":"殖民地",vi:"thuộc địa"},
+"Occupation":{"zh-Hans":"占领","zh-Hant":"佔領",vi:"sự chiếm đóng"},
+"Disease":{"zh-Hans":"疾病","zh-Hant":"疾病",vi:"bệnh tật"},
+"Smallpox":{"zh-Hans":"天花","zh-Hant":"天花",vi:"bệnh đậu mùa"},
+"Immunity":{"zh-Hans":"免疫力","zh-Hant":"免疫力",vi:"khả năng miễn dịch"},
+"Resistance":{"zh-Hans":"反抗","zh-Hant":"反抗",vi:"sự kháng cự"},
+"Guerrilla":{"zh-Hans":"游击队员（游击战）","zh-Hant":"游擊隊員（游擊戰）",vi:"du kích"},
+"Invasion":{"zh-Hans":"入侵","zh-Hant":"入侵",vi:"cuộc xâm lược"},
+"Settlement":{"zh-Hans":"定居（定居点）","zh-Hant":"定居（定居點）",vi:"sự định cư (khu định cư)"},
+"Significance":{"zh-Hans":"重要性（历史意义）","zh-Hant":"重要性（歷史意義）",vi:"tầm quan trọng (ý nghĩa lịch sử)"},
+"Monument":{"zh-Hans":"纪念碑（纪念建筑）","zh-Hant":"紀念碑（紀念建築）",vi:"tượng đài"},
+"Frontier":{"zh-Hans":"边疆（拓殖前线）","zh-Hant":"邊疆（拓殖前線）",vi:"vùng biên cương"},
+"Squatter":{"zh-Hans":"擅自占地者（牧场主）","zh-Hant":"擅自佔地者（牧場主）",vi:"người chiếm đất (chủ trại chăn nuôi)"},
+"Massacre":{"zh-Hans":"大屠杀","zh-Hant":"大屠殺",vi:"vụ thảm sát"},
+"Witness":{"zh-Hans":"证人（目击者）","zh-Hant":"證人（目擊者）",vi:"nhân chứng"},
+"Trial":{"zh-Hans":"审判","zh-Hant":"審判",vi:"phiên tòa"},
+"Justice":{"zh-Hans":"正义（公正）","zh-Hant":"正義（公正）",vi:"công lý"},
+"Frontier Wars":{"zh-Hans":"边疆战争","zh-Hant":"邊疆戰爭",vi:"Chiến tranh Biên cương"},
+"Dispossession":{"zh-Hans":"剥夺（土地）","zh-Hant":"剝奪（土地）",vi:"sự tước đoạt (đất đai)"},
+"Intergenerational":{"zh-Hans":"代际的","zh-Hant":"跨世代的",vi:"liên thế hệ"},
+"Retaliation":{"zh-Hans":"报复","zh-Hant":"報復",vi:"sự trả đũa"},
+"Perpetrator":{"zh-Hans":"加害者（行凶者）","zh-Hant":"加害者（行兇者）",vi:"thủ phạm"},
+"Premeditated":{"zh-Hans":"预谋的","zh-Hant":"預謀的",vi:"có dự mưu"},
+"Sovereignty":{"zh-Hans":"主权","zh-Hant":"主權",vi:"chủ quyền"},
+"Displacement":{"zh-Hans":"流离失所（被迫迁离）","zh-Hant":"流離失所（被迫遷離）",vi:"sự di dời cưỡng bức"},
+"Atrocity":{"zh-Hans":"暴行","zh-Hant":"暴行",vi:"tội ác tàn bạo"},
+"Genocide":{"zh-Hans":"种族灭绝","zh-Hant":"種族滅絕",vi:"tội diệt chủng"},
+"Memorial":{"zh-Hans":"纪念设施（纪念碑）","zh-Hant":"紀念設施（紀念碑）",vi:"đài tưởng niệm"},
+"Denial":{"zh-Hans":"否认","zh-Hant":"否認",vi:"sự phủ nhận"},
+"Expedition":{"zh-Hans":"探险（远征）","zh-Hant":"探險（遠征）",vi:"cuộc thám hiểm"},
+"Bounty":{"zh-Hans":"赏金","zh-Hant":"賞金",vi:"tiền thưởng"},
+"Treaty":{"zh-Hans":"条约","zh-Hant":"條約",vi:"hiệp ước"},
+"Negotiate":{"zh-Hans":"谈判（协商）","zh-Hant":"談判（協商）",vi:"đàm phán"},
+"Terra nullius":{"zh-Hans":"无主地","zh-Hant":"無主地",vi:"vùng đất vô chủ"},
+"Justification":{"zh-Hans":"理由（辩解）","zh-Hant":"理由（辯解）",vi:"sự biện minh"},
+"Federation":{"zh-Hans":"联邦（联邦成立）","zh-Hant":"聯邦（聯邦成立）",vi:"Liên bang (sự thành lập liên bang)"},
+"National":{"zh-Hans":"国家的（全国的）","zh-Hant":"國家的（全國的）",vi:"thuộc quốc gia"},
+"Speculation":{"zh-Hans":"投机","zh-Hant":"投機",vi:"sự đầu cơ"},
+"Crisis":{"zh-Hans":"危机","zh-Hant":"危機",vi:"cuộc khủng hoảng"},
+"Perspective":{"zh-Hans":"观点（视角）","zh-Hant":"觀點（視角）",vi:"quan điểm (góc nhìn)"},
+"Referendum":{"zh-Hans":"全民公决（公投）","zh-Hant":"公民投票（公投）",vi:"cuộc trưng cầu dân ý"},
+"Constitution":{"zh-Hans":"宪法","zh-Hant":"憲法",vi:"hiến pháp"},
+"Parliament":{"zh-Hans":"议会（国会）","zh-Hant":"國會（議會）",vi:"quốc hội"},
+"Proclaim":{"zh-Hans":"宣布","zh-Hant":"宣告",vi:"tuyên bố"},
+"Census":{"zh-Hans":"人口普查","zh-Hant":"人口普查",vi:"cuộc điều tra dân số"},
+"Mission":{"zh-Hans":"教会传教站","zh-Hant":"教會傳教站",vi:"trạm truyền giáo"},
+"Reserve":{"zh-Hans":"保留地","zh-Hant":"保留地",vi:"khu dành riêng"},
+"Protection":{"zh-Hans":"保护","zh-Hant":"保護",vi:"sự bảo hộ"},
+"Exclusion":{"zh-Hans":"排斥（排除在外）","zh-Hant":"排斥（排除在外）",vi:"sự loại trừ"},
+"Citizenship":{"zh-Hans":"公民身份","zh-Hant":"公民身分",vi:"quyền công dân"},
+"Assimilation":{"zh-Hans":"同化（政策）","zh-Hant":"同化（政策）",vi:"sự đồng hóa"},
+};
+
+/* ================= INDEXES ================= */
+const LESSON_BY_ID = {}; LESSONS.forEach(l=>LESSON_BY_ID[l.id]=l);
+const ALL_WORDS = []; const WORD_LESSON = {};
+LESSONS.forEach(l=>l.words.forEach(w=>{ ALL_WORDS.push(w); WORD_LESSON[w.w]=l.id; }));
+const ITEM_WORD = {}; // apply item id -> word object
+LESSONS.forEach(l=>l.words.forEach(w=>(w.apply||[]).forEach(it=>ITEM_WORD[it.id]=w)));
+const WORD_BY_NAME = {}; ALL_WORDS.forEach(w=>WORD_BY_NAME[w.w]=w);
+
+/* morpheme index: unique word-parts across every buildable word, typed + with examples */
+function classifyMorph(piece){
+  if(/^-.*-$/.test(piece)) return "connector";   // e.g. -o-
+  if(/^-/.test(piece)) return "suffix";
+  if(/-$/.test(piece)) return "prefix";
+  return "root";
+}
+const MORPHS = [];                 // {piece, gloss, type, examples:[wordName]}
+const MORPH_BY_PIECE = {};
+LESSONS.forEach(l=>l.words.forEach(w=>(w.tiles||[]).forEach(([p,g])=>{
+  if(!MORPH_BY_PIECE[p]){ const m={piece:p, gloss:g, type:classifyMorph(p), examples:[]}; MORPH_BY_PIECE[p]=m; MORPHS.push(m); }
+  if(MORPH_BY_PIECE[p].examples.indexOf(w.w)<0) MORPH_BY_PIECE[p].examples.push(w.w);
+})));
+const ALL_GLOSSES = [...new Set(MORPHS.map(m=>m.gloss))];
+const MTYPE_LABEL = {prefix:"Prefixes", root:"Roots & base words", suffix:"Suffixes", connector:"Joiners"};
+const MTYPE_ORDER = ["prefix","root","suffix","connector"];
+const MTYPE_LETTER = {prefix:"mp", root:"mr", suffix:"ms", connector:"mc"};
+
+/* Colour a word's own spelling by morpheme role, matching the coloured
+   code-chips in its morph line below: the purple-lab word-list treatment.
+   Falls back to the plain word if a tile can't be found inside it. */
+function colourWord(v){
+  if(v.type==="origin"||!v.tiles?.length) return esc(v.w);
+  let out="", rest=v.w;
+  for(const [piece] of v.tiles){
+    const clean=piece.replace(/-/g,"");
+    const idx=rest.toLowerCase().indexOf(clean.toLowerCase());
+    if(idx===-1) return esc(v.w);
+    out+=esc(rest.slice(0,idx))+`<span class="${MTYPE_LETTER[classifyMorph(piece)]}">${esc(rest.slice(idx,idx+clean.length))}</span>`;
+    rest=rest.slice(idx+clean.length);
+  }
+  return out+esc(rest);
+}
+function morphChips(tiles){
+  return tiles.map(t=>`<code class="${MTYPE_LETTER[classifyMorph(t[0])]}">${esc(t[0])}</code> <i>${esc(t[1])}</i>`).join(" + ");
+}
+const MLEGEND=`<div class="mlegend"><span><i style="background:var(--mpre)"></i>Prefix</span><span><i style="background:var(--mroot)"></i>Root</span><span><i style="background:var(--msuf)"></i>Suffix</span><span><i style="background:var(--mcon)"></i>Joiner</span></div>`;
+
+/* ================= STATE ================= */
+/* storage shim: real localStorage as a standalone file / on GitHub Pages;
+   silent in-memory fallback if storage is blocked (e.g. a sandboxed preview). */
+const store = (function(){
+  try{ const k="__colvh_probe"; localStorage.setItem(k,"1"); localStorage.removeItem(k); return localStorage; }
+  catch(e){ const m={}; return { getItem:k=>(k in m?m[k]:null), setItem:(k,v)=>{m[k]=String(v);}, removeItem:k=>{delete m[k];} }; }
+})();
+// Own key: every vocab hub on this github.io origin shares one localStorage.
+const KEY = "elc.colonisation.vocabhub.v1";
+let S = load();
+function blankLesson(){ return { studied:false, buildDone:{}, buildFirst:{}, buildComplete:false,
+  applySample:[], applyFirst:{}, applyDone:false,
+  baseDone:false, baseFirst:{}, stretchDone:false, stretchFirst:{} }; }
+/* A first visit starts in the ELC Hub's page language when this hub has it. */
+function hubLang(){ try{ const p=localStorage.getItem("elc_page_language"); return LANGS.some(([c])=>c===p)?p:""; }catch(e){ return ""; } }
+function blank(){ return { lang:hubLang(), startedAt:null, lessons:{}, reviews:[], wstat:{} }; }
+function load(){ try{ const s=JSON.parse(store.getItem(KEY)); return (s&&s.lessons)?s:blank(); }catch(e){ return blank(); } }
+function save(){ try{ store.setItem(KEY, JSON.stringify(S)); }catch(e){} }
+function L(id){ if(!S.lessons[id]) S.lessons[id]=blankLesson(); return S.lessons[id]; }
+function WS(w){ if(!S.wstat[w]) S.wstat[w]={wrong:0,seen:0,rev:0}; return S.wstat[w]; }
+function resetAll(){ if(confirm("Wipe all your progress, scores and review history?")){ S=blank(); save(); go("home"); } }
+function touchStart(){ if(!S.startedAt){ S.startedAt=Date.now(); save(); } }
+
+function shuffle(a){ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function esc(t){ const d=document.createElement("div"); d.textContent=t; return d.innerHTML; }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+let cur = null; // current lesson id
+function go(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById("scr-"+id).classList.add("active");
+  window.scrollTo(0,0);
+  updateNav(id);
+  if(id==="home") renderHome();
+  if(id==="report") renderReport();
+  if(id==="morphtable") renderMorphTable();
+  if(id==="glossary") renderGlossary();
+}
+function updateNav(id){
+  const group={morphtable:"morphtable", glossary:"glossary", report:"report"}[id] || "home";
+  document.querySelectorAll(".topnav button").forEach(b=>b.classList.toggle("on", b.dataset.scr===group));
+}
+function goLesson(){ if(cur) openLesson(cur, false); else go("home"); }
+
+/* translations */
+function trSpan(w, big){
+  if(!S.lang || !TR[w]) return "";
+  const t = TR[w][S.lang]; if(!t) return "";
+  return `<span class="wtr${big?" big":""}" ${RTL[S.lang]?'dir="rtl"':""} lang="${esc(S.lang)}">${esc(t)}</span>`;
+}
+
+/* ================= SCORE HELPERS ================= */
+function buildCounts(l){
+  const st=L(l.id);
+  const done=l.words.filter(w=>st.buildDone[w.w]).length;
+  const clean=l.words.filter(w=>st.buildFirst[w.w]===true).length;
+  return {done, clean, total:l.words.length};
+}
+/* apply sample = descriptors: {k:"a",id} authored, or {k:"g",g:type,w:name} generated */
+function applyKey(d){ return d.k==="a" ? d.id : ("g:"+d.g+":"+d.w); }
+function applyItem(d){
+  if(d.k==="a"){ const w=ITEM_WORD[d.id]; return w.apply.find(x=>x.id===d.id); }
+  return genTask(d.g, WORD_BY_NAME[d.w]);
+}
+function applyWordName(d){ return d.k==="a" ? ITEM_WORD[d.id].w : d.w; }
+function applyCounts(l){
+  const st=L(l.id);
+  const ds=st.applySample||[];
+  const ans=ds.filter(d=>st.applyFirst[applyKey(d)]!==undefined).length;
+  const got=ds.filter(d=>st.applyFirst[applyKey(d)]===true).length;
+  return {ans, got, total:ds.length||l.words.length};
+}
+function lessonCleanRate(l){
+  const b=buildCounts(l), a=applyCounts(l);
+  const attempted=b.done+a.ans; if(!attempted) return null;
+  return (b.clean+a.got)/attempted;
+}
+function lessonDone(l){ const st=L(l.id); return st.buildComplete && st.applyDone; }
+function tierCounts(items, firsts){
+  const ans=items.filter(it=>firsts[it.id]!==undefined).length;
+  const got=items.filter(it=>firsts[it.id]===true).length;
+  return {ans, got, total:items.length};
+}
+
+/* ================= HOME ================= */
+function renderHome(){
+  const wrap=document.getElementById("home-map"); wrap.innerHTML="";
+  /* language toggle */
+  const lrow=document.createElement("div");
+  lrow.className="langrow noprint";
+  let lopts=`<option value="">English only</option>`;
+  LANGS.forEach(([c,n])=>{ lopts+=`<option value="${c}"${S.lang===c?" selected":""}>${esc(n)}</option>`; });
+  lrow.innerHTML=`<label for="langsel">Key words in my language:</label> <select id="langsel">${lopts}</select><span class="trnote"${S.lang?"":" hidden"}>Translations are drafted and not yet checked by a speaker of each language.</span>`;
+  wrap.appendChild(lrow);
+  lrow.querySelector("#langsel").onchange=(e)=>{ S.lang=e.target.value; save(); lrow.querySelector(".trnote").hidden=!S.lang; };
+
+  let topic="";
+  let firstOpen=null;
+  LESSONS.forEach(l=>{
+    if(l.topic!==topic){ topic=l.topic;
+      const h=document.createElement("div"); h.className="topichead"; h.textContent=topic; wrap.appendChild(h);
+      const grid=document.createElement("div"); grid.className="lessons"; grid.dataset.grid="1"; wrap.appendChild(grid);
+    }
+    const grid=wrap.querySelectorAll(".lessons")[wrap.querySelectorAll(".lessons").length-1];
+    const st=L(l.id), b=buildCounts(l), a=applyCounts(l);
+    const chips=[];
+    if(lessonDone(l)) chips.push(`<span class="chip ok">DONE ✓</span>`);
+    else if(b.done||st.studied){ chips.push(`<span class="chip now">IN PROGRESS</span>`); if(firstOpen===null) firstOpen=l.id; }
+    if(st.studied) chips.push(`<span class="chip part">met</span>`);
+    if(b.done) chips.push(`<span class="chip ${st.buildComplete?"ok":"part"}">built ${st.buildComplete?`${b.clean}/${b.total} clean`:`${b.done}/${b.total}`}</span>`);
+    if(a.ans) chips.push(`<span class="chip ${st.applyDone?"ok":"part"}">used ${a.got}/${st.applyDone?a.total:a.ans}</span>`);
+    if(st.baseDone) chips.push(`<span class="chip base">base camp ✓</span>`);
+    if(st.stretchDone) chips.push(`<span class="chip str">stretch ✓</span>`);
+    const card=document.createElement("button");
+    card.className="lcard"+(lessonDone(l)?" done":"");
+    card.innerHTML=`<span class="lnum">LESSON ${esc(l.id)} · ${l.words.length} WORDS</span>
+      <span class="lname">${esc(l.title)}</span>
+      <span class="lstat">${chips.join("")||`<span class="chip">not started</span>`}</span>`;
+    card.onclick=()=>openLesson(l.id, true);
+    grid.appendChild(card);
+  });
+  /* review availability */
+  const pool=reviewPool(latestLessonIdx());
+  const btn=document.getElementById("review-start");
+  btn.disabled = pool.length<4;
+  document.getElementById("review-desc").innerHTML = pool.length<4
+    ? "A quick look back is <b>baked into the start of every lesson</b> once you’ve done your first one. This button is here for extra practice any time."
+    : `Extra practice: a shuffled set from the <b>${pool.length} words</b> you’ve met so far (this also runs automatically when you open a lesson). Everyone gets a different mix. Done ${S.reviews.length} review${S.reviews.length===1?"":"s"} so far.`;
+}
+
+/* ================= LESSON HOME ================= */
+function openLesson(id, fromHome){
+  cur=id;
+  const l=LESSON_BY_ID[id], st=L(id);
+  if(fromHome){
+    const idx=LESSONS.findIndex(x=>x.id===id);
+    const pool=reviewPool(idx);
+    if(pool.length>=4){ runReview(idx, {contLesson:id}); return; }
+  }
+  document.getElementById("lesson-prog").textContent=`LESSON ${id}`;
+  const b=buildCounts(l), a=applyCounts(l);
+  const rate=lessonCleanRate(l);
+  const steps=[
+    { t:"Meet the words", d:`Read this lesson’s ${l.words.length} words, meaning, morphemes and where each came from.`,
+      done:st.studied, locked:false, fn:()=>renderStudy(l), tag:st.studied?"READ":"" },
+    { t:"Build the words", d:"Drag the colour-coded morphemes into the word each one belongs to. Finished words tick off and leave the board.",
+      done:st.buildComplete, locked:false, fn:()=>startBuild(l),
+      tag:st.buildComplete?`${b.clean}/${b.total} CLEAN`:(b.done?`${b.done}/${b.total} built`:"") },
+    { t:"Use the words", d:"Your own sample of apply tasks: scenarios, sentences, meaning-matches. Your neighbour’s set will be different.",
+      done:st.applyDone, locked:false, fn:()=>startApply(l),
+      tag:st.applyDone?`${a.got}/${a.total} FIRST TRY`:(a.ans?`${a.ans}/${a.total} done`:"") },
+  ];
+  const mount=document.getElementById("lesson-body");
+  mount.innerHTML=`<h2 style="text-align:center">${esc(l.id)} · ${esc(l.title)}</h2>
+    <p class="focusline">${l.focus}</p><div class="steps" id="lsteps"></div><div id="ltiers"></div>`;
+  const wrap=mount.querySelector("#lsteps");
+  steps.forEach((stp,i)=>{
+    const btn=document.createElement("button");
+    btn.className="step"+(stp.done?" done":"");
+    btn.disabled=stp.locked;
+    btn.innerHTML=`<span class="num">${stp.done?"✓":i+1}</span><span><span class="t">${stp.t}</span><br><span class="d">${stp.d}</span></span><span class="tag">${stp.locked?"LOCKED":stp.tag}</span>`;
+    btn.onclick=stp.fn;
+    wrap.appendChild(btn);
+  });
+  /* adaptive tiers */
+  const tiers=mount.querySelector("#ltiers");
+  if(l.base){
+    const bc=tierCounts(l.base.items, st.baseFirst);
+    const struggling = st.buildComplete && rate!==null && rate<0.5 && !st.baseDone;
+    const t=document.createElement("div"); t.className="tierbar base";
+    t.innerHTML=`<span class="grow"><b>⛺ Base camp${st.baseDone?`, done (${bc.got}/${bc.total} first try)`:""}</b>
+      ${struggling?"That was a tough climb: these are the same word-parts inside easy words you already know. Five minutes here makes the lesson words much friendlier.":"The same morphemes in everyday words. Start here any time you want a warm-up. It all counts on your report."}</span>
+      <button class="btn btn-ghost" onclick="startBase('${l.id}')">${st.baseDone?"Do it again":"Warm up"}</button>`;
+    tiers.appendChild(t);
+  }
+  if(l.stretch){
+    const sc=tierCounts(l.stretch.items, st.stretchFirst);
+    const unlocked = true;
+    const t=document.createElement("div"); t.className="tierbar stretch";
+    t.innerHTML=`<span class="grow"><b>⛰ Stretch${st.stretchDone?`, done (${sc.got}/${sc.total} first try)`:""}</b>
+      Heavier words built from the parts in this lesson, plus a little word alchemy.</span>
+      <button class="btn btn-water" ${unlocked?"":"disabled"} onclick="startStretch('${l.id}')">${st.stretchDone?"Do it again":"Stretch"}</button>`;
+    tiers.appendChild(t);
+  }
+  go("lesson");
+}
+
+/* ================= STUDY ================= */
+function renderStudy(l){
+  const mount=document.getElementById("study-body");
+  document.getElementById("study-prog").textContent=`STEP 1 · MEET THE WORDS · ${l.id}`;
+  let html=`<h2>Lesson ${esc(l.id)}, ${esc(l.title)}</h2>
+    <p class="muted" style="margin-bottom:14px">Read each word: its meaning, and how its <b>morphemes</b> build that meaning. Tags show each word’s domain.</p>
+    ${MLEGEND}`;
+  mount.innerHTML=html;
+  l.words.forEach(v=>{
+    const map=(v.type==="origin")?"":morphChips(v.tiles);
+    const d=document.createElement("div"); d.className="vcard";
+    const domLabel={water:"LAW & GOVERNMENT",earth:"LAND & SETTLEMENT",people:"PEOPLE & IMPACT",hazard:"CONFLICT & VIOLENCE"}[v.domain]||v.domain;
+    d.innerHTML=`<div class="top"><span class="w">${colourWord(v)}</span><span class="pos">${esc(v.pos)}</span>${trSpan(v.w)}
+        <span class="dtag ${v.domain}">${domLabel}</span></div>
+      <div class="meaning">${esc(v.meaning)}</div>
+      <div class="morph">${ v.type==="origin" ? v.note : (map+" &nbsp;→&nbsp; "+esc(v.w)+"<br>"+v.note) }</div>`;
+    mount.appendChild(d);
+  });
+  const row=document.createElement("div"); row.className="nextrow noprint";
+  row.innerHTML=`<button class="btn btn-primary">I’ve read them: start building →</button>`;
+  row.querySelector("button").onclick=()=>{ L(l.id).studied=true; touchStart(); save(); startBuild(l); };
+  mount.appendChild(row);
+  go("study");
+}
+
+/* ================= GENERIC BUILDER (words + tier builds) ================= */
+function renderBuilder(mount, spec, opts){
+  /* spec: {w, pos?, tiles, decoys, meaning, note?/explain?} ; opts: {dots, prompt, onFirst, onDone} */
+  const pieces=spec.tiles.map(t=>t[0]);
+  const bank=shuffle(spec.tiles.concat(spec.decoys||[]));
+  let pos=0, errored=false;
+  const slotHtml=pieces.map((_,i)=>(i?`<span class="joiner">+</span>`:"")+`<span class="slot">&nbsp;</span>`).join("");
+  mount.innerHTML=`${opts.dots||""}
+    <div class="prompt">${opts.prompt||"Build the word: tap the morphemes into place, in order"}</div>
+    <div class="buildword" id="bword">? ${spec.pos?`<span class="muted" style="font-size:14px">(${esc(spec.pos)})</span>`:""}</div>
+    <div class="slots" id="slots">${slotHtml}</div>
+    <div class="bank" id="bank"></div>
+    <div class="maprow" id="maprow"></div>
+    <div class="reveal" id="reveal"></div>
+    <div class="nextrow noprint"><button class="btn btn-primary" id="bnext" style="display:none">Next →</button></div>`;
+  const bankEl=mount.querySelector("#bank");
+  const slots=mount.querySelectorAll("#slots .slot");
+  bank.forEach(([piece,gloss])=>{
+    const t=document.createElement("button"); t.className="tile "+classifyMorph(piece);
+    t.innerHTML=`<span class="mm">${esc(piece)}</span><span class="gl">${esc(gloss)}</span>`;
+    t.onclick=()=>{
+      if(pos>=pieces.length) return;
+      if(piece===pieces[pos] && !t.disabled){
+        slots[pos].textContent=piece; slots[pos].classList.add("filled");
+        t.disabled=true; pos++;
+        if(pos===pieces.length){
+          mount.querySelector("#bword").innerHTML=`${esc(spec.w)} ${spec.pos?`<span class="muted" style="font-size:14px">(${esc(spec.pos)})</span>`:""} ${trSpan(spec.w)}`;
+          opts.onFirst && opts.onFirst(!errored);
+          const mr=mount.querySelector("#maprow");
+          mr.innerHTML=morphChips(spec.tiles)+" &nbsp;→&nbsp; <b>"+esc(spec.w)+"</b>";
+          const r=mount.querySelector("#reveal");
+          r.className="reveal show";
+          r.innerHTML=`<span class="rw">${esc(spec.w)}</span>: ${esc(spec.meaning)}${(spec.note||spec.explain)?`<br><span class="muted">${spec.note||spec.explain}</span>`:""}`;
+          const nb=mount.querySelector("#bnext");
+          nb.style.display="inline-block"; nb.onclick=opts.onDone;
+          nb.focus();
+        }
+      } else {
+        errored=true;
+        t.classList.add("shake");
+        setTimeout(()=>t.classList.remove("shake"),320);
+      }
+    };
+    bankEl.appendChild(t);
+  });
+}
+
+/* origin question (used in build step + review) */
+function renderOriginQ(mount, spec, opts){
+  mount.innerHTML=`${opts.dots||""}
+    <div class="prompt">Word origin. This one can’t be cut into smaller meaningful parts</div>
+    <div class="buildword">${esc(spec.w)} ${spec.pos?`<span class="muted" style="font-size:14px">(${esc(spec.pos)})</span>`:""}</div>
+    <div class="qtext" style="text-align:center">${spec.originQ}</div>
+    <div class="opts" id="oopts"></div>
+    <div class="reveal" id="reveal"></div>
+    <div class="nextrow noprint"><button class="btn btn-primary" id="bnext" style="display:none">Next →</button></div>`;
+  const optsEl=mount.querySelector("#oopts");
+  let first=true;
+  shuffle(spec.originOpts.slice()).forEach(o=>{
+    const btn=document.createElement("button"); btn.className="opt"; btn.textContent=o;
+    btn.onclick=()=>{
+      const correct=(o===spec.originA);
+      if(first){ opts.onFirst && opts.onFirst(correct); first=false; }
+      if(correct){
+        btn.classList.add("right");
+        optsEl.querySelectorAll(".opt").forEach(x=>x.disabled=true);
+        const r=mount.querySelector("#reveal");
+        r.className="reveal show";
+        r.innerHTML=`<span class="rw">${esc(spec.w)}</span> ${trSpan(spec.w)}, ${esc(spec.meaning)}<br><span class="muted">${spec.note}</span>`;
+        const nb=mount.querySelector("#bnext");
+        nb.style.display="inline-block"; nb.onclick=opts.onDone; nb.focus();
+      } else {
+        btn.classList.add("wrongpick"); btn.disabled=true;
+      }
+    };
+    optsEl.appendChild(btn);
+  });
+}
+
+/* ================= STEP 2 · BUILD: colour-coded drag-and-drop morpheme table ================= */
+let buildCtx=null; // {l, tapSel}
+function startBuild(l){
+  touchStart();
+  const st=L(l.id);
+  const buildable=l.words.filter(w=>w.type==="morph"||w.type==="compound");
+  if(buildable.every(w=>st.buildDone[w.w])){ buildOriginPhase(l); return; }
+  go("build");
+  renderBuildTable(l, buildable);
+}
+function buildProgressText(l){
+  const st=L(l.id);
+  const done=l.words.filter(w=>st.buildDone[w.w]).length;
+  document.getElementById("build-prog").textContent=`STEP 2 · BUILD · ${done}/${l.words.length} words`;
+}
+function renderBuildTable(l, buildable){
+  const st=L(l.id);
+  buildCtx={l, tapSel:null};
+  /* one shared morpheme bank: every part these words need, deduped, plus a few decoys */
+  const need=new Map();
+  buildable.forEach(w=>w.tiles.forEach(([p,g])=>{ if(!need.has(p)) need.set(p,g); }));
+  const realSet=new Set(need.keys());
+  const decoyPool=[]; const seenD=new Set();
+  buildable.forEach(w=>(w.decoys||[]).forEach(([p,g])=>{ if(!realSet.has(p)&&!seenD.has(p)){ seenD.add(p); decoyPool.push([p,g]); } }));
+  const bankArr=[...need.entries()].map(([p,g])=>({piece:p,gloss:g,type:classifyMorph(p)}))
+    .concat(shuffle(decoyPool).slice(0,3).map(([p,g])=>({piece:p,gloss:g,type:classifyMorph(p)})));
+  let bankHtml="";
+  MTYPE_ORDER.forEach(type=>{
+    const group=bankArr.filter(m=>m.type===type);
+    if(!group.length) return;
+    bankHtml+=`<div class="mgroup"><div class="glabel ${type}">${MTYPE_LABEL[type]}</div><div class="mtiles">`+
+      shuffle(group).map(m=>`<button class="mtile ${m.type}" data-piece="${esc(m.piece)}" data-gloss="${esc(m.gloss)}" data-type="${m.type}"><span class="mm">${esc(m.piece)}</span><span class="gl">${esc(m.gloss)}</span></button>`).join("")+
+      `</div></div>`;
+  });
+  const active=shuffle(buildable.filter(w=>!st.buildDone[w.w]));
+  const rowsHtml=active.map(w=>{
+    const slots=w.tiles.map((_,si)=>(si?`<span class="wjoin">+</span>`:"")+`<span class="wslot" data-i="${si}"><span class="ph">drop</span></span>`).join("");
+    return `<div class="wrow" data-w="${esc(w.w)}">
+      <div class="wmean">${sayBtn(w.meaning)}<span class="pos">${esc(w.pos)}</span>: ${esc(w.meaning)}</div>
+      <div class="wslots">${slots}</div>
+      <div class="wbuilt"></div></div>`;
+  }).join("");
+  const mount=document.getElementById("build-body");
+  mount.innerHTML=`
+    <h2 style="text-align:center">Build the words: Lesson ${esc(l.id)}</h2>
+    <p class="muted" style="text-align:center;margin-bottom:8px">${ACCESS
+      ? "Most pieces are placed for you. Read the meaning, tap the missing morpheme, then tap the empty slot. A finished word ticks off and leaves the board."
+      : "Drag each morpheme into the word it belongs to, or tap a morpheme, then tap a slot. Build <b>prefix → root → suffix</b>, left to right. A finished word ticks off and leaves the board; keep going until none are left."}</p>
+    <div class="mlegend"><span><i style="background:var(--mpre)"></i>Prefix (start)</span><span><i style="background:var(--mroot)"></i>Root (heart)</span><span><i style="background:var(--msuf)"></i>Suffix (end)</span></div>
+    <div class="mbank">${bankHtml}</div>
+    <div class="buildhint" id="buildhint"></div>
+    <div class="wtable" id="wtable">${rowsHtml}</div>`;
+  buildProgressText(l);
+  wireBuildDnD(mount);
+  wireSay(mount);
+}
+function wireBuildDnD(mount){
+  mount.querySelectorAll(".mtile").forEach(tile=>{
+    const info={piece:tile.dataset.piece, gloss:tile.dataset.gloss, type:tile.dataset.type};
+    if(ACCESS){
+      /* Tap only. A drag threshold of six pixels reads a tremor as a drag,
+         so in access mode the pointer never drags: tap selects (and the tile
+         grows), tap again deselects. */
+      tile.addEventListener("click", ()=>{
+        const same=buildCtx.tapSel && buildCtx.tapSel.piece===info.piece && buildCtx.tapSel.type===info.type;
+        setTapSel(same ? null : info);
+      });
+    } else {
+      tile.addEventListener("pointerdown", e=>startTileDrag(e, tile, info));
+    }
+  });
+  mount.querySelectorAll(".wslot").forEach(slot=>{
+    slot.addEventListener("click", ()=>{
+      if(slot.classList.contains("locked")) return;
+      if(slot.dataset.piece){ clearSlot(slot); return; }
+      if(buildCtx.tapSel){ const s=buildCtx.tapSel; setTapSel(null); fillSlot(slot, s); }
+    });
+  });
+  if(ACCESS) prefillBoard(mount);
+}
+/* Access mode: pre-place every slot but one per word, and lock what is
+   pre-placed. The open slot varies by word, so the student still reads the
+   meaning and still chooses the piece; what falls away is the tap count. */
+function prefillBoard(mount){
+  mount.querySelectorAll(".wrow").forEach(row=>{
+    const w=WORD_BY_NAME[row.dataset.w];
+    if(!w || w.tiles.length<2) return;
+    const open=Math.floor(Math.random()*w.tiles.length);
+    row.querySelectorAll(".wslot").forEach((slot,si)=>{
+      if(si===open) return;
+      const [piece]=w.tiles[si];
+      const m=MORPH_BY_PIECE[piece]||{};
+      slot.dataset.piece=piece; slot.dataset.type=m.type||classifyMorph(piece);
+      slot.className="wslot filled locked "+(m.type||classifyMorph(piece));
+      slot.innerHTML=`<span class="mm">${esc(piece)}</span>`;
+    });
+  });
+}
+function setTapSel(info){
+  buildCtx.tapSel=info;
+  document.querySelectorAll("#build-body .mtile").forEach(t=>{
+    t.classList.toggle("sel", !!info && t.dataset.piece===info.piece && t.dataset.type===info.type);
+  });
+}
+function startTileDrag(e, tile, info){
+  e.preventDefault();
+  const sx=e.clientX, sy=e.clientY; let moved=false, ghost=null;
+  try{ tile.setPointerCapture(e.pointerId); }catch(_){}
+  function mv(ev){
+    if(!moved && Math.hypot(ev.clientX-sx, ev.clientY-sy)>6){ moved=true; tile.classList.add("dragging"); ghost=mkGhost(info); }
+    if(moved && ghost){ ghost.style.left=ev.clientX+"px"; ghost.style.top=ev.clientY+"px"; hoverSlot(ev); }
+  }
+  function up(ev){
+    tile.removeEventListener("pointermove",mv); tile.removeEventListener("pointerup",up);
+    try{ tile.releasePointerCapture(e.pointerId); }catch(_){}
+    if(moved){
+      tile.classList.remove("dragging"); if(ghost) ghost.remove(); clearHover();
+      const slot=slotAt(ev);
+      if(slot && !slot.dataset.piece) fillSlot(slot, info);
+    } else {
+      const same=buildCtx.tapSel && buildCtx.tapSel.piece===info.piece && buildCtx.tapSel.type===info.type;
+      setTapSel(same ? null : info);
+    }
+  }
+  tile.addEventListener("pointermove",mv); tile.addEventListener("pointerup",up);
+}
+function mkGhost(info){
+  const g=document.createElement("div"); g.className="drag-ghost mtile "+info.type;
+  g.innerHTML=`<span class="mm">${esc(info.piece)}</span><span class="gl">${esc(info.gloss)}</span>`;
+  document.body.appendChild(g); return g;
+}
+function slotAt(ev){ const el=document.elementFromPoint(ev.clientX,ev.clientY); return el?el.closest(".wslot"):null; }
+function hoverSlot(ev){ clearHover(); const s=slotAt(ev); if(s && !s.dataset.piece) s.classList.add("over"); }
+function clearHover(){ document.querySelectorAll("#build-body .wslot.over").forEach(s=>s.classList.remove("over")); }
+function fillSlot(slot, info){
+  slot.dataset.piece=info.piece; slot.dataset.type=info.type;
+  slot.className="wslot filled "+info.type; slot.innerHTML=`<span class="mm">${esc(info.piece)}</span>`;
+  checkRow(slot.closest(".wrow"));
+}
+function clearSlot(slot){
+  delete slot.dataset.piece; delete slot.dataset.type;
+  slot.className="wslot"; slot.innerHTML=`<span class="ph">drop</span>`;
+  const h=document.getElementById("buildhint"); if(h) h.textContent="";
+}
+function checkRow(rowEl){
+  const w=WORD_BY_NAME[rowEl.dataset.w];
+  const slots=[...rowEl.querySelectorAll(".wslot")];
+  if(slots.some(s=>!s.dataset.piece)) return;
+  const placed=slots.map(s=>s.dataset.piece);
+  const answer=w.tiles.map(t=>t[0]);
+  const correct=placed.length===answer.length && placed.every((p,i)=>p===answer[i]);
+  const hint=document.getElementById("buildhint");
+  if(correct){ if(hint) hint.textContent=""; markRowDone(rowEl, w); }
+  else {
+    const st=L(buildCtx.l.id);
+    if(st.buildFirst[w.w]===undefined){ st.buildFirst[w.w]=false; WS(w.w).wrong++; save(); }
+    const sameSet=[...placed].sort().join("~")===[...answer].sort().join("~");
+    rowEl.classList.add("wrong"); setTimeout(()=>rowEl.classList.remove("wrong"),320);
+    if(ACCESS){
+      slots.forEach(s=>{ if(!s.classList.contains("locked")) clearSlot(s); });
+      if(hint) hint.innerHTML="Not that piece: reread the meaning and pick again.";
+    } else if(hint) hint.innerHTML = sameSet
+      ? "Right pieces: check the <b>order</b> (prefix → root → suffix). Tap a slot to send its piece back."
+      : "Not a match yet: reread the meaning. Tap any slot to send its piece back.";
+  }
+}
+function markRowDone(rowEl, w){
+  const st=L(buildCtx.l.id);
+  st.buildDone[w.w]=true;
+  if(st.buildFirst[w.w]===undefined) st.buildFirst[w.w]=true;
+  save();
+  rowEl.classList.add("done");
+  rowEl.querySelector(".wbuilt").innerHTML=`<span class="wname">${esc(w.w)}</span> ${trSpan(w.w)} <span class="wtickmark">✓</span>`;
+  buildProgressText(buildCtx.l);
+  setTimeout(()=>{
+    rowEl.classList.add("gone");
+    setTimeout(()=>{
+      rowEl.remove();
+      if(!document.querySelector("#wtable .wrow")) buildOriginPhase(buildCtx.l);
+    },320);
+  },850);
+}
+function buildOriginPhase(l){
+  const st=L(l.id);
+  const origins=l.words.filter(w=>w.type==="origin" && !st.buildDone[w.w]);
+  if(!origins.length){ finishBuild(l); return; }
+  go("build");
+  const mount=document.getElementById("build-body");
+  mount.innerHTML=`<h2 style="text-align:center">Word origins: Lesson ${esc(l.id)}</h2>
+    <p class="muted" style="text-align:center;margin-bottom:12px">A few of this lesson’s words come from names or ideas, not word-parts, so you match their story instead of building them.</p>
+    <div id="origin-slot"></div>`;
+  let queue=shuffle(origins.slice());
+  function next(){
+    buildProgressText(l);
+    if(!queue.length){ finishBuild(l); return; }
+    const w=queue.shift();
+    renderTaskItem(document.getElementById("origin-slot"),
+      {type:"desc", q:w.originQ, a:w.originA, opts:w.originOpts.slice(), explain:w.note, tag:"ORIGIN · "+w.w},
+      { onAnswer:(correct)=>{
+          if(st.buildFirst[w.w]===undefined){ st.buildFirst[w.w]=correct; if(!correct) WS(w.w).wrong++; save(); }
+          if(correct){ st.buildDone[w.w]=true; save(); } else queue.push(w);
+        },
+        onNext:next });
+  }
+  next();
+}
+function finishBuild(l){
+  const st=L(l.id); st.buildComplete=true; save();
+  const b=buildCounts(l);
+  const pct=Math.round(100*b.clean/b.total);
+  const cls=pct>=80?"good":(pct>=60?"mid":"low");
+  document.getElementById("build-body").innerHTML=`
+    <div class="sumbox"><div class="prompt">Lesson ${esc(l.id)}, clean builds (right first go)</div>
+    <div class="big ${cls}">${b.clean} / ${b.total}</div>
+    <p class="muted">Every word is built. “Clean” means you placed it correctly on the first full attempt, anything you had to redo still counts as done, just not clean.</p></div>
+    <div class="nextrow" style="justify-content:center">
+      <button class="btn btn-ghost" onclick="goLesson()">back to lesson</button>
+      <button class="btn btn-primary" onclick="startApply(LESSON_BY_ID['${l.id}'])">Use the words →</button></div>`;
+}
+
+/* ================= SHARED MCQ ITEM RENDERER ================= */
+function renderTaskItem(mount, it, hooks){
+  /* it: {type, q/before/after/svg(string name or raw), a, opts, explain, tag?} */
+  const box=document.createElement("div");
+  if(it.tag) box.innerHTML+=`<span class="reviewtag">${esc(it.tag)}</span>`;
+  let fb, nextBtn;
+  const isRight=(o)=>o===it.a;
+  function finishItem(correct){
+    fb.className="feedback "+(correct?"ok":"bad");
+    fb.innerHTML=(correct?"<b>Correct.</b> ":`<b>Not quite: the answer is “${esc(it.a)}”.</b> `)+(it.explain||"");
+    if(!correct) fb.innerHTML+=" <i>This one will come back around.</i>";
+    nextBtn.style.display="inline-block";
+    hooks.onAnswer && hooks.onAnswer(correct);
+  }
+  const kind=it.type||"desc";
+  if(kind==="diagram"){
+    const svg=SVGS[it.svg]||it.svg;
+    box.innerHTML+=`<div class="prompt">Read the diagram, then choose</div><div class="svgbox">${svg}</div>`;
+    const qd=document.createElement("div"); qd.className="qtext"; qd.innerHTML=it.q; box.appendChild(qd);
+    box.appendChild(buildOpts(it,isRight,finishItem,()=>nextBtn.style.display==="inline-block",null));
+  } else if(kind==="cloze"){
+    box.innerHTML+=`<div class="prompt">Choose the word that fits the sentence</div>`;
+    const qd=document.createElement("div"); qd.className="qtext";
+    qd.innerHTML=`${esc(it.before)} <span class="gap">&nbsp;</span> ${esc(it.after)}`;
+    box.appendChild(qd);
+    box.appendChild(buildOpts(it,isRight,finishItem,()=>nextBtn.style.display==="inline-block",qd.querySelector(".gap")));
+  } else {
+    const prompts={scenario:"Read the scenario, then choose",desc:"Match the word",morphmatch:"Read the morphemes, then choose the word they build",alchemy:"Word alchemy, use the parts to work it out",wordsum:"Add the morphemes, which word do they make?",meaningmatch:"Which word fits the meaning?",morphmeaning:"What does the word-part mean?"};
+    box.innerHTML+=`<div class="prompt">${prompts[kind]||prompts.desc}</div>`;
+    const qd=document.createElement("div"); qd.className="qtext"; qd.innerHTML=it.q; box.appendChild(qd);
+    box.appendChild(buildOpts(it,isRight,finishItem,()=>nextBtn.style.display==="inline-block",null));
+  }
+  fb=document.createElement("div"); fb.className="feedback"; box.appendChild(fb);
+  const row=document.createElement("div"); row.className="nextrow noprint";
+  nextBtn=document.createElement("button"); nextBtn.className="btn btn-primary"; nextBtn.textContent="Next →";
+  nextBtn.style.display="none"; nextBtn.onclick=hooks.onNext;
+  row.appendChild(nextBtn); box.appendChild(row);
+  mount.innerHTML=""; mount.appendChild(box);
+}
+function buildOpts(it, isRight, finishItem, locked, gapEl){
+  const optList=shuffle(it.opts.slice());
+  const opts=document.createElement("div");
+  opts.className=optList.every(o=>o.length<28)?"opts chips":"opts";
+  optList.forEach(o=>{
+    const btn=document.createElement("button"); btn.className="opt"; btn.textContent=o;
+    btn.onclick=()=>{
+      if(locked()) return;
+      const correct=isRight(o);
+      btn.classList.add(correct?"right":"wrongpick");
+      if(!correct) opts.querySelectorAll(".opt").forEach(x=>{ if(isRight(x.textContent)) x.classList.add("right"); });
+      opts.querySelectorAll(".opt").forEach(x=>x.disabled=true);
+      if(gapEl && correct) gapEl.textContent=o;
+      finishItem(correct);
+    };
+    opts.appendChild(btn);
+  });
+  return opts;
+}
+
+/* ================= GENERATED TASKS (for variety + anti-copying) ================= */
+function sameLessonDistractors(word, n){
+  const l=LESSON_BY_ID[WORD_LESSON[word.w]];
+  return shuffle(l.words.filter(x=>x.w!==word.w).map(x=>x.w)).slice(0,n);
+}
+function morphMap(word){
+  return word.tiles ? morphChips(word.tiles)+" → <b>"+esc(word.w)+"</b>" : (word.note||"");
+}
+function genTypesFor(word){ return word.tiles ? ["meaningmatch","wordsum","morphmeaning"] : ["meaningmatch"]; }
+function genTask(gtype, word){
+  if(gtype==="wordsum" && word.tiles){
+    const eq=word.tiles.map(t=>`<b>${esc(t[0])}</b>`).join(" + ");
+    return { type:"wordsum", q:`Which word do these parts build?<br><span class="eqn">${eq}</span>`,
+      a:word.w, opts:[word.w].concat(sameLessonDistractors(word,3)), explain:morphMap(word) };
+  }
+  if(gtype==="morphmeaning" && word.tiles){
+    const roots=word.tiles.filter(t=>classifyMorph(t[0])==="root");
+    const t=pick(roots.length?roots:word.tiles);
+    const wrong=shuffle(ALL_GLOSSES.filter(g=>g!==t[1])).slice(0,3);
+    return { type:"morphmeaning", q:`In <b>${esc(word.w)}</b>, what does the part <b>${esc(t[0])}</b> mean?`,
+      a:t[1], opts:[t[1]].concat(wrong), explain:`<b>${esc(t[0])}</b> = ${esc(t[1])}. &nbsp; ${morphMap(word)}` };
+  }
+  return { type:"meaningmatch", q:`Which word means this?<br><i>${esc(word.meaning)}</i>`,
+    a:word.w, opts:[word.w].concat(sameLessonDistractors(word,3)), explain:morphMap(word) };
+}
+
+/* ================= STEP 3 · USE THE WORDS ================= */
+function startApply(l){
+  touchStart();
+  const st=L(l.id);
+  if(!st.applySample.length){
+    st.applySample=l.words.map(w=>{
+      const gts=genTypesFor(w);
+      if(Math.random()<0.5 && w.apply && w.apply.length) return {k:"a", id:pick(w.apply).id};
+      return {k:"g", g:pick(gts), w:w.w};
+    });
+    save();
+  }
+  go("apply");
+  const descs=st.applySample.slice();
+  const record = !st.applyDone; /* re-runs don't change the report */
+  let queue=shuffle(descs.map(d=>({d, it:Object.assign({}, applyItem(d))})));
+  let mastered=0;
+  function next(){
+    document.getElementById("apply-prog").textContent=`STEP 3 · USE THE WORDS · mastered ${mastered}/${descs.length}`;
+    if(!queue.length){ finishApply(l, record); return; }
+    const cur=queue.shift();
+    const key=applyKey(cur.d);
+    renderTaskItem(document.getElementById("apply-body"), cur.it, {
+      onAnswer:(correct)=>{
+        if(record && st.applyFirst[key]===undefined){
+          st.applyFirst[key]=correct;
+          if(!correct) WS(applyWordName(cur.d)).wrong++;
+          save();
+        }
+        if(correct) mastered++; else queue.push(cur);
+      },
+      onNext:next,
+    });
+  }
+  next();
+}
+function finishApply(l, recorded){
+  const st=L(l.id);
+  if(recorded){ st.applyDone=true; save(); }
+  const a=applyCounts(l);
+  const pct=a.total?Math.round(100*a.got/a.total):0;
+  const cls=pct>=80?"good":(pct>=60?"mid":"low");
+  const rate=lessonCleanRate(l);
+  let follow="";
+  if(rate!==null && rate<0.5 && l.base && !st.baseDone){
+    follow=`<div class="tierbar base"><span class="grow"><b>⛺ Base camp?</b> Those words fought back. The same word-parts live inside easy words you already know, a five-minute warm-up there, then this lesson will feel different.</span>
+      <button class="btn btn-ghost" onclick="startBase('${l.id}')">Warm up</button></div>`;
+  } else if(rate!==null && rate>=0.85 && l.stretch && !st.stretchDone){
+    follow=`<div class="tierbar stretch"><span class="grow"><b>⛰ Stretch unlocked.</b> You own these morphemes now: take on the heavier words built from them.</span>
+      <button class="btn btn-water" onclick="startStretch('${l.id}')">Stretch</button></div>`;
+  }
+  document.getElementById("apply-body").innerHTML=`
+    <div class="sumbox"><div class="prompt">Lesson ${esc(l.id)}, first attempts</div>
+    <div class="big ${cls}">${a.got} / ${a.total}</div>
+    <p class="muted">Every task is mastered: wrong answers looped back until you cleared them. The score above is your FIRST attempt on each.${recorded?"":" (Practice run: your report kept the original scores.)"}</p></div>
+    ${follow}
+    <div class="nextrow" style="justify-content:center">
+      <button class="btn btn-ghost" onclick="goLesson()">back to lesson</button>
+      <button class="btn btn-primary" onclick="go('home')">all lessons</button></div>`;
+}
+
+/* ================= TIERS: BASE CAMP & STRETCH ================= */
+function runTier(lid, tierKey){
+  const l=LESSON_BY_ID[lid], st=L(lid);
+  const tier=l[tierKey];
+  const firsts = tierKey==="base" ? st.baseFirst : st.stretchFirst;
+  const doneFlag = tierKey==="base" ? "baseDone" : "stretchDone";
+  const scr = tierKey==="base" ? "base" : "stretch";
+  const label = tierKey==="base" ? "BASE CAMP" : "STRETCH";
+  touchStart();
+  go(scr);
+  const mount=document.getElementById(scr+"-body");
+  const progEl=document.getElementById(scr+"-prog");
+  const record=!st[doneFlag];
+  let queue=shuffle(tier.items.slice());
+  let mastered=0; const total=tier.items.length;
+  let intro=true;
+  function recFirst(id, correct){
+    if(record && firsts[id]===undefined){ firsts[id]=correct; save(); }
+  }
+  function next(){
+    progEl.textContent=`${label} · ${lid} · mastered ${mastered}/${total}`;
+    if(!queue.length){
+      if(record){ st[doneFlag]=true; save(); }
+      const tc=tierCounts(tier.items, firsts);
+      const pct=Math.round(100*tc.got/tc.total);
+      const cls=pct>=80?"good":(pct>=60?"mid":"low");
+      mount.innerHTML=`<div class="sumbox"><div class="prompt">${label} · lesson ${esc(lid)}: first attempts</div>
+        <div class="big ${cls}">${tc.got} / ${tc.total}</div>
+        <p class="muted">${tierKey==="base"?"Foundations set. Those same parts are waiting inside the lesson words, go back and use them.":"Heavy words carried. These count as bonus territory on your report."}</p></div>
+        <div class="nextrow" style="justify-content:center">
+        <button class="btn btn-primary" onclick="goLesson()">back to lesson</button></div>`;
+      return;
+    }
+    const it=queue.shift();
+    if(it.kind==="build"){
+      renderBuilder(mount, it, { prompt:"Build the word: tap the pieces into place, in order",
+        onFirst:(clean)=>recFirst(it.id, clean),
+        onDone:()=>{ mastered++; next(); } });
+    } else {
+      renderTaskItem(mount, {type:"alchemy", q:it.q, a:it.a, opts:it.opts, explain:it.explain}, {
+        onAnswer:(correct)=>{ recFirst(it.id, correct); if(correct) mastered++; else queue.push(it); },
+        onNext:next });
+    }
+  }
+  if(intro){
+    mount.innerHTML=`<h2 style="text-align:center">${tierKey==="base"?"⛺ Base camp":"⛰ Stretch"} · Lesson ${esc(lid)}</h2>
+      <p class="focusline">${tier.intro}</p>
+      <div class="nextrow" style="justify-content:center"><button class="btn btn-primary" id="tstart">Start →</button></div>`;
+    mount.querySelector("#tstart").onclick=()=>{ intro=false; next(); };
+  }
+}
+function startBase(lid){ runTier(lid,"base"); }
+function startStretch(lid){ runTier(lid,"stretch"); }
+
+/* ================= REVIEW ================= */
+function latestLessonIdx(){
+  let idx=-1;
+  LESSONS.forEach((l,i)=>{ const st=S.lessons[l.id]; if(st && (st.studied||Object.keys(st.buildDone).length)) idx=i; });
+  return idx;
+}
+function reviewPool(uptoIdx){
+  /* every word from the lessons BEFORE this one in the sequence, a warm-up always
+     looks back over prior lessons, whether or not they were fully finished */
+  const pool=[];
+  LESSONS.forEach((l,i)=>{ if(uptoIdx>=0 && i>=uptoIdx) return; l.words.forEach(w=>pool.push(w)); });
+  return pool;
+}
+function startReviewSetup(){
+  const idx=latestLessonIdx();
+  if(idx<0){ return; }
+  go("review");
+  const mount=document.getElementById("review-body");
+  document.getElementById("review-prog").textContent="REVIEW · SET-UP";
+  let opts="";
+  LESSONS.forEach((l,i)=>{
+    const st=S.lessons[l.id];
+    const started=st&&(st.studied||Object.keys(st.buildDone).length);
+    if(started||i<=idx) opts+=`<option value="${i}"${i===idx?" selected":""}>${l.id} · ${esc(l.title)}</option>`;
+  });
+  mount.innerHTML=`<h2 style="text-align:center">Quick review</h2>
+    <p class="focusline">Five words drawn from earlier lessons: weighted so the ones you’ve missed before come back more often. Gap-fill or match to meaning. Every run is a different mix.</p>
+    <div class="idrow" style="justify-content:center">
+      <span><label for="rev-upto">We’re currently learning lesson…</label>
+      <select id="rev-upto" class="btn" style="font-weight:600">${opts}</select></span>
+    </div>
+    <div class="nextrow" style="justify-content:center">
+      <button class="btn btn-water" id="rev-go">Shuffle my six →</button>
+    </div>`;
+  mount.querySelector("#rev-go").onclick=()=>{
+    const upto=parseInt(mount.querySelector("#rev-upto").value,10);
+    runReview(upto);
+  };
+}
+function weightedSample(pool, n){
+  const entries=pool.map(w=>{
+    const ws=WS(w.w);
+    let wt=1 + 2*Math.min(ws.wrong,4) + (ws.rev===0?1.5:0);
+    return {w, wt};
+  });
+  const out=[];
+  while(out.length<n && entries.length){
+    let total=entries.reduce((s,e)=>s+e.wt,0);
+    let r=Math.random()*total;
+    let k=0;
+    for(let i=0;i<entries.length;i++){ r-=entries[i].wt; if(r<=0){ k=i; break; } }
+    out.push(entries[k].w);
+    entries.splice(k,1);
+  }
+  return out;
+}
+function reviewTaskFor(word, pool){
+  /* quick warm-up tasks only: GAP-FILL a sentence, or MATCH the word to its definition.
+     Both are backed by the lesson data (authored cloze items + word meanings). */
+  const clozes=(word.apply||[]).filter(it=>it.type==="cloze");
+  if(clozes.length && Math.random()<0.5) return Object.assign({}, pick(clozes));
+  /* match word -> definition, with distractors drawn from the review pool */
+  const others=shuffle(pool.filter(x=>x.w!==word.w)).slice(0,3).map(x=>x.w);
+  const opts=[word.w].concat(others.length>=3?others:sameLessonDistractors(word,3));
+  return { type:"meaningmatch", q:`Which word means this?<br><i>${esc(word.meaning)}</i>`,
+    a:word.w, opts, explain:morphMap(word) };
+}
+function runReview(uptoIdx, opts){
+  opts=opts||{};
+  const pool=reviewPool(uptoIdx);
+  if(pool.length<4){ if(opts.contLesson) openLesson(opts.contLesson, false); else go("home"); return; }
+  go("review");
+  const n=Math.min(5,pool.length);
+  const words=weightedSample(pool,n);
+  const items=words.map(w=>{ const it=Object.assign({}, reviewTaskFor(w,pool)); it._w=w.w; it.tag="REVIEW · from lesson "+WORD_LESSON[w.w]; return it; });
+  let queue=shuffle(items);
+  let mastered=0;
+  const firsts={};
+  words.forEach(w=>{ const ws=WS(w.w); ws.seen++; ws.rev++; });
+  function next(){
+    document.getElementById("review-prog").textContent=(opts.contLesson?`WARM-UP REVIEW → LESSON ${opts.contLesson}`:"REVIEW")+` · mastered ${mastered}/${items.length}`;
+    if(!queue.length){ finishReview(uptoIdx, words, firsts, opts); return; }
+    const it=queue.shift();
+    renderTaskItem(document.getElementById("review-body"), it, {
+      onAnswer:(correct)=>{
+        if(firsts[it._w]===undefined){
+          firsts[it._w]=correct;
+          if(!correct) WS(it._w).wrong++;
+          save();
+        }
+        if(correct) mastered++; else queue.push(it);
+      },
+      onNext:next,
+    });
+  }
+  if(opts.contLesson){
+    const mount=document.getElementById("review-body");
+    mount.innerHTML=`<div class="sumbox"><div class="prompt">Before Lesson ${esc(opts.contLesson)}</div>
+      <p class="muted" style="margin:6px 0 0">Quick warm-up first: <b>5 words from earlier lessons</b>, drawn at random (ones you’ve missed come back more often). Just gap-fill a sentence or match the word to its meaning. Then we jump into the new lesson.</p></div>
+      <div class="nextrow" style="justify-content:center"><button class="btn btn-water" id="rev-begin">Start warm-up →</button>
+      <button class="btn btn-ghost" onclick="openLesson('${opts.contLesson}', false)">Skip to lesson</button></div>`;
+    mount.querySelector("#rev-begin").onclick=next;
+  } else next();
+}
+function finishReview(uptoIdx, words, firsts, opts){
+  opts=opts||{};
+  const got=words.filter(w=>firsts[w.w]===true).length;
+  const missed=words.filter(w=>firsts[w.w]===false).map(w=>w.w);
+  S.reviews.push({ when:Date.now(), upTo:LESSONS[uptoIdx]?LESSONS[uptoIdx].id:": ", total:words.length, got, missed });
+  save();
+  const pct=Math.round(100*got/words.length);
+  const cls=pct>=80?"good":(pct>=60?"mid":"low");
+  const buttons = opts.contLesson
+    ? `<button class="btn btn-primary" onclick="openLesson('${opts.contLesson}', false)">Start Lesson ${esc(opts.contLesson)} →</button>
+       <button class="btn btn-ghost" onclick="go('home')">home</button>`
+    : `<button class="btn btn-water" onclick="startReviewSetup()">Another six</button>
+       <button class="btn btn-ghost" onclick="go('home')">home</button>
+       <button class="btn btn-ghost" onclick="go('report')">my report</button>`;
+  document.getElementById("review-body").innerHTML=`
+    <div class="sumbox"><div class="prompt">${opts.contLesson?"Warm-up review":"Review"}: first attempts</div>
+    <div class="big ${cls}">${got} / ${words.length}</div>
+    <p class="muted">${missed.length?`Back for another visit soon: <b>${esc(missed.join(", "))}</b>: the shuffle remembers.`:"Clean sweep: these words are sticking."}</p></div>
+    <div class="nextrow" style="justify-content:center">${buttons}</div>`;
+}
+
+/* ================= REFERENCE LOOK-UPS (always available from the nav) ================= */
+function renderMorphTable(){
+  const m=document.getElementById("morphtable-body");
+  let html=`<h2 style="text-align:center">Morpheme table</h2>
+    <p class="muted" style="text-align:center;margin-bottom:6px">Every word-part in the module, colour-coded. Learn a part once and you can read it inside dozens of words.</p>
+    <div class="mlegend"><span><i style="background:var(--mpre)"></i>Prefix</span><span><i style="background:var(--mroot)"></i>Root / base</span><span><i style="background:var(--msuf)"></i>Suffix</span></div>`;
+  MTYPE_ORDER.forEach(type=>{
+    const group=MORPHS.filter(mm=>mm.type===type).slice().sort((a,b)=>a.piece.replace(/-/g,"").localeCompare(b.piece.replace(/-/g,"")));
+    if(!group.length) return;
+    html+=`<div class="refhead ${type}">${MTYPE_LABEL[type]}</div>
+      <table class="reftable"><tr><th>Part</th><th>Meaning</th><th>Words that use it</th></tr>`;
+    group.forEach(mm=>{
+      html+=`<tr><td><span class="mtile ${type}"><span class="mm">${esc(mm.piece)}</span></span></td>
+        <td>${esc(mm.gloss)}</td><td class="muted">${mm.examples.map(esc).join(", ")}</td></tr>`;
+    });
+    html+=`</table>`;
+  });
+  m.innerHTML=html;
+}
+function renderGlossary(){
+  const m=document.getElementById("glossary-body");
+  m.innerHTML=`<h2 style="text-align:center">Word list</h2>
+    <p class="muted" style="text-align:center;margin-bottom:10px">Every key word in the module, meaning, parts and (if you’ve chosen a language) your translation. Search or scroll.</p>
+    ${MLEGEND}
+    <div class="reffilter"><input id="gloss-search" placeholder="Search a word or meaning…" aria-label="search words"></div>
+    <div id="gloss-list"></div>`;
+  const input=m.querySelector("#gloss-search");
+  input.addEventListener("input", ()=>drawGloss(input.value.trim().toLowerCase()));
+  drawGloss("");
+}
+function drawGloss(q){
+  const wrap=document.getElementById("gloss-list"); if(!wrap) return;
+  let html="";
+  LESSONS.forEach(l=>{
+    const ws=l.words.filter(w=> !q || w.w.toLowerCase().includes(q) || w.meaning.toLowerCase().includes(q));
+    if(!ws.length) return;
+    html+=`<div class="topichead">Lesson ${esc(l.id)} · ${esc(l.title)}</div>`;
+    ws.forEach(w=>{
+      const map=w.tiles
+        ? morphChips(w.tiles)+" &nbsp;→&nbsp; <b>"+esc(w.w)+"</b>"
+        : `<span class="muted">from a name or idea: see its story in the lesson</span>`;
+      const domLabel={water:"LAW & GOVERNMENT",earth:"LAND & SETTLEMENT",people:"PEOPLE & IMPACT",hazard:"CONFLICT & VIOLENCE"}[w.domain]||w.domain;
+      html+=`<div class="vcard"><div class="top"><span class="w">${colourWord(w)}</span>${sayBtn(w.w+". "+w.meaning)}<span class="pos">${esc(w.pos)}</span>${trSpan(w.w)}
+          <span class="dtag ${w.domain}">${domLabel}</span></div>
+        <div class="meaning">${esc(w.meaning)}</div>
+        <div class="morph">${map}</div></div>`;
+    });
+  });
+  wrap.innerHTML=html || `<p class="muted" style="text-align:center">No words match “${esc(q)}”.</p>`;
+  wireSay(wrap);
+}
+
+/* ================= REPORT ================= */
+function vcode(str){
+  let h=5381; for(let i=0;i<str.length;i++){ h=((h<<5)+h+str.charCodeAt(i))>>>0; }
+  return h.toString(36).toUpperCase().padStart(7,"0").slice(0,7);
+}
+function fmtWhen(t){
+  try{ return new Date(t).toLocaleString("en-AU",{day:"numeric",month:"short",hour:"numeric",minute:"2-digit"}); }
+  catch(e){ return ""; }
+}
+function renderReport(){
+  const m=document.getElementById("report-body");
+  const dt=new Date().toLocaleString("en-AU",{dateStyle:"full",timeStyle:"short"});
+  let rows="", aggFirst=0, aggAtt=0, sig="";
+  LESSONS.forEach(l=>{
+    const st=S.lessons[l.id];
+    if(!st){ rows+=`<tr><td>${esc(l.id)} ${esc(l.title)}</td><td class="nf">: </td><td class="nf">: </td><td class="nf">: </td><td class="nf">: </td></tr>`; return; }
+    const b=buildCounts(l), a=applyCounts(l);
+    const bTxt = b.done? (st.buildComplete?`${b.clean}/${b.total}`:`${b.clean}/${b.done} (${b.done}/${b.total} built)`) : ": ";
+    const aTxt = a.ans? (st.applyDone?`${a.got}/${a.total}`:`${a.got}/${a.ans} (unfinished)`) : ": ";
+    const bc=l.base?tierCounts(l.base.items, st.baseFirst):null;
+    const sc=l.stretch?tierCounts(l.stretch.items, st.stretchFirst):null;
+    const bcTxt = bc&&bc.ans? `${bc.got}/${st.baseDone?bc.total:bc.ans}` : ": ";
+    const scTxt = sc&&sc.ans? `${sc.got}/${st.stretchDone?sc.total:sc.ans}` : ": ";
+    aggFirst += b.clean + a.got; aggAtt += b.done + a.ans;
+    sig += `|${l.id}:${b.clean}.${a.got}`;
+    rows+=`<tr><td>${esc(l.id)} ${esc(l.title)}</td>
+      <td class="score">${bTxt}</td><td class="score">${aTxt}</td>
+      <td class="score">${bcTxt}</td><td class="score">${scTxt}</td></tr>`;
+  });
+  /* review log */
+  let revRows="";
+  S.reviews.slice(-12).forEach(r=>{
+    revRows+=`<tr><td>${esc(fmtWhen(r.when))}</td><td>${esc(r.upTo)}</td><td class="score">${r.got}/${r.total}</td>
+      <td${r.missed.length?"":" class='nf'"}>${r.missed.length?esc(r.missed.join(", ")):"none"}</td></tr>`;
+  });
+  /* words needing another go */
+  const needs={};
+  LESSONS.forEach(l=>{
+    const st=S.lessons[l.id]; if(!st) return;
+    l.words.forEach(w=>{ if(st.buildFirst[w.w]===false) needs[w.w]=(needs[w.w]||0)+1; });
+    (st.applySample||[]).forEach(d=>{ if(st.applyFirst[applyKey(d)]===false) needs[applyWordName(d)]=(needs[applyWordName(d)]||0)+1; });
+  });
+  S.reviews.forEach(r=>r.missed.forEach(w=>{ needs[w]=(needs[w]||0)+1; }));
+  const needList=Object.keys(needs).sort((x,y)=>needs[y]-needs[x]);
+  const revFirst=S.reviews.reduce((s,r)=>s+r.got,0), revAtt=S.reviews.reduce((s,r)=>s+r.total,0);
+  const code=vcode(`${aggFirst}/${aggAtt}|${revFirst}/${revAtt}${sig}`);
+  m.innerHTML=`
+    <p class="noprint" style="margin-bottom:14px"><button class="btn btn-primary" onclick="window.print()">Save as PDF</button></p>
+    <p class="muted noprint" style="margin-bottom:14px">Click <b>Save as PDF</b> and choose &ldquo;Save as PDF&rdquo; as the destination. Put your name in the file name, then send the file to your teacher. This page does not ask for your name.</p>
+    <h2>Impact of Colonisation: Vocab Report</h2>
+    <p class="muted">${dt}</p>
+    <table class="repgrid">
+      <tr><th>Lesson</th><th>Build (clean)</th><th>Use (1st try)</th><th>Base camp</th><th>Stretch</th></tr>
+      ${rows}
+      <tr><td><b>All lesson items attempted</b></td><td class="score" colspan="2"><b>${aggAtt?`${aggFirst}/${aggAtt} (${Math.round(100*aggFirst/aggAtt)}%)`:": "}</b></td><td colspan="2">first attempts; everything was then mastered via the retry loop</td></tr>
+    </table>
+    <h3>Review sessions (${S.reviews.length})</h3>
+    ${S.reviews.length?`<table class="repgrid"><tr><th>When</th><th>Up to lesson</th><th>First try</th><th>Missed</th></tr>${revRows}</table>
+      <p class="muted">Across all reviews: <b>${revFirst}/${revAtt}</b> first-attempt. ${S.reviews.length>12?"(last 12 shown)":""}</p>`
+      :`<p class="muted">No review sessions yet: reviews are the part that makes words stick.</p>`}
+    <h3>Words needing another go</h3>
+    <p class="muted">${needList.length?needList.map(w=>`${esc(w)}${needs[w]>1?` (×${needs[w]})`:""}`).join(", "):"None recorded: every first attempt so far has landed."}</p>
+    <h3>Reading this report</h3>
+    <p class="muted">Each lesson runs meet → build (assemble the word from its morphemes) → use (apply tasks sampled from a bank). Base camp is the support tier, the same morphemes in everyday words; Stretch is the extension tier. Reviews shuffle words from earlier lessons, weighted toward ones previously missed. All scores are FIRST attempts; wrong answers loop until mastered, so a rough first-attempt score with everything cleared still shows honest, finished work.</p>
+    <p class="muted">Verification code: <span class="vcode">${code}</span> · Impact of Colonisation Vocab Hub</p>`;
+}
+/* ---- boot ---- */
+go("home");
+</script>
+</body>
+</html>
