@@ -165,6 +165,26 @@
   .wloc a { color:var(--accent); font-weight:600; text-decoration:none; }
   .wloc a:hover { text-decoration:underline; }
   .notr .tr, .notr .wtr { display:none; }
+  /* --- showing several languages at once (teacher display) --- */
+  .alsoshow { display:flex; flex-wrap:wrap; align-items:center; gap:6px; }
+  .aslabel { font-size:.78rem; color:var(--muted); }
+  .langchip { font:inherit; font-size:.78rem; line-height:1; cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px; white-space:nowrap;
+    padding:6px 8px 6px 10px; border-radius:999px;
+    border:1px solid var(--accent,#0d7a70); background:var(--accent-soft,#f4f9f8);
+    color:var(--ink,#212427); }
+  .langx { font-weight:700; opacity:.55; }
+  .langchip:hover .langx { opacity:1; }
+  /* one line per language, each tagged so a class can find its own at a glance */
+  .trstack { display:flex; flex-direction:column; gap:2px; }
+  .trone { display:flex; align-items:baseline; gap:6px; }
+  .trtag { flex:0 0 auto; font-style:normal; font-size:.62rem; font-weight:700;
+    opacity:.62; white-space:nowrap; min-width:4.2em; }
+  .trtext { min-width:0; }
+  .morph .trstack { gap:1px; padding-left:.8em; margin:2px 0 5px;
+    border-left:2px solid var(--hair,#e6e7e3); }
+  .morph .trtag { font-size:.58rem; min-width:3.6em; }
+  @media (max-width:640px){ .trtag { min-width:3.4em; font-size:.58rem; } }
 
   /* ---------- 2 BUILD · the board ----------
      One shared morpheme bank at the top — every piece the set's buildable
@@ -374,6 +394,7 @@
       bStep3:"Fill in every word you can, then press Check my answers. A few pieces belong to no word here.",
       leadUse:"One question for each word. You get one try — accuracy first.",
       homeLangL:"Home language", homeLangNone:"— none —",
+      alsoShowL:"Also show", alsoShowAdd:"+ another language", alsoShowDrop:"Stop showing",
       trOn:"Translations on", trOff:"Translations off",
       mBuilt:"✓ built", mUsed:"✓ used", mNone:"not yet",
       /* a word repeated from an earlier set (revision sets, a few cross-unit
@@ -423,6 +444,7 @@
       bStep3:"能填的词都填上，然后按“检查我的答案”。有几个词素在这里用不到。",
       leadUse:"每个单词一道题，只有一次机会——先求准确。",
       homeLangL:"母语", homeLangNone:"— 不显示 —",
+      alsoShowL:"同时显示", alsoShowAdd:"＋ 增加语言", alsoShowDrop:"不再显示",
       trOn:"显示翻译", trOff:"隐藏翻译",
       mBuilt:"✓ 已拼成", mUsed:"✓ 已使用", mNone:"未开始",
       learnInF: function(u,n){ return "在 " + u + " · 单词表 " + n + " 学"; },
@@ -470,6 +492,7 @@
       bStep3:"能填的字都填上，再按「檢查我的答案」。有幾個詞素在這裡用不到。",
       leadUse:"每個單字一題，只有一次機會——先求正確。",
       homeLangL:"母語", homeLangNone:"— 不顯示 —",
+      alsoShowL:"同時顯示", alsoShowAdd:"＋ 增加語言", alsoShowDrop:"不再顯示",
       trOn:"顯示翻譯", trOff:"隱藏翻譯",
       mBuilt:"✓ 已拼成", mUsed:"✓ 已使用", mNone:"尚未開始",
       learnInF: function(u,n){ return "在 " + u + " · 單字表 " + n + " 學"; },
@@ -517,6 +540,7 @@
       bStep3:"Điền hết những từ em làm được, rồi bấm “Kiểm tra bài của em”. Có vài thành phần không dùng đến.",
       leadUse:"Mỗi từ một câu hỏi. Em chỉ có một lượt trả lời — chính xác trước đã.",
       homeLangL:"Tiếng mẹ đẻ", homeLangNone:"— không hiện —",
+      alsoShowL:"Hiện thêm", alsoShowAdd:"+ thêm ngôn ngữ", alsoShowDrop:"Ngừng hiện",
       trOn:"Hiện bản dịch", trOff:"Ẩn bản dịch",
       mBuilt:"✓ đã ghép", mUsed:"✓ đã dùng", mNone:"chưa bắt đầu",
       learnInF: function(u,n){ return "học ở " + u + " · danh sách từ " + n; },
@@ -622,6 +646,66 @@
   function slug(w){ return String(w).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
   function key(w){ return String(w).toLowerCase(); }
   function homeLang(){ try { return localStorage.getItem(HOME_KEY) || ""; } catch(e){ return ""; } }
+  /* --- showing several languages at once (teacher display) ---------------
+     One screen at the front of a room serves a class that rarely shares a
+     home language. These are languages shown ALONGSIDE the home language,
+     never instead of it, so a teacher can put a word up in Chinese,
+     Vietnamese and Spanish together. Display only: nothing here changes what
+     is built, checked or recorded. */
+  var EXTRA_KEY = "elc_stem_extra_langs";
+  var LANG_SHORT = {
+    "zh-Hans":"简体中文", "zh-Hant":"繁體中文", ja:"日本語", ko:"한국어",
+    vi:"Tiếng Việt", ar:"العربية", fa:"فارسی", ur:"اردو", am:"አማርኛ",
+    ml:"മലയാളം", ta:"தமிழ்", tl:"Tagalog", ps:"پښتو", ro:"Română",
+    ru:"Русский", fr:"Français", hi:"हिन्दी", es:"Español"
+  };
+  function langShort(id){
+    if (LANG_SHORT[id]) return LANG_SHORT[id];
+    var l = (D.langs || []).filter(function(x){ return x.id === id; })[0];
+    return l ? l.name : id;
+  }
+  function knownLang(id){
+    return !!id && (D.langs || []).some(function(l){ return l.id === id; });
+  }
+  function extraLangs(){
+    var raw = "";
+    try { raw = localStorage.getItem(EXTRA_KEY) || ""; } catch(e){ raw = ""; }
+    if (!raw) return [];
+    var seen = {}; seen[homeLang()] = 1;   /* never repeat the home language */
+    return raw.split(",").map(function(x){ return x.trim(); })
+      .filter(function(id){
+        if (!knownLang(id) || seen[id]) return false;
+        seen[id] = 1; return true;
+      });
+  }
+  function setExtraLangs(list){
+    try { localStorage.setItem(EXTRA_KEY, list.join(",")); } catch(e){}
+  }
+  /* Every language to show, home language first. Empty when none is chosen —
+     the page already treats "no home language" as "English only". */
+  function showLangs(){
+    var hl = homeLang();
+    if (!hl) return [];
+    return [hl].concat(extraLangs());
+  }
+  /* Translations for one entry, as HTML. With a single language this is the
+     markup the page produced before — no tag, no wrapper — so a student who
+     never touches the option sees an unchanged page. */
+  function trLines(tr, langs){
+    if (!tr) return "";
+    var found = [];
+    langs.forEach(function(id){ if (tr[id]) found.push([id, tr[id]]); });
+    if (!found.length) return "";
+    if (langs.length === 1) {
+      return "<bdi lang='" + esc(found[0][0]) + "'>" + esc(found[0][1]) + "</bdi>" +
+             SAY(found[0][1], found[0][0], "sm");
+    }
+    return "<span class='trstack'>" + found.map(function(f){
+      return "<span class='trone'><i class='trtag'>" + esc(langShort(f[0])) +
+        "</i><bdi class='trtext' lang='" + esc(f[0]) + "' dir='auto'>" + esc(f[1]) +
+        "</bdi>" + SAY(f[1], f[0], "sm") + "</span>";
+    }).join("") + "</span>";
+  }
   function setHomeLang(v){ try { localStorage.setItem(HOME_KEY, v); } catch(e){} }
   function wState(w){ var v = Store.vocab()[key(w)]; return v || null; }
   function isRev(set){ return set.id === "rev" || /\(revision\)/i.test(set.title); }
@@ -742,6 +826,28 @@
   }
 
   /* ---------------- 1 WORDS ---------------- */
+  /* chips for the languages currently added (click to remove) + a dropdown
+     to add another. Only rendered once a home language is chosen. */
+  function alsoShowCtl(){
+    var extras = extraLangs(), taken = {}, i;
+    taken[homeLang()] = 1;
+    for (i = 0; i < extras.length; i++) taken[extras[i]] = 1;
+    var h = "<span class='alsoshow'><span class='aslabel'>" + esc(T("alsoShowL")) + "</span>";
+    extras.forEach(function(id){
+      h += "<button type='button' class='langchip' data-drop='" + esc(id) + "' title='" +
+        esc(T("alsoShowDrop") + " " + langShort(id)) + "'>" + esc(langShort(id)) +
+        "<span class='langx'>\u00d7</span></button>";
+    });
+    var opts = (D.langs || []).filter(function(l){ return !taken[l.id]; });
+    if (opts.length) {
+      h += "<select id='alsoShowSel'><option value=''>" + esc(T("alsoShowAdd")) + "</option>";
+      opts.forEach(function(l){
+        h += "<option value='" + esc(l.id) + "'>" + esc(l.name) + "</option>";
+      });
+      h += "</select>";
+    }
+    return h + "</span>";
+  }
   function langOptions(){
     var hl = homeLang();
     var h = "<option value=''>" + esc(T("homeLangNone")) + "</option>";
@@ -778,11 +884,11 @@
      and the home-language gloss inside that same italic run so the "hide
      translations" toggle still reaches it (.notr .tr). Display only — these
      were never tappable here; the tappable chips live on the build board. */
-  function partMorph(p, hl){
-    var trTxt = (hl && p.tr && p.tr[hl]) ? p.tr[hl] : "";
+  function partMorph(p, langs){
+    var tr = trLines(p.tr, langs);
     return "<code class='" + morphClass(p.type) + "'>" + esc(p.surface) + "</code> <i>" +
       esc(p.meaning) +
-      (trTxt ? "<span class='tr'> · <bdi lang='" + esc(hl) + "'>" + esc(trTxt) + "</bdi></span>" : "") +
+      (tr ? "<span class='tr'> · " + tr + "</span>" : "") +
       "</i>";
   }
   function marksFor(w){
@@ -811,11 +917,12 @@
       esc(T("learnInF")(loc.unitName, loc.index)) + "</a></p>";
   }
   function renderWords(hlWord){
-    var set = cur.set, hl = homeLang();
+    var set = cur.set, hl = homeLang(), langs = showLangs();
     var h = "<p class='panelead'>" + esc(T("leadWords")) + "</p>" +
       "<div class='wctl'>" +
         "<label>" + esc(T("homeLangL")) +
           "<select id='homeLangSel'>" + langOptions() + "</select></label>" +
+        (hl ? alsoShowCtl() : "") +
         (hl ? "<button class='tgl' type='button' id='trTgl' aria-pressed='" + showTr + "'>" +
               esc(showTr ? T("trOn") : T("trOff")) + "</button>" : "") +
       "</div>" +
@@ -833,13 +940,13 @@
           SAY(w.w, "en", "lg") + "</span>" + marksFor(w) + "</div>" +
         homeNote(w);
       h += "<p class='wmean'>" + esc(w.meaning) + "</p>";
-      if (hl && w.tr && w.tr[hl]) h += "<p class='wtr' lang='" + esc(hl) + "' dir='auto'>" +
-        esc(w.tr[hl]) + SAY(w.tr[hl], hl, "sm") + "</p>";
+      var wtr = trLines(w.tr, langs);
+      if (wtr) h += "<p class='wtr' dir='auto'>" + wtr + "</p>";
       if (w.example) h += "<p class='wex'>" + esc(w.example) + SAY(w.example, "en", "sm") + "</p>";
       /* breakdown under the meaning, behind a dashed rule, note beneath it */
       if (parts.length) {
         h += "<div class='morph'>" +
-          parts.map(function(p){ return partMorph(p, hl); }).join(" + ") +
+          parts.map(function(p){ return partMorph(p, langs); }).join(" + ") +
           (w.note ? "<span class='mnote'>" + w.note + "</span>" : "") + "</div>";
       } else if (w.note) {
         h += "<p class='wnote'>" + w.note + "</p>";
@@ -853,6 +960,19 @@
     var lsel = document.getElementById("homeLangSel");
     if (lsel) lsel.addEventListener("change", function(){
       setHomeLang(lsel.value); showTr = true; renderWords(null);
+    });
+    var asel = document.getElementById("alsoShowSel");
+    if (asel) asel.addEventListener("change", function(){
+      if (!asel.value) return;
+      setExtraLangs(extraLangs().concat([asel.value]));
+      showTr = true; renderWords(null);
+    });
+    Array.prototype.forEach.call(el.pw.querySelectorAll("[data-drop]"), function(btn){
+      btn.addEventListener("click", function(){
+        var id = btn.getAttribute("data-drop");
+        setExtraLangs(extraLangs().filter(function(x){ return x !== id; }));
+        renderWords(null);
+      });
     });
     var tg = document.getElementById("trTgl");
     if (tg) tg.addEventListener("click", function(){
