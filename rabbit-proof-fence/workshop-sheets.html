@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%231f4b4b'/><path d='M4 13h24M4 19h24' stroke='%23e8b36a' stroke-width='2'/><path d='M9 8v18M16 8v18M23 8v18' stroke='%23f5efe4' stroke-width='3' stroke-linecap='round'/></svg>">
+<title>Writing workshop sheets: Rabbit-Proof Fence</title>
+<style>
+/* Three A4 portrait sheets: the anchor, the climb cards to cut out, and
+   the colour-it paragraphs. Print in colour; the shapes and underline
+   styles carry the meaning in black and white too. */
+@page{size:A4 portrait;margin:11mm}
+*{box-sizing:border-box}
+body{margin:0;background:#e9e2d4;color:#2a2118;font:10.5pt/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.bar{max-width:794px;margin:14px auto 0;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.bar a,.bar button{font:inherit;font-size:14px;padding:9px 14px;border:1px solid #c9b99c;border-radius:8px;background:#fffaf1;color:#2a2118;text-decoration:none;cursor:pointer;min-height:40px}
+.sheet{width:210mm;min-height:297mm;margin:14px auto;background:#fff;padding:11mm;box-shadow:0 2px 10px rgba(0,0,0,.12);
+       break-after:page;page-break-after:always;display:flex;flex-direction:column}
+.sheet:last-of-type{break-after:auto;page-break-after:auto}
+h1{font:700 17pt/1.15 Georgia,serif;margin:0 0 1mm}
+h2{font:700 12pt/1.2 Georgia,serif;margin:4mm 0 2mm}
+.sub{color:#6c5f50;font-size:9.5pt;margin:0 0 3mm}
+.name{display:flex;gap:6mm;font-size:10pt;margin:0 0 3mm}
+.name span{flex:1;border-bottom:1px solid #999}
+.k{font-weight:700;background:var(--bg2);color:var(--fg);text-decoration:underline;text-decoration-style:var(--ul);
+   text-decoration-thickness:1.5px;text-underline-offset:3px;padding:0 2px;border-radius:2px;
+   -webkit-print-color-adjust:exact;print-color-adjust:exact;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.k .gl{font-size:.7em;vertical-align:.4em;margin-right:1px}
+.key{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm}
+.key div{border:1.5px solid var(--fg);background:var(--bg2);border-radius:3mm;padding:2.5mm 3mm;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.key b{font:700 13pt/1.1 Georgia,serif;color:var(--fg)}
+.key small{display:block;font-size:9pt;margin-top:1mm}
+table{border-collapse:collapse;width:100%;font-size:8.8pt;line-height:1.3}
+th,td{border:1px solid #c9b99c;padding:1.6mm 2mm;vertical-align:top;text-align:left}
+th{background:#f5efe4;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+td.rk{font-weight:800;color:var(--fg);background:var(--bg2);white-space:nowrap;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.models{display:grid;grid-template-columns:12mm 1fr;gap:2.4mm 3mm;font:11pt/1.75 Georgia,serif}
+.models b{font:800 10.5pt/1.75 system-ui,sans-serif;color:#6c5f50}
+.frame{font:10.5pt/1.5 Georgia,serif;border:1px solid #c9b99c;border-radius:2mm;padding:2mm 3mm;margin-bottom:2mm}
+.frame b{font:800 9.5pt system-ui,sans-serif;color:#6c5f50;margin-right:2mm}
+.cutnote{font-size:9.5pt;margin:0 0 2mm}
+.grp{margin-bottom:2.5mm}
+.grp .lab{font-size:8.5pt;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:#6c5f50;margin-bottom:1mm}
+.tiles{display:flex;flex-wrap:wrap;gap:0}
+.tile{border:1.3px dashed #555;padding:2.2mm 3mm;font-weight:700;font-size:10.5pt;background:var(--bg2,#fff);color:var(--fg,#2a2118);
+      -webkit-print-color-adjust:exact;print-color-adjust:exact;position:relative;margin:0 -1.3px -1.3px 0}
+.tile .gl{font-size:.75em;margin-right:1mm}
+.tile .lv{display:block;font-size:7pt;font-weight:600;color:#6c5f50}
+.glue{display:flex;flex-direction:column;gap:3mm;margin-top:auto}
+.glue div{border:1.5px solid #c9b99c;border-radius:2mm;min-height:20mm;padding:1.5mm 2.5mm;font:800 9pt system-ui,sans-serif;color:#6c5f50}
+.para{font:11.5pt/2.15 Georgia,serif;margin:0 0 2mm}
+.ptag{font:800 9pt system-ui,sans-serif;color:#6c5f50;margin:3mm 0 0}
+.lines{border-top:1px solid #bbb;height:7.5mm}
+.k-verb,.k-subj,.k-join{--fg:#2a2118;--bg2:#fff}
+@media print{ body{background:#fff} .bar{display:none} .sheet{margin:0;box-shadow:none;width:auto;min-height:0;height:274mm;padding:0} }
+@media screen and (max-width:860px){ .sheet{width:auto;min-height:0;margin:10px} }
+</style>
+<style id="kindcss"></style>
+</head>
+<body>
+<div class="bar"><a href="index.html">&larr; Rabbit-Proof Fence</a><a href="workshop.html">Workshops</a><a href="workshop-deck.html">Deck</a><button onclick="print()">Print</button></div>
+
+<section class="sheet" id="s1"></section>
+<section class="sheet" id="s2"></section>
+<section class="sheet" id="s3"></section>
+
+<script src="writing-content.js"></script>
+<script src="workshop-content.js"></script>
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const esc = t => String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const KIND = Object.fromEntries(CRITERIA.map(c => [c.key, c]));
+$("kindcss").textContent = CRITERIA.map(c => `.k-${c.key}{--fg:${c.ink};--bg2:${c.soft};--ul:${c.underline}}`).join("");
+const gl = k => KIND[k] ? `<span class="gl">${KIND[k].glyph}</span>` : "";
+const marked = src => esc(src).replace(/\{(\w+)\|([^}]*)\}/g, (m, k, t) =>
+  (KIND[k] && k !== "lang") ? `<span class="k k-${k}">${gl(k)}${t}</span>` : t);
+const plain = src => esc(src.replace(/\{\w+\|([^}]*)\}/g, "$1"));
+
+/* ---- sheet 1: the anchor ---- */
+$("s1").innerHTML = `<h1>Theme, evidence, purpose</h1>
+  <p class="sub">Rabbit-Proof Fence · ELC Film Analysis rubric, C2 to C4</p>
+  <div class="key">${WS_KINDS.map(k => `<div class="k-${k.key}"><b>${KIND[k.key].glyph} ${k.short}</b><small>${esc(k.ask)}</small></div>`).join("")}</div>
+  <h2>The rubric</h2>
+  <table><tr><th></th>${WS_BANDS.map(b => `<th>${b} ${WS_SKILL[b]}</th>`).join("")}</tr>
+  ${WS_KINDS.map(k => `<tr><td class="rk k-${k.key}">${KIND[k.key].glyph} ${k.short}</td>${WS_BANDS.map(b => `<td>${esc(CONTINUUM[k.key][b])}</td>`).join("")}</tr>`).join("")}</table>
+  <h2>One sentence, three bands · ${esc(WS_CLIMB.moment)}</h2>
+  <div class="models">${WS_BANDS.map(b => `<b>${b}</b><span>${marked(WS_CLIMB.models[b])}</span>`).join("")}</div>
+  <h2>Frames</h2>
+  ${WS_BANDS.map(b => `<div class="frame"><b>${b}</b>${esc(WS_FRAMES[b])}</div>`).join("")}`;
+
+/* ---- sheet 2: the climb cards ---- */
+const GROUPS = [["idea","Theme"],["evid","Evidence"],["purp","Purpose"],["subj","Who"],["verb","Verb"],["join","Joiners"]];
+const lvText = t => t.lv[0] === t.lv[1] ? "C" + t.lv[0] : "C" + t.lv[0] + "–C" + t.lv[1];
+$("s2").innerHTML = `<h1>The climb: cards</h1>
+  <div class="name"><span>Name</span><span>Date</span></div>
+  <p class="cutnote">Cut along the dashes. Build the sentence at C2 and glue it down. Then build it again at C3 and C4.</p>
+  <p class="sub" style="margin-top:-1mm">${esc(WS_CLIMB.moment)} · ${esc(WS_CLIMB.q)}</p>
+  ${GROUPS.map(([k, name]) => `<div class="grp"><div class="lab">${gl(k)} ${name}</div><div class="tiles">` +
+    WS_CLIMB.tiles.filter(t => t.k === k).map(t => `<div class="tile k-${k}">${esc(t.t)}<span class="lv">${lvText(t)}</span></div>`).join("") +
+    `</div></div>`).join("")}
+  <div class="glue">${WS_BANDS.map(b => `<div>${b}</div>`).join("")}</div>`;
+
+/* ---- sheet 3: colour it, on paper ---- */
+const ctl = WS_SETS.find(s => s.id === "control");
+$("s3").innerHTML = `<h1>Colour it</h1>
+  <div class="name"><span>Name</span><span>Date</span></div>
+  <p class="cutnote">Underline the theme in red ▲, the evidence in blue ■, the purpose in green ●. Then write the band.</p>
+  <p class="sub">${esc(ctl.q)}</p>
+  ${["C3","C2","C4"].map((b, i) => `<p class="ptag">Paragraph ${i + 1} · Band: ______</p><p class="para">${plain(ctl.paras[b].text)}</p>`).join("")}
+  <p class="ptag">Paragraph 2, one band higher</p>
+  ${Array.from({length:5}, () => `<div class="lines"></div>`).join("")}`;
+</script>
+</body>
+</html>

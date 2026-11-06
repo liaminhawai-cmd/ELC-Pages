@@ -346,15 +346,20 @@ window.ELCProgress = (() => {
   /* ---------------- Rabbit-Proof Fence ----------------
      elc_rpf_v1 → { quiz:[{date, right, total, missed:[answer]}] }
        saved by rabbit-proof-fence/techniques.html; dates are day strings.
-     elc.rpf.vocabhub.v1 → the vocab hub (see vocabHub). */
+     elc.rpf.vocabhub.v1 → the vocab hub (see vocabHub).
+     elc.rpf.workshop.v1 → { log:[{day, what, detail}] }, saved by
+       rabbit-proof-fence/workshop.html when a part is finished. */
   function rpf() {
     const s = readJson("elc_rpf_v1", null);
     const quiz = s && Array.isArray(s.quiz) ? s.quiz.filter((q) => q && q.date && q.total) : [];
     const { lessonsDone, reviews, events: hubEvents } = vocabHub("elc.rpf.vocabhub.v1");
-    if (!quiz.length && !lessonsDone && !reviews.length) return null;
+    const ws = readJson("elc.rpf.workshop.v1", null);
+    const wsLog = ws && Array.isArray(ws.log) ? ws.log.filter((e) => e && e.day && e.what) : [];
+    if (!quiz.length && !lessonsDone && !reviews.length && !wsLog.length) return null;
 
     const events = quiz.map((q) => ({ day: q.date, label: "Film techniques quiz",
-                                      detail: q.right + "/" + q.total + " right first try" })).concat(hubEvents);
+                                      detail: q.right + "/" + q.total + " right first try" })).concat(hubEvents)
+      .concat(wsLog.map((e) => ({ day: e.day, label: "Writing workshop: " + e.what, detail: e.detail || "" })));
     const stats = [];
     if (quiz.length) {
       const best = quiz.reduce((b, q) => ((Number(q.right) || 0) > (Number(b.right) || 0) ? q : b), quiz[0]);
