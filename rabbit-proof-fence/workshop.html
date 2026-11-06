@@ -21,11 +21,9 @@ html,body{margin:0;height:100%}
 body{background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
      display:flex;flex-direction:column;overflow:hidden}
 button{font:inherit;color:inherit}
-.serif{font-family:Georgia,"Times New Roman",serif}
 
 /* ---- top bar ---- */
-#top{flex:0 0 auto;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:7px 12px;
-     background:var(--deep);color:#fff}
+#top{flex:0 0 auto;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:7px 12px;background:#1f4b4b;color:#fff}
 #top a.back{color:#fff;text-decoration:none;font-size:13px;opacity:.9;padding:8px 6px}
 #top a.back:hover{text-decoration:underline}
 #top h1{font:700 16px/1 Georgia,serif;margin:0 10px 0 2px;white-space:nowrap}
@@ -40,38 +38,40 @@ main{flex:1 1 auto;min-height:0;padding:10px 14px 12px;max-width:1360px;width:10
 .panel.on{display:grid}
 .box{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;min-height:0}
 .scroll{overflow:auto}
-h2{font:700 15px/1.3 system-ui,sans-serif;margin:0 0 8px}
 .lab{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 5px}
 .q{font-family:Georgia,serif;font-size:15px;margin:0 0 8px;color:var(--muted)}
 .pills{display:flex;gap:5px;flex-wrap:wrap;margin:0 0 10px}
 .pills button{border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;cursor:pointer;
      font-size:13.5px;min-height:36px}
 .pills button.on{border:2px solid var(--ink);font-weight:700;padding:5px 11px}
-.pills button .tick{color:var(--good);margin-left:4px}
+.tick{color:var(--good);margin-left:4px;font-weight:800}
+.tick.part{color:var(--ok)}
 .btn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:8px 14px;cursor:pointer;min-height:40px;font-size:14px}
 .btn:hover{border-color:var(--ink)}
-.btn.main{background:var(--deep);color:#fff;border-color:var(--deep)}
-@media (prefers-color-scheme:dark){ .btn.main{color:#10201f} }
+.btn.main{background:#1f4b4b;color:#fff;border-color:#1f4b4b}
+.btn:disabled{opacity:.5;cursor:default}
 :focus-visible{outline:3px solid var(--earth);outline-offset:2px}
 .small{font-size:12.5px;color:var(--muted)}
-.fb{border-radius:8px;padding:8px 11px;font-size:14px;margin-top:8px;min-height:20px}
+.fb{border-radius:8px;padding:8px 11px;font-size:14px;margin-top:8px}
 .fb:empty{display:none}
 .fb.good{background:var(--goodbg);color:var(--good)}
 .fb.ok{background:var(--okbg);color:var(--ok)}
 .fb.bad{background:var(--badbg);color:var(--bad)}
+.score{font-size:14px;margin:6px 0}
+.score b.bad{color:var(--bad)}
 
 /* ---- the three colours (values come from CRITERIA, see the script) ---- */
 .chip{display:inline-flex;align-items:center;gap:8px;border-radius:9px;padding:9px 14px;min-height:44px;
       font-weight:700;cursor:grab;touch-action:none;user-select:none;border:2px solid var(--fg);
       background:var(--bg2);color:var(--fg)}
 .chip.armed{box-shadow:0 0 0 3px var(--ink)}
-.chip .g{font-size:15px}
 .ghost{position:fixed;z-index:999;pointer-events:none;transform:translate(-50%,-60%) rotate(-2deg);
        box-shadow:0 6px 18px rgba(0,0,0,.25);opacity:.95}
 .lifting{opacity:.35}
 .over{outline:3px dashed var(--ink);outline-offset:2px}
+.k-verb,.k-subj,.k-join{--fg:var(--ink);--bg2:var(--card);--ul:solid}
 
-/* ---- colour it ---- */
+/* ---- 1 colour it ---- */
 #p-colour{grid-template-columns:270px minmax(0,1fr);gap:12px}
 .chips{display:flex;flex-direction:column;gap:8px;margin:4px 0 12px}
 .para{font-family:Georgia,serif;font-size:21px;line-height:2.05;margin:0}
@@ -79,14 +79,16 @@ h2{font:700 15px/1.3 system-ui,sans-serif;margin:0 0 8px}
 .seg:hover{background:rgba(127,127,127,.12)}
 .seg.on{background:var(--bg2);color:var(--fg);font-weight:700;text-decoration:underline;text-decoration-style:var(--ul);
         text-decoration-thickness:2px;text-underline-offset:4px;cursor:default}
-.seg.on .gl{font-size:.62em;vertical-align:.55em;margin-right:2px}
+.seg.on.rev{outline:2px dashed var(--bad);outline-offset:1px}
+.seg.on.rev::after{content:" ✗";color:var(--bad);font-size:.7em}
+.seg.once{text-decoration:underline wavy var(--bad);text-underline-offset:5px}
+.seg .gl{font-size:.62em;vertical-align:.55em;margin-right:2px}
 .seg.miss{animation:shake .3s}
 @keyframes shake{25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
 .rub{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;font-size:13.5px;margin-top:10px}
 .rub .rk{font-weight:800;color:var(--fg);white-space:nowrap}
-.count{font-size:14px;margin:6px 0}
 
-/* ---- sort ---- */
+/* ---- 2 sort ---- */
 #p-sort{grid-template-columns:minmax(0,1fr) minmax(0,2.4fr);gap:12px}
 #sortCols{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;min-height:0}
 .col{display:flex;flex-direction:column;min-height:0;border:2px dashed var(--line);border-radius:var(--r);padding:8px;background:var(--card)}
@@ -99,29 +101,35 @@ h2{font:700 15px/1.3 system-ui,sans-serif;margin:0 0 8px}
 .card .tag{display:block;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
 .card.armed{box-shadow:0 0 0 3px var(--ink)}
 .card.right{border-color:var(--good);background:var(--goodbg);cursor:default}
-.card.wrong{border-color:var(--bad);background:var(--badbg)}
+.card.second{border-color:var(--ok);background:var(--okbg);cursor:default}
+.card.rev{border:2px dashed var(--bad);background:var(--badbg);cursor:default}
+.card.back{border:2px solid var(--bad)}
 .card .why{display:block;margin-top:5px;font-size:12px;font-weight:600}
-.card.right .why{color:var(--good)} .card.wrong .why{color:var(--bad)}
-#tray{display:flex;flex-direction:column;gap:6px}
+.card.right .why{color:var(--good)} .card.second .why{color:var(--ok)} .card.rev .why,.card.back .why{color:var(--bad)}
+#tray{display:flex;flex-direction:column;gap:6px;margin-top:8px}
 
-/* ---- three ways ---- */
-#p-ways{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
-.frame{font-family:Georgia,serif;font-size:20px;line-height:2.1;background:var(--card);border:1px solid var(--line);
-       border-radius:var(--r);padding:12px 16px}
+/* ---- 3 three ways ---- */
+#p-ways{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:12px}
+.frame{font-family:Georgia,serif;font-size:20px;line-height:2.1;background:var(--bg);border-radius:var(--r);padding:12px 16px}
 .slot{display:inline-block;min-width:110px;border:2px dashed var(--fg,var(--muted));border-radius:6px;padding:0 8px;
       line-height:1.5;vertical-align:baseline;color:var(--muted);font-size:15px;font-family:system-ui,sans-serif}
-.slot.cur{background:rgba(127,127,127,.1)}
 .slot.filled,.giv{border-style:solid;background:var(--bg2);color:var(--fg);font-weight:700;font-family:Georgia,serif;font-size:20px;
-       text-decoration:underline;text-decoration-style:var(--ul);text-underline-offset:4px;border-radius:5px;padding:0 4px}
-.giv{border:0}
-.opts{display:flex;flex-direction:column;gap:8px;margin-top:8px}
-.tile{display:block;text-align:left;border:1px solid var(--line);border-radius:8px;padding:9px 12px;min-height:42px;
+       text-decoration:underline;text-decoration-style:var(--ul);text-underline-offset:4px;border-radius:5px;padding:0 4px;cursor:pointer}
+.giv{border:0;cursor:default}
+.slot.j-good{outline:3px solid var(--good)} .slot.j-ok{outline:3px solid var(--ok)}
+.slot.j-weak{outline:3px solid var(--bad);text-decoration:line-through}
+.results{list-style:none;padding:0;margin:8px 0 0;font-size:14px}
+.results li{padding:6px 10px;border-radius:7px;margin-bottom:5px}
+.results li.good{background:var(--goodbg);color:var(--good)} .results li.ok{background:var(--okbg);color:var(--ok)}
+.results li.weak{background:var(--badbg);color:var(--bad)}
+.optgrp{margin-bottom:12px}
+.opts{display:flex;flex-direction:column;gap:6px}
+.tile{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:8px;padding:8px 12px;min-height:42px;
       background:var(--bg2,var(--card));color:var(--fg,var(--ink));font-weight:600;cursor:grab;touch-action:none;user-select:none}
-.tile.armed{box-shadow:0 0 0 3px var(--ink)}
-.tile.no{background:var(--badbg);color:var(--bad);border-color:var(--bad)}
-.k-verb,.k-subj,.k-join{--fg:var(--ink);--bg2:var(--card);--ul:solid}
+.tile.armed,.tile.in{box-shadow:0 0 0 3px var(--ink)}
+.tile.no{background:var(--badbg);color:var(--bad);border-color:var(--bad);text-decoration:line-through;cursor:default}
 
-/* ---- climb ---- */
+/* ---- 4 climb ---- */
 #p-climb{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:10px 12px}
 #strip{min-height:84px;display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start;align-items:center;
        border:2px dashed var(--line);border-radius:var(--r);padding:10px;background:var(--card)}
@@ -131,9 +139,8 @@ h2{font:700 15px/1.3 system-ui,sans-serif;margin:0 0 8px}
     background:var(--bg2);color:var(--fg);font-weight:600;font-size:14.5px;cursor:grab;touch-action:none;user-select:none}
 .ct .gl{font-size:11px}
 .ct.ret{background:var(--badbg);color:var(--bad);border:2px solid var(--bad);text-decoration:line-through}
-.ct.armed{box-shadow:0 0 0 3px var(--ink)}
 .caret{width:3px;align-self:stretch;background:var(--ink);border-radius:2px}
-#bank{columns:2 260px;column-gap:16px}
+#bank{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:0 16px;align-content:start}
 .bankgrp{margin-bottom:8px;break-inside:avoid}
 .bankgrp .tiles{display:flex;flex-wrap:wrap;gap:6px}
 .needs{list-style:none;padding:0;margin:0;font-size:13.5px}
@@ -143,7 +150,7 @@ h2{font:700 15px/1.3 system-ui,sans-serif;margin:0 0 8px}
 .needs li.n::before{content:"✗";color:var(--bad);font-weight:800}
 .needs li.n{color:var(--bad)}
 
-/* ---- write ---- */
+/* ---- 5 write ---- */
 #p-write{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
 select{font:inherit;padding:7px 9px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);min-height:40px;max-width:100%}
 textarea{width:100%;font:17px/1.6 Georgia,serif;padding:10px 12px;border:1px solid var(--line);border-radius:8px;
@@ -153,14 +160,13 @@ textarea{width:100%;font:17px/1.6 Georgia,serif;padding:10px 12px;border:1px sol
 #mine .w{padding:2px 1px;border-radius:3px;cursor:pointer}
 #mine .w.on{background:var(--bg2);color:var(--fg);font-weight:700;text-decoration:underline;text-decoration-style:var(--ul);text-underline-offset:4px}
 .brush{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
-.brush button{min-height:40px}
 .brush button.on{box-shadow:0 0 0 3px var(--ink)}
 
 /* ---- report ---- */
 #p-report{grid-template-columns:minmax(0,1fr);gap:10px;grid-template-rows:auto minmax(0,1fr)}
 table.rep{border-collapse:collapse;width:100%;font-size:13.5px}
 table.rep th,table.rep td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}
-table.rep th{background:var(--bg);width:190px}
+table.rep th{background:var(--bg);width:210px}
 #tsv{width:100%;font:12px/1.4 ui-monospace,Consolas,monospace;min-height:60px}
 
 @media screen and (max-width:860px){
@@ -189,7 +195,7 @@ table.rep th{background:var(--bg);width:190px}
       <div class="pills" id="colBand"></div>
       <div class="lab">Drag a colour onto a phrase</div>
       <div class="chips" id="colChips"></div>
-      <div class="count" id="colCount"></div>
+      <div class="score" id="colCount"></div>
       <button class="btn" id="colReset">Start this paragraph again</button>
     </div>
     <div class="box scroll">
@@ -201,12 +207,17 @@ table.rep th{background:var(--bg);width:190px}
   </section>
 
   <!-- 2 · Sort -->
-  <section class="panel" id="p-sort" aria-label="Sort the wall">
+  <section class="panel" id="p-sort" aria-label="Sort">
     <div class="box scroll">
       <div class="lab">Paragraphs</div>
       <div class="pills" id="sortSet"></div>
-      <div id="tray"></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <button class="btn main" id="sortCheck">Check</button>
+        <button class="btn" id="sortAgain" hidden>Sort again</button>
+        <span class="score" id="sortScore"></span>
+      </div>
       <div class="fb" id="sortFb" aria-live="polite"></div>
+      <div id="tray"></div>
     </div>
     <div id="sortCols"></div>
   </section>
@@ -216,13 +227,14 @@ table.rep th{background:var(--bg);width:190px}
     <div class="box scroll">
       <div class="pills" id="wayRoutes"></div>
       <div class="frame" id="wayFrame"></div>
-      <div class="fb" id="wayFb" aria-live="polite"></div>
-      <div id="wayAfter" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap"></div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px">
+        <button class="btn main" id="wayCheck">Check</button>
+        <span class="score" id="wayScore"></span>
+      </div>
+      <ul class="results" id="wayResults" aria-live="polite"></ul>
+      <div id="wayAfter" style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap"></div>
     </div>
-    <div class="box scroll">
-      <div class="lab" id="wayAsk"></div>
-      <div class="opts" id="wayOpts"></div>
-    </div>
+    <div class="box scroll" id="wayOpts"></div>
   </section>
 
   <!-- 4 · The climb -->
@@ -279,7 +291,7 @@ table.rep th{background:var(--bg);width:190px}
       <textarea id="tsv" readonly aria-label="Report row" style="margin-top:8px"></textarea>
     </div>
     <div class="box scroll"><table class="rep" id="repTable"></table>
-      <p class="small">First tries only. Saved in this browser, nowhere else.</p></div>
+      <p class="small">First tries and first checks are what count. Saved in this browser, nowhere else.</p></div>
   </section>
 </main>
 
@@ -290,12 +302,26 @@ table.rep th{background:var(--bg);width:190px}
 /* =========================================================================
    Rabbit-Proof Fence writing workshops. Content is in workshop-content.js
    and writing-content.js; this script knows nothing about the film.
+
+   Every activity makes guessing cost something:
+   - Colour it: a wrong colour is told the rule for the colour it chose,
+     not the answer. A second miss reveals the phrase as missed. Black
+     parts count as misses. A paragraph passes only with WS_PASS.colourMisses
+     misses or fewer.
+   - Sort: place every card, then Check. No feedback per move. Wrong cards
+     come back for one more round; a second miss reveals them as missed.
+   - Three ways in: fill the whole sentence, then Check. A route passes only
+     if the first check had no weak pick.
+   - The climb: every tile is in the bank at every band, so retired tiles
+     are decoys. Every check is counted.
+   Correct work is never wiped.
    ========================================================================= */
 const $ = id => document.getElementById(id);
 const esc = t => String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 const KIND = Object.fromEntries(CRITERIA.map(c => [c.key, c]));
 const SHORT = Object.fromEntries(WS_KINDS.map(k => [k.key, k.short]));
 const today = () => { const d = new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); };
+const isTarget = k => k === "idea" || k === "evid" || k === "purp";
 
 /* ---- colour classes from CRITERIA: ink on paper, lamp in dark mode ---- */
 (function(){
@@ -308,15 +334,15 @@ const today = () => { const d = new Date(); return d.getFullYear()+"-"+String(d.
 })();
 const glyph = k => KIND[k] ? `<span class="gl" aria-hidden="true">${KIND[k].glyph}</span>` : "";
 
-/* ---- saved state ---- */
-const KEY = "elc.rpf.workshop.v1";
+/* ---- saved state. v2: the sort and three-ways records changed shape. ---- */
+const KEY = "elc.rpf.workshop.v2";
 const S = Object.assign({
-  start: Date.now(), secs: 0,
-  colour: {},   /* pid -> {done:{i:1}, first:{i:true|false}} */
+  secs: 0,
+  colour: {},     /* pid -> {done:{i:1}, first:{i:bool}, miss:{i:n}, rev:{i:1}, black:n} */
   colourMiss: {}, /* "evid>purp" -> n  (dropped>actual) */
-  sort: {},     /* cardId -> {first: band placed first, right:bool} */
-  ways: {},     /* routeId -> {weak:[text], done:bool} */
-  climb: { band:2, strip:[], passed:{}, first:{}, firstMiss:{} },
+  sort: {},       /* cardId -> {r1:band, r2:band, out:"right"|"second"|"rev", note} */
+  ways: {},       /* routeId -> {checks:n, first:[q per step], firstWeak:[text], done:bool} */
+  climb: { band:2, strip:[], passed:{}, checks:{}, firstMiss:{} },
   write: { theme:"belonging", moment:0, band:"C3", text:"", marks:{}, savedAt:null },
   log: []
 }, (() => { try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } })());
@@ -329,6 +355,7 @@ function logEvent(what, detail){
 let lastTouch = Date.now();
 ["pointerdown","keydown"].forEach(ev => addEventListener(ev, () => lastTouch = Date.now(), true));
 setInterval(() => { if (document.visibilityState === "visible" && Date.now() - lastTouch < 120000) { S.secs += 15; save(); } }, 15000);
+function say(id, cls, html){ const el = $(id); el.className = "fb " + cls; el.innerHTML = html; }
 
 /* =========================================================================
    DRAG: pointer events, so it works with a mouse, a finger or a pen.
@@ -366,24 +393,24 @@ function dragify(el, targetSel, onDrop, onMove){
 function onTap(el, fn){ el.addEventListener("click", e => { if (!justDragged) fn(e); }); }
 
 /* =========================================================================
-   TABS
+   TABS. A tick means passed (see WS_PASS), not just started.
    ========================================================================= */
 const TABS = [
   ["colour","1 · Colour it"], ["sort","2 · Sort"], ["ways","3 · Three ways in"],
   ["climb","4 · The climb"], ["write","5 · Write"], ["report","Report"]
 ];
 function tabDone(id){
-  if (id === "colour") return Object.keys(S.colour).some(p => isColourDone(p));
-  if (id === "sort")   return Object.values(S.sort).some(c => c.right);
-  if (id === "ways")   return Object.values(S.ways).some(w => w.done);
-  if (id === "climb")  return !!S.climb.passed[4];
+  if (id === "colour") return Object.keys(S.colour).some(p => colourStatus(p).passed);
+  if (id === "sort")   return sortStatus().passed;
+  if (id === "ways")   return WS_ROUTES.every(r => wayPassed(r.id));
+  if (id === "climb")  return [2,3,4].every(n => climbClean(n));
   if (id === "write")  return S.write.text.trim().split(/\s+/).length >= 15;
   return false;
 }
 function drawTabs(){
   const cur = (location.hash || "#colour").slice(1);
   $("tabs").innerHTML = TABS.map(([id, name]) =>
-    `<button data-t="${id}" class="${id===cur?"on":""}" aria-current="${id===cur}">${name}${tabDone(id)?'<span class="tick" aria-label="started">✓</span>':""}</button>`).join("");
+    `<button data-t="${id}" class="${id===cur?"on":""}" aria-current="${id===cur}">${name}${tabDone(id)?'<span class="tick" aria-label="passed">✓</span>':""}</button>`).join("");
   $("tabs").querySelectorAll("button").forEach(b => b.onclick = () => { location.hash = b.dataset.t; });
   document.querySelectorAll(".panel").forEach(p => p.classList.toggle("on", p.id === "p-" + cur));
   if (cur === "report") drawReport();
@@ -393,44 +420,45 @@ addEventListener("hashchange", drawTabs);
 /* =========================================================================
    PARAGRAPHS: parse {key|text} into segments
    ========================================================================= */
-function paraText(set, band){
-  const p = set.paras[band];
-  return p.src === "EXAMPLES" ? EXAMPLES[band] : p.text;
-}
+function paraText(set, band){ const p = set.paras[band]; return p.src === "EXAMPLES" ? EXAMPLES[band] : p.text; }
 function segments(src){
   const out = []; const re = /\{(\w+)\|([^}]*)\}/g; let last = 0, m;
-  const plain = t => { if (!t) return;
-    /* a run with no letters (". ", ", ") is not a target */
-    out.push({ k: /[A-Za-z]/.test(t) ? "plain" : "punct", t }); };
+  const plain = t => { if (!t) return; out.push({ k: /[A-Za-z]/.test(t) ? "plain" : "punct", t }); };
   while ((m = re.exec(src))) { plain(src.slice(last, m.index)); out.push({ k: m[1], t: m[2] }); last = re.lastIndex; }
   plain(src.slice(last));
   return out;
 }
 const stripMarks = src => src.replace(/\{\w+\|([^}]*)\}/g, "$1");
-const isTarget = k => k === "idea" || k === "evid" || k === "purp";
 
 /* =========================================================================
    1 · COLOUR IT
    ========================================================================= */
 let colSet = 0, colBand = "C2", armed = null;
 const pid = () => WS_SETS[colSet].id + "-" + colBand;
-function colRec(){ return S.colour[pid()] || (S.colour[pid()] = { done:{}, first:{} }); }
-function isColourDone(p){
-  const [sid, band] = p.split("-"); const set = WS_SETS.find(s => s.id === sid); if (!set) return false;
-  const segs = segments(paraText(set, band)); const r = S.colour[p];
-  return r && segs.every((s, i) => !isTarget(s.k) || r.done[i]);
+function colRec(){ const r = S.colour[pid()] || (S.colour[pid()] = {}); for (const k of ["done","first","miss","rev"]) r[k] = r[k] || {}; r.black = r.black || 0; return r; }
+function colourStatus(p){
+  const [sid, band] = p.split("-"); const set = WS_SETS.find(s => s.id === sid); const r = S.colour[p];
+  if (!set || !r) return { complete:false, passed:false };
+  const segs = segments(paraText(set, band));
+  const targets = segs.map((s, i) => i).filter(i => isTarget(segs[i].k));
+  /* r.miss holds every miss, black parts included */
+  const misses = Object.values(r.miss || {}).reduce((a, b) => a + b, 0);
+  const revealed = Object.keys(r.rev || {}).length;
+  const complete = targets.every(i => r.done && r.done[i]);
+  return { complete, passed: complete && !revealed && misses <= WS_PASS.colourMisses, misses, revealed,
+           total: targets.length, done: targets.filter(i => r.done && r.done[i]).length,
+           first: targets.filter(i => r.first && r.first[i] === true).length };
 }
 function drawColour(){
-  $("colSet").innerHTML = WS_SETS.map((s, i) =>
-    `<button data-i="${i}" class="${i===colSet?"on":""}">${esc(s.theme)}</button>`).join("");
-  $("colSet").querySelectorAll("button").forEach(b => b.onclick = () => { colSet = +b.dataset.i; drawColour(); });
-  $("colBand").innerHTML = WS_BANDS.map(b =>
-    `<button data-b="${b}" class="${b===colBand?"on":""}">${b}${isColourDone(WS_SETS[colSet].id+"-"+b)?'<span class="tick">✓</span>':""}</button>`).join("");
-  $("colBand").querySelectorAll("button").forEach(b => b.onclick = () => { colBand = b.dataset.b; drawColour(); });
+  $("colSet").innerHTML = WS_SETS.map((s, i) => `<button data-i="${i}" class="${i===colSet?"on":""}">${esc(s.theme)}</button>`).join("");
+  $("colSet").querySelectorAll("button").forEach(b => b.onclick = () => { colSet = +b.dataset.i; say("colFb","",""); drawColour(); });
+  $("colBand").innerHTML = WS_BANDS.map(b => { const st = colourStatus(WS_SETS[colSet].id + "-" + b);
+    return `<button data-b="${b}" class="${b===colBand?"on":""}">${b}${st.passed?'<span class="tick">✓</span>':st.complete?'<span class="tick part">○</span>':""}</button>`; }).join("");
+  $("colBand").querySelectorAll("button").forEach(b => b.onclick = () => { colBand = b.dataset.b; say("colFb","",""); drawColour(); });
 
   $("colChips").innerHTML = WS_KINDS.map(k =>
     `<button class="chip k-${k.key} ${armed===k.key?"armed":""}" data-k="${k.key}" aria-pressed="${armed===k.key}">`+
-    `<span class="g" aria-hidden="true">${KIND[k.key].glyph}</span>${k.short}</button>`).join("");
+    `<span aria-hidden="true">${KIND[k.key].glyph}</span>${k.short}</button>`).join("");
   $("colChips").querySelectorAll(".chip").forEach(c => {
     dragify(c, ".seg", t => { if (t) colourDrop(c.dataset.k, +t.dataset.i); });
     onTap(c, () => { armed = armed === c.dataset.k ? null : c.dataset.k; drawColour(); });
@@ -440,248 +468,296 @@ function drawColour(){
   $("colQ").textContent = set.q;
   $("colPara").innerHTML = segs.map((s, i) => {
     if (s.k === "punct") return esc(s.t);
-    if (r.done[i]) return `<span class="seg on k-${s.k}">${glyph(s.k)}${esc(s.t)}</span>`;
-    /* a span, not a button, so the phrase wraps like the rest of the line;
-       spaces at its edges sit outside it */
     const m = s.t.match(/^(\s*)(.*?)(\s*)$/s);
-    return `${m[1]}<span class="seg" role="button" tabindex="0" data-i="${i}">${esc(m[2])}</span>${m[3]}`;
+    if (r.done[i]) return `${m[1]}<span class="seg on k-${s.k} ${r.rev[i]?"rev":""}" data-i="${i}">${glyph(s.k)}${esc(m[2])}</span>${m[3]}`;
+    /* a span, not a button, so the phrase wraps like the rest of the line */
+    return `${m[1]}<span class="seg ${r.miss[i]?"once":""}" role="button" tabindex="0" data-i="${i}">${esc(m[2])}</span>${m[3]}`;
   }).join("");
-  $("colPara").querySelectorAll("span.seg:not(.on)").forEach(b => b.addEventListener("keydown", e => {
-    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); b.click(); } }));
-  $("colPara").querySelectorAll("span.seg:not(.on)").forEach(b => onTap(b, () => {
-    if (!armed) { say("colFb", "ok", "Pick a colour first: ▲ Theme, ■ Evidence or ● Purpose."); return; }
-    colourDrop(armed, +b.dataset.i);
-  }));
+  $("colPara").querySelectorAll("span.seg:not(.on)").forEach(b => {
+    b.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); b.click(); } });
+    onTap(b, () => {
+      if (!armed) { say("colFb", "ok", "Pick a colour first: ▲ Theme, ■ Evidence or ● Purpose."); return; }
+      colourDrop(armed, +b.dataset.i);
+    });
+  });
 
-  const total = segs.filter(s => isTarget(s.k)).length;
-  const done = segs.filter((s, i) => isTarget(s.k) && r.done[i]).length;
-  const first = segs.filter((s, i) => isTarget(s.k) && r.first[i] === true).length;
-  $("colCount").innerHTML = `${done} of ${total} coloured` + (done ? ` · <b>${first}</b> right first try` : "");
-  /* when the paragraph is fully coloured, the band's rubric lines appear beside it */
-  $("colRub").innerHTML = done === total ? `<div class="lab" style="margin-top:12px">${colBand} ${WS_SKILL[colBand]}: the rubric</div><div class="rub">` +
+  const st = colourStatus(pid());
+  $("colCount").innerHTML = `${st.done} of ${st.total} coloured · <b>${st.first}</b> right first try` +
+    (st.misses ? ` · <b class="bad">${st.misses} miss${st.misses>1?"es":""}</b>` : "") +
+    (st.revealed ? ` · <b class="bad">${st.revealed} shown</b>` : "");
+  $("colRub").innerHTML = st.complete ? `<div class="lab" style="margin-top:12px">${colBand} ${WS_SKILL[colBand]}: the rubric</div><div class="rub">` +
     WS_KINDS.map(k => `<span class="rk k-${k.key}">${KIND[k.key].glyph} ${k.short}</span><span>${esc(CONTINUUM[k.key][colBand])}</span>`).join("") + `</div>` : "";
   drawTabs();
 }
 function colourDrop(kind, i){
   const set = WS_SETS[colSet], segs = segments(paraText(set, colBand)), s = segs[i], r = colRec();
-  if (!s || r.done[i]) return;
-  if (s.k === kind) {
+  if (!s || r.done[i] || s.k === "punct") return;
+  let cls, msg;
+  if (!isTarget(s.k)) {                       /* a black part: always a miss */
+    r.black++; r.miss[i] = (r.miss[i] || 0) + 1; S.colourMiss[kind + ">black"] = (S.colourMiss[kind + ">black"] || 0) + 1;
+    cls = "bad"; msg = WS_NOT.black;
+  } else if (s.k === kind) {
     if (r.first[i] === undefined) r.first[i] = true;
-    r.done[i] = 1;
-    say("colFb", "good", `${KIND[kind].glyph} ${SHORT[kind]}: ${WS_KINDS.find(k=>k.key===kind).ask}.`);
-    if (isColourDone(pid())) logEvent("Colour it", set.theme + " " + colBand);
+    r.done[i] = 1; cls = "good"; msg = `${KIND[kind].glyph} ${SHORT[kind]}.`;
   } else {
-    if (isTarget(s.k) && r.first[i] === undefined) r.first[i] = false;
-    const miss = kind + ">" + (isTarget(s.k) ? s.k : "black");
-    S.colourMiss[miss] = (S.colourMiss[miss] || 0) + 1;
-    const msg = isTarget(s.k) ? WS_WRONG[kind][s.k] : (s.k === "lang" ? WS_WRONG.lang : WS_WRONG.plain);
-    say("colFb", "bad", msg);
-    const el = $("colPara").querySelector(`[data-i="${i}"]`);
-    if (el) { el.classList.remove("miss"); void el.offsetWidth; el.classList.add("miss"); }
+    r.first[i] = false; r.miss[i] = (r.miss[i] || 0) + 1;
+    S.colourMiss[kind + ">" + s.k] = (S.colourMiss[kind + ">" + s.k] || 0) + 1;
+    if (r.miss[i] >= 2) { r.done[i] = 1; r.rev[i] = 1; cls = "bad"; msg = WS_IS[s.k] + " It counts as missed."; }
+    else { cls = "bad"; msg = WS_NOT[kind] + " One more try on this phrase."; }
   }
-  save();
-  const fb = $("colFb").innerHTML, cls = $("colFb").className;
-  drawColour(); $("colFb").innerHTML = fb; $("colFb").className = cls;
-  if (s.k !== kind) { const el = $("colPara").querySelector(`[data-i="${i}"]`); if (el) el.classList.add("miss"); }
+  const st = colourStatus(pid());
+  if (st.complete) {
+    if (st.passed) { msg += ` <b>Passed: ${st.first} of ${st.total} right first try.</b>`; cls = "good"; logEvent("Colour it", set.theme + " " + colBand); }
+    else cls = "bad", msg += ` <b>Coloured, not passed: ${st.misses} miss${st.misses===1?"":"es"}${st.revealed?", "+st.revealed+" shown":""}. A pass is ${WS_PASS.colourMisses} miss or fewer. Start again, or try another paragraph.</b>`;
+  }
+  save(); drawColour(); say("colFb", cls, msg);
+  if (cls === "bad") { const el = $("colPara").querySelector(`[data-i="${i}"]`); if (el) { el.classList.remove("miss"); void el.offsetWidth; el.classList.add("miss"); } }
 }
 $("colReset").onclick = () => { delete S.colour[pid()]; save(); say("colFb", "", ""); drawColour(); };
-function say(id, cls, html){ const el = $(id); el.className = "fb " + cls; el.innerHTML = html; }
 
 /* =========================================================================
-   2 · SORT: drag each paragraph to the band it shows
+   2 · SORT: place every card, then Check. No feedback per move.
    ========================================================================= */
 const SORT_OPTS = [["all","All nine"]].concat(WS_SETS.map(s => [s.id, s.theme]));
 let sortSet = "all", sortArmed = null;
 const CARDS = [];
 WS_SETS.forEach(s => WS_BANDS.forEach(b => CARDS.push({ id: s.id + "-" + b, set: s, band: b, text: stripMarks(paraText(s, b)) })));
-/* a fixed order (WS_SORT_ORDER) so the tray never runs C2, C3, C4 within a question */
 CARDS.sort((a, b) => WS_SORT_ORDER.indexOf(a.id) - WS_SORT_ORDER.indexOf(b.id));
-const place = {}; /* cardId -> band where it sits now (this visit) */
-for (const [id, rec] of Object.entries(S.sort)) if (rec.right) place[id] = CARDS.find(c => c.id === id)?.band;
-
+const place = {};   /* cardId -> band where an unchecked card sits now */
+const shownCards = () => CARDS.filter(c => sortSet === "all" || c.set.id === sortSet);
+const sRec = id => S.sort[id] || (S.sort[id] = {});
+function sortStatus(){
+  const r1 = CARDS.filter(c => S.sort[c.id]?.r1).length;
+  const right1 = CARDS.filter(c => S.sort[c.id]?.r1 === c.band).length;
+  const resolved = CARDS.filter(c => S.sort[c.id]?.out).length;
+  const done = resolved === CARDS.length, ok = done && right1 >= WS_PASS.sortFirstRound;
+  /* a pass on a later attempt is shown, but only a first-attempt pass gets the tick:
+     by then every answer has been seen */
+  return { r1, right1, resolved, done, ok, passed: ok && !(S.sortTries || []).length };
+}
 function drawSort(){
   $("sortSet").innerHTML = SORT_OPTS.map(([id, name]) => `<button data-s="${id}" class="${id===sortSet?"on":""}">${esc(name)}</button>`).join("");
-  $("sortSet").querySelectorAll("button").forEach(b => b.onclick = () => { sortSet = b.dataset.s; drawSort(); });
-  const shown = CARDS.filter(c => sortSet === "all" || c.set.id === sortSet);
+  $("sortSet").querySelectorAll("button").forEach(b => b.onclick = () => { sortSet = b.dataset.s; say("sortFb","",""); drawSort(); });
+  const cards = shownCards();
   const cardHtml = c => {
-    const rec = S.sort[c.id] || {}, at = place[c.id];
-    const st = at ? (at === c.band ? "right" : "wrong") : "";
-    let why = "";
-    if (st === "right") why = `<span class="why">✓ ${esc(c.set.paras[c.band].why)}</span>`;
-    if (st === "wrong") why = `<span class="why">${esc(sortWhy(c, at))}</span>`;
-    return `<button class="card ${st} ${sortArmed===c.id?"armed":""}" data-c="${c.id}" ${st==="right"?'aria-disabled="true"':""}>`+
-      `<span class="tag">${esc(c.set.theme)}</span>${esc(c.text)}${why}</button>`;
+    const r = S.sort[c.id] || {};
+    let cls = "", why = "";
+    if (r.out === "right")  { cls = "right";  why = `✓ First try. ${c.set.paras[c.band].why}`; }
+    if (r.out === "second") { cls = "second"; why = `Right on the second try. ${c.set.paras[c.band].why}`; }
+    if (r.out === "rev")    { cls = "rev";    why = `✗ Missed twice. ${c.set.paras[c.band].why}`; }
+    if (!r.out && r.note && !place[c.id]) { cls = "back"; why = r.note; }
+    return `<button class="card ${cls} ${sortArmed===c.id?"armed":""}" data-c="${c.id}" ${r.out?'aria-disabled="true"':""}>`+
+      `<span class="tag">${esc(c.set.theme)}</span>${esc(c.text)}${why?`<span class="why">${esc(why)}</span>`:""}</button>`;
   };
-  $("tray").innerHTML = shown.filter(c => !place[c.id]).map(cardHtml).join("") ||
-    `<p class="small">All placed.</p>`;
+  const where = c => S.sort[c.id]?.out ? c.band : place[c.id];
+  $("tray").innerHTML = cards.filter(c => !where(c)).map(cardHtml).join("") || `<p class="small">All placed.</p>`;
   $("sortCols").innerHTML = WS_BANDS.map(b =>
     `<div class="col" data-b="${b}"><h3>${b} ${WS_SKILL[b]}</h3>`+
     `<div class="desc">${KIND.idea.glyph} ${esc(CONTINUUM.idea[b])}<br>${KIND.purp.glyph} ${esc(CONTINUUM.purp[b])}</div>`+
-    `<div class="drop">${shown.filter(c => place[c.id] === b).map(cardHtml).join("")}</div></div>`).join("");
-  document.querySelectorAll("#p-sort .card:not(.right)").forEach(el => {
-    dragify(el, ".col", t => { if (t) sortDrop(el.dataset.c, t.dataset.b); });
+    `<div class="drop">${cards.filter(c => where(c) === b).map(cardHtml).join("")}</div></div>`).join("");
+  document.querySelectorAll("#p-sort .card:not([aria-disabled])").forEach(el => {
+    dragify(el, ".col, #tray", t => { if (t) sortMove(el.dataset.c, t.dataset.b || null); });
     onTap(el, () => { sortArmed = sortArmed === el.dataset.c ? null : el.dataset.c; drawSort(); });
   });
   document.querySelectorAll("#sortCols .col").forEach(col => onTap(col, e => {
-    if (sortArmed && !e.target.closest(".card")) sortDrop(sortArmed, col.dataset.b);
+    if (sortArmed && !e.target.closest(".card")) sortMove(sortArmed, col.dataset.b);
   }));
+  const st = sortStatus();
+  const tries = S.sortTries || [];
+  $("sortScore").innerHTML = [
+    st.r1 ? `First round: <b>${st.right1}</b> of ${st.r1} right` +
+      (st.passed ? ' <span class="tick">✓ passed</span>' : st.ok ? ` <span class="tick part">passed on attempt ${tries.length + 1}</span>` : "") : "",
+    tries.length ? `earlier attempts: ${tries.map(t => t.right1 + "/9").join(", ")}` : ""].filter(Boolean).join(" · ");
+  $("sortAgain").hidden = !st.done;
   drawTabs();
 }
-function sortWhy(c, at){
-  const lo = WS_BANDS.indexOf(at) < WS_BANDS.indexOf(c.band);
-  if (lo) return `Too low. This paragraph does more than ${at} ${WS_SKILL[at]}. Read the rubric lines at the top of the next column and find the words that match.`;
-  /* too high: say what the band below the one chosen still needs */
-  return `Too high. ${c.set.paras[c.band].lack}`;
+function sortMove(id, band){
+  if (S.sort[id]?.out) return;
+  if (band) place[id] = band; else delete place[id];
+  sortArmed = null; drawSort();
 }
-function sortDrop(id, band){
-  const c = CARDS.find(x => x.id === id); if (!c) return;
-  const rec = S.sort[id] || (S.sort[id] = {});
-  if (rec.first === undefined) rec.first = band;
-  place[id] = band; sortArmed = null;
-  if (band === c.band) { rec.right = true; say("sortFb", "good", `✓ ${esc(c.set.theme)}, ${band}.`);
-    if (CARDS.filter(x => x.set === c.set).every(x => S.sort[x.id]?.right)) logEvent("Sort", c.set.theme); }
-  else say("sortFb", "bad", esc(sortWhy(c, band)));
-  save(); drawSort();
-}
+$("sortAgain").onclick = () => {
+  S.sortTries = (S.sortTries || []).concat({ day: today(), right1: sortStatus().right1 });
+  S.sort = {}; for (const k in place) delete place[k];
+  /* a new attempt gets a new order, so the old one cannot be replayed from memory */
+  CARDS.sort(() => Math.random() - .5);
+  save(); say("sortFb", "", ""); drawSort();
+};
+$("sortCheck").onclick = () => {
+  const open = shownCards().filter(c => !S.sort[c.id]?.out);
+  if (!open.length) { say("sortFb", "ok", "Nothing left to check here. Pick another set, or All nine."); return; }
+  const unplaced = open.filter(c => !place[c.id]);
+  if (unplaced.length) { say("sortFb", "ok", `Place every card first: ${unplaced.length} still in the tray.`); return; }
+  let right = 0, back = 0, rev = 0;
+  for (const c of open) {
+    const r = sRec(c.id), at = place[c.id];
+    if (!r.r1) {                                   /* first round */
+      r.r1 = at;
+      if (at === c.band) { r.out = "right"; right++; }
+      else { r.note = `Not ${at}. ${at} purpose: “${CONTINUUM.purp[at]}” Find the ● purpose in this paragraph and test it against the other two columns.`; back++; }
+    } else {                                       /* second round */
+      r.r2 = at;
+      if (at === c.band) { r.out = "second"; right++; }
+      else { r.out = "rev"; rev++; }
+    }
+    delete place[c.id];
+  }
+  save();
+  const st = sortStatus();
+  say("sortFb", back || rev ? "bad" : "good",
+    `${right} right` + (back ? `, ${back} back in the tray for one more try` : "") + (rev ? `, ${rev} missed twice and shown` : "") + "." +
+    (st.done ? (st.ok ? ` Passed: ${st.right1} of 9 first round.` : ` Not passed: ${st.right1} of 9 first round. A pass is ${WS_PASS.sortFirstRound}.`) : ""));
+  if (st.ok) logEvent("Sort", st.right1 + "/9 first round, attempt " + ((S.sortTries || []).length + 1));
+  drawSort();
+};
 
 /* =========================================================================
-   3 · THREE WAYS IN
+   3 · THREE WAYS IN: fill every slot, then Check
    ========================================================================= */
-let wayI = 0, wayPicks = [], wayArmed = null;
-function wayKindOf(step){ return step.kind; }
+let wayI = 0, wayPicks = {}, wayJudged = null, wayArmed = null;
+const wRec = id => S.ways[id] || (S.ways[id] = { checks:0, first:null, firstWeak:[], done:false });
+/* a tick needs every pick green on the FIRST check: amber is a lower band, not a pass */
+const wayPassed = id => { const r = S.ways[id]; return !!(r && r.first && r.first.every(q => q === "good")); };
 function drawWays(){
-  const R = WS_ROUTES[wayI];
+  const R = WS_ROUTES[wayI], rec = S.ways[R.id];
   $("wayRoutes").innerHTML = WS_ROUTES.map((r, i) =>
-    `<button data-i="${i}" class="${i===wayI?"on":""}">${esc(r.name)}${S.ways[r.id]?.done?'<span class="tick">✓</span>':""}</button>`).join("");
-  $("wayRoutes").querySelectorAll("button").forEach(b => b.onclick = () => { wayI = +b.dataset.i; wayPicks = []; say("wayFb","",""); drawWays(); });
+    `<button data-i="${i}" class="${i===wayI?"on":""}">${esc(r.name)}${wayPassed(r.id)?'<span class="tick">✓</span>':S.ways[r.id]?.done?'<span class="tick part">○</span>':""}</button>`).join("");
+  $("wayRoutes").querySelectorAll("button").forEach(b => b.onclick = () => { wayI = +b.dataset.i; wayPicks = {}; wayJudged = null; drawWays(); });
 
-  const stepIdx = wayPicks.length, done = stepIdx >= R.steps.length;
-  const filled = {}; R.steps.forEach((st, i) => { if (wayPicks[i] !== undefined) filled[st.kind] = st.opts[wayPicks[i]].t; });
+  /* the sentence frame */
   let html = "", first = true;
   for (const part of R.build) {
     let piece;
     if (part[0] === "@") {
       const k = part.slice(1);
-      const gt = first ? R.given.text.charAt(0).toUpperCase() + R.given.text.slice(1) : R.given.text;
-      if (R.given.kind === k) piece = `<span class="giv k-${k}">${glyph(k)}${esc(gt)}</span>`;
-      else {
-        const si = R.steps.findIndex(s => s.kind === k);
-        piece = filled[k] !== undefined
-          ? `<span class="slot filled k-${k}">${glyph(k)}${esc(filled[k])}</span>`
-          : `<span class="slot k-${k} ${si===stepIdx?"cur":""}" data-si="${si}">${esc(R.steps[si].ask)}</span>`;
+      if (R.given.kind === k) {
+        const gt = first ? R.given.text.charAt(0).toUpperCase() + R.given.text.slice(1) : R.given.text;
+        piece = `<span class="giv k-${k}">${glyph(k)}${esc(gt)}</span>`;
+      } else {
+        const si = R.steps.findIndex(s => s.kind === k), j = wayPicks[si];
+        const jd = wayJudged && wayJudged[si] ? "j-" + wayJudged[si] : "";
+        piece = j !== undefined
+          ? `<span class="slot filled k-${k} ${jd}" data-si="${si}" title="Tap to take it out">${glyph(k)}${esc(R.steps[si].opts[j].t)}</span>`
+          : `<span class="slot k-${k}" data-si="${si}">${esc(R.steps[si].ask)}</span>`;
       }
-    } else piece = esc(part);
-    if (first && part[0] !== "@") piece = piece.charAt(0).toUpperCase() + piece.slice(1);
+    } else piece = esc(first ? part.charAt(0).toUpperCase() + part.slice(1) : part);
     html += (html && !/^[,.]/.test(part) ? " " : "") + piece; first = false;
   }
   $("wayFrame").innerHTML = html;
+  $("wayFrame").querySelectorAll(".slot.filled").forEach(s => onTap(s, () => { delete wayPicks[+s.dataset.si]; wayJudged = null; drawWays(); }));
 
-  if (done) {
-    $("wayAsk").textContent = "";
-    $("wayOpts").innerHTML = "";
-    const next = WS_ROUTES.findIndex(r => !S.ways[r.id]?.done);
-    $("wayAfter").innerHTML = `<button class="btn" id="wayAgain">Again, different choices</button>` +
-      (next >= 0 ? `<button class="btn main" id="wayNext">${esc(WS_ROUTES[next].name)}</button>` : "");
-    $("wayAgain").onclick = () => { wayPicks = []; say("wayFb","",""); drawWays(); };
-    if ($("wayNext")) $("wayNext").onclick = () => { wayI = next; wayPicks = []; say("wayFb","",""); drawWays(); };
-  } else {
-    $("wayAfter").innerHTML = "";
-    const st = R.steps[stepIdx];
-    $("wayAsk").innerHTML = `${glyph(st.kind)} ${esc(st.ask)}`;
-    /* the data lists the best option first; rotate so position never gives it away */
-    const rot = (wayI * 3 + stepIdx) % st.opts.length;
+  /* the options: every step at once, each group rotated so position gives nothing away */
+  $("wayOpts").innerHTML = R.steps.map((st, si) => {
+    const rot = (wayI * 3 + si) % st.opts.length;
     const order = st.opts.map((_, j) => (j + rot) % st.opts.length);
-    $("wayOpts").innerHTML = order.map(j =>
-      `<button class="tile k-${st.kind} ${wayArmed===j?"armed":""}" data-j="${j}">${esc(st.opts[j].t)}</button>`).join("");
-    $("wayOpts").querySelectorAll(".tile").forEach(t => {
-      dragify(t, ".slot.cur", tgt => { if (tgt) wayPick(+t.dataset.j); });
-      onTap(t, () => wayPick(+t.dataset.j));
-    });
-  }
+    return `<div class="optgrp"><div class="lab">${glyph(st.kind)} ${esc(st.ask)}</div><div class="opts">` +
+      order.map(j => `<button class="tile k-${st.kind} ${wayPicks[si]===j?"in":""}" data-si="${si}" data-j="${j}">${esc(st.opts[j].t)}</button>`).join("") +
+      `</div></div>`;
+  }).join("");
+  $("wayOpts").querySelectorAll(".tile").forEach(t => {
+    const si = +t.dataset.si, j = +t.dataset.j;
+    dragify(t, `.slot[data-si="${si}"]`, tgt => { if (tgt) { wayPicks[si] = j; wayJudged = null; drawWays(); } });
+    onTap(t, () => { wayPicks[si] = j; wayJudged = null; drawWays(); });
+  });
+
+  const full = R.steps.every((_, si) => wayPicks[si] !== undefined);
+  $("wayCheck").disabled = !full;
+  $("wayScore").innerHTML = rec && rec.checks ? `Checks: <b>${rec.checks}</b>` + (rec.first ? ` · first check: ${rec.first.filter(q => q === "good").length} of ${rec.first.length} green` : "") +
+    (wayPassed(R.id) ? ' <span class="tick">✓ passed</span>' : rec.first ? ` <span class="small">(a pass is all green on the first check)</span>` : "") : "";
+  const allGood = wayJudged && !wayJudged.includes("weak");
+  $("wayResults").innerHTML = wayJudged ? R.steps.map((st, si) => {
+    const o = st.opts[wayPicks[si]] || null, q = wayJudged[si];
+    if (!o) return "";
+    return `<li class="${q}">${glyph(st.kind)} <b>${esc(o.t)}</b>: ${esc(o.why)}</li>`;
+  }).join("") : "";
+  if (allGood) {
+    const next = WS_ROUTES.findIndex(r => !wayPassed(r.id) && r.id !== R.id);
+    $("wayAfter").innerHTML = `<button class="btn" id="wayAgain">Again</button>` +
+      (next >= 0 ? `<button class="btn main" id="wayNext">${esc(WS_ROUTES[next].name)}</button>` : "");
+    $("wayAgain").onclick = () => { wayPicks = {}; wayJudged = null; drawWays(); };
+    if ($("wayNext")) $("wayNext").onclick = () => { wayI = next; wayPicks = {}; wayJudged = null; drawWays(); };
+  } else $("wayAfter").innerHTML = "";
   drawTabs();
 }
-function wayPick(j){
-  const R = WS_ROUTES[wayI], st = R.steps[wayPicks.length], o = st.opts[j];
-  const rec = S.ways[R.id] || (S.ways[R.id] = { weak:[], done:false });
-  if (o.q === "weak") {
-    if (!rec.weak.includes(o.t)) rec.weak.push(o.t);
-    say("wayFb", "bad", esc(o.why)); save();
-    const el = $("wayOpts").querySelector(`[data-j="${j}"]`); if (el) el.classList.add("no");
-    return;
-  }
-  wayPicks.push(j);
-  say("wayFb", o.q === "good" ? "good" : "ok", esc(o.why));
-  if (wayPicks.length === R.steps.length) { rec.done = true; logEvent("Three ways in", R.name); }
+$("wayCheck").onclick = () => {
+  const R = WS_ROUTES[wayI], rec = wRec(R.id);
+  const qs = R.steps.map((st, si) => st.opts[wayPicks[si]].q);
+  rec.checks++;
+  if (!rec.first) { rec.first = qs; rec.firstWeak = R.steps.map((st, si) => qs[si] === "weak" ? st.opts[wayPicks[si]].t : null).filter(Boolean); }
+  wayJudged = qs;
+  if (!qs.includes("weak")) { rec.done = true; if (wayPassed(R.id)) logEvent("Three ways in", R.name); }
+  else R.steps.forEach((_, si) => { if (qs[si] === "weak") { /* keep it on screen, judged, until they swap it */ } });
   save(); drawWays();
-}
+};
 
 /* =========================================================================
-   4 · THE CLIMB
+   4 · THE CLIMB: every tile at every band, so the old ones are decoys
    ========================================================================= */
 const T = WS_CLIMB.tiles.map((t, i) => Object.assign({ i }, t));
 const BANDNAME = n => "C" + n;
-let climbArmed = null, caretAt = -1;
-const live = n => t => t.lv[0] <= n && n <= t.lv[1];
+let caretAt = -1;
 const retiredAt = (t, n) => n > t.lv[1];
+const climbClean = n => S.climb.passed[n] && (S.climb.checks[n] || 0) <= WS_PASS.climbChecks;
 function drawClimb(){
   const n = S.climb.band;
   $("climbQ").textContent = WS_CLIMB.moment + " · " + WS_CLIMB.q;
-  $("climbBand").innerHTML = [2,3,4].map(b =>
-    `<button data-b="${b}" class="${b===n?"on":""}">${BANDNAME(b)} ${WS_SKILL[BANDNAME(b)]}${S.climb.passed[b]?'<span class="tick">✓</span>':""}</button>`).join("");
+  $("climbBand").innerHTML = [2,3,4].map(b => {
+    const p = S.climb.passed[b], c = S.climb.checks[b] || 0;
+    const mark = p ? (climbClean(b) ? '<span class="tick">✓</span>' : `<span class="tick part">✓ ${c} checks</span>`) : "";
+    return `<button data-b="${b}" class="${b===n?"on":""}">${BANDNAME(b)} ${WS_SKILL[BANDNAME(b)]}${mark}</button>`; }).join("");
   $("climbBand").querySelectorAll("button").forEach(b => b.onclick = () => setBand(+b.dataset.b));
 
-  /* the sentence */
-  const strip = S.climb.strip.map(i => T[i]);
+  /* the sentence. Retired tiles are only flagged after a check or a lift,
+     so the strip itself does not give the answer away. */
+  const strip = S.climb.strip.map(i => T[i]), showRet = !!S.climb.showRet;
   $("strip").innerHTML = strip.map((t, pos) =>
     (caretAt === pos ? `<span class="caret"></span>` : "") +
-    `<button class="ct k-${t.k} ${retiredAt(t, n)?"ret":""} ${climbArmed===("s"+pos)?"armed":""}" data-pos="${pos}" `+
-    `aria-label="${esc(t.t)}${retiredAt(t,n)?", retired":""}. Arrow keys move it, Delete removes it.">${glyph(t.k)}${esc(t.t)}</button>`).join("") +
+    `<button class="ct k-${t.k} ${showRet && retiredAt(t, n)?"ret":""}" data-pos="${pos}" `+
+    `aria-label="${esc(t.t)}. Arrow keys move it, Delete removes it.">${glyph(t.k)}${esc(t.t)}</button>`).join("") +
     (caretAt === strip.length ? `<span class="caret"></span>` : "");
   $("strip").querySelectorAll(".ct").forEach(el => {
     const pos = +el.dataset.pos;
     dragify(el, "#strip, #bank", (tgt, ev) => {
       caretAt = -1;
       if (!tgt) { drawClimb(); return; }
-      if (tgt.id === "bank") { S.climb.strip.splice(pos, 1); }
+      if (tgt.id === "bank") S.climb.strip.splice(pos, 1);
       else { const to = insertIndex(ev); const [v] = S.climb.strip.splice(pos, 1); S.climb.strip.splice(to > pos ? to - 1 : to, 0, v); }
-      save(); drawClimb();
+      changed(); drawClimb();
     }, trackCaret);
-    onTap(el, () => { S.climb.strip.splice(pos, 1); save(); drawClimb(); focusStrip(Math.min(pos, S.climb.strip.length - 1)); });
+    onTap(el, () => { S.climb.strip.splice(pos, 1); changed(); drawClimb(); focusStrip(Math.min(pos, S.climb.strip.length - 1)); });
     el.addEventListener("keydown", e => {
       const s = S.climb.strip;
       if ((e.key === "ArrowLeft" && pos > 0) || (e.key === "ArrowRight" && pos < s.length - 1)) {
         const to = e.key === "ArrowLeft" ? pos - 1 : pos + 1; [s[pos], s[to]] = [s[to], s[pos]];
-        save(); drawClimb(); focusStrip(to); e.preventDefault();
+        changed(); drawClimb(); focusStrip(to); e.preventDefault();
       }
-      if (e.key === "Delete" || e.key === "Backspace") { s.splice(pos, 1); save(); drawClimb(); focusStrip(Math.min(pos, s.length - 1)); e.preventDefault(); }
+      if (e.key === "Delete" || e.key === "Backspace") { s.splice(pos, 1); changed(); drawClimb(); focusStrip(Math.min(pos, s.length - 1)); e.preventDefault(); }
     });
   });
 
-  /* the bank: only tiles live at this band */
+  /* the bank: every tile, every band */
   const groups = [["idea","Theme"],["evid","Evidence"],["purp","Purpose"],["subj","Who"],["verb","Verb"],["join","Joiners"]];
-  $("bank").innerHTML = groups.map(([k, name]) => {
-    const tiles = T.filter(t => t.k === k && live(n)(t));
-    return `<div class="bankgrp"><div class="lab">${glyph(k)} ${name}</div><div class="tiles">` +
-      tiles.map(t => `<button class="ct k-${t.k}" data-t="${t.i}">${esc(t.t)}</button>`).join("") + `</div></div>`;
-  }).join("");
+  $("bank").innerHTML = groups.map(([k, name]) =>
+    `<div class="bankgrp"><div class="lab">${glyph(k)} ${name}</div><div class="tiles">` +
+    T.filter(t => t.k === k).map(t => `<button class="ct k-${t.k}" data-t="${t.i}">${esc(t.t)}</button>`).join("") + `</div></div>`).join("");
   $("bank").querySelectorAll(".ct").forEach(el => {
     dragify(el, "#strip", (tgt, ev) => {
-      if (tgt) { S.climb.strip.splice(insertIndex(ev), 0, +el.dataset.t); save(); }
+      if (tgt) { S.climb.strip.splice(insertIndex(ev), 0, +el.dataset.t); changed(); }
       caretAt = -1; drawClimb();
     }, trackCaret);
-    onTap(el, () => { S.climb.strip.push(+el.dataset.t); save(); drawClimb(); });
+    onTap(el, () => { S.climb.strip.push(+el.dataset.t); changed(); drawClimb(); });
   });
 
   $("needLab").textContent = BANDNAME(n) + " " + WS_SKILL[BANDNAME(n)] + " needs";
-  if (!$("needs").dataset.checked || +$("needs").dataset.checked !== n)
+  if (+$("needs").dataset.checked !== n)
     $("needs").innerHTML = WS_CLIMB.need[n].map(([, msg]) => `<li>${esc(msg)}</li>`).join("");
   $("climbUp").textContent = n < 4 ? "Lift it to " + BANDNAME(n + 1) : "Back to C2";
   drawTabs();
 }
+function changed(){ S.climb.showRet = false; $("needs").dataset.checked = ""; save(); }
 function focusStrip(pos){ const el = $("strip").querySelector(`[data-pos="${pos}"]`); if (el) el.focus(); }
 function insertIndex(ev){
-  const kids = [...$("strip").querySelectorAll(".ct:not(.lifting)")];
-  for (const k of kids) {
+  for (const k of $("strip").querySelectorAll(".ct:not(.lifting)")) {
     const r = k.getBoundingClientRect();
     if (ev.clientY < r.top) return +k.dataset.pos;
     if (ev.clientY <= r.bottom && ev.clientX < r.left + r.width / 2) return +k.dataset.pos;
@@ -693,19 +769,22 @@ function trackCaret(ev, tgt){
   if (want !== caretAt) { caretAt = want;
     const old = $("strip").querySelector(".caret"); if (old) old.remove();
     if (want >= 0) { const c = document.createElement("span"); c.className = "caret";
-      const at = $("strip").querySelector(`.ct[data-pos="${want}"]`); $("strip").insertBefore(c, at); } }
+      $("strip").insertBefore(c, $("strip").querySelector(`.ct[data-pos="${want}"]`)); } }
 }
 function setBand(b){
-  S.climb.band = b; save(); $("needs").dataset.checked = "";
+  S.climb.band = b; $("needs").dataset.checked = "";
+  /* lifting flags the tiles this band has outgrown: that is the teaching */
   const ret = S.climb.strip.map(i => T[i]).filter(t => retiredAt(t, b));
-  if (ret.length) say("climbFb", "bad", ret.map(t => `<b>${esc(t.t)}</b>: ${esc(t.retire)}`).join("<br>"));
+  S.climb.showRet = ret.length > 0; save();
+  if (ret.length) say("climbFb", "bad", "Outgrown at " + BANDNAME(b) + ":<br>" + ret.map(t => `<b>${esc(t.t)}</b>: ${esc(t.retire)}`).join("<br>"));
   else say("climbFb", "", "");
   drawClimb();
 }
 $("climbUp").onclick = () => setBand(S.climb.band < 4 ? S.climb.band + 1 : 2);
-$("climbClear").onclick = () => { S.climb.strip = []; save(); say("climbFb","",""); drawClimb(); };
+$("climbClear").onclick = () => { S.climb.strip = []; changed(); say("climbFb","",""); drawClimb(); };
 $("climbCheck").onclick = () => {
   const n = S.climb.band, strip = S.climb.strip.map(i => T[i]);
+  if (!strip.length) { say("climbFb", "ok", "Build a sentence first."); return; }
   const has = f => strip.some(f);
   const TEST = {
     subj: () => has(t => t.k === "subj"), verb: () => has(t => t.k === "verb"), evid: () => has(t => t.k === "evid"),
@@ -717,34 +796,33 @@ $("climbCheck").onclick = () => {
     purp4: () => has(t => t.k === "purp" && t.n >= 4)
   };
   const res = WS_CLIMB.need[n].map(([k, msg]) => [TEST[k](), msg, k]);
-  /* a sentence, not a heap: dumping every tile in fails */
-  const count = k => strip.filter(t => t.k === k).length;
-  const extra = [];
+  /* a sentence, not a heap: dumping tiles in fails */
+  const count = k => strip.filter(t => t.k === k).length, extra = [];
   if (count("subj") > 1) extra.push("One subject only. Take one of them out.");
   if (count("verb") > 2) extra.push("Too many verbs. Keep one or two.");
   ["idea","evid","purp"].forEach(k => { if (count(k) > 2) extra.push(`Three ${SHORT[k].toLowerCase()} tiles is a heap, not a sentence. Keep the best one or two.`); });
   const ret = strip.filter(t => retiredAt(t, n));
-  ret.forEach(t => extra.push(`“${t.t}” is retired at ${BANDNAME(n)}. ${t.retire}`));
+  ret.forEach(t => extra.push(`“${t.t}” does not work at ${BANDNAME(n)}. ${t.retire}`));
   const pass = res.every(r => r[0]) && !extra.length;
-  $("needs").innerHTML = res.map(([ok, msg]) => `<li class="${ok?"y":"n"}">${esc(msg)}</li>`).join("") +
-    extra.map(m => `<li class="n">${esc(m)}</li>`).join("");
+  S.climb.checks[n] = (S.climb.checks[n] || 0) + 1;
+  if (S.climb.checks[n] === 1) S.climb.firstMiss[n] = res.filter(r => !r[0]).map(r => r[2]).concat(ret.map(t => "“" + t.t + "”")).concat(extra.length > ret.length ? ["heap"] : []);
+  S.climb.showRet = true;
+  $("needs").innerHTML = res.map(([ok, msg]) => `<li class="${ok?"y":"n"}">${esc(msg)}</li>`).join("") + extra.map(m => `<li class="n">${esc(m)}</li>`).join("");
   $("needs").dataset.checked = n;
-  if (S.climb.first[n] === undefined) {
-    S.climb.first[n] = pass;
-    S.climb.firstMiss[n] = res.filter(r => !r[0]).map(r => r[2]).concat(extra.length ? ["heap or retired"] : []);
-  }
   if (pass) {
-    S.climb.passed[n] = strip.map(t => t.t).join(" ");
-    logEvent("The climb", BANDNAME(n));
-    say("climbFb", "good", n < 4 ? `✓ ${BANDNAME(n)}. Now lift the same sentence to ${BANDNAME(n + 1)}.` : "✓ C4. Now write one of your own in 5 · Write.");
-  } else say("climbFb", "bad", "Not yet. The crosses say what is missing.");
+    if (!S.climb.passed[n]) S.climb.passed[n] = strip.map(t => t.t).join(" ");
+    const c = S.climb.checks[n];
+    logEvent("The climb", BANDNAME(n) + (c > 1 ? " in " + c + " checks" : " first check"));
+    say("climbFb", climbClean(n) ? "good" : "ok", `✓ ${BANDNAME(n)} on check ${c}.` + (climbClean(n) ? "" : ` A clean pass is ${WS_PASS.climbChecks} checks or fewer.`) +
+      (n < 4 ? ` Now lift the same sentence to ${BANDNAME(n + 1)}.` : " Now write one of your own in 5 · Write."));
+  } else say("climbFb", "bad", `Not yet. Check ${S.climb.checks[n]}: every check is counted.`);
   save(); drawClimb();
 };
 
 /* =========================================================================
    5 · WRITE YOUR OWN, then colour it
    ========================================================================= */
-let brush = "idea", painting = false;
+let brush = "idea", painting = false, paintFrom = null;
 function drawWrite(){
   const W = S.write;
   $("wTheme").innerHTML = WS_THEMES.map(t => `<option ${t===W.theme?"selected":""}>${esc(t)}</option>`).join("");
@@ -759,10 +837,10 @@ function drawWrite(){
   $("brush").querySelectorAll("button").forEach(b => b.onclick = () => { brush = b.dataset.k; drawWrite(); });
   drawMine();
 }
-function words(){ return S.write.text.split(/(\s+)/); }
+const words = () => S.write.text.split(/(\s+)/);
 function drawMine(){
-  const W = S.write; const parts = words(); let wi = 0;
-  $("mine").innerHTML = W.text.trim() ? parts.map(p => {
+  const W = S.write; let wi = 0;
+  $("mine").innerHTML = W.text.trim() ? words().map(p => {
     if (/^\s+$/.test(p) || !p) return esc(p);
     const k = W.marks[wi]; const h = `<span class="w ${k?"on k-"+k:""}" data-w="${wi}">${esc(p)}</span>`; wi++; return h;
   }).join("") : `<span class="small">Write on the left first.</span>`;
@@ -773,9 +851,7 @@ function drawMine(){
       " This checks that each colour is used, not that it is right. Show your teacher.");
   else say("wFb", "", "");
 }
-/* paint every word between where the drag started and where the pointer is,
-   so a fast drag does not skip words */
-let paintFrom = null;
+/* paint every word between where the drag started and the pointer, so a fast drag does not skip words */
 function paint(el){
   if (!el || !el.dataset || el.dataset.w === undefined) return;
   const to = +el.dataset.w; if (paintFrom === null) paintFrom = to;
@@ -801,32 +877,43 @@ $("wTheme").onchange = () => { S.write.theme = $("wTheme").value; save(); };
 $("wMoment").onchange = () => { S.write.moment = +$("wMoment").value; save(); };
 
 /* =========================================================================
-   REPORT: one tab-separated row per student, first tries only
+   REPORT: one tab-separated row per student, first tries and first checks
    ========================================================================= */
-const HEAD = ["Name", "Date", "Minutes on task", "Colour: first tries", "Colour: misses", "Sort: first tries", "Sort: misses",
-  "Three ways: weak picks", "Climb: first check", "Climb: highest band passed", "Own theme", "Own moment", "Own words",
-  "Own colours used", "Cannot tell you"];
-const MISSNAME = { "idea>evid":"theme marked on evidence", "idea>purp":"theme marked on purpose", "evid>idea":"evidence marked on theme",
-  "evid>purp":"evidence marked on purpose", "purp>idea":"purpose marked on theme", "purp>evid":"purpose marked on evidence" };
+const HEAD = ["Name", "Date", "Minutes on task",
+  "Colour: right first try", "Colour: paragraphs passed", "Colour: misses", "Colour: shown after two misses",
+  "Sort: first round", "Sort: second round / shown", "Sort: first-round misses",
+  "Three ways: first check", "Three ways: total checks",
+  "Climb: checks per band", "Climb: missing at first check",
+  "Own theme", "Own moment", "Own words", "Own colours used", "Cannot tell you"];
+const MISSNAME = { "idea>evid":"theme on evidence", "idea>purp":"theme on purpose", "evid>idea":"evidence on theme",
+  "evid>purp":"evidence on purpose", "purp>idea":"purpose on theme", "purp>evid":"purpose on evidence",
+  "idea>black":"theme on a black part", "evid>black":"evidence on a black part", "purp>black":"purpose on a black part" };
+const NEEDNAME = { subj:"subject", verb:"verb", evid:"evidence", ideaOrPurp:"theme or purpose", tech:"technique word",
+  idea3:"simple theme", purp3:"audience effect", con:"connective", noyce:"Noyce as subject", an:"analytical verb",
+  exact:"exact film term", idea4:"theme as a claim", purp4:"inference about Noyce" };
 function reportData(){
-  let cT = 0, cR = 0;
-  for (const [p, r] of Object.entries(S.colour)) for (const v of Object.values(r.first)) { cT++; if (v) cR++; }
-  const cm = Object.entries(S.colourMiss).map(([k, n]) => (MISSNAME[k] || (k.split(">")[0] ? SHORT[k.split(">")[0]].toLowerCase() + " on a black part" : k)) + " ×" + n).join("; ");
-  const sorted = Object.entries(S.sort).filter(([, r]) => r.first);
-  const sR = sorted.filter(([id, r]) => r.first === CARDS.find(c => c.id === id)?.band).length;
-  const sm = sorted.filter(([id, r]) => r.first !== CARDS.find(c => c.id === id)?.band).map(([id, r]) => {
-    const c = CARDS.find(x => x.id === id); return `${c.set.theme} ${c.band} put in ${r.first}`; }).join("; ");
-  const weak = Object.values(S.ways).flatMap(w => w.weak).map(t => "“" + t + "”").join("; ");
-  const NEEDNAME = { subj:"subject", verb:"verb", evid:"evidence", ideaOrPurp:"theme or purpose", tech:"technique word",
-    idea3:"simple theme", purp3:"audience effect", con:"connective", noyce:"Noyce as subject", an:"analytical verb",
-    exact:"exact film term", idea4:"theme as a claim", purp4:"inference about Noyce" };
-  const cf = [2,3,4].filter(n => S.climb.first[n] !== undefined).map(n => "C" + n + (S.climb.first[n] ? " ✓" :
-    " ✗ (" + S.climb.firstMiss[n].map(k => NEEDNAME[k] || k).join(", ") + ")")).join("; ");
-  const top = [4,3,2].find(n => S.climb.passed[n]);
+  let cT = 0, cR = 0, cRev = 0, cPass = 0, cDone = 0;
+  for (const p of Object.keys(S.colour)) { const st = colourStatus(p); cT += st.total ? Object.keys(S.colour[p].first || {}).length : 0;
+    cR += st.first || 0; cRev += st.revealed || 0; if (st.passed) cPass++; if (st.complete) cDone++; }
+  const cm = Object.entries(S.colourMiss).map(([k, n]) => (MISSNAME[k] || k) + " ×" + n).join("; ");
+  const sst = sortStatus();
+  const s2 = CARDS.filter(c => S.sort[c.id]?.out === "second").length, sRev = CARDS.filter(c => S.sort[c.id]?.out === "rev").length;
+  const sm = CARDS.filter(c => S.sort[c.id]?.r1 && S.sort[c.id].r1 !== c.band).map(c => `${c.set.theme} ${c.band} put in ${S.sort[c.id].r1}`).join("; ");
+  const wf = WS_ROUTES.filter(r => S.ways[r.id]?.first).map(r => { const w = S.ways[r.id].firstWeak;
+    const f = S.ways[r.id].first, ok = f.filter(q => q === "ok").length;
+    return r.name + ": " + f.filter(q => q === "good").length + "/" + f.length + " green" + (ok ? ", " + ok + " lower band" : "") +
+      (w.length ? ", " + w.length + " weak (" + w.map(t => "“" + t + "”").join(", ") + ")" : ""); }).join("; ");
+  const wc = WS_ROUTES.reduce((a, r) => a + (S.ways[r.id]?.checks || 0), 0);
+  const cc = [2,3,4].filter(n => S.climb.checks[n]).map(n => "C" + n + " " + (S.climb.passed[n] ? "passed" : "not passed") + " in " + S.climb.checks[n] + " check" + (S.climb.checks[n] > 1 ? "s" : "")).join("; ");
+  const cf = [2,3,4].filter(n => S.climb.firstMiss[n] && S.climb.firstMiss[n].length).map(n => "C" + n + ": " + S.climb.firstMiss[n].map(k => NEEDNAME[k] || k).join(", ")).join("; ");
   const used = [...new Set(Object.values(S.write.marks))].map(k => SHORT[k]).join(", ");
-  return ["", today(), Math.round(S.secs / 60), cT ? `${cR}/${cT}` : "", cm, sorted.length ? `${sR}/${sorted.length}` : "", sm,
-    weak, cf, top ? "C" + top : "", S.write.text.trim() ? S.write.theme : "", S.write.text.trim() ? WS_MOMENTS[S.write.moment] : "",
-    S.write.text.trim(), used, "Whether the student’s own colours and sentence are accurate: read the words."];
+  const own = S.write.text.trim();
+  return ["", today(), Math.round(S.secs / 60),
+    cT ? `${cR}/${cT}` : "", cDone ? `${cPass} of ${cDone} finished` : "", cm, cRev || "",
+    (sst.r1 ? `${sst.right1}/${sst.r1}` : "") + ((S.sortTries || []).length ? " (earlier attempts: " + S.sortTries.map(t => t.right1 + "/9").join(", ") + ")" : ""), sst.r1 ? `${s2} / ${sRev}` : "", sm,
+    wf, wc || "", cc, cf,
+    own ? S.write.theme : "", own ? WS_MOMENTS[S.write.moment] : "", own, used,
+    "Whether the student’s own sentence and colours are accurate: read the words."];
 }
 function drawReport(){
   const d = reportData();

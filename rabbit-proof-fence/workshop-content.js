@@ -29,18 +29,26 @@ const WS_KINDS = [
 const WS_BANDS = ["C2", "C3", "C4"];
 const WS_SKILL = { C2:"Describe", C3:"Explain", C4:"Analyse" };
 
-/* What a wrong colour is told. [dropped][actual]. "lang" and "plain" are
-   the parts that stay black. */
-const WS_WRONG = {
-  idea:{ evid:"This is on screen: a shot, a sound or a line. That is evidence ■. Theme ▲ is the big idea, like belonging or control.",
-         purp:"This says what Noyce wants the audience to feel or think. That is purpose ●. Theme ▲ is the idea itself." },
-  evid:{ idea:"This is an idea about the film, not something on screen. That is theme ▲. Evidence ■ is a shot, a sound or a line.",
-         purp:"This says what the shot or line does to the audience. That is purpose ●. Evidence ■ is the shot, the sound or the line itself." },
-  purp:{ idea:"This names the big idea. That is theme ▲. Purpose ● says what Noyce wants us to feel or understand.",
-         evid:"This is on screen. That is evidence ■. Purpose ● is what it does to the audience." },
-  lang:"This word links the parts together. It stays black.",
-  plain:"This part holds the sentence together. It stays black."
+/* A first wrong colour is told the rule for the colour it CHOSE, never the
+   right answer: otherwise the second try is free. A second miss on the
+   same phrase reveals it (WS_IS) and it counts as missed. */
+const WS_NOT = {
+  idea:"Not theme ▲. Theme is the big idea: a word like belonging or control, or a claim about it.",
+  evid:"Not evidence ■. Evidence is on screen or in the soundtrack: a shot, a sound, or a line someone says.",
+  purp:"Not purpose ●. Purpose is what Noyce wants the audience to feel, think or understand.",
+  black:"Not a colour. This part holds the sentence together, so it stays black. It counts as a miss."
 };
+const WS_IS = {
+  idea:"Missed twice: this is theme ▲, an idea about the film, not something on screen.",
+  evid:"Missed twice: this is evidence ■. It is on screen or in the soundtrack.",
+  purp:"Missed twice: this is purpose ●. It says what Noyce wants the audience to feel or think."
+};
+
+/* What counts as passed. A tick means passed, not just finished.
+   colourMisses: misses allowed in one paragraph (black parts count).
+   sortFirstRound: of the nine paragraphs, right before any feedback.
+   climbChecks: a band passed in this many checks or fewer gets a clean tick. */
+const WS_PASS = { colourMisses:1, sortFirstRound:7, climbChecks:2 };
 
 /* ---------------------------------------------------------------------
    THE PARAGRAPHS. Three questions, one paragraph at each C band.
@@ -166,7 +174,8 @@ const WS_ROUTES = [
    The sentence is never wiped. Each tile has lv:[first, last] band it is
    available at (2 = C2). A tile used above its last band is "retired":
    it stays in the sentence, flagged, with "retire" saying why, until the
-   student trades it out.
+   student trades it out. lv:[0,0] is a decoy that fails at every band.
+   Every tile is in the bank at every band, so choosing is the work.
    kinds: subj, verb, evid, idea, purp, join (black, links the parts).
    tech: the evidence names a technique.  exact: the term is precise.
    --------------------------------------------------------------------- */
@@ -181,35 +190,43 @@ const WS_CLIMB = {
   },
   tiles:[
     { k:"subj", t:"The film", lv:[2,3], retire:"At C4 the subject is the director’s choice. Write about Noyce." },
+    { k:"subj", t:"It", lv:[0,0], retire:"“It” could be anything. Say who made the choice: Noyce, or the film." },
     { k:"subj", t:"The girls", lv:[2,2], retire:"At C3 the sentence is about how the film is made. Start with Noyce or the film." },
     { k:"subj", t:"Noyce", lv:[2,4] },
 
     { k:"verb", t:"shows", lv:[2,3], retire:"“Shows” is a C2 literal verb. C4 writes “with analytical verbs (“symbolises”, “reveals”)”." },
     { k:"verb", t:"is about", lv:[2,2], retire:"“Is about” retells. C3 explains." },
     { k:"verb", t:"uses", lv:[3,4] },
+    { k:"verb", t:"has", lv:[0,0], retire:"“Has” says nothing about what the film does. Pick a verb that does." },
     { k:"verb", t:"highlights", lv:[2,4], an:true },
     { k:"verb", t:"symbolises", lv:[2,4], an:true },
     { k:"verb", t:"reveals", lv:[2,4], an:true },
 
     { k:"evid", t:"the girls walking", lv:[2,2], retire:"C3 “adds a technique word”. Name the shot." },
     { k:"evid", t:"“Find that rabbit fence, we go home”", lv:[2,4] },
+    { k:"evid", t:"the bell at Moore River", lv:[0,0], retire:"That is Moore River, not the walk. Use evidence from this moment." },
     { k:"evid", t:"a long shot of the girls beside the fence", lv:[3,3], tech:true,
       retire:"At C4 the term is exact: the girls are tiny in the frame, so it is an extreme long shot." },
     { k:"evid", t:"extreme long shots of three small girls beside the endless fence", lv:[4,4], tech:true, exact:true },
+    { k:"evid", t:"the archival footage at the end", lv:[0,0], retire:"That is the ending, not the walk. Use evidence from this moment." },
     { k:"evid", t:"the non-diegetic music as they walk", lv:[4,4], tech:true, exact:true },
 
     { k:"idea", t:"the girls want to go home", lv:[2,2], n:2, retire:"C3 names a simple theme, like family or belonging." },
     { k:"idea", t:"they miss their mother", lv:[2,2], n:2, retire:"C3 names a simple theme, like family or belonging." },
+    { k:"idea", t:"the desert is hot", lv:[0,0], retire:"That is the weather, not an idea. A theme is a big idea, like belonging or family." },
     { k:"idea", t:"family", lv:[3,3], n:3, retire:"At C4 the theme becomes a claim: what does the film say about it?" },
     { k:"idea", t:"belonging", lv:[3,3], n:3, retire:"At C4 the theme becomes a claim: what does the film say about it?" },
     { k:"idea", t:"belonging as a bond that distance cannot break", lv:[4,4], n:4 },
     { k:"idea", t:"the fence as the way home", lv:[4,4], n:4 },
+    { k:"idea", t:"the fence is long", lv:[0,0], retire:"That describes the fence. A theme is the idea it carries." },
 
     { k:"purp", t:"It is sad", lv:[2,2], n:2, retire:"C3 explains the purpose or audience effect: “to show…”, “to make us feel…”." },
     { k:"purp", t:"Molly is brave", lv:[2,2], n:2, retire:"C3 explains the purpose or audience effect: “to show…”, “to make us feel…”." },
     { k:"purp", t:"to show how far from home they are", lv:[3,4], n:3 },
+    { k:"purp", t:"to make the film longer", lv:[0,0], retire:"That is about the film’s length, not the audience or Noyce’s message." },
     { k:"purp", t:"so the audience feels sad for them", lv:[3,3], n:3, retire:"At C4 the purpose is an inference about Noyce, not only a feeling." },
     { k:"purp", t:"suggesting that no law can stop them belonging to their family", lv:[4,4], n:4 },
+    { k:"purp", t:"because the music is loud", lv:[0,0], retire:"Loud is a fact about the sound. Purpose says what Noyce wants us to feel or think." },
     { k:"purp", t:"suggesting that Noyce wants us to see the land as their home", lv:[4,4], n:4 },
 
     { k:"join", t:".", lv:[2,4] },

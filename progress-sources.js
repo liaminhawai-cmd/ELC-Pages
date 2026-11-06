@@ -347,14 +347,17 @@ window.ELCProgress = (() => {
      elc_rpf_v1 → { quiz:[{date, right, total, missed:[answer]}] }
        saved by rabbit-proof-fence/techniques.html; dates are day strings.
      elc.rpf.vocabhub.v1 → the vocab hub (see vocabHub).
-     elc.rpf.workshop.v1 → { log:[{day, what, detail}] }, saved by
-       rabbit-proof-fence/workshop.html when a part is finished. */
+     elc.rpf.workshop.v2 → { log:[{day, what, detail}] }, saved by
+       rabbit-proof-fence/workshop.html when a part is passed. v1 is the
+       first release's record, still read so nothing earned disappears. */
   function rpf() {
     const s = readJson("elc_rpf_v1", null);
     const quiz = s && Array.isArray(s.quiz) ? s.quiz.filter((q) => q && q.date && q.total) : [];
     const { lessonsDone, reviews, events: hubEvents } = vocabHub("elc.rpf.vocabhub.v1");
-    const ws = readJson("elc.rpf.workshop.v1", null);
-    const wsLog = ws && Array.isArray(ws.log) ? ws.log.filter((e) => e && e.day && e.what) : [];
+    const wsLog = ["elc.rpf.workshop.v1", "elc.rpf.workshop.v2"].flatMap((k) => {
+      const ws = readJson(k, null);
+      return ws && Array.isArray(ws.log) ? ws.log.filter((e) => e && e.day && e.what) : [];
+    });
     if (!quiz.length && !lessonsDone && !reviews.length && !wsLog.length) return null;
 
     const events = quiz.map((q) => ({ day: q.date, label: "Film techniques quiz",

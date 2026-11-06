@@ -45,7 +45,7 @@ td.rk{font-weight:800;color:var(--fg);background:var(--bg2);white-space:nowrap;-
 .tile{border:1.3px dashed #555;padding:2.2mm 3mm;font-weight:700;font-size:10.5pt;background:var(--bg2,#fff);color:var(--fg,#2a2118);
       -webkit-print-color-adjust:exact;print-color-adjust:exact;position:relative;margin:0 -1.3px -1.3px 0}
 .tile .gl{font-size:.75em;margin-right:1mm}
-.tile .lv{display:block;font-size:7pt;font-weight:600;color:#6c5f50}
+
 .glue{display:flex;flex-direction:column;gap:3mm;margin-top:auto}
 .glue div{border:1.5px solid #c9b99c;border-radius:2mm;min-height:20mm;padding:1.5mm 2.5mm;font:800 9pt system-ui,sans-serif;color:#6c5f50}
 .para{font:11.5pt/2.15 Georgia,serif;margin:0 0 2mm}
@@ -91,13 +91,13 @@ $("s1").innerHTML = `<h1>Theme, evidence, purpose</h1>
 
 /* ---- sheet 2: the climb cards ---- */
 const GROUPS = [["idea","Theme"],["evid","Evidence"],["purp","Purpose"],["subj","Who"],["verb","Verb"],["join","Joiners"]];
-const lvText = t => t.lv[0] === t.lv[1] ? "C" + t.lv[0] : "C" + t.lv[0] + "–C" + t.lv[1];
 $("s2").innerHTML = `<h1>The climb: cards</h1>
   <div class="name"><span>Name</span><span>Date</span></div>
   <p class="cutnote">Cut along the dashes. Build the sentence at C2 and glue it down. Then build it again at C3 and C4.</p>
   <p class="sub" style="margin-top:-1mm">${esc(WS_CLIMB.moment)} · ${esc(WS_CLIMB.q)}</p>
   ${GROUPS.map(([k, name]) => `<div class="grp"><div class="lab">${gl(k)} ${name}</div><div class="tiles">` +
-    WS_CLIMB.tiles.filter(t => t.k === k).map(t => `<div class="tile k-${k}">${esc(t.t)}<span class="lv">${lvText(t)}</span></div>`).join("") +
+    /* no band labels on the cards: which band a tile belongs to is the question */
+    WS_CLIMB.tiles.filter(t => t.k === k).map(t => `<div class="tile k-${k}">${esc(t.t)}</div>`).join("") +
     `</div></div>`).join("")}
   <div class="glue">${WS_BANDS.map(b => `<div>${b}</div>`).join("")}</div>`;
 
