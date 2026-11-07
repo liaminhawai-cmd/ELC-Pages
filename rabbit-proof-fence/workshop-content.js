@@ -278,3 +278,40 @@ const WS_FRAMES = {
   C3:"Noyce shows that ▲ ______ . He uses ■ (technique) ______ ● to show ______ , so ______ .",
   C4:"Noyce presents ▲ (theme) as ______ . ■ (exact film term) ______ reveals ______ , ● suggesting that Noyce wants us to ______ ."
 };
+
+/* ---------------------------------------------------------------------
+   KEY WORDS for the projector deck, in all three languages at once: the
+   deck is shown to the whole room, so it never asks which language.
+   (Student pages ask each student to pick one.)
+   Every entry is copied from a table the hub already uses, so a word is
+   the same here as in the vocab hub and the film techniques slides:
+     vocab-hub.html TR (Purpose, Describe, Explain, Analyse, Belonging,
+       Determination, Separation, Highlight, Reveal),
+     techniques.html TERMS (the shots and sounds),
+     writing-content.js TIER3_T / TIER2_T (theme, suggesting),
+     ../index.html (rubric, in Mandarin).
+   Drafted here, new: evidence, control, and rubric in Vietnamese.
+   All are drafted and not yet checked by a speaker (EAL_NOTE).
+   Mandarin (Traditional) uses Taiwan wording, Simplified uses Mainland.
+   --------------------------------------------------------------------- */
+const WS_TERM_LANGS = [["zh-Hant","繁體"], ["zh-Hans","简体"], ["vi","Tiếng Việt"]];
+const WS_TERMS = {
+  "theme":              {"zh-Hant":"主題", "zh-Hans":"主题", "vi":"chủ đề"},
+  "evidence":           {"zh-Hant":"證據", "zh-Hans":"证据", "vi":"bằng chứng"},
+  "purpose":            {"zh-Hant":"目的", "zh-Hans":"目的", "vi":"mục đích"},
+  "describe":           {"zh-Hant":"描述", "zh-Hans":"描述", "vi":"mô tả"},
+  "explain":            {"zh-Hant":"解釋", "zh-Hans":"解释", "vi":"giải thích"},
+  "analyse":            {"zh-Hant":"分析", "zh-Hans":"分析", "vi":"phân tích"},
+  "rubric":             {"zh-Hant":"評分標準", "zh-Hans":"评分标准", "vi":"tiêu chí chấm điểm"},
+  "belonging":          {"zh-Hant":"歸屬感", "zh-Hans":"归属感", "vi":"cảm giác thuộc về"},
+  "control":            {"zh-Hant":"控制", "zh-Hans":"控制", "vi":"sự kiểm soát"},
+  "determination":      {"zh-Hant":"決心", "zh-Hans":"决心", "vi":"quyết tâm"},
+  "separation":         {"zh-Hant":"分離", "zh-Hans":"分离", "vi":"sự chia cắt"},
+  "long shot":          {"zh-Hant":"遠景", "zh-Hans":"远景", "vi":"toàn cảnh"},
+  "extreme long shot":  {"zh-Hant":"大遠景", "zh-Hans":"大远景", "vi":"đại toàn cảnh"},
+  "close-up":           {"zh-Hant":"特寫", "zh-Hans":"特写", "vi":"cận cảnh"},
+  "diegetic sound":     {"zh-Hant":"劇情內聲音", "zh-Hans":"剧情内声音", "vi":"âm thanh trong truyện"},
+  "highlight":          {"zh-Hant":"凸顯（強調）", "zh-Hans":"突出（凸显）", "vi":"làm nổi bật"},
+  "reveal":             {"zh-Hant":"揭露（顯示）", "zh-Hans":"揭示", "vi":"cho thấy, tiết lộ"},
+  "suggesting":         {"zh-Hant":"暗示", "zh-Hans":"暗示", "vi":"gợi ý"}
+};

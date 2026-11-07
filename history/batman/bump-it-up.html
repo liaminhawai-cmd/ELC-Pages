@@ -395,19 +395,32 @@ const UNIT_LANGS = hasEAL ? EAL_LANGS.filter(l => {
   return !tables.length || tables.every(t => t && t[l.code]);
 }) : [];
 let lang = "";
+/* Teacher display: the ladder goes on the board, so by default a tapped
+   word shows Mandarin (Traditional), Mandarin (Simplified) and Vietnamese
+   at once. A student can pick one language instead. "all" lives in its
+   own key (shared by every ladder), so each unit's language key only ever
+   holds one language, which other pages read. */
+const ALL3 = ["zh-Hant","zh-Hans","vi"].filter(c => UNIT_LANGS.some(l => l.code === c));
+let view = ALL3.length === 3 ? "all" : "one";
+try { const v = localStorage.getItem("elc_ladder_view"); if (v === "one" || (v === "all" && ALL3.length === 3)) view = v; } catch (e) {}
 if (hasEAL){
   try { lang = localStorage.getItem("wagoll-lang") || ""; } catch (e) { lang = ""; }
   if (lang && !UNIT_LANGS.some(l => l.code === lang)) lang = "";
   const btn = el("tLangBtn"), menu = el("langMenu");
   const languageLabel = () => UNIT_LANGS.find(l => l.code === lang);
   function syncLanguageButton(){
+    if (view === "all") {
+      btn.textContent = "🌐 繁體 · 简体 · Tiếng Việt"; btn.dataset.on = "1";
+      menu.querySelectorAll("button[data-l]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.l === "all")));
+      return;
+    }
     const chosen = languageLabel();
     btn.textContent = chosen ? `🌐 ${chosen.label}` : "🌐 Translate";
     btn.dataset.on = chosen ? "1" : "0";
     menu.querySelectorAll("button[data-l]").forEach(b =>
       b.setAttribute("aria-pressed", String(b.dataset.l === lang)));
   }
-  menu.innerHTML = UNIT_LANGS.map(l =>
+  menu.innerHTML = (ALL3.length === 3 ? '<button type="button" data-l="all" aria-pressed="false"><b>繁體 · 简体 · Tiếng Việt</b><br>All three, for the board</button>' : "") + UNIT_LANGS.map(l =>
     `<button type="button" data-l="${l.code}" lang="${l.code}" aria-pressed="false">` +
     `<b>${esc(l.label)}</b><br>${esc(l.english)}</button>`).join("") +
     '<button type="button" class="clear" data-l="">English only</button>';
@@ -421,6 +434,9 @@ if (hasEAL){
     const choice = ev.target.closest("button[data-l]");
     if (!choice) return;
     ev.stopPropagation();
+    view = choice.dataset.l === "all" ? "all" : "one";
+    try { localStorage.setItem("elc_ladder_view", view); } catch (e) {}
+    if (view === "all") { menu.hidden = true; btn.setAttribute("aria-expanded", "false"); syncLanguageButton(); hidePop(); render(); return; }
     lang = choice.dataset.l;
     try { localStorage.setItem("wagoll-lang", lang); } catch (e) {}
     menu.hidden = true; btn.setAttribute("aria-expanded", "false");
@@ -446,7 +462,7 @@ function ealFor(term){
     if (hit) t = TIER3_T[hit];
   }
   if (!t) return null;
-  return (!lang || t[lang]) ? { t, en } : null;
+  return (view === "all" ? ALL3.some(c => t[c]) : (!lang || t[lang])) ? { t, en } : null;
 }
 /* Same contract as ealFor, sourced from a unit's own TIER2_T. A unit with
    no TIER2_T yet simply has no tier-2 translations: the popup still opens,
@@ -460,7 +476,7 @@ function tier2For(term){
     if (hit) t = TIER2_T[hit];
   }
   if (!t) return null;
-  return (!lang || t[lang]) ? { t } : null;
+  return (view === "all" ? ALL3.some(c => t[c]) : (!lang || t[lang])) ? { t } : null;
 }
 /* Put the globe on every chip whose word has a translation available, so the
    feature is visible without opening anything. */
@@ -799,6 +815,13 @@ const pop = el("pop");
 function openTranslatable(anchorEl, kind, body, hit){
   showPop(kind, anchorEl.textContent, body, null, anchorEl);
   if (!hit || !hasEAL) return;
+  if (view === "all"){
+    el("popBody").insertAdjacentHTML("beforeend",
+      ALL3.filter(c => hit.t[c]).map(c => `<span class="tr"><b lang="${c}">${esc(hit.t[c])}</b>` +
+        `<span class="warn">${esc(UNIT_LANGS.find(l => l.code === c).label)}</span></span>`).join("") +
+      `<span class="tr"><span class="warn">${esc(EAL_NOTE)}</span></span>`);
+    return;
+  }
   if (lang){
     const label = UNIT_LANGS.find(l => l.code === lang);
     el("popBody").insertAdjacentHTML("beforeend",
@@ -814,7 +837,8 @@ function openTranslatable(anchorEl, kind, body, hit){
     `</span>`);
   el("popBody").querySelectorAll("button[data-l]").forEach(btn => btn.onclick = ev => {
     ev.stopPropagation();
-    lang = btn.dataset.l;
+    lang = btn.dataset.l; view = "one";
+    try { localStorage.setItem("elc_ladder_view", "one"); } catch (e) {}
     const chosen = UNIT_LANGS.find(l => l.code === lang);
     const languageButton = el("tLangBtn");
     languageButton.textContent = chosen ? `🌐 ${chosen.label}` : "🌐 Translate";

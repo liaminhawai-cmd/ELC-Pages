@@ -32,7 +32,8 @@ table.rub{border-collapse:collapse;width:100%;font-size:21px;line-height:1.35}
 table.rub th,table.rub td{border:2px solid var(--line);padding:12px 14px;vertical-align:top;text-align:left;background:var(--card)}
 table.rub th{background:var(--bg);font-size:22px}
 table.rub td.rk{font-weight:800;color:var(--fg);background:var(--bg2);white-space:nowrap}
-.bands{display:flex;flex-direction:column;gap:22px}
+.bands{display:flex;flex-direction:column;gap:14px}
+.bands .mid{font-size:30px;line-height:1.6}
 .band{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:baseline}
 .band .b{font:800 30px/1 system-ui,sans-serif;color:var(--muted)}
 .band.off{visibility:hidden}
@@ -46,10 +47,18 @@ table.rub td.rk{font-weight:800;color:var(--fg);background:var(--bg2);white-spac
 .btns button.right{border-color:var(--good);background:var(--goodbg);color:var(--good)}
 .btns button.wrong{border-color:var(--bad);background:var(--badbg);color:var(--bad)}
 .verdict{font:500 26px/1.45 system-ui,sans-serif;margin-top:22px;padding:14px 20px;border-radius:12px;background:var(--goodbg);color:var(--good)}
-.frames{display:flex;flex-direction:column;gap:26px}
-.frame{font:32px/1.6 Georgia,serif;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:18px 26px}
+.frames{display:flex;flex-direction:column;gap:14px}
+.frame{font:27px/1.5 Georgia,serif;background:var(--card);border:2px solid var(--line);border-radius:14px;padding:12px 22px}
 .frame b{font:800 24px/1 system-ui,sans-serif;color:var(--muted);margin-right:14px}
-ul.mom{font:26px/1.55 system-ui,sans-serif;columns:2;margin:24px 0 0;padding-left:30px}
+ul.mom{font:22px/1.45 system-ui,sans-serif;columns:2;margin:14px 0 0;padding-left:30px}
+#slide{display:flex;flex-direction:column}
+#slide .body{flex:1 1 auto;min-height:0}
+.terms{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;padding-top:14px}
+.term{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:8px 16px;display:flex;flex-direction:column;gap:2px;font:20px/1.3 system-ui,sans-serif}
+.term b{font-size:22px;color:var(--earth)}
+.term .tr{display:flex;gap:10px;align-items:baseline}
+.term .tr i{font-style:normal;font-size:14px;font-weight:800;color:var(--muted);min-width:76px}
+.terms .trnote{font-size:14px;color:var(--muted);margin-left:auto;align-self:flex-end}
 #foot{position:absolute;left:80px;right:80px;bottom:22px;display:flex;justify-content:space-between;font-size:18px;color:var(--muted)}
 #foot a{color:var(--muted)}
 #notes{position:fixed;left:0;right:0;bottom:0;max-height:34vh;overflow:auto;background:#fffaf1;border-top:3px solid var(--earth);
@@ -95,31 +104,32 @@ const plain = src => esc(src.replace(/\{\w+\|([^}]*)\}/g, "$1"));
    notes (for the teacher, N key).
    ========================================================================= */
 const SLIDES = [];
-SLIDES.push({ steps:0, draw:() => `<div class="kick">Rabbit-Proof Fence · Analytical writing</div>
+SLIDES.push({ steps:0, terms:["theme","evidence","purpose"], draw:() => `<div class="kick">Rabbit-Proof Fence · Analytical writing</div>
   <h1>Theme, evidence, purpose</h1>
   <div class="legend">${WS_KINDS.map(k => `<span class="k k-${k.key}"><span class="gl">${KIND[k.key].glyph}</span>${k.short}<small>${esc(k.ask)}</small></span>`).join("")}</div>`,
   notes:"The three colours are the ELC WAGOLL colours: red-orange ideas and themes, blue evidence, green purpose. Each has a shape and a line style too, for printing in black and white and for colour-blind readers. Ask: which one is on screen? Which one is in our heads? Which one is Noyce’s?" });
 
-SLIDES.push({ steps:0, draw:() => `<div class="kick">ELC Film Analysis rubric</div><h2>C2, C3, C4</h2>
+SLIDES.push({ steps:0, terms:["rubric","describe","explain","analyse"], draw:() => `<div class="kick">ELC Film Analysis rubric</div><h2>C2, C3, C4</h2>
   <table class="rub"><tr><th></th>${WS_BANDS.map(b => `<th>${b} ${WS_SKILL[b]}</th>`).join("")}</tr>
   ${WS_KINDS.map(k => `<tr><td class="rk k-${k.key}">${lab(k.key)}</td>${WS_BANDS.map(b => `<td>${esc(CONTINUUM[k.key][b])}</td>`).join("")}</tr>`).join("")}</table>`,
   notes:"The rubric word for word, only the three rows these workshops teach. Read across one row at a time: what changes from C2 to C4? Students point at the word that changes." });
 
 /* colour it: one paragraph per band, the control question */
 const ctl = setOf("control");
-WS_BANDS.forEach(b => SLIDES.push({ steps: countMarks(textOf(ctl, b)),
+WS_BANDS.forEach(b => SLIDES.push({ steps: countMarks(textOf(ctl, b)), terms:["theme","evidence","purpose","control"],
   draw: s => `<div class="kick">Which colour? · ${b}</div><p class="q">${esc(ctl.q)}</p><div class="mid">${marked(textOf(ctl, b), s)}</div>`,
   notes:`Read it aloud once. Each click colours the next phrase. Before each click, students show 1 finger for theme, 2 for evidence, 3 for purpose. ${ctl.paras[b].why}` }));
 
 /* the climb: the same sentence at C2, C3, C4 */
-SLIDES.push({ steps:3, draw: s => `<div class="kick">The climb · ${esc(WS_CLIMB.moment)}</div><p class="q">${esc(WS_CLIMB.q)}</p>
+SLIDES.push({ steps:3, terms:["long shot","extreme long shot","belonging","highlight"], draw: s => `<div class="kick">The climb · ${esc(WS_CLIMB.moment)}</div><p class="q">${esc(WS_CLIMB.q)}</p>
   <div class="bands">${WS_BANDS.map((b, i) => `<div class="band ${i < s ? "" : "off"}"><span class="b">${b}</span><span class="mid">${marked(WS_CLIMB.models[b])}</span></div>`).join("")}</div>`,
   notes:"One sentence, three times. After each click ask: what was traded out? C2 to C3: “the girls walking” becomes “a long shot” (a technique word), and the purpose becomes “to show”. C3 to C4: “a long shot” becomes “extreme long shots” (exact), the theme becomes a claim, and the purpose says what Noyce wants us to see." });
 
 /* three ways in: options for every step, judged on click */
+const ROUTE_TERMS = { ev:["extreme long shot","highlight","belonging","suggesting"], idea:["control","reveal","suggesting"], eff:["close-up","diegetic sound","separation"] };
 WS_ROUTES.forEach((R, ri) => {
   const st = { picks:[], tried:{} };
-  SLIDES.push({ steps:0, route:true, reset:() => { st.picks = []; st.tried = {}; },
+  SLIDES.push({ steps:0, route:true, terms: ROUTE_TERMS[R.id], reset:() => { st.picks = []; st.tried = {}; },
     draw: () => {
       const filled = {}; R.steps.forEach((s, i) => { if (st.picks[i] !== undefined) filled[s.kind] = s.opts[st.picks[i]].t; });
       const si = st.picks.length;
@@ -155,7 +165,7 @@ WS_ROUTES.forEach((R, ri) => {
 /* which band? the three paragraphs that are hardest to judge by length */
 [["control","C2"],["determination","C3"],["determination","C4"]].forEach(([sid, band]) => {
   const s = setOf(sid); let pick = null;
-  SLIDES.push({ steps:0, reset:() => { pick = null; },
+  SLIDES.push({ steps:0, terms:["describe","explain","analyse", sid], reset:() => { pick = null; },
     draw: () => `<div class="kick">Which band?</div><p class="q">${esc(s.q)}</p><div class="mid" style="font-size:27px">${pick === band ? marked(textOf(s, band)) : plain(textOf(s, band))}</div>
       <div class="btns">${WS_BANDS.map(b => `<button data-b="${b}" class="${pick === b ? (b === band ? "right" : "wrong") : ""}">${b}</button>`).join("")}</div>
       ${pick ? `<div class="verdict" style="${pick === band ? "" : "background:var(--badbg);color:var(--bad)"}">${esc(pick === band ? s.paras[band].why :
@@ -164,10 +174,19 @@ WS_ROUTES.forEach((R, ri) => {
     notes:`Fingers up: 2, 3 or 4. Then click the class’s answer. ${band === "C2" && sid === "control" ? "This is the longest paragraph in the set and it is C2: length is not the band." : ""}${band === "C3" ? "Long, with “because” and “so”, but every effect is a feeling." : ""}${band === "C4" && sid === "determination" ? "No “suggesting”, and still C4: “Noyce positions us to admire…” is the inference." : ""}` });
 });
 
-SLIDES.push({ steps:0, draw:() => `<div class="kick">Your turn</div><h2>Pick a moment. Pick a frame.</h2>
+SLIDES.push({ steps:0, terms:["theme","evidence","purpose"], draw:() => `<div class="kick">Your turn</div><h2>Pick a moment. Pick a frame.</h2>
   <div class="frames">${WS_BANDS.map(b => `<div class="frame"><b>${b}</b>${esc(WS_FRAMES[b])}</div>`).join("")}</div>
   <ul class="mom">${WS_MOMENTS.map(m => `<li>${esc(m)}</li>`).join("")}</ul>`,
   notes:"Students write in tab 5 of the workshop page (or on the sheet), then colour their own sentence. Aim one band above where they are. Collect the report rows at the end: Report tab, Copy my row." });
+
+/* Key words in all three languages at once: the deck is for the whole
+   room, so it never asks which language. */
+function termStrip(list){
+  if (!list || !list.length) return "";
+  return `<div class="terms">` + list.filter(k => WS_TERMS[k]).map(k => `<span class="term"><b>${esc(k)}</b>` +
+    WS_TERM_LANGS.map(([c, tag]) => `<span class="tr"><i>${tag}</i><span lang="${c}">${esc(WS_TERMS[k][c])}</span></span>`).join("") + `</span>`).join("") +
+    `<span class="trnote">Translations drafted, not yet checked by a speaker.</span></div>`;
+}
 
 /* =========================================================================
    NAVIGATION
@@ -175,7 +194,7 @@ SLIDES.push({ steps:0, draw:() => `<div class="kick">Your turn</div><h2>Pick a m
 let cur = Math.max(0, Math.min(SLIDES.length - 1, (+location.hash.slice(1) || 1) - 1)), step = 0;
 function draw(){
   const S = SLIDES[cur];
-  $("slide").innerHTML = S.draw(step);
+  $("slide").innerHTML = `<div class="body">${S.draw(step)}</div>` + termStrip(S.terms);
   if (S.wire) S.wire();
   $("num").textContent = (cur + 1) + " / " + SLIDES.length;
   $("notes").innerHTML = "<b>Notes</b> · " + esc(S.notes || "");

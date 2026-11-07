@@ -59,6 +59,10 @@ a{color:inherit}
 .term{font-size:.6em;border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:.2em .7em}
 .term b{color:var(--earth)}
 .term .tr{margin-left:.35em;color:var(--muted)}
+/* all three languages at once: each on its own line under the English */
+.term.all{font-size:.74em;border-radius:.6em;display:inline-flex;flex-direction:column;align-items:flex-start;padding:.25em .7em;gap:.05em}
+.term.all .tr{margin-left:0;display:flex;gap:.4em;align-items:baseline;color:var(--ink)}
+.term.all .tag{font-style:normal;font-size:.7em;font-weight:800;color:var(--muted);min-width:4.4em}
 .slide .note{font-size:.55em;color:var(--muted);margin-top:.4em;border-top:1px dashed var(--line);padding-top:.35em}
 .slide table.apply{width:100%;border-collapse:collapse;font-size:.54em}
 .slide table.apply th,.slide table.apply td{border:1px solid var(--line);padding:.16em .5em;text-align:left}
@@ -118,6 +122,7 @@ img.still{display:block;width:auto;height:auto;max-width:100%;max-height:46vh;ma
     <button type="button" role="tab" id="tabQuiz" aria-selected="false">Quiz</button>
   </div>
   <label><span class="sr" hidden>Key words in</span><select id="lang" aria-label="Key words in another language">
+    <option value="all">Key words: 繁體 · 简体 · Tiếng Việt</option>
     <option value="">Key words: English only</option>
     <option value="zh-Hant" lang="zh-Hant">Mandarin (Traditional) · 繁體國語</option>
     <option value="zh-Hans" lang="zh-Hans">Mandarin (Simplified) · 简体普通话</option>
@@ -683,9 +688,22 @@ const store = {
 const LANG_KEY = "elc_rpf_lang", SLIDE_KEY = "elc_rpf_slide", RESULT_KEY = "elc_rpf_v1";
 let lang = store.get(LANG_KEY, null);
 if (lang == null) { try { const p = localStorage.getItem("elc_page_language"); lang = (p === "zh-Hans" || p === "zh-Hant") ? p : ""; } catch (e) { lang = ""; } }
-$("lang").value = lang;
+/* The slides are shown at the front of the room, so by default they carry
+   all three languages at once. A student on their own device can pick one
+   (or English only) and that choice is remembered. "all" is kept in its own
+   key, so elc_rpf_lang (which the vocab hub and the ladder also read) only
+   ever holds a single language. */
+const VIEW_KEY = "elc_rpf_slide_view";
+const ALL3 = [["zh-Hant","繁體"],["zh-Hans","简体"],["vi","Tiếng Việt"]];
+let view = store.get(VIEW_KEY, "all");
+$("lang").value = view === "all" ? "all" : lang;
 
 function termChip(t){
+  if (view === "all" && TERMS[t]) {
+    const rows = ALL3.filter(([c]) => TERMS[t][c]).map(([c, tag]) =>
+      `<span class="tr"><i class="tag">${tag}</i><span lang="${c}">${esc(TERMS[t][c])}</span></span>`).join("");
+    return `<span class="term all"><b>${esc(t)}</b>${rows}</span>`;
+  }
   const tr = lang && TERMS[t] && TERMS[t][lang];
   return `<span class="term"><b>${esc(t)}</b>${tr ? `<span class="tr" lang="${lang}">${esc(tr)}</span>` : ""}</span>`;
 }
@@ -717,7 +735,7 @@ function renderSlide(){
   $("prev").disabled = si === 0;
   $("next").disabled = si === SLIDES.length - 1;
   $("jump").value = String(si);
-  $("trnote").hidden = !lang;
+  $("trnote").hidden = !(lang || view === "all");
   store.set(SLIDE_KEY, si);
 }
 /* Make the pictures as big as the space left on the slide allows: try
@@ -848,7 +866,12 @@ function setMode(m){
 }
 $("tabSlides").onclick = () => setMode("slides");
 $("tabQuiz").onclick = () => setMode("quiz");
-$("lang").onchange = (e) => { lang = e.target.value; store.set(LANG_KEY, lang); renderSlide(); };
+$("lang").onchange = (e) => {
+  const v = e.target.value;
+  if (v === "all") view = "all";
+  else { view = "one"; lang = v; store.set(LANG_KEY, lang); }
+  store.set(VIEW_KEY, view); renderSlide();
+};
 
 renderSlide();
 setMode(location.hash === "#quiz" ? "quiz" : "slides");
