@@ -77,6 +77,10 @@ a{color:inherit}
 .qtext{font-size:1.15rem;font-weight:650;margin:6px 0 12px}
 .qfig{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px;margin-bottom:12px}
 .qfig svg{width:100%;height:auto;display:block;max-height:46vh}
+/* never cropped: the edges of the frame are the evidence for the shot type */
+img.still{display:block;width:auto;height:auto;max-width:100%;max-height:46vh;margin:0 auto;border-radius:.3em}
+.slide figure img.still{width:100%;max-height:none}
+.credit{display:block;font-size:.72rem;color:var(--muted);text-align:right;margin-top:3px;font-weight:600}
 .opts{display:grid;gap:8px;grid-template-columns:1fr 1fr}
 .opts button{border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:12px;font-weight:700;text-align:left;cursor:pointer}
 .opts button:hover:not(:disabled){border-color:var(--deep)}
@@ -97,7 +101,10 @@ a{color:inherit}
 @media (max-width:760px){
   #slides{height:auto}
   .slide{width:100%;aspect-ratio:auto;font-size:16px;padding:16px}
-  .slide .cols{grid-template-columns:1fr}
+  /* on a phone the slide grows with its content. A % gap there is sized as
+     zero and then added, which pushed the pictures into the key words:
+     use a fixed gap */
+  .slide .cols{grid-template-columns:1fr;flex:none;gap:1em}
   .opts{grid-template-columns:1fr}
 }
 </style>
@@ -135,7 +142,8 @@ a{color:inherit}
 <script>
 /* =======================================================================
    CONTENT — edit here. Slides follow the unit's film techniques
-   PowerPoint; every picture is drawn below, none is a film still.
+   PowerPoint. Pictures are drawn below, except the film stills listed
+   in STILLS.
    ======================================================================= */
 
 /* Key words, with drafted translations: Simplified (Mainland usage),
@@ -319,7 +327,7 @@ const QUIZ = [
   { fam:"Shots", q:"What shot is this?", fig:"shot:els", a:"Extreme long shot", opts:["Extreme long shot","Long shot","Medium shot","Close-up"],
     why:"The land fills the screen and the people are tiny: an extreme long shot." },
   { fam:"Shots", q:"What shot is this?", fig:"shot:cu", a:"Close-up", opts:["Close-up","Medium shot","Extreme close-up","Long shot"],
-    why:"The face fills the screen: a close-up. Only the eyes would be an extreme close-up." },
+    why:"Her head and shoulders fill the height of the frame: a close-up. Only the eyes would be an extreme close-up." },
   { fam:"Shots", q:"What shot is this?", fig:"shot:ms", a:"Medium shot", opts:["Medium shot","Long shot","Close-up","Extreme long shot"],
     why:"Waist up: a medium shot." },
   { fam:"Shots", q:"What shot is this?", fig:"shot:ls", a:"Long shot", opts:["Long shot","Extreme long shot","Medium shot","Close-up"],
@@ -366,8 +374,27 @@ const QUIZ = [
     why:"Mise en scène means everything placed in the frame." },
 ];
 
+/* Stills from the film, used for study (the teacher's call: fair use for
+   criticism and review). Where a picture key has a still, the still is
+   shown in place of the drawing, on the slides and in the quiz. To add
+   one: put a JPEG about 960px wide in stills/ and add a line here.
+   File names are numbers on purpose: a name like "close-up.jpg" would
+   give the quiz answer away. "see" describes the picture without naming
+   the technique, for screen readers in the quiz. Never use the archival
+   footage of the real Molly and Daisy.
+   slide:"beside" keeps the drawing on the slides and adds the still next
+   to it: the angle drawings show where the camera is, which a still
+   cannot. The quiz always shows the still alone. */
+const STILLS = {
+  "shot:cu":   { src:"stills/rpf-01.jpg", see:"Molly's head and shoulders, with the rocks behind her out of focus" },
+  "angle:low": { src:"stills/rpf-02.jpg", see:"Neville's face and shoulders, seen from below, against the ceiling", slide:"beside" },
+  "shot:ms":   { src:"stills/rpf-03.jpg", see:"Constable Riggs on his horse and the tracker beside a bush, from the waist up" },
+  "shot:ls":   { src:"stills/rpf-04.jpg", see:"A girl running across the settlement yard, head to feet, with the buildings behind her" }
+};
+const STILL_CREDIT = "Still from Rabbit-Proof Fence (2002)";
+
 /* =======================================================================
-   DIAGRAMS — all drawn here, nothing copied from the film.
+   DIAGRAMS: drawn here. A key with a line in STILLS shows the still.
    ======================================================================= */
 let uid = 0;
 const C = { skyTop:"#b9d8e6", skyLow:"#f1efe2", land:"#d99a5b", landDark:"#c27f45", hill:"#c8895a", post:"#6b4a2f",
@@ -622,7 +649,18 @@ function iconSVG(kind){
   return "";
 }
 
-function diagram(key){
+/* inQuiz: the picture must not name its own answer, so the still's alt
+   text only describes it, and a drawing's label loses its "Technique:"
+   prefix. */
+function diagram(key, inQuiz){
+  if (key.endsWith("#drawn")) return drawn(key.slice(0, -6));
+  const st = STILLS[key];
+  if (st) return `<img class="still" src="${st.src}" alt="${esc(STILL_CREDIT + ": " + st.see)}" loading="lazy">` +
+    `<span class="credit">${esc(STILL_CREDIT)}</span>`;
+  const svg = drawn(key);
+  return inQuiz ? svg.replace(/aria-label="[^":]*:\s*/, 'aria-label="') : svg;
+}
+function drawn(key){
   const [k, v] = key.split(":");
   if (k === "shot") return shotSVG(v);
   if (k === "angle") return angleSVG(v);
@@ -658,7 +696,8 @@ $("jump").innerHTML = SLIDES.map((s, i) => `<option value="${i}">${i + 1}. ${esc
 
 function renderSlide(){
   const s = SLIDES[si];
-  const figs = (s.figs || []).filter(([k]) => k);
+  const figs = (s.figs || []).filter(([k]) => k).flatMap(([k, cap]) =>
+    STILLS[k] && STILLS[k].slide === "beside" ? [[k + "#drawn", cap], [k, (cap || "").split(":")[0] + " in the film"]] : [[k, cap]]);
   const figHtml = figs.length ? `<div class="figs" style="--n:${s.wide ? Math.min(figs.length, 5) : Math.min(figs.length, 2)}">${
     figs.map(([k, cap]) => `<figure>${diagram(k)}${cap ? `<figcaption>${esc(cap)}</figcaption>` : ""}</figure>`).join("")}</div>` : "";
   const text = `${s.rule ? `<p class="rule">${esc(s.rule)}</p>` : ""}
@@ -672,6 +711,8 @@ function renderSlide(){
     ${s.terms ? `<div class="terms">${s.terms.map(termChip).join("")}</div>` : ""}
     ${s.note ? `<p class="note">${esc(s.note)}</p>` : ""}`;
   fitFigs();
+  /* a still's size is only known once it loads: fit again then */
+  document.querySelectorAll("#slide img.still").forEach((im) => { if (!im.complete) im.addEventListener("load", fitFigs, { once:true }); });
   $("count").textContent = `${si + 1} / ${SLIDES.length}`;
   $("prev").disabled = si === 0;
   $("next").disabled = si === SLIDES.length - 1;
@@ -687,11 +728,16 @@ function fitFigs(){
   figs.style.gridTemplateColumns = figs.style.justifyContent = "";
   if (matchMedia("(max-width:760px)").matches) return;
   const cols = figs.closest(".cols"), list = [...figs.children];
-  const svg0 = list[0].querySelector("svg").getBoundingClientRect();
+  /* a figure holds a drawing (svg) or a film still (img) */
+  const pic = (f) => f.querySelector("svg, img");
+  const svg0 = pic(list[0]).getBoundingClientRect();
   const padW = list[0].offsetWidth - svg0.width;
   let padH = list[0].offsetHeight - svg0.height;
   const gap = parseFloat(getComputedStyle(figs).columnGap) || 0;
-  const ar = Math.min(...list.map((f) => { const b = f.querySelector("svg").viewBox.baseVal; return b && b.height ? b.width / b.height : 16 / 9; }));
+  const ar = Math.min(...list.map((f) => {
+    const p = pic(f);
+    if (p.tagName === "IMG") return p.naturalHeight ? p.naturalWidth / p.naturalHeight : 16 / 9;
+    const b = p.viewBox.baseVal; return b && b.height ? b.width / b.height : 16 / 9; }));
   for (let pass = 0; pass < 2; pass++){
     const W = figs.clientWidth, H = cols.getBoundingClientRect().bottom - figs.getBoundingClientRect().top;
     let best = { w: 0, n: 1, rows: 1 };
@@ -733,7 +779,7 @@ function showQ(){
   const opts = it.opts.length === 2 ? it.opts : shuffle(it.opts);
   $("quiz").innerHTML = `<div class="qcard">
     <div class="qtop"><span>${esc(it.fam)}</span><span>${done} of ${QUIZ.length} right</span></div>
-    ${it.fig ? `<div class="qfig">${diagram(it.fig)}</div>` : ""}
+    ${it.fig ? `<div class="qfig">${diagram(it.fig, true)}</div>` : ""}
     <p class="qtext">${esc(it.q)}</p>
     <div class="opts">${opts.map((o) => `<button type="button" data-o="${esc(o)}">${esc(o)}</button>`).join("")}</div>
     <div class="feedback" id="fb"></div>
