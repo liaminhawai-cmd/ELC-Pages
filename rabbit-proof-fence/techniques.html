@@ -106,6 +106,9 @@ a{color:inherit}
 .slide .mvdiag svg{width:62%}
 .slide .mvcap{margin-top:.3em;line-height:1.3}
 .slide .mv{grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)}
+.slide .cols.withdemo{grid-template-columns:minmax(0,.7fr) minmax(0,1.4fr)}
+.slide .withdemo .mv{grid-template-columns:minmax(0,1fr) 215px}
+.slide .withdemo .mvdiag svg{width:58%}
 .slide .mvcap{font-size:.78em}
 @media (max-width:760px){ .mv,.slide .mv,.mvquiz .mv,.mvquiz.mvshow .mv{grid-template-columns:minmax(0,1fr)} .slide .mvview{width:100%} .slide .mvdiag svg{width:70%} }
 /* never cropped: the edges of the frame are the evidence for the shot type */
@@ -321,18 +324,15 @@ const SLIDES = [
   { kicker:"Movement", title:"Pan and tilt: the camera turns",
     points:[["Pan","the camera turns left or right from one spot, like turning your head. Effect: shows how wide a place is, or follows something moving across it."],
             ["Tilt","the camera turns up or down from one spot. Effect: shows height: a tall tree, a building, a person from feet to face."]],
-    figs:[["move:pan","Pan: turns side to side"],["move:tilt","Tilt: turns up and down"]],
+    demo:["pan","tilt"],
     terms:["pan","tilt"] },
 
   { kicker:"Movement", title:"Zoom and tracking",
     points:[["Zoom","the lens changes from a wide shot to a closer shot. The camera itself does not move. Effect: pulls our attention to something; can create excitement or shock."],
             ["Tracking (dolly) shot","the camera moves along beside the action, on a vehicle or on rails. Effect: we travel with the characters and feel part of the journey."],
             ["In the film","look for the camera moving with the girls as they walk or run."]],
-    figs:[["move:zoom","Zoom: the lens moves in"],["move:track","Tracking: the camera travels"]],
+    demo:["zoom","track"],
     terms:["zoom","tracking shot"] },
-
-  { kicker:"Movement", title:"Try it: drag to move the camera",
-    demo:true, wide:true, terms:["pan","tilt","zoom","tracking shot"] },
 
   { kicker:"Sound", title:"Sound: what we hear, and who can hear it",
     points:[["Diegetic sound","the characters can hear it: voices, footsteps, wind, a song someone sings."],
@@ -768,8 +768,8 @@ function drawn(key){
 const MV = {
   pan:   { label:"Pan",           drag:"x", say:"The camera turns left and right from one spot. Everything moves across the picture together." },
   tilt:  { label:"Tilt",          drag:"y", say:"The camera turns up and down from one spot. Everything moves up and down the picture together." },
-  zoom:  { label:"Zoom",          drag:"x", say:"The camera stays still and the lens moves in. Everything gets bigger, the background as well." },
-  track: { label:"Tracking shot", drag:"x", say:"The whole camera travels alongside the girls. They stay the same size and place, and the background slides past: near things faster, far things slower." }
+  zoom:  { label:"Zoom",          drag:"x", say:"The camera stays still and the lens moves in. Everything gets bigger, the background too." },
+  track: { label:"Tracking shot", drag:"x", say:"The camera travels beside the girls. They stay the same size; the background slides past, near things faster." }
 };
 const MV_L = 1800;
 const MV_LAYERS = ["sky", "far", "near", "land", "fence", "girls", "bush"];
@@ -802,13 +802,15 @@ function mvDiagram(mode, t){
 }
 function mountDemo(host){
   const quiz = host.dataset.quiz === "1";
-  let mode = host.dataset.mode || "pan", t = 0, timer = null;
+  const list = (host.dataset.modes || "").split(",").filter((m) => MV[m]);
+  const keys = list.length ? list : Object.keys(MV);
+  let mode = host.dataset.mode || keys[0], t = 0, timer = null;
   const p = "mv" + (++uid) + "_";
   host.classList.toggle("mvquiz", quiz);
   /* On a slide the controls sit beside the picture (the slide is short); in the quiz they sit under it. */
   const ctl = `<div class="mvctl"><input type="range" min="0" max="1000" value="0" aria-label="Move the camera"><button type="button" class="mvplay">&#9654; Play</button></div>
-      <p class="mvhint">Drag the picture or the slider. Watch what moves.</p>`;
-  const modes = `<div class="mvmodes" role="group" aria-label="Kind of movement">${Object.keys(MV).map((m) => `<button type="button" data-m="${m}" aria-pressed="${m === mode}">${MV[m].label}</button>`).join("")}</div>`;
+      <p class="mvhint">${quiz ? "Drag the picture or the slider. Watch what moves." : "Drag the picture."}</p>`;
+  const modes = `<div class="mvmodes" role="group" aria-label="Kind of movement">${keys.map((m) => `<button type="button" data-m="${m}" aria-pressed="${m === mode}">${MV[m].label}</button>`).join("")}</div>`;
   host.innerHTML = `<div class="mv"><div class="mvmain"><div class="mvview">${mvSceneSVG(p)}</div>${quiz ? ctl : ""}</div>
       <div class="mvside"><div class="mvextra">${quiz ? "" : modes + ctl}</div><div class="mvrev"${quiz ? " hidden" : ""}><div class="mvdiag"></div><p class="mvcap"></p></div></div></div>`;
   const q = (s) => host.querySelector(s), layer = (n) => host.querySelector("#" + p + n);
@@ -915,9 +917,9 @@ function renderSlide(){
     ${s.table ? `<table class="apply"><thead><tr><th>Technique</th><th>Example (time + screenshot)</th><th>Effect on the audience</th></tr></thead><tbody>${
         s.table.map((t) => `<tr><td>${esc(t)}</td><td></td><td></td></tr>`).join("")}</tbody></table>` : ""}
     ${s.frame ? `<p class="frame"><b>Sentence frame:</b> ${esc(s.frame)}</p>` : ""}
-    ${s.demo ? `<div class="mvhost" data-mode="pan"></div>` : ""}`;
+    ${s.demo ? `<div class="mvhost" data-modes="${s.demo.join(",")}"></div>` : ""}`;
   $("slide").innerHTML = `<div class="kicker">${esc(s.kicker)}</div><h2>${esc(s.title)}</h2>
-    <div class="cols${s.wide ? " wide" : ""}">${s.wide ? `<div>${text}${figHtml}</div>` : `<div>${text}</div>${figHtml}`}</div>
+    <div class="cols${s.wide ? " wide" : ""}${s.demo ? " withdemo" : ""}">${s.wide ? `<div>${text}${figHtml}</div>` : s.demo ? `<div>${text.replace(/<div class="mvhost".*<\/div>/, "")}</div>${text.match(/<div class="mvhost".*?<\/div>/)[0]}` : `<div>${text}</div>${figHtml}`}</div>
     ${s.terms ? `<div class="terms">${s.terms.map(termChip).join("")}</div>` : ""}
     ${s.note ? `<p class="note">${esc(s.note)}</p>` : ""}`;
   fitFigs();
