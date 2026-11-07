@@ -208,7 +208,7 @@ const SLIDES = [
             ["Movement","how the camera moves"],
             ["Sound","what we hear, and who can hear it"],
             ["Light and colour","how the screen feels"]],
-    figs:[["shot:els","The desert and the fence"]] },
+    figs:[["shot:els","Small figures in a huge desert"]] },
 
   { kicker:"Shots", title:"Framing: how much of the screen the subject fills",
     rule:"The further away the camera, the more we see of the place. The closer the camera, the more we see of the person's feelings.",
@@ -240,7 +240,7 @@ const SLIDES = [
 
   { kicker:"Angles", title:"Camera angle: where the camera is placed",
     rule:"The angle changes how we judge a person: strong or weak, normal or strange.",
-    figs:[["angle:low","Low angle"],["angle:eye","Eye level"],["angle:high","High angle"]],
+    figs:[["angle:low#drawn","Low angle"],["angle:eye#drawn","Eye level"],["angle:high#drawn","High angle"]],
     wide:true, terms:["camera angle","low angle","eye level","high angle"] },
 
   { kicker:"Angles", title:"Low angle and high angle",
@@ -255,8 +255,14 @@ const SLIDES = [
     points:[["Eye level","the camera is at the person's eye height, like a person watching. Effect: neutral; we feel equal to the character."],
             ["Bird's-eye view","straight down from high above. Effect: people look tiny, like on a map. It can show a pattern, or a long way to travel."],
             ["Worm's-eye view","from the ground, looking straight up. Effect: an extreme low angle; the subject towers over us."]],
-    figs:[["angle:eye","Eye level"],["angle:bird","Bird's-eye view"],["angle:worm","Worm's-eye view"]],
+    figs:[["angle:eye#drawn","Eye level"],["angle:bird#drawn","Bird's-eye view"],["angle:worm#drawn","Worm's-eye view"]],
     terms:["eye level","bird's-eye view","worm's-eye view"] },
+
+  { kicker:"Angles", title:"Eye level, bird's-eye and worm's-eye in the film",
+    rule:"The same three angles, in the film.",
+    qs:["Where is the camera in each picture?", "How does that angle make you feel about the people or things in it?"],
+    figs:[["angle:eye#still","Eye level"],["angle:bird#still","Bird's-eye view"],["angle:worm#still","Worm's-eye view"]],
+    wide:true, terms:["eye level","bird's-eye view","worm's-eye view"] },
 
   { kicker:"Angles", title:"Dutch angle, point of view, over the shoulder",
     points:[["Dutch (canted) angle","the camera is tilted, so the horizon slopes. Effect: something feels wrong: tension, confusion, danger."],
@@ -307,7 +313,7 @@ const SLIDES = [
     points:[["Lighting","bright light can feel open and safe. Dark light and shadows can feel scary or secret."],
             ["Colour","warm colours (gold, orange, red earth) can feel free, alive, at home. Cold colours (grey, blue) can feel sad, cold, trapped."],
             ["In the film","compare the colours of the desert with the colours at Moore River. What changes, and why?"]],
-    figs:[["light:contrast","Warm and bright, cold and grey"]],
+    figs:[["light:warm","Warm: bright and open"],["light:cold","Cold: grey and closed in"]],
     terms:["lighting","colour","warm colours","cold colours"] },
 
   { kicker:"Other techniques", title:"Footage, the frame, symbols and flashbacks",
@@ -315,7 +321,7 @@ const SLIDES = [
             ["Mise en scène","everything placed in the frame: the setting, costumes, props, where people stand. Ask: why is this here?"],
             ["Symbol","something that stands for an idea. Think about the spirit bird and the fence: what could they stand for?"],
             ["Flashback","a scene from an earlier time, shown inside the story. Effect: shows a memory or explains the past."]],
-    figs:[["icon:film","Archival footage"],["icon:frame","Mise en scène"]],
+    figs:[["icon:film","Archival footage"],["icon:frame","Mise en scène"],["icon:bird","Symbol: the spirit bird"]],
     terms:["archival footage","mise en scène","symbol","flashback"] },
 
   { kicker:"Your turn", title:"Find them in the first 10 minutes",
@@ -389,12 +395,24 @@ const QUIZ = [
    footage of the real Molly and Daisy.
    slide:"beside" keeps the drawing on the slides and adds the still next
    to it: the angle drawings show where the camera is, which a still
-   cannot. The quiz always shows the still alone. */
+   cannot. The quiz always shows the still alone. In a slide's figs, a key
+   can also end in #drawn (force the drawing) or #still (force the still). */
 const STILLS = {
   "shot:cu":   { src:"stills/rpf-01.jpg", see:"Molly's head and shoulders, with the rocks behind her out of focus" },
   "angle:low": { src:"stills/rpf-02.jpg", see:"Neville's face and shoulders, seen from below, against the ceiling", slide:"beside" },
   "shot:ms":   { src:"stills/rpf-03.jpg", see:"Constable Riggs on his horse and the tracker beside a bush, from the waist up" },
-  "shot:ls":   { src:"stills/rpf-04.jpg", see:"A girl running across the settlement yard, head to feet, with the buildings behind her" }
+  "shot:ls":   { src:"stills/rpf-04.jpg", see:"A girl running across the settlement yard, head to feet, with the buildings behind her" },
+  "shot:els":  { src:"stills/rpf-05.jpg", see:"Small figures far away on a wide golden plain, with low hills and a pale sky" },
+  "shot:ecu":  { src:"stills/rpf-06.jpg", see:"A girl's eyes and eyebrow filling the whole picture" },
+  "angle:high":{ src:"stills/rpf-07.jpg", see:"Neville at his desk and a woman seated opposite, in a room of filing cabinets", slide:"beside" },
+  "angle:bird":{ src:"stills/rpf-08.jpg", see:"Two children lying on pale sand, their heads and arms spread across the picture" },
+  "angle:eye": { src:"stills/rpf-09.jpg", see:"Two girls standing at a barbed-wire fence in the desert" },
+  "angle:worm":{ src:"stills/rpf-10.jpg", see:"A wagon wheel and the stony ground beside it, with sky behind" },
+  "angle:ots": { src:"stills/rpf-11.jpg", see:"The back of a head on the left, and a girl sitting on rocks eating bread", slide:"beside" },
+  "light:warm":{ src:"stills/rpf-13.jpg", see:"A girl and her mother looking up, against golden stones in strong light" },
+  "light:cold":{ src:"stills/rpf-14.jpg", see:"Girls lying in beds under grey-blue blankets in a dim dormitory" },
+  "icon:frame":{ src:"stills/rpf-15.jpg", see:"Rows of children in matching white clothes at a long table, with two nuns at the back" },
+  "icon:bird": { src:"stills/rpf-12.jpg", see:"A bird flying high in a blue sky" }
 };
 const STILL_CREDIT = "Still from Rabbit-Proof Fence (2002)";
 
@@ -659,8 +677,9 @@ function iconSVG(kind){
    prefix. */
 function diagram(key, inQuiz){
   if (key.endsWith("#drawn")) return drawn(key.slice(0, -6));
+  if (key.endsWith("#still")) key = key.slice(0, -6);
   const st = STILLS[key];
-  if (st) return `<img class="still" src="${st.src}" alt="${esc(STILL_CREDIT + ": " + st.see)}" loading="lazy">` +
+  if (st) return `<img class="still" src="${st.src}" alt="${esc(STILL_CREDIT + ": " + st.see)}">` +
     `<span class="credit">${esc(STILL_CREDIT)}</span>`;
   const svg = drawn(key);
   return inQuiz ? svg.replace(/aria-label="[^":]*:\s*/, 'aria-label="') : svg;
