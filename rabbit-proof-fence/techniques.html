@@ -118,6 +118,7 @@ img.still{display:block;width:auto;height:auto;max-width:100%;max-height:46vh;ma
 .opts{display:grid;gap:8px;grid-template-columns:1fr 1fr}
 .opts button{border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:12px;font-weight:700;text-align:left;cursor:pointer}
 .combo{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.combo.one{grid-template-columns:1fr}
 .cgrp{display:grid;gap:6px;align-content:start}
 .clab{font-size:.78rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .cgrp button{border:2px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:9px 12px;font-weight:700;text-align:left;cursor:pointer;font:inherit;font-weight:700}
@@ -386,10 +387,12 @@ const QUIZ = [
     why:{ size:"Whole people, head to feet, with the place around them: a long shot.", angle:"The camera is at the people's height, looking straight at them: eye level." } },
   { fam:"Distance and angle", combo:true, q:"How far away is the camera, and where is it?", fig:"combo:3", size:"Medium shot", angle:"Eye level", a:"Medium shot, eye level",
     why:{ size:"Waist up: a medium shot.", angle:"The camera is at the girls' height, looking straight at them: eye level." } },
-  { fam:"Distance and angle", combo:true, q:"How far away is the camera, and where is it?", fig:"combo:4", size:"Close-up", angle:"Eye level", a:"Close-up, eye level",
-    why:{ size:"Her head and shoulders fill the frame: a close-up.", angle:"The camera is level with her face: eye level." } },
-  { fam:"Distance and angle", combo:true, q:"How far away is the camera, and where is it?", fig:"combo:5", size:"Extreme close-up", angle:"Eye level", a:"Extreme close-up, eye level",
-    why:{ size:"Only her eyes: an extreme close-up.", angle:"The camera looks straight at her face: eye level." } },
+  { fam:"Distance and angle", combo:true, q:"How far away is the camera, and where is it?", fig:"combo:4", size:"Close-up", angle:"High angle", a:"Close-up, high angle",
+    why:{ size:"Her head and shoulders fill the frame: a close-up.", angle:"The camera is above her, looking down: the stones fill the whole background and there is no sky. A high angle." } },
+  { fam:"Distance and angle", combo:true, q:"How far away is the camera, and where is it?", fig:"combo:5", size:"Close-up", angle:"Eye level", a:"Close-up, eye level",
+    why:{ size:"Her face fills the frame: a close-up.", angle:"The camera is level with her face: the trees and sky sit straight behind her, not the ground or a ceiling. Eye level." } },
+  { fam:"Distance", combo:true, q:"How far away is the camera?", fig:"combo:10", size:"Extreme close-up", a:"Extreme close-up",
+    why:{ size:"Only her eyes fill the frame: an extreme close-up." } },
   { fam:"Distance and angle", combo:true, q:"How far away is the camera, and where is it?", fig:"combo:6", size:"Medium shot", angle:"Low angle", a:"Medium shot, low angle",
     why:{ size:"Waist up, with the church behind him: a medium shot.", angle:"The camera is below him, looking up as he leans over: a low angle. It is how a child sees an adult." } },
   { fam:"Distance and angle", combo:true, q:"How far away is the camera, and where is it?", fig:"combo:7", size:"Close-up", angle:"Low angle", a:"Close-up, low angle",
@@ -469,7 +472,8 @@ Object.assign(STILLS, {
   "combo:2": { src:"stills/rpf-17.jpg", see:"People standing and two riders on horseback in a clearing among trees, with a small shed and a dog" },
   "combo:3": { src:"stills/rpf-09.jpg", see:"Two girls standing at a barbed-wire fence in the desert" },
   "combo:4": { src:"stills/rpf-01.jpg", see:"Molly's head and shoulders, with the rocks behind her out of focus" },
-  "combo:5": { src:"stills/rpf-06.jpg", see:"A girl's eyes and eyebrow filling the whole picture" },
+  "combo:5": { src:"stills/rpf-19.jpg", see:"A girl's face turned to look past the camera, with trees and sky blurred behind her and a second girl's head low in the frame" },
+  "combo:10": { src:"stills/rpf-06.jpg", see:"A girl's eyes and eyebrow filling the whole picture" },
   "combo:6": { src:"stills/rpf-18.jpg", see:"Neville bending forward towards the camera, with a church and another man behind him" },
   "combo:7": { src:"stills/rpf-02.jpg", see:"Neville's face and shoulders in a dim room" },
   "combo:8": { src:"stills/rpf-07.jpg", see:"Neville at his desk and a woman seated opposite, in a room of filing cabinets" },
@@ -1032,7 +1036,7 @@ function showCombo(it){
   $("quiz").innerHTML = `<div class="qcard combocard">
     <div class="qtop"><span>${esc(it.fam)}</span><span>${done} of ${QUIZ.length} right</span></div>
     <div class="cwrap"><div class="cleft"><div class="qfig">${diagram(it.fig, true)}</div><p class="qtext">${esc(it.q)}</p></div>
-    <div class="cright"><div class="combo">${grp("size", "Distance", COMBO_SIZES)}${grp("angle", "Angle", COMBO_ANGLES)}</div>
+    <div class="cright"><div class="combo${it.angle ? "" : " one"}">${grp("size", "Distance", COMBO_SIZES)}${it.angle ? grp("angle", "Angle", COMBO_ANGLES) : ""}</div>
     <div class="feedback" id="fb"></div>
     <div class="qrow"><button type="button" class="btn ghost" id="skip">Skip for now</button><button type="button" class="btn" id="qcheck" disabled>Check</button><button type="button" class="btn" id="qnext" hidden>Next &rarr;</button></div></div></div>
   </div>`;
@@ -1040,16 +1044,16 @@ function showCombo(it){
   btns.forEach((b) => b.onclick = () => {
     pick[b.dataset.g] = b.dataset.o;
     btns.filter((x) => x.dataset.g === b.dataset.g).forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
-    $("qcheck").disabled = !(pick.size && pick.angle);
+    $("qcheck").disabled = !(pick.size && (pick.angle || !it.angle));
   });
   $("qcheck").onclick = () => {
-    const okS = pick.size === it.size, okA = pick.angle === it.angle, ok = okS && okA;
+    const okS = pick.size === it.size, okA = !it.angle || pick.angle === it.angle, ok = okS && okA;
     if (first[qi] === undefined) first[qi] = ok;
     btns.forEach((x) => { x.disabled = true;
       const right = (x.dataset.g === "size" ? it.size : it.angle) === x.dataset.o;
       if (right) x.classList.add("right"); else if (x.getAttribute("aria-pressed") === "true") x.classList.add("wrong"); });
     const fb = $("fb"); fb.className = "feedback show " + (ok ? "ok" : "no");
-    fb.innerHTML = `<b>${ok ? "Right." : "Not this time."}</b><br>Distance: ${okS ? "right" : "not " + esc(pick.size) + ", it is " + esc(it.size)}. ${esc(it.why.size)}<br>Angle: ${okA ? "right" : "not " + esc(pick.angle) + ", it is " + esc(it.angle)}. ${esc(it.why.angle)}${ok ? "" : " This one comes back at the end."}`;
+    fb.innerHTML = `<b>${ok ? "Right." : "Not this time."}</b><br>Distance: ${okS ? "right" : "not " + esc(pick.size) + ", it is " + esc(it.size)}. ${esc(it.why.size)}${it.angle ? `<br>Angle: ${okA ? "right" : "not " + esc(pick.angle) + ", it is " + esc(it.angle)}. ${esc(it.why.angle)}` : ""}${ok ? "" : " This one comes back at the end."}`;
     queue.shift(); if (ok) done++; else queue.push(qi);
     $("skip").hidden = true; $("qcheck").hidden = true; $("qnext").hidden = false; $("qnext").focus();
   };
