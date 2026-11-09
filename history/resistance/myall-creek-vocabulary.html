@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Myall Creek vocabulary</title>
+<style>
+:root{
+  --bg:#fbf7ef; --ink:#1f2328; --muted:#5b6068; --line:#ddd3c0; --deep:#1f4a52;
+  --pre:#1f5f99; --pre-bg:#e3eef9;
+  --root:#2e6b3a; --root-bg:#e2f1e4;
+  --suf:#a2481f; --suf-bg:#fbe7da;
+  --whole:#555b63; --whole-bg:#eeeeea;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#d9d2c2}
+body{display:flex;align-items:center;justify-content:center}
+/* The slide is drawn at 1920 x 1080 and scaled to fit the window, so zooming or resizing keeps it whole. */
+#slide{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;background:var(--bg);color:var(--ink);
+  font:22px/1.1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:26px 36px 18px;display:flex;flex-direction:column}
+h1{margin:0;font-size:38px;color:var(--deep);line-height:1.1}
+.sub{color:var(--muted);font-size:17px;margin:2px 0 10px}
+.blocks{display:grid;grid-template-columns:1fr 1fr;gap:36px;flex:1;min-height:0}
+h2{margin:0 0 4px;font-size:22px;color:#fff;background:var(--deep);padding:6px 12px;border-radius:6px}
+table{border-collapse:collapse;width:100%;table-layout:fixed}
+th{font-size:16px;text-align:left;color:var(--muted);padding:3px 8px;border-bottom:2px solid var(--deep);font-weight:700}
+td{padding:0 8px;height:37px;border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden;vertical-align:middle}
+col.w{width:262px} col.h{width:168px} col.s{width:168px} col.v{width:auto}
+td.word{font-size:27px;font-weight:800}
+td.zh{font-size:23px}
+td.vi{font-size:22px}
+.m{padding:0 1px;border-radius:3px}
+.P{color:var(--pre);background:var(--pre-bg);border-bottom:4px solid var(--pre)}
+.R{color:var(--root);background:var(--root-bg);border-bottom:4px double var(--root)}
+.S{color:var(--suf);background:var(--suf-bg);border-bottom:4px dotted var(--suf)}
+.W{color:var(--whole);background:var(--whole-bg);border-bottom:4px dashed var(--whole)}
+.key{display:flex;gap:26px;align-items:center;font-size:19px;padding-top:8px}
+.key .m{font-weight:800;padding:0 8px}
+.note{margin-left:auto;color:var(--muted);font-size:15px}
+</style>
+</head>
+<body>
+
+<!-- =====================================================================
+     CONTENT. Edit the lists below.
+     Each word: w (as it appears), p (its parts, written "type|text":
+     P prefix, R root, S suffix, W a whole word that cannot be split),
+     hant (Traditional, Taiwan usage), hans (Simplified), vi (Vietnamese).
+     Source: Jacaranda History Alive 9, "The Myall Creek Massacre (1838)".
+     Translations are drafted and not yet checked by a speaker of each language.
+     ===================================================================== -->
+<script>
+const TIER3 = [
+ {w:"Aboriginal", p:["P|Ab-","R|origin","S|-al"], hant:"澳洲原住民", hans:"澳洲原住民", vi:"người bản địa Úc"},
+ {w:"cultural", p:["R|cult","S|-ure","S|-al"], hant:"文化的", hans:"文化的", vi:"thuộc về văn hóa"},
+ {w:"frontier", p:["R|front","S|-ier"], hant:"邊疆", hans:"边疆", vi:"vùng biên giới"},
+ {w:"convict", p:["P|con-","R|vict"], hant:"囚犯", hans:"囚犯", vi:"tù nhân"},
+ {w:"ex-convict", p:["P|ex-","R|convict"], hant:"刑滿釋放者", hans:"刑满释放者", vi:"người từng là tù nhân"},
+ {w:"assigned", p:["P|as-","R|sign","S|-ed"], hant:"被分派的", hans:"被分派的", vi:"được phân công"},
+ {w:"station", p:["R|stat","S|-ion"], hant:"大型牧場", hans:"大型牧场", vi:"trại chăn nuôi lớn"},
+ {w:"squatter", p:["R|squat","S|-ter"], hant:"佔地牧場主", hans:"占地牧场主", vi:"người chiếm đất chăn nuôi"},
+ {w:"stockmen", p:["R|stock","R|men"], hant:"牧牛工", hans:"牧牛工", vi:"công nhân chăn gia súc"},
+ {w:"non-Christian", p:["P|non-","R|Christ","S|-ian"], hant:"非基督徒", hans:"非基督徒", vi:"không theo Cơ Đốc giáo"},
+ {w:"magistrate", p:["R|magistr","S|-ate"], hant:"治安法官", hans:"治安法官", vi:"quan tòa địa phương"},
+ {w:"governor", p:["R|govern","S|-or"], hant:"總督", hans:"总督", vi:"thống đốc"},
+ {w:"trial", p:["R|tri","S|-al"], hant:"審判", hans:"审判", vi:"phiên tòa"},
+ {w:"witness", p:["R|wit","S|-ness"], hant:"證人", hans:"证人", vi:"nhân chứng"},
+ {w:"sworn", p:["R|swor","S|-n"], hant:"宣誓", hans:"宣誓", vi:"tuyên thệ"},
+ {w:"accused", p:["P|ac-","R|cuse","S|-d"], hant:"被告", hans:"被告", vi:"bị cáo"},
+ {w:"charged", p:["R|charge","S|-d"], hant:"被控", hans:"被控", vi:"bị buộc tội"},
+ {w:"guilty", p:["R|guilt","S|-y"], hant:"有罪", hans:"有罪", vi:"có tội"},
+ {w:"hanged", p:["R|hang","S|-ed"], hant:"被絞死", hans:"被绞死", vi:"bị treo cổ"},
+ {w:"massacre", p:["W|massacre"], hant:"大屠殺", hans:"大屠杀", vi:"vụ thảm sát"},
+ {w:"victim", p:["W|victim"], hant:"受害者", hans:"受害者", vi:"nạn nhân"},
+ {w:"premeditated", p:["P|pre-","R|medit","S|-ated"], hant:"預謀的", hans:"预谋的", vi:"có chủ ý từ trước"}
+];
+const TIER2 = [
+ {w:"unprovoked", p:["P|un-","P|pro-","R|vok","S|-ed"], hant:"無端的", hans:"无端的", vi:"vô cớ"},
+ {w:"unusual", p:["P|un-","R|us","S|-ual"], hant:"不尋常的", hans:"不寻常的", vi:"khác thường"},
+ {w:"unsuccessful", p:["P|un-","R|success","S|-ful"], hant:"不成功的", hans:"不成功的", vi:"không thành công"},
+ {w:"reported", p:["P|re-","R|port","S|-ed"], hant:"通報", hans:"通报", vi:"trình báo"},
+ {w:"removed", p:["P|re-","R|move","S|-d"], hant:"移除", hans:"移除", vi:"loại bỏ"},
+ {w:"remains", p:["P|re-","R|main","S|-s"], hant:"遺骸", hans:"遗骸", vi:"hài cốt"},
+ {w:"supported", p:["P|sup-","R|port","S|-ed"], hant:"支持", hans:"支持", vi:"ủng hộ"},
+ {w:"conflict", p:["P|con-","R|flict"], hant:"衝突", hans:"冲突", vi:"xung đột"},
+ {w:"consequence", p:["P|con-","R|sequ","S|-ence"], hant:"後果", hans:"后果", vi:"hậu quả"},
+ {w:"evidence", p:["P|e-","R|vid","S|-ence"], hant:"證據", hans:"证据", vi:"bằng chứng"},
+ {w:"justice", p:["R|just","S|-ice"], hant:"正義", hans:"正义", vi:"công lý"},
+ {w:"outcome", p:["R|out","R|come"], hant:"結果", hans:"结果", vi:"kết quả"},
+ {w:"outrage", p:["W|outrage"], hant:"憤慨", hans:"愤慨", vi:"sự phẫn nộ"},
+ {w:"punished", p:["R|pun","S|-ish","S|-ed"], hant:"懲罰", hans:"惩罚", vi:"trừng phạt"},
+ {w:"mistreatment", p:["P|mis-","R|treat","S|-ment"], hant:"虐待", hans:"虐待", vi:"sự đối xử tệ bạc"},
+ {w:"attempts", p:["P|at-","R|tempt","S|-s"], hant:"嘗試", hans:"尝试", vi:"nỗ lực"},
+ {w:"shameful", p:["R|shame","S|-ful"], hant:"可恥的", hans:"可耻的", vi:"đáng xấu hổ"},
+ {w:"defenceless", p:["P|de-","R|fence","S|-less"], hant:"無力自衛的", hans:"无力自卫的", vi:"không có khả năng tự vệ"},
+ {w:"frightening", p:["R|fright","S|-en","S|-ing"], hant:"驚嚇", hans:"惊吓", vi:"làm hoảng sợ"},
+ {w:"documented", p:["R|docu","S|-ment","S|-ed"], hant:"有文獻記錄的", hans:"有文献记录的", vi:"được ghi chép đầy đủ"},
+ {w:"possibly", p:["R|poss","S|-ibly"], hant:"可能", hans:"可能", vi:"có thể"}
+];
+</script>
+
+<div id="slide">
+  <h1>Myall Creek: tier 3 and tier 2 words</h1>
+  <div class="sub">Jacaranda History Alive 9, The Myall Creek Massacre (1838)</div>
+  <div class="blocks">
+    <section><h2>Tier 3 · topic words</h2><table id="t3"></table></section>
+    <section><h2>Tier 2 · words for any subject</h2><table id="t2"></table></section>
+  </div>
+  <div class="key" aria-label="Key">
+    <span class="m P">prefix</span><span class="m R">root</span><span class="m S">suffix</span><span class="m W">whole word</span>
+    <span class="note">Translations are drafted and not yet checked by a speaker of each language.</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  function word(x){
+    /* hyphens are dropped from the parts, except in a word that has its own hyphen (ex-convict, non-Christian) */
+    const keep = x.w.includes("-");
+    return x.p.map((s) => { const [t, text] = s.split("|"); const shown = keep ? text.replace(/^-/, "") : text.replace(/-/g, "");
+      return `<span class="m ${t}">${esc(shown)}</span>`; }).join("");
+  }
+  function table(id, list){
+    document.getElementById(id).innerHTML =
+      `<colgroup><col class="w"><col class="h"><col class="s"><col class="v"></colgroup>
+       <thead><tr><th>Word</th><th lang="zh-Hant">繁體</th><th lang="zh-Hans">简体</th><th lang="vi">Tiếng Việt</th></tr></thead><tbody>` +
+      list.map((x) => `<tr><td class="word">${word(x)}</td><td class="zh" lang="zh-Hant">${esc(x.hant)}</td><td class="zh" lang="zh-Hans">${esc(x.hans)}</td><td class="vi" lang="vi">${esc(x.vi)}</td></tr>`).join("") + "</tbody>";
+  }
+  table("t3", TIER3); table("t2", TIER2);
+
+  /* Fit the 1920 x 1080 slide to the window. Zooming the browser changes the window size in CSS pixels, so this follows it. */
+  const slide = document.getElementById("slide");
+  function fit(){
+    const k = Math.min(innerWidth / 1920, innerHeight / 1080);
+    slide.style.transform = `scale(${k}) translate(-50%, -50%)`;
+  }
+  addEventListener("resize", fit);
+  if (window.visualViewport) visualViewport.addEventListener("resize", fit);
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(document.body);
+  fit();
+})();
+</script>
+</body>
+</html>
