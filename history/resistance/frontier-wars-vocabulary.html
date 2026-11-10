@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frontier Wars vocabulary</title>
+<style>
+:root{
+  --bg:#fbf7ef; --ink:#1f2328; --muted:#5b6068; --line:#ddd3c0; --deep:#1f4a52;
+  --pre:#1f5f99; --pre-bg:#e3eef9;
+  --root:#2e6b3a; --root-bg:#e2f1e4;
+  --suf:#a2481f; --suf-bg:#fbe7da;
+  --whole:#555b63; --whole-bg:#eeeeea;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#d9d2c2}
+body{display:flex;align-items:center;justify-content:center}
+/* The slide is drawn at 1920 x 1080 and scaled to fit the window, so zooming or resizing keeps it whole. */
+#slide{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;background:var(--bg);color:var(--ink);
+  font:22px/1.1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:26px 36px 18px;display:flex;flex-direction:column}
+h1{margin:0;font-size:38px;color:var(--deep);line-height:1.1}
+.sub{color:var(--muted);font-size:17px;margin:2px 0 10px}
+.blocks{display:grid;grid-template-columns:1fr 1fr;gap:36px;flex:1;min-height:0}
+h2{margin:0 0 4px;font-size:22px;color:#fff;background:var(--deep);padding:6px 12px;border-radius:6px}
+table{border-collapse:collapse;width:100%;table-layout:fixed}
+th{font-size:16px;text-align:left;color:var(--muted);padding:3px 8px;border-bottom:2px solid var(--deep);font-weight:700}
+td{padding:0 8px;height:37px;border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden;vertical-align:middle}
+col.w{width:262px} col.h{width:168px} col.s{width:168px} col.v{width:auto}
+td.word{font-size:27px;font-weight:800}
+td.zh{font-size:23px}
+td.vi{font-size:22px}
+.m{padding:0 1px;border-radius:3px}
+.P{color:var(--pre);background:var(--pre-bg);border-bottom:4px solid var(--pre)}
+.R{color:var(--root);background:var(--root-bg);border-bottom:4px double var(--root)}
+.S{color:var(--suf);background:var(--suf-bg);border-bottom:4px dotted var(--suf)}
+.W{color:var(--whole);background:var(--whole-bg);border-bottom:4px dashed var(--whole)}
+.key{display:flex;gap:26px;align-items:center;font-size:19px;padding-top:8px}
+.key .m{font-weight:800;padding:0 8px}
+.note{margin-left:auto;color:var(--muted);font-size:15px}
+</style>
+</head>
+<body>
+
+<!-- =====================================================================
+     CONTENT. Edit the lists below.
+     Each word: w (as it appears), p (its parts, written "type|text":
+     P prefix, R root, S suffix, W a whole word that cannot be split),
+     hant (Traditional, Taiwan usage), hans (Simplified), vi (Vietnamese).
+     Source: Year 9 History, Making a Nation student handout, "The Frontier Wars:
+     the consequences of colonisation on Aboriginal and Torres Strait Islander
+     peoples". Translations shared with the Impact of Colonisation vocab hub
+     use the hub's wording, shortened where the slide needs it.
+     Translations are drafted and not yet checked by a speaker of each language.
+     ===================================================================== -->
+<script>
+const TIER3 = [
+ {w:"colonisation", p:["R|colon","S|-is","S|-ation"], hant:"殖民", hans:"殖民", vi:"sự thuộc địa hóa"},
+ {w:"dispossession", p:["P|dis-","R|possess","S|-ion"], hant:"剝奪（土地）", hans:"剥夺（土地）", vi:"sự tước đoạt (đất đai)"},
+ {w:"displacement", p:["P|dis-","R|place","S|-ment"], hant:"被迫遷離", hans:"被迫迁离", vi:"sự di dời cưỡng bức"},
+ {w:"Indigenous", p:["P|In-","R|digen","S|-ous"], hant:"原住民的", hans:"原住民的", vi:"bản địa"},
+ {w:"Islander", p:["R|Island","S|-er"], hant:"島民", hans:"岛民", vi:"người dân đảo"},
+ {w:"Country", p:["W|Country"], hant:"故土", hans:"故土", vi:"vùng đất tổ tiên"},
+ {w:"invader", p:["P|in-","R|vad","S|-er"], hant:"侵略者", hans:"侵略者", vi:"kẻ xâm lược"},
+ {w:"settler", p:["R|settl","S|-er"], hant:"移居者", hans:"移居者", vi:"người định cư"},
+ {w:"settlement", p:["R|settle","S|-ment"], hant:"定居點", hans:"定居点", vi:"khu định cư"},
+ {w:"frontier", p:["R|front","S|-ier"], hant:"邊疆", hans:"边疆", vi:"vùng biên cương"},
+ {w:"resistance", p:["P|re-","R|sist","S|-ance"], hant:"反抗", hans:"反抗", vi:"sự kháng cự"},
+ {w:"retaliation", p:["P|re-","R|tali","S|-ation"], hant:"報復", hans:"报复", vi:"sự trả đũa"},
+ {w:"massacred", p:["W|massacre","S|-d"], hant:"遭屠殺", hans:"遭屠杀", vi:"bị thảm sát"},
+ {w:"perpetrator", p:["R|perpetr","S|-ator"], hant:"加害者", hans:"加害者", vi:"thủ phạm"},
+ {w:"capital offence", p:["R|capit","S|-al","W| offence"], hant:"死罪", hans:"死罪", vi:"tội tử hình"},
+ {w:"historian", p:["R|histor","S|-ian"], hant:"歷史學家", hans:"历史学家", vi:"nhà sử học"},
+ {w:"protection", p:["P|pro-","R|tect","S|-ion"], hant:"保護", hans:"保护", vi:"sự bảo hộ"},
+ {w:"welfare", p:["R|wel","R|fare"], hant:"福利", hans:"福利", vi:"phúc lợi"},
+ {w:"mission", p:["R|miss","S|-ion"], hant:"教會傳教站", hans:"教会传教站", vi:"trạm truyền giáo"},
+ {w:"reserve", p:["P|re-","R|serve"], hant:"保留地", hans:"保留地", vi:"khu dành riêng"},
+ {w:"ancestral", p:["R|ancestr","S|-al"], hant:"祖傳的", hans:"祖传的", vi:"thuộc về tổ tiên"},
+ {w:"intergenerational", p:["P|inter-","R|gener","S|-ation","S|-al"], hant:"跨世代的", hans:"代际的", vi:"liên thế hệ"},
+ {w:"trauma", p:["W|trauma"], hant:"創傷", hans:"创伤", vi:"sang chấn tâm lý"}
+];
+const TIER2 = [
+ {w:"negatively", p:["R|negat","S|-ive","S|-ly"], hant:"負面地", hans:"负面地", vi:"một cách tiêu cực"},
+ {w:"affected", p:["P|af-","R|fect","S|-ed"], hant:"受影響的", hans:"受影响的", vi:"bị ảnh hưởng"},
+ {w:"violent", p:["R|viol","S|-ent"], hant:"暴力的", hans:"暴力的", vi:"bạo lực"},
+ {w:"ongoing", p:["R|on","R|going"], hant:"持續的", hans:"持续的", vi:"đang tiếp diễn"},
+ {w:"impact", p:["P|im-","R|pact"], hant:"影響", hans:"影响", vi:"tác động"},
+ {w:"unrecognised", p:["P|un-","P|re-","R|cogn","S|-is","S|-ed"], hant:"未被承認的", hans:"未被承认的", vi:"không được công nhận"},
+ {w:"invalidate", p:["P|in-","R|valid","S|-ate"], hant:"否定", hans:"否定", vi:"phủ nhận"},
+ {w:"experiences", p:["P|ex-","R|peri","S|-ence","S|-s"], hant:"經歷", hans:"经历", vi:"trải nghiệm"},
+ {w:"defending", p:["P|de-","R|fend","S|-ing"], hant:"保衛", hans:"保卫", vi:"bảo vệ"},
+ {w:"disrupted", p:["P|dis-","R|rupt","S|-ed"], hant:"擾亂", hans:"扰乱", vi:"làm gián đoạn"},
+ {w:"perceived", p:["P|per-","R|ceive","S|-d"], hant:"認為", hans:"认为", vi:"nhìn nhận"},
+ {w:"unoccupied", p:["P|un-","R|occupi","S|-ed"], hant:"無人居住的", hans:"无人居住的", vi:"không có người ở"},
+ {w:"depleted", p:["P|de-","R|plet","S|-ed"], hant:"耗盡的", hans:"耗尽的", vi:"bị cạn kiệt"},
+ {w:"forcibly", p:["R|forc","S|-ibly"], hant:"強行地", hans:"强行地", vi:"một cách cưỡng ép"},
+ {w:"widespread", p:["R|wide","R|spread"], hant:"普遍的", hans:"普遍的", vi:"lan rộng"},
+ {w:"estimated", p:["R|estim","S|-ate","S|-d"], hant:"估計", hans:"估计", vi:"ước tính"},
+ {w:"comparison", p:["P|com-","R|par","S|-ison"], hant:"比較", hans:"比较", vi:"sự so sánh"},
+ {w:"insisted", p:["P|in-","R|sist","S|-ed"], hant:"堅持要求", hans:"坚持要求", vi:"khăng khăng yêu cầu"},
+ {w:"damaging", p:["R|damag","S|-ing"], hant:"有害的", hans:"有害的", vi:"gây tổn hại"},
+ {w:"contentious", p:["P|con-","R|tent","S|-ious"], hant:"有爭議的", hans:"有争议的", vi:"gây tranh cãi"},
+ {w:"consequences", p:["P|con-","R|sequ","S|-ence","S|-s"], hant:"後果", hans:"后果", vi:"hậu quả"}
+];
+</script>
+
+<div id="slide">
+  <h1>The Frontier Wars: tier 3 and tier 2 words</h1>
+  <div class="sub">Year 9 History, Making a Nation: The Frontier Wars, the consequences of colonisation</div>
+  <div class="blocks">
+    <section><h2>Tier 3 · topic words</h2><table id="t3"></table></section>
+    <section><h2>Tier 2 · words for any subject</h2><table id="t2"></table></section>
+  </div>
+  <div class="key" aria-label="Key">
+    <span class="m P">prefix</span><span class="m R">root</span><span class="m S">suffix</span><span class="m W">whole word</span>
+    <span class="note">Translations are drafted and not yet checked by a speaker of each language.</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  function word(x){
+    /* hyphens are dropped from the parts, except in a word that has its own hyphen (ex-convict, non-Christian) */
+    const keep = x.w.includes("-");
+    return x.p.map((s) => { const [t, text] = s.split("|"); const shown = keep ? text.replace(/^-/, "") : text.replace(/-/g, "");
+      return `<span class="m ${t}">${esc(shown)}</span>`; }).join("");
+  }
+  function table(id, list){
+    document.getElementById(id).innerHTML =
+      `<colgroup><col class="w"><col class="h"><col class="s"><col class="v"></colgroup>
+       <thead><tr><th>Word</th><th lang="zh-Hant">繁體</th><th lang="zh-Hans">简体</th><th lang="vi">Tiếng Việt</th></tr></thead><tbody>` +
+      list.map((x) => `<tr><td class="word">${word(x)}</td><td class="zh" lang="zh-Hant">${esc(x.hant)}</td><td class="zh" lang="zh-Hans">${esc(x.hans)}</td><td class="vi" lang="vi">${esc(x.vi)}</td></tr>`).join("") + "</tbody>";
+  }
+  table("t3", TIER3); table("t2", TIER2);
+
+  /* Fit the 1920 x 1080 slide to the window. Zooming the browser changes the window size in CSS pixels, so this follows it. */
+  const slide = document.getElementById("slide");
+  function fit(){
+    const k = Math.min(innerWidth / 1920, innerHeight / 1080);
+    slide.style.transform = `scale(${k}) translate(-50%, -50%)`;
+  }
+  addEventListener("resize", fit);
+  if (window.visualViewport) visualViewport.addEventListener("resize", fit);
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(document.body);
+  fit();
+})();
+</script>
+</body>
+</html>
