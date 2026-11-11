@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forming Victoria vocabulary</title>
+<style>
+:root{
+  --bg:#fbf7ef; --ink:#1f2328; --muted:#5b6068; --line:#ddd3c0; --deep:#1f4a52;
+  --pre:#1f5f99; --pre-bg:#e3eef9;
+  --root:#2e6b3a; --root-bg:#e2f1e4;
+  --suf:#a2481f; --suf-bg:#fbe7da;
+  --whole:#555b63; --whole-bg:#eeeeea;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#d9d2c2}
+body{display:flex;align-items:center;justify-content:center}
+/* The slide is drawn at 1920 x 1080 and scaled to fit the window, so zooming or resizing keeps it whole. */
+#slide{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;background:var(--bg);color:var(--ink);
+  font:22px/1.1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:26px 36px 18px;display:flex;flex-direction:column}
+h1{margin:0;font-size:38px;color:var(--deep);line-height:1.1}
+.sub{color:var(--muted);font-size:17px;margin:2px 0 10px}
+.blocks{display:grid;grid-template-columns:1fr 1fr;gap:36px;flex:1;min-height:0}
+h2{margin:0 0 4px;font-size:22px;color:#fff;background:var(--deep);padding:6px 12px;border-radius:6px}
+table{border-collapse:collapse;width:100%;table-layout:fixed}
+th{font-size:16px;text-align:left;color:var(--muted);padding:3px 8px;border-bottom:2px solid var(--deep);font-weight:700}
+td{padding:0 8px;height:37px;border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden;vertical-align:middle}
+col.w{width:262px} col.h{width:168px} col.s{width:168px} col.v{width:auto}
+td.word{font-size:27px;font-weight:800}
+td.zh{font-size:23px}
+td.vi{font-size:22px}
+.m{padding:0 1px;border-radius:3px}
+.P{color:var(--pre);background:var(--pre-bg);border-bottom:4px solid var(--pre)}
+.R{color:var(--root);background:var(--root-bg);border-bottom:4px double var(--root)}
+.S{color:var(--suf);background:var(--suf-bg);border-bottom:4px dotted var(--suf)}
+.W{color:var(--whole);background:var(--whole-bg);border-bottom:4px dashed var(--whole)}
+.key{display:flex;gap:26px;align-items:center;font-size:19px;padding-top:8px}
+.key .m{font-weight:800;padding:0 8px}
+.note{margin-left:auto;color:var(--muted);font-size:15px}
+</style>
+</head>
+<body>
+
+<!-- =====================================================================
+     CONTENT. Edit the lists below.
+     Each word: w (as it appears), p (its parts, written "type|text":
+     P prefix, R root, S suffix, W a whole word that cannot be split),
+     hant (Traditional, Taiwan usage), hans (Simplified), vi (Vietnamese).
+     Source: Good Humanities 9, "Forming Victoria", pages 102 to 107.
+     Words shared with the Myall Creek, Frontier Wars and Batman pages use the
+     same translations.
+     Translations are drafted and not yet checked by a speaker of each language.
+     ===================================================================== -->
+<script>
+const TIER3 = [
+ {w:"colonists", p:["R|colon","S|-ist","S|-s"], hant:"殖民者", hans:"殖民者", vi:"người thực dân"},
+ {w:"treaty", p:["R|treat","S|-y"], hant:"條約", hans:"条约", vi:"hiệp ước"},
+ {w:"Ngurungaeta", p:["W|Ngurungaeta"], hant:"族群領袖", hans:"族群领袖", vi:"thủ lĩnh bộ tộc"},
+ {w:"tanderrum", p:["W|tanderrum"], hant:"通行共享儀式", hans:"通行共享仪式", vi:"nghi lễ cho phép đi qua"},
+ {w:"Creation", p:["R|Creat","S|-ion"], hant:"創世", hans:"创世", vi:"sự sáng tạo thế giới"},
+ {w:"expedition", p:["P|ex-","R|ped","S|-ition"], hant:"遠征隊", hans:"远征队", vi:"đoàn thám hiểm"},
+ {w:"convicts", p:["P|con-","R|vict","S|-s"], hant:"囚犯", hans:"囚犯", vi:"tù nhân"},
+ {w:"settlement", p:["R|settle","S|-ment"], hant:"定居點", hans:"定居点", vi:"khu định cư"},
+ {w:"terra nullius", p:["W|terra nullius"], hant:"無主之地", hans:"无主之地", vi:"vùng đất vô chủ"},
+ {w:"void", p:["W|void"], hant:"無效的", hans:"无效的", vi:"vô hiệu"},
+ {w:"trespass", p:["P|tres-","R|pass"], hant:"非法侵入", hans:"非法侵入", vi:"sự xâm phạm"},
+ {w:"Crown", p:["W|Crown"], hant:"英國王室", hans:"英国王室", vi:"Vương triều Anh"},
+ {w:"acres", p:["R|acre","S|-s"], hant:"英畝", hans:"英亩", vi:"mẫu Anh"},
+ {w:"schooner", p:["W|schooner"], hant:"縱帆船", hans:"纵帆船", vi:"thuyền buồm dọc"},
+ {w:"surveyor", p:["P|sur-","R|vey","S|-or"], hant:"測量員", hans:"测量员", vi:"người đo đạc"},
+ {w:"incorporated", p:["P|in-","R|corpor","S|-ate","S|-d"], hant:"正式設立", hans:"正式设立", vi:"được thành lập chính thức"},
+ {w:"squatters", p:["R|squat","S|-ter","S|-s"], hant:"佔地牧場主", hans:"占地牧场主", vi:"người chiếm đất chăn nuôi"},
+ {w:"livestock", p:["R|live","R|stock"], hant:"牲畜", hans:"牲畜", vi:"gia súc"},
+ {w:"reprisals", p:["P|re-","R|pris","S|-al","S|-s"], hant:"報復行動", hans:"报复行动", vi:"các cuộc trả đũa"},
+ {w:"extra-judicial", p:["P|extra-","R|judic","S|-ial"], hant:"法外的", hans:"法外的", vi:"ngoài vòng pháp luật"},
+ {w:"Protectorate", p:["P|Pro-","R|tect","S|-or","S|-ate"], hant:"保護機構", hans:"保护机构", vi:"cơ quan bảo hộ"},
+ {w:"oral history", p:["R|or","S|-al","W| history"], hant:"口述歷史", hans:"口述历史", vi:"lịch sử truyền miệng"},
+ {w:"sacred", p:["R|sacr","S|-ed"], hant:"神聖的", hans:"神圣的", vi:"linh thiêng"}
+];
+const TIER2 = [
+ {w:"traditional", p:["R|tradit","S|-ion","S|-al"], hant:"傳統的", hans:"传统的", vi:"truyền thống"},
+ {w:"alliance", p:["P|al-","R|li","S|-ance"], hant:"聯盟", hans:"联盟", vi:"liên minh"},
+ {w:"intervened", p:["P|inter-","R|ven","S|-ed"], hant:"介入", hans:"介入", vi:"can thiệp"},
+ {w:"reversed", p:["P|re-","R|vers","S|-ed"], hant:"逆轉", hans:"逆转", vi:"đảo ngược"},
+ {w:"commercial", p:["P|com-","R|merc","S|-ial"], hant:"商業的", hans:"商业的", vi:"thương mại"},
+ {w:"political", p:["R|polit","S|-ical"], hant:"政治的", hans:"政治的", vi:"chính trị"},
+ {w:"establish", p:["R|establ","S|-ish"], hant:"建立", hans:"建立", vi:"thành lập"},
+ {w:"plentiful", p:["R|plenti","S|-ful"], hant:"豐富的", hans:"丰富的", vi:"dồi dào"},
+ {w:"approval", p:["P|ap-","R|prov","S|-al"], hant:"批准", hans:"批准", vi:"sự chấp thuận"},
+ {w:"obtained", p:["P|ob-","R|tain","S|-ed"], hant:"取得", hans:"取得", vi:"giành được"},
+ {w:"supplement", p:["P|sup-","R|ple","S|-ment"], hant:"補充", hans:"补充", vi:"bổ sung"},
+ {w:"progressive", p:["P|pro-","R|gress","S|-ive"], hant:"進步的", hans:"进步的", vi:"tiến bộ"},
+ {w:"negotiate", p:["R|negoti","S|-ate"], hant:"談判", hans:"谈判", vi:"đàm phán"},
+ {w:"claim", p:["W|claim"], hant:"聲稱擁有", hans:"声称拥有", vi:"tuyên bố quyền sở hữu"},
+ {w:"apparently", p:["P|ap-","R|par","S|-ent","S|-ly"], hant:"據說", hans:"据说", vi:"có vẻ như"},
+ {w:"ceremony", p:["W|ceremony"], hant:"儀式", hans:"仪式", vi:"nghi lễ"},
+ {w:"temporary", p:["R|tempor","S|-ary"], hant:"暫時的", hans:"暂时的", vi:"tạm thời"},
+ {w:"problematic", p:["R|problem","S|-atic"], hant:"有問題的", hans:"有问题的", vi:"có vấn đề"},
+ {w:"acknowledged", p:["P|ac-","R|knowledge","S|-d"], hant:"承認", hans:"承认", vi:"thừa nhận"},
+ {w:"entrepreneur", p:["W|entrepreneur"], hant:"企業家", hans:"企业家", vi:"doanh nhân"},
+ {w:"sanctioned", p:["R|sanct","S|-ion","S|-ed"], hant:"正式認可", hans:"正式认可", vi:"phê chuẩn"}
+];
+</script>
+
+<div id="slide">
+  <h1>Forming Victoria: tier 3 and tier 2 words</h1>
+  <div class="sub">Good Humanities 9, Forming Victoria (pages 102 to 107)</div>
+  <div class="blocks">
+    <section><h2>Tier 3 · topic words</h2><table id="t3"></table></section>
+    <section><h2>Tier 2 · words for any subject</h2><table id="t2"></table></section>
+  </div>
+  <div class="key" aria-label="Key">
+    <span class="m P">prefix</span><span class="m R">root</span><span class="m S">suffix</span><span class="m W">whole word</span>
+    <span class="note">Translations are drafted and not yet checked by a speaker of each language.</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  function word(x){
+    /* hyphens are dropped from the parts, except in a word that has its own hyphen (ex-convict, non-Christian) */
+    const keep = x.w.includes("-");
+    return x.p.map((s) => { const [t, text] = s.split("|"); const shown = keep ? text.replace(/^-/, "") : text.replace(/-/g, "");
+      return `<span class="m ${t}">${esc(shown)}</span>`; }).join("");
+  }
+  function table(id, list){
+    document.getElementById(id).innerHTML =
+      `<colgroup><col class="w"><col class="h"><col class="s"><col class="v"></colgroup>
+       <thead><tr><th>Word</th><th lang="zh-Hant">繁體</th><th lang="zh-Hans">简体</th><th lang="vi">Tiếng Việt</th></tr></thead><tbody>` +
+      list.map((x) => `<tr><td class="word">${word(x)}</td><td class="zh" lang="zh-Hant">${esc(x.hant)}</td><td class="zh" lang="zh-Hans">${esc(x.hans)}</td><td class="vi" lang="vi">${esc(x.vi)}</td></tr>`).join("") + "</tbody>";
+  }
+  table("t3", TIER3); table("t2", TIER2);
+
+  /* Fit the 1920 x 1080 slide to the window. Zooming the browser changes the window size in CSS pixels, so this follows it. */
+  const slide = document.getElementById("slide");
+  function fit(){
+    const k = Math.min(innerWidth / 1920, innerHeight / 1080);
+    slide.style.transform = `scale(${k}) translate(-50%, -50%)`;
+  }
+  addEventListener("resize", fit);
+  if (window.visualViewport) visualViewport.addEventListener("resize", fit);
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(document.body);
+  fit();
+})();
+</script>
+</body>
+</html>
