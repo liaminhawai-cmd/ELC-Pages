@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reasons for federation vocabulary</title>
+<style>
+:root{
+  --bg:#fbf7ef; --ink:#1f2328; --muted:#5b6068; --line:#ddd3c0; --deep:#1f4a52;
+  --pre:#1f5f99; --pre-bg:#e3eef9;
+  --root:#2e6b3a; --root-bg:#e2f1e4;
+  --suf:#a2481f; --suf-bg:#fbe7da;
+  --whole:#555b63; --whole-bg:#eeeeea;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#d9d2c2}
+body{display:flex;align-items:center;justify-content:center}
+/* The slide is drawn at 1920 x 1080 and scaled to fit the window, so zooming or resizing keeps it whole. */
+#slide{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;background:var(--bg);color:var(--ink);
+  font:22px/1.1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:26px 36px 18px;display:flex;flex-direction:column}
+h1{margin:0;font-size:38px;color:var(--deep);line-height:1.1}
+.sub{color:var(--muted);font-size:17px;margin:2px 0 10px}
+.blocks{display:grid;grid-template-columns:1fr 1fr;gap:36px;flex:1;min-height:0}
+h2{margin:0 0 4px;font-size:22px;color:#fff;background:var(--deep);padding:6px 12px;border-radius:6px}
+table{border-collapse:collapse;width:100%;table-layout:fixed}
+th{font-size:16px;text-align:left;color:var(--muted);padding:3px 8px;border-bottom:2px solid var(--deep);font-weight:700}
+td{padding:0 8px;height:37px;border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden;vertical-align:middle}
+col.w{width:262px} col.h{width:168px} col.s{width:168px} col.v{width:auto}
+td.word{font-size:27px;font-weight:800}
+td.zh{font-size:23px}
+td.vi{font-size:22px}
+.m{padding:0 1px;border-radius:3px}
+.P{color:var(--pre);background:var(--pre-bg);border-bottom:4px solid var(--pre)}
+.R{color:var(--root);background:var(--root-bg);border-bottom:4px double var(--root)}
+.S{color:var(--suf);background:var(--suf-bg);border-bottom:4px dotted var(--suf)}
+.W{color:var(--whole);background:var(--whole-bg);border-bottom:4px dashed var(--whole)}
+.key{display:flex;gap:26px;align-items:center;font-size:19px;padding-top:8px}
+.key .m{font-weight:800;padding:0 8px}
+.note{margin-left:auto;color:var(--muted);font-size:15px}
+</style>
+</head>
+<body>
+
+<!-- =====================================================================
+     CONTENT. Edit the lists below.
+     Each word: w (as it appears), p (its parts, written "type|text":
+     P prefix, R root, S suffix, W a whole word that cannot be split),
+     hant (Traditional, Taiwan usage), hans (Simplified), vi (Vietnamese).
+     Source: Australia: The Story of Us, episode 3 "Fair Go" (Seven, 2015), the
+     federation section at the end (about 33:30 to 40:15), which is the ClickView
+     clip "Reasons for federation". Words taken from the episode's subtitles. Words shared with the other vocabulary slides use the same
+     translations.
+     Translations are drafted and not yet checked by a speaker of each language.
+     ===================================================================== -->
+<script>
+const TIER3 = [
+ {w:"federate", p:["R|feder","S|-ate"], hant:"組成聯邦", hans:"组成联邦", vi:"hợp thành liên bang"},
+ {w:"colonies", p:["R|coloni","S|-es"], hant:"殖民地", hans:"殖民地", vi:"các thuộc địa"},
+ {w:"financial", p:["R|financ","S|-ial"], hant:"金融的", hans:"金融的", vi:"tài chính"},
+ {w:"crisis", p:["W|crisis"], hant:"危機", hans:"危机", vi:"khủng hoảng"},
+ {w:"speculation", p:["R|specul","S|-ation"], hant:"投機", hans:"投机", vi:"sự đầu cơ"},
+ {w:"maritime", p:["R|mari","S|-time"], hant:"海運的", hans:"海运的", vi:"hàng hải"},
+ {w:"striking", p:["R|strik","S|-ing"], hant:"罷工的", hans:"罢工的", vi:"đang đình công"},
+ {w:"picket", p:["W|picket"], hant:"罷工糾察", hans:"罢工纠察", vi:"chặn cổng đình công"},
+ {w:"union", p:["R|uni","S|-on"], hant:"工會", hans:"工会", vi:"công đoàn"},
+ {w:"employers", p:["P|em-","R|ploy","S|-er","S|-s"], hant:"雇主", hans:"雇主", vi:"chủ lao động"},
+ {w:"unemployed", p:["P|un-","P|em-","R|ploy","S|-ed"], hant:"失業的", hans:"失业的", vi:"thất nghiệp"},
+ {w:"labourer", p:["R|labour","S|-er"], hant:"勞工", hans:"劳工", vi:"người lao động chân tay"},
+ {w:"auctioneer", p:["R|auction","S|-eer"], hant:"拍賣商", hans:"拍卖商", vi:"người bán đấu giá"},
+ {w:"shearers", p:["R|shear","S|-er","S|-s"], hant:"剪羊毛工", hans:"剪羊毛工", vi:"thợ xén lông cừu"},
+ {w:"woolsheds", p:["R|wool","R|shed","S|-s"], hant:"剪毛棚", hans:"剪毛棚", vi:"nhà kho xén lông"},
+ {w:"industrial", p:["R|industri","S|-al"], hant:"勞資的", hans:"劳资的", vi:"(thuộc) lao động"},
+ {w:"civil war", p:["W|civil war"], hant:"內戰", hans:"内战", vi:"nội chiến"},
+ {w:"disputes", p:["P|dis-","R|pute","S|-s"], hant:"勞資糾紛", hans:"劳资纠纷", vi:"tranh chấp"},
+ {w:"fair go", p:["W|fair go"], hant:"公平機會", hans:"公平机会", vi:"cơ hội công bằng"},
+ {w:"the dole", p:["W|the dole"], hant:"失業救濟金", hans:"失业救济金", vi:"trợ cấp thất nghiệp"},
+ {w:"pensions", p:["R|pens","S|-ion","S|-s"], hant:"退休金", hans:"养老金", vi:"lương hưu"},
+ {w:"migrants", p:["R|migr","S|-ant","S|-s"], hant:"移民", hans:"移民", vi:"người di cư"},
+ {w:"parliament", p:["R|parl","S|-ia","S|-ment"], hant:"議會", hans:"议会", vi:"nghị viện"}
+];
+const TIER2 = [
+ {w:"prosperity", p:["R|prosper","S|-ity"], hant:"繁榮", hans:"繁荣", vi:"sự thịnh vượng"},
+ {w:"boom", p:["W|boom"], hant:"經濟繁榮期", hans:"经济繁荣期", vi:"thời kỳ bùng nổ kinh tế"},
+ {w:"profits", p:["R|profit","S|-s"], hant:"利潤", hans:"利润", vi:"lợi nhuận"},
+ {w:"collapse", p:["P|col-","R|lapse"], hant:"倒閉", hans:"倒闭", vi:"sụp đổ"},
+ {w:"rampant", p:["W|rampant"], hant:"猖獗的", hans:"猖獗的", vi:"tràn lan"},
+ {w:"greed", p:["W|greed"], hant:"貪婪", hans:"贪婪", vi:"lòng tham"},
+ {w:"paralyses", p:["R|paralys","S|-es"], hant:"使癱瘓", hans:"使瘫痪", vi:"làm tê liệt"},
+ {w:"polarises", p:["R|polar","S|-is","S|-es"], hant:"使兩極分化", hans:"使两极分化", vi:"gây phân cực"},
+ {w:"determined", p:["P|de-","R|termin","S|-ed"], hant:"下定決心的", hans:"下定决心的", vi:"quyết tâm"},
+ {w:"threat", p:["W|threat"], hant:"威脅", hans:"威胁", vi:"mối đe dọa"},
+ {w:"decently", p:["R|decent","S|-ly"], hant:"體面地", hans:"体面地", vi:"một cách tử tế"},
+ {w:"conflict", p:["P|con-","R|flict"], hant:"衝突", hans:"冲突", vi:"xung đột"},
+ {w:"erupts", p:["P|e-","R|rupt","S|-s"], hant:"爆發", hans:"爆发", vi:"bùng nổ"},
+ {w:"brink", p:["W|brink"], hant:"邊緣", hans:"边缘", vi:"bờ vực"},
+ {w:"appals", p:["P|ap-","R|pal","S|-s"], hant:"使震驚", hans:"使震惊", vi:"làm kinh hoàng"},
+ {w:"resolve", p:["P|re-","R|solve"], hant:"解決", hans:"解决", vi:"giải quyết"},
+ {w:"peacefully", p:["R|peace","S|-ful","S|-ly"], hant:"和平地", hans:"和平地", vi:"một cách hòa bình"},
+ {w:"foundation", p:["R|found","S|-ation"], hant:"基礎", hans:"基础", vi:"nền tảng"},
+ {w:"excludes", p:["P|ex-","R|clud","S|-es"], hant:"排斥", hans:"排斥", vi:"loại trừ"},
+ {w:"recognise", p:["P|re-","R|cogn","S|-ise"], hant:"承認", hans:"承认", vi:"công nhận"}
+];
+</script>
+
+<div id="slide">
+  <h1>Reasons for federation: tier 3 and tier 2 words</h1>
+  <div class="sub">Video: Australia: The Story of Us, Fair Go (clip: Reasons for federation)</div>
+  <div class="blocks">
+    <section><h2>Tier 3 · topic words</h2><table id="t3"></table></section>
+    <section><h2>Tier 2 · words for any subject</h2><table id="t2"></table></section>
+  </div>
+  <div class="key" aria-label="Key">
+    <span class="m P">prefix</span><span class="m R">root</span><span class="m S">suffix</span><span class="m W">whole word</span>
+    <span class="note">Translations are drafted and not yet checked by a speaker of each language.</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  function word(x){
+    /* hyphens are dropped from the parts, except in a word that has its own hyphen (ex-convict, non-Christian) */
+    const keep = x.w.includes("-");
+    return x.p.map((s) => { const [t, text] = s.split("|"); const shown = keep ? text.replace(/^-/, "") : text.replace(/-/g, "");
+      return `<span class="m ${t}">${esc(shown)}</span>`; }).join("");
+  }
+  function table(id, list){
+    document.getElementById(id).innerHTML =
+      `<colgroup><col class="w"><col class="h"><col class="s"><col class="v"></colgroup>
+       <thead><tr><th>Word</th><th lang="zh-Hant">繁體</th><th lang="zh-Hans">简体</th><th lang="vi">Tiếng Việt</th></tr></thead><tbody>` +
+      list.map((x) => `<tr><td class="word">${word(x)}</td><td class="zh" lang="zh-Hant">${esc(x.hant)}</td><td class="zh" lang="zh-Hans">${esc(x.hans)}</td><td class="vi" lang="vi">${esc(x.vi)}</td></tr>`).join("") + "</tbody>";
+  }
+  table("t3", TIER3); table("t2", TIER2);
+
+  /* Fit the 1920 x 1080 slide to the window. Zooming the browser changes the window size in CSS pixels, so this follows it. */
+  const slide = document.getElementById("slide");
+  function fit(){
+    const k = Math.min(innerWidth / 1920, innerHeight / 1080);
+    slide.style.transform = `scale(${k}) translate(-50%, -50%)`;
+  }
+  addEventListener("resize", fit);
+  if (window.visualViewport) visualViewport.addEventListener("resize", fit);
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(document.body);
+  fit();
+})();
+</script>
+</body>
+</html>
