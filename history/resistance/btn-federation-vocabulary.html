@@ -24,9 +24,9 @@ h1{margin:0;font-size:38px;color:var(--deep);line-height:1.1}
 h2{margin:0 0 4px;font-size:22px;color:#fff;background:var(--deep);padding:6px 12px;border-radius:6px}
 table{border-collapse:collapse;width:100%;table-layout:fixed}
 th{font-size:16px;text-align:left;color:var(--muted);padding:3px 8px;border-bottom:2px solid var(--deep);font-weight:700}
-td{padding:0 8px;height:37px;border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden;vertical-align:middle}
+td{padding:0 8px;height:32px;border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden;vertical-align:middle}
 col.w{width:262px} col.h{width:168px} col.s{width:168px} col.v{width:auto}
-td.word{font-size:27px;font-weight:800}
+td.word{font-size:25px;font-weight:800}
 td.zh{font-size:23px}
 td.vi{font-size:22px}
 .m{padding:0 1px;border-radius:3px}
@@ -60,6 +60,7 @@ const TIER3 = [
  {w:"premier", p:["W|premier"], hant:"州長", hans:"州长", vi:"thủ hiến"},
  {w:"delegates", p:["P|de-","R|leg","S|-ate","S|-s"], hant:"代表", hans:"代表", vi:"các đại biểu"},
  {w:"constitution", p:["P|con-","R|stitut","S|-ion"], hant:"憲法", hans:"宪法", vi:"hiến pháp"},
+ {w:"referendum", p:["R|refer","S|-endum"], hant:"公民投票", hans:"全民公决", vi:"cuộc trưng cầu dân ý"},
  {w:"draft", p:["W|draft"], hant:"草案", hans:"草案", vi:"bản dự thảo"},
  {w:"Commonwealth", p:["R|Common","R|wealth"], hant:"澳洲聯邦", hans:"澳大利亚联邦", vi:"Liên bang Úc"},
  {w:"democratic", p:["R|democrat","S|-ic"], hant:"民主的", hans:"民主的", vi:"dân chủ"},
@@ -76,6 +77,12 @@ const TIER3 = [
  {w:"proclaimed", p:["P|pro-","R|claim","S|-ed"], hant:"宣告成立", hans:"宣告成立", vi:"được tuyên bố"}
 ];
 const TIER2 = [
+ {w:"movement", p:["R|move","S|-ment"], hant:"運動", hans:"运动", vi:"phong trào"},
+ {w:"important", p:["P|im-","R|port","S|-ant"], hant:"重要的", hans:"重要的", vi:"quan trọng"},
+ {w:"events", p:["P|e-","R|vent","S|-s"], hant:"事件", hans:"事件", vi:"các sự kiện"},
+ {w:"result", p:["P|re-","R|sult"], hant:"結果", hans:"结果", vi:"kết quả"},
+ {w:"officially", p:["R|offici","S|-al","S|-ly"], hant:"正式地", hans:"正式地", vi:"một cách chính thức"},
+ {w:"authorised", p:["R|author","S|-is","S|-ed"], hant:"正式授權", hans:"正式授权", vi:"cho phép chính thức"},
  {w:"separate", p:["R|separ","S|-ate"], hant:"分開的", hans:"分开的", vi:"riêng biệt"},
  {w:"divided", p:["R|divid","S|-ed"], hant:"分割的", hans:"分割的", vi:"bị chia cắt"},
  {w:"convinced", p:["P|con-","R|vinc","S|-ed"], hant:"說服", hans:"说服", vi:"thuyết phục"},
