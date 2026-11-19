@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discrimination at Federation vocabulary</title>
+<style>
+:root{
+  --bg:#fbf7ef; --ink:#1f2328; --muted:#5b6068; --line:#ddd3c0; --deep:#1f4a52;
+  --pre:#1f5f99; --pre-bg:#e3eef9;
+  --root:#2e6b3a; --root-bg:#e2f1e4;
+  --suf:#a2481f; --suf-bg:#fbe7da;
+  --whole:#555b63; --whole-bg:#eeeeea;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;overflow:hidden;background:#d9d2c2}
+body{display:flex;align-items:center;justify-content:center}
+/* The slide is drawn at 1920 x 1080 and scaled to fit the window, so zooming or resizing keeps it whole. */
+#slide{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:0 0;background:var(--bg);color:var(--ink);
+  font:22px/1.1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:26px 36px 18px;display:flex;flex-direction:column}
+h1{margin:0;font-size:38px;color:var(--deep);line-height:1.1}
+.sub{color:var(--muted);font-size:17px;margin:2px 0 10px}
+.blocks{display:grid;grid-template-columns:1fr 1fr;gap:36px;flex:1;min-height:0}
+h2{margin:0 0 4px;font-size:22px;color:#fff;background:var(--deep);padding:6px 12px;border-radius:6px}
+table{border-collapse:collapse;width:100%;table-layout:fixed}
+th{font-size:16px;text-align:left;color:var(--muted);padding:3px 8px;border-bottom:2px solid var(--deep);font-weight:700}
+td{padding:0 8px;height:37px;border-bottom:1px solid var(--line);white-space:nowrap;overflow:hidden;vertical-align:middle}
+col.w{width:262px} col.h{width:168px} col.s{width:168px} col.v{width:auto}
+td.word{font-size:27px;font-weight:800}
+td.word.long{font-size:22px}
+td.zh{font-size:23px}
+td.vi{font-size:22px}
+.m{padding:0 1px;border-radius:3px}
+.P{color:var(--pre);background:var(--pre-bg);border-bottom:4px solid var(--pre)}
+.R{color:var(--root);background:var(--root-bg);border-bottom:4px double var(--root)}
+.S{color:var(--suf);background:var(--suf-bg);border-bottom:4px dotted var(--suf)}
+.W{color:var(--whole);background:var(--whole-bg);border-bottom:4px dashed var(--whole)}
+.key{display:flex;gap:26px;align-items:center;font-size:19px;padding-top:8px}
+.key .m{font-weight:800;padding:0 8px}
+.note{margin-left:auto;color:var(--muted);font-size:15px}
+</style>
+</head>
+<body>
+
+<!-- =====================================================================
+     CONTENT. Edit the lists below.
+     Each word: w (as it appears), p (its parts, written "type|text":
+     P prefix, R root, S suffix, W a whole word that cannot be split),
+     hant (Traditional, Taiwan usage), hans (Simplified), vi (Vietnamese).
+     Source: Oxford Big Ideas History 10: Australian Curriculum, chapter 3 Rights and
+     freedoms, "Background to the struggle for Indigenous rights" (pages 137 to 140). Words shared with the other vocabulary slides use the same
+     translations.
+     Translations are drafted and not yet checked by a speaker of each language.
+     ===================================================================== -->
+<script>
+const TIER3 = [
+ {w:"Federation", p:["R|Feder","S|-ation"], hant:"聯邦成立", hans:"联邦成立", vi:"sự thành lập liên bang"},
+ {w:"Commonwealth", p:["R|Common","R|wealth"], hant:"澳洲聯邦", hans:"澳大利亚联邦", vi:"Liên bang Úc"},
+ {w:"frontier", p:["R|front","S|-ier"], hant:"殖民前線", hans:"殖民前线", vi:"tuyến biên giới"},
+ {w:"Protection Boards", p:["P|Pro-","R|tect","S|-ion","W| Boards"], hant:"保護委員會", hans:"保护委员会", vi:"hội đồng bảo hộ"},
+ {w:"Chief Protectors", p:["W|Chief ","P|Pro-","R|tect","S|-or","S|-s"], hant:"首席保護官", hans:"首席保护官", vi:"Trưởng ban bảo hộ"},
+ {w:"reserves", p:["P|re-","R|serve","S|-s"], hant:"保留地", hans:"保留地", vi:"khu dành riêng"},
+ {w:"missions", p:["R|miss","S|-ion","S|-s"], hant:"教會傳教站", hans:"教会传教站", vi:"trạm truyền giáo"},
+ {w:"segregation", p:["P|se-","R|greg","S|-ation"], hant:"隔離", hans:"隔离", vi:"sự tách biệt"},
+ {w:"assimilation", p:["P|as-","R|simil","S|-ation"], hant:"同化", hans:"同化", vi:"sự đồng hóa"},
+ {w:"absorption", p:["P|ab-","R|sorp","S|-tion"], hant:"吸納", hans:"吸纳", vi:"sự hấp thụ vào"},
+ {w:"mixed race", p:["R|mixed","W| race"], hant:"混血（舊稱）", hans:"混血（旧称）", vi:"lai (cách gọi cũ)"},
+ {w:"marginalised", p:["R|margin","S|-al","S|-ise","S|-d"], hant:"被邊緣化", hans:"被边缘化", vi:"bị gạt ra bên lề"},
+ {w:"Acts", p:["R|Act","S|-s"], hant:"法案", hans:"法案", vi:"các đạo luật"},
+ {w:"census", p:["W|census"], hant:"人口普查", hans:"人口普查", vi:"điều tra dân số"},
+ {w:"basic wage", p:["W|basic ","R|wage"], hant:"基本工資", hans:"基本工资", vi:"lương cơ bản"},
+ {w:"pensions", p:["R|pens","S|-ion","S|-s"], hant:"養老金", hans:"养老金", vi:"trợ cấp hưu trí"},
+ {w:"colour bar", p:["R|colour","W| bar"], hant:"膚色隔離", hans:"肤色隔离", vi:"rào cản màu da"},
+ {w:"apartheid", p:["W|apartheid"], hant:"種族隔離制度", hans:"种族隔离制度", vi:"chế độ a-pác-thai"},
+ {w:"welfare", p:["R|wel","R|fare"], hant:"福利", hans:"福利", vi:"phúc lợi"},
+ {w:"Stolen Generations", p:["W|Stolen ","R|Gener","S|-ation","S|-s"], hant:"被偷走的一代", hans:"被偷走的一代", vi:"Thế hệ bị đánh cắp"},
+ {w:"Bringing Them Home", p:["W|Bringing Them Home"], hant:"《帶他們回家》", hans:"《带他们回家》", vi:"Đưa các em về nhà"},
+ {w:"inquiry", p:["P|in-","R|quir","S|-y"], hant:"調查", hans:"调查", vi:"cuộc điều tra"}
+];
+const TIER2 = [
+ {w:"compounded", p:["P|com-","R|pound","S|-ed"], hant:"加劇", hans:"加剧", vi:"làm trầm trọng thêm"},
+ {w:"thwart", p:["W|thwart"], hant:"阻撓", hans:"阻挠", vi:"cản trở"},
+ {w:"premature", p:["P|pre-","R|matur","S|-e"], hant:"過早的", hans:"过早的", vi:"quá sớm"},
+ {w:"inferior", p:["R|infer","S|-ior"], hant:"低等的", hans:"低等的", vi:"thấp kém"},
+ {w:"significant", p:["R|sign","S|-ific","S|-ant"], hant:"重要的", hans:"重要的", vi:"đáng kể"},
+ {w:"minority", p:["R|minor","S|-ity"], hant:"少數群體", hans:"少数群体", vi:"nhóm thiểu số"},
+ {w:"excluded", p:["P|ex-","R|clude","S|-d"], hant:"被排除", hans:"被排除", vi:"bị loại trừ"},
+ {w:"entitled", p:["P|en-","R|title","S|-d"], hant:"有權", hans:"有权", vi:"có quyền"},
+ {w:"eligible", p:["P|e-","R|lig","S|-ible"], hant:"符合資格", hans:"符合资格", vi:"đủ điều kiện"},
+ {w:"restrictions", p:["P|re-","R|strict","S|-ion","S|-s"], hant:"限制", hans:"限制", vi:"các hạn chế"},
+ {w:"prohibited", p:["P|pro-","R|hibit","S|-ed"], hant:"被禁止", hans:"被禁止", vi:"bị cấm"},
+ {w:"underpinned", p:["P|under-","R|pinn","S|-ed"], hant:"支撐", hans:"支撑", vi:"làm nền tảng cho"},
+ {w:"neglected", p:["P|neg-","R|lect","S|-ed"], hant:"被忽視", hans:"被忽视", vi:"bị bỏ mặc"},
+ {w:"insufficient", p:["P|in-","P|suf-","R|fic","S|-ient"], hant:"不足的", hans:"不足的", vi:"không đủ"},
+ {w:"integrated", p:["R|integr","S|-at","S|-ed"], hant:"融入", hans:"融入", vi:"được hòa nhập"},
+ {w:"displaced", p:["P|dis-","R|plac","S|-ed"], hant:"流離失所的", hans:"流离失所的", vi:"bị mất nơi ở"},
+ {w:"overt", p:["W|overt"], hant:"公開的", hans:"公开的", vi:"công khai"},
+ {w:"discrimination", p:["P|dis-","R|crimin","S|-ation"], hant:"歧視", hans:"歧视", vi:"sự phân biệt đối xử"},
+ {w:"justification", p:["R|justi","S|-fic","S|-ation"], hant:"正當理由", hans:"正当理由", vi:"lý do biện minh"},
+ {w:"collated", p:["P|col-","R|lat","S|-ed"], hant:"彙整", hans:"汇总", vi:"tổng hợp"}
+];
+</script>
+
+<div id="slide">
+  <h1>Discrimination at Federation: tier 3 and tier 2 words</h1>
+  <div class="sub">Oxford Big Ideas History 10, Rights and freedoms: Background to the struggle for Indigenous rights (pages 137 to 140)</div>
+  <div class="blocks">
+    <section><h2>Tier 3 · topic words</h2><table id="t3"></table></section>
+    <section><h2>Tier 2 · words for any subject</h2><table id="t2"></table></section>
+  </div>
+  <div class="key" aria-label="Key">
+    <span class="m P">prefix</span><span class="m R">root</span><span class="m S">suffix</span><span class="m W">whole word</span>
+    <span class="note">Officials of the time used &ldquo;mixed race&rdquo; and &ldquo;absorption&rdquo;. They describe the policy, not people today. Translations are drafted and not yet checked by a speaker of each language.</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+  function word(x){
+    /* hyphens are dropped from the parts, except in a word that has its own hyphen (ex-convict, non-Christian) */
+    const keep = x.w.includes("-");
+    return x.p.map((s) => { const [t, text] = s.split("|"); const shown = keep ? text.replace(/^-/, "") : text.replace(/-/g, "");
+      return `<span class="m ${t}">${esc(shown)}</span>`; }).join("");
+  }
+  function table(id, list){
+    document.getElementById(id).innerHTML =
+      `<colgroup><col class="w"><col class="h"><col class="s"><col class="v"></colgroup>
+       <thead><tr><th>Word</th><th lang="zh-Hant">繁體</th><th lang="zh-Hans">简体</th><th lang="vi">Tiếng Việt</th></tr></thead><tbody>` +
+      list.map((x) => `<tr><td class="word${x.w.length > 17 ? " long" : ""}">${word(x)}</td><td class="zh" lang="zh-Hant">${esc(x.hant)}</td><td class="zh" lang="zh-Hans">${esc(x.hans)}</td><td class="vi" lang="vi">${esc(x.vi)}</td></tr>`).join("") + "</tbody>";
+  }
+  table("t3", TIER3); table("t2", TIER2);
+
+  /* Fit the 1920 x 1080 slide to the window. Zooming the browser changes the window size in CSS pixels, so this follows it. */
+  const slide = document.getElementById("slide");
+  function fit(){
+    const k = Math.min(innerWidth / 1920, innerHeight / 1080);
+    slide.style.transform = `scale(${k}) translate(-50%, -50%)`;
+  }
+  addEventListener("resize", fit);
+  if (window.visualViewport) visualViewport.addEventListener("resize", fit);
+  if (window.ResizeObserver) new ResizeObserver(fit).observe(document.body);
+  fit();
+})();
+</script>
+</body>
+</html>
