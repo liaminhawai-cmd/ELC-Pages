@@ -6,12 +6,41 @@
 *{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden}body{background:var(--bg);color:var(--ink)}button,select{font:inherit}button{cursor:pointer;border:1px solid var(--border);color:var(--ink);background:var(--surface);border-radius:11px;padding:10px 14px;min-height:43px;font-weight:650}button:hover,select:hover{border-color:var(--accent)}button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}.primary{background:#2563eb;color:white;border-color:#2563eb}.shell{height:100dvh;max-height:100dvh;max-width:1200px;margin:auto;padding:12px 18px;display:grid;grid-template-rows:auto auto minmax(0,1fr) auto auto;gap:10px}.top{display:flex;align-items:center;justify-content:space-between;gap:10px}.back{font-size:.92rem;color:var(--accent);text-decoration:none;font-weight:700}.top h1{font-size:clamp(1.2rem,2.6vw,1.9rem);line-height:1.1;margin:0}.intro{font-size:.85rem;color:var(--muted);margin:3px 0 0}.controls,.actions,.timer{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}.controls{justify-content:space-between}.controls label,.timer label{font-size:.85rem;font-weight:650}select{padding:10px;border:1px solid var(--border);background:var(--surface);color:var(--ink);border-radius:10px;min-height:43px}.count{color:var(--muted);font-size:.86rem;white-space:nowrap}.question-card{border:1px solid var(--border);border-radius:20px;background:var(--surface);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:clamp(12px,2.4vw,28px);min-height:0;overflow:auto;box-shadow:0 3px 15px rgba(0,0,0,.05)}.category{font-size:.88rem;color:var(--accent);font-weight:800}.question{font-size:clamp(1.35rem,3.8vw,3rem);font-weight:800;line-height:1.21;max-width:980px;margin:12px 0}.prompt{font-size:clamp(.8rem,1.6vw,1rem);color:var(--muted)}.timer{padding-bottom:3px}.clock{font-size:clamp(1.3rem,2.2vw,1.7rem);font-variant-numeric:tabular-nums;font-weight:800;min-width:68px}.help{display:none;position:fixed;z-index:5;inset:0;background:rgba(3,8,23,.55);align-items:center;justify-content:center;padding:16px}.help.open{display:flex}.help-panel{position:relative;background:var(--surface);color:var(--ink);border-radius:18px;padding:24px;max-width:600px;width:100%;max-height:85dvh;overflow:auto}.help-panel h2{margin:0 0 12px}.help-panel p{margin:8px 0}.help-panel .close{position:absolute;right:14px;top:12px}.help-panel ul{margin:8px 0;padding-left:22px}.help-panel li{margin:8px 0}.help-panel .example{background:var(--soft);border-radius:12px;padding:12px;margin-top:12px}.help-panel .example strong{color:var(--ink)}
 @media(max-height:610px){.shell{padding:6px 12px;gap:5px}.top h1{font-size:1.2rem}.intro{display:none}.question{font-size:clamp(1.2rem,3vw,2.35rem);margin:7px 0}.question-card{padding:8px}.timer button,.actions button{padding:6px 10px;min-height:36px}select{min-height:36px;padding:6px}.clock{font-size:1.3rem}}
 @media(max-width:600px){.shell{padding:9px;gap:7px}.top{align-items:flex-start}.back{font-size:.8rem}.top h1{font-size:1.25rem}.intro{display:none}.controls{justify-content:center}.actions button{font-size:.84rem;padding:8px;min-height:40px}.question{font-size:clamp(1.25rem,5.3vw,2.2rem)}.timer{gap:5px}.timer button{padding:8px;font-size:.84rem}}
-</style></head><body><main class="shell">
-<header class="top"><div><h1>💬 Speaking Topics</h1><p class="intro">Choose a question. Share your answer. Ask another question.</p></div><a href="index.html" class="back">← ELC Hub</a></header>
+
+/* Opening category screen, sized for a classroom projector */
+body:not(.playing) .shell{display:none}
+body.playing .welcome{display:none}
+.welcome{height:100dvh;max-width:1100px;margin:auto;padding:clamp(12px,3vh,30px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(10px,2vh,22px);text-align:center;overflow:auto}
+.welcome h1{font-size:clamp(1.8rem,4vw,3.1rem);line-height:1.1;margin:0}
+.welcome p{color:var(--muted);font-size:clamp(.9rem,1.6vw,1.1rem);margin:0}
+.category-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(8px,1.8vw,18px);width:100%;max-width:960px}
+.category-choice{min-height:clamp(88px,16vh,155px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;font-size:clamp(.92rem,1.6vw,1.25rem);border:2px solid var(--border);border-radius:17px;box-shadow:0 2px 12px rgba(0,0,0,.05)}
+.category-choice .choice-emoji{font-size:clamp(1.6rem,3.2vw,2.5rem);line-height:1}
+.category-choice small{font-size:.8em;color:var(--muted);font-weight:500}
+.category-choice:hover{border-color:var(--accent);background:var(--soft)}
+.timer input[type=number]{width:58px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--ink);padding:8px 5px;min-height:40px;font-weight:700;text-align:center}
+.home-button{white-space:nowrap;font-size:.85rem;padding:7px 10px}
+@media(max-width:600px){.category-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.category-choice{min-height:90px}.welcome{justify-content:flex-start}.welcome h1{font-size:1.7rem}.category-choice .choice-emoji{font-size:1.5rem}.timer input[type=number]{width:48px}}
+@media(max-height:540px) and (min-width:601px){.welcome{gap:7px;padding:7px 18px}.category-choice{min-height:74px;gap:4px}.category-choice .choice-emoji{font-size:1.35rem}.welcome h1{font-size:1.65rem}.welcome p{font-size:.85rem}}
+</style></head><body>
+<section class="welcome" aria-labelledby="welcomeTitle">
+<a href="index.html" class="back">← ELC Hub</a>
+<h1 id="welcomeTitle">💬 Speaking Topics</h1>
+<p>Choose a category. Share your opinion, explain why, and ask someone a question.</p>
+<div class="category-grid" aria-label="Choose a speaking topic category">
+<button class="category-choice" data-choice="all"><span class="choice-emoji">🎲</span>All topics<small>50 questions</small></button>
+<button class="category-choice" data-choice="0"><span class="choice-emoji">😂</span>Ridiculous debates<small>10 questions</small></button>
+<button class="category-choice" data-choice="1"><span class="choice-emoji">🌶️</span>Unpopular opinions<small>10 questions</small></button>
+<button class="category-choice" data-choice="2"><span class="choice-emoji">🤯</span>Impossible choices<small>10 questions</small></button>
+<button class="category-choice" data-choice="3"><span class="choice-emoji">👀</span>Awkward situations<small>10 questions</small></button>
+<button class="category-choice" data-choice="4"><span class="choice-emoji">👽</span>Strange hypotheticals<small>10 questions</small></button>
+</div>
+</section><main class="shell">
+<header class="top"><div><h1>💬 Speaking Topics</h1><p class="intro">Choose a question. Share your answer. Ask another question.</p></div><button class="home-button" id="categoriesHome">← Categories</button></header>
 <div class="controls"><label for="filter">Topic category <select id="filter"><option value="all">🎲 All categories</option><option value="0">😂 Ridiculous debates</option><option value="1">🌶️ Unpopular opinions</option><option value="2">🤯 Impossible choices</option><option value="3">👀 Awkward situations</option><option value="4">👽 Strange hypotheticals</option></select></label><span class="count" id="counter">Question 1 of 50</span></div>
 <section class="question-card" aria-live="polite"><div class="category" id="category"></div><div class="question" id="question"></div><div class="prompt">Answer → Add a reason → Ask someone else</div></section>
 <div class="actions"><button id="previous">← Previous</button><button class="primary" id="random">🎲 Random topic</button><button id="next">Next →</button><button id="help" aria-haspopup="dialog">💡 Speaking help</button></div>
-<div class="timer"><span id="clock" class="clock" role="timer" aria-live="off">03:00</span><button class="primary" id="start">▶ Start timer</button><button id="reset">↺ Reset</button><label for="duration">Minutes <select id="duration"><option value="60">1</option><option value="120">2</option><option value="180" selected>3</option><option value="240">4</option><option value="300">5</option></select></label></div>
+<div class="timer"><span id="clock" class="clock" role="timer" aria-live="off">03:00</span><button class="primary" id="start">▶ Start timer</button><button id="reset">↺ Reset</button><label for="minutes">Min <input id="minutes" type="number" min="0" max="180" step="1" inputmode="numeric" value="3" aria-label="Timer minutes"></label><label for="timerSeconds">Sec <input id="timerSeconds" type="number" min="0" max="59" step="1" inputmode="numeric" value="0" aria-label="Timer seconds"></label></div>
 </main><div class="help" id="dialog" role="dialog" aria-modal="true" aria-labelledby="helpTitle"><div class="help-panel"><button id="close" class="close" aria-label="Close speaking help">✕</button><h2 id="helpTitle">Keep the conversation going</h2><ul><li>I think … because …</li><li>I would choose … because …</li><li>Really? Why?</li><li>What about you?</li><li>Can you give an example?</li><li>But what if …?</li><li>I agree / disagree because …</li></ul><div class="example"><strong>Answer:</strong> I would choose free time.<br><strong>Add:</strong> I like spending time with my friends.<br><strong>Ask:</strong> What would you choose?</div><p id="followup"></p></div></div>
 <script>
 // TOPIC DATA: edit questions here. All topics are suitable for a secondary-school classroom.
@@ -19,6 +48,11 @@ const TOPICS=[{"category":"Ridiculous debates","question":"Would you rather figh
 const FOLLOWUPS=["Why did you choose that?","What might happen next?","What would your friends say?","Can you give an example?","What could go wrong?","Does anyone disagree?"];
 const $=id=>document.getElementById(id);
 let index=0,history=[],seconds=180,timer=null;
+document.querySelectorAll("[data-choice]").forEach(button=>button.addEventListener("click",()=>{
+  $("filter").value=button.dataset.choice;index=filtered()[0];history=[];render();
+  document.body.classList.add("playing");$("random").focus();
+}));
+$("categoriesHome").addEventListener("click",()=>{stop();document.body.classList.remove("playing");document.querySelector(".category-choice").focus()});
 const filtered=()=>TOPICS.map((item,i)=>i).filter(i=>$("filter").value==="all"||Math.floor(i/10)===Number($("filter").value));
 function render(){const ids=filtered();if(!ids.includes(index))index=ids[0];$("question").textContent=TOPICS[index].question;$("category").textContent=TOPICS[index].category;$("counter").textContent="Question "+(ids.indexOf(index)+1)+" of "+ids.length;$("followup").textContent="Follow-up challenge: "+FOLLOWUPS[index%FOLLOWUPS.length]}
 function move(n){const ids=filtered();index=ids[(ids.indexOf(index)+n+ids.length)%ids.length];render()}
@@ -27,9 +61,15 @@ $("previous").addEventListener("click",()=>move(-1));$("next").addEventListener(
 $("random").addEventListener("click",()=>{const ids=filtered();let available=ids.filter(i=>i!==index&&!history.includes(i));if(!available.length){history=[];available=ids.filter(i=>i!==index)}if(!available.length)available=ids;index=available[Math.floor(Math.random()*available.length)];history.push(index);render()});
 function clock(){const m=String(Math.floor(seconds/60)).padStart(2,"0");const s=String(seconds%60).padStart(2,"0");$("clock").textContent=m+":"+s}
 function stop(){if(timer!==null)clearInterval(timer);timer=null;$("start").textContent="▶ Start timer"}
-$("start").addEventListener("click",()=>{if(timer!==null){stop();return}if(seconds===0){seconds=Number($("duration").value);clock()}$("start").textContent="Ⅱ Pause timer";timer=setInterval(()=>{seconds=Math.max(0,seconds-1);clock();if(seconds===0){stop();$("clock").textContent="TIME!"}},1000)});
-function reset(){stop();seconds=Number($("duration").value);clock()}
-$("reset").addEventListener("click",reset);$("duration").addEventListener("change",reset);
+$("start").addEventListener("click",()=>{if(timer!==null){stop();return}if(seconds===0){seconds=chosenDuration();clock()}$("start").textContent="Ⅱ Pause timer";timer=setInterval(()=>{seconds=Math.max(0,seconds-1);clock();if(seconds===0){stop();$("clock").textContent="TIME!"}},1000)});
+function chosenDuration(){
+  const m=Math.min(180,Math.max(0,Math.floor(Number($("minutes").value)||0)));
+  const sec=Math.min(59,Math.max(0,Math.floor(Number($("timerSeconds").value)||0)));
+  return Math.max(1,m*60+sec);
+}
+function reset(){stop();seconds=chosenDuration();clock()}
+$("reset").addEventListener("click",reset);
+["minutes","timerSeconds"].forEach(id=>$(id).addEventListener("change",reset));
 function closeHelp(){$("dialog").classList.remove("open");$("help").focus()}
 $("help").addEventListener("click",()=>{$("dialog").classList.add("open");$("close").focus()});$("close").addEventListener("click",closeHelp);$("dialog").addEventListener("click",e=>{if(e.target===$("dialog"))closeHelp()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("dialog").classList.contains("open"))closeHelp()});
 render();clock();
