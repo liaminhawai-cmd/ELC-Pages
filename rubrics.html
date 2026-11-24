@@ -29,6 +29,14 @@
   main { max-width:1180px; margin:0 auto; padding:18px 14px 70px; }
   section { margin-top:34px; scroll-margin-top:12px; }
   h2.sec { font-size:1.2rem; margin:0 0 12px; }
+  .sechead { display:flex; flex-wrap:wrap; align-items:center; gap:8px 16px; margin-bottom:12px; }
+  .sechead h2.sec { margin:0; }
+  .modes { display:inline-flex; border:1px solid var(--line); border-radius:999px; background:var(--card);
+           box-shadow:var(--shadow); padding:3px; gap:3px; }
+  .mode { border:0; background:transparent; color:var(--ink); font:inherit; font-size:.9rem; font-weight:600;
+          border-radius:999px; padding:0 16px; min-height:40px; cursor:pointer; }
+  .mode[aria-pressed="true"] { background:var(--accent); color:#fff; }
+  .mode:focus-visible, .exbtn:focus-visible, details.ext summary:focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
 
   .jump { display:flex; flex-wrap:wrap; gap:7px; }
   .jump a { border:1px solid var(--line); background:var(--card); border-radius:999px;
@@ -126,7 +134,12 @@ function P(en, vi, zh){ return {en, vi, zh}; }
 const RUBRICS = [
 
 /* ---------------------------------------------------------------- */
-{ id:"analytical", emoji:"✍️", title:"Analytical Writing",
+/* Reading & Analytical Writing: the main reading rubric. `rows` is the
+   text version; `film` holds the same four skill areas reworded for film,
+   and a Text / Film switch on the page chooses between them. The C-level
+   Reading rubric (reading aloud, summary, evidence, text purpose) sits
+   underneath as a fold-out in `extensions`. */
+{ id:"analytical", emoji:"📖", title:"Reading & Analytical Writing",
   legend:true,
   cta:{ href:"teea-paragraph.html", emoji:"🌳", h:"See it in a paragraph — T·E·E·A, colour-coded",
         p:"The Giving Tree, worked example, coloured sentence by sentence." },
@@ -187,11 +200,13 @@ const RUBRICS = [
             "Bàn luận về những ý tưởng xã hội, đạo đức sâu sắc hơn, liên kết các lựa chọn với bối cảnh rộng hơn.", "探讨更深层的社会、道德或伦理观念，将选择与更广泛的语境联系起来。") ]
       ] }
   ],
-  extensions:[
-    /* Same four skill areas and four bands as Analytical Writing, reworded
-       for film — from teaching/assessment/rubrics/film-analysis-rubric.docx.
-       Chinese is the docx's own; Vietnamese is ours. */
+  /* Same four skill areas and four bands as the text version, reworded
+     for film, from teaching/assessment/rubrics/film-analysis-rubric.docx.
+     Chinese is the docx's own; Vietnamese is ours. */
+  film:
     { title:"Film Analysis",
+      cta:{ href:"rabbit-proof-fence/wagoll-wall.html", emoji:"🎬", h:"See it in a paragraph: How Noyce Shows Belonging",
+            p:"Rabbit-Proof Fence WAGOLL wall, colour-coded." },
       bands:["C2","C3","C4","VCE 1"],
       rows:[
         { skill:"Ideas & Themes", vi:"Ý tưởng & Chủ đề", zh:"主题与思想", cls:"idea",
@@ -238,62 +253,63 @@ const RUBRICS = [
             [ P("Discusses deeper social or moral ideas, linking the director's choices to historical or ethical context.",
                 "Bàn luận về những ý tưởng xã hội hoặc đạo đức sâu sắc hơn, liên kết các lựa chọn của đạo diễn với bối cảnh lịch sử hoặc đạo đức.", "探讨更深层社会/道德意义。") ]
           ] }
-      ] }
-  ] },
-
-/* ---------------------------------------------------------------- */
-{ id:"reading", emoji:"📖", title:"Reading",
-  bands:["C2","C3","C4","VCE 1","VCE 2"],
-  rows:[
-    { skill:"Reading aloud", vi:"Đọc thành tiếng", zh:"朗读", cls:"",
-      cells:[
-        [ P("Read with some rhythm emphasis and tone variation.",
-            "Đọc với một chút nhịp điệu, nhấn mạnh và thay đổi giọng điệu.", "朗读时有一定的节奏、重音和语调变化。") ],
-        [ P("Rhythm and emphasis match text's purpose",
-            "Nhịp điệu và trọng âm phù hợp với mục đích của văn bản.", "节奏与重音与文本的目的相匹配。") ],
-        [ P("Read with precise and subtle rhythm tone and emphasis",
-            "Đọc với nhịp điệu, giọng điệu và trọng âm chính xác và tinh tế.", "以精确而细腻的节奏、语调和重音朗读。") ],
-        [], []
       ] },
-    { skill:"Summary", vi:"Tóm tắt", zh:"概括", cls:"",
-      cells:[
-        [ P("Extract main ideas from texts",
-            "Rút ra những ý chính từ văn bản.", "从文本中提取主要观点。") ],
-        [ P("Explain main ideas and plot developments",
-            "Giải thích những ý chính và diễn biến cốt truyện.", "解释主要观点与情节发展。") ],
-        [ P("Use appropriate language to Identify and infer ideas, themes, and plot details",
-            "Sử dụng ngôn ngữ phù hợp để xác định và suy luận các ý tưởng, chủ đề và chi tiết cốt truyện.", "使用恰当的语言识别并推断观点、主题与情节细节。") ],
-        [ P("Uses precise and appropriate language to explore interconnected ideas and values presented in the text, including discussion of character, setting and other aspects of the text",
-            "Sử dụng ngôn ngữ chính xác và phù hợp để khám phá những ý tưởng và giá trị liên kết với nhau được trình bày trong văn bản, bao gồm thảo luận về nhân vật, bối cảnh và các khía cạnh khác của văn bản.", "使用精准恰当的语言，探讨文本中相互关联的观点与价值观，包括对人物、背景及文本其他方面的讨论。") ],
-        [ P("Uses nuanced and appropriate language to examine the text fluently and critically.",
-            "Sử dụng ngôn ngữ tinh tế và phù hợp để phân tích văn bản một cách trôi chảy và có phản biện.", "使用细腻恰当的语言，流畅而具批判性地审视文本。") ]
-      ] },
-    { skill:"Evidence", vi:"Bằng chứng", zh:"证据", cls:"",
-      cells:[
-        [ P("Use quotes to link to ideas.",
-            "Dùng trích dẫn để liên kết với các ý tưởng.", "用引用来连接观点。") ],
-        [ P("Use metalanguage, and quotes to support ideas",
-            "Dùng siêu ngôn ngữ và trích dẫn để hỗ trợ các ý tưởng.", "运用元语言和引用来支持观点。") ],
-        [ P("Embed evidence and use appropriate metalanguage to discuss. Make clear links to themes and ideas",
-            "Lồng ghép bằng chứng và dùng siêu ngôn ngữ phù hợp để thảo luận. Tạo liên kết rõ ràng với chủ đề và ý tưởng.", "嵌入证据并使用恰当的元语言进行论述，与主题和观点建立清晰的联系。") ],
-        [ P("Embeds relevant textual evidence to explain how the author has conveyed ideas in the text presented in response to the topic.",
-            "Lồng ghép bằng chứng văn bản phù hợp để giải thích cách tác giả truyền tải các ý tưởng trong văn bản, đáp ứng đúng đề bài.", "嵌入相关的文本证据，解释作者如何在文本中传达观点，并紧扣题目作出回应。") ],
-        [ P("Integrates relevant textual evidence with precision and control to examine critically the ways in which ideas are presented in the text in consideration of the topic.",
-            "Tích hợp bằng chứng văn bản phù hợp một cách chính xác và có kiểm soát để phân tích phản biện cách các ý tưởng được trình bày trong văn bản, gắn với đề bài.", "精准而有把控地整合相关文本证据，结合题目批判性地审视文本中呈现观点的方式。") ]
-      ] },
-    { skill:"Text purpose", vi:"Mục đích của văn bản", zh:"文本的目的", cls:"",
-      cells:[
-        [ P("Identify common text types and features",
-            "Nhận biết các loại văn bản và đặc điểm phổ biến.", "识别常见的文本类型与特征。") ],
-        [ P("Identify the main purpose of the text and describe text features",
-            "Xác định mục đích chính của văn bản và mô tả các đặc điểm của văn bản.", "确定文本的主要目的，并描述文本特征。") ],
-        [ P("Discuss how specific text features relate to the purpose. Make inferences about the author's intent",
-            "Thảo luận về việc các đặc điểm cụ thể của văn bản liên quan thế nào đến mục đích. Suy luận về ý định của tác giả.", "讨论具体的文本特征如何与目的相关联，并推断作者的意图。") ],
-        [ P("Discuss and examine how structures, language features and vocabulary choices relate to the purpose. Make inferences about the author's complex and nuanced ideas.",
-            "Thảo luận và phân tích cách cấu trúc, đặc điểm ngôn ngữ và lựa chọn từ vựng liên quan đến mục đích. Suy luận về những ý tưởng phức tạp và tinh tế của tác giả.", "讨论并考察结构、语言特征与词汇选择如何与目的相关联，并推断作者复杂而细腻的观点。") ],
-        [ P("Discuss and Critically examine how structures, language features and vocabulary choices relate to the purpose. Make inferences about the author's ideas, concerns and values",
-            "Thảo luận và phân tích phản biện cách cấu trúc, đặc điểm ngôn ngữ và lựa chọn từ vựng liên quan đến mục đích. Suy luận về các ý tưởng, mối quan tâm và giá trị của tác giả.", "讨论并批判性地考察结构、语言特征与词汇选择如何与目的相关联，并推断作者的观点、关切与价值观。") ]
-      ] }
+  extensions:[
+    /* The C-level EAL Reading rubric, kept whole: reading aloud, summary,
+       evidence and text purpose. */
+    { title:"Reading skills (C levels)",
+    bands:["C2","C3","C4","VCE 1","VCE 2"],
+    rows:[
+      { skill:"Reading aloud", vi:"Đọc thành tiếng", zh:"朗读", cls:"",
+        cells:[
+          [ P("Read with some rhythm emphasis and tone variation.",
+              "Đọc với một chút nhịp điệu, nhấn mạnh và thay đổi giọng điệu.", "朗读时有一定的节奏、重音和语调变化。") ],
+          [ P("Rhythm and emphasis match text's purpose",
+              "Nhịp điệu và trọng âm phù hợp với mục đích của văn bản.", "节奏与重音与文本的目的相匹配。") ],
+          [ P("Read with precise and subtle rhythm tone and emphasis",
+              "Đọc với nhịp điệu, giọng điệu và trọng âm chính xác và tinh tế.", "以精确而细腻的节奏、语调和重音朗读。") ],
+          [], []
+        ] },
+      { skill:"Summary", vi:"Tóm tắt", zh:"概括", cls:"",
+        cells:[
+          [ P("Extract main ideas from texts",
+              "Rút ra những ý chính từ văn bản.", "从文本中提取主要观点。") ],
+          [ P("Explain main ideas and plot developments",
+              "Giải thích những ý chính và diễn biến cốt truyện.", "解释主要观点与情节发展。") ],
+          [ P("Use appropriate language to Identify and infer ideas, themes, and plot details",
+              "Sử dụng ngôn ngữ phù hợp để xác định và suy luận các ý tưởng, chủ đề và chi tiết cốt truyện.", "使用恰当的语言识别并推断观点、主题与情节细节。") ],
+          [ P("Uses precise and appropriate language to explore interconnected ideas and values presented in the text, including discussion of character, setting and other aspects of the text",
+              "Sử dụng ngôn ngữ chính xác và phù hợp để khám phá những ý tưởng và giá trị liên kết với nhau được trình bày trong văn bản, bao gồm thảo luận về nhân vật, bối cảnh và các khía cạnh khác của văn bản.", "使用精准恰当的语言，探讨文本中相互关联的观点与价值观，包括对人物、背景及文本其他方面的讨论。") ],
+          [ P("Uses nuanced and appropriate language to examine the text fluently and critically.",
+              "Sử dụng ngôn ngữ tinh tế và phù hợp để phân tích văn bản một cách trôi chảy và có phản biện.", "使用细腻恰当的语言，流畅而具批判性地审视文本。") ]
+        ] },
+      { skill:"Evidence", vi:"Bằng chứng", zh:"证据", cls:"",
+        cells:[
+          [ P("Use quotes to link to ideas.",
+              "Dùng trích dẫn để liên kết với các ý tưởng.", "用引用来连接观点。") ],
+          [ P("Use metalanguage, and quotes to support ideas",
+              "Dùng siêu ngôn ngữ và trích dẫn để hỗ trợ các ý tưởng.", "运用元语言和引用来支持观点。") ],
+          [ P("Embed evidence and use appropriate metalanguage to discuss. Make clear links to themes and ideas",
+              "Lồng ghép bằng chứng và dùng siêu ngôn ngữ phù hợp để thảo luận. Tạo liên kết rõ ràng với chủ đề và ý tưởng.", "嵌入证据并使用恰当的元语言进行论述，与主题和观点建立清晰的联系。") ],
+          [ P("Embeds relevant textual evidence to explain how the author has conveyed ideas in the text presented in response to the topic.",
+              "Lồng ghép bằng chứng văn bản phù hợp để giải thích cách tác giả truyền tải các ý tưởng trong văn bản, đáp ứng đúng đề bài.", "嵌入相关的文本证据，解释作者如何在文本中传达观点，并紧扣题目作出回应。") ],
+          [ P("Integrates relevant textual evidence with precision and control to examine critically the ways in which ideas are presented in the text in consideration of the topic.",
+              "Tích hợp bằng chứng văn bản phù hợp một cách chính xác và có kiểm soát để phân tích phản biện cách các ý tưởng được trình bày trong văn bản, gắn với đề bài.", "精准而有把控地整合相关文本证据，结合题目批判性地审视文本中呈现观点的方式。") ]
+        ] },
+      { skill:"Text purpose", vi:"Mục đích của văn bản", zh:"文本的目的", cls:"",
+        cells:[
+          [ P("Identify common text types and features",
+              "Nhận biết các loại văn bản và đặc điểm phổ biến.", "识别常见的文本类型与特征。") ],
+          [ P("Identify the main purpose of the text and describe text features",
+              "Xác định mục đích chính của văn bản và mô tả các đặc điểm của văn bản.", "确定文本的主要目的，并描述文本特征。") ],
+          [ P("Discuss how specific text features relate to the purpose. Make inferences about the author's intent",
+              "Thảo luận về việc các đặc điểm cụ thể của văn bản liên quan thế nào đến mục đích. Suy luận về ý định của tác giả.", "讨论具体的文本特征如何与目的相关联，并推断作者的意图。") ],
+          [ P("Discuss and examine how structures, language features and vocabulary choices relate to the purpose. Make inferences about the author's complex and nuanced ideas.",
+              "Thảo luận và phân tích cách cấu trúc, đặc điểm ngôn ngữ và lựa chọn từ vựng liên quan đến mục đích. Suy luận về những ý tưởng phức tạp và tinh tế của tác giả.", "讨论并考察结构、语言特征与词汇选择如何与目的相关联，并推断作者复杂而细腻的观点。") ],
+          [ P("Discuss and Critically examine how structures, language features and vocabulary choices relate to the purpose. Make inferences about the author's ideas, concerns and values",
+              "Thảo luận và phân tích phản biện cách cấu trúc, đặc điểm ngôn ngữ và lựa chọn từ vựng liên quan đến mục đích. Suy luận về các ý tưởng, mối quan tâm và giá trị của tác giả.", "讨论并批判性地考察结构、语言特征与词汇选择如何与目的相关联，并推断作者的观点、关切与价值观。") ]
+        ] }
+    ] }
   ] },
 
 /* ---------------------------------------------------------------- */
@@ -561,22 +577,24 @@ const CELL_EXAMPLES = {
 /*  ANALYTICAL WRITING — 4 bands: C2, C3, C4, VCE 1                     */
 /*  Ladder 1: The Giving Tree.  Ladder 2: Rabbit-Proof Fence /          */
 /*  The Bone Sparrow (Evidence row).                                    */
+/*  An example that starts "[film] " shows under the Film switch; the   */
+/*  rest show under Text. The tag itself is never shown.                */
 /* ==================================================================== */
 "analytical": {
 
   "Ideas & Themes": [
     /* C2 — Describe: says what happens */
     [ "The tree gives the boy apples, then her branches, then her trunk. At the end she is only a stump.",
-      "In Rabbit-Proof Fence the three girls run away from the camp and walk home along the fence." ],
+      "[film] In Rabbit-Proof Fence the three girls run away from the camp and walk home along the fence." ],
     /* C3 — Explain: basic feelings, first link to a simple theme */
     [ "The tree is feel happy when the boy take her branches, but she is sad when he go away. The story is about love in a family.",
-      "The girls are scared but they keep walking and walking. It show the theme of courage." ],
+      "[film] The girls are scared but they keep walking and walking. It show the theme of courage." ],
     /* C4 — Analyse: technique linked to theme, what the creator might be saying */
     [ "Silverstein repeats “And the tree was happy” after every time the boy takes something, which links her giving to the theme of sacrifice. He may be saying that love can damage the person who gives it.",
-      "Noyce uses long shots of the empty desert to connect the girls’ walk to the idea of freedom, suggesting the land belongs to them and not to the government." ],
+      "[film] Noyce uses long shots of the empty desert to connect the girls’ walk to the idea of freedom, suggesting the land belongs to them and not to the government." ],
     /* VCE 1 — Interpret: choices express messages, values, perspectives */
     [ "By ending with a stump instead of a reunion, Silverstein presents unconditional love as both a virtue and a cost, inviting readers to question the cultural expectation that a mother should give until there is nothing left.",
-      "Noyce keeps the fence running through almost every wide shot, so a government line drawn across country becomes the film’s image of control and positions viewers to judge removal as ownership rather than protection." ]
+      "[film] Noyce keeps the fence running through almost every wide shot, so a government line drawn across country becomes the film’s image of control and positions viewers to judge removal as ownership rather than protection." ]
   ],
 
   "Evidence & Metalanguage": [
@@ -597,31 +615,31 @@ const CELL_EXAMPLES = {
   "Language & Structure": [
     /* C2 — short simple sentences, literal verbs */
     [ "The author uses repetition. It shows the tree is happy. The boy takes the apples.",
-      "The film uses a long shot. It shows the girls walking alone." ],
+      "[film] The film uses a long shot. It shows the girls walking alone." ],
     /* C3 — connectives (because, so, to) and basic evaluative words */
     [ "The author uses repetition because he wants to show the tree is very generous, so the reader feels sad for her.",
-      "The long shot makes the audience see how far the girls must travel, so we know they are brave." ],
+      "[film] The long shot makes the audience see how far the girls must travel, so we know they are brave." ],
     /* C4 — complex sentences, analytical verbs */
     [ "Silverstein’s repetition of “And the tree was happy” highlights the one-sided relationship, suggesting themes of sacrifice and imbalance.",
-      "Noyce uses a long shot to highlight the girls’ isolation in the vast desert, symbolising both their determination and their loss of freedom." ],
+      "[film] Noyce uses a long shot to highlight the girls’ isolation in the vast desert, symbolising both their determination and their loss of freedom." ],
     /* VCE 1 — fluent, cohesive, varied structures showing cause, effect, interpretation */
     [ "Because the refrain returns unchanged after every loss, the reader begins to hear it as denial rather than contentment; by the final page Silverstein has turned a children’s rhythm into a warning.",
-      "Where the early wide shots dwarf the girls, the closing framing holds them still against the same horizon, so that the landscape which once measured the distance ahead comes to measure what the journey has cost." ]
+      "[film] Where the early wide shots dwarf the girls, the closing framing holds them still against the same horizon, so that the landscape which once measured the distance ahead comes to measure what the journey has cost." ]
   ],
 
   "Purpose & Interpretation": [
     /* C2 — the basic meaning or message */
     [ "The story is about giving. The tree give everything to the boy.",
-      "The message of the film is the girls want to go home to their mother." ],
+      "[film] The message of the film is the girls want to go home to their mother." ],
     /* C3 — the effect on the reader or viewer */
     [ "The ending makes the reader feel sad, because the tree have nothing left and the boy is old now.",
-      "The long shots make the audience feel tired and worried for the girls, so we want them to reach home." ],
+      "[film] The long shots make the audience feel tired and worried for the girls, so we want them to reach home." ],
     /* C4 — inference about the creator's intent or perspective */
     [ "Silverstein probably wants readers to question whether the tree’s giving is really love, because he never lets the boy say thank you.",
-      "Noyce has the officials speak calmly about paperwork and settlements, which suggests he wants us to see the cruelty as ordinary and official, not personal." ],
+      "[film] Noyce has the officials speak calmly about paperwork and settlements, which suggests he wants us to see the cruelty as ordinary and official, not personal." ],
     /* VCE 1 — deeper social, moral, ethical ideas linked to broader context */
     [ "Silverstein leaves the stump silent so the moral question stays with the reader: in a culture that praises endless generosity, at what point does self-sacrifice become self-erasure?",
-      "By filming the removal from the children’s height, Noyce puts viewers inside a history usually told through policy documents, asking an Australian audience to weigh the state’s claimed good intentions against the lived cost of the Stolen Generations." ]
+      "[film] By filming the removal from the children’s height, Noyce puts viewers inside a history usually told through policy documents, asking an Australian audience to weigh the state’s claimed good intentions against the lived cost of the Stolen Generations." ]
   ]
 },
 
@@ -819,37 +837,83 @@ function phraseHTML(p){
 document.getElementById("jump").innerHTML = RUBRICS.map(r =>
   `<a href="#${r.id}">${r.emoji} ${esc(r.title)}</a>`).join("");
 
+/* A rubric with a `film` version gets a Text / Film switch. The choice is
+   remembered on this device only; the page works the same without it. */
+const MODE_KEY = "elc.rubrics.mode.v1";
+let MODE = "text";
+try { if(localStorage.getItem(MODE_KEY) === "film") MODE = "film"; } catch(e) {}
+
+/* Worked examples tagged "[film] " show under Film, the rest under Text.
+   A cell with no example for the mode gets no e.g. button. */
+const FILM_TAG = "[film] ";
+function examplesFor(rid, skill, band, mode){
+  const all = ((CELL_EXAMPLES[rid]||{})[skill]||[])[band] || [];
+  const r = RUBRICS.find(x => x.id === rid);
+  const isFilm = x => x.startsWith(FILM_TAG);
+  const keep = (!r || !r.film) ? all : all.filter(x => isFilm(x) === (mode === "film"));
+  return keep.map(x => isFilm(x) ? x.slice(FILM_TAG.length) : x);
+}
+
+function ctaHTML(c){
+  return c ? `<a class="card" href="${c.href}">
+      <span class="emoji">${c.emoji}</span>
+      <span><h3>${esc(c.h)}</h3><p>${esc(c.p)}</p></span>
+      <span class="go">→</span></a>` : "";
+}
+
+function tableHTML(r, mode){
+  const src = (mode === "film" && r.film) ? r.film : r;
+  const head = `<thead><tr><th>Skill area</th>${src.bands.map(b=>`<th>${esc(b)}</th>`).join("")}</tr></thead>`;
+  const body = "<tbody>" + src.rows.map(row => {
+    const cells = src.bands.map((_,i) => {
+      const ph = row.cells[i] || [];
+      if(!ph.length) return `<td class="empty"></td>`;
+      const exBtn = examplesFor(r.id, row.skill, i, mode).length
+        ? `<button class="exbtn" data-ex="${esc(r.id)}|${esc(row.skill)}|${i}|${mode}" aria-expanded="false">e.g.</button>`
+        : "";
+      return `<td>${ph.map(phraseHTML).join(" ")}${exBtn}</td>`;
+    }).join("");
+    return `<tr class="${row.cls}"><td class="skill">${phraseHTML(P(row.skill,row.vi,row.zh))}</td>${cells}</tr>`;
+  }).join("") + "</tbody>";
+  return `<table class="rubric">${head}${body}</table>`;
+}
+
+function sectionBody(r){
+  const mode = r.film ? MODE : "text";
+  const cta = ctaHTML(mode === "film" && r.film ? r.film.cta : r.cta);
+  return `${cta}<div class="scroll">${tableHTML(r, mode)}</div>`;
+}
+
 document.getElementById("sections").innerHTML = RUBRICS.map(r => {
   const legend = r.legend ? `<div class="legend">
       <span class="sw"><span class="dot evid"></span>Evidence &amp; metalanguage</span>
       <span class="sw"><span class="dot purp"></span>Purpose &amp; interpretation</span>
       <span class="sw"><span class="dot idea"></span>Ideas &amp; themes</span>
     </div>` : "";
-  const cta = r.cta ? `<a class="card" href="${r.cta.href}">
-      <span class="emoji">${r.cta.emoji}</span>
-      <span><h3>${esc(r.cta.h)}</h3><p>${esc(r.cta.p)}</p></span>
-      <span class="go">→</span></a>` : "";
-  const head = `<thead><tr><th>Skill area</th>${r.bands.map(b=>`<th>${esc(b)}</th>`).join("")}</tr></thead>`;
-  const body = "<tbody>" + r.rows.map(row => {
-    const cells = r.bands.map((_,i) => {
-      const ph = row.cells[i] || [];
-      if(!ph.length) return `<td class="empty"></td>`;
-      const exs = ((CELL_EXAMPLES[r.id]||{})[row.skill]||[])[i] || [];
-      const exBtn = exs.length
-        ? `<button class="exbtn" data-ex="${esc(r.id)}|${esc(row.skill)}|${i}">e.g.</button>`
-        : "";
-      return `<td>${ph.map(phraseHTML).join(" ")}${exBtn}</td>`;
-    }).join("");
-    return `<tr class="${row.cls}"><td class="skill">${phraseHTML(P(row.skill,row.vi,row.zh))}</td>${cells}</tr>`;
-  }).join("") + "</tbody>";
+  const sw = r.film ? `<div class="modes" role="group" aria-label="Rubric for">
+      <button type="button" class="mode" data-mode="text" aria-pressed="${MODE==="text"}">📄 Text</button>
+      <button type="button" class="mode" data-mode="film" aria-pressed="${MODE==="film"}">🎬 Film</button>
+    </div>` : "";
   const extras = (r.extensions||[]).map(extHTML).join("");
   return `<section id="${r.id}">
-      <h2 class="sec">${r.emoji} ${esc(r.title)}</h2>
-      ${cta}${legend}
-      <div class="scroll"><table class="rubric">${head}${body}</table></div>
+      <div class="sechead"><h2 class="sec">${r.emoji} ${esc(r.title)}</h2>${sw}</div>
+      ${legend}
+      <div class="secbody" data-rid="${esc(r.id)}">${sectionBody(r)}</div>
       ${extras ? `<div class="extgroup">${extras}</div>` : ""}
     </section>`;
 }).join("");
+
+document.addEventListener("click", e=>{
+  const b = e.target.closest(".mode");
+  if(!b) return;
+  MODE = b.dataset.mode;
+  try { localStorage.setItem(MODE_KEY, MODE); } catch(err) {}
+  RUBRICS.filter(r => r.film).forEach(r => {
+    const sec = document.getElementById(r.id);
+    sec.querySelectorAll(".mode").forEach(m => m.setAttribute("aria-pressed", String(m.dataset.mode === MODE)));
+    sec.querySelector(".secbody").innerHTML = sectionBody(r);
+  });
+});
 
 /* An extension: a related rubric that reuses its parent's row/band shape.
    A cell is either a plain string (no translation yet) or a P(en,vi,zh)
@@ -885,9 +949,14 @@ document.addEventListener("click", e=>{
   if(!b) return;
   const td = b.closest("td");
   const existing = td.querySelector(":scope > .cellex");
-  if(existing){ existing.remove(); b.classList.remove("on"); return; }
-  const [rid, skill, band] = b.dataset.ex.split("|");
-  const exs = ((CELL_EXAMPLES[rid]||{})[skill]||[])[+band] || [];
+  if(existing){ existing.remove(); b.classList.remove("on"); b.setAttribute("aria-expanded","false"); return; }
+  /* One example open per table, so the grid stays readable. */
+  const table = b.closest("table");
+  table.querySelectorAll(".cellex").forEach(x => x.remove());
+  table.querySelectorAll(".exbtn.on").forEach(x => { x.classList.remove("on"); x.setAttribute("aria-expanded","false"); });
+  const [rid, skill, band, mode] = b.dataset.ex.split("|");
+  const exs = examplesFor(rid, skill, +band, mode);
+  b.setAttribute("aria-expanded","true");
   const div = document.createElement("div");
   div.className = "cellex";
   div.innerHTML = `<b>What this can look like:</b>` +
