@@ -15,7 +15,7 @@
 
    PASSWORD. The class sees every rung and its rubric rows, and the worked
    examples up to Level 6. Typing "colonisation" anywhere on the wall (not in
-   a text box) opens Levels 7 to 10. Typing it again closes them. It is a
+   a text box) opens Levels 7 to 10 and VCE. Typing it again closes them. It is a
    curtain, not a lock: the word is in this file.
    ======================================================================= */
 
@@ -54,7 +54,7 @@ const CRITERIA = [
     ink:"#744f91", lamp:"#bda0d8", underline:"double" },
 ];
 
-const LEVELS = ["Level 6","Level 7","Level 8","Level 9","Level 10"];
+const LEVELS = ["Level 6","Level 7","Level 8","Level 9","Level 10","VCE"];
 const STUDENT_LEVELS = ["Foundation to Level 2", "Levels 3 and 4", "Level 5", "Level 6"];
 const EARLY_LEVELS = ["Foundation to Level 2","Levels 3 and 4","Level 5"];
 
@@ -161,11 +161,12 @@ const EARLY_EXPLANATIONS = {
 };
 
 const EXAMPLES = {
- "Level 6": "{source|Sources A and B are primary sources written by European explorers}. {source|Source C is a primary source too: the words of Mahroot, an Aboriginal man, in 1845}. {perspective|The sources show different points of view}. {perspective|Cook sees Aboriginal people as happy, but Dampier calls them \"the miserablest people in the world\"}. {perspective|Mahroot's point of view is about what happened to his people}. {judge|Source C is more useful for the impact of colonisation, because Mahroot lived through it}. I think the Europeans judged Aboriginal people without understanding them.",
- "Level 7": "{source|Source A is from James Cook's journal, written in August 1770 after he sailed up the east coast}. {source|Cook kept the journal as a record for the British navy}. {source|Source B is from William Dampier's book, published in 1697, about the north-west coast in 1688}. {perspective|Cook's point of view is positive. He says Aboriginal people are \"far more happier than we Europeans\" and live in \"Tranquillity\"}. {perspective|Dampier's point of view is negative. He says they \"differ but little from brutes\"}. {perspective|Mahroot gives an Aboriginal point of view. He remembers 400 people, but in 1845 only \"three women and I\" were left}. {judge|Sources A and B are useful for showing what Europeans thought}, {judge|but they cannot tell us what Aboriginal people thought}. {judge|Source C is the most useful for the impact of colonisation}. I conclude that Europeans saw Aboriginal people in very different ways, but colonisation was a disaster for them.",
- "Level 8": "{source|Source A comes from the description of New South Wales that Cook added to his journal in August 1770}. {source|Its old spelling, such as \"wholy\" and \"necessarys\", shows it was written at the time}. {source|Source C is different: it is Mahroot's evidence to a committee of the New South Wales parliament, printed as questions and answers}. {perspective|Cook and Dampier both judge Aboriginal people by European standards}. {perspective|Dampier sees no houses or farm animals and calls them \"the miserablest people in the world\"}. {perspective|Cook sees the same lack of possessions and decides they are happy \"in not knowing the use of them\"}. {perspective|Mahroot does not judge his people's way of life. He counts the people who are gone}. {judge|We should ask how much Dampier really understood}. {judge|He saw people half-close their eyes against flies and decided they \"cannot see far\"}. {judge|We should also ask whether Source C tells the whole story}. {judge|The committee asks about alcohol, but never about smallpox, which spread around Sydney in 1789}. I think Cook's view was kinder than Dampier's, but both were outsiders, and only Source C shows what colonisation cost.",
- "Level 9": "{source|The origin of Source A helps explain its tone}. {source|Cook wrote this description just after he claimed the whole east coast for King George III on 22 August 1770}. {source|A man who had just claimed the land had a reason to describe its people as content and harmless}. {perspective|Sources A and B look like opposites, but they have something in common}. {perspective|Both writers measure Aboriginal people by what Europeans own: houses, clothes and \"conveniencies\"}. {perspective|Dampier finds them lacking, and Cook finds them happy, but both describe a people without things}. {perspective|Mahroot speaks about his people as a community of \"Four hundred\", now nearly gone}. {judge|Source A is accurate about what Cook saw: people refused the goods his crew offered}. {judge|It is less reliable about what that meant. Refusing gifts may show the people did not want the strangers, not that they were happy}. {judge|Source C is an Aboriginal primary source, but the committee chose the questions and a clerk wrote down the answers}. My judgement is that Source C is the most useful source for the impact of colonisation, and Sources A and B are most useful as evidence of European attitudes.",
- "Level 10": "{source|The explicit meaning of Source A is praise: Aboriginal people are \"far more happier than we Europeans\"}. {source|Its implicit meaning is less kind. They are happy \"in not knowing\", which makes them sound like children who do not understand the world}. {source|When Cook writes \"in my opinion argues\", he shows that their happiness is his reading of them, not their own words}. {perspective|Cook's patronising praise and Dampier's \"brutes\" rest on the same idea: Europeans are the ones who judge}. {perspective|Neither writer asks Aboriginal people what they valued}. {perspective|Mahroot's evidence shows the cost of that silence. His people fell from \"Four hundred\" to \"Only four\"}. {judge|Yet Source C is shaped by Europeans too}. {judge|The question \"It was by getting drunk you think?\" offers him the answer before he gives it}. {judge|The committee's focus on alcohol leaves out disease and the loss of land, so even this Aboriginal voice reaches us filtered}. The sources are most reliable as evidence of who had the power to describe whom. Cook could praise Aboriginal people and claim their land in the same week. Mahroot could only answer the questions he was asked."
+ "Level 6": "{source|Sources A and B are primary sources written by European explorers}. {source|Source C is a primary source too, because Mahroot, an Aboriginal man, said these words in 1845}. {perspective|The sources show different points of view}. {perspective|Cook sees Aboriginal people as happy, but Dampier calls them \"the miserablest people in the world\"}. {perspective|Mahroot talks about what happened to his people}. {judge|Source C is more useful for showing what colonisation did, because Mahroot lived through it}. I think the Europeans judged Aboriginal people without understanding them.",
+ "Level 7": "{source|Source A is from James Cook's journal, written in August 1770 after he sailed up the east coast}. {source|Cook kept the journal as a record for the British navy}. {source|Source B is from William Dampier's book, published in 1697, about the north-west coast in 1688}. {perspective|Cook's point of view is positive. He says Aboriginal people are \"far more happier than we Europeans\" and live in \"Tranquillity\"}. {perspective|Dampier's point of view is negative. He says they \"differ but little from brutes\"}. {perspective|Mahroot gives an Aboriginal point of view. He remembers 400 people, but in 1845 only \"three women and I\" were left}. {judge|Sources A and B are useful for showing what Europeans thought}, {judge|but they cannot tell us what Aboriginal people thought}. {judge|Source C is the most useful for showing what colonisation did to Aboriginal people}. I conclude that Europeans saw Aboriginal people in very different ways, but colonisation was a disaster for them.",
+ "Level 8": "{source|Cook wrote Source A in his journal in August 1770, as part of his description of New South Wales}. {source|The old spelling, such as \"wholy\" and \"necessarys\", shows he wrote it at the time}. {source|Source C is set out as questions and answers. Mahroot gave this evidence to a committee of the New South Wales parliament}. {perspective|Cook and Dampier both judge Aboriginal people by European standards}. {perspective|Dampier calls them \"the miserablest people in the world\" and says they \"differ but little from brutes\"}. {perspective|Cook sees that they own very little and decides they are happy \"in not knowing the use of them\"}. {perspective|Mahroot is the only one who belongs to the people he describes. He counts how many of them have died}. {judge|We should ask how much Dampier really understood}. {judge|He saw people half-close their eyes against flies and decided they \"cannot see far\"}. {judge|We should also ask whether Source C tells the whole story}. {judge|The committee asks about alcohol, but never about smallpox, which spread around Sydney in 1789}. I think Cook's view was kinder than Dampier's, but both were outsiders, and only Source C shows what colonisation cost.",
+ "Level 9": "{source|Source A's origin helps explain why Cook sounds so kind}. {source|Cook wrote this description just after he claimed the whole east coast for King George III on 22 August 1770}. {source|He had a reason to make the people sound content and harmless, because he had just claimed their land}. {perspective|Sources A and B look like opposites, but they start from the same idea}. {perspective|Dampier calls Aboriginal people \"the miserablest people in the world\", and Cook opens with almost the same words, \"the most wretched people upon Earth\"}. {perspective|Dampier agrees with that idea and Cook argues against it. Both men decide from the outside whether Aboriginal people are happy, and neither asks them}. {perspective|Mahroot counts his people instead: \"Four hundred\" when he was young}. {judge|Source A is probably accurate about what Cook saw. People did not want the goods his crew offered}. {judge|It is less reliable about what that meant. Cook decides the people were happy, but they may have refused the gifts because they did not want the strangers there}. {judge|Source C is an Aboriginal primary source, but the committee chose the questions and a clerk wrote down the answers}. My judgement is that Source C tells us the most about the impact of colonisation. Sources A and B tell us more about European attitudes.",
+ "Level 10": "{source|Explicitly, Cook praises Aboriginal people. He says they are \"far more happier than we Europeans\"}. {source|Implicitly, he is less kind. He says they are happy \"in not knowing\", which makes them sound like children}. {source|When Cook writes \"in my opinion argues\", he admits that their happiness is his own guess about them}. {perspective|Cook's praise is patronising and Dampier's \"brutes\" is an insult, but both men assume that Europeans get to do the judging}. {perspective|Cook and Dampier never ask Aboriginal people what they value}. {perspective|When a committee finally asks Mahroot in 1845, his people have fallen from \"Four hundred\" to \"Only four\"}. {judge|But Europeans shaped Source C too}. {judge|The question \"It was by getting drunk you think?\" offers him the answer before he gives it}. {judge|The committee picks up on alcohol and never asks about disease or the land that was taken. We only hear Mahroot through questions that colonists wrote}. All three sources are most reliable as evidence of how Europeans described Aboriginal people. Cook could praise Aboriginal people and claim their land in the same week. Mahroot could only answer the questions he was asked.",
+ "VCE": "{source|Source A reads like a reply to Source B}. {source|Cook's \"most wretched people upon Earth\" echoes Dampier's \"miserablest people in the world\", and Dampier's book was well known in England by 1770}. {source|Cook seems to be arguing with Dampier as well as describing the people he met, and he is writing for the same English readers}. {perspective|His praise is part of that argument}. {perspective|Cook reverses Dampier's verdict, but he is still answering Dampier's question about how miserable these people are}. {perspective|Cook wrote this in the same week he claimed the east coast. If people \"set no Value\" on things, a British reader could easily assume they would not miss their land}. {perspective|Mahroot's people lived at Botany Bay, inside the land Cook claimed. In his lifetime, they went from \"Four hundred\" to \"Only four\"}. {judge|Source C is the best evidence of the three for the impact of colonisation, but the committee had a purpose too}. {judge|The committee wanted to know why Aboriginal people were dying out, and \"It was by getting drunk you think?\" hands Mahroot an answer that blames his own people}. {judge|That answer cannot explain the losses on its own. Smallpox spread around Sydney in 1789, and many people died}. {judge|Disease and the loss of land are the causes the committee never asked about}. Read together, the sources tell us more about how Europeans explained Aboriginal people than about Aboriginal people themselves. Dampier and Cook judge Aboriginal people from the outside, and the committee blames drink. None of them explains how about 400 people became four."
 };
 const EXPLANATIONS = {
  "Level 6": {
@@ -185,13 +186,18 @@ const EXPLANATIONS = {
  },
  "Level 9": {
   "source": "Explains what the origin means for the source's tone.",
-  "perspective": "Compares A and B: different conclusions, the same European measuring stick.",
+  "perspective": "Compares A and B: they start from the same idea and reach opposite conclusions, both from the outside.",
   "judge": "Identifies what Source A is accurate on and where it is unreliable, and the limits of Source C."
  },
  "Level 10": {
   "source": "Analyses explicit and implicit meaning: patronising praise.",
   "perspective": "Explains what each writer valued, and who was never asked.",
   "judge": "Analyses how Source C was shaped by the questions, and what the sources are reliable evidence of."
+ },
+ "VCE": {
+  "source": "Reads Source A as a reply to Source B: who Cook was answering, and who he wrote for.",
+  "perspective": "Shows that opposite views share the same terms, and links Cook's praise to his claim on the land.",
+  "judge": "Tests Source C against its purpose and the context, then argues across all three sources."
  }
 };
 
@@ -205,13 +211,15 @@ const CONTINUUM = {
   "Level 7": "I can identify the origin, content features and purpose of historical sources.",
   "Level 8": "I can describe the origin, content features and purpose of historical sources.",
   "Level 9": "I can explain the origin, content features and purpose of historical sources.",
-  "Level 10": "I can analyse the origin, explicit and implicit meaning, and purpose of historical sources."
+  "Level 10": "I can analyse the origin, explicit and implicit meaning, and purpose of historical sources.",
+  "VCE": "I can analyse a source's origin, purpose and audience, including what earlier writing it answers."
  },
  "perspective": {
   "Level 6": "I can identify different points of view in primary sources.",
   "Level 7": "I can describe different points of view in primary sources.",
   "Level 8": "I can explain different points of view in primary sources.",
-  "Level 9": "I can compare and contrast different points of view in primary sources, outlining the similarities and differences."
+  "Level 9": "I can compare and contrast different points of view in primary sources, outlining the similarities and differences.",
+  "VCE": "I can analyse how a perspective is shaped by its context, and what opposing views share."
  },
  "judge": {
   "Level 5": "I can say one thing a source can and cannot tell us.",
@@ -219,7 +227,8 @@ const CONTINUUM = {
   "Level 7": "I can draw conclusions about the usefulness of sources.",
   "Level 8": "I can compare and contrast historical sources and ask questions about their accuracy, usefulness and reliability.",
   "Level 9": "I can compare and contrast historical sources and identify their accuracy, usefulness and reliability.",
-  "Level 10": "I can compare and contrast sources and analyse their accuracy, usefulness and reliability."
+  "Level 10": "I can compare and contrast sources and analyse their accuracy, usefulness and reliability.",
+  "VCE": "I can evaluate sources as evidence against their purpose and the context, and use them to build an argument."
  }
 };
 
@@ -231,7 +240,8 @@ const VC = {
  "Level 9": [["VC2HH10S03","analyse the purpose, features, content and context of historical sources"],["VC2HH10S04","evaluate the value of sources for use as evidence to interpret historical significance, continuity and change, and causes and consequences"]],
  "Level 10": [["VC2HH10S03","analyse the purpose, features, content and context of historical sources"],["VC2HH10S04","evaluate the value of sources for use as evidence to interpret historical significance, continuity and change, and causes and consequences"]]
 };
-const VC_NOTE = "Levels 6 to 9 are the Year 7 Ancient China Source Analysis Rubric, word for word: rows 1, 3 and 5. That rubric stops at 6 and 9, so Level 5 and Level 10 of rows 1 and 5 quote the Ancient Australia source analysis continuum, also word for word. No rubric words the perspectives row at Level 5 or 10, or any row below Level 5: those lines are plain descriptions written for this wall. The codes are Victorian Curriculum 2.0.";
+const VC_HEAD = { "VCE": "VCE History" };
+const VC_NOTE = "Levels 6 to 9 are the Year 7 Ancient China Source Analysis Rubric, word for word: rows 1, 3 and 5. That rubric stops at 6 and 9, so Level 5 and Level 10 of rows 1 and 5 quote the Ancient Australia source analysis continuum, also word for word. No rubric words the perspectives row at Level 5 or 10, or any row below Level 5: those lines are plain descriptions written for this wall. The codes are Victorian Curriculum 2.0. The VCE rung's three lines are written for this wall to describe VCE History source work (origin, purpose, perspectives, sources as evidence); they are not VCAA wording, and no study design codes are given.";
 
 /* new: what this rung adds, as instructions. background: facts the rung uses that are not in the sources. */
 const BUMP = {
@@ -250,7 +260,9 @@ const BUMP = {
  "Level 9": { "new": "Explain what the origin means for the tone. Compare A and B: what do they share? Say what each source is reliable for.",
    "background": "Cook claimed the east coast for King George III on 22 August 1770, just before he wrote Source A." },
  "Level 10": { "new": "Explain what Source A says and what it suggests. Explain who was never asked. Judge how Source C was shaped.",
-   "background": "A leading question suggests its own answer. The committee's questions were written by colonists." }
+   "background": "A leading question suggests its own answer. The committee's questions were written by colonists." },
+ "VCE": { "new": "Read Source A as a reply to Source B. Link Cook's view to his claim on the land. Test Source C against the context, then make one argument across all three.",
+   "background": "Dampier's book went through several editions and was well known in England long before 1770." }
 };
 
 const GLOSS = {
@@ -312,7 +324,11 @@ const KID = {
  "Level 10": { band:"Level 10", lines:[
    "I can explain what a source says, what it suggests, and why it was made.",
    "I can explain what different people valued, and whose voice is missing.",
-   "I can judge how reliable each source is, and why."] }
+   "I can judge how reliable each source is, and why."] },
+ "VCE": { band:"VCE History", lines:[
+   "I can say who a source was answering and who it was written for.",
+   "I can show how a point of view comes from its time, and what opposite views share.",
+   "I can test a source against what else we know, and use all the sources in one argument."] }
 };
 
 /* ---------- the printed worksheet (worksheet.html) ---------- */
