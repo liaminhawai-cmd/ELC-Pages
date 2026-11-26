@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="First contact: one big question, three sources with plain English, context, writing space and the rubric. Two A4 pages.">
+<title>First Contact: Worksheet</title>
+<style>
+/* Two A4 pages, built from content.js so the sheet and the wall can never
+   disagree. Page 1: the question, the context and the three sources. Page 2:
+   the question again, lines, and the rubric. */
+:root{ --ink:#1c2333; --muted:#5b6478; --line:#a7b0bf; --soft:#f3f1f7; --head:#223f43; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#e9edf4;color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.35;
+     -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.bar{max-width:210mm;margin:12px auto 0;display:flex;gap:14px;align-items:center;padding:0 8px;flex-wrap:wrap}
+.bar a,.bar button{color:#223f43;font-weight:800;text-decoration:none;font-size:.9rem;background:none;border:0;cursor:pointer;min-height:40px;font-family:inherit}
+.bar a:focus-visible,.bar button:focus-visible{outline:3px solid #223f43;outline-offset:2px}
+.sheet{width:210mm;height:297mm;margin:12px auto;background:#fff;padding:11mm 13mm 10mm;box-shadow:0 2px 12px rgba(16,24,40,.12);
+       overflow:hidden;display:flex;flex-direction:column;gap:2.2mm}
+h1{font-size:15pt;letter-spacing:-.2px}
+.who{font-size:9pt;color:var(--muted);display:flex;gap:6mm}
+.who span{display:inline-block;width:45mm;border-bottom:.3mm solid var(--line)}
+.q{background:var(--soft);border-left:1.6mm solid var(--head);padding:1.6mm 3.5mm;font-size:11.5pt;font-weight:800}
+.q small{display:block;font-size:8.6pt;font-weight:400;color:var(--muted);margin-top:.6mm}
+.ctx{display:grid;grid-template-columns:repeat(3,1fr);gap:1.2mm 4mm;font-size:7.8pt;line-height:1.28;border:.3mm solid var(--line);border-radius:2mm;padding:2mm 3mm}
+.ctx b{display:block;font-size:7.4pt;text-transform:uppercase;letter-spacing:.05em;color:var(--head)}
+.src{border:.3mm solid var(--line);border-radius:2mm;overflow:hidden;display:flex;flex-direction:column}
+.src .cap{background:var(--head);color:#fff;font-size:8.4pt;padding:1.2mm 3mm}
+.src .cap b{font-size:9.4pt;margin-right:2mm}
+.src .cols{display:grid;grid-template-columns:1.5fr 1fr}
+.src .orig{padding:1.6mm 3mm;font-family:Georgia,"Times New Roman",serif;font-size:8.7pt;line-height:1.32}
+.src .orig p+p{margin-top:1mm}
+.src .plain{padding:1.6mm 3mm;font-size:8.3pt;line-height:1.3;background:#f7f9fc;border-left:.3mm dashed var(--line)}
+.src .plain::before{content:"Plain English";display:block;font-size:7pt;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);margin-bottom:.6mm}
+.src .plain p+p{margin-top:1.2mm}
+.src .cite{font-size:7pt;color:var(--muted);padding:0 3mm 1.6mm}
+.lines{flex:1;background:repeating-linear-gradient(to bottom,transparent 0,transparent 8.6mm,var(--line) 8.6mm,var(--line) 8.9mm)}
+.hint{font-size:8.6pt;color:var(--muted)}
+table{width:100%;border-collapse:collapse;font-size:7.9pt}
+th,td{border:.3mm solid var(--line);padding:1.2mm 1.8mm;vertical-align:top;text-align:left}
+th{background:var(--soft)}
+td.row{font-weight:700;width:34mm}
+.foot{font-size:7.4pt;color:var(--muted);text-align:center}
+.note{font-size:7.2pt;color:var(--muted);font-style:italic}
+@media print{
+  @page{size:A4 portrait;margin:0}
+  body{background:#fff}
+  .bar{display:none}
+  .sheet{margin:0;box-shadow:none;break-after:page}
+  .sheet:last-child{break-after:auto}
+}
+</style>
+</head>
+<body>
+<nav class="bar" aria-label="Page links">
+  <a href="bump-it-up.html">← Bump it up: First contact</a>
+  <button type="button" onclick="window.print()">🖨️ Print both pages</button>
+</nav>
+<section class="sheet" id="p1" aria-label="Page 1: the question and the sources"></section>
+<section class="sheet" id="p2" aria-label="Page 2: your answer and the rubric"></section>
+
+<script src="content.js"></script>
+<script>
+const esc = s => String(s).replace(/[&<>]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const W = WORKSHEET;
+const who = `<div class="who">Name <span></span> Date <span></span></div>`;
+const q = `<div class="q">${esc(WALL.inquiry)}<small>${esc(W.task)}</small></div>`;
+
+const srcBlock = s => `<div class="src">
+  <div class="cap"><b>${esc(s.tab)}</b>${esc(s.sheetHead)}</div>
+  <div class="cols">
+    <div class="orig">${s.paragraphs.map(p => `<p>${esc(p)}</p>`).join("")}</div>
+    <div class="plain">${s.plain.map(p => `<p>${esc(p)}</p>`).join("")}</div>
+  </div>
+  <div class="cite">${esc(s.cite)}</div>
+</div>`;
+
+document.getElementById("p1").innerHTML =
+  `<h1>${esc(W.title)}</h1>${who}${q}
+   <div class="ctx">${FACTS.map(([h, t]) => `<div><b>${esc(h)}</b>${esc(t)}</div>`).join("")}</div>
+   ${SOURCES.map(srcBlock).join("")}
+   <div class="foot">${esc(W.title)} · page 1</div>`;
+
+const LV = W.rubricLevels;
+const rowText = (c, lv, n) => (CONTINUUM[c.key] && CONTINUUM[c.key][lv]) || (KID[lv] && KID[lv].lines[n]) || "";
+document.getElementById("p2").innerHTML =
+  `${q}
+   <p class="hint">${esc(W.hint)}</p>
+   <div class="lines"></div>
+   <div><b style="font-size:9.5pt">Rubric: where is my answer?</b></div>
+   <table><tr><th></th>${LV.map(l => `<th>${esc(l)}</th>`).join("")}</tr>
+   ${CRITERIA.map((c, n) => `<tr><td class="row" style="color:${c.ink}">${c.glyph} ${c.name}</td>${LV.map(l => `<td>${esc(rowText(c, l, n))}</td>`).join("")}</tr>`).join("")}
+   </table>
+   <p class="note">${esc(W.rubricNote)}</p>
+   <div class="foot">${esc(W.title)} · page 2</div>`;
+</script>
+</body>
+</html>
