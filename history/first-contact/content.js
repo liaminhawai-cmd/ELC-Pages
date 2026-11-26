@@ -15,7 +15,7 @@
 
    PASSWORD. The class sees every rung and its rubric rows, and the worked
    examples up to Level 6. Typing "colonisation" anywhere on the wall (not in
-   a text box) opens Levels 7 to 10 and VCE. Typing it again closes them. It is a
+   a text box) opens Levels 7 to 10 and the VCE rungs (Years 11 and 12). Typing it again closes them. It is a
    curtain, not a lock: the word is in this file.
    ======================================================================= */
 
@@ -54,7 +54,7 @@ const CRITERIA = [
     ink:"#744f91", lamp:"#bda0d8", underline:"double" },
 ];
 
-const LEVELS = ["Level 6","Level 7","Level 8","Level 9","Level 10","VCE"];
+const LEVELS = ["Level 6","Level 7","Level 8","Level 9","Level 10","Year 11","Year 12"];
 const STUDENT_LEVELS = ["Foundation to Level 2", "Levels 3 and 4", "Level 5", "Level 6"];
 const EARLY_LEVELS = ["Foundation to Level 2","Levels 3 and 4","Level 5"];
 
@@ -166,7 +166,8 @@ const EXAMPLES = {
  "Level 8": "{source|Cook wrote Source A in his journal in August 1770, as part of his description of New South Wales}. {source|The old spelling, such as \"wholy\" and \"necessarys\", shows he wrote it at the time}. {source|Source C is set out as questions and answers. Mahroot gave this evidence to a committee of the New South Wales parliament}. {perspective|Cook and Dampier both judge Aboriginal people by European standards}. {perspective|Dampier calls them \"the miserablest people in the world\" and says they \"differ but little from brutes\"}. {perspective|Cook sees that they own very little and decides they are happy \"in not knowing the use of them\"}. {perspective|Mahroot is the only one who belongs to the people he describes. He counts how many of them have died}. {judge|We should ask how much Dampier really understood}. {judge|He saw people half-close their eyes against flies and decided they \"cannot see far\"}. {judge|We should also ask whether Source C tells the whole story}. {judge|The committee asks about alcohol, but never about smallpox, which spread around Sydney in 1789}. I think Cook's view was kinder than Dampier's, but both were outsiders, and only Source C shows what colonisation cost.",
  "Level 9": "{source|Source A's origin helps explain why Cook sounds so kind}. {source|Cook wrote this description just after he claimed the whole east coast for King George III on 22 August 1770}. {source|He had a reason to make the people sound content and harmless, because he had just claimed their land}. {perspective|Sources A and B look like opposites, but they start from the same idea}. {perspective|Dampier calls Aboriginal people \"the miserablest people in the world\", and Cook opens with almost the same words, \"the most wretched people upon Earth\"}. {perspective|Dampier agrees with that idea and Cook argues against it. Both men decide from the outside whether Aboriginal people are happy, and neither asks them}. {perspective|Mahroot counts his people instead: \"Four hundred\" when he was young}. {judge|Source A is probably accurate about what Cook saw. People did not want the goods his crew offered}. {judge|It is less reliable about what that meant. Cook decides the people were happy, but they may have refused the gifts because they did not want the strangers there}. {judge|Source C is an Aboriginal primary source, but the committee chose the questions and a clerk wrote down the answers}. My judgement is that Source C tells us the most about the impact of colonisation. Sources A and B tell us more about European attitudes.",
  "Level 10": "{source|Explicitly, Cook praises Aboriginal people. He says they are \"far more happier than we Europeans\"}. {source|Implicitly, he is less kind. He says they are happy \"in not knowing\", which makes them sound like children}. {source|When Cook writes \"in my opinion argues\", he admits that their happiness is his own guess about them}. {perspective|Cook's praise is patronising and Dampier's \"brutes\" is an insult, but both men assume that Europeans get to do the judging}. {perspective|Cook and Dampier never ask Aboriginal people what they value}. {perspective|When a committee finally asks Mahroot in 1845, his people have fallen from \"Four hundred\" to \"Only four\"}. {judge|But Europeans shaped Source C too}. {judge|The question \"It was by getting drunk you think?\" offers him the answer before he gives it}. {judge|The committee picks up on alcohol and never asks about disease or the land that was taken. We only hear Mahroot through questions that colonists wrote}. All three sources are most reliable as evidence of how Europeans described Aboriginal people. Cook could praise Aboriginal people and claim their land in the same week. Mahroot could only answer the questions he was asked.",
- "VCE": "{source|Source A reads like a reply to Source B}. {source|Cook's \"most wretched people upon Earth\" echoes Dampier's \"miserablest people in the world\", and Dampier's book was well known in England by 1770}. {source|Cook seems to be arguing with Dampier as well as describing the people he met, and he is writing for the same English readers}. {perspective|His praise is part of that argument}. {perspective|Cook reverses Dampier's verdict, but he is still answering Dampier's question about how miserable these people are}. {perspective|Cook wrote this in the same week he claimed the east coast. If people \"set no Value\" on things, a British reader could easily assume they would not miss their land}. {perspective|Mahroot's people lived at Botany Bay, inside the land Cook claimed. In his lifetime, they went from \"Four hundred\" to \"Only four\"}. {judge|Source C is the best evidence of the three for the impact of colonisation, but the committee had a purpose too}. {judge|The committee wanted to know why Aboriginal people were dying out, and \"It was by getting drunk you think?\" hands Mahroot an answer that blames his own people}. {judge|That answer cannot explain the losses on its own. Smallpox spread around Sydney in 1789, and many people died}. {judge|Disease and the loss of land are the causes the committee never asked about}. Read together, the sources tell us more about how Europeans explained Aboriginal people than about Aboriginal people themselves. Dampier and Cook judge Aboriginal people from the outside, and the committee blames drink. None of them explains how about 400 people became four."
+ "Year 11": "{source|Source A reads like a reply to Source B}. {source|Cook's \"most wretched people upon Earth\" echoes Dampier's \"miserablest people in the world\", and Dampier's book was well known in England by 1770}. {source|Cook seems to be arguing with Dampier as well as describing the people he met, and he is writing for the same English readers}. {perspective|His praise is part of that argument}. {perspective|Cook reverses Dampier's verdict, but he is still answering Dampier's question about how miserable these people are}. {perspective|Cook wrote this in the same week he claimed the east coast. If people \"set no Value\" on things, a British reader could easily assume they would not miss their land}. {perspective|Mahroot's people lived at Botany Bay, inside the land Cook claimed. In his lifetime, they went from \"Four hundred\" to \"Only four\"}. {judge|Source C is the best evidence of the three for the impact of colonisation, but the committee had a purpose too}. {judge|The committee wanted to know why Aboriginal people were dying out, and \"It was by getting drunk you think?\" hands Mahroot an answer that blames his own people}. {judge|That answer cannot explain the losses on its own. Smallpox spread around Sydney in 1789, and many people died}. {judge|Disease and the loss of land are the causes the committee never asked about}. Read together, the sources tell us more about how Europeans explained Aboriginal people than about Aboriginal people themselves. Dampier and Cook judge Aboriginal people from the outside, and the committee blames drink. None of them explains how about 400 people became four.",
+ "Year 12": "{source|All three sources were made for European readers: Cook's journal for the navy, Dampier's book for buyers in England, and Mahroot's evidence for a parliament}. {source|Mahroot's words only reached print because colonists wanted an answer to their own question about why his people were dying}. {perspective|In 1968 W. E. H. Stanner called the way Australian histories left out Aboriginal people the great Australian silence, and these sources show the same silence at work long before 1968}. {perspective|Cook and Dampier describe Aboriginal people without hearing from them at all}. {perspective|The committee does hear Mahroot, but it decides what he is asked, and it never asks about the land}. {judge|Henry Reynolds and later historians set out to write Aboriginal experience back into the history, and Source C supports that approach}. {judge|It records a loss that no European source here mentions: \"Four hundred\" people down to \"Only four\"}. {judge|It also shows the limit of that approach, because historians still meet Mahroot through a record that colonists made}. {judge|The careful way to use Source C is to trust what Mahroot knew first-hand, the numbers, and to treat the cause he gives with the same caution as the question that suggested it}. My judgement is that these sources show the silence Stanner described more than they fill it. Mahroot's count is the strongest evidence of the three, because no question could change how many of his people were left."
 };
 const EXPLANATIONS = {
  "Level 6": {
@@ -194,10 +195,15 @@ const EXPLANATIONS = {
   "perspective": "Explains what each writer valued, and who was never asked.",
   "judge": "Analyses how Source C was shaped by the questions, and what the sources are reliable evidence of."
  },
- "VCE": {
+ "Year 11": {
   "source": "Reads Source A as a reply to Source B: who Cook was answering, and who he wrote for.",
   "perspective": "Shows that opposite views share the same terms, and links Cook's praise to his claim on the land.",
   "judge": "Tests Source C against its purpose and the context, then argues across all three sources."
+ },
+ "Year 12": {
+  "source": "Explains who each source was made for, and why Mahroot's words were recorded at all.",
+  "perspective": "Uses a historian's interpretation, Stanner's great Australian silence, to explain what the three perspectives share.",
+  "judge": "Weighs Reynolds' approach against Source C: what it supports, and where the record still limits it."
  }
 };
 
@@ -212,14 +218,16 @@ const CONTINUUM = {
   "Level 8": "I can describe the origin, content features and purpose of historical sources.",
   "Level 9": "I can explain the origin, content features and purpose of historical sources.",
   "Level 10": "I can analyse the origin, explicit and implicit meaning, and purpose of historical sources.",
-  "VCE": "I can analyse a source's origin, purpose and audience, including what earlier writing it answers."
+  "Year 11": "I can analyse a source's origin, purpose and audience, including what earlier writing it answers.",
+  "Year 12": "I can analyse how a source's origin, purpose and audience shape what it records and what it leaves out."
  },
  "perspective": {
   "Level 6": "I can identify different points of view in primary sources.",
   "Level 7": "I can describe different points of view in primary sources.",
   "Level 8": "I can explain different points of view in primary sources.",
   "Level 9": "I can compare and contrast different points of view in primary sources, outlining the similarities and differences.",
-  "VCE": "I can analyse how a perspective is shaped by its context, and what opposing views share."
+  "Year 11": "I can analyse how a perspective is shaped by its context, and what opposing views share.",
+  "Year 12": "I can analyse perspectives in sources alongside historians' interpretations of the period."
  },
  "judge": {
   "Level 5": "I can say one thing a source can and cannot tell us.",
@@ -228,7 +236,8 @@ const CONTINUUM = {
   "Level 8": "I can compare and contrast historical sources and ask questions about their accuracy, usefulness and reliability.",
   "Level 9": "I can compare and contrast historical sources and identify their accuracy, usefulness and reliability.",
   "Level 10": "I can compare and contrast sources and analyse their accuracy, usefulness and reliability.",
-  "VCE": "I can evaluate sources as evidence against their purpose and the context, and use them to build an argument."
+  "Year 11": "I can evaluate sources as evidence against their purpose and the context, and use them to build an argument.",
+  "Year 12": "I can evaluate historians' interpretations against the sources, and judge what the sources can and cannot support."
  }
 };
 
@@ -240,8 +249,8 @@ const VC = {
  "Level 9": [["VC2HH10S03","analyse the purpose, features, content and context of historical sources"],["VC2HH10S04","evaluate the value of sources for use as evidence to interpret historical significance, continuity and change, and causes and consequences"]],
  "Level 10": [["VC2HH10S03","analyse the purpose, features, content and context of historical sources"],["VC2HH10S04","evaluate the value of sources for use as evidence to interpret historical significance, continuity and change, and causes and consequences"]]
 };
-const VC_HEAD = { "VCE": "VCE History" };
-const VC_NOTE = "Levels 6 to 9 are the Year 7 Ancient China Source Analysis Rubric, word for word: rows 1, 3 and 5. That rubric stops at 6 and 9, so Level 5 and Level 10 of rows 1 and 5 quote the Ancient Australia source analysis continuum, also word for word. No rubric words the perspectives row at Level 5 or 10, or any row below Level 5: those lines are plain descriptions written for this wall. The codes are Victorian Curriculum 2.0. The VCE rung's three lines are written for this wall to describe VCE History source work (origin, purpose, perspectives, sources as evidence); they are not VCAA wording, and no study design codes are given.";
+const VC_HEAD = { "Year 11": "VCE History", "Year 12": "VCE History" };
+const VC_NOTE = "Levels 6 to 9 are the Year 7 Ancient China Source Analysis Rubric, word for word: rows 1, 3 and 5. That rubric stops at 6 and 9, so Level 5 and Level 10 of rows 1 and 5 quote the Ancient Australia source analysis continuum, also word for word. No rubric words the perspectives row at Level 5 or 10, or any row below Level 5: those lines are plain descriptions written for this wall. The codes are Victorian Curriculum 2.0. The Year 11 and Year 12 lines are written for this wall to describe VCE History source work (Units 1 and 2, then Units 3 and 4, where historians' interpretations come in); they are not VCAA wording, and no study design codes are given.";
 
 /* new: what this rung adds, as instructions. background: facts the rung uses that are not in the sources. */
 const BUMP = {
@@ -261,8 +270,10 @@ const BUMP = {
    "background": "Cook claimed the east coast for King George III on 22 August 1770, just before he wrote Source A." },
  "Level 10": { "new": "Explain what Source A says and what it suggests. Explain who was never asked. Judge how Source C was shaped.",
    "background": "A leading question suggests its own answer. The committee's questions were written by colonists." },
- "VCE": { "new": "Read Source A as a reply to Source B. Link Cook's view to his claim on the land. Test Source C against the context, then make one argument across all three.",
-   "background": "Dampier's book went through several editions and was well known in England long before 1770." }
+ "Year 11": { "new": "Read Source A as a reply to Source B. Link Cook's view to his claim on the land. Test Source C against the context, then make one argument across all three.",
+   "background": "Dampier's book went through several editions and was well known in England long before 1770." },
+ "Year 12": { "new": "Say who each source was made for. Use a historian's interpretation to explain what the sources share. Judge what Source C can and cannot support.",
+   "background": "In 1968 the anthropologist W. E. H. Stanner called the way Australian histories left out Aboriginal people \"the great Australian silence\". Historians since, such as Henry Reynolds in The Other Side of the Frontier (1981), have set out to write Aboriginal experience back in." }
 };
 
 const GLOSS = {
@@ -325,10 +336,14 @@ const KID = {
    "I can explain what a source says, what it suggests, and why it was made.",
    "I can explain what different people valued, and whose voice is missing.",
    "I can judge how reliable each source is, and why."] },
- "VCE": { band:"VCE History", lines:[
+ "Year 11": { band:"VCE History, Year 11 (Units 1 and 2)", lines:[
    "I can say who a source was answering and who it was written for.",
    "I can show how a point of view comes from its time, and what opposite views share.",
-   "I can test a source against what else we know, and use all the sources in one argument."] }
+   "I can test a source against what else we know, and use all the sources in one argument."] },
+ "Year 12": { band:"VCE History, Year 12 (Units 3 and 4)", lines:[
+   "I can say who a source was made for, and what that leaves out.",
+   "I can use a historian's idea to explain what different points of view share.",
+   "I can judge what a source can support, and weigh a historian's argument against it."] }
 };
 
 /* ---------- the printed worksheet (worksheet.html) ---------- */
