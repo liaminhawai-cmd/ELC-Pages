@@ -14,12 +14,12 @@
    China Source Analysis Rubric, word for word.
 
    PASSWORD. The class sees every rung and its rubric rows, and the worked
-   examples up to Level 6. Typing "jcolonisation" anywhere on the wall (not in
+   examples up to Level 6. Typing "colonisation" anywhere on the wall (not in
    a text box) opens Levels 7 to 10. Typing it again closes them. It is a
    curtain, not a lock: the word is in this file.
    ======================================================================= */
 
-const UNLOCK_WORD = "jcolonisation";
+const UNLOCK_WORD = "colonisation";
 
 const WALL = {
   id: "elc-first-contact",
