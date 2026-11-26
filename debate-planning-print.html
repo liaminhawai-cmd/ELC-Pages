@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en-AU" translate="no" class="notranslate">
+<head>
+<meta name="google" content="notranslate">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Paper debate planning set: team plan, argument builder, rebuttal prep, palm cards and a flow sheet for during the debate. Five A4 pages.">
+<title>Debate Planning Sheets: ELC Hub</title>
+<style>
+  /* Paper first. Same colours as debate-structure.html: team A blue, team B orange,
+     rebuttal always red, argument 1 green, argument 2 purple. Every colour also has
+     a printed word, so a black-and-white copy loses nothing. */
+  :root {
+    --ink:#1c2333; --muted:#5b6478; --line:#9aa3b5; --faint:#e3e8f2;
+    --a:#2563eb; --a-soft:#dbeafe; --b:#c2410c; --b-soft:#ffedd5;
+    --reb:#dc2626; --reb-soft:#fee2e2;
+    --g1:#15803d; --g1s:#dcfce7; --g2:#7c3aed; --g2s:#ede9fe;
+    --plain:#475569; --plain-soft:#f1f5f9;
+  }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:#e9edf4; color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+         line-height:1.35; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  .bar { max-width:210mm; margin:12px auto 0; display:flex; gap:12px; align-items:center; flex-wrap:wrap; padding:0 8px; }
+  .bar a, .bar button { color:#7c3aed; font-weight:800; text-decoration:none; font-size:.9rem; background:none; border:0; cursor:pointer; min-height:40px; font-family:inherit; }
+  .bar a:focus-visible, .bar button:focus-visible { outline:3px solid #7c3aed; outline-offset:2px; }
+
+  .sheet { width:210mm; height:297mm; margin:12px auto; background:#fff; padding:11mm 12mm;
+           box-shadow:0 2px 12px rgba(16,24,40,.12); overflow:hidden; display:flex; flex-direction:column; gap:3.2mm; }
+  .head { display:flex; align-items:baseline; gap:6mm; border-bottom:.6mm solid var(--ink); padding-bottom:2mm; }
+  .head h1 { font-size:15pt; letter-spacing:-.2px; }
+  .head .who { margin-left:auto; font-size:9.5pt; color:var(--muted); white-space:nowrap; }
+  .head .who span { display:inline-block; width:38mm; border-bottom:.3mm solid var(--line); margin-left:1.5mm; }
+  .head .who span.short { width:24mm; }
+
+  h2 { font-size:11pt; display:flex; align-items:center; gap:2mm; }
+  .tag { display:inline-block; font-size:8pt; font-weight:800; padding:.4mm 2.2mm; border-radius:3mm; border:.3mm solid; white-space:nowrap; }
+  .tag.a { color:var(--a); background:var(--a-soft); border-color:var(--a); }
+  .tag.b { color:var(--b); background:var(--b-soft); border-color:var(--b); }
+  .tag.reb { color:var(--reb); background:var(--reb-soft); border-color:var(--reb); }
+  .tag.g1 { color:var(--g1); background:var(--g1s); border-color:var(--g1); }
+  .tag.g2 { color:var(--g2); background:var(--g2s); border-color:var(--g2); }
+  .tag.plain { color:var(--plain); background:var(--plain-soft); border-color:var(--plain); }
+  .tag.ghost { background:transparent; border-style:dashed; }
+
+  .box { border:.4mm solid var(--line); border-radius:2.5mm; padding:2.5mm 3.5mm; }
+  .box.reb { border-left:2mm solid var(--reb); }
+  .box.g1 { border-left:2mm solid var(--g1); }
+  .box.g2 { border-left:2mm solid var(--g2); }
+  .grow { flex:1; display:flex; flex-direction:column; }
+
+  /* writing lines: a frame sentence starts the line, the rest is ruled */
+  .ln { border-bottom:.3mm solid var(--line); min-height:8.5mm; display:flex; align-items:flex-end; padding-bottom:.8mm; font-size:10pt; }
+  .ln b { font-weight:700; white-space:nowrap; margin-right:1.5mm; }
+  .ln.fill { flex:1; }
+  .lab { font-size:8pt; font-weight:900; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); margin-top:1.5mm; }
+  .lab + .ln { min-height:7mm; }
+
+  .two { display:grid; grid-template-columns:1fr 1fr; gap:4mm; }
+  .circle { font-size:10pt; }
+  .circle .opt { display:inline-block; border:.3mm solid var(--line); border-radius:4mm; padding:.6mm 3mm; margin-left:2mm; font-weight:700; }
+  .ticks { font-size:9pt; display:flex; flex-wrap:wrap; gap:1mm 4mm; margin-top:1.2mm; }
+  .ticks span::before { content:""; display:inline-block; width:3.2mm; height:3.2mm; border:.3mm solid var(--ink); border-radius:.6mm; margin-right:1.2mm; vertical-align:-.5mm; }
+
+  /* run order */
+  table { width:100%; border-collapse:collapse; font-size:9pt; }
+  th, td { border:.3mm solid var(--line); padding:1.4mm 2mm; vertical-align:top; text-align:left; }
+  th { font-size:8pt; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); background:#f6f8fc; }
+  td.name { width:34mm; }
+  td.num { width:14mm; font-weight:800; }
+  td .tag { margin:.4mm .6mm .4mm 0; }
+  .order td { height:11mm; }
+
+  /* starters bank */
+  .starters { display:grid; grid-template-columns:repeat(4,1fr); gap:2mm; }
+  .starters div { border:.3mm solid var(--reb); border-radius:2mm; padding:1.5mm 2mm; font-size:8.6pt; }
+  .starters h3 { font-size:7.6pt; text-transform:uppercase; letter-spacing:.04em; color:var(--reb); }
+
+  /* palm cards: 2 x 3, dashed cut lines */
+  .cards { flex:1; display:grid; grid-template-columns:1fr 1fr; grid-template-rows:repeat(3,1fr); gap:0; }
+  .card { border:.4mm dashed var(--muted); padding:3mm 3.5mm; display:flex; flex-direction:column; gap:1mm; }
+  .card h2 { font-size:10.5pt; }
+  .card .ln { min-height:7.4mm; font-size:9.6pt; }
+  .card .ln.fill { flex:1; }
+  .card .who2 { font-size:8pt; color:var(--muted); margin-left:auto; font-weight:600; }
+
+  /* flow sheet */
+  .flow td { height:33mm; }
+  .flow td.num { width:20mm; }
+  .flow th:nth-child(2) { width:58mm; }
+  .flow th:nth-child(3) { width:52mm; }
+  .flow .say { font-size:7.6pt; color:var(--muted); display:block; margin-top:1mm; font-weight:400; }
+
+  .foot { font-size:7.8pt; color:var(--muted); text-align:right; margin-top:auto; }
+
+  @media print {
+    @page { size:A4 portrait; margin:0; }
+    body { background:#fff; }
+    .bar { display:none; }
+    .sheet { margin:0; box-shadow:none; break-after:page; }
+    .sheet:last-child { break-after:auto; }
+  }
+  @media screen and (max-width:860px) {
+    .sheet { transform-origin:top left; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="bar" aria-label="Page links">
+  <a href="debate-structure.html">← Debate structure</a>
+  <button type="button" onclick="window.print()">🖨️ Print all five sheets</button>
+  <a href="debate-reframe.html">🔲 Reframe sheets (one argument per page) →</a>
+</nav>
+
+<!-- ═════════════ SHEET 1 · TEAM PLAN ═════════════ -->
+<section class="sheet" aria-label="Sheet 1: Team plan">
+  <div class="head">
+    <h1>1 · Team plan</h1>
+    <div class="who">Team<span></span></div>
+  </div>
+
+  <div class="ln"><b>Topic:</b></div>
+  <div class="circle">Circle your side:
+    <span class="opt" style="color:var(--a)">Affirmative · agrees</span>
+    <span class="opt" style="color:var(--b)">Negative · disagrees</span>
+  </div>
+
+  <div class="box">
+    <h2><span class="tag plain">Definition</span> What do the key words of the topic mean?</h2>
+    <div class="ln"><b>When we say “___________”, we mean</b></div>
+    <div class="ln"></div>
+  </div>
+
+  <div class="box">
+    <h2><span class="tag plain">Brainstorm</span> Reasons on both sides</h2>
+    <div class="two">
+      <div>
+        <div class="lab">Reasons to agree</div>
+        <div class="ln">1.</div><div class="ln">2.</div><div class="ln">3.</div><div class="ln">4.</div>
+      </div>
+      <div>
+        <div class="lab">Reasons to disagree</div>
+        <div class="ln">1.</div><div class="ln">2.</div><div class="ln">3.</div><div class="ln">4.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="box">
+    <h2><span class="tag plain">Contention</span> Our team's main opinion</h2>
+    <div class="ln"><b>Our contention is that</b></div>
+    <div class="ln"></div>
+    <div class="two" style="margin-top:1.5mm">
+      <div><div class="lab"><span class="tag g1">Argument 1</span> strongest reason</div><div class="ln"></div><div class="ln"></div></div>
+      <div><div class="lab"><span class="tag g2">Argument 2</span> second reason</div><div class="ln"></div><div class="ln"></div></div>
+    </div>
+  </div>
+
+  <div class="grow">
+    <h2 style="margin-bottom:1.5mm">Who says what</h2>
+    <table class="order">
+      <thead><tr><th>Speaker</th><th>Name</th><th style="color:var(--a)">If we are Affirmative</th><th style="color:var(--b)">If we are Negative</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1st</td><td class="name"></td>
+            <td><span class="tag plain">Definition</span><span class="tag plain">Contention</span><span class="tag ghost g1">names Arg 1</span><span class="tag ghost g2">names Arg 2</span><span class="tag g1">Argument 1 + evidence</span></td>
+            <td><span class="tag plain">Contention</span><span class="tag ghost g1">names Arg 1</span><span class="tag ghost g2">names Arg 2</span><span class="tag reb">Rebuttal</span><span class="tag g1">Argument 1 + evidence</span></td></tr>
+        <tr><td class="num">2nd</td><td class="name"></td>
+            <td><span class="tag reb">Rebuttal</span><span class="tag g2">Argument 2 + evidence</span></td>
+            <td><span class="tag reb">Rebuttal</span><span class="tag g2">Argument 2 + evidence</span></td></tr>
+        <tr><td class="num">3rd</td><td class="name"></td>
+            <td><span class="tag reb">Rebuttal</span><span class="tag ghost g1">sums up Arg 1</span><span class="tag ghost g2">sums up Arg 2</span> no new argument</td>
+            <td><span class="tag ghost g1">sums up Arg 1</span><span class="tag ghost g2">sums up Arg 2</span> no new argument · speaks last</td></tr>
+      </tbody>
+    </table>
+    <p class="foot" style="text-align:left;margin-top:1.5mm">Speaking order: Aff 1 → Neg 1 → Aff 2 → Neg 2 → Aff 3 → Neg 3. Only 2 people? Speaker 1 also takes the 3rd turn.</p>
+  </div>
+</section>
+
+<!-- ═════════════ SHEET 2 · ARGUMENT BUILDER ═════════════ -->
+<section class="sheet" aria-label="Sheet 2: Argument builder">
+  <div class="head">
+    <h1>2 · Build your argument</h1>
+    <div class="who">Name<span></span> Team<span class="short"></span></div>
+  </div>
+
+  <div class="box g1 grow">
+    <h2><span class="tag g1">Argument 1</span> 1st speaker</h2>
+    <div class="ln"><b>Our first argument is that</b></div>
+    <div class="ln"></div>
+    <div class="ln"><b>For example,</b></div>
+    <div class="ln"></div>
+    <div class="ticks">Kind of evidence:<span>fact</span><span>statistic</span><span>example</span><span>expert opinion</span><span>anecdote</span></div>
+    <div class="ln"><b>This shows that</b></div>
+    <div class="ln"></div>
+    <div class="ticks">Technique I will use:<span>rhetorical question</span><span>emotive language</span><span>statistics and data</span><span>anecdote</span><span>repetition</span></div>
+    <div class="ln"><b>My line with that technique:</b></div>
+    <div class="two" style="margin-top:1mm">
+      <div><div class="lab" style="color:var(--reb)">They will answer</div><div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div></div>
+      <div><div class="lab">We will say back</div><div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div></div>
+    </div>
+  </div>
+
+  <div class="box g2 grow">
+    <h2><span class="tag g2">Argument 2</span> 2nd speaker</h2>
+    <div class="ln"><b>Our next argument is that</b></div>
+    <div class="ln"></div>
+    <div class="ln"><b>For example,</b></div>
+    <div class="ln"></div>
+    <div class="ticks">Kind of evidence:<span>fact</span><span>statistic</span><span>example</span><span>expert opinion</span><span>anecdote</span></div>
+    <div class="ln"><b>This shows that</b></div>
+    <div class="ln"></div>
+    <div class="ticks">Technique I will use:<span>rhetorical question</span><span>emotive language</span><span>statistics and data</span><span>anecdote</span><span>repetition</span></div>
+    <div class="ln"><b>My line with that technique:</b></div>
+    <div class="two" style="margin-top:1mm">
+      <div><div class="lab" style="color:var(--reb)">They will answer</div><div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div></div>
+      <div><div class="lab">We will say back</div><div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ SHEET 3 · REBUTTAL PREP ═════════════ -->
+<section class="sheet" aria-label="Sheet 3: Rebuttal prep">
+  <div class="head">
+    <h1>3 · Get ready to rebut</h1>
+    <div class="who">Name<span></span> Team<span class="short"></span></div>
+  </div>
+
+  <div class="starters">
+    <div><h3>Name their point</h3>“The first speaker for the affirmative argued that…”</div>
+    <div><h3>Turn to it</h3>“However, this argument ignores…”</div>
+    <div><h3>Counter with evidence</h3>“In fact, the evidence shows that…”</div>
+    <div><h3>Close it off</h3>“So this argument does not stand, because…”</div>
+  </div>
+
+  <div class="box reb grow">
+    <h2><span class="tag reb">Their argument A</span></h2>
+    <div class="ln"><b>They will probably argue that</b></div>
+    <div class="ln"><b>Their example will probably be</b></div>
+    <div class="ln"><b>However, this argument ignores</b></div>
+    <div class="ln"><b>In fact, the evidence shows that</b></div>
+    <div class="ln"><b>So this argument does not stand, because</b></div>
+    <div class="ln"></div><div class="ln"></div>
+  </div>
+
+  <div class="box reb grow">
+    <h2><span class="tag reb">Their argument B</span></h2>
+    <div class="ln"><b>They will probably argue that</b></div>
+    <div class="ln"><b>Their example will probably be</b></div>
+    <div class="ln"><b>However, this argument ignores</b></div>
+    <div class="ln"><b>In fact, the evidence shows that</b></div>
+    <div class="ln"><b>So this argument does not stand, because</b></div>
+    <div class="ln"></div><div class="ln"></div>
+  </div>
+
+  <div class="box reb grow">
+    <h2><span class="tag reb">Their argument C</span></h2>
+    <div class="ln"><b>They will probably argue that</b></div>
+    <div class="ln"><b>Their example will probably be</b></div>
+    <div class="ln"><b>However, this argument ignores</b></div>
+    <div class="ln"><b>In fact, the evidence shows that</b></div>
+    <div class="ln"><b>So this argument does not stand, because</b></div>
+    <div class="ln"></div><div class="ln"></div>
+  </div>
+</section>
+
+<!-- ═════════════ SHEET 4 · PALM CARDS ═════════════ -->
+<section class="sheet" aria-label="Sheet 4: Palm cards">
+  <div class="head">
+    <h1>4 · Palm cards</h1>
+    <div class="who">Cut on the dashed lines. Dot points only.</div>
+  </div>
+  <div class="cards">
+    <div class="card">
+      <h2><span class="tag plain">Opening</span> 1st speaker <span class="who2">card 1</span></h2>
+      <div class="ln"><b>Our contention is that</b></div>
+      <div class="ln"><b>We have two arguments:</b></div>
+      <div class="ln"><b>1.</b></div>
+      <div class="ln"><b>2.</b></div>
+      <div class="ln fill"></div>
+    </div>
+    <div class="card">
+      <h2><span class="tag reb">Rebuttal</span> 2nd / 3rd speaker <span class="who2">card 1</span></h2>
+      <div class="ln"><b>The speaker for the other team argued that</b></div>
+      <div class="ln"><b>However,</b></div>
+      <div class="ln"><b>This means their argument does not work because</b></div>
+      <div class="ln fill"></div>
+    </div>
+    <div class="card">
+      <h2><span class="tag g1">Argument + evidence</span> <span class="who2">card 2</span></h2>
+      <div class="ln"><b>Our ________ argument is that</b></div>
+      <div class="ln"><b>For example,</b></div>
+      <div class="ln"></div>
+      <div class="ln"><b>This shows that</b></div>
+      <div class="ln fill"></div>
+    </div>
+    <div class="card">
+      <h2><span class="tag g2">Argument + evidence</span> <span class="who2">card 2</span></h2>
+      <div class="ln"><b>Our ________ argument is that</b></div>
+      <div class="ln"><b>For example,</b></div>
+      <div class="ln"></div>
+      <div class="ln"><b>This shows that</b></div>
+      <div class="ln fill"></div>
+    </div>
+    <div class="card">
+      <h2><span class="tag plain">Summary</span> 3rd speaker <span class="who2">no new arguments</span></h2>
+      <div class="ln"><b>In conclusion, we believe</b></div>
+      <div class="ln"><b>Argument 1 was</b></div>
+      <div class="ln"><b>Argument 2 was</b></div>
+      <div class="ln"><b>The other team said</b></div>
+      <div class="ln"><b>but we showed</b></div>
+      <div class="ln"><b>That is why you should agree with us.</b></div>
+    </div>
+    <div class="card">
+      <h2><span class="tag reb">Rebuttal</span> spare <span class="who2">write during the debate</span></h2>
+      <div class="ln"><b>The speaker for the other team argued that</b></div>
+      <div class="ln"><b>However,</b></div>
+      <div class="ln"><b>This means their argument does not work because</b></div>
+      <div class="ln fill"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═════════════ SHEET 5 · FLOW SHEET (during the debate) ═════════════ -->
+<section class="sheet" aria-label="Sheet 5: Flow sheet">
+  <div class="head">
+    <h1>5 · Flow sheet: while they speak</h1>
+    <div class="who">Name<span></span></div>
+  </div>
+  <div class="ln" style="min-height:7mm"><b>Topic:</b></div>
+  <table class="flow">
+    <thead><tr><th>Speaker</th><th>Their argument<span class="say">key words only</span></th><th>Their detail or example<span class="say">the exact thing they said</span></th><th>Our answer<span class="say">However… In fact…</span></th></tr></thead>
+    <tbody>
+      <tr><td class="num"><span class="tag a">Aff 1</span></td><td></td><td></td><td></td></tr>
+      <tr><td class="num"><span class="tag b">Neg 1</span></td><td></td><td></td><td></td></tr>
+      <tr><td class="num"><span class="tag a">Aff 2</span></td><td></td><td></td><td></td></tr>
+      <tr><td class="num"><span class="tag b">Neg 2</span></td><td></td><td></td><td></td></tr>
+      <tr><td class="num"><span class="tag a">Aff 3</span></td><td></td><td></td><td></td></tr>
+      <tr><td class="num"><span class="tag b">Neg 3</span></td><td></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+  <div class="box" style="margin-top:auto">
+    <h2><span class="tag reb">Rebuttals</span> from the debate rubric</h2>
+    <table style="margin-top:1.2mm;font-size:8.4pt">
+      <tr><th style="width:12mm">C2</th><td>I can identify my opponents' key arguments.</td></tr>
+      <tr><th>C3</th><td>I can address details or examples from my opponents' arguments in my rebuttal.</td></tr>
+      <tr><th>C4</th><td>I can address specific details or examples from my opponents' arguments in my rebuttal. I can identify connotations and implied meanings from my opponent's speech.</td></tr>
+    </table>
+  </div>
+</section>
+
+</body>
+</html>
