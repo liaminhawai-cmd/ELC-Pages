@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en-AU" translate="no" class="notranslate">
+<head>
+<meta name="google" content="notranslate">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Type the class list and get an interview rotation: who interviews whom in each round, where the teacher watches, and who sits out.">
+<title>Interview Rotation — ELC Hub</title>
+<style>
+  :root {
+    --bg:#f6f8fc; --card:#fff; --ink:#1c2333; --muted:#5b6478; --line:#e3e8f2;
+    --accent:#2563eb; --accent-soft:#dbeafe; --on-accent:#fff;
+    --ok:#15803d; --warn:#b45309; --warn-soft:#fef3c7;
+    --teacher:#fff4c2; --teacher-line:#d9b72a; --stripe:#f8fafd;
+    --radius:14px; --shadow:0 1px 2px rgba(16,24,40,.05),0 5px 16px rgba(16,24,40,.07);
+  }
+  @media (prefers-color-scheme:dark) {
+    :root { --bg:#0f1420; --card:#171e2e; --ink:#f5f7ff; --muted:#c7d0e2; --line:#34405b;
+            --accent:#8eb4ff; --accent-soft:#1d2c4d; --on-accent:#0f1420;
+            --ok:#4ade80; --warn:#fbbf24; --warn-soft:#3b2f0b;
+            --teacher:#3a3210; --teacher-line:#a68a1c; --stripe:#1b2336; --shadow:0 2px 10px rgba(0,0,0,.4); }
+  }
+  * { box-sizing:border-box; margin:0; }
+  [hidden] { display:none !important; }
+  body { background:var(--bg); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; line-height:1.5; }
+  .shell { max-width:1120px; margin:auto; padding:12px 16px 40px; }
+  .back { color:var(--accent); font-weight:800; text-decoration:none; font-size:.9rem; display:inline-block; padding:6px 0; }
+  .back:hover { text-decoration:underline; }
+  h1 { font-size:clamp(1.4rem,3.6vw,1.9rem); letter-spacing:-.4px; margin-top:4px; }
+  h2 { font-size:1.05rem; }
+  .sub { color:var(--muted); font-size:.95rem; margin-top:4px; max-width:70ch; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:14px 16px; }
+
+  /* ── controls ── */
+  .controls { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:18px; margin-top:14px; }
+  .field { display:flex; flex-direction:column; gap:5px; border:0; padding:0; min-width:0; }
+  .field + .field { margin-top:14px; }
+  label, legend { font-size:.72rem; font-weight:900; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+  .count { text-transform:none; letter-spacing:0; font-weight:700; }
+  textarea, select { font:inherit; color:var(--ink); background:var(--bg); border:2px solid var(--line); border-radius:10px; padding:9px 11px; width:100%; }
+  textarea { min-height:230px; resize:vertical; font-weight:600; }
+  textarea:focus, select:focus, .btn:focus-visible, input:focus-visible { outline:3px solid color-mix(in srgb,var(--accent) 35%,transparent); outline-offset:1px; }
+  .choice { display:flex; gap:9px; align-items:flex-start; font-size:.92rem; font-weight:400; letter-spacing:0; text-transform:none; color:var(--ink);
+            border:2px solid var(--line); border-radius:10px; padding:9px 11px; cursor:pointer; margin-top:6px; background:var(--bg); }
+  .choice:has(input:checked) { border-color:var(--accent); background:var(--accent-soft); }
+  .choice input { margin-top:4px; accent-color:var(--accent); width:17px; height:17px; flex:none; }
+  small { color:var(--muted); font-size:.8rem; }
+  .btns { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  .btn { font:inherit; font-weight:800; cursor:pointer; border:2px solid var(--line); background:var(--card); color:var(--ink); border-radius:10px; padding:9px 16px; min-height:44px; }
+  .btn:hover { border-color:var(--accent); }
+  .btn.primary { background:var(--accent); color:var(--on-accent); border-color:var(--accent); }
+  .msg { font-size:.88rem; margin-top:10px; color:var(--muted); min-height:1.3em; }
+  .msg.warn { color:var(--warn); font-weight:700; }
+
+  /* ── results ── */
+  #out { margin-top:18px; }
+  #out.stale .card:not(.keep) { opacity:.45; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; }
+  .chip { background:var(--accent-soft); color:var(--ink); font-weight:800; font-size:.84rem; padding:5px 12px; border-radius:999px; }
+  .checks { margin-top:12px; }
+  .checks ul { list-style:none; padding:0; margin-top:8px; display:grid; gap:6px; }
+  .checks li { display:flex; gap:9px; font-size:.92rem; }
+  .checks .mark { flex:none; width:1.3em; text-align:center; font-weight:900; }
+  .checks .ok .mark { color:var(--ok); }
+  .checks .no { color:var(--warn); }
+  .checks .no .mark { color:var(--warn); }
+  .part { margin-top:14px; }
+  .part header { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; margin-bottom:8px; }
+  .part header p { color:var(--muted); font-size:.86rem; margin-top:2px; }
+  .tablewrap { overflow-x:auto; }
+  table { border-collapse:collapse; width:100%; font-size:.92rem; }
+  th, td { padding:7px 10px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { font-size:.72rem; font-weight:900; letter-spacing:.05em; text-transform:uppercase; color:var(--muted); white-space:nowrap; }
+  tbody tr:nth-child(even) td:not(.teacher) { background:var(--stripe); }
+  td.rd { font-weight:900; width:3.4em; }
+  .rotation td:not(.rd) { white-space:nowrap; }
+  th.teacher, td.teacher { background:var(--teacher); box-shadow:inset 3px 0 0 var(--teacher-line); font-weight:700; }
+  td.sit { color:var(--muted); }
+  .arrow { color:var(--accent); font-weight:900; padding:0 .3em; }
+  .sheetcard { margin-top:14px; }
+  .sheet td, .sheet th { white-space:normal; }
+  .actions { margin-top:16px; display:flex; gap:10px; }
+  .privacy { margin-top:22px; max-width:640px; padding:9px 12px; border-radius:10px; background:var(--accent-soft); color:var(--muted); font-size:.8rem; }
+
+  @media (max-width:700px) {
+    .controls { grid-template-columns:minmax(0,1fr); }
+    textarea { min-height:170px; }
+    .rotation { min-width:600px; }
+  }
+  @media print {
+    @page { size:A4 landscape; margin:10mm; }
+    :root { --bg:#fff; --card:#fff; --ink:#000; --muted:#333; --line:#999; --accent:#000; --teacher:#e8e8e8; --teacher-line:#000; --stripe:#fff; --ok:#000; --warn:#000; }
+    body { font-size:10pt; }
+    .back, .controls, .actions, .privacy, .copy { display:none !important; }
+    .card { box-shadow:none; break-inside:avoid; padding:6px 10px; }
+    .part { break-inside:avoid; margin-top:8px; }
+    .part header { margin-bottom:3px; } .part header p { margin-top:0; }
+    th, td { padding:2.5px 7px; font-size:9.5pt; }
+    h1 { font-size:15pt; margin:0; } .sub { display:none; }
+    #out { margin-top:4px; }
+    .chip { background:none; border:1px solid #999; padding:2px 10px; }
+    .checks { margin-top:8px; } .checks ul { gap:2px; } .checks li { font-size:9pt; }
+    .checks:not(:has(li.no)) { display:none; }          /* the tick list is a screen aid: print it only when something needs attention */
+    .checks li.ok { display:none; }
+    .sheetcard { break-before:page; margin-top:0; }
+    #out.stale .card:not(.keep) { opacity:1; }
+  }
+</style>
+</head>
+<body>
+<main class="shell">
+  <a class="back" href="index.html">← ELC Hub</a>
+  <h1>🔁 Interview rotation</h1>
+  <p class="sub">Type the class list. The page works out who interviews whom in each round, where the teacher watches, and who sits out.</p>
+
+  <div class="controls card">
+    <div class="field">
+      <label for="names">Class list <span class="count" id="count"></span></label>
+      <textarea id="names" spellcheck="false" autocomplete="off" placeholder="One name on each line"></textarea>
+    </div>
+    <div>
+      <fieldset class="field">
+        <legend>Each pair of students interviews</legend>
+        <label class="choice"><input type="radio" name="mode" value="twice" checked><span><b>Twice.</b> Each one asks and each one answers. Part 1, then Part 2 with the roles swapped.</span></label>
+        <label class="choice"><input type="radio" name="mode" value="once"><span><b>Once.</b> One of them asks. Part 1 only.</span></label>
+      </fieldset>
+      <div class="field" id="firstField" hidden>
+        <label for="first">Sits out first</label>
+        <select id="first"></select>
+        <small>One student sits out each round and watches another pair. Pick who watches first, or leave it open.</small>
+      </div>
+      <div class="btns">
+        <button class="btn primary" id="make" type="button">Make the rotation</button>
+        <button class="btn" id="clear" type="button">Clear names</button>
+      </div>
+      <p class="msg" id="msg" role="status"></p>
+    </div>
+  </div>
+
+  <section id="out" hidden aria-label="The rotation">
+    <p class="chips" id="chips"></p>
+    <div class="card checks"><h2>What this rotation does</h2><ul id="checks"></ul></div>
+    <div id="parts"></div>
+    <div class="card sheetcard"><h2>When the teacher sees each student</h2><div class="tablewrap" id="sheet"></div></div>
+    <p class="actions"><button class="btn" id="print" type="button">🖨️ Print</button></p>
+  </section>
+
+  <p class="privacy">🔒 No account needed. The names you type stay in this browser and are never sent anywhere. “Clear names” removes them.</p>
+</main>
+
+<script>
+/* ===== ENGINE START (no page code in here: the tests load this block on its own) ===== */
+/* A pair is [interviewer, interviewee]; students are numbered 0..N-1.
+   Base rounds come from the circle method: each unordered pair meets once, and for an odd
+   class one student sits out each round. Part 1 uses their orientation; Part 2 reverses
+   every pair, so each ordered pair (A asks B) happens exactly once over the two parts. */
+function makeRng(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function shuffled(arr, rnd) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); const t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+const pairKey = (a, b) => (a < b ? a * 1000 + b : b * 1000 + a);
+const swapped = (p, flip) => (flip ? [p[1], p[0]] : p);
+
+function parseNames(text) {
+  let lines = String(text || "").split(/\r?\n/);
+  if (lines.length === 1) lines = lines[0].split(/[,;\t]+/);
+  const names = [], notes = [], seen = new Set();
+  for (const raw of lines) {
+    let s = raw.replace(/^\s*\d+[.)]\s+/, "").replace(/\s+/g, " ").trim();
+    s = Array.from(s).slice(0, 24).join("").trim();
+    if (!s) continue;
+    let out = s, n = 1;
+    while (seen.has(out.toLowerCase())) out = s + " (" + ++n + ")";
+    if (out !== s) notes.push(s);
+    seen.add(out.toLowerCase());
+    names.push(out);
+  }
+  return { names, repeated: Array.from(new Set(notes)) };
+}
+
+/* Base rounds over students (perm maps circle position -> student). */
+function baseRounds(N, perm) {
+  const rounds = [];
+  if (N % 2) {
+    const m = (N - 1) / 2;
+    for (let r = 0; r < N; r++) {
+      const pairs = [];
+      for (let k = 1; k <= m; k++) pairs.push([perm[(r + k) % N], perm[(r - k + N) % N]]);
+      rounds.push({ sit: perm[r], pairs });
+    }
+  } else {
+    const M = N - 1, m = N / 2;
+    for (let r = 0; r < M; r++) {
+      const pairs = [r % 2 === 0 ? [perm[M], perm[r]] : [perm[r], perm[M]]];
+      for (let k = 1; k < m; k++) pairs.push([perm[(r + k) % M], perm[(r - k + M) % M]]);
+      rounds.push({ sit: -1, pairs });
+    }
+  }
+  return rounds;
+}
+
+/* Which pair does the teacher watch in each base round? Every student is watched at most once
+   as interviewer and at most once as interviewee in a part (exactly once when the class is odd). */
+function assignTeacher(rounds, N, flip, banned, mustI, mustE, rnd, limit) {
+  const R = rounds.length, usedI = new Array(N).fill(false), usedE = new Array(N).fill(false);
+  const pick = new Array(R).fill(-1);
+  let nodes = 0;
+  const options = (b) => {
+    const out = [], ps = rounds[b].pairs;
+    for (let j = 0; j < ps.length; j++) {
+      const [x, y] = swapped(ps[j], flip);
+      if (usedI[x] || usedE[y] || banned.has(pairKey(x, y))) continue;
+      out.push(j);
+    }
+    return out;
+  };
+  function rec(done) {
+    if (done === R) return mustI.every((s) => usedI[s]) && mustE.every((s) => usedE[s]);
+    if (++nodes > limit) return false;
+    if (R - done < mustI.filter((s) => !usedI[s]).length || R - done < mustE.filter((s) => !usedE[s]).length) return false;
+    let best = -1, bestOpts = null;
+    for (let b = 0; b < R; b++) {
+      if (pick[b] >= 0) continue;
+      const o = options(b);
+      if (!o.length) return false;
+      if (!bestOpts || o.length < bestOpts.length || (o.length === bestOpts.length && rnd() < 0.5)) { best = b; bestOpts = o; }
+    }
+    for (const j of shuffled(bestOpts, rnd)) {
+      const [x, y] = swapped(rounds[best].pairs[j], flip);
+      pick[best] = j; usedI[x] = usedE[y] = true;
+      if (rec(done + 1)) return true;
+      pick[best] = -1; usedI[x] = usedE[y] = false;
+      if (nodes > limit) return false;
+    }
+    return false;
+  }
+  return rec(0) ? pick : null;
+}
+
+/* In what order are the base rounds run? Whenever the teacher sees the same student again, at
+   least g rounds must have passed (g = 2 means never two rounds in a row). obs[s] holds the
+   rounds (counted across both parts) in which the teacher has already seen student s. */
+function orderRounds(R, watched, g, startPos, obs, prevBase, firstBase, rnd, limit) {
+  const used = new Array(R).fill(false), seq = [];
+  let nodes = 0;
+  function rec(i) {
+    if (i === R) return true;
+    if (++nodes > limit) return false;
+    const pos = startPos + i;
+    let cand = [];
+    for (let b = 0; b < R; b++) {
+      if (used[b]) continue;
+      if (i === 0 && ((firstBase >= 0 && b !== firstBase) || b === prevBase)) continue;
+      const [x, y] = watched[b];
+      if (obs[x].some((q) => pos - q < g) || obs[y].some((q) => pos - q < g)) continue;
+      cand.push(b);
+    }
+    for (const b of shuffled(cand, rnd)) {
+      const [x, y] = watched[b];
+      used[b] = true; seq.push(b); obs[x].push(pos); obs[y].push(pos);
+      if (rec(i + 1)) return true;
+      obs[x].pop(); obs[y].pop(); seq.pop(); used[b] = false;
+      if (nodes > limit) return false;
+    }
+    return false;
+  }
+  return rec(0) ? seq : null;
+}
+
+/* Odd class: the student who sits out watches one of the other pairs. Over a part each student is
+   watched once as interviewer and once as interviewee, and we avoid watching someone in the round
+   next to the teacher's look at them (bound = how many such clashes we accept). */
+function assignPeers(rounds, N, flip, teacherPick, posOf, tObs, pObs, bound, rnd, limit) {
+  const R = rounds.length, usedI = new Array(N).fill(false), usedE = new Array(N).fill(false);
+  const pick = new Array(R).fill(-1), cost = new Array(R).fill(0);
+  let nodes = 0;
+  const near = (list, p) => { let c = 0; for (const q of list) if (Math.abs(q - p) <= 1) c++; return c; };
+  const options = (b) => {
+    const out = [], ps = rounds[b].pairs;
+    for (let j = 0; j < ps.length; j++) {
+      if (j === teacherPick[b]) continue;
+      const [x, y] = swapped(ps[j], flip);
+      if (usedI[x] || usedE[y]) continue;
+      const c = near(tObs[x], posOf[b]) + near(tObs[y], posOf[b]) + near(pObs[x], posOf[b]) + near(pObs[y], posOf[b]);
+      if (c <= bound) out.push([j, c]);
+    }
+    return out;
+  };
+  function rec(done) {
+    if (done === R) return true;
+    if (++nodes > limit) return false;
+    let best = -1, bestOpts = null;
+    for (let b = 0; b < R; b++) {
+      if (pick[b] >= 0) continue;
+      const o = options(b);
+      if (!o.length) return false;
+      if (!bestOpts || o.length < bestOpts.length || (o.length === bestOpts.length && rnd() < 0.5)) { best = b; bestOpts = o; }
+    }
+    const order = shuffled(bestOpts, rnd).sort((u, v) => u[1] - v[1]);
+    for (const [j, c] of order) {
+      const [x, y] = swapped(rounds[best].pairs[j], flip);
+      pick[best] = j; cost[best] = c; usedI[x] = usedE[y] = true; pObs[x].push(posOf[best]); pObs[y].push(posOf[best]);
+      if (rec(done + 1)) return true;
+      pick[best] = -1; usedI[x] = usedE[y] = false; pObs[x].pop(); pObs[y].pop();
+      if (nodes > limit) return false;
+    }
+    return false;
+  }
+  if (!rec(0)) return null;
+  return { pick, cost: cost.reduce((a, b) => a + b, 0) };
+}
+
+/* One try at a whole rotation. Returns null if a step finds no way through. */
+function attempt(N, twice, firstStudent, level, rnd) {
+  const odd = N % 2 === 1, perm = shuffled(Array.from({ length: N }, (_, i) => i), rnd);
+  const rounds = baseRounds(N, perm), R = rounds.length, parts = twice ? 2 : 1;
+  const firstBase = odd && firstStudent >= 0 ? rounds.findIndex((r) => r.sit === firstStudent) : -1;
+  const tObs = Array.from({ length: N }, () => []);
+  const banned = new Set(), made = [];
+  let prevBase = -1, mustI = [], mustE = [];
+  for (let p = 0; p < parts; p++) {
+    const flip = p === 1;
+    const teacher = assignTeacher(rounds, N, flip, level.t3 ? banned : new Set(), mustI, mustE, rnd, 4000);
+    if (!teacher) return null;
+    const watched = teacher.map((j, b) => swapped(rounds[b].pairs[j], flip));
+    const seq = orderRounds(R, watched, level.g, p * R, tObs, prevBase, p === 0 ? firstBase : -1, rnd, 30000);
+    if (!seq) return null;
+    watched.forEach(([x, y]) => banned.add(pairKey(x, y)));
+    prevBase = seq[R - 1];
+    if (p === 0 && parts === 2) {
+      const seenI = new Array(N).fill(false), seenE = new Array(N).fill(false);
+      watched.forEach(([x, y]) => { seenI[x] = true; seenE[y] = true; });
+      mustI = seenI.map((v, s) => (v ? -1 : s)).filter((s) => s >= 0);
+      mustE = seenE.map((v, s) => (v ? -1 : s)).filter((s) => s >= 0);
+    }
+    made.push({ flip, teacher, seq });
+  }
+  let cost = 0;
+  if (odd && rounds[0].pairs.length >= 2) {
+    const pObs = Array.from({ length: N }, () => []);
+    for (let p = 0; p < parts; p++) {
+      const posOf = new Array(R);
+      made[p].seq.forEach((b, i) => { posOf[b] = p * R + i; });
+      let got = null;
+      for (const bound of [0, 1, 2, 99]) {
+        got = assignPeers(rounds, N, made[p].flip, made[p].teacher, posOf, tObs, pObs, bound, rnd, bound === 99 ? 20000 : 1500);
+        if (got) break;
+      }
+      if (!got) return null;
+      made[p].peer = got.pick; cost += got.cost;
+    }
+  }
+  return { rounds, made, cost, R };
+}
+
+function build(N, names, twice, a) {
+  const { rounds, made, R } = a;
+  const res = { N, names, twice, odd: N % 2 === 1, parts: [] };
+  for (const part of made) {
+    const out = [];
+    for (const b of part.seq) {
+      const ps = rounds[b].pairs.map((q) => swapped(q, part.flip));
+      const t = part.teacher[b], pe = part.peer ? part.peer[b] : -1;
+      const rest = ps.map((q, j) => j).filter((j) => j !== t && j !== pe);
+      const order = [t].concat(pe >= 0 ? [pe] : [], rest);
+      out.push({ pairs: order.map((j) => ps[j]), sit: rounds[b].sit, hasPeer: pe >= 0 });
+    }
+    res.parts.push({ rounds: out });
+  }
+  return res;
+}
+
+/* names: array of N >= 3 distinct strings.  opt: { twice, first (index or -1), seed } */
+function generate(names, opt) {
+  const N = names.length, twice = !!opt.twice, rnd = makeRng(opt.seed || 1), t0 = Date.now();
+  const R = N % 2 ? N : N - 1, gTop = Math.max(2, Math.min(4, Math.floor(R / 2)));
+  const ladder = [];
+  for (let g = gTop; g >= 2; g--) ladder.push({ g, t3: true, tries: 40 });
+  ladder.push({ g: 2, t3: false, tries: 40 }, { g: 1, t3: false, tries: 40 });
+  for (const level of ladder) {
+    let best = null;
+    for (let i = 0; i < level.tries && Date.now() - t0 < 1500; i++) {
+      const a = attempt(N, twice, opt.first >= 0 ? opt.first : -1, level, rnd);
+      if (a && (!best || a.cost < best.cost)) best = a;
+      if (best && best.cost === 0) break;
+    }
+    if (best) return build(N, names, twice, best);
+  }
+  return null;
+}
+
+/* ---- What is actually true of a finished rotation? (reads only the rotation, not how it was made) ---- */
+function analyse(res) {
+  const N = res.N, odd = N % 2 === 1, m = Math.floor(N / 2), parts = res.parts, flat = [];
+  parts.forEach((p, pi) => p.rounds.forEach((r, ri) => flat.push({ pi, ri, r })));
+  const A = { N, odd, m, rounds: flat.length, interviews: flat.length * m };
+  const bump = (mp, k) => mp.set(k, (mp.get(k) || 0) + 1);
+  A.sane = flat.every(({ r }) => {
+    const seen = new Array(N).fill(0);
+    r.pairs.forEach(([x, y]) => { seen[x]++; seen[y]++; });
+    if (odd) { if (!(r.sit >= 0)) return false; seen[r.sit]++; } else if (r.sit >= 0) return false;
+    return r.pairs.length === m && seen.every((c) => c === 1);
+  });
+  const ord = new Map(), unord = new Map(), asI = new Array(N).fill(0), asE = new Array(N).fill(0);
+  flat.forEach(({ r }) => r.pairs.forEach(([x, y]) => { bump(ord, x * N + y); bump(unord, pairKey(x, y)); asI[x]++; asE[y]++; }));
+  A.bothRoles = true; A.onceEach = true;
+  for (let x = 0; x < N; x++) for (let y = x + 1; y < N; y++) {
+    if (ord.get(x * N + y) !== 1 || ord.get(y * N + x) !== 1) A.bothRoles = false;
+    if (unord.get(pairKey(x, y)) !== 1) A.onceEach = false;
+  }
+  A.asI = asI; A.asE = asE;
+  // the teacher watches the first pair of every round
+  const tI = parts.map(() => new Array(N).fill(0)), tE = parts.map(() => new Array(N).fill(0));
+  const tSeen = new Map(), last = new Array(N).fill(-99);
+  A.minGap = Infinity;
+  flat.forEach(({ pi, r }, g) => {
+    const [x, y] = r.pairs[0];
+    tI[pi][x]++; tE[pi][y]++; bump(tSeen, pairKey(x, y));
+    for (const s of [x, y]) { A.minGap = Math.min(A.minGap, g - last[s]); last[s] = g; }
+  });
+  A.teacherRepeats = Array.from(tSeen.values()).filter((c) => c > 1).length;
+  A.teacherOncePerPart = parts.every((p, pi) => tI[pi].every((c) => c === 1) && tE[pi].every((c) => c === 1));
+  const sumI = tI[0].map((_, s) => tI.reduce((a, row) => a + row[s], 0)), sumE = tE[0].map((_, s) => tE.reduce((a, row) => a + row[s], 0));
+  A.missI = sumI.map((c, s) => (c ? -1 : s)).filter((s) => s >= 0);
+  A.missE = sumE.map((c, s) => (c ? -1 : s)).filter((s) => s >= 0);
+  if (odd) {
+    A.sitOncePerPart = parts.every((p) => { const c = new Array(N).fill(0); p.rounds.forEach((r) => c[r.sit]++); return c.every((x) => x === 1); });
+    A.sitterChanges = flat.every((f, i) => i === 0 || flat[i - 1].r.sit !== f.r.sit);
+    A.peers = m >= 2;
+    if (A.peers) {
+      const pI = parts.map(() => new Array(N).fill(0)), pE = parts.map(() => new Array(N).fill(0));
+      A.peerDiffers = true;
+      flat.forEach(({ pi, r }) => {
+        if (!r.pairs[1] || pairKey(r.pairs[1][0], r.pairs[1][1]) === pairKey(r.pairs[0][0], r.pairs[0][1])) { A.peerDiffers = false; return; }
+        pI[pi][r.pairs[1][0]]++; pE[pi][r.pairs[1][1]]++;
+      });
+      A.peerRoles = parts.every((p, pi) => pI[pi].every((c) => c === 1) && pE[pi].every((c) => c === 1));
+    }
+  }
+  return A;
+}
+
+function verifyRotation(res) {
+  const A = analyse(res), names = res.names, twice = res.parts.length === 2, out = [];
+  const add = (ok, text) => out.push({ ok, text });
+  const who = (a) => (a.length > 4 ? a.slice(0, 4).map((i) => names[i]).join(", ") + " and " + (a.length - 4) + " more" : a.map((i) => names[i]).join(", "));
+  const inPart = twice ? " in each part" : "";
+  if (!A.sane) add(false, "This rotation has a mistake in it: someone is missing from a round. Press “Make a different rotation”.");
+  if (twice) {
+    add(A.bothRoles, A.bothRoles ? "Every student interviews every other student once, and is interviewed by every other student once." : "Some students do not meet in both roles.");
+  } else {
+    add(A.onceEach, A.onceEach ? "Every pair of students meets once." : "Some pairs of students do not meet, or meet more than once.");
+    const lo = Math.min(...A.asI, ...A.asE), hi = Math.max(...A.asI, ...A.asE);
+    add(hi - lo <= (A.odd ? 0 : 1), lo === hi ? `Everyone interviews ${lo} times and is interviewed ${lo} times.` : `Everyone interviews ${lo} or ${hi} times and is interviewed ${lo} or ${hi} times.`);
+  }
+  if (A.teacherOncePerPart) add(true, `${twice ? "In each part, the" : "The"} teacher sees every student once as the interviewer and once as the interviewee.`);
+  else if (!A.missI.length && !A.missE.length) add(true, "The teacher sees every student at least once as the interviewer and at least once as the interviewee.");
+  else {
+    const bits = [];
+    if (A.missI.length) bits.push(`${who(A.missI)} as the interviewer`);
+    if (A.missE.length) bits.push(`${who(A.missE)} as the interviewee`);
+    add(false, `The teacher does not see ${bits.join(", or ")}. There are only ${A.rounds} rounds.${twice ? "" : " Choose “Twice” to see everyone."}`);
+  }
+  add(A.teacherRepeats === 0, A.teacherRepeats === 0 ? "The teacher never watches the same two students twice." : `The teacher watches some pairs of students twice. This page could not avoid it with only ${A.N} students.`);
+  if (A.minGap >= 2) add(true, "The teacher never sees the same student in two rounds in a row." + (A.minGap >= 3 ? ` There are always at least ${A.minGap - 1} rounds in between.` : ""));
+  else add(false, `The teacher sees some students in two rounds in a row. This page could not avoid it with only ${A.N} students.`);
+  if (A.odd) {
+    add(A.sitOncePerPart && A.sitterChanges, A.sitOncePerPart && A.sitterChanges ? `A different student sits out each round. Everyone sits out once${inPart}.` : "The students who sit out are not shared out evenly.");
+    if (A.peers) add(A.peerDiffers && A.peerRoles, A.peerDiffers && A.peerRoles ? `The student who sits out watches a pair the teacher is not watching, and sees every student once as the interviewer and once as the interviewee${inPart}.` : "The students who sit out do not see every student once in each role.");
+    else add(true, "With 3 students, the student who sits out can only watch the teacher’s pair.");
+  }
+  return out;
+}
+
+/* ===== ENGINE END ===== */
+
+/* ===== PAGE ===== */
+const $ = (id) => document.getElementById(id);
+const KEY = "elc_interview_rotation_v1", MAX = 30;
+let current = null;                       // { res, seed } for what is on screen
+
+function el(tag, attrs, ...kids) {
+  const n = document.createElement(tag);
+  for (const k in attrs || {}) { if (k === "class") n.className = attrs[k]; else if (k === "text") n.textContent = attrs[k]; else n.setAttribute(k, attrs[k]); }
+  kids.forEach((c) => n.append(c));
+  return n;
+}
+const isTwice = () => document.querySelector('input[name="mode"]:checked').value === "twice";
+const say = (text, warn) => { $("msg").textContent = text || ""; $("msg").className = "msg" + (warn ? " warn" : ""); };
+
+function save() {
+  try { localStorage.setItem(KEY, JSON.stringify({ names: $("names").value, twice: isTwice(), first: $("first").value, seed: current ? current.seed : 0 })); } catch (e) {}
+}
+function load() {
+  try { return JSON.parse(localStorage.getItem(KEY) || "null"); } catch (e) { return null; }
+}
+
+function pairCell(q, names, cls) {
+  const td = el("td", { class: cls || "", title: names[q[0]] + " interviews " + names[q[1]] });
+  td.append(names[q[0]], el("span", { class: "arrow", role: "img", "aria-label": "interviews", text: "→" }), names[q[1]]);
+  return td;
+}
+
+function columnsOf(res, p) {
+  const m = res.N >> 1, hasPeer = res.parts[p].rounds[0].hasPeer, head = ["Round", "Teacher watches"];
+  for (let j = 2; j <= m; j++) head.push("Pair " + j);
+  if (res.odd) head.push(hasPeer ? "Sits out, watches Pair 2" : "Sits out, watches the teacher’s pair");
+  return head;
+}
+
+function tsv(res, p) {
+  const nm = res.names;
+  const rows = res.parts[p].rounds.map((r, i) => [i + 1].concat(r.pairs.map((q) => nm[q[0]] + " → " + nm[q[1]]), res.odd ? [nm[r.sit]] : []));
+  return [columnsOf(res, p)].concat(rows).map((r) => r.join("\t")).join("\n");
+}
+
+async function copyText(text, btn) {
+  let done = false;
+  try { await navigator.clipboard.writeText(text); done = true; }
+  catch (e) {
+    const t = el("textarea", { "aria-hidden": "true" });
+    t.value = text; t.style.cssText = "position:fixed;opacity:0;left:-999px";
+    document.body.append(t); t.select();
+    try { done = document.execCommand("copy"); } catch (_) {}
+    t.remove();
+  }
+  const old = btn.dataset.label || btn.textContent;
+  btn.dataset.label = old;
+  btn.textContent = done ? "Copied" : "Could not copy";
+  setTimeout(() => { btn.textContent = old; }, 1600);
+}
+
+function renderPart(res, p) {
+  const part = res.parts[p], twice = res.parts.length === 2, nm = res.names;
+  const sec = el("section", { class: "card part" });
+  const note = !twice ? "Each pair meets once. A → B means A interviews B."
+    : p === 0 ? "Each pair meets once. A → B means A interviews B."
+    : "The same pairs as Part 1 with the roles swapped. A → B means A interviews B.";
+  const copy = el("button", { class: "btn copy", type: "button", text: "Copy table" });
+  copy.addEventListener("click", () => copyText(tsv(res, p), copy));
+  sec.append(el("header", {}, el("div", {}, el("h2", { text: twice ? (p === 0 ? "Part 1" : "Part 2 · roles swapped") : "Rotation" }), el("p", { text: part.rounds.length + " rounds. " + note })), copy));
+  const table = el("table", { class: "rotation", "aria-label": (twice ? "Part " + (p + 1) : "Rotation") + ": who interviews whom in each round" });
+  const trh = el("tr");
+  columnsOf(res, p).forEach((h, i) => trh.append(el("th", { class: i === 1 ? "teacher" : "", scope: "col", text: h })));
+  table.append(el("thead", {}, trh));
+  const tb = el("tbody");
+  part.rounds.forEach((r, i) => {
+    const tr = el("tr");
+    tr.append(el("td", { class: "rd", text: String(i + 1) }));
+    r.pairs.forEach((q, j) => tr.append(pairCell(q, nm, j === 0 ? "teacher" : "")));
+    if (res.odd) tr.append(el("td", { class: "sit", text: nm[r.sit] }));
+    tb.append(tr);
+  });
+  table.append(tb);
+  sec.append(el("div", { class: "tablewrap" }, table));
+  return sec;
+}
+
+function renderSheet(res) {
+  const twice = res.parts.length === 2, nm = res.names, where = (p, i) => (twice ? "Part " + (p + 1) + ", " : "") + "round " + (i + 1);
+  const t = el("table", { class: "sheet" });
+  const head = ["Student", "Teacher sees them interviewing", "Teacher sees them being interviewed"].concat(res.odd ? ["Sits out"] : []);
+  t.append(el("thead", {}, el("tr", {}, ...head.map((h) => el("th", { scope: "col", text: h })))));
+  const tb = el("tbody");
+  nm.forEach((name, s) => {
+    const asI = [], asE = [], out = [];
+    res.parts.forEach((part, p) => part.rounds.forEach((r, i) => {
+      if (r.pairs[0][0] === s) asI.push(where(p, i));
+      if (r.pairs[0][1] === s) asE.push(where(p, i));
+      if (r.sit === s) out.push(where(p, i));
+    }));
+    const cell = (a) => { const td = el("td"); (a.length ? a : ["—"]).forEach((x, k) => { if (k) td.append(el("br")); td.append(x); }); return td; };
+    const tr = el("tr", {}, el("td", { text: name, style: "font-weight:700" }), cell(asI), cell(asE));
+    if (res.odd) tr.append(cell(out));
+    tb.append(tr);
+  });
+  t.append(tb);
+  return t;
+}
+
+function render(res) {
+  const R = res.parts[0].rounds.length, twice = res.parts.length === 2, A = analyse(res);
+  const chips = $("chips"); chips.textContent = "";
+  [res.N + " students", twice ? "2 parts · " + R + " rounds in each" : "1 part · " + R + " rounds", A.interviews + " interviews"].forEach((c) => chips.append(el("span", { class: "chip", text: c })));
+  const ul = $("checks"); ul.textContent = "";
+  verifyRotation(res).forEach((c) => ul.append(el("li", { class: c.ok ? "ok" : "no" }, el("span", { class: "mark", text: c.ok ? "✓" : "⚠" }), el("span", { text: c.text }))));
+  const parts = $("parts"); parts.textContent = "";
+  res.parts.forEach((_, p) => parts.append(renderPart(res, p)));
+  const sheet = $("sheet"); sheet.textContent = ""; sheet.append(renderSheet(res));
+  $("out").hidden = false; $("out").classList.remove("stale");
+  $("make").textContent = "Make a different rotation";
+}
+
+/* The class list decides what the controls offer. */
+function syncControls() {
+  const p = parseNames($("names").value), n = p.names.length;
+  $("count").textContent = n ? "· " + n + (n === 1 ? " name" : " names") + (n % 2 === 1 && n >= 3 ? " · one student sits out each round" : "") : "";
+  const box = $("firstField"), sel = $("first"), keep = sel.value;
+  box.hidden = !(n % 2 === 1 && n >= 3 && n <= MAX);
+  if (!box.hidden) {
+    sel.textContent = "";
+    sel.append(el("option", { value: "", text: "Anyone" }));
+    p.names.forEach((x) => sel.append(el("option", { value: x, text: x })));
+    sel.value = p.names.includes(keep) ? keep : "";
+  }
+  return p;
+}
+
+function make(seed) {
+  const p = syncControls(), n = p.names.length, twice = isTwice();
+  if (n < 3) { say("Add at least 3 names.", true); return; }
+  if (n > MAX) { say("This page makes rotations for up to " + MAX + " students. You have " + n + ".", true); return; }
+  const first = n % 2 === 1 ? p.names.indexOf($("first").value) : -1;
+  const res = generate(p.names, { twice, first, seed });
+  if (!res) { say("The page could not make a rotation. Press the button again.", true); return; }
+  current = { res, seed };
+  render(res); save();
+  say(p.repeated.length ? "Two students have the same name, so the second one shows “(2)” after it: " + p.repeated.join(", ") + "." : "", false);
+}
+
+function stale() {
+  if (!current) return;
+  $("out").classList.add("stale");
+  say("The class list or settings changed. Press “Make a different rotation” to update the tables.", false);
+}
+
+const newSeed = () => (Math.floor(Math.random() * 2147483646) + 1);
+$("make").addEventListener("click", () => make(newSeed()));
+$("clear").addEventListener("click", () => {
+  $("names").value = ""; current = null; $("out").hidden = true; $("make").textContent = "Make the rotation";
+  syncControls(); say(""); try { localStorage.removeItem(KEY); } catch (e) {}
+  $("names").focus();
+});
+$("names").addEventListener("input", () => { syncControls(); stale(); save(); });
+document.querySelectorAll('input[name="mode"]').forEach((r) => r.addEventListener("change", () => { stale(); save(); }));
+$("first").addEventListener("change", () => { stale(); save(); });
+$("print").addEventListener("click", () => window.print());
+
+(function boot() {
+  const s = load();
+  if (s && typeof s.names === "string") {
+    $("names").value = s.names;
+    document.querySelector('input[name="mode"][value="' + (s.twice === false ? "once" : "twice") + '"]').checked = true;
+    syncControls();
+    if (typeof s.first === "string" && s.first) $("first").value = s.first;
+    if (s.seed && parseNames(s.names).names.length >= 3) make(s.seed);
+  } else syncControls();
+})();
+</script>
+</body>
+</html>
